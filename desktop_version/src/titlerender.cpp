@@ -45,9 +45,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         dwgfx.drawsprite((160 - 96) + 3 * 32, temp, 23, tr, tg, tb);
         dwgfx.drawsprite((160 - 96) + 4 * 32, temp, 23, tr, tg, tb);
         dwgfx.drawsprite((160 - 96) + 5 * 32, temp, 23, tr, tg, tb);
-				#if defined(MAKEANDPLAY)
-					dwgfx.Print(-1,temp+35,"     MAKE AND PLAY EDITION",tr, tg, tb, true);
-				#endif
+        dwgfx.Print(-1,temp+35," COMMUNITY EDITION",tr, tg, tb, true);
 
         dwgfx.Print(5, 175, "[ Press ACTION to Start ]", tr, tg, tb, true);
         dwgfx.Print(5, 195, "ACTION = Space, Z, or V", int(tr*0.5f), int(tg*0.5f), int(tb*0.5f), true);
@@ -83,10 +81,8 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.drawsprite((160 - 96) + 3 * 32, temp, 23, tr, tg, tb);
             dwgfx.drawsprite((160 - 96) + 4 * 32, temp, 23, tr, tg, tb);
             dwgfx.drawsprite((160 - 96) + 5 * 32, temp, 23, tr, tg, tb);
-						#if defined(MAKEANDPLAY)
-							dwgfx.Print(-1,temp+35,"     MAKE AND PLAY EDITION",tr, tg, tb, true);
-						#endif
-            dwgfx.Print( 310 - (4*8), 230, "v2.2", tr/2, tg/2, tb/2);
+			dwgfx.Print(-1, temp + 35, " COMMUNITY EDITION", tr, tg, tb, true);
+            dwgfx.Print( 310 - (4*8), 230, "c1.0", tr/2, tg/2, tb/2);
 
 						if(music.mmmmmm){
 						  dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
