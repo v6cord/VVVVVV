@@ -1,7 +1,11 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include <SDL.h>
+#if defined(__SWITCH__)
+	#include <SDL2/SDL.h>
+#else
+	#include <SDL.h>
+#endif
 
 class Screen
 {

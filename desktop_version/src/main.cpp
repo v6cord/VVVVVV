@@ -1,4 +1,8 @@
+#if defined(__SWITCH__)
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 #include <ctime>
 #include "SoundSystem.h"
 
