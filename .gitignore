@@ -1,6 +1,7 @@
-desktop_version/build
+desktop_version/build/
 SDL2_mixer-2.0.4/
 SDL2-2.0.10/
 *.o
 .vs/
 data.zip
+desktop_version/flibitBuild/
