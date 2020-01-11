@@ -248,8 +248,7 @@ int main(int argc, char *argv[])
     key.isActive = true;
 
     uint32_t last_frame = 0;
-    //double frame_time = 1000.0 / 30.0;
-    double frame_time = 34.0; // keep TASes syncing
+    double frame_time = 1000.0 / 30.0;
 
     while(!key.quitProgram)
     {
