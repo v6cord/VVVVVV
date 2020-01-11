@@ -451,17 +451,34 @@ void musicclass::initefchannels()
 	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
 }
 
-void musicclass::playwav(const char* t)
+void musicclass::playfile(const char* t, std::string track)
 {
     int channel;
 
-    auto[pair, inserted] = custom_wavs.insert(std::make_pair(t, SoundTrack()));
+    auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
     if (inserted) {
         pair->second = SoundTrack(t);
     }
-    channel = Mix_PlayChannel(-1, pair->second.sound, 0);
+
+    if (track != "") {
+        stopfile(track);
+        channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+    } else {
+        channel = Mix_PlayChannel(-1, pair->second.sound, 0);
+    }
+
     if (channel == -1) {
         fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+    } else if (track != "") {
+        custom_file_channels[track] = channel;
+    }
+}
+
+void musicclass::stopfile(std::string track) {
+    auto iter = custom_file_channels.find(track);
+    if (iter != custom_file_channels.end()) {
+        Mix_FadeOutChannel(iter->second, 100);
+        custom_file_channels.erase(iter);
     }
 }
 

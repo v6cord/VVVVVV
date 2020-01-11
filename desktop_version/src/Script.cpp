@@ -68,10 +68,8 @@ void scriptclass::tokenize( std::string t )
 		}
 	}
 
-	if (tempword != "")
-	{
-		words[j] = tempword;
-	}
+        words[j] = tempword;
+        words[j + 1] = "";
 }
 
 void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
@@ -275,9 +273,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));
 			}
-			if (words[0] == "playwav")
+			if (words[0] == "playfile")
 			{
-				music.playwav(words[1].c_str());
+				music.playfile(words[1].c_str(), words[2]);
+			}
+			if (words[0] == "stopfile")
+			{
+				music.stopfile(words[1]);
 			}
 			if (words[0] == "play")
 			{

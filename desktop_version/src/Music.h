@@ -39,7 +39,8 @@ public:
 	// Play a sound effect! There are 16 channels, which iterate
 	void initefchannels();
 
-	void playwav(const char* t);
+	void playfile(const char* t, std::string track);
+	void stopfile(std::string track);
 
 	void playef(int t, int offset = 0);
 
@@ -65,7 +66,8 @@ public:
 
         bool muted;
 
-        std::map<std::string, SoundTrack> custom_wavs;
+        std::map<std::string, SoundTrack> custom_files;
+        std::map<std::string, int> custom_file_channels;
 };
 
 
