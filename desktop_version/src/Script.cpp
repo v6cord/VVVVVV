@@ -263,6 +263,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					scriptdelay = 1;
 				}
 			}
+			if (words[0] == "toceil")
+			{
+				if(obj.entities[obj.getplayer()].onground>0)
+				{
+					game.press_action = true;
+					scriptdelay = 1;
+				}
+			}
 			if (words[0] == "playef")
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));
@@ -308,8 +316,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "reloadroom")
 			{
-				//USAGE: reloadroom(x,y)
+				//USAGE: reloadroom()
 				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
+			}
+			if (words[0] == "movetoroom")
+			{
+				//USAGE: movetoroom(x,y)
+				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
 			}
 			if (words[0] == "cutscene")
 			{
