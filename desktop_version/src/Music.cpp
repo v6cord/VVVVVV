@@ -227,6 +227,11 @@ void musicclass::play(int t)
 			t += 16;
 		}
 	}
+    if (muted)
+    {
+        currentsong = t;
+        return;
+    }
 	safeToProcessMusic = true;
 	Mix_VolumeMusic(128);
 	if (currentsong !=t)

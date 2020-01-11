@@ -59,6 +59,8 @@ public:
 	// MMMMMM mod settings
 	bool mmmmmm;
 	bool usingmmmmmm;
+
+        bool muted;
 };
 
 

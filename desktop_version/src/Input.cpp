@@ -734,6 +734,20 @@ SDL_assert(0 && "Remove open level dir");
                     }
                     else if (game.currentmenuoption == 4)
                     {
+                        // mute
+                        if (music.muted) {
+                            music.muted = false;
+                            auto prev = music.currentsong;
+                            music.currentsong = -1;
+                            music.play(prev);
+                        } else {
+                            music.muted = true;
+                            Mix_FadeOutMusic(100);
+                        }
+                        music.playef(11, 10);
+                    }
+                    else if (game.currentmenuoption == 5)
+                    {
                         //back
                         music.playef(11, 10);
                         game.createmenu("options");

@@ -6940,9 +6940,11 @@ void Game::createmenu( std::string t )
         menuoptionsactive[2] = true;
         menuoptions[3] = "slowdown";
         menuoptionsactive[3] = true;
-        menuoptions[4] = "return";
+        menuoptions[4] = "music";
+        menuoptionsactive[3] = true;
+        menuoptions[5] = "return";
         menuoptionsactive[4] = true;
-        nummenuoptions = 5;
+        nummenuoptions = 6;
         menuxoff = -40;
         menuyoff = 16;
     }
