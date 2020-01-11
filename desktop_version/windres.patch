@@ -1,0 +1,18 @@
+diff --git a/configure.in b/configure.in
+index 240a322..00ae516 100644
+--- a/configure.in
++++ b/configure.in
+@@ -710,10 +710,10 @@ DEPENDS=`echo "$DEPENDS" | sed 's,\\$,\\\\$,g'`
+ 
+ VERSION_OBJECTS=`echo $VERSION_SOURCES`
+ VERSION_DEPENDS=`echo $VERSION_SOURCES`
+-VERSION_OBJECTS=`echo "$VERSION_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.rc,$(objects)/\1.o,g'`
++VERSION_OBJECTS=`echo "$VERSION_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.rc,$(objects)/\1.lo,g'`
+ VERSION_DEPENDS=`echo "$VERSION_DEPENDS" | sed 's,\([[^ ]]*\)/\([[^ ]]*\)\.rc,\\
+-$(objects)/\2.o: \1/\2.rc\\
+-	\$(WINDRES) \$< \$@,g'`
++$(objects)/\2.lo: \1/\2.rc\\
++	\$(LIBTOOL) --mode=compile \$(WINDRES) \$< -o \$@,g'`
+ VERSION_DEPENDS=`echo "$VERSION_DEPENDS" | sed 's,\\$,\\\\$,g'`
+ 
+ PLAYWAVE_SOURCES="$srcdir/playwave.c"
