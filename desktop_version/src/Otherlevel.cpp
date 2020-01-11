@@ -14,7 +14,7 @@ void otherlevelclass::addline(std::string t)
 	roomtextnumlines++;
 }
 
-std::vector<std::string> otherlevelclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
+growing_vector<std::string> otherlevelclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
 {
 	int t;
 	roomtileset = 1;
@@ -22,7 +22,7 @@ std::vector<std::string> otherlevelclass::loadlevel(int rx, int ry , Game& game,
 	rx -= 100;
 	ry -= 100;
 	t = rx + (ry * 100);
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	roomname = "";
 
 	roomtextnumlines = 0;

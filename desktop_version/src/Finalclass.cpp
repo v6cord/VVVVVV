@@ -1,11 +1,11 @@
 #include "Finalclass.h"
 
-std::vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, entityclass& obj)
+growing_vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, entityclass& obj)
 {
 	int t;
 
 	t = rx + (ry * 100);
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	coin = 0;
 	rcol = 0;
 	warpx = false;

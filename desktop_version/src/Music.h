@@ -40,8 +40,8 @@ public:
 
 	void playef(int t, int offset = 0);
 
-	std::vector<SoundTrack> soundTracks;
-	std::vector<MusicTrack> musicTracks;
+        std::vector<SoundTrack> soundTracks;
+        std::vector<MusicTrack> musicTracks;
 	SoundSystem soundSystem;
 	bool safeToProcessMusic;
 

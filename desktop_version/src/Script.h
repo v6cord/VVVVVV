@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Game.h"
 
 #include "Enums.h"
 
@@ -47,9 +48,9 @@ public:
                    entityclass& obj, UtilityClass& help, musicclass& music);
 
     //Script contents
-    std::vector<std::string> commands;
-    std::vector<std::string> words;
-    std::vector<std::string> txt;
+    growing_vector<std::string> commands;
+    growing_vector<std::string> words;
+    growing_vector<std::string> txt;
     std::string scriptname;
     int position, scriptlength;
     int looppoint, loopcount;
@@ -70,7 +71,7 @@ public:
     int i, j, k;
 
     //Custom level stuff
-     std::vector <std::string>  customscript;
+     growing_vector <std::string>  customscript;
 };
 
 #endif /* SCRIPT_H */

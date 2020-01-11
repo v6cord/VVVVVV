@@ -10,6 +10,7 @@
 #include "Entity.h"
 #include "Graphics.h"
 #include <vector>
+#include "Game.h"
 #include "Music.h"
 #include "editor.h"
 
@@ -56,11 +57,11 @@ public:
 
     bool collide(int x, int y);
 
-    void fillareamap(std::vector<std::string>& tmap);
+    void fillareamap(growing_vector<std::string>& tmap);
 
     void settile(int xp, int yp, int t);
 
-    void fillcontent(std::vector<std::string>& tmap);
+    void fillcontent(growing_vector<std::string>& tmap);
 
 
     int area(int _rx, int _ry);
@@ -82,13 +83,13 @@ public:
     void loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
 
-    std::vector <int> roomdeaths;
-    std::vector <int> roomdeathsfinal;
-    std::vector <int> areamap;
-    std::vector <int> contents;
-    std::vector <int> explored;
-    std::vector <int> vmult;
-    std::vector <std::string> tmap;
+    growing_vector <int> roomdeaths;
+    growing_vector <int> roomdeathsfinal;
+    growing_vector <int> areamap;
+    growing_vector <int> contents;
+    growing_vector <int> explored;
+    growing_vector <int> vmult;
+    growing_vector <std::string> tmap;
 
     int temp;
     int temp2;
@@ -138,7 +139,7 @@ public:
     int customzoom;
     bool customshowmm;
 
-    std::vector<std::string> specialnames;
+    growing_vector<std::string> specialnames;
     int glitchmode;
     int glitchdelay;
     std::string glitchname;
@@ -151,8 +152,8 @@ public:
     int final_colorframe, final_colorframedelay;
 
     //Teleporters and Trinkets on the map
-    std::vector<point> teleporters;
-    std::vector<point> shinytrinkets;
+    growing_vector<point> teleporters;
+    growing_vector<point> shinytrinkets;
 
     int numteleporters, numshinytrinkets;
     bool showteleporters, showtargets, showtrinkets;
@@ -160,7 +161,7 @@ public:
     //Roomtext
     int roomtextx[100], roomtexty[100];
     bool roomtexton;
-    std::vector<std::string> roomtext;
+    growing_vector<std::string> roomtext;
     int roomtextnumlines;
 
     //Levels

@@ -1,6 +1,7 @@
 #include "FileSystemUtils.h"
 
 #include <vector>
+#include "Game.h"
 #include <string>
 
 #include <stdio.h>
@@ -134,9 +135,9 @@ void FILESYSTEM_freeMemory(unsigned char **mem)
 	*mem = NULL;
 }
 
-std::vector<std::string> FILESYSTEM_getLevelDirFileNames()
+growing_vector<std::string> FILESYSTEM_getLevelDirFileNames()
 {
-	std::vector<std::string> list;
+	growing_vector<std::string> list;
 	char **fileList = PHYSFS_enumerateFiles("/levels");
 	char **i;
 	std::string builtLocation;
@@ -348,7 +349,10 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 	length = ftell(file);
 	fseek(file, 0, SEEK_SET);
 	data = (char*) malloc(length);
-	fread(data, 1, length, file);
+	if (fread(data, 1, length, file) <= 0) {
+            printf("it broke!!!\n");
+            exit(1);
+        }
 	fclose(file);
 
 	/* Write data */

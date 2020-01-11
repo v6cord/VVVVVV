@@ -3,6 +3,7 @@
 
 #include "GraphicsResources.h"
 #include <vector>
+#include "Game.h"
 
 
 
@@ -198,21 +199,21 @@ public:
 
 	int j, k, m;
 
-	std::vector <SDL_Surface*> backgrounds;
-	std::vector <SDL_Surface*> images;
+	growing_vector <SDL_Surface*> backgrounds;
+	growing_vector <SDL_Surface*> images;
 
-	std::vector <SDL_Surface*> tele;
-	std::vector <SDL_Surface*> tiles;
-	std::vector <SDL_Surface*> tiles2;
-	std::vector <SDL_Surface*> tiles3;
-	std::vector <SDL_Surface*> entcolours;
-	std::vector <SDL_Surface*> sprites;
-	std::vector <SDL_Surface*> flipsprites;
-	std::vector <SDL_Surface*> bfont;
-	std::vector <SDL_Surface*> bfontmask;
-	std::vector <SDL_Surface*> flipbfont;
-	std::vector <SDL_Surface*> flipbfontmask;
-	std::vector <int> bfontlen;
+	growing_vector <SDL_Surface*> tele;
+	growing_vector <SDL_Surface*> tiles;
+	growing_vector <SDL_Surface*> tiles2;
+	growing_vector <SDL_Surface*> tiles3;
+	growing_vector <SDL_Surface*> entcolours;
+	growing_vector <SDL_Surface*> sprites;
+	growing_vector <SDL_Surface*> flipsprites;
+	growing_vector <SDL_Surface*> bfont;
+	growing_vector <SDL_Surface*> bfontmask;
+	growing_vector <SDL_Surface*> flipbfont;
+	growing_vector <SDL_Surface*> flipbfontmask;
+	growing_vector <int> bfontlen;
 
 	bool flipmode;
 	bool setflipmode;
@@ -252,25 +253,25 @@ public:
 
 	int fademode;
 	int fadeamount;
-	std::vector <int> fadebars;
+	growing_vector <int> fadebars;
 
 	bool trinketcolset;
 	int trinketr, trinketg, trinketb;
 
-	std::vector <textboxclass> textbox;
+	growing_vector <textboxclass> textbox;
 	int ntextbox;
 
 	bool showcutscenebars;
 	int cutscenebarspos;
 
-	std::vector<SDL_Rect> stars;
-	std::vector<int> starsspeed;
+	growing_vector<SDL_Rect> stars;
+	growing_vector<int> starsspeed;
 
 	int spcol, spcoldel;
-	std::vector<SDL_Rect> backboxes;
-	std::vector<int> backboxvx;
-	std::vector<int> backboxvy;
-	std::vector<float> backboxint;
+	growing_vector<SDL_Rect> backboxes;
+	growing_vector<int> backboxvx;
+	growing_vector<int> backboxvy;
+	growing_vector<float> backboxint;
 	SDL_Rect backboxrect;
 
 	int warpskip, warpfcol, warpbcol;

@@ -6,6 +6,7 @@
 #include "BlockV.h"
 
 #include <vector>
+#include "Game.h"
 #include <string>
 
 #define		rn( rx,  ry) ((rx) + ((ry) * 100))
@@ -191,11 +192,11 @@ public:
     void entitycollisioncheck(Graphics& dwgfx, Game& game, mapclass& map, musicclass& music);
 
 
-    std::vector<entclass> entities;
+    growing_vector<entclass> entities;
 
     int nentity;
 
-    std::vector<entclass> linecrosskludge;
+    growing_vector<entclass> linecrosskludge;
     int nlinecrosskludge;
 
     point colpoint1, colpoint2;
@@ -213,10 +214,10 @@ public:
     int activetrigger;
 
 
-    std::vector<blockclass> blocks;
-    std::vector<int> flags;
-    std::vector<int> collect;
-    std::vector<int> customcollect;
+    growing_vector<blockclass> blocks;
+    growing_vector<int> flags;
+    growing_vector<int> collect;
+    growing_vector<int> customcollect;
 
     int nblocks;
     bool skipblocks, skipdirblocks;
