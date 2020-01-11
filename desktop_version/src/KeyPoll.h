@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Game.h"
 #include <map> // FIXME: I should feel very bad for using C++ -flibit
 
 #include "SDL.h"
@@ -57,7 +58,7 @@ public:
 
 	bool isUp(SDL_Keycode key);
 
-	bool isDown(std::vector<SDL_GameControllerButton> buttons);
+	bool isDown(growing_vector<SDL_GameControllerButton> buttons);
 	bool isDown(SDL_GameControllerButton button);
 	bool controllerButtonDown();
 	bool controllerWantsLeft(bool includeVert);

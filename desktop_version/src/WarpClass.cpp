@@ -2,7 +2,7 @@
 
 #include "MakeAndPlay.h"
 
-std::vector<std::string> warpclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
+growing_vector<std::string> warpclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
 {
 	int t;
 
@@ -12,7 +12,7 @@ std::vector<std::string> warpclass::loadlevel(int rx, int ry , Game& game, entit
 	ry += 49;   //warp
 
 	t = rx + (ry * 100);
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	coin = 0;
 	rcol = 0;
 	warpx = false;

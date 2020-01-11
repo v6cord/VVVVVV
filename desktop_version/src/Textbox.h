@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include <string>
 #include <vector>
+#include "Game.h"
 
 class textboxclass
 {
@@ -35,7 +36,7 @@ public:
     void addline(std::string t);
 public:
     //Fundamentals
-    std::vector<std::string> line;
+    growing_vector<std::string> line;
     int xp, yp, lw, w, h, numlines;
     int x,y;
     int r,g,b;

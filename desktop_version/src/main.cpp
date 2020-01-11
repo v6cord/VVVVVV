@@ -36,10 +36,12 @@ scriptclass script;
 
 int main(int argc, char *argv[])
 {
+    printf("filesystem\n");
     if(!FILESYSTEM_init(argv[0]))
     {
         return 1;
     }
+    printf("sdl\n");
     SDL_Init(
         SDL_INIT_VIDEO |
         SDL_INIT_AUDIO |
@@ -53,8 +55,10 @@ int main(int argc, char *argv[])
         SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
     }
 
+    printf("network\n");
     NETWORK_init();
 
+    printf("gamescreen\n");
     Screen gameScreen;
 
 	printf("\t\t\n");

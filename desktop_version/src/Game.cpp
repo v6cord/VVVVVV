@@ -533,7 +533,7 @@ void Game::loadcustomlevelstats()
                     std::string TextString = (pText);
                     if(TextString.length())
                     {
-                        std::vector<std::string> values = split(TextString,',');
+                        growing_vector<std::string> values = split(TextString,',');
                         for(size_t i = 0; i < values.size(); i++)
                         {
                             if(i<200) customlevelscore[i]=(atoi(values[i].c_str()));
@@ -546,7 +546,7 @@ void Game::loadcustomlevelstats()
                     std::string TextString = (pText);
                     if(TextString.length())
                     {
-                        std::vector<std::string> values = split(TextString,'|');
+                        growing_vector<std::string> values = split(TextString,'|');
                         for(size_t i = 0; i < values.size(); i++)
                         {
                             if(i<200) customlevelstats[i]=values[i];
@@ -4161,7 +4161,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 unlock.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4175,7 +4175,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 unlocknotify.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4189,7 +4189,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 besttimes.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4203,7 +4203,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 besttrinkets.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4218,7 +4218,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 bestlives.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4233,7 +4233,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 bestrank.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4843,7 +4843,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length()>1)
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4857,7 +4857,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.flags.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4871,7 +4871,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 crewstats.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4885,7 +4885,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.collect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5065,7 +5065,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length()>1)
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5079,7 +5079,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.flags.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5093,7 +5093,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 for(size_t i = 0; i < 6; i++)
                 {
                     obj.customcrewmoods[i]=atoi(values[i].c_str());
@@ -5106,7 +5106,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 crewstats.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5120,7 +5120,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.collect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5134,7 +5134,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.customcollect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5392,7 +5392,7 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
                 std::string TextString = (pText);
                 if(TextString.length())
                 {
-                    std::vector<std::string> values = split(TextString,',');
+                    growing_vector<std::string> values = split(TextString,',');
                     tele_crewstats.clear();
                     for(size_t i = 0; i < values.size(); i++)
                     {
@@ -5483,7 +5483,7 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
                 std::string TextString = (pText);
                 if(TextString.length())
                 {
-                    std::vector<std::string> values = split(TextString,',');
+                    growing_vector<std::string> values = split(TextString,',');
                     quick_crewstats.clear();
                     for(size_t i = 0; i < values.size(); i++)
                     {
@@ -6305,7 +6305,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6319,7 +6319,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.flags.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6333,7 +6333,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 crewstats.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6347,7 +6347,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.collect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {

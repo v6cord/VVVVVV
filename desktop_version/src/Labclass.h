@@ -5,12 +5,13 @@
 #include "Entity.h"
 
 #include <vector>
+#include "Game.h"
 #include <string>
 
 class labclass
 {
 public:
-    std::vector<std::string>  loadlevel(int rx, int ry , Game& game, entityclass& obj);
+    growing_vector<std::string>  loadlevel(int rx, int ry , Game& game, entityclass& obj);
 
     std::string roomname;
     int coin, rcol;

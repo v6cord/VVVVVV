@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Game.h"
 
 class towerclass
 {
@@ -15,9 +16,9 @@ public:
 
     int miniat(int xp, int yp, int yoff);
 
-    void fillbackground(std::vector<std::string>& tmap);
+    void fillbackground(growing_vector<std::string>& tmap);
 
-    void fillminitower(std::vector<std::string>& tmap);
+    void fillminitower(growing_vector<std::string>& tmap);
 
     void loadminitower1();
 
@@ -25,7 +26,7 @@ public:
 
     void loadbackground();
 
-    void fillcontents(std::vector<std::string>& tmap);
+    void fillcontents(growing_vector<std::string>& tmap);
 
     void loadmap();
 
@@ -34,10 +35,10 @@ public:
     //public var minitower:Array = new Array();
     //public var vmult:Array = new Array();
 
-    std::vector<int> back;
-    std::vector<int> contents;
-    std::vector<int> minitower;
-    std::vector<int> vmult;
+    growing_vector<int> back;
+    growing_vector<int> contents;
+    growing_vector<int> minitower;
+    growing_vector<int> vmult;
 
     bool minitowermode;
     int i;

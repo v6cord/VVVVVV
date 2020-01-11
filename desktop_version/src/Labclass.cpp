@@ -1,6 +1,6 @@
 #include "Labclass.h"
 
-std::vector<std::string> labclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
+growing_vector<std::string> labclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
 {
 	int t;
 
@@ -18,7 +18,7 @@ std::vector<std::string> labclass::loadlevel(int rx, int ry , Game& game, entity
 	}
 
 	t = rx + (ry * 100);
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	coin = 0;
 	rcol = 0;
 	roomname = "Untitled room ["+UtilityClass::String(rx) + "," + UtilityClass::String(ry)+"]";

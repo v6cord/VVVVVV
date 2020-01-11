@@ -1594,7 +1594,8 @@ void editorclass::findstartpoint(Game& game)
         game.edsavery = 100;
         game.edsavegc = 0;
         game.edsavey--;
-        game.edsavedir=1-edentity[testeditor].p1;
+        // i'm not sure what this line is supposed to do, but it can never be correct
+        //game.edsavedir=1-edentity[testeditor].p1;
     }
     else
     {
@@ -1618,7 +1619,7 @@ void editorclass::saveconvertor()
     maxheight=20;
     int oldwidth=10, oldheight=10;
 
-    std::vector <int> tempcontents;
+    growing_vector <int> tempcontents;
     for (int j = 0; j < 30 * oldwidth; j++)
     {
         for (int i = 0; i < 40 * oldheight; i++)
@@ -1818,7 +1819,7 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 //contents.clear();
                 for(size_t i = 0; i < contents.size(); i++)
                 {
@@ -1846,7 +1847,7 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-              std::vector<std::string> values = split(TextString,',');
+              growing_vector<std::string> values = split(TextString,',');
               contents.clear();
               for(int i = 0; i < values.size(); i++)
               {
@@ -1924,7 +1925,7 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,'|');
+                growing_vector<std::string> values = split(TextString,'|');
                 script.clearcustom();
                 for(size_t i = 0; i < values.size(); i++)
                 {
