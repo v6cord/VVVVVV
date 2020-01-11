@@ -270,7 +270,7 @@ void PLATFORM_migrateSaveData(char* output)
 #elif defined(_WIN32)
 	WIN32_FIND_DATA findHandle;
 	HANDLE hFind = NULL;
-	char fileSearch[MAX_PATH];
+	char fileSearch[MAX_PATH + 9];
 
 	/* Same place, different layout. */
 	strcpy(oldDirectory, output);

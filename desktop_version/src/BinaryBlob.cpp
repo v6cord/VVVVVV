@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __MINGW32__
+#define PRINTF_LL "%I64d"
+#else
+#define PRINTF_LL "%lld"
+#endif
+
 /* FIXME: Abstract to FileSystemUtils! */
 #include <physfs.h>
 
@@ -108,7 +114,7 @@ bool binaryBlob::unPackBinary(const char* name)
 	}
 	PHYSFS_close(handle);
 
-	printf("The complete reloaded file size: %lli\n", size);
+	printf("The complete reloaded file size: " PRINTF_LL "\n", size);
 
 	for (int i = 0; i < 128; i += 1)
 	{
