@@ -6632,9 +6632,11 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[1] = true;
 					menuoptions[2] = "game options";
 					menuoptionsactive[2] = true;
-					menuoptions[3] = "quit game";
+                    menuoptions[3] = "changelog";
 					menuoptionsactive[3] = true;
-					nummenuoptions = 4;
+					menuoptions[4] = "quit game";
+					menuoptionsactive[4] = true;
+					nummenuoptions = 5;
 					menuxoff = -16;
 					menuyoff = -10;
 				#elif !defined(MAKEANDPLAY)
@@ -6648,9 +6650,11 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[3] = true;
 					menuoptions[4] = "view credits";
 					menuoptionsactive[4] = true;
-					menuoptions[5] = "quit game";
+                    menuoptions[5] = "changelog";
 					menuoptionsactive[5] = true;
-					nummenuoptions = 6;
+					menuoptions[6] = "quit game";
+					menuoptionsactive[6] = true;
+					nummenuoptions = 7;
 					menuxoff = -16;
 					menuyoff = -10;
 				#endif
@@ -7027,6 +7031,14 @@ void Game::createmenu( std::string t )
         nummenuoptions = 7;
         menuxoff = -70;
         menuyoff = -20;
+    }
+    else if (t == "changelog")
+    {
+        menuoptions[0] = "return";
+        menuoptionsactive[0] = true;
+        nummenuoptions = 1;
+        menuxoff = 26;
+        menuyoff = 64;
     }
     else if (t == "credits")
     {

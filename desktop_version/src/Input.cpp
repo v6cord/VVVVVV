@@ -262,6 +262,13 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     }
                     else if (game.currentmenuoption == 3)
                     {
+                        //Changelog
+                        music.playef(11, 10);
+                        game.createmenu("changelog");
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 4)
+                    {
                         //bye!
                         music.playef(2, 10);
                         game.mainmenu = 100;
@@ -324,6 +331,13 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         map.nexttowercolour();
                     }
                     else if (game.currentmenuoption == 5)
+                    {
+                        //Changelog
+                        music.playef(11, 10);
+                        game.createmenu("changelog");
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 6)
                     {
                         //bye!
                         music.playef(2, 10);
@@ -1031,6 +1045,12 @@ SDL_assert(0 && "Remove open level dir");
                         game.createmenu("options");
                         map.nexttowercolour();
                     }
+                }
+                else if (game.currentmenuname == "changelog")
+                {
+                    music.playef(11, 10);
+                    game.createmenu("mainmenu");
+                    map.nexttowercolour();
                 }
                 else if (game.currentmenuname == "credits")
                 {

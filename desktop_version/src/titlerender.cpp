@@ -81,6 +81,13 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 dwgfx.Print( 10, 230, "git.io/vvvvvv-ce", tr/2, tg/2, tb/2);
             }
         }
+        else if (game.currentmenuname == "changelog")
+        {
+            dwgfx.bigprint( -1, 50, "Changelog:", tr, tg, tb, true, 2);
+            dwgfx.Print( -1, 100, "yuuuuh", tr, tg, tb, true);
+            dwgfx.Print( -1, 115, "removed herobrine",  tr, tg, tb, true);
+            dwgfx.Print( -1, 130, "CUnk",  tr, tg, tb, true);
+        }
         else if (game.currentmenuname == "levellist")
         {
           if(ed.ListOfMetaData.size()==0){
