@@ -313,7 +313,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int player = obj.getplayer();
 				obj.entities[player].xp = ss_toi(words[1]);
 				obj.entities[player].yp = ss_toi(words[2]);
-				game.gravitycontrol = ss_toi(words[3]);
+				if (words[3] != "") {
+                                    game.gravitycontrol = ss_toi(words[3]);
+                                } else {
+                                    game.gravitycontrol = 0;
+                                }
 
 			}
 			if (words[0] == "gotoroom")
