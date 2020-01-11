@@ -3,6 +3,9 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # CMake Options
 OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)

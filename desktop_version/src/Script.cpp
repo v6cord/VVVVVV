@@ -275,6 +275,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));
 			}
+			if (words[0] == "playwav")
+			{
+				music.playwav(words[1].c_str());
+			}
 			if (words[0] == "play")
 			{
 				music.play(ss_toi(words[1]));
