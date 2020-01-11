@@ -38,24 +38,17 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         tg = 164 - (help.glow / 2) - int(fRandom() * 4);
         tb = 164 - (help.glow / 2) - int(fRandom() * 4);
 
-        temp = 50;
-        dwgfx.drawsprite((160 - 96) + 0 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 1 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 2 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 3 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 4 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 5 * 32, temp, 23, tr, tg, tb);
-        dwgfx.Print(-1,temp+35," COMMUNITY EDITION",tr, tg, tb, true);
+        dwgfx.drawsprite((160 - 96) + 0 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 1 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 2 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 3 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 4 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 5 * 32, 50, 23, tr, tg, tb);
+        dwgfx.Print(-1,95,"COMMUNITY EDITION",tr, tg, tb, true);
 
         dwgfx.Print(5, 175, "[ Press ACTION to Start ]", tr, tg, tb, true);
         dwgfx.Print(5, 195, "ACTION = Space, Z, or V", int(tr*0.5f), int(tg*0.5f), int(tb*0.5f), true);
 
-        //dwgfx.Print(5, 215, "Press CTRL-F for Fullscreen", tr, tg, tb, true);
-
-        /*dwgfx.Print(5, 5, "IGF WIP Build, 29th Oct '09", tr, tg, tb, true);
-        dwgfx.Print(5, 200, "Game by Terry Cavanagh", tr, tg, tb, true);
-        dwgfx.Print(5, 210, "Music by Magnus P~lsson", tr, tg, tb, true);
-        dwgfx.Print(5, 220, "Roomnames by Bennett Foddy", tr, tg, tb, true);*/
     }
     else
     {
@@ -64,29 +57,27 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         tr = map.r - (help.glow / 4) - int(fRandom() * 4);
         tg = map.g - (help.glow / 4) - int(fRandom() * 4);
         tb = map.b - (help.glow / 4) - int(fRandom() * 4);
-        if (tr < 0) tr = 0;
-        if(tr>255) tr=255;
-        if (tg < 0) tg = 0;
-        if(tg>255) tg=255;
-        if (tb < 0) tb = 0;
-        if(tb>255) tb=255;
 
-        temp = 50;
+        if (tr < 0)   tr = 0;
+        if (tr > 255) tr = 255;
+        if (tg < 0)   tg = 0;
+        if (tg > 255) tg = 255;
+        if (tb < 0)   tb = 0;
+        if (tb > 255) tb = 255;
 
         if(game.currentmenuname=="mainmenu")
         {
-            dwgfx.drawsprite((160 - 96) + 0 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 1 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 2 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 3 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 4 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 5 * 32, temp, 23, tr, tg, tb);
-			dwgfx.Print(-1, temp + 35, " COMMUNITY EDITION", tr, tg, tb, true);
+            dwgfx.drawsprite((160 - 96) + 0 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 1 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 2 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 3 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 4 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 5 * 32, 50, 23, tr, tg, tb);
+            dwgfx.Print(-1,95,"COMMUNITY EDITION",tr, tg, tb, true);
             dwgfx.Print( 310 - (4*8), 230, "c1.0", tr/2, tg/2, tb/2);
-
-						if(music.mmmmmm){
-						  dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
-						}
+			if (music.mmmmmm) {
+			    dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
+		    }
         }
         else if (game.currentmenuname == "levellist")
         {
@@ -239,6 +230,14 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.bigprint( 40, 135, "Magnus P~lsson", tr, tg, tb, true, 2);
             dwgfx.drawimagecol(8, -1, 156, tr *0.75, tg *0.75, tb *0.75, true);
             //dwgfx.Print( 40, 155, "http://souleye.madtracker.net", tr, tg, tb, true);
+        }
+        else if (game.currentmenuname == "credits_ce")
+        {
+            dwgfx.Print( -1, 50, "VVVVVV: Community Edition has", tr, tg, tb, true);
+            dwgfx.Print( -1, 65, "accepted contributions from:", tr, tg, tb, true);
+            dwgfx.Print( -1, 100, "Info Teddy", tr, tg, tb, true);
+            dwgfx.Print( -1, 115, "AllyTally",  tr, tg, tb, true);
+            dwgfx.Print( -1, 130, "leo60228",  tr, tg, tb, true);
         }
         else if (game.currentmenuname == "credits2")
         {

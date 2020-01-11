@@ -7046,6 +7046,16 @@ void Game::createmenu( std::string t )
         menuxoff = 20;
         menuyoff = 64;
     }
+    else if (t == "credits_ce")
+    {
+        menuoptions[0] = "next page";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "return";
+        menuoptionsactive[1] = true;
+        nummenuoptions = 2;
+        menuxoff = 20;
+        menuyoff = 64;
+    }
     else if (t == "credits25")
     {
         menuoptions[0] = "next page";

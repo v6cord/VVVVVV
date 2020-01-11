@@ -1025,6 +1025,23 @@ SDL_assert(0 && "Remove open level dir");
                     {
                         //next page
                         music.playef(11, 10);
+                        game.createmenu("credits_ce");
+                        map.nexttowercolour();
+                    }
+                    else
+                    {
+                        //back
+                        music.playef(11, 10);
+                        game.createmenu("mainmenu");
+                        map.nexttowercolour();
+                    }
+                }
+                else if (game.currentmenuname == "credits_ce")
+                {
+                    if (game.currentmenuoption == 0)
+                    {
+                        //next page
+                        music.playef(11, 10);
                         game.createmenu("credits2");
                         map.nexttowercolour();
                     }

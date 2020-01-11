@@ -151,7 +151,8 @@ int main(int argc, char *argv[])
 
     //game.gamestate = TITLEMODE;
     //game.gamestate=EDITORMODE;
-    game.gamestate = PRELOADER; //Remember to uncomment this later!
+    //game.gamestate = PRELOADER; //Remember to uncomment this later!
+    game.gamestate = TITLEMODE;
 
     game.menustart = false;
     game.mainmenu = 0;
