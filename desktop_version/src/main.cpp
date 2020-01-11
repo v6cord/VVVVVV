@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <cmath>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
@@ -243,43 +244,33 @@ int main(int argc, char *argv[])
 		*/
     //End hack here ----
 
-    volatile Uint32 time, timePrev = 0;
     game.infocus = true;
     key.isActive = true;
+
+    uint32_t last_frame = 0;
+    //double frame_time = 1000.0 / 30.0;
+    double frame_time = 34.0; // keep TASes syncing
 
     while(!key.quitProgram)
     {
 		//gameScreen.ClearScreen(0x00);
 
-        time = SDL_GetTicks();
-
         // Update network per frame.
         NETWORK_update();
 
         //framerate limit to 30
-        Uint32 timetaken = time - timePrev;
-        if(game.gamestate==EDITORMODE)
-		{
-          if (timetaken < 24)
-          {
-              volatile Uint32 delay = 24 - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
-        }else{
-          if (timetaken < game.gameframerate)
-          {
-              volatile Uint32 delay = game.gameframerate - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
+        while (true) {
+            uint32_t ticks = SDL_GetTicks();
+            uint32_t ticks_elapsed = ticks - last_frame;
+            double double_ticks = ticks_elapsed;
+            double delay_time = round(frame_time - double_ticks);
+            if (delay_time > 0) {
+                SDL_Delay(1);
+            } else {
+                last_frame = ticks;
+                break;
+            }
         }
-
-
 
         key.Poll();
 		if(key.toggleFullscreen)
