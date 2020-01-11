@@ -71,12 +71,8 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
-#ifdef _WIN32
 	strcpy(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
-#else
-	strcpy(output, "data.zip");
-#endif
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
 		puts("Error: data.zip missing!");
@@ -160,13 +156,12 @@ growing_vector<std::string> FILESYSTEM_getLevelDirFileNames()
 
 void PLATFORM_getOSDirectory(char* output)
 {
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__) || defined(__OpenBSD__)
-	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
-#elif defined(_WIN32)
+#ifdef _WIN32
+	/* This block is here for compatibility, do not touch it! */
 	SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, output);
 	strcat(output, "\\VVVVVV\\");
 #else
-#error See PLATFORM_getOSDirectory
+	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
 #endif
 }
 
