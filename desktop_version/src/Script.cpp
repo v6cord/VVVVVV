@@ -195,6 +195,15 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				passive = true;
 				scriptdelay = ss_toi(words[1]);
 			}
+			if (words[0] == "settile")
+			{
+				// settile(x,y,tile)
+				// If you're dealing with spikes/one-ways/1x1 disappears,
+				// this won't change their collision, nor add any collision,
+				// because those are all actually blocks
+				map.settile(ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]));
+				dwgfx.foregrounddrawn = false;
+			}
       if (words[0] == "flag")
 			{
 				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){
