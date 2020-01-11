@@ -28,6 +28,7 @@ ENDIF()
 
 # Include Directories
 INCLUDE_DIRECTORIES(src tinyxml physfs lodepng)
+include(sdl2-config OPTIONAL)
 
 # Source Lists
 SET(VVV_SRC
@@ -103,10 +104,14 @@ ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 TARGET_LINK_LIBRARIES(vvvvvv physfs-static tinyxml-static lodepng-static)
 
 # SDL2 Dependency (Detection pulled from FAudio)
-if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
+if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND DEFINED VVVVVV_CROSS_COMPILE)
+	message(STATUS "Cross-compiling to Windows from Linux")
+	target_include_directories(vvvvvv PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
+	target_link_libraries(vvvvvv SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
+elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
 	message(STATUS "Using pre-defined SDL2 variables SDL2_INCLUDE_DIRS and SDL2_LIBRARIES")
 	target_include_directories(vvvvvv PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-	target_link_libraries(vvvvvv ${SDL2_LIBRARIES})
+        target_link_libraries(vvvvvv ${SDL2_LIBRARIES})
 else()
 	# Only try to autodetect if both SDL2 variables aren't explicitly set
 	find_package(SDL2 CONFIG)
