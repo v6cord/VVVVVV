@@ -24,6 +24,7 @@ scriptclass::scriptclass()
 	scriptlength = 0;
 	scriptdelay = 0;
 	running = false;
+	passive = false;
 
 	b = 0;
 	g = 0;
@@ -186,6 +187,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			if (words[0] == "delay")
 			{
 				//USAGE: delay(frames)
+				scriptdelay = ss_toi(words[1]);
+			}
+			if (words[0] == "pdelay")
+			{
+				//USAGE: delay(frames)
+				passive = true;
 				scriptdelay = ss_toi(words[1]);
 			}
       if (words[0] == "flag")
@@ -2504,6 +2511,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 	if(scriptdelay>0)
 	{
 		scriptdelay--;
+		if (scriptdelay == 0) {
+			passive = false;
+		}
 	}
 }
 
@@ -3552,4 +3562,5 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	scriptdelay = 0;
 	scriptname = "null";
 	running = false;
+	passive = false;
 }

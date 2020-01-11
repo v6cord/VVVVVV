@@ -1734,7 +1734,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     //game.mx = (mouseX / 2);
     //game.my = (mouseY / 2);
 
-    if(!script.running)
+    if(!script.running || (script.running && script.passive))
     {
         game.press_left = false;
         game.press_right = false;
@@ -1800,7 +1800,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     }
     else
     { */
-        if(!script.running)
+        if(!script.running || (script.running && script.passive))
         {
             if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false))
             {

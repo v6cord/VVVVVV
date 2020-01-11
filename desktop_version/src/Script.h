@@ -56,6 +56,7 @@ public:
 
     int scriptdelay;
     bool running;
+    bool passive;
     std::string tempword;
     std::string currentletter;
 
