@@ -199,7 +199,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "pdelay")
 			{
-				//USAGE: delay(frames)
+				//USAGE: pdelay(frames)
 				passive = true;
 				scriptdelay = ss_toi(words[1]);
 			}
@@ -306,6 +306,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//USAGE: gotoroom(x,y) (manually add 100)
 				map.gotoroom(ss_toi(words[1])+100, ss_toi(words[2])+100, dwgfx, game, obj, music);
 			}
+			if (words[0] == "reloadroom")
+			{
+				//USAGE: reloadroom(x,y)
+				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
+			}
 			if (words[0] == "cutscene")
 			{
 				dwgfx.showcutscenebars = true;
@@ -399,6 +404,25 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
 				//Number of lines for the textbox!
 				txtnumlines = ss_toi(words[4]);
+				for (int i = 0; i < txtnumlines; i++)
+				{
+					position++;
+					txt[i] = commands[position];
+				}
+			}
+			else if ((words[0] == "textcolor") || (words[0] == "textcolour"))
+			{
+				// set the colors
+				r = ss_toi(words[1]);
+				g = ss_toi(words[2]);
+				b = ss_toi(words[3]);
+
+				//next are the x,y coordinates
+				textx = ss_toi(words[4]);
+				texty = ss_toi(words[5]);
+
+				//Number of lines for the textbox!
+				txtnumlines = ss_toi(words[6]);
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
