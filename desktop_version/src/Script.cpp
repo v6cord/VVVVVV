@@ -176,6 +176,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			if (words[0] == "customifnotflag")
+			{
+				if (obj.flags[ss_toi(words[1])]!=1)
+				{
+					load("custom_"+words[2]);
+					position--;
+				}
+			}
 			if (words[0] == "custommap")
 			{
 				if(words[1]=="on"){
@@ -1314,6 +1322,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "ifflag")
 			{
 				if (obj.flags[ss_toi(words[1])]==1)
+				{
+					load(words[2]);
+					position--;
+				}
+			}
+			else if (words[0] == "ifnotflag")
+			{
+				if (obj.flags[ss_toi(words[1])]!=1)
 				{
 					load(words[2]);
 					position--;

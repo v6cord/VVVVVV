@@ -204,6 +204,9 @@ void scriptclass::load(std::string t)
           }else if(words[0] == "ifflag"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add("custom"+script.customscript[i]);
+          }else if(words[0] == "ifnotflag"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
           }else if(words[0] == "iftrinketsless"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add("custom"+script.customscript[i]);
