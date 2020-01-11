@@ -4856,7 +4856,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 //Mouse input
                 if(key.leftbutton)
                 {
-                    if(ed.lclickdelay==0 || ed.drawmode==0) // super simple bandaid fix
+                    if(ed.lclickdelay==0)
                     {
                         //Depending on current mode, place something
                         if(ed.drawmode==0)
