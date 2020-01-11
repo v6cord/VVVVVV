@@ -78,7 +78,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
 			if (music.mmmmmm) {
 			    dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
 		    } else {
-                dwgfx.Print( 10, 230, "git.io/vvvvvv-ce", tr/2, tg/2, tb/2);
+                dwgfx.Print( 10, 230, "git.io/v6-ce", tr/2, tg/2, tb/2);
             }
         }
         else if (game.currentmenuname == "changelog")
