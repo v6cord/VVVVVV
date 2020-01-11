@@ -204,6 +204,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.settile(ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]));
 				dwgfx.foregrounddrawn = false;
 			}
+			if (words[0] == "setroomname")
+			{
+				// setroomname(roomname)
+				map.roomname = words[1];
+			}
       if (words[0] == "flag")
 			{
 				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){
