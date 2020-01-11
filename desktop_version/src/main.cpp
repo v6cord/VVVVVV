@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <cmath>
+#include <chrono>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
@@ -247,8 +248,8 @@ int main(int argc, char *argv[])
     game.infocus = true;
     key.isActive = true;
 
-    uint32_t last_frame = 0;
-    double frame_time = 1000.0 / 30.0;
+    std::chrono::high_resolution_clock::time_point last_frame;
+    std::chrono::duration<int, std::ratio<1, 30>> frame_time(1);
 
     while(!key.quitProgram)
     {
@@ -259,14 +260,10 @@ int main(int argc, char *argv[])
 
         //framerate limit to 30
         while (true) {
-            uint32_t ticks = SDL_GetTicks();
-            uint32_t ticks_elapsed = ticks - last_frame;
-            double double_ticks = ticks_elapsed;
-            double delay_time = round(frame_time - double_ticks);
-            if (delay_time > 0) {
-                SDL_Delay(1);
-            } else {
-                last_frame = ticks;
+            auto now = std::chrono::high_resolution_clock::now();
+            auto elapsed = now - last_frame;
+            if (elapsed >= frame_time) {
+                last_frame = now;
                 break;
             }
         }
