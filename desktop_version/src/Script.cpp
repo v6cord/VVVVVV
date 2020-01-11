@@ -213,7 +213,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			if (words[0] == "setroomname")
 			{
 				// setroomname(roomname)
-				map.roomname = words[1];
+                                position++;
+				map.roomname = commands[position];
 			}
       if (words[0] == "flag")
 			{
