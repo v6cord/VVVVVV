@@ -1171,7 +1171,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				obj.entities[i].state = ss_toi(words[2]);
 				if (obj.entities[i].state == 16)
 				{
-					obj.entities[i].para=ss_toi(words[3]);
+					if (words[1] == "player")
+					{
+						// Just do a walk instead
+						int walkframes = (ss_toi(words[3]) - obj.entities[i].xp) / 6;
+						scriptdelay = std::abs(walkframes);
+						if (walkframes > 0)
+						{
+							game.press_left = false;
+							game.press_right = true;
+						}
+						else if (walkframes < 0)
+						{
+							game.press_left = true;
+							game.press_right = false;
+						}
+					}
+					else
+					{
+						obj.entities[i].para=ss_toi(words[3]);
+					}
 				}
 				else if (obj.entities[i].state == 17)
 				{
