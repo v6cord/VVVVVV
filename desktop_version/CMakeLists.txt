@@ -3,23 +3,31 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 
+# CMake Options
+OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
+OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
+
 # Architecture Flags
 IF(APPLE)
 	# Wow, Apple is a huge jerk these days huh?
 	SET(OSX_10_9_SDK_PATH /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk)
-	IF(IS_DIRECTORY ${OSX_10_9_SDK_PATH})
-		SET(CMAKE_OSX_SYSROOT ${OSX_10_9_SDK_PATH})
-	ELSE()
-		MESSAGE(WARNING "macOS 10.9 SDK not found - proceeding with the default SDK. This may cause issues!")
-		SET(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
+	IF(NOT CMAKE_OSX_SYSROOT)
+		IF(IS_DIRECTORY ${OSX_10_9_SDK_PATH})
+			SET(CMAKE_OSX_SYSROOT ${OSX_10_9_SDK_PATH})
+		ELSE()
+			MESSAGE(WARNING "CMAKE_OSX_SYSROOT not set and macOS 10.9 SDK not found! Using default one.")
+		ENDIF()
 	ENDIF()
-	MESSAGE(STATUS "Using macOS SDK at ${CMAKE_OSX_SYSROOT}")
 	SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
 	LINK_DIRECTORIES(/usr/local/lib)
 	ADD_COMPILE_OPTIONS(-Werror=partial-availability)
 ENDIF()
 
 PROJECT(VVVVVV)
+
+IF(APPLE)
+	MESSAGE(STATUS "Using macOS SDK at ${CMAKE_OSX_SYSROOT}")
+ENDIF()
 
 # Compiler Flags
 ADD_DEFINITIONS(-DPHYSFS_SUPPORTS_DEFAULT=0 -DPHYSFS_SUPPORTS_ZIP=1)
@@ -102,6 +110,17 @@ IF(WIN32)
 	ADD_EXECUTABLE(vvvvvv WIN32 ${VVV_SRC})
 ELSE()
 	ADD_EXECUTABLE(vvvvvv ${VVV_SRC})
+ENDIF()
+
+# Build options
+IF(ENABLE_WARNINGS)
+	# The weird syntax is due to CMake generator expressions.
+	# Saves quite a few lines and boilerplate at the price of readability.
+	TARGET_COMPILE_OPTIONS(vvvvvv PRIVATE
+		$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
+			-Wall $<$<BOOL:ENABLE_WERROR>:-Werror>>
+		$<$<CXX_COMPILER_ID:MSVC>:
+			/W4 $<$<BOOL:ENABLE_WERROR>:/WX>>)
 ENDIF()
 
 # Library information
