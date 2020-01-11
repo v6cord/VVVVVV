@@ -18,7 +18,7 @@ class growing_vector : public std::vector<T> {
         if (this->size() < needed_size) {
             this->resize(needed_size);
         }
-        return this->operator[](index);
+        return std::vector<T>::operator[](index);
     }
     template<typename T2 = T>
     T2& operator[](typename std::vector<T2>::size_type index) {
@@ -26,7 +26,7 @@ class growing_vector : public std::vector<T> {
         if (this->size() < needed_size) {
             this->resize(needed_size);
         }
-        return this->operator[](index);
+        return std::vector<T>::operator[](index);
     }
 };
 
