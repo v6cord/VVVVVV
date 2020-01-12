@@ -1,7 +1,10 @@
-{ crossSystem ? null }:
-let pkgs = import <nixpkgs> {
-  inherit crossSystem;
-};
+{ cross ? false }:
+let pkgsNative = import (builtins.fetchTarball {
+  name = "cross-compile-nixpkgs";
+  url = https://github.com/nixos/nixpkgs/archive/2436c27541b2f52deea3a4c1691216a02152e729.tar.gz;
+  sha256 = "0p98dwy3rbvdp6np596sfqnwlra11pif3rbdh02pwdyjmdvkmbvd";
+}) {};
+    pkgs = if cross then pkgsNative.pkgsCross.mingwW64 else pkgsNative;
 in
   pkgs.callPackage (
     {stdenv, smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake}:
@@ -35,6 +38,6 @@ in
           patches = [ ./windres.patch ];
         }))
       ] else [ SDL2 SDL2_mixer ];
-      CMAKE_MODULE_PATH = if stdenv.targetPlatform.isWindows then "${sdl}/lib/cmake/SDL2/" else null;
+      CMAKE_MODULE_PATH = if stdenv.targetPlatform.isWindows then "${sdl}/lib/cmake/SDL2/" else "${SDL2.dev}/lib/cmake/SDL2/";
     })
   ) {}
