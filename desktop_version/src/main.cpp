@@ -34,9 +34,11 @@
 #include <string.h>
 
 scriptclass script;
- edentities edentity[3000];
+edentities edentity[3000];
+editorclass ed;
 
- editorclass ed;
+bool startinplaytest = false;
+std::string playtestname;
 
 int main(int argc, char *argv[])
 {
@@ -52,10 +54,25 @@ int main(int argc, char *argv[])
     );
     SDL_ShowCursor(SDL_DISABLE);
 
-    if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
+    for (int i = 1; i < argc; ++i) {
+        if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
+            if (i + 1 < argc) {
+                startinplaytest = true;
+                i++;
+                playtestname = std::string("levels/");
+                playtestname.append(argv[i]);
+                playtestname.append(std::string(".vvvvvv"));
+            } else {
+                printf("--playing option requires one argument.\n");
+                return 1;
+            }
+        }
+    }
+
+    /*if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
     {
         SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
-    }
+    }*/
 
     NETWORK_init();
 
@@ -220,6 +237,57 @@ int main(int argc, char *argv[])
     entityclass obj;
     obj.init();
 
+    if (startinplaytest) {
+        game.levelpage=0;
+        ed.getDirectoryData();
+        game.loadcustomlevelstats();
+
+        bool found = false;
+
+        // search for the file in the vector
+        for(growing_vector<std::string>::size_type i = 0; i < ed.ListOfMetaData.size(); i++) {
+            LevelMetaData currentmeta = ed.ListOfMetaData[i];
+            if (currentmeta.filename == playtestname) {
+                game.playcustomlevel = (int)i;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            printf("Level not found\n");
+            return 1;
+        }
+        game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
+        game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
+        std::string name = game.saveFilePath + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
+        TiXmlDocument doc(name.c_str());
+	    game.mainmenu = 22;
+        ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+        ed.findstartpoint(game);
+        game.gamestate = GAMEMODE;
+        script.hardreset(key, graphics, game, map, obj, help, music);
+        game.customstart(obj, music);
+        game.jumpheld = true;
+		map.custommodeforreal = true;
+        map.custommode = true;
+        map.customx = 100;
+        map.customy = 100;
+        if(obj.nentity==0) {
+            obj.createentity(game, game.savex, game.savey, 0, 0);
+        } else {
+            map.resetplayer(graphics, game, obj, music);
+        }
+        map.gotoroom(game.saverx, game.savery, graphics, game, obj, music);
+		ed.generatecustomminimap(graphics, map);
+		map.customshowmm=true;
+        if(ed.levmusic>0){
+            music.play(ed.levmusic);
+        } else {
+            music.currentsong=-1;
+		}
+		//dwgfx.fademode = 4;
+
+    }
     //Quick hack to start in final level ---- //Might be useful to leave this commented in for testing
     /*
     //game.gamestate=GAMEMODE;
