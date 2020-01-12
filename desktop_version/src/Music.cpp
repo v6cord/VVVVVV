@@ -462,7 +462,7 @@ void musicclass::playfile(const char* t, std::string track)
 
     if (track != "") {
         stopfile(track);
-        channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+        if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, -1);
     } else {
         channel = Mix_PlayChannel(-1, pair->second.sound, 0);
     }
