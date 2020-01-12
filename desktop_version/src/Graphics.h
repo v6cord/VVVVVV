@@ -4,6 +4,7 @@
 #include "GraphicsResources.h"
 #include <vector>
 #include "Game.h"
+#include <map>
 
 
 
@@ -278,6 +279,7 @@ public:
 
 	int warpskip, warpfcol, warpbcol;
 
+        std::map<int, int> font_positions;
 };
 
 #endif /* GRAPHICS_H */
