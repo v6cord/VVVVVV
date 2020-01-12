@@ -297,7 +297,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             //dwgfx.Print( 40, 85, "http://www.distractionware.com", tr, tg, tb, true);
 
             dwgfx.Print( -1, 120, "and features music by", tr, tg, tb, true);
-            dwgfx.bigprint( 40, 135, "Magnus Pålsson", tr, tg, tb, true, 2);
+            dwgfx.bigprint( 40, 135, "Magnus P~lsson", tr, tg, tb, true, 2);
             dwgfx.drawimagecol(8, -1, 156, tr *0.75, tg *0.75, tb *0.75, true);
             //dwgfx.Print( 40, 155, "http://souleye.madtracker.net", tr, tg, tb, true);
         }
@@ -406,7 +406,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( 80, 80,"Joshua Buergel", tr, tg, tb);
             dwgfx.Print( 80, 90,"Joshua Hochner", tr, tg, tb);
             dwgfx.Print( 80, 100,"Kurt Ostfeld", tr, tg, tb);
-            dwgfx.Print( 80, 110,"Magnus Pålsson", tr, tg, tb);
+            dwgfx.Print( 80, 110,"Magnus P~lsson", tr, tg, tb);
             dwgfx.Print( 80, 120,"Mark Neschadimenko", tr, tg, tb);
             dwgfx.Print( 80, 130,"Matt Antonellis", tr, tg, tb);
             dwgfx.Print( 80, 140,"Matthew Reppert", tr, tg, tb);
@@ -1394,7 +1394,7 @@ void gamecompleterender(Graphics& dwgfx, Game& game, entityclass& obj, UtilityCl
     if (dwgfx.onscreen(600 + game.creditposition))
     {
         dwgfx.Print(40, 600 + game.creditposition, "With Music by", tr, tg, tb);
-        dwgfx.bigprint(60, 610 + game.creditposition, "Magnus Pålsson", tr, tg, tb);
+        dwgfx.bigprint(60, 610 + game.creditposition, "Magnus P~lsson", tr, tg, tb);
     }
 
     if (dwgfx.onscreen(640 + game.creditposition))
@@ -1480,7 +1480,7 @@ void gamecompleterender(Graphics& dwgfx, Game& game, entityclass& obj, UtilityCl
     if (dwgfx.onscreen(1420 + game.creditposition)) dwgfx.Print(-1, 1430 + game.creditposition,"Joshua Buergel", tr, tg, tb, true);
     if (dwgfx.onscreen(1430 + game.creditposition)) dwgfx.Print(-1, 1440 + game.creditposition,"Joshua Hochner", tr, tg, tb, true);
     if (dwgfx.onscreen(1440 + game.creditposition)) dwgfx.Print(-1, 1450 + game.creditposition,"Kurt Ostfeld", tr, tg, tb, true);
-    if (dwgfx.onscreen(1450 + game.creditposition)) dwgfx.Print(-1, 1460 + game.creditposition, "Magnus Pålsson", tr, tg, tb, true);
+    if (dwgfx.onscreen(1450 + game.creditposition)) dwgfx.Print(-1, 1460 + game.creditposition, "Magnus P~lsson", tr, tg, tb, true);
     if (dwgfx.onscreen(1460 + game.creditposition)) dwgfx.Print(-1, 1470 + game.creditposition,"Mark Neschadimenko", tr, tg, tb, true);
     if (dwgfx.onscreen(1470 + game.creditposition)) dwgfx.Print(-1, 1480 + game.creditposition,"Matt Antonellis", tr, tg, tb, true);
     if (dwgfx.onscreen(1480 + game.creditposition)) dwgfx.Print(-1, 1490 + game.creditposition,"Matthew Reppert", tr, tg, tb, true);
