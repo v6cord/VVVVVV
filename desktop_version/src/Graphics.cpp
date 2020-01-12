@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Screen.h"
+#include <utf8.h>
 
 Graphics::Graphics()
 {
@@ -250,10 +251,10 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
         _x = ((160 ) - ((len(_s)) / 2));
     int bfontpos = 0;
     int curr;
-    for (unsigned int i = 0; i < _s.length(); i++)
-    {
-        curr = (_s.c_str())[i];
-        if (curr > 255 || curr < 0)
+    auto iter = _s.begin();
+    while (iter != _s.end()) {
+        curr = utf8::next(iter, _s.end());
+        if (curr > 0x7f || curr < 0)
         {
             curr = '?';
         }
@@ -293,10 +294,10 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 
     int bfontpos = 0;
     int curr;
-    for (unsigned int i = 0; i < _s.length(); i++)
-    {
-        curr = (_s.c_str())[i];
-        if (curr > 255 || curr < 0)
+    auto iter = _s.begin();
+    while (iter != _s.end()) {
+        curr = utf8::next(iter, _s.end());
+        if (curr > 0x7f || curr < 0)
         {
             curr = '?';
         }
@@ -332,9 +333,10 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 int Graphics::len(std::string t)
 {
     int bfontpos = 0;
-    for (unsigned int i = 0; i < t.length(); i++)
-    {
-        int cur = (t.c_str())[i];
+    auto iter = t.begin();
+    while (iter != t.end()) {
+        int cur = utf8::next(iter, t.end());
+        if (cur < 0 || cur > 0x7f) cur = '?'; // TODO: unicode
         bfontpos+= bfontlen[cur] ;
     }
     return bfontpos;
@@ -351,13 +353,12 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
     int bfontpos = 0;
-    int curr;
-    for (unsigned int i = 0; i < _s.length(); i++)
-    {
-        curr = (_s.c_str())[i];
-        if (curr > 255 || curr < 0)
+    auto iter = _s.begin();
+    while (iter != _s.end()) {
+        int curr = utf8::next(iter, _s.end());
+        if (curr > 0x7f || curr < 0)
         {
-            curr = '?';
+            curr = '?'; // TODO: unicode
         }
         point tpoint;
         tpoint.x = _x + bfontpos;
@@ -414,10 +415,10 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
         _x = ((308) - (_s.length() / 2));
     int bfontpos = 0;
     int curr;
-    for (unsigned int i = 0; i < _s.length(); i++)
-    {
-        curr = (_s.c_str())[i];
-        if (curr > 255 || curr < 0)
+    auto iter = _s.begin();
+    while (iter != _s.end()) {
+        curr = utf8::next(iter, _s.end());
+        if (curr > 0x7f || curr < 0)
         {
             curr = '?';
         }
@@ -3097,10 +3098,10 @@ void Graphics::bigrprint(int x, int y, std::string& t, int r, int g, int b, bool
 
 	int bfontpos = 0;
 	int cur;
-	for (size_t i = 0; i < t.length(); i++)
-	{
-		cur = (t.c_str())[i];
-		if (cur > 255 || cur < 0)
+        auto iter = t.begin();
+	while (iter != t.end()) {
+		cur = utf8::next(iter, t.end());
+		if (cur > 0x7f || cur < 0)
 		{
 			cur = '?';
 		}
