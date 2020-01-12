@@ -3,7 +3,8 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Screen.h"
-#include <utf8.h>
+#include "FileSystemUtils.h"
+#include <utf8/checked.h>
 #include <physfs.h>
 
 Graphics::Graphics()
@@ -132,10 +133,10 @@ Graphics::Graphics()
 }
 
 int Graphics::font_idx(char32_t ch) {
-    if (grphx.im_bfont->h > 128) {
+    if (font_positions.size() > 0) {
         std::map<int, int>::iterator iter = font_positions.find(ch);
         if (iter == font_positions.end()) {
-            return font_idx('?');
+            return font_positions.at('?');
         } else {
             return iter->second;
         }
@@ -174,22 +175,12 @@ void Graphics::Makebfont()
         }
     }
 
-    PHYSFS_File* charmap_file = PHYSFS_openRead("graphics/font.txt");
-    if (charmap_file != NULL) {
-        uint64_t length = PHYSFS_fileLength(charmap_file);
-        char* charmap = (char*) malloc(length);
-        uint64_t read = 0;
-        do {
-            int64_t ret = PHYSFS_readBytes(charmap_file, charmap, length);
-            if (ret >= 0) {
-                read += ret;
-            } else {
-                printf("%s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
-                exit(1);
-            }
-        } while (read < length);
-        char* current = charmap;
-        char* end = charmap + length;
+    unsigned char* charmap = NULL;
+    size_t length;
+    FILESYSTEM_loadFileToMemory("graphics/font.txt", &charmap, &length);
+    if (charmap != NULL) {
+        unsigned char* current = charmap;
+        unsigned char* end = charmap + length;
         int pos = 0;
         while (current != end) {
             int codepoint = utf8::next(current, end);
@@ -281,7 +272,7 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
         _x = ((160 ) - ((len(_s)) / 2));
     int bfontpos = 0;
     int curr;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         curr = utf8::next(iter, _s.end());
         point tpoint;
@@ -320,7 +311,7 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 
     int bfontpos = 0;
     int curr;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         curr = utf8::next(iter, _s.end());
 
@@ -355,7 +346,7 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 int Graphics::len(std::string t)
 {
     int bfontpos = 0;
-    auto iter = t.begin();
+    std::string::iterator iter = t.begin();
     while (iter != t.end()) {
         int cur = utf8::next(iter, t.end());
         bfontpos += bfontlen(cur);
@@ -374,7 +365,7 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
     int bfontpos = 0;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         int curr = utf8::next(iter, _s.end());
         point tpoint;
@@ -432,7 +423,7 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
         _x = ((308) - (_s.length() / 2));
     int bfontpos = 0;
     int curr;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         curr = utf8::next(iter, _s.end());
         point tpoint;
@@ -3112,7 +3103,7 @@ void Graphics::bigrprint(int x, int y, std::string& t, int r, int g, int b, bool
 
 	int bfontpos = 0;
 	int cur;
-        auto iter = t.begin();
+        std::string::iterator iter = t.begin();
 	while (iter != t.end()) {
 		cur = utf8::next(iter, t.end());
 		if (flipmode)

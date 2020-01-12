@@ -3,8 +3,6 @@
 #include <chrono>
 #include "SoundSystem.h"
 
-#include "tinyxml.h"
-
 #include "UtilityClass.h"
 #include "Game.h"
 #include "Graphics.h"

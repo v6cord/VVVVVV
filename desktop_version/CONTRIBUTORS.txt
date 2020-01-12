@@ -3,9 +3,11 @@ Contributors
 
 (Ordered alphabetically by last name.)
 
+* Matt 'Stelpjo' Aaldenberg
 * Christoph Böhmwalder (@chrboe)
 * Charlie Bruce (@charliebruce)
 * Brian Callahan (@ibara)
+* Dav999 (Dav999-v)
 * Daniel Lee (@ddm999)
 * Elliott Saltar (@eboyblue3)
 * Marvin Scholz (@ePirat)
