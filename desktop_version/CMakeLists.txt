@@ -54,7 +54,7 @@ IF(NOT WIN32)
 ENDIF()
 
 # Include Directories
-INCLUDE_DIRECTORIES(src tinyxml physfs lodepng)
+INCLUDE_DIRECTORIES(src tinyxml physfs lodepng utfcpp/source)
 include(sdl2-config OPTIONAL)
 
 # Source Lists

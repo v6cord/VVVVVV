@@ -385,7 +385,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
                     std::string name = game.saveFilePath + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
                     TiXmlDocument doc(name.c_str());
-	                  if (!doc.LoadFile()){
+	                  if (!doc.LoadFile(TIXML_ENCODING_UTF8)){
 	                    game.mainmenu = 22;
                       dwgfx.fademode = 2;
 	                  }else{

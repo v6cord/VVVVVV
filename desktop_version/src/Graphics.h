@@ -29,6 +29,9 @@ public:
 
 	GraphicsResources grphx;
 
+        int bfontlen(char32_t ch);
+        int font_idx(char32_t ch);
+
 	void Makebfont();
 
 	void drawhuetile(int x, int y, int t, int c);
@@ -213,7 +216,6 @@ public:
 	growing_vector <SDL_Surface*> bfontmask;
 	growing_vector <SDL_Surface*> flipbfont;
 	growing_vector <SDL_Surface*> flipbfontmask;
-	growing_vector <int> bfontlen;
 
 	bool flipmode;
 	bool setflipmode;
