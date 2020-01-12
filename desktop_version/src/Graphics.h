@@ -29,6 +29,8 @@ public:
 
 	GraphicsResources grphx;
 
+        int font_idx(char32_t ch);
+
 	void Makebfont();
 
 	void drawhuetile(int x, int y, int t, int c);
