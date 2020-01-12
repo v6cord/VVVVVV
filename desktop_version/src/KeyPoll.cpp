@@ -93,7 +93,7 @@ void KeyPoll::Poll()
 
 			if (textentrymode)
 			{
-				if (evt.key.keysym.sym == SDLK_BACKSPACE)
+				if (evt.key.keysym.sym == SDLK_BACKSPACE && keybuffer.size() > 0)
 				{
 					std::string::iterator iter = keybuffer.end();
 					utf8::prior(iter, keybuffer.begin());
