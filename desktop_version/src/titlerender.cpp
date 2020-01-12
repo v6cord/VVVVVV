@@ -20,6 +20,39 @@ int tr;
 int tg;
 int tb;
 
+growing_vector<std::string> changelog = {
+    // [line] is a huge line, have fun with that
+    // The text should not be bigger than this line:
+    // --------------------------------------
+    "Version c1.0",
+    "[line]",
+    "- Added UTF-8 support",
+    "- pdelay(n) - a delay(n) that doesn't",
+    "  lock the players movement",
+    "- setroomname() - sets the roomname to",
+    "  the next line",
+    "- settile(x,y,tile) - place a tile",
+    "  temporarily in the room",
+    "- textcolo(u)r(r,g,b,x,y,lines) - text()",
+    "  but you can set the color directly",
+    "- reloadroom() - reloads the current",
+    "  room",
+    "- toceil() - inverted tofloor()",
+    "- movetoroom(x,y) - a relative",
+    "  gotoroom()",
+    "- playfile(file[, id]) - play a file as",
+    "  either music or a sound effect. if you",
+    "  specify an id, the file loops",
+    "- stopfile(id) - stops playing a looping",
+    "  audio file",
+    "- followposition now works for the player",
+    "- There's now an option to disable only",
+    "  the music",
+    "- Lots of limits in VVVVVV have been",
+    "  removed, like the script line limit"
+
+};
+
 std::string tempstring;
 
 void updategraphicsmode(Game& game, Graphics& dwgfx)
@@ -58,12 +91,9 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         tg = map.g - (help.glow / 4) - int(fRandom() * 4);
         tb = map.b - (help.glow / 4) - int(fRandom() * 4);
 
-        if (tr < 0)   tr = 0;
-        if (tr > 255) tr = 255;
-        if (tg < 0)   tg = 0;
-        if (tg > 255) tg = 255;
-        if (tb < 0)   tb = 0;
-        if (tb > 255) tb = 255;
+        tr = std::clamp(tr, 0, 255);
+        tg = std::clamp(tg, 0, 255);
+        tb = std::clamp(tb, 0, 255);
 
         if(game.currentmenuname=="mainmenu")
         {
@@ -83,10 +113,41 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         }
         else if (game.currentmenuname == "changelog")
         {
-            dwgfx.bigprint( -1, 50, "Changelog:", tr, tg, tb, true, 2);
-            dwgfx.Print( -1, 100, "yuuuuh", tr, tg, tb, true);
-            dwgfx.Print( -1, 115, "removed herobrine",  tr, tg, tb, true);
-            dwgfx.Print( -1, 130, "CUnk",  tr, tg, tb, true);
+            dwgfx.bigprint( -1, 20, "Changelog:", tr, tg, tb, true, 2);
+
+
+            // Let's clamp the offset--we can't really
+            // use std::clamp because it's unsigned
+            if (game.changelogoffset + 13 >= changelog.size()) {
+                game.changelogoffset = changelog.size() - 14;
+            }
+
+            // We can just make more variables instead of ifs
+            int temp_tr = tr;
+            int temp_tg = tg;
+            int temp_tb = tb;
+
+            for(growing_vector<std::string>::size_type i = 0 + game.changelogoffset; i != (14 + game.changelogoffset) && i < changelog.size(); i++) {
+                // Huge if, I swear this made sense when I wrote it
+                // If there's more lines above the top line displayed, or if
+                // there's more lines below the bottom lined displayed, make
+                // the color darker.
+                if ((i == 0 + game.changelogoffset && (game.changelogoffset != 0)) || (i == 13 + game.changelogoffset && game.changelogoffset != changelog.size() - 14)) {
+                    temp_tr = tr / 2;
+                    temp_tg = tg / 2;
+                    temp_tb = tb / 2;
+                } else {
+                    temp_tr = tr;
+                    temp_tg = tg;
+                    temp_tb = tb;
+                }
+                if (changelog[i] == "[line]") {
+                    // If the string is literally "[line]", just replace it
+                    dwgfx.Print(0, 48 + ((i - game.changelogoffset) * 10), "________________________________________", temp_tr, temp_tg, temp_tb);
+                } else {
+                    dwgfx.Print(0, 50 + ((i - game.changelogoffset) * 10), changelog[i], temp_tr, temp_tg, temp_tb);
+                }
+            }
         }
         else if (game.currentmenuname == "levellist")
         {

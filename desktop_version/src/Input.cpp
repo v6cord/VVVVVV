@@ -212,6 +212,17 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
         if (game.currentmenuoption < 0) game.currentmenuoption = game.nummenuoptions-1;
         if (game.currentmenuoption >= game.nummenuoptions ) game.currentmenuoption = 0;
 
+        if (game.currentmenuname == "changelog") {
+            if (key.isDown(KEYBOARD_DOWN)) {
+                game.changelogoffset++;
+            }
+            if (key.isDown(KEYBOARD_UP)) {
+                if (game.changelogoffset != 0) {
+                    game.changelogoffset--;
+                }
+            }
+        }
+
         if (game.press_action)
         {
             if (!game.menustart)

@@ -170,6 +170,8 @@ public:
     int mainmenu;
     bool menustart;
 
+    unsigned changelogoffset = 0;
+
     //Teleporting
     bool teleport_to_new_area;
     int teleport_to_x, teleport_to_y;
