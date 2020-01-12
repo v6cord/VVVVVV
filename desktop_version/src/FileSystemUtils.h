@@ -7,6 +7,8 @@
 
 #include "tinyxml.h"
 
+#include "tinyxml.h"
+
 int FILESYSTEM_init(char *argvZero);
 void FILESYSTEM_deinit();
 
