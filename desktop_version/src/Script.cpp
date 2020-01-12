@@ -11,21 +11,27 @@ scriptclass::scriptclass()
     	//Start SDL
 
 	//Init
-	for (int i = 0; i < 500; i++)
-	{
-		commands.push_back(std::string());
-	}
-	for (int i = 0; i < 40; i++)
-	{
-		words.push_back(std::string());
-		txt.push_back(std::string());
-	}
+	commands.resize(500);
+	words.resize(40);
+	txt.resize(40);
+
 	position = 0;
 	scriptlength = 0;
 	scriptdelay = 0;
 	running = false;
+	passive = false;
 
-
+	b = 0;
+	g = 0;
+	i = 0;
+	j = 0;
+	k = 0;
+	loopcount = 0;
+	looppoint = 0;
+	r = 0;
+	textx = 0;
+	texty = 0;
+	txtnumlines = 0;
 }
 
 void scriptclass::clearcustom(){
@@ -57,10 +63,8 @@ void scriptclass::tokenize( std::string t )
 		}
 	}
 
-	if (tempword != "")
-	{
-		words[j] = tempword;
-	}
+        words[j] = tempword;
+        words[j + 1] = "";
 }
 
 void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
@@ -165,6 +169,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			if (words[0] == "customifnotflag")
+			{
+				if (obj.flags[ss_toi(words[1])]!=1)
+				{
+					load("custom_"+words[2]);
+					position--;
+				}
+			}
 			if (words[0] == "custommap")
 			{
 				if(words[1]=="on"){
@@ -177,6 +189,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: delay(frames)
 				scriptdelay = ss_toi(words[1]);
+			}
+			if (words[0] == "pdelay")
+			{
+				//USAGE: pdelay(frames)
+				passive = true;
+				scriptdelay = ss_toi(words[1]);
+			}
+			if (words[0] == "settile")
+			{
+				// settile(x,y,tile)
+				// If you're dealing with spikes/one-ways/1x1 disappears,
+				// this won't change their collision, nor add any collision,
+				// because those are all actually blocks
+				map.settile(ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]));
+				dwgfx.foregrounddrawn = false;
+			}
+			if (words[0] == "setroomname")
+			{
+				// setroomname(roomname)
+                                position++;
+				map.roomname = commands[position];
 			}
       if (words[0] == "flag")
 			{
@@ -224,9 +257,25 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					scriptdelay = 1;
 				}
 			}
+			if (words[0] == "toceil")
+			{
+				if(obj.entities[obj.getplayer()].onground>0)
+				{
+					game.press_action = true;
+					scriptdelay = 1;
+				}
+			}
 			if (words[0] == "playef")
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));
+			}
+			if (words[0] == "playfile")
+			{
+				music.playfile(words[1].c_str(), words[2]);
+			}
+			if (words[0] == "stopfile")
+			{
+				music.stopfile(words[1]);
 			}
 			if (words[0] == "play")
 			{
@@ -259,13 +308,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int player = obj.getplayer();
 				obj.entities[player].xp = ss_toi(words[1]);
 				obj.entities[player].yp = ss_toi(words[2]);
-				game.gravitycontrol = ss_toi(words[3]);
+				if (words[3] != "") {
+                                    game.gravitycontrol = ss_toi(words[3]);
+                                } else {
+                                    game.gravitycontrol = 0;
+                                }
 
 			}
 			if (words[0] == "gotoroom")
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
 				map.gotoroom(ss_toi(words[1])+100, ss_toi(words[2])+100, dwgfx, game, obj, music);
+			}
+			if (words[0] == "reloadroom")
+			{
+				//USAGE: reloadroom()
+				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
+			}
+			if (words[0] == "movetoroom")
+			{
+				//USAGE: movetoroom(x,y)
+				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
 			}
 			if (words[0] == "cutscene")
 			{
@@ -360,6 +423,25 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
 				//Number of lines for the textbox!
 				txtnumlines = ss_toi(words[4]);
+				for (int i = 0; i < txtnumlines; i++)
+				{
+					position++;
+					txt[i] = commands[position];
+				}
+			}
+			else if ((words[0] == "textcolor") || (words[0] == "textcolour"))
+			{
+				// set the colors
+				r = ss_toi(words[1]);
+				g = ss_toi(words[2]);
+				b = ss_toi(words[3]);
+
+				//next are the x,y coordinates
+				textx = ss_toi(words[4]);
+				texty = ss_toi(words[5]);
+
+				//Number of lines for the textbox!
+				txtnumlines = ss_toi(words[6]);
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
@@ -1088,7 +1170,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				obj.entities[i].state = ss_toi(words[2]);
 				if (obj.entities[i].state == 16)
 				{
-					obj.entities[i].para=ss_toi(words[3]);
+					if (words[1] == "player")
+					{
+						// Just do a walk instead
+						int walkframes = (ss_toi(words[3]) - obj.entities[i].xp) / 6;
+						scriptdelay = std::abs(walkframes);
+						if (walkframes > 0)
+						{
+							game.press_left = false;
+							game.press_right = true;
+						}
+						else if (walkframes < 0)
+						{
+							game.press_left = true;
+							game.press_right = false;
+						}
+					}
+					else
+					{
+						obj.entities[i].para=ss_toi(words[3]);
+					}
 				}
 				else if (obj.entities[i].state == 17)
 				{
@@ -1283,6 +1384,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "ifflag")
 			{
 				if (obj.flags[ss_toi(words[1])]==1)
+				{
+					load(words[2]);
+					position--;
+				}
+			}
+			else if (words[0] == "ifnotflag")
+			{
+				if (obj.flags[ss_toi(words[1])]!=1)
 				{
 					load(words[2]);
 					position--;
@@ -2494,6 +2603,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 	if(scriptdelay>0)
 	{
 		scriptdelay--;
+		if (scriptdelay == 0) {
+			passive = false;
+		}
 	}
 }
 
@@ -3526,7 +3638,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
     obj.customcrewmoods[i]=1;
   }
 
-	for (i = 0; i < 20; i++)
+	for (i = 0; i < 100; i++)
 	{
 		obj.collect[i] = 0;
 		obj.customcollect[i] = 0;
@@ -3542,4 +3654,5 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	scriptdelay = 0;
 	scriptname = "null";
 	running = false;
+	passive = false;
 }

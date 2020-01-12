@@ -1,0 +1,13 @@
+# Build objects
+build/
+flibitBuild/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+VVVVVV.exe
+VVVVVV
+*.a
+
+# Game data
+data.zip

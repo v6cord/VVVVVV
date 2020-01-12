@@ -4,6 +4,8 @@
 
 #include "tinyxml.h"
 
+#include "FileSystemUtils.h"
+
 // Found in titlerender.cpp
 void updategraphicsmode(Game& game, Graphics& dwgfx);
 
@@ -212,6 +214,17 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
         if (game.currentmenuoption < 0) game.currentmenuoption = game.nummenuoptions-1;
         if (game.currentmenuoption >= game.nummenuoptions ) game.currentmenuoption = 0;
 
+        if (game.currentmenuname == "changelog") {
+            if (key.isDown(KEYBOARD_DOWN)) {
+                game.changelogoffset++;
+            }
+            if (key.isDown(KEYBOARD_UP)) {
+                if (game.changelogoffset != 0) {
+                    game.changelogoffset--;
+                }
+            }
+        }
+
         if (game.press_action)
         {
             if (!game.menustart)
@@ -261,6 +274,13 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         map.nexttowercolour();
                     }
                     else if (game.currentmenuoption == 3)
+                    {
+                        //Changelog
+                        music.playef(11, 10);
+                        game.createmenu("changelog");
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 4)
                     {
                         //bye!
                         music.playef(2, 10);
@@ -325,6 +345,13 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     }
                     else if (game.currentmenuoption == 5)
                     {
+                        //Changelog
+                        music.playef(11, 10);
+                        game.createmenu("changelog");
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 6)
+                    {
                         //bye!
                         music.playef(2, 10);
                         game.mainmenu = 100;
@@ -358,9 +385,9 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
                     game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
 
-                    std::string name = game.saveFilePath + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
-                    TiXmlDocument doc(name.c_str());
-	                  if (!doc.LoadFile()){
+                    std::string name = "saves/" + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
+                    TiXmlDocument doc;
+	                  if (!FILESYSTEM_loadTiXmlDocument(name.c_str(), &doc)){
 	                    game.mainmenu = 22;
                       dwgfx.fademode = 2;
 	                  }else{
@@ -428,7 +455,6 @@ SDL_assert(0 && "Remove open level dir");
                   if (game.currentmenuoption == 0){
                     music.playef(11, 10);
                     dwgfx.screenbuffer->toggleFullScreen();
-                    music.playef(11, 10);
                     game.fullscreen = !game.fullscreen;
                     updategraphicsmode(game, dwgfx);
                     game.savestats(map, dwgfx);
@@ -437,7 +463,6 @@ SDL_assert(0 && "Remove open level dir");
                   }else if (game.currentmenuoption == 1){
                     music.playef(11, 10);
                     dwgfx.screenbuffer->toggleStretchMode();
-                    music.playef(11, 10);
                     game.stretchMode = (game.stretchMode + 1) % 3;
                     updategraphicsmode(game, dwgfx);
                     game.savestats(map, dwgfx);
@@ -446,7 +471,6 @@ SDL_assert(0 && "Remove open level dir");
                   }else if (game.currentmenuoption == 2){
                     music.playef(11, 10);
                     dwgfx.screenbuffer->toggleLinearFilter();
-                    music.playef(11, 10);
                     game.useLinearFilter = !game.useLinearFilter;
                     updategraphicsmode(game, dwgfx);
                     game.savestats(map, dwgfx);
@@ -709,6 +733,8 @@ SDL_assert(0 && "Remove open level dir");
                             music.playef(18, 10);
                             game.screenshake = 10;
                             game.flashlight = 5;
+                        }else{
+                            music.playef(11, 10);
                         }
                     }
                     else if (game.currentmenuoption == 2)
@@ -733,6 +759,20 @@ SDL_assert(0 && "Remove open level dir");
                         music.playef(11, 10);
                     }
                     else if (game.currentmenuoption == 4)
+                    {
+                        // mute
+                        if (music.muted) {
+                            music.muted = false;
+                            auto prev = music.currentsong;
+                            music.currentsong = -1;
+                            music.play(prev);
+                        } else {
+                            music.muted = true;
+                            Mix_FadeOutMusic(100);
+                        }
+                        music.playef(11, 10);
+                    }
+                    else if (game.currentmenuoption == 5)
                     {
                         //back
                         music.playef(11, 10);
@@ -955,7 +995,7 @@ SDL_assert(0 && "Remove open level dir");
                 {
                     if (game.currentmenuoption == 0)
                     {
-                        //unlock time trials seperately...
+                        //unlock time trials separately...
                         music.playef(11, 10);
                         game.createmenu("unlockmenutrials");
                         map.nexttowercolour();
@@ -1015,11 +1055,34 @@ SDL_assert(0 && "Remove open level dir");
                     {
                         //back
                         music.playef(11, 10);
+                        game.createmenu("options");
+                        map.nexttowercolour();
+                    }
+                }
+                else if (game.currentmenuname == "changelog")
+                {
+                    music.playef(11, 10);
+                    game.createmenu("mainmenu");
+                    map.nexttowercolour();
+                }
+                else if (game.currentmenuname == "credits")
+                {
+                    if (game.currentmenuoption == 0)
+                    {
+                        //next page
+                        music.playef(11, 10);
+                        game.createmenu("credits_ce");
+                        map.nexttowercolour();
+                    }
+                    else
+                    {
+                        //back
+                        music.playef(11, 10);
                         game.createmenu("mainmenu");
                         map.nexttowercolour();
                     }
                 }
-                else if (game.currentmenuname == "credits")
+                else if (game.currentmenuname == "credits_ce")
                 {
                     if (game.currentmenuoption == 0)
                     {
@@ -1332,6 +1395,7 @@ SDL_assert(0 && "Remove open level dir");
 
 					if (game.currentmenuoption == 4)
 					{
+						music.playef(11, 10);
 						game.createmenu("options");
 
 						//Add extra menu for mmmmmm mod
@@ -1703,7 +1767,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     //game.mx = (mouseX / 2);
     //game.my = (mouseY / 2);
 
-    if(!script.running)
+    if(!script.running || (script.running && script.passive))
     {
         game.press_left = false;
         game.press_right = false;
@@ -1769,7 +1833,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     }
     else
     { */
-        if(!script.running)
+        if(!script.running || (script.running && script.passive))
         {
             if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false))
             {

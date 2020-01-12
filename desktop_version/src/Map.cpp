@@ -100,7 +100,7 @@ mapclass::mapclass()
 	roomtextnumlines = 0;
 
 	//Areamap starts at 100,100 and extends 20x20
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	tmap.push_back("1,2,2,2,2,2,2,2,0,3,0,0,0,4,4,4,4,4,4,4");
 	tmap.push_back("1,2,2,2,2,2,2,0,0,3,0,0,0,0,4,4,4,4,4,4");
 	tmap.push_back("0,1,0,0,2,0,0,0,0,3,0,0,0,0,4,4,4,4,4,4");
@@ -737,12 +737,12 @@ bool mapclass::collide(int x, int y)
 	return false;
 }
 
-void mapclass::fillareamap(std::vector<std::string>& tmap)
+void mapclass::fillareamap(growing_vector<std::string>& tmap)
 {
 
 	for (j = 0; j < 20; j++)
 	{
-		std::vector<std::string> maprow = split(tmap[j], ',');
+		growing_vector<std::string> maprow = split(tmap[j], ',');
 		for (int i = 0; i < 20; i++)
 		{
 			areamap[i + (j * 20)] = atoi(maprow[i].c_str());
@@ -758,12 +758,12 @@ void mapclass::settile(int xp, int yp, int t)
 	}
 }
 
-void mapclass::fillcontent(std::vector<std::string>& tmap)
+void mapclass::fillcontent(growing_vector<std::string>& tmap)
 {
 
 	for (j = 0; j < 29+extrarow; j++)
 	{
-		std::vector<std::string> maprow = split(tmap[j], ',');
+		growing_vector<std::string> maprow = split(tmap[j], ',');
 
 		for(int i = 0; i < 40; i++)
 		{
@@ -1189,7 +1189,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 	obj.customwarpmodevon=false;
 	obj.customwarpmodehon=false;
 
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 
 	if (finalmode)
 	{

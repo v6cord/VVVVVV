@@ -2,6 +2,7 @@
 #define EDITOR_H
 
 #include <vector>
+#include "Game.h"
 #include <string>
 #include "Script.h"
 
@@ -90,8 +91,8 @@ class editorclass{
   std::string Desc3;
 	std::string website;
 
-  std::vector<std::string> directoryList;
-  std::vector<LevelMetaData> ListOfMetaData;
+  growing_vector<std::string> directoryList;
+  growing_vector<LevelMetaData> ListOfMetaData;
 
   void getDirectoryData();
   bool getLevelMetaData(std::string& filename, LevelMetaData& _data );
@@ -151,10 +152,10 @@ class editorclass{
   //Colouring stuff
   int getwarpbackground(int rx, int ry);
 
-  std::vector<std::string> getLevelDirFileNames( );
-  std::vector <int> swapmap;
-  std::vector <int> contents;
-  std::vector <int> vmult;
+  growing_vector<std::string> getLevelDirFileNames( );
+  growing_vector <int> swapmap;
+  growing_vector <int> contents;
+  growing_vector <int> vmult;
   int numtrinkets;
   int numcrewmates;
   edlevelclass level[400]; //Maxwidth*maxheight

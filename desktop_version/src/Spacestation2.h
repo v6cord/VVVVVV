@@ -6,11 +6,12 @@
 
 #include <string>
 #include <vector>
+#include "Game.h"
 
 class spacestation2class
 {
 public:
-	std::vector<std::string> loadlevel(int rx, int ry, Game& game, entityclass& obj);
+	growing_vector<std::string> loadlevel(int rx, int ry, Game& game, entityclass& obj);
 	std::string roomname;
 };
 

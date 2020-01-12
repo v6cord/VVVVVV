@@ -13,6 +13,7 @@ void scriptclass::load(std::string t)
     position = 0;
     scriptlength=0;
     running = true;
+    bool internalmode = false;
 
 	int maxlength = (std::min(int(t.length()),7));
     std::string customstring="";
@@ -78,7 +79,13 @@ void scriptclass::load(std::string t)
           if (words[0] != "flash" && words[1] == "unused") {
             words[1] = "1";
           }
-          if(words[0] == "music"){
+          if (words[0] == "enableinternal") {
+            internalmode = true;
+          } else if (words[0] == "disableinternal") {
+            internalmode = false;
+          } else if (internalmode) {
+            add(script.customscript[i]);
+          } else if (words[0] == "music"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if(words[1]=="0"){
               tstring="stopmusic()";
@@ -209,6 +216,9 @@ void scriptclass::load(std::string t)
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add("custom"+script.customscript[i]);
           }else if(words[0] == "ifflag"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
+          }else if(words[0] == "ifnotflag"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add("custom"+script.customscript[i]);
           }else if(words[0] == "iftrinketsless"){
@@ -5329,7 +5339,7 @@ void scriptclass::load(std::string t)
 
         add("squeak(blue)");
         add("text(blue,0,0,3)");
-        add("This lab is amazing! The scentists");
+        add("This lab is amazing! The scientists");
         add("who worked here know a lot more");
         add("about warp technology than we do!");
         add("position(blue,below)");

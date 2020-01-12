@@ -102,11 +102,11 @@ int towerclass::miniat(int xp, int yp, int yoff)
 	return 0;
 }
 
-void towerclass::fillbackground(std::vector<std::string>& tmap)
+void towerclass::fillbackground(growing_vector<std::string>& tmap)
 {
 	for (int j = 0; j < 120; j++)
 	{
-		std::vector<std::string> maprow = split(tmap[j], ',');
+		growing_vector<std::string> maprow = split(tmap[j], ',');
 		for (int i = 0; i < 40; i++)
 		{
 			back[i + vmult[j]] = atoi(maprow[i].c_str());
@@ -114,13 +114,13 @@ void towerclass::fillbackground(std::vector<std::string>& tmap)
 	}
 }
 
-void towerclass::fillminitower(std::vector<std::string>& tmap)
+void towerclass::fillminitower(growing_vector<std::string>& tmap)
 {
 
 
 	for (int j = 0; j < 100; j++)
 	{
-		std::vector<std::string> maprow = split(tmap[j], ',');
+		growing_vector<std::string> maprow = split(tmap[j], ',');
 		for (int i = 0; i < 40; i++)
 		{
 			minitower[i + vmult[j]] = atoi(maprow[i].c_str());
@@ -130,7 +130,7 @@ void towerclass::fillminitower(std::vector<std::string>& tmap)
 
 void towerclass::loadminitower1()
 {
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	//Loads the first minitower into the array.
 	tmap.push_back("12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12");
 	tmap.push_back("12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12");
@@ -238,7 +238,7 @@ void towerclass::loadminitower1()
 
 void towerclass::loadminitower2()
 {
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	tmap.push_back("12,12,21,10,0,0,0,0,0,0,0,0,0,0,0,0,11,20,21,10,0,20,21,28,28,20,21,28,28,20,12,12,12,12,12,12,12,12,12,12");
 	tmap.push_back("12,12,21,10,0,0,0,0,0,0,0,0,0,0,0,0,11,20,21,10,0,20,21,28,28,20,21,28,28,20,12,12,12,12,12,12,12,12,12,12");
 	tmap.push_back("12,12,21,10,0,0,0,0,0,0,0,0,0,0,0,0,11,20,21,10,0,20,21,28,28,20,21,28,28,20,12,12,12,12,12,12,12,12,12,12");
@@ -347,7 +347,7 @@ void towerclass::loadminitower2()
 void towerclass::loadbackground()
 {
 	//Loads the background into the array.
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	tmap.push_back("1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,1,2,0,0,0,0,0,0,0,0,0,0,0,0,5,4,0,0");
 	tmap.push_back("2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,1,2,0,0,0,0,0,0,0,0,0,0,0,0,5,1,1,4,0");
 	tmap.push_back("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,1,2,0,0,0,0,0,0,0,0,0,0,0,0,5,1,1,1,1,4");
@@ -471,11 +471,11 @@ void towerclass::loadbackground()
 	fillbackground(tmap);
 }
 
-void towerclass::fillcontents(std::vector<std::string>& tmap)
+void towerclass::fillcontents(growing_vector<std::string>& tmap)
 {
 	for (int j = 0; j < 700; j++)
 	{
-		std::vector<std::string> maprow = split(tmap[j], ',');
+		growing_vector<std::string> maprow = split(tmap[j], ',');
 		for (int i = 0; i < 40; i++)
 		{
 			contents[i + vmult[j]] = atoi(maprow[i].c_str());
@@ -485,7 +485,7 @@ void towerclass::fillcontents(std::vector<std::string>& tmap)
 
 void towerclass::loadmap()
 {
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	//Loads the map into the array.
 	tmap.push_back("12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12");
 	tmap.push_back("12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12");

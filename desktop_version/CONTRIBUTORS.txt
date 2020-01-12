@@ -1,6 +1,21 @@
 Contributors
 ------------
 
+(Ordered alphabetically by last name.)
+
+* Matt 'Stelpjo' Aaldenberg
 * Christoph Böhmwalder (@chrboe)
+* Charlie Bruce (@charliebruce)
+* Brian Callahan (@ibara)
+* Dav999 (Dav999-v)
+* Daniel Lee (@ddm999)
+* Elliott Saltar (@eboyblue3)
+* Marvin Scholz (@ePirat)
+* Keith Stellyes (@keithstellyes)
 * Elijah Stone
+* Info Teddy (@InfoTeddy)
+* leo60228 (@leo60228)
 * Emmanuel Vadot (@evadot)
+* Rémi Verschelde (@akien-mga)
+* viri (viri.me)
+* Wouter (Xesxen)

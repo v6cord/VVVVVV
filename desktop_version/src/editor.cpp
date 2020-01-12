@@ -16,6 +16,7 @@
 #include "FileSystemUtils.h"
 
 #include <string>
+#include <utf8/checked.h>
 
 edlevelclass::edlevelclass()
 {
@@ -1594,7 +1595,8 @@ void editorclass::findstartpoint(Game& game)
         game.edsavery = 100;
         game.edsavegc = 0;
         game.edsavey--;
-        game.edsavedir=1-edentity[testeditor].p1;
+        // i'm not sure what this line is supposed to do, but it can never be correct
+        //game.edsavedir=1-edentity[testeditor].p1;
     }
     else
     {
@@ -1618,7 +1620,7 @@ void editorclass::saveconvertor()
     maxheight=20;
     int oldwidth=10, oldheight=10;
 
-    std::vector <int> tempcontents;
+    growing_vector <int> tempcontents;
     for (int j = 0; j < 30 * oldwidth; j++)
     {
         for (int i = 0; i < 40 * oldheight; i++)
@@ -1818,7 +1820,7 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 //contents.clear();
                 for(size_t i = 0; i < contents.size(); i++)
                 {
@@ -1846,7 +1848,7 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-              std::vector<std::string> values = split(TextString,',');
+              growing_vector<std::string> values = split(TextString,',');
               contents.clear();
               for(int i = 0; i < values.size(); i++)
               {
@@ -1924,7 +1926,7 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,'|');
+                growing_vector<std::string> values = split(TextString,'|');
                 script.clearcustom();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -2107,7 +2109,7 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( scriptString.c_str() ));
     data->LinkEndChild( msg );
 
-    doc.SaveFile((std::string(FILESYSTEM_getUserLevelDirectory()) + _path).c_str() );
+    FILESYSTEM_saveTiXmlDocument(("levels/" + _path).c_str(), &doc);
 }
 
 
@@ -2632,7 +2634,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 }
                 else
                 {
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),edentity[i].scriptname.length()*8,8,dwgfx.getRGB(96,96,96));
+                    auto length = utf8::distance(edentity[i].scriptname.begin(), edentity[i].scriptname.end());
+                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),length*8,8,dwgfx.getRGB(96,96,96));
                 }
                 dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), edentity[i].scriptname, 196, 196, 255 - help.glow);
                 break;
@@ -3642,6 +3645,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     game.my = (float) key.my;
     ed.tilex=(game.mx - (game.mx%8))/8;
     ed.tiley=(game.my - (game.my%8))/8;
+    if (game.stretchMode == 1) {
+        // In this mode specifically, we have to fix the mouse coordinates
+        int winwidth, winheight;
+        dwgfx.screenbuffer->GetWindowSize(&winwidth, &winheight);
+        ed.tilex = ed.tilex * 320 / winwidth;
+        ed.tiley = ed.tiley * 240 / winheight;
+    }
 
     game.press_left = false;
     game.press_right = false;
@@ -3782,7 +3792,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ed.sby--;
                     }
                     key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                    ed.sbx = ed.sb[ed.pagey+ed.sby].length();
+                    ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
                 }
 
                 if (key.isDown(27))
@@ -3860,7 +3870,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             ed.sb[ed.pagey+ed.sby]=key.keybuffer;
-            ed.sbx = ed.sb[ed.pagey+ed.sby].length();
+            ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
 
             if(!game.press_map && !key.isDown(27)) game.mapheld=false;
             if (!game.mapheld)
@@ -3879,7 +3889,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         if(ed.sby+ed.pagey>=ed.sblength) ed.sblength=ed.sby+ed.pagey;
                         key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                        ed.sbx = ed.sb[ed.pagey+ed.sby].length();
+                        ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
                     }
                     else
                     {

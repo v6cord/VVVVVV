@@ -16,6 +16,7 @@ class SoundTrack
 {
 public:
 	SoundTrack(const char* fileName);
+        SoundTrack() = default;
 	Mix_Chunk *sound;
 };
 

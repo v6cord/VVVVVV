@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <stdio.h>
+#include <utility>
 #include "Music.h"
 #include "BinaryBlob.h"
 
@@ -206,8 +207,14 @@ musicclass::musicclass()
 	FadeVolAmountPerFrame = 0;
 
 	custompd = false;
-	// currentsong = -1;
-	// nicefade = 0;
+
+	currentsong = 0;
+	musicfade = 0;
+	musicfadein = 0;
+	nicechange = 0;
+	nicefade = 0;
+	resumesong = 0;
+	volume = 0.0f;
 }
 
 void musicclass::play(int t)
@@ -221,6 +228,11 @@ void musicclass::play(int t)
 			t += 16;
 		}
 	}
+    if (muted)
+    {
+        currentsong = t;
+        return;
+    }
 	safeToProcessMusic = true;
 	Mix_VolumeMusic(128);
 	if (currentsong !=t)
@@ -437,6 +449,37 @@ void musicclass::changemusicarea(int x, int y)
 void musicclass::initefchannels()
 {
 	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
+}
+
+void musicclass::playfile(const char* t, std::string track)
+{
+    int channel;
+
+    auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
+    if (inserted) {
+        pair->second = SoundTrack(t);
+    }
+
+    if (track != "") {
+        stopfile(track);
+        if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+    } else {
+        channel = Mix_PlayChannel(-1, pair->second.sound, 0);
+    }
+
+    if (channel == -1) {
+        fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+    } else if (track != "") {
+        custom_file_channels[track] = channel;
+    }
+}
+
+void musicclass::stopfile(std::string track) {
+    auto iter = custom_file_channels.find(track);
+    if (iter != custom_file_channels.end()) {
+        Mix_FadeOutChannel(iter->second, 100);
+        custom_file_channels.erase(iter);
+    }
 }
 
 void musicclass::playef(int t, int offset)

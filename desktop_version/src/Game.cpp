@@ -207,18 +207,14 @@ Game::Game(void):
     }
     customcol=0;
 
-    for (int i = 0; i < 6; i++)
-    {
-        bool cstats;
-        cstats = false;
-        crewstats.push_back(cstats);
-        tele_crewstats.push_back(false);
-        quick_crewstats.push_back(false);
-        besttimes.push_back( -1);
-        besttrinkets.push_back( -1);
-        bestlives.push_back( -1);
-        bestrank.push_back( -1);
-    }
+    crewstats.resize(6);
+    tele_crewstats.resize(6);
+    quick_crewstats.resize(6);
+    besttimes.resize(6, -1);
+    besttrinkets.resize(6, -1);
+    bestlives.resize(6, -1);
+    bestrank.resize(6, -1);
+
     crewstats[0] = true;
     lastsaved = 0;
 
@@ -230,23 +226,10 @@ Game::Game(void):
     quick_currentarea = "Error! Error!";
 
     //Menu stuff initiliased here:
-    for (int mi = 0; mi < 25; mi++)
-    {
-        menuoptions.push_back(std::string());
-        menuoptionsactive.push_back(bool());
-
-        bool nb1, nb2;
-        nb1 = false;
-        nb2 = false;
-        unlock.push_back(nb1);
-        unlocknotify.push_back(nb2);
-    }
-
-    for (int ui = 0; ui < 25; ui++)
-    {
-        unlock[ui] = false;
-        unlocknotify[ui] = false;
-    }
+    menuoptions.resize(25);
+    menuoptionsactive.resize(25);
+    unlock.resize(25);
+    unlocknotify.resize(25);
 
     nummenuoptions = 0;
     currentmenuoption = 0;
@@ -310,8 +293,8 @@ Game::Game(void):
 
     saveFilePath = FILESYSTEM_getUserSaveDirectory();
 
-    TiXmlDocument doc((saveFilePath + "qsave.vvv").c_str());
-    if (!doc.LoadFile())
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc))
     {
         quickcookieexists = false;
         quicksummary = "";
@@ -348,8 +331,8 @@ Game::Game(void):
     }
 
 
-    TiXmlDocument docTele((saveFilePath+"tsave.vvv").c_str());
-    if (!docTele.LoadFile())
+    TiXmlDocument docTele;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
     {
         telecookieexists = false;
         telesummary = "";
@@ -487,8 +470,8 @@ void Game::loadcustomlevelstats()
     //testing
     if(!customlevelstatsloaded)
     {
-        TiXmlDocument doc((saveFilePath+"levelstats.vvv").c_str());
-        if (!doc.LoadFile())
+        TiXmlDocument doc;
+        if (!FILESYSTEM_loadTiXmlDocument("saves/levelstats.vvv", &doc))
         {
             //No levelstats file exists; start new
             numcustomlevelstats=0;
@@ -533,7 +516,7 @@ void Game::loadcustomlevelstats()
                     std::string TextString = (pText);
                     if(TextString.length())
                     {
-                        std::vector<std::string> values = split(TextString,',');
+                        growing_vector<std::string> values = split(TextString,',');
                         for(size_t i = 0; i < values.size(); i++)
                         {
                             if(i<200) customlevelscore[i]=(atoi(values[i].c_str()));
@@ -546,7 +529,7 @@ void Game::loadcustomlevelstats()
                     std::string TextString = (pText);
                     if(TextString.length())
                     {
-                        std::vector<std::string> values = split(TextString,'|');
+                        growing_vector<std::string> values = split(TextString,'|');
                         for(size_t i = 0; i < values.size(); i++)
                         {
                             if(i<200) customlevelstats[i]=values[i];
@@ -598,7 +581,7 @@ void Game::savecustomlevelstats()
     msg->LinkEndChild( new TiXmlText( customlevelstatsstr.c_str() ));
     msgs->LinkEndChild( msg );
 
-    if(doc.SaveFile( (saveFilePath+"levelstats.vvv").c_str() ))
+    if(FILESYSTEM_saveTiXmlDocument("saves/levelstats.vvv", &doc))
     {
         printf("Level stats saved\n");
     }
@@ -4122,8 +4105,8 @@ void Game::unlocknum( int t, mapclass& map, Graphics& dwgfx )
 void Game::loadstats( mapclass& map, Graphics& dwgfx )
 {
     // TODO loadstats
-    TiXmlDocument doc((saveFilePath+"unlock.vvv").c_str());
-    if (!doc.LoadFile())
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/unlock.vvv", &doc))
     {
         savestats(map, dwgfx);
         printf("No Stats found. Assuming a new player\n");
@@ -4161,7 +4144,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 unlock.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4175,7 +4158,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 unlocknotify.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4189,7 +4172,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 besttimes.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4203,7 +4186,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 besttrinkets.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4218,7 +4201,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 bestlives.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4233,7 +4216,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 bestrank.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4581,7 +4564,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
 	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
 	dataNode->LinkEndChild( msg );
 
-    doc.SaveFile( (saveFilePath+"unlock.vvv").c_str() );
+    FILESYSTEM_saveTiXmlDocument("saves/unlock.vvv", &doc);
 }
 
 void Game::customstart( entityclass& obj, musicclass& music )
@@ -4809,8 +4792,8 @@ void Game::starttrial( int t, entityclass& obj, musicclass& music )
 
 void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 {
-    TiXmlDocument doc((saveFilePath+"qsave.vvv").c_str());
-    if (!doc.LoadFile()) return; ;
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -4843,7 +4826,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length()>1)
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4857,7 +4840,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.flags.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4871,7 +4854,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 crewstats.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -4885,7 +4868,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.collect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5031,8 +5014,8 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
 {
     std::string levelfile = savfile.substr(7);
-    TiXmlDocument doc((saveFilePath+levelfile+".vvv").c_str());
-    if (!doc.LoadFile()) return; ;
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument(("saves/"+levelfile+".vvv").c_str(), &doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -5065,7 +5048,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length()>1)
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5079,7 +5062,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.flags.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5093,7 +5076,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 for(size_t i = 0; i < 6; i++)
                 {
                     obj.customcrewmoods[i]=atoi(values[i].c_str());
@@ -5106,7 +5089,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 crewstats.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5120,7 +5103,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.collect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5134,7 +5117,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.customcollect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -5315,8 +5298,8 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
     //	quick_crewstats = summary_crewstats.slice();
     //}
 
-    TiXmlDocument docTele((saveFilePath+"tsave.vvv").c_str());
-    if (!docTele.LoadFile())
+    TiXmlDocument docTele;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
     {
         telecookieexists = false;
         telesummary = "";
@@ -5392,7 +5375,7 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
                 std::string TextString = (pText);
                 if(TextString.length())
                 {
-                    std::vector<std::string> values = split(TextString,',');
+                    growing_vector<std::string> values = split(TextString,',');
                     tele_crewstats.clear();
                     for(size_t i = 0; i < values.size(); i++)
                     {
@@ -5406,8 +5389,8 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
         tele_currentarea = map.currentarea(map.area(l_saveX, l_saveY));
     }
 
-    TiXmlDocument doc((saveFilePath+"qsave.vvv").c_str());
-    if (!doc.LoadFile())
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc))
     {
         quickcookieexists = false;
         quicksummary = "";
@@ -5483,7 +5466,7 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
                 std::string TextString = (pText);
                 if(TextString.length())
                 {
-                    std::vector<std::string> values = split(TextString,',');
+                    growing_vector<std::string> values = split(TextString,',');
                     quick_crewstats.clear();
                     for(size_t i = 0; i < values.size(); i++)
                     {
@@ -5751,7 +5734,7 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
     //telecookie.flush();
     //telecookie.close();
 
-    if(doc.SaveFile( (saveFilePath+"tsave.vvv").c_str() ))
+    if(FILESYSTEM_saveTiXmlDocument("saves/tsave.vvv", &doc))
     {
         printf("Game saved\n");
     }
@@ -5995,7 +5978,7 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
     //telecookie.flush();
     //telecookie.close();
 
-    if(doc.SaveFile( (saveFilePath+ "qsave.vvv").c_str() ))
+    if(FILESYSTEM_saveTiXmlDocument("saves/qsave.vvv", &doc))
     {
         printf("Game saved\n");
     }
@@ -6256,7 +6239,7 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     //telecookie.close();
 
     std::string levelfile = savfile.substr(7);
-    if(doc.SaveFile( (saveFilePath+ levelfile+".vvv").c_str() ))
+    if(FILESYSTEM_saveTiXmlDocument(("saves/"+levelfile+".vvv").c_str(), &doc))
     {
         printf("Game saved\n");
     }
@@ -6270,8 +6253,8 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
 void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
 {
-    TiXmlDocument doc((saveFilePath+"tsave.vvv").c_str());
-    if (!doc.LoadFile()) return; ;
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -6305,7 +6288,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6319,7 +6302,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.flags.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6333,7 +6316,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 crewstats.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6347,7 +6330,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             std::string TextString = (pText);
             if(TextString.length())
             {
-                std::vector<std::string> values = split(TextString,',');
+                growing_vector<std::string> values = split(TextString,',');
                 obj.collect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
@@ -6632,9 +6615,11 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[1] = true;
 					menuoptions[2] = "game options";
 					menuoptionsactive[2] = true;
-					menuoptions[3] = "quit game";
+                    menuoptions[3] = "changelog";
 					menuoptionsactive[3] = true;
-					nummenuoptions = 4;
+					menuoptions[4] = "quit game";
+					menuoptionsactive[4] = true;
+					nummenuoptions = 5;
 					menuxoff = -16;
 					menuyoff = -10;
 				#elif !defined(MAKEANDPLAY)
@@ -6648,9 +6633,11 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[3] = true;
 					menuoptions[4] = "view credits";
 					menuoptionsactive[4] = true;
-					menuoptions[5] = "quit game";
+                    menuoptions[5] = "changelog";
 					menuoptionsactive[5] = true;
-					nummenuoptions = 6;
+					menuoptions[6] = "quit game";
+					menuoptionsactive[6] = true;
+					nummenuoptions = 7;
 					menuxoff = -16;
 					menuyoff = -10;
 				#endif
@@ -6940,9 +6927,11 @@ void Game::createmenu( std::string t )
         menuoptionsactive[2] = true;
         menuoptions[3] = "slowdown";
         menuoptionsactive[3] = true;
-        menuoptions[4] = "return";
+        menuoptions[4] = "music";
+        menuoptionsactive[3] = true;
+        menuoptions[5] = "return";
         menuoptionsactive[4] = true;
-        nummenuoptions = 5;
+        nummenuoptions = 6;
         menuxoff = -40;
         menuyoff = 16;
     }
@@ -7026,6 +7015,14 @@ void Game::createmenu( std::string t )
         menuxoff = -70;
         menuyoff = -20;
     }
+    else if (t == "changelog")
+    {
+        menuoptions[0] = "return";
+        menuoptionsactive[0] = true;
+        nummenuoptions = 1;
+        menuxoff = 26;
+        menuyoff = 64;
+    }
     else if (t == "credits")
     {
         menuoptions[0] = "next page";
@@ -7037,6 +7034,16 @@ void Game::createmenu( std::string t )
         menuyoff = 64;
     }
     else if (t == "credits2")
+    {
+        menuoptions[0] = "next page";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "return";
+        menuoptionsactive[1] = true;
+        nummenuoptions = 2;
+        menuxoff = 20;
+        menuyoff = 64;
+    }
+    else if (t == "credits_ce")
     {
         menuoptions[0] = "next page";
         menuoptionsactive[0] = true;

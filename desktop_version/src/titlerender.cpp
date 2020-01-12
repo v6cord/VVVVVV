@@ -20,6 +20,47 @@ int tr;
 int tg;
 int tb;
 
+growing_vector<std::string> changelog = {
+    // [line] is a huge line, have fun with that
+    // The text should not be bigger than this line:
+    // --------------------------------------
+    "Version c1.0",
+    "[line]",
+    "- Added UTF-8 support",
+    "- enableinternal() - a simplified",
+    "  command that makes every line after",
+    "  it parse as internal except for",
+    "  disableinternal()",
+    "- disableinternal() - a simplified",
+    "  command that makes every line after",
+    "  it parse as simplified",
+    "- pdelay(n) - a delay(n) that doesn't",
+    "  lock the players movement",
+    "- setroomname() - sets the roomname to",
+    "  the next line",
+    "- settile(x,y,tile) - place a tile",
+    "  temporarily in the room",
+    "- textcolo(u)r(r,g,b,x,y,lines) - text()",
+    "  but you can set the color directly",
+    "- reloadroom() - reloads the current",
+    "  room",
+    "- toceil() - inverted tofloor()",
+    "- movetoroom(x,y) - a relative",
+    "  gotoroom()",
+    "- playfile(file[, id]) - play a file as",
+    "  either music or a sound effect. if you",
+    "  specify an id, the file loops",
+    "- stopfile(id) - stops playing a looping",
+    "  audio file",
+    "- followposition now works for the",
+    "  player",
+    "- There's now an option to disable only",
+    "  the music",
+    "- All limits have been removed except",
+    "  for the 20x20 map size limit"
+
+};
+
 std::string tempstring;
 
 void updategraphicsmode(Game& game, Graphics& dwgfx)
@@ -38,26 +79,17 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         tg = 164 - (help.glow / 2) - int(fRandom() * 4);
         tb = 164 - (help.glow / 2) - int(fRandom() * 4);
 
-        temp = 50;
-        dwgfx.drawsprite((160 - 96) + 0 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 1 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 2 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 3 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 4 * 32, temp, 23, tr, tg, tb);
-        dwgfx.drawsprite((160 - 96) + 5 * 32, temp, 23, tr, tg, tb);
-				#if defined(MAKEANDPLAY)
-					dwgfx.Print(-1,temp+35,"     MAKE AND PLAY EDITION",tr, tg, tb, true);
-				#endif
+        dwgfx.drawsprite((160 - 96) + 0 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 1 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 2 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 3 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 4 * 32, 50, 23, tr, tg, tb);
+        dwgfx.drawsprite((160 - 96) + 5 * 32, 50, 23, tr, tg, tb);
+        dwgfx.Print(-1,95,"COMMUNITY EDITION",tr, tg, tb, true);
 
         dwgfx.Print(5, 175, "[ Press ACTION to Start ]", tr, tg, tb, true);
         dwgfx.Print(5, 195, "ACTION = Space, Z, or V", int(tr*0.5f), int(tg*0.5f), int(tb*0.5f), true);
 
-        //dwgfx.Print(5, 215, "Press CTRL-F for Fullscreen", tr, tg, tb, true);
-
-        /*dwgfx.Print(5, 5, "IGF WIP Build, 29th Oct '09", tr, tg, tb, true);
-        dwgfx.Print(5, 200, "Game by Terry Cavanagh", tr, tg, tb, true);
-        dwgfx.Print(5, 210, "Music by Magnus P~lsson", tr, tg, tb, true);
-        dwgfx.Print(5, 220, "Roomnames by Bennett Foddy", tr, tg, tb, true);*/
     }
     else
     {
@@ -66,31 +98,64 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         tr = map.r - (help.glow / 4) - int(fRandom() * 4);
         tg = map.g - (help.glow / 4) - int(fRandom() * 4);
         tb = map.b - (help.glow / 4) - int(fRandom() * 4);
-        if (tr < 0) tr = 0;
-        if(tr>255) tr=255;
-        if (tg < 0) tg = 0;
-        if(tg>255) tg=255;
-        if (tb < 0) tb = 0;
-        if(tb>255) tb=255;
 
-        temp = 50;
+        tr = std::clamp(tr, 0, 255);
+        tg = std::clamp(tg, 0, 255);
+        tb = std::clamp(tb, 0, 255);
 
         if(game.currentmenuname=="mainmenu")
         {
-            dwgfx.drawsprite((160 - 96) + 0 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 1 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 2 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 3 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 4 * 32, temp, 23, tr, tg, tb);
-            dwgfx.drawsprite((160 - 96) + 5 * 32, temp, 23, tr, tg, tb);
-						#if defined(MAKEANDPLAY)
-							dwgfx.Print(-1,temp+35,"     MAKE AND PLAY EDITION",tr, tg, tb, true);
-						#endif
-            dwgfx.Print( 310 - (4*8), 230, "v2.2", tr/2, tg/2, tb/2);
+            dwgfx.drawsprite((160 - 96) + 0 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 1 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 2 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 3 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 4 * 32, 50, 23, tr, tg, tb);
+            dwgfx.drawsprite((160 - 96) + 5 * 32, 50, 23, tr, tg, tb);
+            dwgfx.Print(-1,95,"COMMUNITY EDITION",tr, tg, tb, true);
+            dwgfx.Print( 310 - (4*8), 230, "c1.0", tr/2, tg/2, tb/2);
+			if (music.mmmmmm) {
+			    dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
+		    } else {
+                dwgfx.Print( 10, 230, "git.io/v6-ce", tr/2, tg/2, tb/2);
+            }
+        }
+        else if (game.currentmenuname == "changelog")
+        {
+            dwgfx.bigprint( -1, 20, "Changelog:", tr, tg, tb, true, 2);
 
-						if(music.mmmmmm){
-						  dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
-						}
+
+            // Let's clamp the offset--we can't really
+            // use std::clamp because it's unsigned
+            if (game.changelogoffset + 13 >= changelog.size()) {
+                game.changelogoffset = changelog.size() - 14;
+            }
+
+            // We can just make more variables instead of ifs
+            int temp_tr = tr;
+            int temp_tg = tg;
+            int temp_tb = tb;
+
+            for(growing_vector<std::string>::size_type i = 0 + game.changelogoffset; i != (14 + game.changelogoffset) && i < changelog.size(); i++) {
+                // Huge if, I swear this made sense when I wrote it
+                // If there's more lines above the top line displayed, or if
+                // there's more lines below the bottom lined displayed, make
+                // the color darker.
+                if ((i == 0 + game.changelogoffset && (game.changelogoffset != 0)) || (i == 13 + game.changelogoffset && game.changelogoffset != changelog.size() - 14)) {
+                    temp_tr = tr / 2;
+                    temp_tg = tg / 2;
+                    temp_tb = tb / 2;
+                } else {
+                    temp_tr = tr;
+                    temp_tg = tg;
+                    temp_tb = tb;
+                }
+                if (changelog[i] == "[line]") {
+                    // If the string is literally "[line]", just replace it
+                    dwgfx.Print(0, 48 + ((i - game.changelogoffset) * 10), "________________________________________", temp_tr, temp_tg, temp_tb);
+                } else {
+                    dwgfx.Print(0, 50 + ((i - game.changelogoffset) * 10), changelog[i], temp_tr, temp_tg, temp_tb);
+                }
+            }
         }
         else if (game.currentmenuname == "levellist")
         {
@@ -243,6 +308,14 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.bigprint( 40, 135, "Magnus P~lsson", tr, tg, tb, true, 2);
             dwgfx.drawimagecol(8, -1, 156, tr *0.75, tg *0.75, tb *0.75, true);
             //dwgfx.Print( 40, 155, "http://souleye.madtracker.net", tr, tg, tb, true);
+        }
+        else if (game.currentmenuname == "credits_ce")
+        {
+            dwgfx.Print( -1, 50, "VVVVVV: Community Edition has", tr, tg, tb, true);
+            dwgfx.Print( -1, 65, "accepted contributions from:", tr, tg, tb, true);
+            dwgfx.Print( -1, 100, "Info Teddy", tr, tg, tb, true);
+            dwgfx.Print( -1, 115, "AllyTally",  tr, tg, tb, true);
+            dwgfx.Print( -1, 130, "leo60228",  tr, tg, tb, true);
         }
         else if (game.currentmenuname == "credits2")
         {
@@ -531,6 +604,19 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                     dwgfx.Print( -1, 105, "Game speed is at 40%", tr, tg, tb, true);
                 }
             }
+            else if (game.currentmenuoption == 4)
+            {
+                dwgfx.bigprint( -1, 40, "Music", tr, tg, tb, true);
+                dwgfx.Print( -1, 75, "Disables music.", tr, tg, tb, true);
+                if (!music.muted)
+                {
+                    dwgfx.Print( -1, 85, "Music is ON.", tr, tg, tb, true);
+                }
+                else
+                {
+                    dwgfx.Print( -1, 85, "Music is OFF.", tr/2, tg/2, tb/2, true);
+                }
+            }
         }
         else if (game.currentmenuname == "playint1" || game.currentmenuname == "playint2")
         {
@@ -785,7 +871,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         {
             dwgfx.bigprint( -1, 30, "Unlock Time Trials", tr, tg, tb, true);
             dwgfx.Print( -1, 65, "You can unlock each time", tr, tg, tb, true);
-            dwgfx.Print( -1, 75, "trial seperately.", tr, tg, tb, true);
+            dwgfx.Print( -1, 75, "trial separately.", tr, tg, tb, true);
         }
         else if (game.currentmenuname == "timetrials")
         {
@@ -1604,7 +1690,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         if (game.advancetext) dwgfx.bprint(5, 5, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
-    if (game.readytotele > 100 && !game.advancetext && game.hascontrol && !script.running && !game.intimetrial)
+    if (game.readytotele > 100 && !game.advancetext && game.hascontrol && (!script.running || (script.running && script.passive)) && !game.intimetrial)
     {
         if(dwgfx.flipmode)
         {

@@ -1,4 +1,6 @@
 #include <SDL.h>
+#include <cmath>
+#include <chrono>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
@@ -30,9 +32,11 @@
 #include <string.h>
 
 scriptclass script;
- edentities edentity[3000];
+edentities edentity[3000];
+editorclass ed;
 
- editorclass ed;
+bool startinplaytest = false;
+std::string playtestname;
 
 int main(int argc, char *argv[])
 {
@@ -48,10 +52,28 @@ int main(int argc, char *argv[])
     );
     SDL_ShowCursor(SDL_DISABLE);
 
-    if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
+    for (int i = 1; i < argc; ++i) {
+        if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
+            if (i + 1 < argc) {
+                startinplaytest = true;
+                i++;
+                playtestname = std::string("levels/");
+                playtestname.append(argv[i]);
+                playtestname.append(std::string(".vvvvvv"));
+            } else {
+                printf("--playing option requires one argument.\n");
+                return 1;
+            }
+        }
+        if (std::string(argv[i]) == "-renderer") {
+            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
+        }
+    }
+
+    /*if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
     {
         SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
-    }
+    }*/
 
     NETWORK_init();
 
@@ -129,8 +151,8 @@ int main(int argc, char *argv[])
     graphics.Makebfont();
 
 
-    graphics.forgroundBuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.forgroundBuffer, SDL_BLENDMODE_NONE);
+    graphics.foregroundBuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
+    SDL_SetSurfaceBlendMode(graphics.foregroundBuffer, SDL_BLENDMODE_NONE);
 
     graphics.screenbuffer = &gameScreen;
 
@@ -151,7 +173,8 @@ int main(int argc, char *argv[])
 
     //game.gamestate = TITLEMODE;
     //game.gamestate=EDITORMODE;
-    game.gamestate = PRELOADER; //Remember to uncomment this later!
+    //game.gamestate = PRELOADER; //Remember to uncomment this later!
+    game.gamestate = TITLEMODE;
 
     game.menustart = false;
     game.mainmenu = 0;
@@ -215,6 +238,57 @@ int main(int argc, char *argv[])
     entityclass obj;
     obj.init();
 
+    if (startinplaytest) {
+        game.levelpage=0;
+        ed.getDirectoryData();
+        game.loadcustomlevelstats();
+
+        bool found = false;
+
+        // search for the file in the vector
+        for(growing_vector<std::string>::size_type i = 0; i < ed.ListOfMetaData.size(); i++) {
+            LevelMetaData currentmeta = ed.ListOfMetaData[i];
+            if (currentmeta.filename == playtestname) {
+                game.playcustomlevel = (int)i;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            printf("Level not found\n");
+            return 1;
+        }
+        game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
+        game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
+        std::string name = game.saveFilePath + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
+        TiXmlDocument doc(name.c_str());
+	    game.mainmenu = 22;
+        ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+        ed.findstartpoint(game);
+        game.gamestate = GAMEMODE;
+        script.hardreset(key, graphics, game, map, obj, help, music);
+        game.customstart(obj, music);
+        game.jumpheld = true;
+		map.custommodeforreal = true;
+        map.custommode = true;
+        map.customx = 100;
+        map.customy = 100;
+        if(obj.nentity==0) {
+            obj.createentity(game, game.savex, game.savey, 0, 0);
+        } else {
+            map.resetplayer(graphics, game, obj, music);
+        }
+        map.gotoroom(game.saverx, game.savery, graphics, game, obj, music);
+		ed.generatecustomminimap(graphics, map);
+		map.customshowmm=true;
+        if(ed.levmusic>0){
+            music.play(ed.levmusic);
+        } else {
+            music.currentsong=-1;
+		}
+		//dwgfx.fademode = 4;
+
+    }
     //Quick hack to start in final level ---- //Might be useful to leave this commented in for testing
     /*
     //game.gamestate=GAMEMODE;
@@ -238,43 +312,28 @@ int main(int argc, char *argv[])
 		*/
     //End hack here ----
 
-    volatile Uint32 time, timePrev = 0;
     game.infocus = true;
     key.isActive = true;
+
+    std::chrono::high_resolution_clock::time_point last_frame;
+    std::chrono::duration<int, std::ratio<1, 30>> frame_time(1);
 
     while(!key.quitProgram)
     {
 		//gameScreen.ClearScreen(0x00);
 
-        time = SDL_GetTicks();
-
         // Update network per frame.
         NETWORK_update();
 
         //framerate limit to 30
-        Uint32 timetaken = time - timePrev;
-        if(game.gamestate==EDITORMODE)
-		{
-          if (timetaken < 24)
-          {
-              volatile Uint32 delay = 24 - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
-        }else{
-          if (timetaken < game.gameframerate)
-          {
-              volatile Uint32 delay = game.gameframerate - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
+        while (true) {
+            auto now = std::chrono::high_resolution_clock::now();
+            auto elapsed = now - last_frame;
+            if (elapsed >= frame_time) {
+                last_frame = now;
+                break;
+            }
         }
-
-
 
         key.Poll();
 		if(key.toggleFullscreen)

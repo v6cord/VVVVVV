@@ -1,6 +1,7 @@
 #include "FileSystemUtils.h"
 
 #include <vector>
+#include "Game.h"
 #include <string>
 
 #include <stdio.h>
@@ -10,12 +11,19 @@
 #include <SDL.h>
 #include <physfs.h>
 
+#include "tinyxml.h"
+
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
-#define mkdir(a, b) CreateDirectory(a, NULL)
+int mkdir(char* path, int mode)
+{
+	WCHAR utf16_path[MAX_PATH];
+	MultiByteToWideChar(CP_UTF8, 0, path, -1, utf16_path, MAX_PATH);
+	return CreateDirectoryW(utf16_path, NULL);
+}
 #define VNEEDS_MIGRATION (mkdirResult != 0)
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <sys/stat.h>
 #include <limits.h>
 #define VNEEDS_MIGRATION (mkdirResult == 0)
@@ -38,6 +46,7 @@ int FILESYSTEM_init(char *argvZero)
 	int mkdirResult;
 
 	PHYSFS_init(argvZero);
+	PHYSFS_permitSymbolicLinks(1);
 
 	/* Determine the OS user directory */
 	PLATFORM_getOSDirectory(output);
@@ -47,6 +56,7 @@ int FILESYSTEM_init(char *argvZero)
 
 	/* Mount our base user directory */
 	PHYSFS_mount(output, NULL, 1);
+	PHYSFS_setWriteDir(output);
 	printf("Base directory: %s\n", output);
 
 	/* Create save directory */
@@ -70,12 +80,8 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
-#ifdef _WIN32
 	strcpy(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
-#else
-	strcpy(output, "data.zip");
-#endif
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
 		puts("Error: data.zip missing!");
@@ -124,7 +130,7 @@ void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *
 		*len = length;
 	}
 	*mem = (unsigned char*) malloc(length);
-	PHYSFS_read(handle, *mem, 1, length);
+	PHYSFS_readBytes(handle, *mem, length);
 	PHYSFS_close(handle);
 }
 
@@ -134,9 +140,38 @@ void FILESYSTEM_freeMemory(unsigned char **mem)
 	*mem = NULL;
 }
 
-std::vector<std::string> FILESYSTEM_getLevelDirFileNames()
+bool FILESYSTEM_saveTiXmlDocument(const char *name, TiXmlDocument *doc)
 {
-	std::vector<std::string> list;
+	/* TiXmlDocument.SaveFile doesn't account for Unicode paths, PHYSFS does */
+	TiXmlPrinter printer;
+	doc->Accept(&printer);
+	PHYSFS_File* handle = PHYSFS_openWrite(name);
+	if (handle == NULL)
+	{
+		return false;
+	}
+	PHYSFS_writeBytes(handle, printer.CStr(), printer.Size());
+	PHYSFS_close(handle);
+	return true;
+}
+
+bool FILESYSTEM_loadTiXmlDocument(const char *name, TiXmlDocument *doc)
+{
+	/* TiXmlDocument.SaveFile doesn't account for Unicode paths, PHYSFS does */
+	unsigned char *mem = NULL;
+	FILESYSTEM_loadFileToMemory(name, &mem, NULL);
+	if (mem == NULL)
+	{
+		return false;
+	}
+	doc->Parse((const char*)mem, NULL, TIXML_ENCODING_UTF8);
+	FILESYSTEM_freeMemory(&mem);
+	return true;
+}
+
+growing_vector<std::string> FILESYSTEM_getLevelDirFileNames()
+{
+	growing_vector<std::string> list;
 	char **fileList = PHYSFS_enumerateFiles("/levels");
 	char **i;
 	std::string builtLocation;
@@ -159,26 +194,14 @@ std::vector<std::string> FILESYSTEM_getLevelDirFileNames()
 
 void PLATFORM_getOSDirectory(char* output)
 {
-#if defined(__linux__) || defined(__FreeBSD__)
-	const char *homeDir = getenv("XDG_DATA_HOME");
-	if (homeDir == NULL)
-	{
-		strcpy(output, PHYSFS_getUserDir());
-		strcat(output, ".local/share/VVVVVV/");
-	}
-	else
-	{
-		strcpy(output, homeDir);
-		strcat(output, "/VVVVVV/");
-	}
-#elif defined(__APPLE__)
-	strcpy(output, PHYSFS_getUserDir());
-	strcat(output, "Library/Application Support/VVVVVV/");
-#elif defined(_WIN32)
-	SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, output);
+#ifdef _WIN32
+	/* This block is here for compatibility, do not touch it! */
+	WCHAR utf16_path[MAX_PATH];
+	SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, utf16_path);
+	WideCharToMultiByte(CP_UTF8, 0, utf16_path, -1, output, MAX_PATH, NULL, NULL);
 	strcat(output, "\\VVVVVV\\");
 #else
-#error See PLATFORM_getOSDirectory
+	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
 #endif
 }
 
@@ -187,7 +210,7 @@ void PLATFORM_migrateSaveData(char* output)
 	char oldLocation[MAX_PATH];
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 	DIR *dir = NULL;
 	struct dirent *de = NULL;
 	DIR *subDir = NULL;
@@ -200,7 +223,7 @@ void PLATFORM_migrateSaveData(char* output)
 		return;
 	}
 	strcpy(oldDirectory, homeDir);
-#if defined(__linux__) || defined(__FreeBSD__)
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 	strcat(oldDirectory, "/.vvvvvv/");
 #elif defined(__APPLE__)
 	strcat(oldDirectory, "/Documents/VVVVVV/");
@@ -287,7 +310,7 @@ void PLATFORM_migrateSaveData(char* output)
 #elif defined(_WIN32)
 	WIN32_FIND_DATA findHandle;
 	HANDLE hFind = NULL;
-	char fileSearch[MAX_PATH];
+	char fileSearch[MAX_PATH + 9];
 
 	/* Same place, different layout. */
 	strcpy(oldDirectory, output);
@@ -361,7 +384,10 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 	length = ftell(file);
 	fseek(file, 0, SEEK_SET);
 	data = (char*) malloc(length);
-	fread(data, 1, length, file);
+	if (fread(data, 1, length, file) <= 0) {
+            printf("it broke!!!\n");
+            exit(1);
+        }
 	fclose(file);
 
 	/* Write data */

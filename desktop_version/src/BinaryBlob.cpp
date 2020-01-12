@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __MINGW32__
+#define PRINTF_LL "%I64d"
+#else
+#define PRINTF_LL "%lld"
+#endif
+
 /* FIXME: Abstract to FileSystemUtils! */
 #include <physfs.h>
 
@@ -19,6 +25,7 @@ binaryBlob::binaryBlob()
 			m_headers[i].name[j] = '\0';
 		}
 	}
+	::memset(m_headers, 0, 128 * sizeof(resourceheader));
 }
 
 #ifdef VVV_COMPILEMUSIC
@@ -91,7 +98,7 @@ bool binaryBlob::unPackBinary(const char* name)
 
 	size = PHYSFS_fileLength(handle);
 
-	PHYSFS_read(handle, &m_headers, 1, sizeof(resourceheader) * 128);
+	PHYSFS_readBytes(handle, &m_headers, sizeof(resourceheader) * 128);
 
 	int offset = 0 + (sizeof(resourceheader) * 128);
 
@@ -101,13 +108,13 @@ bool binaryBlob::unPackBinary(const char* name)
 		{
 			PHYSFS_seek(handle, offset);
 			m_memblocks[i] = (char*) malloc(m_headers[i].size);
-			PHYSFS_read(handle, m_memblocks[i], 1, m_headers[i].size);
+			PHYSFS_readBytes(handle, m_memblocks[i], m_headers[i].size);
 			offset += m_headers[i].size;
 		}
 	}
 	PHYSFS_close(handle);
 
-	printf("The complete reloaded file size: %li\n", size);
+	printf("The complete reloaded file size: " PRINTF_LL "\n", size);
 
 	for (int i = 0; i < 128; i += 1)
 	{

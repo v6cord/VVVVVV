@@ -2,7 +2,7 @@
 
 #include "MakeAndPlay.h"
 
-std::vector<std::string> spacestation2class::loadlevel(int rx, int ry, Game& game, entityclass& obj)
+growing_vector<std::string> spacestation2class::loadlevel(int rx, int ry, Game& game, entityclass& obj)
 {
 	int t;
 	rx -= 100;
@@ -13,7 +13,7 @@ std::vector<std::string> spacestation2class::loadlevel(int rx, int ry, Game& gam
 
 	t = rx + (ry * 100);
 
-	std::vector<std::string> tmap;
+	growing_vector<std::string> tmap;
 	roomname = "Untitled room ["+UtilityClass::String(rx) + "," + UtilityClass::String(ry)+"]";
 
 	switch(t)

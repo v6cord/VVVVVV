@@ -8,7 +8,6 @@
 #include "UtilityClass.h"
 #include "GraphicsUtil.h"
 
-
 class entityclass;
 class mapclass;
 class Graphics;
@@ -171,6 +170,8 @@ public:
     int mainmenu;
     bool menustart;
 
+    unsigned changelogoffset = 0;
+
     //Teleporting
     bool teleport_to_new_area;
     int teleport_to_x, teleport_to_y;
@@ -179,8 +180,8 @@ public:
     int teleport_to_teleporter;
 
     //Main Menu Variables
-    std::vector<std::string> menuoptions;
-    std::vector<bool> menuoptionsactive;
+    growing_vector<std::string> menuoptions;
+    growing_vector<int> menuoptionsactive;
     int nummenuoptions, currentmenuoption ;
     std::string menuselection, currentmenuname, previousmenuname;
     int menuxoff, menuyoff;
@@ -224,20 +225,20 @@ public:
 
     bool inintermission;
 
-    std::vector<bool> crewstats;
+    growing_vector<int> crewstats;
 
     bool alarmon;
     int alarmdelay;
     bool blackout;
 
-    std::vector<bool> tele_crewstats;
+    growing_vector<int> tele_crewstats;
 
-    std::vector<bool> quick_crewstats;
+    growing_vector<int> quick_crewstats;
 
-    std::vector<int> unlock;
-    std::vector<int> unlocknotify;
-    std::vector<int> temp_unlock;
-    std::vector<int> temp_unlocknotify;
+    growing_vector<int> unlock;
+    growing_vector<int> unlocknotify;
+    growing_vector<int> temp_unlock;
+    growing_vector<int> temp_unlocknotify;
     int stat_trinkets;
     bool fullscreen;
     int bestgamedeaths;
@@ -249,10 +250,10 @@ public:
     int stat_slowdown;
 
 
-    std::vector<int>besttimes;
-    std::vector<int>besttrinkets;
-    std::vector<int>bestlives;
-    std::vector<int> bestrank;
+    growing_vector<int>besttimes;
+    growing_vector<int>besttrinkets;
+    growing_vector<int>bestlives;
+    growing_vector<int> bestrank;
 
     bool telecookieexists;
     bool quickcookieexists;
@@ -318,7 +319,7 @@ public:
     std::string currentaction;
     bool recordinit;
 
-    std::vector<int> playback;
+    growing_vector<int> playback;
     int playbackpos;
     int playbacksize;
     int playmove;
@@ -350,9 +351,9 @@ public:
     bool customlevelstatsloaded;
 
 
-	std::vector<SDL_GameControllerButton> controllerButton_map;
-	std::vector<SDL_GameControllerButton> controllerButton_flip;
-	std::vector<SDL_GameControllerButton> controllerButton_esc;
+	growing_vector<SDL_GameControllerButton> controllerButton_map;
+	growing_vector<SDL_GameControllerButton> controllerButton_flip;
+	growing_vector<SDL_GameControllerButton> controllerButton_esc;
 
 };
 
