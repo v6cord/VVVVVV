@@ -27,6 +27,13 @@ growing_vector<std::string> changelog = {
     "Version c1.0",
     "[line]",
     "- Added UTF-8 support",
+    "- enableinternal() - a simplified",
+    "  command that makes every line after",
+    "  it parse as internal except for",
+    "  disableinternal()",
+    "- disableinternal() - a simplified",
+    "  command that makes every line after",
+    "  it parse as simplified",
     "- pdelay(n) - a delay(n) that doesn't",
     "  lock the players movement",
     "- setroomname() - sets the roomname to",
@@ -48,8 +55,8 @@ growing_vector<std::string> changelog = {
     "- followposition now works for the player",
     "- There's now an option to disable only",
     "  the music",
-    "- Lots of limits in VVVVVV have been",
-    "  removed, like the script line limit"
+    "- All limits have been removed except",
+    "  for the 20x20 map size limit"
 
 };
 
