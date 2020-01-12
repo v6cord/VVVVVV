@@ -65,6 +65,9 @@ int main(int argc, char *argv[])
                 return 1;
             }
         }
+        if (std::string(argv[i]) == "-renderer") {
+            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
+        }
     }
 
     /*if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
