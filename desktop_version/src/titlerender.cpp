@@ -64,7 +64,15 @@ growing_vector<std::string> changelog = {
     "- There's now an option to disable only",
     "  the music",
     "- All limits have been removed except",
-    "  for the 20x20 map size limit"
+    "  for the 20x20 map size limit",
+    "- destroy(platformsreal) - A version of",
+    "  destroy(platforms) that isn't bugged",
+    "- destroy(enemies)",
+    "- destroy(trinkets)",
+    "- destroy(warplines)",
+    "- destroy(checkpoints)",
+    "- destroy(all)",
+    "- destroy(conveyors)",
 
 };
 
