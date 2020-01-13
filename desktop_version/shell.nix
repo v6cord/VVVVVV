@@ -1,14 +1,15 @@
-{ cross ? false }:
+{ cross ? false, clang ? false }:
 let pkgsNative = import (builtins.fetchTarball {
   name = "cross-compile-nixpkgs";
   url = https://github.com/nixos/nixpkgs/archive/2436c27541b2f52deea3a4c1691216a02152e729.tar.gz;
   sha256 = "0p98dwy3rbvdp6np596sfqnwlra11pif3rbdh02pwdyjmdvkmbvd";
 }) {};
     pkgs = if cross then pkgsNative.pkgsCross.mingwW64 else pkgsNative;
+    stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
   pkgs.callPackage (
-    {stdenv, smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake}:
-    mkShell (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
+    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake}:
+    (mkShell.override { inherit stdenv; }) (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
         outputs = ["out"];
         outputBin = "out";
         passthru = {

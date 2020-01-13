@@ -1,7 +1,7 @@
 # CMake File for VVVVVV
 # Written by Ethan "flibitijibibo" Lee
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -119,7 +119,7 @@ IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
 	SET(PFS_SRC ${PFS_SRC} ../third_party/physfs/physfs_platform_apple.m)
 ENDIF()
-SET(PNG_SRC ../third_party/lodepng/lodepng.c)
+SET(PNG_SRC ../third_party/lodepng/lodepng.cpp)
 
 # Executable information
 IF(WIN32)
@@ -144,8 +144,11 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
+find_package(Filesystem REQUIRED)
+
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static)
+TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static std::filesystem)
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND DEFINED VVVVVV_CROSS_COMPILE)
