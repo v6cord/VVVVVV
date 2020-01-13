@@ -375,6 +375,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eci = 0; eci < obj.nentity; eci++)
 						if (obj.entities[eci].type == 55)
 							obj.entities[eci].active = false;
+				} else if (words[1] == "teleporter" || words[1] == "teleporters") {
+					for (int eti = 0; eti < obj.nentity; eti++)
+						if (obj.entities[eti].type == 100)
+							obj.entities[eti].active = false;
+
+					game.activetele = false;
 				}
 
 				obj.cleanup();
