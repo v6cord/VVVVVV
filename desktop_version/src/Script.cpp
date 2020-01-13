@@ -190,6 +190,92 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eci = 0; eci < obj.nentity; eci++)
 						if (obj.entities[eci].type == 8)
 							obj.entities[eci].active = false;
+				} else if (words[1] == "all") {
+					// Don't want to use obj.removeallblocks(), it'll remove all spikes too
+					for (int bl = 0; bl < obj.nblocks; bl++)
+						if (obj.blocks[bl].type != DAMAGE)
+							obj.blocks[bl].clear();
+
+					// Too bad there's no obj.removeallentities()
+					// (Wouldn't want to use it anyway, we need to take care of the conveyors' tile 1s)
+					for (int ei = 0; ei < obj.nentity; ei++)
+						if (obj.entities[ei].rule != 0) { // Destroy everything except the player
+							// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
+							// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+							if (obj.entities[ei].active && obj.entities[ei].type == 1 &&
+							(obj.entities[ei].behave == 8 || obj.entities[ei].behave == 9)) {
+								// Ok, is it aligned with the grid?
+								if (obj.entities[ei].xp % 8 != 0 || obj.entities[ei].yp % 8 != 0) {
+									obj.entities[ei].active = false;
+									continue;
+								}
+
+								// Is its top-left corner outside the map?
+								if (obj.entities[ei].xp < 0 || obj.entities[ei].xp >= 320
+								|| obj.entities[ei].yp < 0 || obj.entities[ei].yp >= 240) {
+									obj.entities[ei].active = false;
+									continue;
+								}
+
+								// Very well then, we might have an edentity conveyor...
+
+								int thisxp = obj.entities[ei].xp / 8;
+								int thisyp = obj.entities[ei].yp / 8;
+
+								int usethislength;
+								// Map.cpp uses this exact check to place 8 tiles down instead of 4,
+								// hope this conveyor's width didn't change in the meantime
+								if (obj.entities[ei].w == 64)
+									usethislength = 8;
+								else
+									usethislength = 4;
+
+								// Check that all tiles are tile 1
+								bool alltilestile1 = true;
+								for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+									if (map.contents[tilex + thisyp*40] != 1) {
+										alltilestile1 = false;
+										break;
+									}
+
+								if (!alltilestile1) {
+									obj.entities[ei].active = false;
+									continue;
+								}
+
+								// Ok, finally fix the tiles
+								// I don't care enough to check for what was actually behind the tiles originally
+								for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+									map.settile(tilex, thisyp, 0);
+
+								// And of course, we have to force the game to redraw the room
+								dwgfx.foregrounddrawn = false;
+							}
+
+							// Ok, NOW deactivate it
+							obj.entities[ei].active = false;
+						}
+					obj.cleanup();
+
+					// Copy-pasted from above
+					obj.horplatforms = false;
+					obj.vertplatforms = false;
+					obj.customwarpmode = false;
+					obj.customwarpmodevon = false;
+					obj.customwarpmodehon = false;
+					// If we had a warp background before, warp lines undid it
+					switch (ed.level[game.roomx-100 + ed.maxwidth*(game.roomy-100)].warpdir) {
+					case 1:
+						map.warpx = true;
+						break;
+					case 2:
+						map.warpy = true;
+						break;
+					case 3:
+						map.warpx = true;
+						map.warpy = true;
+						break;
+					}
 				}
 			}
 			if (words[0] == "customiftrinkets")
