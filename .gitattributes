@@ -1,2 +1,2 @@
 *.as linguist-language=ActionScript
-mobile-version/* linguist-vendored
+mobile_version/* linguist-vendored
