@@ -367,6 +367,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[egi].active = false;
 				} else if (words[1] == "roomtext") {
 					map.roomtexton = false;
+				} else if (words[1] == "crewmates") {
+					for (int eci = 0; eci < obj.nentity; eci++)
+						if (obj.entities[eci].type == 12 || obj.entities[eci].type == 14)
+							obj.entities[eci].active = false;
 				}
 
 				obj.cleanup();
