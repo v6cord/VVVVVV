@@ -357,6 +357,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[eqi].active = false;
 							obj.removeblockat(obj.entities[eqi].xp, obj.entities[eqi].yp);
 						}
+				} else if (words[1] == "coins") {
+					for (int eci = 0; eci < obj.nentity; eci++)
+						if (obj.entities[eci].type == 6)
+							obj.entities[eci].active = false;
 				}
 
 				obj.cleanup();
