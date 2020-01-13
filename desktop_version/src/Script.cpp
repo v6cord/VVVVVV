@@ -371,6 +371,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eci = 0; eci < obj.nentity; eci++)
 						if (obj.entities[eci].type == 12 || obj.entities[eci].type == 14)
 							obj.entities[eci].active = false;
+				} else if (words[1] == "customcrewmates") {
+					for (int eci = 0; eci < obj.nentity; eci++)
+						if (obj.entities[eci].type == 55)
+							obj.entities[eci].active = false;
 				}
 
 				obj.cleanup();
