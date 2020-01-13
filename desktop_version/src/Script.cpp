@@ -276,6 +276,69 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						map.warpy = true;
 						break;
 					}
+				} else if (words[1] == "conveyors") {
+					// Copy-pasted from above
+					for (int edc = 0; edc < obj.nentity; edc++)
+						if (obj.entities[edc].active && obj.entities[edc].type == 1 &&
+						(obj.entities[edc].behave == 8 || obj.entities[edc].behave == 9)) {
+							for (int ii = 0; ii < obj.nblocks; ii++)
+								if (obj.blocks[ii].xp == obj.entities[edc].xp && obj.blocks[ii].yp == obj.entities[edc].yp)
+									obj.blocks[ii].clear();
+							int jj = obj.nblocks - 1;
+							while (jj >= 0 && !obj.blocks[jj].active) {
+								obj.nblocks--;
+								jj--;
+							}
+							obj.entities[edc].active = false;
+
+							// Important: set width and height to 0, or there will still be collision
+							obj.entities[edc].w = 0;
+							obj.entities[edc].h = 0;
+
+							// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
+							// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+
+							// Ok, is it aligned with the grid?
+							if (obj.entities[edc].xp % 8 != 0 || obj.entities[edc].yp % 8 != 0)
+								continue;
+
+							// Is its top-left corner outside the map?
+							if (obj.entities[edc].xp < 0 || obj.entities[edc].xp >= 320
+							|| obj.entities[edc].yp < 0 || obj.entities[edc].yp >= 240)
+								continue;
+
+							// Very well then, we might have an edentity conveyor...
+
+							int thisxp = obj.entities[edc].xp / 8;
+							int thisyp = obj.entities[edc].yp / 8;
+
+							int usethislength;
+							// Map.cpp uses this exact check to place 8 tiles down instead of 4,
+							// hope this conveyor's width didn't change in the meantime
+							if (obj.entities[edc].w == 64)
+								usethislength = 8;
+							else
+								usethislength = 4;
+
+							// Check that all tiles are tile 1
+							bool alltilestile1 = true;
+							for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+								if (map.contents[tilex + thisyp*40] != 1) {
+									alltilestile1 = false;
+									break;
+								}
+
+							if (!alltilestile1)
+								continue;
+
+							// Ok, finally fix the tiles
+							// I don't care enough to check for what was actually behind the tiles originally
+							for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+								map.settile(tilex, thisyp, 0);
+
+							// And of course, we have to force the game to redraw the room
+							dwgfx.foregrounddrawn = false;
+						}
 				}
 			}
 			if (words[0] == "customiftrinkets")
