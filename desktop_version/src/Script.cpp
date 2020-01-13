@@ -198,63 +198,59 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
 					// Too bad there's no obj.removeallentities()
 					// (Wouldn't want to use it anyway, we need to take care of the conveyors' tile 1s)
-					for (int ei = 0; ei < obj.nentity; ei++)
-						if (obj.entities[ei].rule != 0) { // Destroy everything except the player
-							// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
-							// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
-							if (obj.entities[ei].active && obj.entities[ei].type == 1 &&
-							(obj.entities[ei].behave == 8 || obj.entities[ei].behave == 9)) {
-								// Ok, is it aligned with the grid?
-								if (obj.entities[ei].xp % 8 != 0 || obj.entities[ei].yp % 8 != 0) {
-									obj.entities[ei].active = false;
-									continue;
-								}
+					for (int ei = 0; ei < obj.nentity; ei++) {
+						if (obj.entities[ei].rule == 0) // Destroy everything except the player
+							continue;
 
-								// Is its top-left corner outside the map?
-								if (obj.entities[ei].xp < 0 || obj.entities[ei].xp >= 320
-								|| obj.entities[ei].yp < 0 || obj.entities[ei].yp >= 240) {
-									obj.entities[ei].active = false;
-									continue;
-								}
+						obj.entities[ei].active = false;
 
-								// Very well then, we might have an edentity conveyor...
+						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
+						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+						if (!obj.entities[ei].active || obj.entities[ei].type != 1 ||
+						(obj.entities[ei].behave != 8 && obj.entities[ei].behave != 9))
+							continue;
 
-								int thisxp = obj.entities[ei].xp / 8;
-								int thisyp = obj.entities[ei].yp / 8;
+						// Ok, we've found a conveyor, is it aligned with the grid?
+						if (obj.entities[ei].xp % 8 != 0 || obj.entities[ei].yp % 8 != 0)
+							continue;
 
-								int usethislength;
-								// Map.cpp uses this exact check to place 8 tiles down instead of 4,
-								// hope this conveyor's width didn't change in the meantime
-								if (obj.entities[ei].w == 64)
-									usethislength = 8;
-								else
-									usethislength = 4;
+						// Is its top-left corner outside the map?
+						if (obj.entities[ei].xp < 0 || obj.entities[ei].xp >= 320
+						|| obj.entities[ei].yp < 0 || obj.entities[ei].yp >= 240)
+							continue;
 
-								// Check that all tiles are tile 1
-								bool alltilestile1 = true;
-								for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-									if (map.contents[tilex + thisyp*40] != 1) {
-										alltilestile1 = false;
-										break;
-									}
+						// Very well then, we might have an edentity conveyor...
 
-								if (!alltilestile1) {
-									obj.entities[ei].active = false;
-									continue;
-								}
+						int thisxp = obj.entities[ei].xp / 8;
+						int thisyp = obj.entities[ei].yp / 8;
 
-								// Ok, finally fix the tiles
-								// I don't care enough to check for what was actually behind the tiles originally
-								for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-									map.settile(tilex, thisyp, 0);
+						int usethislength;
+						// Map.cpp uses this exact check to place 8 tiles down instead of 4,
+						// hope this conveyor's width didn't change in the meantime
+						if (obj.entities[ei].w == 64)
+							usethislength = 8;
+						else
+							usethislength = 4;
 
-								// And of course, we have to force the game to redraw the room
-								dwgfx.foregrounddrawn = false;
+						// Check that all tiles are tile 1
+						bool alltilestile1 = true;
+						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+							if (map.contents[tilex + thisyp*40] != 1) {
+								alltilestile1 = false;
+								break;
 							}
 
-							// Ok, NOW deactivate it
-							obj.entities[ei].active = false;
-						}
+						if (!alltilestile1)
+							continue;
+
+						// Ok, finally fix the tiles
+						// I don't care enough to check for what was actually behind the tiles originally
+						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+							map.settile(tilex, thisyp, 0);
+
+						// And of course, we have to force the game to redraw the room
+						dwgfx.foregrounddrawn = false;
+					}
 
 					// Copy-pasted from above
 					obj.horplatforms = false;
@@ -277,62 +273,64 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					}
 				} else if (words[1] == "conveyors") {
 					// Copy-pasted from above
-					for (int edc = 0; edc < obj.nentity; edc++)
-						if (obj.entities[edc].active && obj.entities[edc].type == 1 &&
-						(obj.entities[edc].behave == 8 || obj.entities[edc].behave == 9)) {
-							for (int ii = 0; ii < obj.nblocks; ii++)
-								if (obj.blocks[ii].xp == obj.entities[edc].xp && obj.blocks[ii].yp == obj.entities[edc].yp)
-									obj.blocks[ii].clear();
-							obj.entities[edc].active = false;
+					for (int edc = 0; edc < obj.nentity; edc++) {
+						if (!obj.entities[edc].active || obj.entities[edc].type != 1 ||
+						(obj.entities[edc].behave != 8 && obj.entities[edc].behave != 9))
+							continue;
 
-							// Important: set width and height to 0, or there will still be collision
-							obj.entities[edc].w = 0;
-							obj.entities[edc].h = 0;
+						for (int ii = 0; ii < obj.nblocks; ii++)
+							if (obj.blocks[ii].xp == obj.entities[edc].xp && obj.blocks[ii].yp == obj.entities[edc].yp)
+								obj.blocks[ii].clear();
+						obj.entities[edc].active = false;
 
-							// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
-							// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+						// Important: set width and height to 0, or there will still be collision
+						obj.entities[edc].w = 0;
+						obj.entities[edc].h = 0;
 
-							// Ok, is it aligned with the grid?
-							if (obj.entities[edc].xp % 8 != 0 || obj.entities[edc].yp % 8 != 0)
-								continue;
+						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
+						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
 
-							// Is its top-left corner outside the map?
-							if (obj.entities[edc].xp < 0 || obj.entities[edc].xp >= 320
-							|| obj.entities[edc].yp < 0 || obj.entities[edc].yp >= 240)
-								continue;
+						// Ok, is it aligned with the grid?
+						if (obj.entities[edc].xp % 8 != 0 || obj.entities[edc].yp % 8 != 0)
+							continue;
 
-							// Very well then, we might have an edentity conveyor...
+						// Is its top-left corner outside the map?
+						if (obj.entities[edc].xp < 0 || obj.entities[edc].xp >= 320
+						|| obj.entities[edc].yp < 0 || obj.entities[edc].yp >= 240)
+							continue;
 
-							int thisxp = obj.entities[edc].xp / 8;
-							int thisyp = obj.entities[edc].yp / 8;
+						// Very well then, we might have an edentity conveyor...
 
-							int usethislength;
-							// Map.cpp uses this exact check to place 8 tiles down instead of 4,
-							// hope this conveyor's width didn't change in the meantime
-							if (obj.entities[edc].w == 64)
-								usethislength = 8;
-							else
-								usethislength = 4;
+						int thisxp = obj.entities[edc].xp / 8;
+						int thisyp = obj.entities[edc].yp / 8;
 
-							// Check that all tiles are tile 1
-							bool alltilestile1 = true;
-							for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-								if (map.contents[tilex + thisyp*40] != 1) {
-									alltilestile1 = false;
-									break;
-								}
+						int usethislength;
+						// Map.cpp uses this exact check to place 8 tiles down instead of 4,
+						// hope this conveyor's width didn't change in the meantime
+						if (obj.entities[edc].w == 64)
+							usethislength = 8;
+						else
+							usethislength = 4;
 
-							if (!alltilestile1)
-								continue;
+						// Check that all tiles are tile 1
+						bool alltilestile1 = true;
+						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+							if (map.contents[tilex + thisyp*40] != 1) {
+								alltilestile1 = false;
+								break;
+							}
 
-							// Ok, finally fix the tiles
-							// I don't care enough to check for what was actually behind the tiles originally
-							for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-								map.settile(tilex, thisyp, 0);
+						if (!alltilestile1)
+							continue;
 
-							// And of course, we have to force the game to redraw the room
-							dwgfx.foregrounddrawn = false;
-						}
+						// Ok, finally fix the tiles
+						// I don't care enough to check for what was actually behind the tiles originally
+						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+							map.settile(tilex, thisyp, 0);
+
+						// And of course, we have to force the game to redraw the room
+						dwgfx.foregrounddrawn = false;
+					}
 				}
 
 				obj.cleanup();
