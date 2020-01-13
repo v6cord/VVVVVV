@@ -491,6 +491,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				music.play(ss_toi(words[1]));
 			}
+			if (words[0] == "niceplay")
+			{
+				music.niceplay(ss_toi(words[1]));
+			}
 			if (words[0] == "stopmusic")
 			{
 				music.haltdasmusik();
