@@ -78,6 +78,7 @@ growing_vector<std::string> changelog = {
     "- niceplay() - use this for better area",
     "  music transitions",
     "- destroy(terminals)",
+    "- destroy(scriptboxes)",
 
 };
 
