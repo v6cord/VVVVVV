@@ -275,7 +275,10 @@ void scriptclass::load(std::string t)
                 add("text(blue,0,0,"+words[1]+")");
               break;
             }
-            int ti=atoi(words[1].c_str());
+            int ti = 1;
+            if (!words[1].empty()) {
+                ti = atoi(words[1].c_str());
+            }
             if(ti>=0 && ti<=50){
               for(int ti2=0; ti2<ti; ti2++){
                 i++; add(script.customscript[i]);
@@ -300,7 +303,10 @@ void scriptclass::load(std::string t)
             if(squeakmode==0) add("squeak(player)");
             add("text(cyan,0,0,"+words[1]+")");
 
-            int ti=atoi(words[1].c_str());
+            int ti = 1;
+            if (!words[1].empty()) {
+                ti = atoi(words[1].c_str());
+            }
             if(ti>=0 && ti<=50){
               for(int ti2=0; ti2<ti; ti2++){
                 i++; add(script.customscript[i]);

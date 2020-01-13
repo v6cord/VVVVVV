@@ -637,7 +637,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				texty = ss_toi(words[3]);
 
 				//Number of lines for the textbox!
-				txtnumlines = ss_toi(words[4]);
+                                if (!words[4].empty()) {
+                                    txtnumlines = ss_toi(words[4]);
+                                } else {
+                                    txtnumlines = 1;
+                                }
+
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
