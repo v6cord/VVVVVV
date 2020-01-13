@@ -255,7 +255,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							// Ok, NOW deactivate it
 							obj.entities[ei].active = false;
 						}
-					obj.cleanup();
 
 					// Copy-pasted from above
 					obj.horplatforms = false;
@@ -284,11 +283,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							for (int ii = 0; ii < obj.nblocks; ii++)
 								if (obj.blocks[ii].xp == obj.entities[edc].xp && obj.blocks[ii].yp == obj.entities[edc].yp)
 									obj.blocks[ii].clear();
-							int jj = obj.nblocks - 1;
-							while (jj >= 0 && !obj.blocks[jj].active) {
-								obj.nblocks--;
-								jj--;
-							}
 							obj.entities[edc].active = false;
 
 							// Important: set width and height to 0, or there will still be collision
@@ -339,6 +333,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							// And of course, we have to force the game to redraw the room
 							dwgfx.foregrounddrawn = false;
 						}
+				}
+
+				obj.cleanup();
+				int n = obj.nblocks - 1;
+				while (n >= 0 && !obj.blocks[n].active) {
+					obj.nblocks--;
+					n--;
 				}
 			}
 			if (words[0] == "customiftrinkets")
