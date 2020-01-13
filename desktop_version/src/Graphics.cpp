@@ -156,6 +156,8 @@ void Graphics::drawspritesetcol(int x, int y, int t, int c, UtilityClass& help)
 
 void Graphics::Makebfont()
 {
+    auto fs = FSUtils::getInstance();
+
     for (int j =  0; j < (grphx.im_bfont->h / 8); j++)
     {
         for (int i = 0; i < 16; i++)
@@ -169,12 +171,12 @@ void Graphics::Makebfont()
         }
     }
 
-    unsigned char* charmap = NULL;
-    size_t length;
-    FILESYSTEM_loadFileToMemory("graphics/font.txt", &charmap, &length);
-    if (charmap != NULL) {
-        unsigned char* current = charmap;
-        unsigned char* end = charmap + length;
+    std::vector<uint8_t> buffer;
+
+   if (fs->loadFile("graphics/font.txt", buffer))
+   {
+        unsigned char* current = buffer.data();
+        unsigned char* end = buffer.data() + buffer.size();
         int pos = 0;
         while (current != end) {
             int codepoint = utf8::next(current, end);

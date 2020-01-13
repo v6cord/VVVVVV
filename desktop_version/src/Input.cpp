@@ -131,6 +131,8 @@ void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, en
 
 void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music)
 {
+    auto fs = FSUtils::getInstance();
+
     //game.mx = (mouseX / 4);
     //game.my = (mouseY / 4);
 
@@ -406,7 +408,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
                     std::string name = "saves/" + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
                     TiXmlDocument doc;
-	                  if (!FILESYSTEM_loadTiXmlDocument(name.c_str(), &doc)){
+	                  if (!fs->loadXml(name, doc)){
 	                    game.mainmenu = 22;
                       dwgfx.fademode = 2;
 	                  }else{
@@ -501,7 +503,7 @@ SDL_assert(0 && "Remove open level dir");
                       game.fullScreenEffect_badSignal = !game.fullScreenEffect_badSignal;
                       //Hook the analogue thing in here: ABCDEFG
                       updategraphicsmode(game, dwgfx);
-					  dwgfx.screenbuffer->badSignalEffect= !dwgfx.screenbuffer->badSignalEffect;
+					  dwgfx.screenbuffer->setBadSignal(!dwgfx.screenbuffer->badSignal());
                       game.savestats(map, dwgfx);
                       game.createmenu("graphicoptions");
                       game.currentmenuoption = 3;

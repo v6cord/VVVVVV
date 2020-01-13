@@ -116,6 +116,8 @@ bool GetButtonFromString(const char *pText, SDL_GameControllerButton *button)
 Game::Game(void):
     mutebutton(0)
 {
+    auto fs = FSUtils::getInstance();
+
     infocus = true;
     paused = false;
     muted = false;
@@ -291,10 +293,10 @@ Game::Game(void):
 
     clearcustomlevelstats();
 
-    saveFilePath = FILESYSTEM_getUserSaveDirectory();
+    saveFilePath = fs->saveDirectory().string();
 
     TiXmlDocument doc;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc))
+    if (!fs->loadXml("saves/qsave.vvv", doc))
     {
         quickcookieexists = false;
         quicksummary = "";
@@ -332,7 +334,7 @@ Game::Game(void):
 
 
     TiXmlDocument docTele;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
+    if (!fs->loadXml("saves/tsave.vvv", docTele))
     {
         telecookieexists = false;
         telesummary = "";
@@ -469,11 +471,13 @@ void Game::updatecustomlevelstats(std::string clevel, int cscore)
 
 void Game::loadcustomlevelstats()
 {
+    auto fs = FSUtils::getInstance();
+
     //testing
     if(!customlevelstatsloaded)
     {
         TiXmlDocument doc;
-        if (!FILESYSTEM_loadTiXmlDocument("saves/levelstats.vvv", &doc))
+        if (!fs->loadXml("saves/levelstats.vvv", doc))
         {
             //No levelstats file exists; start new
             numcustomlevelstats=0;
@@ -545,6 +549,8 @@ void Game::loadcustomlevelstats()
 
 void Game::savecustomlevelstats()
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -583,7 +589,7 @@ void Game::savecustomlevelstats()
     msg->LinkEndChild( new TiXmlText( customlevelstatsstr.c_str() ));
     msgs->LinkEndChild( msg );
 
-    if(FILESYSTEM_saveTiXmlDocument("saves/levelstats.vvv", &doc))
+    if(fs->saveXml("saves/levelstats.vvv", doc))
     {
         printf("Level stats saved\n");
     }
@@ -4106,9 +4112,11 @@ void Game::unlocknum( int t, mapclass& map, Graphics& dwgfx )
 
 void Game::loadstats( mapclass& map, Graphics& dwgfx )
 {
+    auto fs = FSUtils::getInstance();
+
     // TODO loadstats
     TiXmlDocument doc;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/unlock.vvv", &doc))
+    if (!fs->loadXml("saves/unlock.vvv", doc))
     {
         savestats(map, dwgfx);
         printf("No Stats found. Assuming a new player\n");
@@ -4326,7 +4334,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
         if (pKey == "advanced_smoothing")
         {
             fullScreenEffect_badSignal = atoi(pText);
-            dwgfx.screenbuffer->badSignalEffect = fullScreenEffect_badSignal;
+            dwgfx.screenbuffer->setBadSignal(fullScreenEffect_badSignal);
         }
 
 				if (pKey == "usingmmmmmm")
@@ -4407,6 +4415,8 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
 
 void Game::savestats( mapclass& _map, Graphics& _dwgfx )
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -4498,7 +4508,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
     dataNode->LinkEndChild( msg );
 
     int width, height;
-    _dwgfx.screenbuffer->GetWindowSize(&width, &height);
+    _dwgfx.screenbuffer->GetWindowSize(width, height);
     msg = new TiXmlElement( "window_width" );
     msg->LinkEndChild( new TiXmlText( tu.String(width).c_str()));
     dataNode->LinkEndChild( msg );
@@ -4575,7 +4585,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
 	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
 	dataNode->LinkEndChild( msg );
 
-    FILESYSTEM_saveTiXmlDocument("saves/unlock.vvv", &doc);
+    fs->saveXml("saves/unlock.vvv", doc);
 }
 
 void Game::customstart( entityclass& obj, musicclass& music )
@@ -4803,8 +4813,10 @@ void Game::starttrial( int t, entityclass& obj, musicclass& music )
 
 void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc)) return;
+    if (!fs->loadXml("saves/qsave.vvv", doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -5024,9 +5036,11 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 
 void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     std::string levelfile = savfile.substr(7);
     TiXmlDocument doc;
-    if (!FILESYSTEM_loadTiXmlDocument(("saves/"+levelfile+".vvv").c_str(), &doc)) return;
+    if (!fs->loadXml(("saves/"+levelfile+".vvv").c_str(), doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -5282,6 +5296,8 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
 //TODO load summary
 void Game::loadsummary( mapclass& map, UtilityClass& help )
 {
+    auto fs = FSUtils::getInstance();
+
     //quickcookie = SharedObject.getLocal("dwvvvvvv_quick");
     //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
 
@@ -5310,7 +5326,7 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
     //}
 
     TiXmlDocument docTele;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
+    if (!fs->loadXml("saves/tsave.vvv", docTele))
     {
         telecookieexists = false;
         telesummary = "";
@@ -5401,7 +5417,7 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
     }
 
     TiXmlDocument doc;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc))
+    if (!fs->loadXml("saves/qsave.vvv", doc))
     {
         quickcookieexists = false;
         quicksummary = "";
@@ -5512,6 +5528,8 @@ void Game::initteleportermode( mapclass& map )
 
 void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     //TODO make this code a bit cleaner.
 
     //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
@@ -5745,7 +5763,7 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
     //telecookie.flush();
     //telecookie.close();
 
-    if(FILESYSTEM_saveTiXmlDocument("saves/tsave.vvv", &doc))
+    if(fs->saveXml("saves/tsave.vvv", doc))
     {
         printf("Game saved\n");
     }
@@ -5759,6 +5777,8 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
 
 void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     quickcookieexists = true;
 
     TiXmlDocument doc;
@@ -5989,7 +6009,7 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
     //telecookie.flush();
     //telecookie.close();
 
-    if(FILESYSTEM_saveTiXmlDocument("saves/qsave.vvv", &doc))
+    if(fs->saveXml("saves/qsave.vvv", doc))
     {
         printf("Game saved\n");
     }
@@ -6003,6 +6023,8 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
 
 void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     quickcookieexists = true;
 
     TiXmlDocument doc;
@@ -6250,7 +6272,7 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     //telecookie.close();
 
     std::string levelfile = savfile.substr(7);
-    if(FILESYSTEM_saveTiXmlDocument(("saves/"+levelfile+".vvv").c_str(), &doc))
+    if(fs->saveXml(("saves/"+levelfile+".vvv"), doc))
     {
         printf("Game saved\n");
     }
@@ -6264,8 +6286,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
 void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
-    if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &doc)) return;
+    if (!fs->loadXml("saves/tsave.vvv", doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
