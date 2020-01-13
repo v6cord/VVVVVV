@@ -82,6 +82,7 @@ growing_vector<std::string> changelog = {
     "- destroy(disappearingplatforms)",
     "- destroy(1x1quicksand)",
     "- destroy(coins)",
+    "- destroy(gravitytokens)",
 
 };
 
