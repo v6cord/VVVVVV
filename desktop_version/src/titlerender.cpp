@@ -73,6 +73,7 @@ growing_vector<std::string> changelog = {
     "- destroy(checkpoints)",
     "- destroy(all)",
     "- destroy(conveyors)",
+    "- killplayer()"
 
 };
 
