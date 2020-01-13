@@ -356,6 +356,7 @@ public:
 	growing_vector<SDL_GameControllerButton> controllerButton_flip;
 	growing_vector<SDL_GameControllerButton> controllerButton_esc;
 
+    bool skipfakeload;
 };
 
 #endif /* GAME_H */
