@@ -216,7 +216,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "drawtext")
 			{
-				// drawtext(x,y,r,g,b)
+				// drawtext(x,y,r,g,b,centered)
 				scriptimage temp;
 				temp.type   = 0;
 				temp.x      = ss_toi(words[1]);
@@ -224,7 +224,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.r      = ss_toi(words[3]);
 				temp.g      = ss_toi(words[4]);
 				temp.b      = ss_toi(words[5]);
-				temp.center = false;
+				temp.center = ss_toi(words[6]);
                 position++;
 				temp.text = commands[position];
 				scriptrender.push_back(temp);
