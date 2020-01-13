@@ -351,7 +351,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[epi].active = false;
 							obj.removeblockat(obj.entities[epi].xp, obj.entities[epi].yp);
 						}
-				} else if (words[1] == "1x1quicksand") {
+				} else if (words[1] == "1x1quicksand" || words[1] == "1x1disappearingplatforms") {
 					for (int eqi = 0; eqi < obj.nentity; eqi++)
 						if (obj.entities[eqi].type == 3) {
 							obj.entities[eqi].active = false;
