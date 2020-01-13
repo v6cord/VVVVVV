@@ -1020,14 +1020,22 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				looppoint = position;
 				loopcount = ss_toi(words[1]);
 			}
+			else if (words[0] == "inf")
+			{
+				//right, loop from this point
+				looppoint = position;
+				loopcount = -1;
+			}
 			else if (words[0] == "loop")
 			{
 				//right, loop from this point
-				loopcount--;
-				if (loopcount > 0)
+				if (loopcount > 1)
 				{
+                                        loopcount--;
 					position = looppoint;
-				}
+				} else if (loopcount == -1) {
+                                        position = looppoint;
+                                }
 			}
 			else if (words[0] == "vvvvvvman")
 			{
