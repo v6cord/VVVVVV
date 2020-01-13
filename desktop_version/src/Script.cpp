@@ -361,7 +361,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eci = 0; eci < obj.nentity; eci++)
 						if (obj.entities[eci].type == 6)
 							obj.entities[eci].active = false;
-				} else if (words[1] == "gravitytokens") {
+				} else if (words[1] == "gravitytokens" || words[1] == "fliptokens") {
 					for (int egi = 0; egi < obj.nentity; egi++)
 						if (obj.entities[egi].type == 4)
 							obj.entities[egi].active = false;
