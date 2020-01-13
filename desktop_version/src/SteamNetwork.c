@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-#include "SDL.h"
-#include "Network.h"
-
-// Steamworks interface versions
-=======
 #include <stdio.h>
 #include <stdint.h>
 #include <SDL.h>
 
 /* Steamworks interface versions */
->>>>>>> upstream/master
 
 #define VVVVVV_STEAMCLIENT "SteamClient017"
 #define VVVVVV_STEAMUSERSTATS "STEAMUSERSTATS_INTERFACE_VERSION011"
