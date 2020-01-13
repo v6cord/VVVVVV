@@ -142,10 +142,20 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				  for(int edi=0; edi<obj.nentity; edi++){
 				    if(obj.entities[edi].type==11) obj.entities[edi].active=false;
           }
-				}else if(words[1]=="platforms"){
-				  for(int edi=0; edi<obj.nentity; edi++){
-				    if(obj.entities[edi].rule==2 && obj.entities[edi].animate==100) obj.entities[edi].active=false;
-          }
+				} else if (words[1] == "platforms" || words[1] == "platformsreal") {
+					// destroy(platforms) is buggy, doesn't remove platforms' blocks
+					for (int edi = 0; edi < obj.nentity; edi++)
+						if (obj.entities[edi].rule == 2 && obj.entities[edi].animate == 100) {
+							obj.entities[edi].active = false;
+							// but destroy(platformsreal) is less buggy
+							if (words[1] == "platformsreal")
+								obj.removeblockat(obj.entities[edi].xp, obj.entities[edi].yp);
+						}
+
+					if (words[1] == "platformsreal") {
+						obj.horplatforms = false;
+						obj.vertplatforms = false;
+					}
 				}
 			}
 			if (words[0] == "customiftrinkets")
