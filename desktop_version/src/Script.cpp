@@ -365,6 +365,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int egi = 0; egi < obj.nentity; egi++)
 						if (obj.entities[egi].type == 4)
 							obj.entities[egi].active = false;
+				} else if (words[1] == "roomtext") {
+					map.roomtexton = false;
 				}
 
 				obj.cleanup();
