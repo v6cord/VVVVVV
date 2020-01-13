@@ -69,6 +69,9 @@ void scriptclass::tokenize( std::string t )
 
 void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
 {
+	if (scriptdelay == 0) {
+		passive = false;
+	}
 	while(running && scriptdelay<=0 && !game.pausescript)
 	{
 		if (position < scriptlength)
@@ -207,9 +210,24 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "setroomname")
 			{
-				// setroomname(roomname)
+				// setroomname()
                                 position++;
 				map.roomname = commands[position];
+			}
+			if (words[0] == "drawtext")
+			{
+				// drawtext(x,y,r,g,b)
+				scriptimage temp;
+				temp.type   = 0;
+				temp.x      = ss_toi(words[1]);
+				temp.y      = ss_toi(words[2]);
+				temp.r      = ss_toi(words[3]);
+				temp.g      = ss_toi(words[4]);
+				temp.b      = ss_toi(words[5]);
+				temp.center = false;
+                position++;
+				temp.text = commands[position];
+				scriptrender.push_back(temp);
 			}
       if (words[0] == "flag")
 			{
@@ -2603,9 +2621,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 	if(scriptdelay>0)
 	{
 		scriptdelay--;
-		if (scriptdelay == 0) {
-			passive = false;
-		}
 	}
 }
 

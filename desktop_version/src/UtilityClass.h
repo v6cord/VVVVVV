@@ -5,6 +5,18 @@
 #include <vector>
 #include <string>
 
+// Script drawing stuff
+struct scriptimage {
+    int type; // 0 for text, 1 for image
+    int x;
+    int y;
+    int r;
+    int g;
+    int b;
+    std::string text;
+    bool center;
+};
+
 template<typename T>
 class growing_vector : public std::vector<T> {
     public:

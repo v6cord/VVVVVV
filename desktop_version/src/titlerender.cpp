@@ -1670,10 +1670,20 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         }
     }
 
-     if(map.custommode && !map.custommodeforreal){
+    // scriptrender
+
+    for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
+        scriptimage current = script.scriptrender[i];
+        if (current.type == 0) {
+            dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+        }
+    }
+    script.scriptrender.clear();
+
+    if(map.custommode && !map.custommodeforreal){
         //Return to level editor
         dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
-      }
+    }
 
 
     dwgfx.cutscenebars();
