@@ -186,6 +186,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						map.warpy = true;
 						break;
 					}
+				} else if (words[1] == "checkpoints") {
+					for (int eci = 0; eci < obj.nentity; eci++)
+						if (obj.entities[eci].type == 8)
+							obj.entities[eci].active = false;
 				}
 			}
 			if (words[0] == "customiftrinkets")
