@@ -79,6 +79,7 @@ growing_vector<std::string> changelog = {
     "  music transitions",
     "- destroy(terminals)",
     "- destroy(scriptboxes)",
+    "- destroy(disappearingplatforms)",
 
 };
 
