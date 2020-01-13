@@ -2278,6 +2278,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (!game.intimetrial && !game.nodeathmode && !game.inintermission) game.savetele(map, obj, music);
 			}
+			else if (words[0] == "customquicksave")
+			{
+				if (!map.custommode || map.custommodeforreal)
+					game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music);
+			}
 			else if (words[0] == "createlastrescued")
 			{
 				if (game.lastsaved==2)
