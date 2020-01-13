@@ -226,13 +226,7 @@ void scriptclass::load(std::string t)
             add("custom"+script.customscript[i]);
           }else if(words[0] == "destroy"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
-            if(words[1]=="gravitylines"){
-              add("destroy(gravitylines)");
-            }else if(words[1]=="warptokens"){
-              add("destroy(warptokens)");
-            }else if(words[1]=="platforms"){
-              add("destroy(platforms)");
-            }
+            add(script.customscript[i]);
           }else if(words[0] == "speaker"){
             speakermode=0;
             if(words[1]=="gray" || words[1]=="grey" || words[1]=="terminal" || words[1]=="0") speakermode=0;
