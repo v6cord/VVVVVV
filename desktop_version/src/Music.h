@@ -4,6 +4,7 @@
 #include "SoundSystem.h"
 
 #include <vector>
+#include <string>
 #include <map>
 
 #define musicroom(rx, ry) ((rx) + ((ry) * 20))
