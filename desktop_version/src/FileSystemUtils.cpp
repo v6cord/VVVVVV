@@ -396,7 +396,7 @@ bool FSUtils::loadFile(
 
 	buffer = std::vector<uint8_t>(p, p + size);
 
-	delete p;
+	delete[] p;
 	PHYSFS_close(handle);
 	return true;
 }
@@ -414,6 +414,8 @@ bool FSUtils::loadXml(
 				nullptr, TIXML_ENCODING_UTF8);
 		return true;
 	}
+
+        return false;
 }
 
 bool FSUtils::saveXml(

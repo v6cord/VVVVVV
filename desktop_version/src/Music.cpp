@@ -469,7 +469,7 @@ void musicclass::initefchannels()
 
 void musicclass::playfile(const char* t, std::string track)
 {
-    int channel;
+    int channel = 0;
 
     auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
     if (inserted) {
