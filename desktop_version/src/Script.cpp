@@ -156,6 +156,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						obj.horplatforms = false;
 						obj.vertplatforms = false;
 					}
+				} else if (words[1] == "enemies") {
+					for (int eni = 0; eni < obj.nentity; eni++)
+						if (obj.entities[eni].rule == 1)
+							obj.entities[eni].active = false;
 				}
 			}
 			if (words[0] == "customiftrinkets")
