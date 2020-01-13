@@ -341,6 +341,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						(obj.blocks[bti].prompt == "Press ENTER to activate terminal" ||
 						obj.blocks[bti].prompt == "Press ENTER to activate terminals"))
 							obj.blocks[bti].active = false;
+				} else if (words[1] == "scriptboxes") {
+					for (int bsi = 0; bsi < obj.nblocks; bsi++)
+						if (obj.blocks[bsi].type == TRIGGER)
+							obj.blocks[bsi].active = false;
 				}
 
 				obj.cleanup();
