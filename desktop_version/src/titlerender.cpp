@@ -75,7 +75,7 @@ growing_vector<std::string> changelog = {
     "- destroy(conveyors)",
     "- killplayer()",
     "- customquicksave()",
-    "- niceplay() - use this for better area"
+    "- niceplay() - use this for better area",
     "  music transitions"
 
 };
