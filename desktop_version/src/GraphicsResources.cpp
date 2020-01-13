@@ -4,23 +4,20 @@
 #include <stdlib.h>
 
 // Used to load PNG data
-extern "C"
-{
-	extern unsigned lodepng_decode24(
-		unsigned char** out,
-		unsigned* w,
-		unsigned* h,
-		const unsigned char* in,
-		size_t insize
-	);
-	extern unsigned lodepng_decode32(
-		unsigned char** out,
-		unsigned* w,
-		unsigned* h,
-		const unsigned char* in,
-		size_t insize
-	);
-}
+extern unsigned lodepng_decode24(
+        unsigned char** out,
+        unsigned* w,
+        unsigned* h,
+        const unsigned char* in,
+        size_t insize
+);
+extern unsigned lodepng_decode32(
+        unsigned char** out,
+        unsigned* w,
+        unsigned* h,
+        const unsigned char* in,
+        size_t insize
+);
 
 SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha = false)
 {
