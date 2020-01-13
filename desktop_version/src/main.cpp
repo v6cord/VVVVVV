@@ -409,6 +409,7 @@ int main(int argc, char *argv[])
                 break;
             case TITLEMODE:
                 //Input
+                changeloginput(key, graphics, map, game, obj, help, music);
                 titleinput(key, graphics, map, game, obj, help, music);
                 //Render
                 titlerender(graphics, map, game, obj, help, music);

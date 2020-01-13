@@ -171,6 +171,7 @@ public:
     bool menustart;
 
     unsigned changelogoffset = 0;
+    int changelogkeydelay = 0;
 
     //Teleporting
     bool teleport_to_new_area;

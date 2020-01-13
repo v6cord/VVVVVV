@@ -110,6 +110,25 @@ void updatebuttonmappings(Game& game, KeyPoll& key, musicclass& music, int bind)
 	}
 }
 
+void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music) {
+    if (game.currentmenuname == "changelog") {
+        if (game.changelogkeydelay == 0) {
+            if (key.keymap[SDLK_DOWN]) {
+                game.changelogkeydelay = 3;
+                game.changelogoffset++;
+            }
+            if (key.keymap[SDLK_UP]) {
+                game.changelogkeydelay = 3;
+                if (game.changelogoffset != 0) {
+                    game.changelogoffset--;
+                }
+            }
+        } else {
+            game.changelogkeydelay--;
+        }
+    }
+}
+
 void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music)
 {
     //game.mx = (mouseX / 4);
