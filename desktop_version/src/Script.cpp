@@ -190,7 +190,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eci = 0; eci < obj.nentity; eci++)
 						if (obj.entities[eci].type == 8)
 							obj.entities[eci].active = false;
-				} else if (words[1] == "all") {
+				} else if (words[1] == "all" || words[1] == "everything") {
 					// Don't want to use obj.removeallblocks(), it'll remove all spikes too
 					for (int bl = 0; bl < obj.nblocks; bl++)
 						if (obj.blocks[bl].type != DAMAGE)
