@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 #include "SDL.h"
 #include "Network.h"
 
 // Steamworks interface versions
+=======
+#include <stdio.h>
+#include <stdint.h>
+#include <SDL.h>
+
+/* Steamworks interface versions */
+>>>>>>> upstream/master
 
 #define VVVVVV_STEAMCLIENT "SteamClient017"
 #define VVVVVV_STEAMUSERSTATS "STEAMUSERSTATS_INTERFACE_VERSION011"
@@ -9,13 +17,13 @@
 // Shared object file name
 
 #if defined(_WIN32)
-#define NETWORK_LIBRARY "steam_api.dll"
+#define STEAM_LIBRARY "steam_api.dll"
 #elif defined(__APPLE__)
-#define NETWORK_LIBRARY "libsteam_api.dylib"
+#define STEAM_LIBRARY "libsteam_api.dylib"
 #elif defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__)
-#define NETWORK_LIBRARY "libsteam_api.so"
+#define STEAM_LIBRARY "libsteam_api.so"
 #else
-#error NETWORK_LIBRARY: Unrecognized platform!
+#error STEAM_LIBRARY: Unrecognized platform!
 #endif
 
 // Function Pointer Types
@@ -92,18 +100,18 @@ static void ClearPointers()
 
 //NETWORK API Implementation
 
-int NETWORK_init()
+int32_t STEAM_init()
 {
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
-	return 1;
+	return 0;
 #endif
 	intptr_t steamClient;
 	int32_t steamUser, steamPipe;
 
-	libHandle = SDL_LoadObject(NETWORK_LIBRARY);
+	libHandle = SDL_LoadObject(STEAM_LIBRARY);
 	if (!libHandle)
 	{
-		printf("%s not found!\n", NETWORK_LIBRARY);
+		printf("%s not found!\n", STEAM_LIBRARY);
 		return 0;
 	}
 
@@ -111,7 +119,7 @@ int NETWORK_init()
 		name = (name##Func) SDL_LoadFunction(libHandle, #name); \
 		if (!name) \
 		{ \
-			printf("%s symbol %s not found!\n", NETWORK_LIBRARY, #name); \
+			printf("%s symbol %s not found!\n", STEAM_LIBRARY, #name); \
 			ClearPointers(); \
 			return 0; \
 		}
@@ -162,7 +170,7 @@ int NETWORK_init()
 	return 1;
 }
 
-void NETWORK_shutdown()
+void STEAM_shutdown()
 {
 	if (libHandle)
 	{
@@ -171,7 +179,7 @@ void NETWORK_shutdown()
 	}
 }
 
-void NETWORK_update()
+void STEAM_update()
 {
 	if (libHandle)
 	{
@@ -179,7 +187,7 @@ void NETWORK_update()
 	}
 }
 
-void NETWORK_unlockAchievement(const char *name)
+void STEAM_unlockAchievement(const char *name)
 {
 	if (libHandle)
 	{
@@ -191,7 +199,7 @@ void NETWORK_unlockAchievement(const char *name)
 	}
 }
 
-int32_t NETWORK_getAchievementProgress(const char *name)
+int32_t STEAM_getAchievementProgress(const char *name)
 {
 	int32_t result = -1;
 	if (libHandle)
@@ -205,7 +213,7 @@ int32_t NETWORK_getAchievementProgress(const char *name)
 	return result;
 }
 
-void NETWORK_setAchievementProgress(const char *name, int32_t stat)
+void STEAM_setAchievementProgress(const char *name, int32_t stat)
 {
 	if (libHandle)
 	{
