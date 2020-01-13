@@ -3,6 +3,8 @@
 #include "FileSystemUtils.h"
 #include <exception>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #if defined(_WIN32)
 #include <windows.h>

@@ -3,6 +3,7 @@
 
 #include "tinyxml.h"
 #include <string>
+#include <vector>
 #include <filesystem>
 
 class FSUtils
