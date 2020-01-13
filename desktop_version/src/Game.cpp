@@ -1306,7 +1306,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 								}
             }
 
-            savestats(map, dwgfx);
+            savestats(map, dwgfx, music);
 
             dwgfx.fademode = 2;
             music.fadeout();
@@ -2232,7 +2232,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3006:
             //Level complete! (warp zone)
-            unlocknum(4, map, dwgfx);
+            unlocknum(4, map, dwgfx, music);
             lastsaved = 4;
             music.play(0);
             state++;
@@ -2346,7 +2346,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3020:
             //Level complete! (Space Station 2)
-            unlocknum(3, map, dwgfx);
+            unlocknum(3, map, dwgfx, music);
             lastsaved = 2;
             music.play(0);
             state++;
@@ -2461,7 +2461,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3040:
             //Level complete! (Lab)
-            unlocknum(1, map, dwgfx);
+            unlocknum(1, map, dwgfx, music);
             lastsaved = 5;
             music.play(0);
             state++;
@@ -2575,7 +2575,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3050:
             //Level complete! (Space Station 1)
-            unlocknum(0, map, dwgfx);
+            unlocknum(0, map, dwgfx, music);
             lastsaved = 1;
             music.play(0);
             state++;
@@ -2709,7 +2709,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3060:
             //Level complete! (Tower)
-            unlocknum(2, map, dwgfx);
+            unlocknum(2, map, dwgfx, music);
             lastsaved = 3;
             music.play(0);
             state++;
@@ -2908,7 +2908,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             else
             {
-                unlocknum(7, map, dwgfx);
+                unlocknum(7, map, dwgfx, music);
                 dwgfx.fademode = 2;
                 companion = 0;
                 state++;
@@ -2938,7 +2938,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             else
             {
-                unlocknum(6, map, dwgfx);
+                unlocknum(6, map, dwgfx, music);
                 dwgfx.fademode = 2;
                 companion = 0;
                 supercrewmate = false;
@@ -3002,7 +3002,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
         case 3501:
             //Game complete!
 						NETWORK_unlockAchievement("vvvvvvgamecomplete");
-            unlocknum(5, map, dwgfx);
+            unlocknum(5, map, dwgfx, music);
             crewstats[0] = true;
             state++;
             statedelay = 75;
@@ -3173,7 +3173,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 						}
 						
 
-            savestats(map, dwgfx);
+            savestats(map, dwgfx, music);
             if (nodeathmode)
             {
 								NETWORK_unlockAchievement("vvvvvvmaster"); //bloody hell
@@ -4085,7 +4085,7 @@ void Game::gethardestroom( mapclass& map )
     }
 }
 
-void Game::deletestats( mapclass& map, Graphics& dwgfx )
+void Game::deletestats( mapclass& map, Graphics& dwgfx, musicclass& music )
 {
     for (int i = 0; i < 25; i++)
     {
@@ -4101,16 +4101,16 @@ void Game::deletestats( mapclass& map, Graphics& dwgfx )
     }
     dwgfx.setflipmode = false;
     stat_trinkets = 0;
-    savestats(map, dwgfx);
+    savestats(map, dwgfx, music);
 }
 
-void Game::unlocknum( int t, mapclass& map, Graphics& dwgfx )
+void Game::unlocknum( int t, mapclass& map, Graphics& dwgfx, musicclass& music )
 {
     unlock[t] = true;
-    savestats(map, dwgfx);
+    savestats(map, dwgfx, music);
 }
 
-void Game::loadstats( mapclass& map, Graphics& dwgfx )
+void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
 {
     auto fs = FSUtils::getInstance();
 
@@ -4118,7 +4118,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
     TiXmlDocument doc;
     if (!fs->loadXml("saves/unlock.vvv", doc))
     {
-        savestats(map, dwgfx);
+        savestats(map, dwgfx, music);
         printf("No Stats found. Assuming a new player\n");
     }
 
@@ -4351,6 +4351,11 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
             skipfakeload = atoi(pText);
         }
 
+        if (pKey == "muted")
+        {
+            music.muted = atoi(pText);
+        }
+
 		if (pKey == "flipButton")
 		{
 			SDL_GameControllerButton newButton;
@@ -4413,7 +4418,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
     }
 }
 
-void Game::savestats( mapclass& _map, Graphics& _dwgfx )
+void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
 {
     auto fs = FSUtils::getInstance();
 
@@ -4560,6 +4565,10 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
 
     msg = new TiXmlElement("skipfakeload");
     msg->LinkEndChild(new TiXmlText(tu.String((int) skipfakeload).c_str()));
+    dataNode->LinkEndChild(msg);
+
+    msg = new TiXmlElement("muted");
+    msg->LinkEndChild(new TiXmlText(tu.String((int) _music.muted).c_str()));
     dataNode->LinkEndChild(msg);
 
     for (size_t i = 0; i < controllerButton_flip.size(); i += 1)

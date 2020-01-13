@@ -59,13 +59,13 @@ public:
 
     void updatestate(Graphics& dwgfx, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music);
 
-    void unlocknum(int t, mapclass& map, Graphics& dwgfx);
+    void unlocknum(int t, mapclass& map, Graphics& dwgfx, musicclass& music);
 
-    void loadstats(mapclass& map, Graphics& dwgfx);
+    void loadstats(mapclass& map, Graphics& dwgfx, musicclass& music);
 
-    void  savestats(mapclass& map, Graphics& dwgfx);
+    void  savestats(mapclass& map, Graphics& dwgfx, musicclass& music);
 
-    void deletestats(mapclass& map, Graphics& dwgfx);
+    void deletestats(mapclass& map, Graphics& dwgfx, musicclass& music);
 
     void deletequick();
 

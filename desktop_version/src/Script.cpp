@@ -3599,7 +3599,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
     //load("intro");
   break;
 	case 100:
-		game.savestats(map, dwgfx);
+		game.savestats(map, dwgfx, music);
 
 		SDL_Quit();
 		exit(0);

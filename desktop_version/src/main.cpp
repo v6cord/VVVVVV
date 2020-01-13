@@ -177,7 +177,7 @@ int main(int argc, char **argv)
     map.bypos = map.ypos / 2;
 
     //Moved screensetting init here from main menu V2.1
-    game.loadstats(map, graphics);
+    game.loadstats(map, graphics, music);
     if (game.skipfakeload)
         game.gamestate = TITLEMODE;
 		if(game.usingmmmmmm==0) music.usingmmmmmm=false;
@@ -528,7 +528,7 @@ int main(int argc, char **argv)
         if (game.savemystats)
         {
             game.savemystats = false;
-            game.savestats(map, graphics);
+            game.savestats(map, graphics, music);
         }
 
         //Mute button
