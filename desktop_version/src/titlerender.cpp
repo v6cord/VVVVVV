@@ -88,6 +88,7 @@ growing_vector<std::string> changelog = {
     "  rescuable crewmates",
     "- destroy(customcrewmates) - destroy",
     "  rescuable crewmates",
+    "- destroy(teleporter)",
 
 };
 
