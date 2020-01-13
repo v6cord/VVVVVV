@@ -73,11 +73,19 @@ void scriptclass::load(std::string t)
         //Now run the script
         for(int i=scriptstart; i<scriptend; i++){
           words[0]="nothing"; //Default!
-          words[1]="1"; //Default!
+          words[1]="unused"; //Default!
           tokenize(script.customscript[i]);
           std::transform(words[0].begin(), words[0].end(), words[0].begin(), ::tolower);
-         if (!internalmode) { // in the interest of not touching more lines I'm not going to properly indent this block lol
-          if(words[0] == "music"){
+          if (words[0] != "flash" && words[1] == "unused") {
+            words[1] = "1";
+          }
+          if (words[0] == "enableinternal") {
+            internalmode = true;
+          } else if (words[0] == "disableinternal") {
+            internalmode = false;
+          } else if (internalmode) {
+            add(script.customscript[i]);
+          } else if (words[0] == "music"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if(words[1]=="0"){
               tstring="stopmusic()";
@@ -96,9 +104,13 @@ void scriptclass::load(std::string t)
             add("play(15)");
           }else if(words[0] == "flash"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
-            add("flash(5)");
-            add("shake(20)");
-            add("playef(9,10)");
+            if (words[1] != "unused" && words[1] != "" && words[1] != "0") {
+              add("flash("+words[1]+")");
+            } else {
+              add("flash(5)");
+              add("shake(20)");
+              add("playef(9,10)");
+            }
           }else if(words[0] == "sad" || words[0] == "cry"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if(words[1]=="player"){
@@ -305,13 +317,8 @@ void scriptclass::load(std::string t)
             add("position(player,above)");
             add("speak_active");
             customtextmode=1;
-          }
-         }
-          if (words[0] == "enableinternal") {
-            internalmode = true;
-          } else if (words[0] == "disableinternal") {
-            internalmode = false;
-          } else if (internalmode) {
+          }else{
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add(script.customscript[i]);
           }
         }
