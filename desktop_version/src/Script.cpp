@@ -345,7 +345,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int bsi = 0; bsi < obj.nblocks; bsi++)
 						if (obj.blocks[bsi].type == TRIGGER)
 							obj.blocks[bsi].active = false;
-				} else if (words[1] == "disappearingplatforms") {
+				} else if (words[1] == "disappearingplatforms" || words[1] == "quicksand") {
 					for (int epi = 0; epi < obj.nentity; epi++)
 						if (obj.entities[epi].type == 2) {
 							obj.entities[epi].active = false;
