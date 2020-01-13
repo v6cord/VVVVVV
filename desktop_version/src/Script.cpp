@@ -331,6 +331,16 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						// And of course, we have to force the game to redraw the room
 						dwgfx.foregrounddrawn = false;
 					}
+				} else if (words[1] == "terminals") {
+					for (int eti = 0; eti < obj.nentity; eti++)
+						if (obj.entities[eti].type == 13)
+							obj.entities[eti].active = false;
+
+					for (int bti = 0; bti < obj.nblocks; bti++)
+						if (obj.blocks[bti].type == ACTIVITY &&
+						(obj.blocks[bti].prompt == "Press ENTER to activate terminal" ||
+						obj.blocks[bti].prompt == "Press ENTER to activate terminals"))
+							obj.blocks[bti].active = false;
 				}
 
 				obj.cleanup();
