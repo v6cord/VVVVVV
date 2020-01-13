@@ -1,3 +1,4 @@
+#include <iostream>
 #include "lodepng.h"
 #include "FileSystemUtils.h"
 #include "GraphicsUtil.h"
@@ -50,12 +51,13 @@ Screen::Screen()
 	SDL_SetWindowTitle(m_pWindow, "VVVVVV");
 
 	//Set icon
-	if (fs->loadFile("VVVVVV.png", buffer))
-	{
+        if (fs->loadFile("VVVVVV.png", buffer))
+        {
+                std::cout << buffer.size() << std::endl;
 		std::vector<uint8_t> data;
 		uint32_t width, height;
 
-		lodepng::decode(data, width, height, buffer);
+		lodepng::decode(data, width, height, buffer, LCT_RGB);
 
 		auto icon = SDL_CreateRGBSurfaceFrom(
 			reinterpret_cast<void*>(data.data()),
@@ -70,7 +72,9 @@ Screen::Screen()
 			SDL_SetWindowIcon(m_pWindow, icon);
 			SDL_FreeSurface(icon);
 		}
-	}
+	} else {
+                std::cerr << "Couldn't read icon!" << std::endl;
+        }
 
 	// FIXME: This surface should be the actual backbuffer! -flibit
 	m_pScreen = SDL_CreateRGBSurface(
