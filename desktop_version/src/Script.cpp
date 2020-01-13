@@ -160,6 +160,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eni = 0; eni < obj.nentity; eni++)
 						if (obj.entities[eni].rule == 1)
 							obj.entities[eni].active = false;
+				} else if (words[1] == "trinkets") {
+					for (int eti = 0; eti < obj.nentity; eti++)
+						if (obj.entities[eti].type == 7)
+							obj.entities[eti].active = false;
 				}
 			}
 			if (words[0] == "customiftrinkets")
