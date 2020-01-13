@@ -164,6 +164,28 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					for (int eti = 0; eti < obj.nentity; eti++)
 						if (obj.entities[eti].type == 7)
 							obj.entities[eti].active = false;
+				} else if (words[1] == "warplines") {
+					for (int ewi = 0; ewi < obj.nentity; ewi++)
+						if (obj.entities[ewi].type >= 51 && obj.entities[ewi].type <= 54)
+							obj.entities[ewi].active = false;
+
+					obj.customwarpmode = false;
+					obj.customwarpmodevon = false;
+					obj.customwarpmodehon = false;
+
+					// If we had a warp background before, warp lines undid it
+					switch (ed.level[game.roomx-100 + ed.maxwidth*(game.roomy-100)].warpdir) {
+					case 1:
+						map.warpx = true;
+						break;
+					case 2:
+						map.warpy = true;
+						break;
+					case 3:
+						map.warpx = true;
+						map.warpy = true;
+						break;
+					}
 				}
 			}
 			if (words[0] == "customiftrinkets")
