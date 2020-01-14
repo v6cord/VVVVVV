@@ -319,14 +319,23 @@ int main(int argc, char **argv)
         NETWORK_update();
 
         //framerate limit to 30
-        while (true) {
-            auto now = std::chrono::high_resolution_clock::now();
-            auto elapsed = now - last_frame;
-            if (elapsed >= frame_time) {
-                last_frame = now;
-                break;
+
+        auto now = std::chrono::high_resolution_clock::now();
+        auto elapsed = now - last_frame;
+        auto remaining = frame_time - elapsed;
+
+        if (remaining.count() > 0) {
+            auto ms_remaining = std::chrono::floor<std::chrono::milliseconds>(remaining);
+            SDL_Delay(ms_remaining.count());
+            while (true) {
+                auto now = std::chrono::high_resolution_clock::now();
+                auto elapsed = now - last_frame;
+                if (elapsed >= frame_time) {
+                    break;
+                }
             }
         }
+        last_frame = now;
 
         key.Poll();
 		if(key.toggleFullscreen)
