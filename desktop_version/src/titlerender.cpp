@@ -96,6 +96,8 @@ growing_vector<std::string> changelog = {
     "  screen deadly",
     "- fatal_bottom() - Makes the bottom of",
     "  the screen deadly",
+    "- ifrand(n,script) - Has a 1/n chance to",
+    "  execute the script",
 
 };
 

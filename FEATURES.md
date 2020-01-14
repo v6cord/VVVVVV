@@ -86,3 +86,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `fatal_top()` - Makes the top of the screen deadly
 
 - `fatal_bottom()` - Makes the bottom of the screen deadly
+
+- `ifrand(n,script)` - Has a 1 in *n* chance to execute the script
