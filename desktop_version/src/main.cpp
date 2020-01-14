@@ -1,4 +1,3 @@
-#include <iostream>
 #include <SDL.h>
 #include <cmath>
 #include <chrono>
@@ -340,7 +339,6 @@ int main(int argc, char **argv)
                 now = std::chrono::high_resolution_clock::now();
                 auto elapsed = now - last_frame;
                 if ((elapsed + 19ns) >= frame_time) {
-                    std::cout << elapsed.count() << std::endl;
                     break;
                 }
             }
