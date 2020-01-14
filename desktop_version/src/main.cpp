@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SDL.h>
 #include <cmath>
 #include <chrono>
@@ -30,6 +31,8 @@
 
 #include <stdio.h>
 #include <string.h>
+
+using namespace std::literals::chrono_literals;
 
 scriptclass script;
 edentities edentity[3000];
@@ -331,12 +334,13 @@ int main(int argc, char **argv)
         auto remaining = frame_time - elapsed;
 
         if (remaining.count() > 0) {
-            auto ms_remaining = std::chrono::floor<std::chrono::milliseconds>(remaining);
+            auto ms_remaining = std::chrono::floor<std::chrono::milliseconds>(remaining) - 2ms;
             SDL_Delay(ms_remaining.count());
             while (true) {
                 now = std::chrono::high_resolution_clock::now();
                 auto elapsed = now - last_frame;
-                if (elapsed >= frame_time) {
+                if ((elapsed + 19ns) >= frame_time) {
+                    std::cout << elapsed.count() << std::endl;
                     break;
                 }
             }
