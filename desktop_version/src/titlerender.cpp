@@ -90,6 +90,8 @@ growing_vector<std::string> changelog = {
     "  if it is flip spawn a flipped crewmate",
     "- fatal_left() - Makes the left side of",
     "  the screen deadly",
+    "- fatal_right() - Makes the right side",
+    "  of the screen deadly",
 
 };
 
