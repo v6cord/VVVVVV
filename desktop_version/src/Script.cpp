@@ -1712,6 +1712,16 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				game.savery = game.roomy;
 				game.savedir = obj.entities[i].dir;
 			}
+			else if (words[0] == "gotocheckpoint")
+			{
+				i = obj.getplayer();
+				obj.entities[i].xp = game.savex;
+				obj.entities[i].yp = game.savey;
+				game.gravitycontrol = game.savegc;
+				game.roomx = game.saverx;
+				game.roomy = game.savery;
+				obj.entities[i].dir = game.savedir;
+			}
 			else if (words[0] == "gamestate")
 			{
 				game.state = ss_toi(words[1]);
