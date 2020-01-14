@@ -239,6 +239,7 @@ void musicclass::play(int t)
 	Mix_VolumeMusic(128);
 	if (currentsong !=t)
 	{
+            stopmusic();
 		if (currentsong != -1)
 		{
 			// Stop the old song first
@@ -303,17 +304,17 @@ void musicclass::stopmusic()
 {
 	// musicchannel.removeEventListener(Event.SOUND_COMPLETE, stopmusic);
 	// musicchannel.stop();
-	Mix_HaltMusic();
-	currentsong = -1;
+    Mix_HaltMusic();
+    currentsong = -1;
+    for (auto&& [id, channel] : custom_file_channels) {
+        Mix_HaltChannel(channel);
+    }
+    custom_file_channels.clear();
 }
 
 void musicclass::haltdasmusik()
 {
-	// musicchannel.removeEventListener(Event.SOUND_COMPLETE, stopmusic);
-	// musicchannel.stop();
-	// resumesong = currentsong;
-	Mix_HaltMusic();
-	currentsong = -1;
+    stopmusic();
 }
 
 void musicclass::silencedasmusik()
@@ -323,6 +324,9 @@ void musicclass::silencedasmusik()
 	//}
 	Mix_VolumeMusic(0) ;
 	musicVolume = 0;
+    for (auto&& [id, channel] : custom_file_channels) {
+        Mix_Volume(channel, 0);
+    }
 }
 
 void musicclass::fadeMusicVolumeIn(int ms)
@@ -342,6 +346,10 @@ void musicclass::fadeout()
 
 	Mix_FadeOutMusic(2000);
 	currentsong = -1;
+    for (auto&& [id, channel] : custom_file_channels) {
+        Mix_FadeOutChannel(channel, 2000);
+    }
+    custom_file_channels.clear();
 }
 
 void musicclass::processmusicfade()
@@ -420,7 +428,7 @@ void musicclass::niceplay(int t)
 	// important: do nothing if the correct song is playing!
 	if(currentsong!=t)
 	{
-		if(currentsong!=-1) fadeout();
+		fadeout();
 		nicefade = 1;
 		nicechange = t;
 	}
