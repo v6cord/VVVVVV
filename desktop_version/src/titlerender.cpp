@@ -100,6 +100,10 @@ growing_vector<std::string> changelog = {
     "  execute the script",
     "- gotocheckpoint() - Teleports the player",
     "  to their last checkpoint"
+    "- Add 6th argument to createentity that",
+    "  sets the color (createcrewman numbers)",
+    "- Add 7th argument to createentity that",
+    "  sets entity 1/56 type (ved numbers)",
 
 };
 

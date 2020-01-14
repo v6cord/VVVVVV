@@ -1774,7 +1774,7 @@ void entityclass::settreadmillcolour( int t, int rx, int ry )
     }
 }
 
-void entityclass::createentity( Game& game, float xp, float yp, int t, float vx /*= 0*/, float vy /*= 0*/, int p1 /*= 0*/, int p2 /*= 0*/, int p3 /*= 320*/, int p4 /*= 240 */ )
+int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /*= 0*/, float vy /*= 0*/, int p1 /*= 0*/, int p2 /*= 0*/, int p3 /*= 320*/, int p4 /*= 240 */ )
 {
     //Find the first inactive case z that we can use to index the new entity
     if (nentity == 0)
@@ -2764,6 +2764,7 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
 
         break;
     }
+    return k;
 }
 
 bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musicclass& music )

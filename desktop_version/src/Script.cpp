@@ -1146,9 +1146,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "createentity")
 			{
-				obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), ss_toi(words[5]));
+				auto k = obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), ss_toi(words[5]));
+                                if (words[6] != "") {
+                                    if (words[7] != "") {
+                                        switch(ss_toi(words[7])) {
+                                            case 0:  obj.setenemyroom(k, 4+100, 0+100); break;
+                                            case 1:  obj.setenemyroom(k, 2+100, 0+100); break;
+                                            case 2:  obj.setenemyroom(k, 12+100, 3+100); break;
+                                            case 3:  obj.setenemyroom(k, 13+100, 12+100); break;
+                                            case 4:  obj.setenemyroom(k, 16+100, 9+100); break;
+                                            case 5:  obj.setenemyroom(k, 19+100, 1+100); break;
+                                            case 6:  obj.setenemyroom(k, 19+100, 2+100); break;
+                                            case 7:  obj.setenemyroom(k, 18+100, 3+100); break;
+                                            case 8:  obj.setenemyroom(k, 16+100, 0+100); break;
+                                            case 9:  obj.setenemyroom(k, 14+100, 2+100); break;
+                                            default: obj.setenemyroom(k, 4+100, 0+100); break;
+                                        }
+                                    }
+                                    obj.entities[k].colour = ss_toi(words[6]);
+                                }
 			}
-			else if (words[0] == "fatal_left")
+                        else if (words[0] == "fatal_left")
 			{
 				obj.fatal_left();
 			}
