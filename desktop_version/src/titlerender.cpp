@@ -88,6 +88,8 @@ growing_vector<std::string> changelog = {
     "  amount of times",
     "- Add seventh argument to createcrewman,",
     "  if it is flip spawn a flipped crewmate",
+    "- fatal_left() - Makes the left side of",
+    "  the screen deadly",
 
 };
 

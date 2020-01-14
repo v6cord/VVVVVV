@@ -78,3 +78,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `inf` - like `do(x)`, but an infinite amount of times
 
 - Added a seventh argument to `createcrewman`, if it is `flip` it spawns a flipped crewmate
+
+- `fatal_left()` - Makes the left side of the screen deadly
