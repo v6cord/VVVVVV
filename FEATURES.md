@@ -4,9 +4,7 @@ A list of all the new features added to VVVVVV: Community Edition. This list is 
 ## Version c1.0
 - Added UTF-8 support
 
-- enableinternal() - a simplified command that makes every line after it parse as internal except for disableinternal()
-
-- disableinternal() - a simplified command that makes every line after it parse as simplified
+- Removed having to use a load script to use internal scripting
 
 - pdelay(n) - a delay(n) that doesn't lock the players movement
 
