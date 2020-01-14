@@ -334,7 +334,7 @@ int main(int argc, char **argv)
             auto ms_remaining = std::chrono::floor<std::chrono::milliseconds>(remaining);
             SDL_Delay(ms_remaining.count());
             while (true) {
-                auto now = std::chrono::high_resolution_clock::now();
+                now = std::chrono::high_resolution_clock::now();
                 auto elapsed = now - last_frame;
                 if (elapsed >= frame_time) {
                     break;
