@@ -207,6 +207,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
 						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
 						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+						// Also I don't care if there's not actually any tile 1s under it
 						if (!obj.entities[ei].active || obj.entities[ei].type != 1 ||
 						(obj.entities[ei].behave != 8 && obj.entities[ei].behave != 9))
 							continue;
@@ -232,17 +233,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							usethislength = 8;
 						else
 							usethislength = 4;
-
-						// Check that all tiles are tile 1
-						bool alltilestile1 = true;
-						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-							if (map.contents[tilex + thisyp*40] != 1) {
-								alltilestile1 = false;
-								break;
-							}
-
-						if (!alltilestile1)
-							continue;
 
 						// Ok, finally fix the tiles
 						// I don't care enough to check for what was actually behind the tiles originally
@@ -290,6 +280,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
 						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
 						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+						// Also I don't care if there's not actually any tile 1s under it, even if it's a spike/one-way that's now invisible and can be touched by the player
 
 						// Ok, is it aligned with the grid?
 						if (obj.entities[edc].xp % 8 != 0 || obj.entities[edc].yp % 8 != 0)
@@ -312,17 +303,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							usethislength = 8;
 						else
 							usethislength = 4;
-
-						// Check that all tiles are tile 1
-						bool alltilestile1 = true;
-						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-							if (map.contents[tilex + thisyp*40] != 1) {
-								alltilestile1 = false;
-								break;
-							}
-
-						if (!alltilestile1)
-							continue;
 
 						// Ok, finally fix the tiles
 						// I don't care enough to check for what was actually behind the tiles originally
