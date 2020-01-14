@@ -91,5 +91,6 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `gotocheckpoint()` - Teleports the player to their last checkpoint
 
-- Add 6th argument to `createentity` that sets the color (createcrewman numbers)
+- Add 6th argument to `createentity` that sets the color (createentity crewmen numbers)
+
 - Add 7th argument to `createentity` that sets entity 1/56 type (ved numbers)
