@@ -84,3 +84,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `fatal_right()` - Makes the right side of the screen deadly
 
 - `fatal_top()` - Makes the top of the screen deadly
+
+- `fatal_bottom()` - Makes the bottom of the screen deadly
