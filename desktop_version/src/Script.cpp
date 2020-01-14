@@ -1074,6 +1074,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), ss_toi(words[5]));
 			}
+			else if (words[0] == "fatal_left")
+			{
+				obj.fatal_left();
+			}
 			else if (words[0] == "createcrewman")
 			{
 				if (words[3] == "cyan")
