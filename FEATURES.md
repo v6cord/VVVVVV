@@ -6,74 +6,74 @@ A list of all the new features added to VVVVVV: Community Edition. This list is 
 
 - Removed having to use a load script to use internal scripting
 
-- pdelay(n) - a delay(n) that doesn't lock the players movement
+- `pdelay(n)` - a `delay(n)` that doesn't lock the players movement
 
-- setroomname() - sets the roomname to the next line
+- `setroomname()` - sets the roomname to the next line
 
-- settile(x,y,tile) - place a tile temporarily in the room
+- `settile(x,y,tile)` - place a tile temporarily in the room
 
-- textcolo(u)r(r,g,b,x,y,lines) - text() but you can set the color directly
+- `textcolo(u)r(r,g,b,x,y,lines)` - `text()` but you can set the color directly
 
-- reloadroom() - reloads the current room
+- `reloadroom()` - reloads the current room
 
-- toceil() - inverted tofloor()
+- `toceil()` - inverted `tofloor()`
 
-- movetoroom(x,y) - a relative gotoroom()
+- `movetoroom(x,y)` - a relative `gotoroom()`
 
-- playfile(file[, id]) - play a file as either music or a sound effect. if you specify an id, the file loops
+- `playfile(file[, id])` - play a file as either music or a sound effect. if you specify an id, the file loops
 
-- stopfile(id) - stops playing a looping audio file
+- `stopfile(id)` - stops playing a looping audio file
 
-- ifnotflag() - an inverted version of ifflag(). customifnotflag is the internal counterpart
+- `ifnotflag()` - an inverted version of `ifflag()`. `customifnotflag` is the internal counterpart
 
-- drawtext(x,y,r,g,b,center) - draw text for one frame. The text you want to display should be after the command. center should be either 0 or 1.
+- `drawtext(x,y,r,g,b,center)` - draw text for one frame. The text you want to display should be after the command. `center` should be either 0 or 1.
 
-- followposition now works for the player
+- `followposition` now works for the player
 
 - There's now an option to disable only the music
 
 - All limits have been removed except for the 20x20 map size limit
 
-- destroy(platformsreal) - A version of destroy(platforms) that isn't bugged
+- `destroy(platformsreal)` - A version of `destroy(platforms)` that isn't bugged
 
-- destroy(enemies)
+- `destroy(enemies)`
 
-- destroy(trinkets)
+- `destroy(trinkets)`
 
-- destroy(warplines)
+- `destroy(warplines)`
 
-- destroy(checkpoints)
+- `destroy(checkpoints)`
 
-- destroy(all)
+- `destroy(all)`
 
-- destroy(conveyors)
+- `destroy(conveyors)`
 
-- destroy(terminals)
+- `destroy(terminals)`
 
-- destroy(scriptboxes)
+- `destroy(scriptboxes)`
 
-- destroy(disappearingplatforms)
+- `destroy(disappearingplatforms)`
 
-- destroy(1x1quicksand)
+- `destroy(1x1quicksand)`
 
-- destroy(coins)
+- `destroy(coins)`
 
-- destroy(gravitytokens)
+- `destroy(gravitytokens)`
 
-- destroy(roomtext)
+- `destroy(roomtext)`
 
-- destroy(crewmates) - destroy non-rescuable crewmates
+- `destroy(crewmates)` - destroy non-rescuable crewmates
 
-- destroy(customcrewmates) - destroy rescuable crewmates
+- `destroy(customcrewmates)` - destroy rescuable crewmates
 
-- destroy(teleporter)
+- `destroy(teleporter)`
 
-- killplayer()
+- `killplayer()`
 
-- customquicksave()
+- `customquicksave()`
 
-- niceplay() - use this for better area music transitions
+- `niceplay()` - use this for better area music transitions
 
-- inf - like do(x), but an infinite amount of times
+- `inf` - like `do(x)`, but an infinite amount of times
 
-- Add seventh argument to createcrewman, if it is flip spawn a flipped crewmate
+- Add seventh argument to `createcrewman`, if it is `flip` spawn a flipped crewmate
