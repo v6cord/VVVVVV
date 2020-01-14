@@ -423,6 +423,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			if (words[0] == "customifrand")
+			{
+				if (fRandom() > 0.5f)
+				{
+					load("custom_"+words[1]);
+					position--;
+				}
+			}
 			if (words[0] == "custommap")
 			{
 				if(words[1]=="on"){
@@ -1702,6 +1710,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				if (game.stat_trinkets < ss_toi(words[1]))
 				{
 					load(words[2]);
+					position--;
+				}
+			}
+			else if (words[0] == "ifrand")
+			{
+				if (fRandom() > 0.5f)
+				{
+					load(words[1]);
 					position--;
 				}
 			}

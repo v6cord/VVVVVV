@@ -224,6 +224,9 @@ void scriptclass::load(std::string t)
           }else if(words[0] == "iftrinketsless"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add("custom"+script.customscript[i]);
+          }else if(words[0] == "ifrand"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
           }else if(words[0] == "destroy"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add(script.customscript[i]);
