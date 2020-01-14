@@ -1086,6 +1086,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				obj.fatal_top();
 			}
+			else if (words[0] == "fatal_bottom")
+			{
+				obj.fatal_bottom();
+			}
 			else if (words[0] == "createcrewman")
 			{
 				if (words[3] == "cyan")
