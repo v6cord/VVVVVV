@@ -88,3 +88,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `fatal_bottom()` - Makes the bottom of the screen deadly
 
 - `ifrand(n,script)` - Has a 1 in *n* chance to execute the script
+
+- `gotocheckpoint()` - Teleports the player to their last checkpoint

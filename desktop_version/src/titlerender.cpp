@@ -98,6 +98,8 @@ growing_vector<std::string> changelog = {
     "  the screen deadly",
     "- ifrand(n,script) - Has a 1/n chance to",
     "  execute the script",
+    "- gotocheckpoint() - Teleports the player",
+    "  to their last checkpoint"
 
 };
 
