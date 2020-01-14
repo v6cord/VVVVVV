@@ -785,7 +785,9 @@ SDL_assert(0 && "Remove open level dir");
                             music.play(prev);
                         } else {
                             music.muted = true;
-                            Mix_FadeOutMusic(100);
+                            auto s = music.currentsong;
+                            music.stopmusic();
+                            music.currentsong = s;
                         }
                         music.playef(11, 10);
                     }
