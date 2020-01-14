@@ -92,6 +92,8 @@ growing_vector<std::string> changelog = {
     "  the screen deadly",
     "- fatal_right() - Makes the right side",
     "  of the screen deadly",
+    "- fatal_top() - Makes the top of the",
+    "  screen deadly",
 
 };
 
