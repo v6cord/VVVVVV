@@ -116,6 +116,8 @@ bool GetButtonFromString(const char *pText, SDL_GameControllerButton *button)
 Game::Game(void):
     mutebutton(0)
 {
+    auto fs = FSUtils::getInstance();
+
     infocus = true;
     paused = false;
     muted = false;
@@ -207,18 +209,14 @@ Game::Game(void):
     }
     customcol=0;
 
-    for (int i = 0; i < 6; i++)
-    {
-        bool cstats;
-        cstats = false;
-        crewstats.push_back(cstats);
-        tele_crewstats.push_back(false);
-        quick_crewstats.push_back(false);
-        besttimes.push_back( -1);
-        besttrinkets.push_back( -1);
-        bestlives.push_back( -1);
-        bestrank.push_back( -1);
-    }
+    crewstats.resize(6);
+    tele_crewstats.resize(6);
+    quick_crewstats.resize(6);
+    besttimes.resize(6, -1);
+    besttrinkets.resize(6, -1);
+    bestlives.resize(6, -1);
+    bestrank.resize(6, -1);
+
     crewstats[0] = true;
     lastsaved = 0;
 
@@ -230,23 +228,10 @@ Game::Game(void):
     quick_currentarea = "Error! Error!";
 
     //Menu stuff initiliased here:
-    for (int mi = 0; mi < 25; mi++)
-    {
-        menuoptions.push_back(std::string());
-        menuoptionsactive.push_back(bool());
-
-        bool nb1, nb2;
-        nb1 = false;
-        nb2 = false;
-        unlock.push_back(nb1);
-        unlocknotify.push_back(nb2);
-    }
-
-    for (int ui = 0; ui < 25; ui++)
-    {
-        unlock[ui] = false;
-        unlocknotify[ui] = false;
-    }
+    menuoptions.resize(25);
+    menuoptionsactive.resize(25);
+    unlock.resize(25);
+    unlocknotify.resize(25);
 
     nummenuoptions = 0;
     currentmenuoption = 0;
@@ -308,10 +293,10 @@ Game::Game(void):
 
     clearcustomlevelstats();
 
-    saveFilePath = FILESYSTEM_getUserSaveDirectory();
+    saveFilePath = fs->saveDirectory().string();
 
-    TiXmlDocument doc((saveFilePath + "qsave.vvv").c_str());
-    if (!doc.LoadFile())
+    TiXmlDocument doc;
+    if (!fs->loadXml("saves/qsave.vvv", doc))
     {
         quickcookieexists = false;
         quicksummary = "";
@@ -348,8 +333,8 @@ Game::Game(void):
     }
 
 
-    TiXmlDocument docTele((saveFilePath+"tsave.vvv").c_str());
-    if (!docTele.LoadFile())
+    TiXmlDocument docTele;
+    if (!fs->loadXml("saves/tsave.vvv", docTele))
     {
         telecookieexists = false;
         telesummary = "";
@@ -410,6 +395,8 @@ Game::Game(void):
     state = 1;
     statedelay = 0;
     //updatestate(dwgfx, map, obj, help, music);
+
+    skipfakeload = false;
 }
 
 Game::~Game(void)
@@ -464,7 +451,7 @@ void Game::updatecustomlevelstats(std::string clevel, int cscore)
             j=numcustomlevelstats+1;
         }
     }
-    if(tvar>=0)
+    if(tvar>=0 && cscore > customlevelscore[tvar])
     {
         //update existing entry
         customlevelscore[tvar]=cscore;
@@ -484,11 +471,13 @@ void Game::updatecustomlevelstats(std::string clevel, int cscore)
 
 void Game::loadcustomlevelstats()
 {
+    auto fs = FSUtils::getInstance();
+
     //testing
     if(!customlevelstatsloaded)
     {
-        TiXmlDocument doc((saveFilePath+"levelstats.vvv").c_str());
-        if (!doc.LoadFile())
+        TiXmlDocument doc;
+        if (!fs->loadXml("saves/levelstats.vvv", doc))
         {
             //No levelstats file exists; start new
             numcustomlevelstats=0;
@@ -560,6 +549,8 @@ void Game::loadcustomlevelstats()
 
 void Game::savecustomlevelstats()
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -598,7 +589,7 @@ void Game::savecustomlevelstats()
     msg->LinkEndChild( new TiXmlText( customlevelstatsstr.c_str() ));
     msgs->LinkEndChild( msg );
 
-    if(doc.SaveFile( (saveFilePath+"levelstats.vvv").c_str() ))
+    if(fs->saveXml("saves/levelstats.vvv", doc))
     {
         printf("Level stats saved\n");
     }
@@ -1315,7 +1306,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 								}
             }
 
-            savestats(map, dwgfx);
+            savestats(map, dwgfx, music);
 
             dwgfx.fademode = 2;
             music.fadeout();
@@ -2241,7 +2232,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3006:
             //Level complete! (warp zone)
-            unlocknum(4, map, dwgfx);
+            unlocknum(4, map, dwgfx, music);
             lastsaved = 4;
             music.play(0);
             state++;
@@ -2355,7 +2346,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3020:
             //Level complete! (Space Station 2)
-            unlocknum(3, map, dwgfx);
+            unlocknum(3, map, dwgfx, music);
             lastsaved = 2;
             music.play(0);
             state++;
@@ -2470,7 +2461,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3040:
             //Level complete! (Lab)
-            unlocknum(1, map, dwgfx);
+            unlocknum(1, map, dwgfx, music);
             lastsaved = 5;
             music.play(0);
             state++;
@@ -2584,7 +2575,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3050:
             //Level complete! (Space Station 1)
-            unlocknum(0, map, dwgfx);
+            unlocknum(0, map, dwgfx, music);
             lastsaved = 1;
             music.play(0);
             state++;
@@ -2718,7 +2709,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
         case 3060:
             //Level complete! (Tower)
-            unlocknum(2, map, dwgfx);
+            unlocknum(2, map, dwgfx, music);
             lastsaved = 3;
             music.play(0);
             state++;
@@ -2917,7 +2908,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             else
             {
-                unlocknum(7, map, dwgfx);
+                unlocknum(7, map, dwgfx, music);
                 dwgfx.fademode = 2;
                 companion = 0;
                 state++;
@@ -2947,7 +2938,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             else
             {
-                unlocknum(6, map, dwgfx);
+                unlocknum(6, map, dwgfx, music);
                 dwgfx.fademode = 2;
                 companion = 0;
                 supercrewmate = false;
@@ -3011,7 +3002,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
         case 3501:
             //Game complete!
 						NETWORK_unlockAchievement("vvvvvvgamecomplete");
-            unlocknum(5, map, dwgfx);
+            unlocknum(5, map, dwgfx, music);
             crewstats[0] = true;
             state++;
             statedelay = 75;
@@ -3182,7 +3173,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 						}
 						
 
-            savestats(map, dwgfx);
+            savestats(map, dwgfx, music);
             if (nodeathmode)
             {
 								NETWORK_unlockAchievement("vvvvvvmaster"); //bloody hell
@@ -4094,7 +4085,7 @@ void Game::gethardestroom( mapclass& map )
     }
 }
 
-void Game::deletestats( mapclass& map, Graphics& dwgfx )
+void Game::deletestats( mapclass& map, Graphics& dwgfx, musicclass& music )
 {
     for (int i = 0; i < 25; i++)
     {
@@ -4110,22 +4101,24 @@ void Game::deletestats( mapclass& map, Graphics& dwgfx )
     }
     dwgfx.setflipmode = false;
     stat_trinkets = 0;
-    savestats(map, dwgfx);
+    savestats(map, dwgfx, music);
 }
 
-void Game::unlocknum( int t, mapclass& map, Graphics& dwgfx )
+void Game::unlocknum( int t, mapclass& map, Graphics& dwgfx, musicclass& music )
 {
     unlock[t] = true;
-    savestats(map, dwgfx);
+    savestats(map, dwgfx, music);
 }
 
-void Game::loadstats( mapclass& map, Graphics& dwgfx )
+void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     // TODO loadstats
-    TiXmlDocument doc((saveFilePath+"unlock.vvv").c_str());
-    if (!doc.LoadFile())
+    TiXmlDocument doc;
+    if (!fs->loadXml("saves/unlock.vvv", doc))
     {
-        savestats(map, dwgfx);
+        savestats(map, dwgfx, music);
         printf("No Stats found. Assuming a new player\n");
     }
 
@@ -4341,7 +4334,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
         if (pKey == "advanced_smoothing")
         {
             fullScreenEffect_badSignal = atoi(pText);
-            dwgfx.screenbuffer->badSignalEffect = fullScreenEffect_badSignal;
+            dwgfx.screenbuffer->setBadSignal(fullScreenEffect_badSignal);
         }
 
 				if (pKey == "usingmmmmmm")
@@ -4351,6 +4344,16 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
 					}else{
 					  usingmmmmmm = 0;
 					}
+        }
+
+        if (pKey == "skipfakeload")
+        {
+            skipfakeload = atoi(pText);
+        }
+
+        if (pKey == "muted")
+        {
+            music.muted = atoi(pText);
         }
 
 		if (pKey == "flipButton")
@@ -4415,8 +4418,10 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
     }
 }
 
-void Game::savestats( mapclass& _map, Graphics& _dwgfx )
+void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -4508,7 +4513,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
     dataNode->LinkEndChild( msg );
 
     int width, height;
-    _dwgfx.screenbuffer->GetWindowSize(&width, &height);
+    _dwgfx.screenbuffer->GetWindowSize(width, height);
     msg = new TiXmlElement( "window_width" );
     msg->LinkEndChild( new TiXmlText( tu.String(width).c_str()));
     dataNode->LinkEndChild( msg );
@@ -4558,6 +4563,14 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
     msg->LinkEndChild( new TiXmlText( tu.String(usingmmmmmm).c_str()));
     dataNode->LinkEndChild( msg );
 
+    msg = new TiXmlElement("skipfakeload");
+    msg->LinkEndChild(new TiXmlText(tu.String((int) skipfakeload).c_str()));
+    dataNode->LinkEndChild(msg);
+
+    msg = new TiXmlElement("muted");
+    msg->LinkEndChild(new TiXmlText(tu.String((int) _music.muted).c_str()));
+    dataNode->LinkEndChild(msg);
+
     for (size_t i = 0; i < controllerButton_flip.size(); i += 1)
     {
         msg = new TiXmlElement("flipButton");
@@ -4581,7 +4594,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
 	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
 	dataNode->LinkEndChild( msg );
 
-    doc.SaveFile( (saveFilePath+"unlock.vvv").c_str() );
+    fs->saveXml("saves/unlock.vvv", doc);
 }
 
 void Game::customstart( entityclass& obj, musicclass& music )
@@ -4809,8 +4822,10 @@ void Game::starttrial( int t, entityclass& obj, musicclass& music )
 
 void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 {
-    TiXmlDocument doc((saveFilePath+"qsave.vvv").c_str());
-    if (!doc.LoadFile()) return; ;
+    auto fs = FSUtils::getInstance();
+
+    TiXmlDocument doc;
+    if (!fs->loadXml("saves/qsave.vvv", doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -5030,9 +5045,11 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 
 void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     std::string levelfile = savfile.substr(7);
-    TiXmlDocument doc((saveFilePath+levelfile+".vvv").c_str());
-    if (!doc.LoadFile()) return; ;
+    TiXmlDocument doc;
+    if (!fs->loadXml(("saves/"+levelfile+".vvv").c_str(), doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -5288,6 +5305,8 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
 //TODO load summary
 void Game::loadsummary( mapclass& map, UtilityClass& help )
 {
+    auto fs = FSUtils::getInstance();
+
     //quickcookie = SharedObject.getLocal("dwvvvvvv_quick");
     //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
 
@@ -5315,8 +5334,8 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
     //	quick_crewstats = summary_crewstats.slice();
     //}
 
-    TiXmlDocument docTele((saveFilePath+"tsave.vvv").c_str());
-    if (!docTele.LoadFile())
+    TiXmlDocument docTele;
+    if (!fs->loadXml("saves/tsave.vvv", docTele))
     {
         telecookieexists = false;
         telesummary = "";
@@ -5406,8 +5425,8 @@ void Game::loadsummary( mapclass& map, UtilityClass& help )
         tele_currentarea = map.currentarea(map.area(l_saveX, l_saveY));
     }
 
-    TiXmlDocument doc((saveFilePath+"qsave.vvv").c_str());
-    if (!doc.LoadFile())
+    TiXmlDocument doc;
+    if (!fs->loadXml("saves/qsave.vvv", doc))
     {
         quickcookieexists = false;
         quicksummary = "";
@@ -5518,6 +5537,8 @@ void Game::initteleportermode( mapclass& map )
 
 void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     //TODO make this code a bit cleaner.
 
     //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
@@ -5751,7 +5772,7 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
     //telecookie.flush();
     //telecookie.close();
 
-    if(doc.SaveFile( (saveFilePath+"tsave.vvv").c_str() ))
+    if(fs->saveXml("saves/tsave.vvv", doc))
     {
         printf("Game saved\n");
     }
@@ -5765,6 +5786,8 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
 
 void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     quickcookieexists = true;
 
     TiXmlDocument doc;
@@ -5995,7 +6018,7 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
     //telecookie.flush();
     //telecookie.close();
 
-    if(doc.SaveFile( (saveFilePath+ "qsave.vvv").c_str() ))
+    if(fs->saveXml("saves/qsave.vvv", doc))
     {
         printf("Game saved\n");
     }
@@ -6009,6 +6032,8 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
 
 void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
 {
+    auto fs = FSUtils::getInstance();
+
     quickcookieexists = true;
 
     TiXmlDocument doc;
@@ -6256,7 +6281,7 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     //telecookie.close();
 
     std::string levelfile = savfile.substr(7);
-    if(doc.SaveFile( (saveFilePath+ levelfile+".vvv").c_str() ))
+    if(fs->saveXml(("saves/"+levelfile+".vvv"), doc))
     {
         printf("Game saved\n");
     }
@@ -6270,8 +6295,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
 void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
 {
-    TiXmlDocument doc((saveFilePath+"tsave.vvv").c_str());
-    if (!doc.LoadFile()) return; ;
+    auto fs = FSUtils::getInstance();
+
+    TiXmlDocument doc;
+    if (!fs->loadXml("saves/tsave.vvv", doc)) return;
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -6632,11 +6659,13 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[1] = true;
 					menuoptions[2] = "game options";
 					menuoptionsactive[2] = true;
-                    menuoptions[3] = "changelog";
+					menuoptions[3] = "view credits";
 					menuoptionsactive[3] = true;
-					menuoptions[4] = "quit game";
+                    menuoptions[4] = "changelog";
 					menuoptionsactive[4] = true;
-					nummenuoptions = 5;
+					menuoptions[5] = "quit game";
+					menuoptionsactive[5] = true;
+					nummenuoptions = 6;
 					menuxoff = -16;
 					menuyoff = -10;
 				#elif !defined(MAKEANDPLAY)
@@ -6947,7 +6976,7 @@ void Game::createmenu( std::string t )
         menuoptions[4] = "music";
         menuoptionsactive[3] = true;
         menuoptions[5] = "return";
-        menuoptionsactive[4] = true;
+        menuoptionsactive[5] = true;
         nummenuoptions = 6;
         menuxoff = -40;
         menuyoff = 16;
@@ -7052,7 +7081,11 @@ void Game::createmenu( std::string t )
     }
     else if (t == "credits2")
     {
+#if defined(MAKEANDPLAY)
+        menuoptions[0] = "first page";
+#elif !defined(MAKEANDPLAY)
         menuoptions[0] = "next page";
+#endif
         menuoptionsactive[0] = true;
         menuoptions[1] = "return";
         menuoptionsactive[1] = true;

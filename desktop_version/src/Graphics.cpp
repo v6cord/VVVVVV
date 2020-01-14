@@ -3,7 +3,9 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Screen.h"
-#include <utf8.h>
+#include "FileSystemUtils.h"
+#include <utf8/checked.h>
+#include <physfs.h>
 
 Graphics::Graphics()
 {
@@ -89,32 +91,26 @@ Graphics::Graphics()
     resumegamemode = false;
 
     //Textboxes!
-    for (int i = 0; i < 30; i++)
-    {
-        textboxclass t;
-        textbox.push_back(t);
-    }
+    textbox.resize(30);
     ntextbox = 0;
 
     //Fading stuff
-    for (int i = 0; i < 15; i++)
-    {
-        fadebars.push_back(0);
-    }
+    fadebars.resize(15);
+
     fadeamount = 0;
     fademode = 0;
 
     // initialize everything else to zero
     backBuffer = NULL;
-    backboxrect.x = 0, backboxrect.y = 0, backboxrect.w = 0, backboxrect.h = 0; 
+    backboxrect = SDL_Rect();
     bcol = 0;
     bcol2 = 0;
-    ct.colour = 0;
-    foot_rect.x = 0, foot_rect.y = 0, foot_rect.w = 0, foot_rect.h = 0;
+    ct = colourTransform();
+    foot_rect = SDL_Rect();
     foregrounddrawn = false;
     foregroundBuffer = NULL;
     backgrounddrawn = false;
-    images_rect.x = 0, images_rect.y = 0, images_rect.w = 0, images_rect.h = 0;
+    images_rect = SDL_Rect();
     j = 0;
     k = 0;
     m = 0;
@@ -122,22 +118,21 @@ Graphics::Graphics()
     menubuffer = NULL;
     screenbuffer = NULL;
     tempBuffer = NULL;
-    tl.x = 0, tl.y = 0;
+    tl = point();
     towerbuffer = NULL;
     trinketr = 0;
     trinketg = 0;
     trinketb = 0;
-    warprect.x = 0, warprect.y = 0, warprect.w = 0, warprect.h = 0;
+    warprect = SDL_Rect();
 }
 
 int Graphics::font_idx(char32_t ch) {
-    if (grphx.im_bfont->h > 128) {
-        auto font = UR"( !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©«­®°²³»¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſΆΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџאבגדהוזחטיךכלםמןנסעףפץצקרשתװױײ׳״—‘’“”€←↑→↓↔↕↖↗↘↙↰↱↲↳↶↷↺↻↼↽↾↿⇀⇁⇂⇃⇅⇆─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟■□▢▲△▶▷▼▽◀◁、。〃〈〉《》「」『』【】〒〓〔〕〖〗〘〙〚〛〜〝〞ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーＵｇｈｉｐｒｔ)";
-        auto ptr = std::char_traits<char32_t>::find(font, std::char_traits<char32_t>::length(font), ch);
-        if (ptr == nullptr) {
-            return font_idx('?');
+    if (font_positions.size() > 0) {
+        std::map<int, int>::iterator iter = font_positions.find(ch);
+        if (iter == font_positions.end()) {
+            return font_positions.at('?');
         } else {
-            return ptr - font;
+            return iter->second;
         }
     } else {
         return ch;
@@ -161,6 +156,8 @@ void Graphics::drawspritesetcol(int x, int y, int t, int c, UtilityClass& help)
 
 void Graphics::Makebfont()
 {
+    auto fs = FSUtils::getInstance();
+
     for (int j =  0; j < (grphx.im_bfont->h / 8); j++)
     {
         for (int i = 0; i < 16; i++)
@@ -171,6 +168,20 @@ void Graphics::Makebfont()
 
             SDL_Surface* TempFlipped = FlipSurfaceVerticle(temp);
             flipbfont.push_back(TempFlipped);
+        }
+    }
+
+    std::vector<uint8_t> buffer;
+
+   if (fs->loadFile("graphics/font.txt", buffer))
+   {
+        unsigned char* current = buffer.data();
+        unsigned char* end = buffer.data() + buffer.size();
+        int pos = 0;
+        while (current != end) {
+            int codepoint = utf8::next(current, end);
+            font_positions[codepoint] = pos;
+            ++pos;
         }
     }
 }
@@ -257,7 +268,7 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
         _x = ((160 ) - ((len(_s)) / 2));
     int bfontpos = 0;
     int curr;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         curr = utf8::next(iter, _s.end());
         point tpoint;
@@ -296,7 +307,7 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 
     int bfontpos = 0;
     int curr;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         curr = utf8::next(iter, _s.end());
 
@@ -331,7 +342,7 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 int Graphics::len(std::string t)
 {
     int bfontpos = 0;
-    auto iter = t.begin();
+    std::string::iterator iter = t.begin();
     while (iter != t.end()) {
         int cur = utf8::next(iter, t.end());
         bfontpos += bfontlen(cur);
@@ -350,7 +361,7 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
     int bfontpos = 0;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         int curr = utf8::next(iter, _s.end());
         point tpoint;
@@ -408,7 +419,7 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
         _x = ((308) - (_s.length() / 2));
     int bfontpos = 0;
     int curr;
-    auto iter = _s.begin();
+    std::string::iterator iter = _s.begin();
     while (iter != _s.end()) {
         curr = utf8::next(iter, _s.end());
         point tpoint;
@@ -3088,7 +3099,7 @@ void Graphics::bigrprint(int x, int y, std::string& t, int r, int g, int b, bool
 
 	int bfontpos = 0;
 	int cur;
-        auto iter = t.begin();
+        std::string::iterator iter = t.begin();
 	while (iter != t.end()) {
 		cur = utf8::next(iter, t.end());
 		if (flipmode)

@@ -4,6 +4,7 @@
 #include "SoundSystem.h"
 
 #include <vector>
+#include <string>
 #include <map>
 
 #define musicroom(rx, ry) ((rx) + ((ry) * 20))
@@ -59,6 +60,9 @@ public:
 	float volume;
 
 	bool custompd;
+
+	int fadeoutqueuesong; // -1 if no song queued
+	bool dontquickfade;
 
 	// MMMMMM mod settings
 	bool mmmmmm;

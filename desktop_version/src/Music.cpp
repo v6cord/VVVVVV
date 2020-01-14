@@ -215,6 +215,8 @@ musicclass::musicclass()
 	nicefade = 0;
 	resumesong = 0;
 	volume = 0.0f;
+	fadeoutqueuesong = -1;
+	dontquickfade = false;
 }
 
 void musicclass::play(int t)
@@ -266,7 +268,16 @@ void musicclass::play(int t)
 				// musicchannel = musicchan[currentsong].play(0);
 				// musicchannel.soundTransform = new SoundTransform(0);
 				// musicchannel.addEventListener(Event.SOUND_COMPLETE, loopmusic);
-				if(Mix_FadeInMusic(musicTracks[t].m_music, -1, 3000)==-1)
+				if (Mix_FadingMusic() == MIX_FADING_OUT) {
+					// We're already fading out
+					fadeoutqueuesong = t;
+					currentsong = -1;
+					if (!dontquickfade)
+						Mix_FadeOutMusic(500); // fade out quicker
+					else
+						dontquickfade = false;
+				}
+				else if(Mix_FadeInMusic(musicTracks[t].m_music, -1, 3000)==-1)
 				{
 					printf("Mix_FadeInMusic: %s\n", Mix_GetError());
 				}
@@ -364,6 +375,11 @@ void musicclass::processmusic()
 	//if (musicfade > 0) processmusicfade();
 	//if (musicfadein > 0) processmusicfadein();
 
+	if (fadeoutqueuesong != -1 && Mix_PlayingMusic() == 0) {
+		play(fadeoutqueuesong);
+		fadeoutqueuesong = -1;
+	}
+
 	if (nicefade == 1 && Mix_PlayingMusic() == 0)
 	{
 		play(nicechange);
@@ -453,7 +469,7 @@ void musicclass::initefchannels()
 
 void musicclass::playfile(const char* t, std::string track)
 {
-    int channel;
+    int channel = 0;
 
     auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
     if (inserted) {
@@ -462,7 +478,7 @@ void musicclass::playfile(const char* t, std::string track)
 
     if (track != "") {
         stopfile(track);
-        channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+        if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, -1);
     } else {
         channel = Mix_PlayChannel(-1, pair->second.sound, 0);
     }

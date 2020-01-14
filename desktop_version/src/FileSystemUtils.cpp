@@ -1,169 +1,68 @@
+#include "SDL.h"
+#include "physfs.h"
 #include "FileSystemUtils.h"
-
-#include <vector>
-#include "Game.h"
+#include <exception>
+#include <iostream>
 #include <string>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <SDL.h>
-#include <physfs.h>
+#include <vector>
 
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
-#define mkdir(a, b) CreateDirectory(a, NULL)
 #define VNEEDS_MIGRATION (mkdirResult != 0)
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <sys/stat.h>
 #include <limits.h>
+#define MAX_PATH PATH_MAX
 #define VNEEDS_MIGRATION (mkdirResult == 0)
 /* These are needed for PLATFORM_* crap */
 #include <unistd.h>
 #include <dirent.h>
-#define MAX_PATH PATH_MAX
 #endif
 
-char saveDir[MAX_PATH];
-char levelDir[MAX_PATH];
+namespace stdfs = std::filesystem;
 
-void PLATFORM_getOSDirectory(char* output);
-void PLATFORM_migrateSaveData(char* output);
-void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
+//Global instance
+static FSUtils* s_pFSUtilsInstance = nullptr;
 
-int FILESYSTEM_init(char *argvZero)
+//Old code
+
+void PLATFORM_copyFile(const char* oldLocation, const char* newLocation)
 {
-	char output[MAX_PATH];
-	int mkdirResult;
+	char* data;
+	long int length;
 
-        PHYSFS_permitSymbolicLinks(1);
-	PHYSFS_init(argvZero);
-
-	/* Determine the OS user directory */
-	PLATFORM_getOSDirectory(output);
-
-	/* Create base user directory, mount */
-	mkdirResult = mkdir(output, 0777);
-
-	/* Mount our base user directory */
-	PHYSFS_mount(output, NULL, 1);
-	printf("Base directory: %s\n", output);
-
-	/* Create save directory */
-	strcpy(saveDir, output);
-	strcat(saveDir, "saves");
-	strcat(saveDir, PHYSFS_getDirSeparator());
-	mkdir(saveDir, 0777);
-	printf("Save directory: %s\n", saveDir);
-
-	/* Create level directory */
-	strcpy(levelDir, output);
-	strcat(levelDir, "levels");
-	strcat(levelDir, PHYSFS_getDirSeparator());
-	mkdirResult |= mkdir(levelDir, 0777);
-	printf("Level directory: %s\n", levelDir);
-
-	/* We didn't exist until now, migrate files! */
-	if (VNEEDS_MIGRATION)
+	/* Read data */
+	FILE* file = fopen(oldLocation, "rb");
+	if (!file)
 	{
-		PLATFORM_migrateSaveData(output);
-	}
-
-	/* Mount the stock content last */
-	strcpy(output, PHYSFS_getBaseDir());
-	strcat(output, "data.zip");
-	if (!PHYSFS_mount(output, NULL, 1))
-	{
-		puts("Error: data.zip missing!");
-		puts("You do not have data.zip!");
-		puts("Grab it from your purchased copy of the game,");
-		puts("or get it from the free Make and Play Edition.");
-
-		SDL_ShowSimpleMessageBox(
-			SDL_MESSAGEBOX_ERROR,
-			"data.zip missing!",
-			"You do not have data.zip!"
-			"\n\nGrab it from your purchased copy of the game,"
-			"\nor get it from the free Make and Play Edition.",
-			NULL
-		);
-		return 0;
-	}
-	return 1;
-}
-
-void FILESYSTEM_deinit()
-{
-	PHYSFS_deinit();
-}
-
-char *FILESYSTEM_getUserSaveDirectory()
-{
-	return saveDir;
-}
-
-char *FILESYSTEM_getUserLevelDirectory()
-{
-	return levelDir;
-}
-
-void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *len)
-{
-	PHYSFS_File *handle = PHYSFS_openRead(name);
-	if (handle == NULL)
-	{
+		printf("Cannot open/copy %s\n", oldLocation);
 		return;
 	}
-	PHYSFS_uint32 length = PHYSFS_fileLength(handle);
-	if (len != NULL)
-	{
-		*len = length;
+	fseek(file, 0, SEEK_END);
+	length = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	data = (char*)malloc(length);
+	if (fread(data, 1, length, file) <= 0) {
+		printf("it broke!!!\n");
+		exit(1);
 	}
-	*mem = (unsigned char*) malloc(length);
-	PHYSFS_readBytes(handle, *mem, length);
-	PHYSFS_close(handle);
-}
+	fclose(file);
 
-void FILESYSTEM_freeMemory(unsigned char **mem)
-{
-	free(*mem);
-	*mem = NULL;
-}
-
-growing_vector<std::string> FILESYSTEM_getLevelDirFileNames()
-{
-	growing_vector<std::string> list;
-	char **fileList = PHYSFS_enumerateFiles("/levels");
-	char **i;
-	std::string builtLocation;
-
-	for (i = fileList; *i != NULL; i++)
+	/* Write data */
+	file = fopen(newLocation, "wb");
+	if (!file)
 	{
-		if (strcmp(*i, "data") == 0)
-		{
-			continue; /* FIXME: lolwut -flibit */
-		}
-		builtLocation = "levels/";
-		builtLocation += *i;
-		list.push_back(builtLocation);
+		printf("Could not write to %s\n", newLocation);
+		free(data);
+		return;
 	}
+	fwrite(data, 1, length, file);
+	fclose(file);
+	free(data);
 
-	PHYSFS_freeList(fileList);
-
-	return list;
-}
-
-void PLATFORM_getOSDirectory(char* output)
-{
-#ifdef _WIN32
-	/* This block is here for compatibility, do not touch it! */
-	SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, output);
-	strcat(output, "\\VVVVVV\\");
-#else
-	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
-#endif
+	/* WTF did we just do */
+	printf("Copied:\n\tOld: %s\n\tNew: %s\n", oldLocation, newLocation);
 }
 
 void PLATFORM_migrateSaveData(char* output)
@@ -172,12 +71,12 @@ void PLATFORM_migrateSaveData(char* output)
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
-	DIR *dir = NULL;
-	struct dirent *de = NULL;
-	DIR *subDir = NULL;
-	struct dirent *subDe = NULL;
+	DIR* dir = NULL;
+	struct dirent* de = NULL;
+	DIR* subDir = NULL;
+	struct dirent* subDe = NULL;
 	char subDirLocation[MAX_PATH];
-	const char *homeDir = getenv("HOME");
+	const char* homeDir = getenv("HOME");
 	if (homeDir == NULL)
 	{
 		/* Uhh, I don't want to get near this. -flibit */
@@ -199,12 +98,12 @@ void PLATFORM_migrateSaveData(char* output)
 	printf("Migrating old savedata to new location...\n");
 	for (de = readdir(dir); de != NULL; de = readdir(dir))
 	{
-		if (	strcmp(de->d_name, "..") == 0 ||
-			strcmp(de->d_name, ".") == 0	)
+		if (strcmp(de->d_name, "..") == 0 ||
+			strcmp(de->d_name, ".") == 0)
 		{
 			continue;
 		}
-		#define COPY_SAVEFILE(name) \
+#define COPY_SAVEFILE(name) \
 			else if (strcmp(de->d_name, name) == 0) \
 			{ \
 				strcpy(oldLocation, oldDirectory); \
@@ -215,10 +114,10 @@ void PLATFORM_migrateSaveData(char* output)
 				PLATFORM_copyFile(oldLocation, newLocation); \
 			}
 		COPY_SAVEFILE("unlock.vvv")
-		COPY_SAVEFILE("tsave.vvv")
-		COPY_SAVEFILE("qsave.vvv")
-		#undef COPY_SAVEFILE
-		else if (strstr(de->d_name, ".vvvvvv.vvv") != NULL)
+			COPY_SAVEFILE("tsave.vvv")
+			COPY_SAVEFILE("qsave.vvv")
+#undef COPY_SAVEFILE
+			else if (strstr(de->d_name, ".vvvvvv.vvv") != NULL)
 		{
 			strcpy(oldLocation, oldDirectory);
 			strcat(oldLocation, de->d_name);
@@ -227,7 +126,7 @@ void PLATFORM_migrateSaveData(char* output)
 			strcat(newLocation, de->d_name);
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
-		else if (strstr(de->d_name, ".vvvvvv") != NULL)
+			else if (strstr(de->d_name, ".vvvvvv") != NULL)
 		{
 			strcpy(oldLocation, oldDirectory);
 			strcat(oldLocation, de->d_name);
@@ -236,7 +135,7 @@ void PLATFORM_migrateSaveData(char* output)
 			strcat(newLocation, de->d_name);
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
-		else if (strcmp(de->d_name, "Saves") == 0)
+			else if (strcmp(de->d_name, "Saves") == 0)
 		{
 			strcpy(subDirLocation, oldDirectory);
 			strcat(subDirLocation, "Saves/");
@@ -250,8 +149,8 @@ void PLATFORM_migrateSaveData(char* output)
 				subDe = readdir(subDir);
 				subDe != NULL;
 				subDe = readdir(subDir)
-			) {
-				#define COPY_SAVEFILE(name) \
+				) {
+#define COPY_SAVEFILE(name) \
 					(strcmp(subDe->d_name, name) == 0) \
 					{ \
 						strcpy(oldLocation, subDirLocation); \
@@ -264,7 +163,7 @@ void PLATFORM_migrateSaveData(char* output)
 				if COPY_SAVEFILE("unlock.vvv")
 				else if COPY_SAVEFILE("tsave.vvv")
 				else if COPY_SAVEFILE("qsave.vvv")
-				#undef COPY_SAVEFILE
+#undef COPY_SAVEFILE
 			}
 		}
 	}
@@ -329,40 +228,213 @@ void PLATFORM_migrateSaveData(char* output)
 #endif
 }
 
-void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
+//Helpers
+
+bool createDirectory(stdfs::path const& path)
 {
-	char *data;
-	long int length;
+	if (!stdfs::exists(path))
+		return stdfs::create_directory(path);
 
-	/* Read data */
-	FILE *file = fopen(oldLocation, "rb");
-	if (!file)
+	return true;
+}
+
+//TODO: Error checking
+bool getOSDirectory(stdfs::path& out)
+{
+	out.clear();
+
+#ifdef _WIN32
+	CHAR path[MAX_PATH];
+	SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path);
+	out = path;
+	out += "\\VVVVVV\\";
+	return true;
+#else
+	out = PHYSFS_getPrefDir("distractionware", "VVVVVV");
+	return true;
+#endif
+}
+
+//FSUtils
+
+//TODO: Error checking
+
+/*
+int FILESYSTEM_init(char *argvZero)
+{
+	//We didn't exist until now, migrate files!
+if (VNEEDS_MIGRATION)
+{
+	PLATFORM_migrateSaveData(output);
+}
+}
+*/
+
+FSUtils::FSUtils(std::string const& argvZero)
+{
+	int mkdirResult = 0;
+
+	//Init PHYSFS
+	PHYSFS_init(argvZero.c_str());
+	PHYSFS_permitSymbolicLinks(true);
+
+	//Determine OS user directory
+	getOSDirectory(m_pBaseDir);
+
+	//Create base directory
+	createDirectory(m_pBaseDir);
+
+	//Mount directory
+	PHYSFS_mount(m_pBaseDir.string().c_str(), nullptr, true);
+	PHYSFS_setWriteDir(m_pBaseDir.string().c_str());
+	std::clog << "Base directory: " << m_pBaseDir << std::endl;
+
+	//Create save directory
+	m_pSaveDir = m_pBaseDir.string() + "saves";
+	m_pSaveDir = m_pSaveDir.string() + PHYSFS_getDirSeparator();
+	createDirectory(m_pSaveDir);
+	std::clog << "Save directory: " << m_pSaveDir << std::endl;
+
+	//Create level directory
+	m_pLevelDir = m_pBaseDir.string() + "levels";
+	m_pLevelDir = m_pLevelDir.string() + PHYSFS_getDirSeparator();
+	createDirectory(m_pLevelDir);
+	std::clog << "Level directory: " << m_pLevelDir << std::endl;
+
+	//Migrate files
+	//TODO: rework it
+	if (VNEEDS_MIGRATION)
 	{
-		printf("Cannot open/copy %s\n", oldLocation);
-		return;
+		PLATFORM_migrateSaveData(const_cast<char*>(m_pLevelDir.string().c_str()));
 	}
-	fseek(file, 0, SEEK_END);
-	length = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	data = (char*) malloc(length);
-	if (fread(data, 1, length, file) <= 0) {
-            printf("it broke!!!\n");
-            exit(1);
-        }
-	fclose(file);
 
-	/* Write data */
-	file = fopen(newLocation, "wb");
-	if (!file)
+	//Mount data.zip
+	m_pDataDir = PHYSFS_getBaseDir() + std::string("data.zip");
+	if (!PHYSFS_mount(m_pDataDir.string().c_str(), nullptr, true))
 	{
-		printf("Could not write to %s\n", newLocation);
-		free(data);
-		return;
+		SDL_ShowSimpleMessageBox(
+			SDL_MESSAGEBOX_ERROR,
+			"data.zip missing!",
+			"You do not have data.zip!"
+			"\n\nGrab it from your purchased copy of the game,"
+			"\nor get it from the free Make and Play Edition.",
+			nullptr);
+		throw std::runtime_error("Data.zip not found.");
 	}
-	fwrite(data, 1, length, file);
-	fclose(file);
-	free(data);
+}
 
-	/* WTF did we just do */
-	printf("Copied:\n\tOld: %s\n\tNew: %s\n", oldLocation, newLocation);
+FSUtils::~FSUtils()
+{
+	PHYSFS_deinit();
+}
+
+FSUtils* FSUtils::create(std::string const& argvZero)
+{
+	auto p = new FSUtils(argvZero);
+
+	if (p)
+	{
+		s_pFSUtilsInstance = p;
+		return p;
+	}
+
+	return nullptr;
+}
+
+void FSUtils::destroy()
+{
+	if (s_pFSUtilsInstance)
+	{
+		delete s_pFSUtilsInstance;
+		s_pFSUtilsInstance = nullptr;
+	}
+}
+
+FSUtils* FSUtils::getInstance()
+{
+	return s_pFSUtilsInstance;
+}
+
+auto FSUtils::levelNames()
+-> std::vector<std::string>
+{
+	std::vector<std::string> vec;
+
+	auto fileList = PHYSFS_enumerateFiles("/levels");
+
+	if (fileList)
+	{
+		for (auto i = fileList; *i; ++i)
+		{
+			if (*i == std::string("data"))
+				continue; //FIXME: lolwut -flibit
+
+			vec.push_back(std::string("levels/") + *i);
+		}
+	}
+
+	PHYSFS_freeList(fileList);
+	return vec;
+}
+
+bool FSUtils::loadFile(
+	std::string const& name,
+	std::vector<uint8_t>& buffer)
+{
+	auto handle = PHYSFS_openRead(name.c_str());
+	
+	if (!handle)
+		return false;
+
+	auto size = PHYSFS_fileLength(handle);
+
+	if (!size)
+		return false;
+
+	buffer.clear();
+
+	auto p = new uint8_t[size];
+	PHYSFS_readBytes(handle, reinterpret_cast<void*>(p), size);
+
+	buffer = std::vector<uint8_t>(p, p + size);
+
+	delete[] p;
+	PHYSFS_close(handle);
+	return true;
+}
+
+bool FSUtils::loadXml(
+	std::string const& name,
+	TiXmlDocument& doc)
+{
+	std::vector<uint8_t> buffer;
+
+	if (this->loadFile(name, buffer))
+	{
+		doc.Parse(
+			reinterpret_cast<char*>(buffer.data()),
+				nullptr, TIXML_ENCODING_UTF8);
+		return true;
+	}
+
+        return false;
+}
+
+bool FSUtils::saveXml(
+	std::string const& name,
+	TiXmlDocument const& doc)
+{
+	TiXmlPrinter printer;
+	doc.Accept(&printer);
+
+	auto handle = PHYSFS_openWrite(name.c_str());
+
+	if (handle)
+	{
+		PHYSFS_writeBytes(handle, printer.CStr(), printer.Size());
+		PHYSFS_close(handle);
+		return true;
+	}
+
+	return false;
 }

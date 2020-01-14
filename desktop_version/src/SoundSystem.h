@@ -1,7 +1,8 @@
 #ifndef SOUNDSYSTEM_H
 #define SOUNDSYSTEM_H
 
-#include <SDL_mixer.h>
+#include "SDL_mixer.h"
+#include <string>
 
 class MusicTrack
 {
@@ -15,7 +16,7 @@ public:
 class SoundTrack
 {
 public:
-	SoundTrack(const char* fileName);
+	SoundTrack(std::string const& fileName);
         SoundTrack() = default;
 	Mix_Chunk *sound;
 };

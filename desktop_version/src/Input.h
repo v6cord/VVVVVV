@@ -9,6 +9,9 @@
 #include "Music.h"
 #include "Map.h"
 
+void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game,
+                entityclass& obj, UtilityClass& help, musicclass& music);
+
 void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game,
                 entityclass& obj, UtilityClass& help, musicclass& music);
 

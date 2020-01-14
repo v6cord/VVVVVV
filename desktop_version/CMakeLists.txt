@@ -1,7 +1,7 @@
 # CMake File for VVVVVV
 # Written by Ethan "flibitijibibo" Lee
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -54,7 +54,13 @@ IF(NOT WIN32)
 ENDIF()
 
 # Include Directories
-INCLUDE_DIRECTORIES(src tinyxml physfs lodepng utfcpp/source)
+INCLUDE_DIRECTORIES(
+	src
+	../third_party/tinyxml
+	../third_party/physfs
+	../third_party/lodepng
+	utfcpp/source
+)
 include(sdl2-config OPTIONAL)
 
 # Source Lists
@@ -90,30 +96,32 @@ SET(VVV_SRC
 	src/UtilityClass.cpp
 	src/WarpClass.cpp
 	src/main.cpp
+	src/Network.c
 	src/SteamNetwork.c
+	src/GOGNetwork.c
 )
 SET(XML_SRC
-	tinyxml/tinystr.cpp
-	tinyxml/tinyxml.cpp
-	tinyxml/tinyxmlerror.cpp
-	tinyxml/tinyxmlparser.cpp
+	../third_party/tinyxml/tinystr.cpp
+	../third_party/tinyxml/tinyxml.cpp
+	../third_party/tinyxml/tinyxmlerror.cpp
+	../third_party/tinyxml/tinyxmlparser.cpp
 )
 SET(PFS_SRC
-	physfs/physfs.c
-	physfs/physfs_archiver_dir.c
-	physfs/physfs_archiver_unpacked.c
-	physfs/physfs_archiver_zip.c
-	physfs/physfs_byteorder.c
-	physfs/physfs_unicode.c
-	physfs/physfs_platform_posix.c
-	physfs/physfs_platform_unix.c
-	physfs/physfs_platform_windows.c
+	../third_party/physfs/physfs.c
+	../third_party/physfs/physfs_archiver_dir.c
+	../third_party/physfs/physfs_archiver_unpacked.c
+	../third_party/physfs/physfs_archiver_zip.c
+	../third_party/physfs/physfs_byteorder.c
+	../third_party/physfs/physfs_unicode.c
+	../third_party/physfs/physfs_platform_posix.c
+	../third_party/physfs/physfs_platform_unix.c
+	../third_party/physfs/physfs_platform_windows.c
 )
 IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
-	SET(PFS_SRC ${PFS_SRC} physfs/physfs_platform_apple.m)
+	SET(PFS_SRC ${PFS_SRC} ../third_party/physfs/physfs_platform_apple.m)
 ENDIF()
-SET(PNG_SRC lodepng/lodepng.c)
+SET(PNG_SRC ../third_party/lodepng/lodepng.cpp)
 
 # Executable information
 IF(WIN32)
@@ -128,9 +136,9 @@ IF(ENABLE_WARNINGS)
 	# Saves quite a few lines and boilerplate at the price of readability.
 	TARGET_COMPILE_OPTIONS(VVVVVV PRIVATE
 		$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-			-Wall $<$<BOOL:ENABLE_WERROR>:-Werror>>
+			-Wall $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
 		$<$<CXX_COMPILER_ID:MSVC>:
-			/W4 $<$<BOOL:ENABLE_WERROR>:/WX>>)
+			/W4 $<$<BOOL:${ENABLE_WERROR}>:/WX>>)
 ENDIF()
 
 # Library information
@@ -138,8 +146,11 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
+find_package(Filesystem REQUIRED)
+
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static)
+TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static std::filesystem)
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND DEFINED VVVVVV_CROSS_COMPILE)

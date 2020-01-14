@@ -59,13 +59,13 @@ public:
 
     void updatestate(Graphics& dwgfx, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music);
 
-    void unlocknum(int t, mapclass& map, Graphics& dwgfx);
+    void unlocknum(int t, mapclass& map, Graphics& dwgfx, musicclass& music);
 
-    void loadstats(mapclass& map, Graphics& dwgfx);
+    void loadstats(mapclass& map, Graphics& dwgfx, musicclass& music);
 
-    void  savestats(mapclass& map, Graphics& dwgfx);
+    void  savestats(mapclass& map, Graphics& dwgfx, musicclass& music);
 
-    void deletestats(mapclass& map, Graphics& dwgfx);
+    void deletestats(mapclass& map, Graphics& dwgfx, musicclass& music);
 
     void deletequick();
 
@@ -171,6 +171,7 @@ public:
     bool menustart;
 
     unsigned changelogoffset = 0;
+    int changelogkeydelay = 0;
 
     //Teleporting
     bool teleport_to_new_area;
@@ -355,6 +356,7 @@ public:
 	growing_vector<SDL_GameControllerButton> controllerButton_flip;
 	growing_vector<SDL_GameControllerButton> controllerButton_esc;
 
+    bool skipfakeload;
 };
 
 #endif /* GAME_H */

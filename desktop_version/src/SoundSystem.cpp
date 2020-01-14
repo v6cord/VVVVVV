@@ -24,24 +24,19 @@ MusicTrack::MusicTrack(SDL_RWops *rw)
 	}
 }
 
-SoundTrack::SoundTrack(const char* fileName)
+SoundTrack::SoundTrack(std::string const& fileName)
 {
-	sound = NULL;
+	auto fs = FSUtils::getInstance();
+	std::vector<uint8_t> buffer;
+	sound = nullptr;
 
-	unsigned char *mem;
-	size_t length = 0;
-	FILESYSTEM_loadFileToMemory(fileName, &mem, &length);
-	SDL_RWops *fileIn = SDL_RWFromMem(mem, length);
+	fs->loadFile(fileName, buffer);
+
+	SDL_RWops *fileIn = SDL_RWFromMem(buffer.data(), buffer.size());
 	sound = Mix_LoadWAV_RW(fileIn, 1);
-	if (length)
-	{
-		FILESYSTEM_freeMemory(&mem);
-	}
 
-	if (sound == NULL)
-	{
+	if (!sound)
 		fprintf(stderr, "Unable to load WAV file: %s\n", Mix_GetError());
-	}
 }
 
 SoundSystem::SoundSystem()

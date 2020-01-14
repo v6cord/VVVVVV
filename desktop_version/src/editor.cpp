@@ -16,6 +16,7 @@
 #include "FileSystemUtils.h"
 
 #include <string>
+#include <utf8/checked.h>
 
 edlevelclass::edlevelclass()
 {
@@ -86,11 +87,12 @@ bool compare_nocase (std::string first, std::string second)
 
 void editorclass::getDirectoryData()
 {
+    auto fs = FSUtils::getInstance();
 
     ListOfMetaData.clear();
     directoryList.clear();
 
-    directoryList = FILESYSTEM_getLevelDirFileNames();
+    directoryList = fs->levelNames();
 
     for(size_t i = 0; i < directoryList.size(); i++)
     {
@@ -114,20 +116,20 @@ void editorclass::getDirectoryData()
     }
 
 }
-bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
+bool editorclass::getLevelMetaData(std::string& path, LevelMetaData& _data )
 {
-    unsigned char *mem = NULL;
-    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
+    std::vector<uint8_t> buffer;
+    auto fs = FSUtils::getInstance();
 
-    if (mem == NULL)
+    if (!fs->loadFile(path.c_str(), buffer))
     {
-        printf("Level %s not found :(\n", _path.c_str());
+        //TODO: Switch to std::clog
+        printf("Level %s not found :(\n", path.c_str());
         return false;
     }
 
     TiXmlDocument doc;
-    doc.Parse((const char*) mem);
-    FILESYSTEM_freeMemory(&mem);
+    doc.Parse(reinterpret_cast<char*>(buffer.data()));
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -166,7 +168,7 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
                 {
                     pText = "";
                 }
-                _data.filename = _path;
+                _data.filename = path;
 
                 if(pKey == "Created")
                 {
@@ -1707,27 +1709,28 @@ void editorclass::countstuff()
     }
 }
 
-void editorclass::load(std::string& _path)
+void editorclass::load(std::string& path)
 {
-    reset();
+    std::vector<uint8_t> buffer;
+    auto fs = FSUtils::getInstance();
 
-    unsigned char *mem = NULL;
+    this->reset();
+
     static const char *levelDir = "levels/";
-    if (_path.compare(0, strlen(levelDir), levelDir) != 0)
+    if (path.compare(0, strlen(levelDir), levelDir) != 0)
     {
-        _path = levelDir + _path;
+        path = levelDir + path;
     }
-    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
 
-    if (mem == NULL)
+    if (!fs->loadFile(path, buffer))
     {
-        printf("No level %s to load :(\n", _path.c_str());
+        //TODO: Switch to std::clog
+        printf("No level %s to load :(\n", path.c_str());
         return;
     }
 
     TiXmlDocument doc;
-    doc.Parse((const char*) mem);
-    FILESYSTEM_freeMemory(&mem);
+    doc.Parse(reinterpret_cast<char*>(buffer.data()));
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -1945,6 +1948,8 @@ void editorclass::load(std::string& _path)
 
 void editorclass::save(std::string& _path)
 {
+    auto fs = FSUtils::getInstance();
+
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -2108,7 +2113,7 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( scriptString.c_str() ));
     data->LinkEndChild( msg );
 
-    doc.SaveFile((std::string(FILESYSTEM_getUserLevelDirectory()) + _path).c_str() );
+    fs->saveXml("levels/" + _path, doc);
 }
 
 
@@ -2633,7 +2638,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 }
                 else
                 {
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),edentity[i].scriptname.length()*8,8,dwgfx.getRGB(96,96,96));
+                    auto length = utf8::distance(edentity[i].scriptname.begin(), edentity[i].scriptname.end());
+                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),length*8,8,dwgfx.getRGB(96,96,96));
                 }
                 dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), edentity[i].scriptname, 196, 196, 255 - help.glow);
                 break;
@@ -3643,6 +3649,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     game.my = (float) key.my;
     ed.tilex=(game.mx - (game.mx%8))/8;
     ed.tiley=(game.my - (game.my%8))/8;
+    if (game.stretchMode == 1) {
+        // In this mode specifically, we have to fix the mouse coordinates
+        int winwidth, winheight;
+        dwgfx.screenbuffer->GetWindowSize(winwidth, winheight);
+        ed.tilex = ed.tilex * 320 / winwidth;
+        ed.tiley = ed.tiley * 240 / winheight;
+    }
 
     game.press_left = false;
     game.press_right = false;
@@ -3783,7 +3796,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ed.sby--;
                     }
                     key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                    ed.sbx = ed.sb[ed.pagey+ed.sby].length();
+                    ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
                 }
 
                 if (key.isDown(27))
@@ -3861,7 +3874,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             ed.sb[ed.pagey+ed.sby]=key.keybuffer;
-            ed.sbx = ed.sb[ed.pagey+ed.sby].length();
+            ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
 
             if(!game.press_map && !key.isDown(27)) game.mapheld=false;
             if (!game.mapheld)
@@ -3880,7 +3893,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         if(ed.sby+ed.pagey>=ed.sblength) ed.sblength=ed.sby+ed.pagey;
                         key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                        ed.sbx = ed.sb[ed.pagey+ed.sby].length();
+                        ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
                     }
                     else
                     {

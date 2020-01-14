@@ -1,3 +1,4 @@
+//Is this file even needed? -cos8o
 #ifndef VNETWORK_H
 #define VNETWORK_H
 
@@ -7,7 +8,7 @@
 extern "C" {
 #endif
 
-int NETWORK_init();
+int32_t NETWORK_init();
 
 void NETWORK_shutdown();
 
@@ -18,8 +19,6 @@ void NETWORK_unlockAchievement(const char *name);
 int32_t NETWORK_getAchievementProgress(const char *name);
 
 void NETWORK_setAchievementProgress(const char *name, int32_t stat);
-
-/* TODO: Steam Workshop? */
 
 #ifdef __cplusplus
 }

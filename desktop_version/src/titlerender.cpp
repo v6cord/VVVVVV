@@ -27,6 +27,13 @@ growing_vector<std::string> changelog = {
     "Version c1.0",
     "[line]",
     "- Added UTF-8 support",
+    "- enableinternal() - a simplified",
+    "  command that makes every line after",
+    "  it parse as internal except for",
+    "  disableinternal()",
+    "- disableinternal() - a simplified",
+    "  command that makes every line after",
+    "  it parse as simplified",
     "- pdelay(n) - a delay(n) that doesn't",
     "  lock the players movement",
     "- setroomname() - sets the roomname to",
@@ -45,11 +52,47 @@ growing_vector<std::string> changelog = {
     "  specify an id, the file loops",
     "- stopfile(id) - stops playing a looping",
     "  audio file",
-    "- followposition now works for the player",
+    "- ifnotflag() - an inverted version of",
+    "  ifflag(). customifnotflag is the",
+    "  internal counterpart",
+    "- drawtext(x,y,r,g,b,center) - draw text",
+    "  for one frame. The text you want to",
+    "  display should be after the command.",
+    "  center should be either 0 or 1.",
+    "- followposition now works for the",
+    "  player",
     "- There's now an option to disable only",
     "  the music",
-    "- Lots of limits in VVVVVV have been",
-    "  removed, like the script line limit"
+    "- All limits have been removed except",
+    "  for the 20x20 map size limit",
+    "- destroy(platformsreal) - A version of",
+    "  destroy(platforms) that isn't bugged",
+    "- destroy(enemies)",
+    "- destroy(trinkets)",
+    "- destroy(warplines)",
+    "- destroy(checkpoints)",
+    "- destroy(all)",
+    "- destroy(conveyors)",
+    "- killplayer()",
+    "- customquicksave()",
+    "- niceplay() - use this for better area",
+    "  music transitions",
+    "- destroy(terminals)",
+    "- destroy(scriptboxes)",
+    "- destroy(disappearingplatforms)",
+    "- destroy(1x1quicksand)",
+    "- destroy(coins)",
+    "- destroy(gravitytokens)",
+    "- destroy(roomtext)",
+    "- destroy(crewmates) - destroy non-",
+    "  rescuable crewmates",
+    "- destroy(customcrewmates) - destroy",
+    "  rescuable crewmates",
+    "- destroy(teleporter)",
+    "- inf - like do(x), but an infinite",
+    "  amount of times",
+    "- Add seventh argument to createcrewman,",
+    "  if it is flip spawn a flipped crewmate",
 
 };
 
@@ -308,6 +351,8 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( -1, 100, "Info Teddy", tr, tg, tb, true);
             dwgfx.Print( -1, 115, "AllyTally",  tr, tg, tb, true);
             dwgfx.Print( -1, 130, "leo60228",  tr, tg, tb, true);
+            dwgfx.Print( -1, 145, "FIQ",  tr, tg, tb, true);
+            dwgfx.Print( -1, 160, "Stelpjo",  tr, tg, tb, true);
         }
         else if (game.currentmenuname == "credits2")
         {
@@ -1204,7 +1249,8 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( -1, 135, "the intermission levels.", tr, tg, tb, true);
         }else if (game.currentmenuname == "playerworlds")
         {   
-						dwgfx.tempstring = FILESYSTEM_getUserLevelDirectory();
+            auto fs = FSUtils::getInstance();
+						dwgfx.tempstring = fs->levelDirectory().string();
 						if(dwgfx.tempstring.length()>80){
 							dwgfx.Print( -1, 160, "To install new player levels, copy", tr, tg, tb, true);
 							dwgfx.Print( -1, 170, "the .vvvvvv files to this folder:", tr, tg, tb, true);
@@ -1662,10 +1708,20 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         }
     }
 
-     if(map.custommode && !map.custommodeforreal){
+    // scriptrender
+
+    for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
+        scriptimage current = script.scriptrender[i];
+        if (current.type == 0) {
+            dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+        }
+    }
+    script.scriptrender.clear();
+
+    if(map.custommode && !map.custommodeforreal){
         //Return to level editor
         dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
-      }
+    }
 
 
     dwgfx.cutscenebars();

@@ -4,26 +4,25 @@
 #include <stdlib.h>
 
 // Used to load PNG data
-extern "C"
-{
-	extern unsigned lodepng_decode24(
-		unsigned char** out,
-		unsigned* w,
-		unsigned* h,
-		const unsigned char* in,
-		size_t insize
-	);
-	extern unsigned lodepng_decode32(
-		unsigned char** out,
-		unsigned* w,
-		unsigned* h,
-		const unsigned char* in,
-		size_t insize
-	);
-}
+extern unsigned lodepng_decode24(
+        unsigned char** out,
+        unsigned* w,
+        unsigned* h,
+        const unsigned char* in,
+        size_t insize
+);
+extern unsigned lodepng_decode32(
+        unsigned char** out,
+        unsigned* w,
+        unsigned* h,
+        const unsigned char* in,
+        size_t insize
+);
 
 SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha = false)
 {
+	auto fs = FSUtils::getInstance();
+
 	//Temporary storage for the image that's loaded
 	SDL_Surface* loadedImage = NULL;
 	//The optimized image that will be used
@@ -32,18 +31,18 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha =
 	unsigned char *data;
 	unsigned int width, height;
 
-	unsigned char *fileIn = NULL;
-	size_t length = 0;
-	FILESYSTEM_loadFileToMemory(filename, &fileIn, &length);
+	std::vector<uint8_t> buffer;
+
+	fs->loadFile(filename, buffer);
+	
 	if (noAlpha)
 	{
-		lodepng_decode24(&data, &width, &height, fileIn, length);
+		lodepng_decode24(&data, &width, &height, buffer.data(), buffer.size());
 	}
 	else
 	{
-		lodepng_decode32(&data, &width, &height, fileIn, length);
+		lodepng_decode32(&data, &width, &height, buffer.data(), buffer.size());
 	}
-	FILESYSTEM_freeMemory(&fileIn);
 
 	loadedImage = SDL_CreateRGBSurfaceFrom(
 		data,

@@ -1,19 +1,42 @@
 #ifndef FILESYSTEMUTILS_H
 #define FILESYSTEMUTILS_H
 
+#include "tinyxml.h"
 #include <string>
 #include <vector>
-#include "Game.h"
+#include <filesystem>
 
-int FILESYSTEM_init(char *argvZero);
-void FILESYSTEM_deinit();
+class FSUtils
+{
+protected:
+	std::filesystem::path m_pBaseDir;
+	std::filesystem::path m_pSaveDir;
+	std::filesystem::path m_pLevelDir;
+	std::filesystem::path m_pDataDir;
 
-char *FILESYSTEM_getUserSaveDirectory();
-char *FILESYSTEM_getUserLevelDirectory();
+	FSUtils(std::string const& argvZero);
+	~FSUtils();
+public:
+	static FSUtils* create(std::string const& argvZero);
+	static void destroy();
+	static FSUtils* getInstance();
 
-void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *len);
-void FILESYSTEM_freeMemory(unsigned char **mem);
+	std::filesystem::path const& saveDirectory() { return m_pSaveDir; }
+	std::filesystem::path const& levelDirectory() { return m_pLevelDir; }
 
-growing_vector<std::string> FILESYSTEM_getLevelDirFileNames();
+	std::vector<std::string> levelNames();
+
+	bool loadFile(
+		std::string const& name,
+		std::vector<uint8_t>& buffer);
+
+	bool loadXml(
+		std::string const& name,
+		TiXmlDocument& doc);
+
+	bool saveXml(
+		std::string const& name,
+		TiXmlDocument const& doc);
+};
 
 #endif /* FILESYSTEMUTILS_H */

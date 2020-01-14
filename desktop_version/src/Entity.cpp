@@ -73,28 +73,13 @@ void entityclass::init()
       customcrewmoods[i]=1;
     }
 
-    for (int i = 0; i < 100; i++)
-    {
-        int t =0;
-        flags.push_back(t);
-    }
+    flags.resize(100);
+    blocks.resize(500);
+    entities.resize(200);
+    linecrosskludge.resize(100);
+    collect.resize(100);
+    customcollect.resize(100);
 
-    for (int i = 0; i < 500; i++)
-    {
-        blocks.push_back(blockclass());
-    }
-
-    for (int z = 0; z < 200; z++)
-    {
-        entities.push_back(entclass());
-    }
-
-    for (int i = 0; i < 100; i++)
-    {
-        linecrosskludge.push_back(entclass());
-        collect.push_back(0);
-        customcollect.push_back(0);
-    }
     nlinecrosskludge = 0;
 }
 
@@ -2253,8 +2238,9 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].gravity = true;
         break;
     case 18: // Crew Member (Ship)
+    case 57: // Crew Member (Flipped)
         //This is the scriping crewmember
-        entities[k].rule = 6;
+        entities[k].rule = t == 57 ? 7 : 6;
         entities[k].type = 12; //A special case!
         entities[k].colour = vx;
         if (int(vy) == 0)
@@ -4219,6 +4205,8 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                 {
                     entities[_i].drawframe=entities[_i].tile+3;
                 }
+
+                if (entities[_i].rule == 7) entities[_i].drawframe += 6;
 
                 if(entities[_i].onground>0 || entities[_i].onroof>0)
                 {

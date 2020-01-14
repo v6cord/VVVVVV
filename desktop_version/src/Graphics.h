@@ -3,7 +3,7 @@
 
 #include "GraphicsResources.h"
 #include <vector>
-#include "Game.h"
+#include <map>
 
 
 
@@ -202,20 +202,20 @@ public:
 
 	int j, k, m;
 
-	growing_vector <SDL_Surface*> backgrounds;
-	growing_vector <SDL_Surface*> images;
+	std::vector <SDL_Surface*> backgrounds;
+	std::vector <SDL_Surface*> images;
 
-	growing_vector <SDL_Surface*> tele;
-	growing_vector <SDL_Surface*> tiles;
-	growing_vector <SDL_Surface*> tiles2;
-	growing_vector <SDL_Surface*> tiles3;
-	growing_vector <SDL_Surface*> entcolours;
-	growing_vector <SDL_Surface*> sprites;
-	growing_vector <SDL_Surface*> flipsprites;
-	growing_vector <SDL_Surface*> bfont;
-	growing_vector <SDL_Surface*> bfontmask;
-	growing_vector <SDL_Surface*> flipbfont;
-	growing_vector <SDL_Surface*> flipbfontmask;
+	std::vector <SDL_Surface*> tele;
+	std::vector <SDL_Surface*> tiles;
+	std::vector <SDL_Surface*> tiles2;
+	std::vector <SDL_Surface*> tiles3;
+	std::vector <SDL_Surface*> entcolours;
+	std::vector <SDL_Surface*> sprites;
+	std::vector <SDL_Surface*> flipsprites;
+	std::vector <SDL_Surface*> bfont;
+	std::vector <SDL_Surface*> bfontmask;
+	std::vector <SDL_Surface*> flipbfont;
+	std::vector <SDL_Surface*> flipbfontmask;
 
 	bool flipmode;
 	bool setflipmode;
@@ -255,29 +255,30 @@ public:
 
 	int fademode;
 	int fadeamount;
-	growing_vector <int> fadebars;
+	std::vector <int> fadebars;
 
 	bool trinketcolset;
 	int trinketr, trinketg, trinketb;
 
-	growing_vector <textboxclass> textbox;
+	std::vector <textboxclass> textbox;
 	int ntextbox;
 
 	bool showcutscenebars;
 	int cutscenebarspos;
 
-	growing_vector<SDL_Rect> stars;
-	growing_vector<int> starsspeed;
+	std::vector<SDL_Rect> stars;
+	std::vector<int> starsspeed;
 
 	int spcol, spcoldel;
-	growing_vector<SDL_Rect> backboxes;
-	growing_vector<int> backboxvx;
-	growing_vector<int> backboxvy;
-	growing_vector<float> backboxint;
+	std::vector<SDL_Rect> backboxes;
+	std::vector<int> backboxvx;
+	std::vector<int> backboxvy;
+	std::vector<float> backboxint;
 	SDL_Rect backboxrect;
 
 	int warpskip, warpfcol, warpbcol;
 
+        std::map<int, int> font_positions;
 };
 
 #endif /* GRAPHICS_H */

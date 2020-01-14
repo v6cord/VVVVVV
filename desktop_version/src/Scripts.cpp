@@ -13,6 +13,7 @@ void scriptclass::load(std::string t)
     position = 0;
     scriptlength=0;
     running = true;
+    bool internalmode = false;
 
 	int maxlength = (std::min(int(t.length()),7));
     std::string customstring="";
@@ -72,10 +73,19 @@ void scriptclass::load(std::string t)
         //Now run the script
         for(int i=scriptstart; i<scriptend; i++){
           words[0]="nothing"; //Default!
-          words[1]="1"; //Default!
+          words[1]="unused"; //Default!
           tokenize(script.customscript[i]);
           std::transform(words[0].begin(), words[0].end(), words[0].begin(), ::tolower);
-          if(words[0] == "music"){
+          if (words[0] != "flash" && words[1] == "unused") {
+            words[1] = "1";
+          }
+          if (words[0] == "enableinternal") {
+            internalmode = true;
+          } else if (words[0] == "disableinternal") {
+            internalmode = false;
+          } else if (internalmode) {
+            add(script.customscript[i]);
+          } else if (words[0] == "music"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if(words[1]=="0"){
               tstring="stopmusic()";
@@ -94,9 +104,13 @@ void scriptclass::load(std::string t)
             add("play(15)");
           }else if(words[0] == "flash"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
-            add("flash(5)");
-            add("shake(20)");
-            add("playef(9,10)");
+            if (words[1] != "unused" && words[1] != "" && words[1] != "0") {
+              add("flash("+words[1]+")");
+            } else {
+              add("flash(5)");
+              add("shake(20)");
+              add("playef(9,10)");
+            }
           }else if(words[0] == "sad" || words[0] == "cry"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if(words[1]=="player"){
@@ -210,15 +224,12 @@ void scriptclass::load(std::string t)
           }else if(words[0] == "iftrinketsless"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             add("custom"+script.customscript[i]);
+          }else if(words[0] == "ifrand"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
           }else if(words[0] == "destroy"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
-            if(words[1]=="gravitylines"){
-              add("destroy(gravitylines)");
-            }else if(words[1]=="warptokens"){
-              add("destroy(warptokens)");
-            }else if(words[1]=="platforms"){
-              add("destroy(platforms)");
-            }
+            add(script.customscript[i]);
           }else if(words[0] == "speaker"){
             speakermode=0;
             if(words[1]=="gray" || words[1]=="grey" || words[1]=="terminal" || words[1]=="0") speakermode=0;
@@ -267,7 +278,10 @@ void scriptclass::load(std::string t)
                 add("text(blue,0,0,"+words[1]+")");
               break;
             }
-            int ti=atoi(words[1].c_str());
+            int ti = 1;
+            if (!words[1].empty()) {
+                ti = atoi(words[1].c_str());
+            }
             if(ti>=0 && ti<=50){
               for(int ti2=0; ti2<ti; ti2++){
                 i++; add(script.customscript[i]);
@@ -292,7 +306,10 @@ void scriptclass::load(std::string t)
             if(squeakmode==0) add("squeak(player)");
             add("text(cyan,0,0,"+words[1]+")");
 
-            int ti=atoi(words[1].c_str());
+            int ti = 1;
+            if (!words[1].empty()) {
+                ti = atoi(words[1].c_str());
+            }
             if(ti>=0 && ti<=50){
               for(int ti2=0; ti2<ti; ti2++){
                 i++; add(script.customscript[i]);
@@ -303,6 +320,9 @@ void scriptclass::load(std::string t)
             add("position(player,above)");
             add("speak_active");
             customtextmode=1;
+          }else{
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add(script.customscript[i]);
           }
         }
 
