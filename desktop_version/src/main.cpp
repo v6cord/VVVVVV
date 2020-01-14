@@ -309,7 +309,7 @@ int main(int argc, char **argv)
     key.isActive = true;
 
     std::chrono::high_resolution_clock::time_point last_frame;
-    std::chrono::duration<int, std::ratio<1, 30>> frame_time(1);
+    std::chrono::duration<int, std::ratio<1, 3000>> frame_time(100);
 
     while(!key.quitProgram)
     {
@@ -319,6 +319,12 @@ int main(int argc, char **argv)
         NETWORK_update();
 
         //framerate limit to 30
+
+        if (game.gameframerate != 34) {
+            frame_time = std::chrono::duration<int, std::ratio<1, 3000>>(game.gameframerate * 3);
+        } else {
+            frame_time = std::chrono::duration<int, std::ratio<1, 3000>>(100);
+        }
 
         auto now = std::chrono::high_resolution_clock::now();
         auto elapsed = now - last_frame;
