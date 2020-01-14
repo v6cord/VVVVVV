@@ -91,6 +91,8 @@ growing_vector<std::string> changelog = {
     "- destroy(teleporter)",
     "- inf - like do(x), but an infinite",
     "  amount of times",
+    "- Add seventh argument to createcrewman,",
+    "  if it is flip spawn a flipped crewmate",
 
 };
 

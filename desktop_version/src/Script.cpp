@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Script.h"
 #include "Graphics.h"
 
@@ -1129,14 +1130,19 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					words[6] = "0";
 				}
 
-				if (ss_toi(words[5]) >= 16)
-				{
-					obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), 18, r, ss_toi(words[4]), ss_toi(words[5]), ss_toi(words[6]));
-				}
-				else
-				{
-					obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), 18, r, ss_toi(words[4]), ss_toi(words[5]));
-				}
+                                int ent = 18;
+                                if (words[7] == "flip") {
+                                    ent = 57;
+                                }
+
+                                if (ss_toi(words[5]) >= 16)
+                                {
+                                    obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ent, r, ss_toi(words[4]), ss_toi(words[5]), ss_toi(words[6]));
+                                }
+                                else
+                                {
+                                    obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ent, r, ss_toi(words[4]), ss_toi(words[5]));
+                                }
 			}
 			else if (words[0] == "changemood")
 			{
