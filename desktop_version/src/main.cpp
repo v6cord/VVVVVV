@@ -532,7 +532,7 @@ int main(int argc, char **argv)
         }
 
         //Mute button
-        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry)
+        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry && !key.textentrymode)
         {
             game.mutebutton = 8;
             if (game.muted)
