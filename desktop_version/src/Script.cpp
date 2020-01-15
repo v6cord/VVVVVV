@@ -1279,7 +1279,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                     obj.named_crewmen[words[7]] = id;
                                 }
 			}
-                        else if (words[0] == "colourcrewman")
+                        else if (words[0] == "colourcrewman" || words[0] == "colorcrewman")
                         {
                             obj.entities[obj.getcrewman(words[1])].colour = ss_toi(words[2]);
                         }
@@ -1435,7 +1435,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				obj.entities[i].tile = 6;
 				obj.entities[i].colour = 102;
 			}
-			else if (words[0] == "changecolour")
+			else if (words[0] == "changecolour" || words[0] == "changecolour")
 			{
                             i = obj.getcrewman(words[1]);
 
@@ -2056,12 +2056,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					i += 25;
 				}
 			}
-			else if (words[0] == "restoreplayercolour")
+			else if (words[0] == "restoreplayercolour" || words[0] == "restoreplayercolor")
 			{
 				i = obj.getplayer();
 				obj.entities[i].colour = 0;
 			}
-			else if (words[0] == "changeplayercolour")
+			else if (words[0] == "changeplayercolour" || words[0] == "changeplayercolour")
 			{
 				i = obj.getplayer();
 
