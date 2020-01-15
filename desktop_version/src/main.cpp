@@ -1,6 +1,4 @@
 #include <SDL.h>
-#include <cmath>
-#include <chrono>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
@@ -30,8 +28,6 @@
 
 #include <stdio.h>
 #include <string.h>
-
-using namespace std::literals::chrono_literals;
 
 scriptclass script;
 edentities edentity[3000];
@@ -316,43 +312,43 @@ int main(int argc, char *argv[])
 		*/
     //End hack here ----
 
+    volatile Uint32 time, timePrev = 0;
     game.infocus = true;
     key.isActive = true;
-
-    std::chrono::high_resolution_clock::time_point last_frame;
-    std::chrono::duration<int, std::ratio<1, 3000>> frame_time(100);
 
     while(!key.quitProgram)
     {
 		//gameScreen.ClearScreen(0x00);
 
+        time = SDL_GetTicks();
+
         // Update network per frame.
         NETWORK_update();
 
         //framerate limit to 30
+        Uint32 timetaken = time - timePrev;
+        if(game.gamestate==EDITORMODE)
+		{
+          if (timetaken < 24)
+          {
+              volatile Uint32 delay = 24 - timetaken;
+              SDL_Delay( delay );
+              time = SDL_GetTicks();
+          }
+          timePrev = time;
 
-        if (game.gameframerate != 34) {
-            frame_time = std::chrono::duration<int, std::ratio<1, 3000>>(game.gameframerate * 3);
-        } else {
-            frame_time = std::chrono::duration<int, std::ratio<1, 3000>>(100);
+        }else{
+          if (timetaken < game.gameframerate)
+          {
+              volatile Uint32 delay = game.gameframerate - timetaken;
+              SDL_Delay( delay );
+              time = SDL_GetTicks();
+          }
+          timePrev = time;
+
         }
 
-        auto now = std::chrono::high_resolution_clock::now();
-        auto elapsed = now - last_frame;
-        auto remaining = frame_time - elapsed;
 
-        if (remaining.count() > 0) {
-            auto ms_remaining = std::chrono::floor<std::chrono::milliseconds>(remaining) - 2ms;
-            SDL_Delay(ms_remaining.count());
-            while (true) {
-                now = std::chrono::high_resolution_clock::now();
-                auto elapsed = now - last_frame;
-                if ((elapsed + 19ns) >= frame_time) {
-                    break;
-                }
-            }
-        }
-        last_frame = now;
 
         key.Poll();
 		if(key.toggleFullscreen)
