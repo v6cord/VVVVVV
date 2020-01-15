@@ -31,13 +31,13 @@ jobs:
         wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
         sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-mixer-dev gcc-8 g++-8
+        sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-mixer-dev gcc-8 g++-8 tree
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
     - name: Install dependencies (macOS)
       if: startsWith(matrix.os, 'macos')
-      run: brew install ninja sdl2 sdl2_mixer
+      run: brew install ninja sdl2 sdl2_mixer tree
 
     - name: CMake configure
       run: |
@@ -46,27 +46,22 @@ jobs:
     - name: Build
       run: ninja -C ${SRC_DIR_PATH}/build
 
+    - name: Build artifacts
+      run: tree ${SRC_DIR_PATH}/build
+
   build-win:
     name: Build (windows-latest)
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
 
-    - name: Install dependencies (Windows)
-      run: |
-        vcpkg install sdl2 sdl2-mixer
+    - name: Install Nix
+      uses: cachix/install-nix-action@v6
 
-    - name: CMake configure
-      run: |
-        cd $env:SRC_DIR_PATH
-        $env:LDFLAGS =  "/LIBPATH:$env:VCPKG_INSTALLATION_ROOT\installed\x86-windows\lib "
-        $env:LDFLAGS += "/LIBPATH:$env:VCPKG_INSTALLATION_ROOT\installed\x86-windows\lib\manual-link"
-        cmake -G "Visual Studio 16 2019" -A Win32 `
-              -DSDL2_INCLUDE_DIRS="$env:VCPKG_INSTALLATION_ROOT\installed\x86-windows\include\SDL2" `
-              -DSDL2_LIBRARIES="SDL2;SDL2main;SDL2_mixer" .
     - name: Build
       run: |
-        cd $env:SRC_DIR_PATH
-        cmake --build .
+        cd $SRC_DIR_PATH
+        mkdir -p build
+        nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH -DVVVVVV_CROSS_COMPILE=1 .. && make -j$(nproc)'
