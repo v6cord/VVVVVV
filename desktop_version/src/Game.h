@@ -13,6 +13,12 @@ class mapclass;
 class Graphics;
 class musicclass;
 
+struct scriptmarker {
+    int x;
+    int y;
+    int tile;
+};
+
 class Game
 {
 public:
@@ -355,6 +361,7 @@ public:
 	growing_vector<SDL_GameControllerButton> controllerButton_map;
 	growing_vector<SDL_GameControllerButton> controllerButton_flip;
 	growing_vector<SDL_GameControllerButton> controllerButton_esc;
+    growing_vector<scriptmarker> scriptmarkers;
 
     bool skipfakeload;
 };
