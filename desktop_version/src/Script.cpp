@@ -609,6 +609,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					scriptdelay = 1;
 				}
 			}
+                        if (words[0] == "markmap")
+                        {
+                            game.scriptmarkers.push_back(scriptmarker {
+                                .x = ss_toi(words[1]),
+                                .y = ss_toi(words[2]),
+                                .tile = ss_toi(words[3]),
+                                    });
+                        }
                         if (words[0] == "mapimage")
                         {
                             SDL_FreeSurface(dwgfx.images[12]);
