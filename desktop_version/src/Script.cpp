@@ -1224,7 +1224,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				}
 				else
 				{
-					r = 19;
+					r=ss_toi(words[3]);
 				}
 
 				//convert the command to the right index
