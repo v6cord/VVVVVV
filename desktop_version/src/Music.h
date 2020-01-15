@@ -14,7 +14,7 @@ class musicclass
 public:
 	musicclass();
 
-	void play(int t);
+	void play(int t, int fadeintime = 3000);
 	void loopmusic();
 	void stopmusic();
 	void haltdasmusik();

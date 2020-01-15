@@ -219,7 +219,7 @@ musicclass::musicclass()
 	dontquickfade = false;
 }
 
-void musicclass::play(int t)
+void musicclass::play(int t, int fadeintime /* = 3000*/)
 {
   t = (t % 16);
 
@@ -278,7 +278,7 @@ void musicclass::play(int t)
 					else
 						dontquickfade = false;
 				}
-				else if(Mix_FadeInMusic(musicTracks[t].m_music, -1, 3000)==-1)
+				else if(Mix_FadeInMusic(musicTracks[t].m_music, -1, fadeintime)==-1)
 				{
 					printf("Mix_FadeInMusic: %s\n", Mix_GetError());
 				}
