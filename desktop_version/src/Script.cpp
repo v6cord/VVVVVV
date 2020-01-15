@@ -1262,13 +1262,21 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                     ent = 57;
                                 }
 
+                                int id;
+
                                 if (ss_toi(words[5]) >= 16)
                                 {
-                                    obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ent, r, ss_toi(words[4]), ss_toi(words[5]), ss_toi(words[6]));
+                                    id = obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ent, r, ss_toi(words[4]), ss_toi(words[5]), ss_toi(words[6]));
                                 }
                                 else
                                 {
-                                    obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ent, r, ss_toi(words[4]), ss_toi(words[5]));
+                                    id = obj.createentity(game, ss_toi(words[1]), ss_toi(words[2]), ent, r, ss_toi(words[4]), ss_toi(words[5]));
+                                }
+
+                                if (words[7] == "flip") {
+                                    if (words[8] != "") obj.named_crewmen[words[8]] = id;
+                                } else if (words[7] != "") {
+                                    obj.named_crewmen[words[7]] = id;
                                 }
 			}
 			else if (words[0] == "changemood")
