@@ -1,3 +1,4 @@
+#include <optional>
 #include <algorithm>
 #include <iostream>
 #include "Script.h"
@@ -634,10 +635,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             SDL_FreeSurface(dwgfx.images[12]);
                             dwgfx.images[12] = LoadImage(words[1].c_str());
+                            dwgfx.mapimage = words[1];
                         }
                         if (words[0] == "automapimage")
                         {
                             ed.generatecustomminimap(dwgfx, map);
+                            dwgfx.mapimage = std::nullopt;
                         }
                         if (words[0] == "disablefog")
                         {
@@ -2764,6 +2767,7 @@ void scriptclass::resetgametomenu( Graphics& dwgfx, Game& game,mapclass& map, en
 
 void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
 {
+    dwgfx.mapimage = std::nullopt;
 	switch(t)
 	{
 	case 0:  //Normal new game

@@ -15,6 +15,7 @@
 
 #include <string>
 #include <algorithm>
+#include <optional>
 
 #include "GraphicsUtil.h"
 #include "Screen.h"
@@ -279,6 +280,7 @@ public:
 	int warpskip, warpfcol, warpbcol;
 
         std::map<int, int> font_positions;
+        std::optional<std::string> mapimage;
 };
 
 #endif /* GRAPHICS_H */
