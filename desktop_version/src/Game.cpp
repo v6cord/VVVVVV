@@ -5279,6 +5279,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             map.customshowmm = atoi(pText);
         }
+        else if (pKey == "nofog")
+        {
+            map.nofog = atoi(pText);
+        }
 
     }
 
