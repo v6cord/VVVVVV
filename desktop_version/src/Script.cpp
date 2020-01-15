@@ -850,42 +850,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				j = 0;
 
 				//the first word is the object to position relative to
-				if (words[1] == "player")
-				{
-					i = obj.getplayer();
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "cyan")
-				{
-					i = obj.getcrewman(0);
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "purple")
-				{
-					i = obj.getcrewman(1);
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "yellow")
-				{
-					i = obj.getcrewman(2);
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "red")
-				{
-					i = obj.getcrewman(3);
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "green")
-				{
-					i = obj.getcrewman(4);
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "blue")
-				{
-					i = obj.getcrewman(5);
-					j = obj.entities[i].dir;
-				}
-				else if (words[1] == "centerx")
+				if (words[1] == "centerx")
 				{
 					words[2] = "donothing";
 					j = -1;
@@ -903,7 +868,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					j = -1;
 					textx = -500;
 					texty = -500;
-				}
+				} else {
+					i = obj.getcrewman(words[1]);
+					j = obj.entities[i].dir;
+                                }
 
 				//next is whether to position above or below
 				if (words[2] == "above")
@@ -1305,42 +1273,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "changemood")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "customcyan")
-				{
-					i=obj.getcustomcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
-				else if (words[1] == "pink")
-				{
-					i=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				if (ss_toi(words[2]) == 0)
 				{
@@ -1353,51 +1286,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "changecustommood")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getcustomcrewman(0);
-					obj.customcrewmoods[0]=ss_toi(words[2]);
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcustomcrewman(0);
-					obj.customcrewmoods[0]=ss_toi(words[2]);
-				}
-				else if (words[1] == "customcyan")
-				{
-					i=obj.getcustomcrewman(0);
-					obj.customcrewmoods[0]=ss_toi(words[2]);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcustomcrewman(3);
-					obj.customcrewmoods[3]=ss_toi(words[2]);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcustomcrewman(4);
-					obj.customcrewmoods[4]=ss_toi(words[2]);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcustomcrewman(2);
-					obj.customcrewmoods[2]=ss_toi(words[2]);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcustomcrewman(5);
-					obj.customcrewmoods[5]=ss_toi(words[2]);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcustomcrewman(1);
-					obj.customcrewmoods[1]=ss_toi(words[2]);
-				}
-				else if (words[1] == "pink")
-				{
-					i=obj.getcustomcrewman(1);
-					obj.customcrewmoods[1]=ss_toi(words[2]);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				if (ss_toi(words[2]) == 0)
 				{
@@ -1410,34 +1299,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "changetile")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				obj.entities[i].tile = ss_toi(words[2]);
 			}
@@ -1450,30 +1312,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				}
 				else
 				{
-					if (words[1] == "cyan")
-					{
-						i=obj.getcrewman(0);
-					}
-					else if (words[1] == "red")
-					{
-						i=obj.getcrewman(3);
-					}
-					else if (words[1] == "green")
-					{
-						i=obj.getcrewman(4);
-					}
-					else if (words[1] == "yellow")
-					{
-						i=obj.getcrewman(2);
-					}
-					else if (words[1] == "blue")
-					{
-						i=obj.getcrewman(5);
-					}
-					else if (words[1] == "purple")
-					{
-						i=obj.getcrewman(1);
-					}
+                                    i = obj.getcrewman(words[1]);
 
 					if (obj.entities[i].rule == 6)
 					{
@@ -1490,67 +1329,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "changegravity")
 			{
 				//not something I'll use a lot, I think. Doesn't need to be very robust!
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				obj.entities[i].tile +=12;
 			}
 			else if (words[0] == "changedir")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				if (ss_toi(words[2]) == 0)
 				{
@@ -1572,34 +1357,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "changeai")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				if (words[2] == "followplayer") words[2] = "10";
 				if (words[2] == "followpurple") words[2] = "11";
@@ -1667,34 +1425,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "changecolour")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
 
 				if (words[2] == "cyan")
 				{
@@ -2144,63 +1875,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "face")
 			{
-				if (words[1] == "player")
-				{
-					i=obj.getplayer();
-				}
-				else if (words[1] == "cyan")
-				{
-					i=obj.getcrewman(0);
-				}
-				else if (words[1] == "red")
-				{
-					i=obj.getcrewman(3);
-				}
-				else if (words[1] == "green")
-				{
-					i=obj.getcrewman(4);
-				}
-				else if (words[1] == "yellow")
-				{
-					i=obj.getcrewman(2);
-				}
-				else if (words[1] == "blue")
-				{
-					i=obj.getcrewman(5);
-				}
-				else if (words[1] == "purple")
-				{
-					i=obj.getcrewman(1);
-				}
-
-				if (words[2] == "player")
-				{
-					j=obj.getplayer();
-				}
-				else if (words[2] == "cyan")
-				{
-					j=obj.getcrewman(0);
-				}
-				else if (words[2] == "red")
-				{
-					j=obj.getcrewman(3);
-				}
-				else if (words[2] == "green")
-				{
-					j=obj.getcrewman(4);
-				}
-				else if (words[2] == "yellow")
-				{
-					j=obj.getcrewman(2);
-				}
-				else if (words[2] == "blue")
-				{
-					j=obj.getcrewman(5);
-				}
-				else if (words[2] == "purple")
-				{
-					j=obj.getcrewman(1);
-				}
+                            i = obj.getcrewman(words[1]);
+                            j = obj.getcrewman(words[2]);
 
 				if (obj.entities[j].xp > obj.entities[i].xp + 5)
 				{
@@ -2333,34 +2009,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "createactivityzone")
 			{
-				if (words[1] == "red")
+				if (words[1] == "green")
 				{
-					i=3;
-				}
-				else if (words[1] == "green")
-				{
-					i=4;
-				}
-				else if (words[1] == "yellow")
-				{
-					i=2;
-				}
-				else if (words[1] == "blue")
-				{
-					i=5;
-				}
-				else if (words[1] == "purple")
-				{
-					i=1;
-				}
-
-				if (i == 4)
-				{
-					obj.createblock(5, obj.entities[obj.getcrewman(i)].xp - 32, obj.entities[obj.getcrewman(i)].yp-20, 96, 60, i);
+					obj.createblock(5, obj.entities[obj.getcrewman(4)].xp - 32, obj.entities[obj.getcrewman(4)].yp-20, 96, 60, i);
 				}
 				else
 				{
-					obj.createblock(5, obj.entities[obj.getcrewman(i)].xp - 32, 0, 96, 240, i);
+					obj.createblock(5, obj.entities[obj.getcrewman(words[1])].xp - 32, 0, 96, 240, i);
 				}
 			}
 			else if (words[0] == "createrescuedcrew")

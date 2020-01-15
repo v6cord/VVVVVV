@@ -113,6 +113,7 @@ public:
     int getlineat(int t);
 
     int getcrewman(int t);
+    int getcrewman(std::string t);
     int getcustomcrewman(int t);
 
     int getteleporter();
