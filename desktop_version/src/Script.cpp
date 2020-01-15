@@ -614,6 +614,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             SDL_FreeSurface(dwgfx.images[12]);
                             dwgfx.images[12] = LoadImage(words[1].c_str());
                         }
+                        if (words[0] == "disablefog")
+                        {
+                            map.nofog = true;
+                        }
+                        if (words[0] == "enablefog")
+                        {
+                            map.nofog = false;
+                        }
 			if (words[0] == "playef")
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));

@@ -178,6 +178,8 @@ public:
 
     //Map cursor
     int cursorstate, cursordelay;
+
+    bool nofog = false;
 };
 
 #endif /* MAPGAME_H */
