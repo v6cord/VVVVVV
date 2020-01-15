@@ -1279,6 +1279,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                     obj.named_crewmen[words[7]] = id;
                                 }
 			}
+                        else if (words[0] == "colourcrewman")
+                        {
+                            obj.entities[obj.getcrewman(words[1])].colour = ss_toi(words[2]);
+                        }
 			else if (words[0] == "changemood")
 			{
                             i = obj.getcrewman(words[1]);
