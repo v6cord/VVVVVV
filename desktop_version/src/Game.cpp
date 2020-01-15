@@ -6260,6 +6260,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
         msgs->LinkEndChild( msg );
     }
 
+    msg = new TiXmlElement( "nofog" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(map.nofog).c_str() ));
+    msgs->LinkEndChild( msg );
+
     customquicksummary = summary;
     //telecookie.flush();
     //telecookie.close();
