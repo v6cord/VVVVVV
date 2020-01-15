@@ -4433,6 +4433,8 @@ int entityclass::getcrewman(std::string t) {
     else if (t == "pink")
     {
         return getcrewman(1);
+    } else {
+        return named_crewmen.at(t);
     }
 }
 

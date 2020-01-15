@@ -8,6 +8,7 @@
 #include <vector>
 #include "Game.h"
 #include <string>
+#include <map>
 
 #define		rn( rx,  ry) ((rx) + ((ry) * 100))
 
@@ -242,6 +243,8 @@ public:
     bool customwarpmode, customwarpmodevon, customwarpmodehon;
     std::string customscript;
     int customcrewmoods[6];
+
+    std::map<std::string, int> named_crewmen;
 };
 
 #endif /* ENTITY_H */
