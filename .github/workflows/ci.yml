@@ -52,7 +52,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: ${{ format('VVVVVV-CE-{0}', runner.os }}
+        name: ${{ format('VVVVVV-CE-{0}', runner.os) }}
         path: desktop_version/build/VVVVVV
 
   build-win:
