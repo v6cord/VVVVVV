@@ -2267,6 +2267,8 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
             entities[k].dir = p2;
         }
 
+        if (entities[k].rule == 7) entities[k].tile += 6;
+
         entities[k].gravity = true;
         break;
     case 19: // Crew Member (Ship) More tests!
@@ -4206,8 +4208,6 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                 {
                     entities[_i].drawframe=entities[_i].tile+3;
                 }
-
-                if (entities[_i].rule == 7) entities[_i].drawframe += 6;
 
                 if(entities[_i].onground>0 || entities[_i].onroof>0)
                 {
