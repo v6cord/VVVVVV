@@ -40,17 +40,19 @@ editorclass ed;
 bool startinplaytest = false;
 std::string playtestname;
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-    auto fs = FSUtils::create(argv[0]);
-
-    if (!fs)
+    if(!FILESYSTEM_init(argv[0]))
+    {
         return 1;
-
-    auto screen = Screen::create();
-
-    if (!screen)
-        return 1;
+    }
+    SDL_Init(
+        SDL_INIT_VIDEO |
+        SDL_INIT_AUDIO |
+        SDL_INIT_JOYSTICK |
+        SDL_INIT_GAMECONTROLLER
+    );
+    SDL_ShowCursor(SDL_DISABLE);
 
     for (int i = 1; i < argc; ++i) {
         if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
@@ -76,6 +78,8 @@ int main(int argc, char **argv)
     }*/
 
     NETWORK_init();
+
+    Screen gameScreen;
 
 	printf("\t\t\n");
 	printf("\t\t\n");
@@ -105,6 +109,11 @@ int main(int argc, char **argv)
 	printf("\t\t  888888    888888  \n");
 	printf("\t\t\n");
 	printf("\t\t\n");
+
+    //Set up screen
+
+
+
 
     UtilityClass help;
     // Load Ini
@@ -138,7 +147,7 @@ int main(int argc, char **argv)
     graphics.images.push_back(graphics.grphx.im_image11);
     graphics.images.push_back(graphics.grphx.im_image12);
 
-    const SDL_PixelFormat* fmt = screen->GetFormat();
+    const SDL_PixelFormat* fmt = gameScreen.GetFormat();
     graphics.backBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,32,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask ) ;
     SDL_SetSurfaceBlendMode(graphics.backBuffer, SDL_BLENDMODE_NONE);
     graphics.Makebfont();
@@ -147,7 +156,7 @@ int main(int argc, char **argv)
     graphics.foregroundBuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
     SDL_SetSurfaceBlendMode(graphics.foregroundBuffer, SDL_BLENDMODE_NONE);
 
-    graphics.screenbuffer = screen;
+    graphics.screenbuffer = &gameScreen;
 
     graphics.menubuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask );
     SDL_SetSurfaceBlendMode(graphics.menubuffer, SDL_BLENDMODE_NONE);
@@ -348,7 +357,7 @@ int main(int argc, char **argv)
         key.Poll();
 		if(key.toggleFullscreen)
 		{
-			if(!screen->isWindowed())
+			if(!gameScreen.isWindowed)
 			{
 				//SDL_WM_GrabInput(SDL_GRAB_ON);
 				SDL_ShowCursor(SDL_DISABLE);
@@ -365,7 +374,7 @@ int main(int argc, char **argv)
 				SDL_ShowCursor(SDL_ENABLE);
 			}
 
-			screen->toggleFullScreen();
+			gameScreen.toggleFullScreen();
 			game.fullscreen = !game.fullscreen;
 			key.toggleFullscreen = false;
 
@@ -586,13 +595,13 @@ int main(int argc, char **argv)
 		if(key.resetWindow)
 		{
 			key.resetWindow = false;
-			screen->ResizeScreen(-1, -1);
+			gameScreen.ResizeScreen(-1, -1);
 		}
 
         music.processmusic();
         graphics.processfade();
         game.gameclock();
-        screen->FlipScreen();
+        gameScreen.FlipScreen();
 
         //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
     }
@@ -606,8 +615,8 @@ int main(int argc, char **argv)
 
     //Quit SDL
     NETWORK_shutdown();
-    Screen::destroy();
-    FSUtils::destroy();
+    SDL_Quit();
+    FILESYSTEM_deinit();
 
     return 0;
 }

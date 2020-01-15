@@ -1,3 +1,5 @@
+#include "Network.h"
+
 #include <stdio.h>
 #include <stdint.h>
 #include <SDL.h>
@@ -7,7 +9,7 @@
 #define VVVVVV_STEAMCLIENT "SteamClient017"
 #define VVVVVV_STEAMUSERSTATS "STEAMUSERSTATS_INTERFACE_VERSION011"
 
-// Shared object file name
+/* Shared object file name */
 
 #if defined(_WIN32)
 #define STEAM_LIBRARY "steam_api.dll"
@@ -19,7 +21,7 @@
 #error STEAM_LIBRARY: Unrecognized platform!
 #endif
 
-// Function Pointer Types
+/* Function Pointer Types */
 
 typedef uint8_t (*SteamAPI_InitFunc)();
 typedef void (*SteamAPI_ShutdownFunc)();
@@ -50,7 +52,7 @@ typedef uint8_t (*SteamAPI_ISteamUserStats_SetAchievementFunc)(
 	const char*
 );
 
-// DLL, Entry Points
+/* DLL, Entry Points */
 
 static void *libHandle = NULL;
 static intptr_t steamUserStats = (intptr_t) NULL;
@@ -70,7 +72,7 @@ DEFINE_FUNC(SteamAPI_ISteamUserStats_SetStat)
 DEFINE_FUNC(SteamAPI_ISteamUserStats_SetAchievement)
 #undef DEFINE_FUNC
 
-// Clean up after ourselves...
+/* Clean up after ourselves... */
 
 static void ClearPointers()
 {
@@ -91,7 +93,7 @@ static void ClearPointers()
 	SteamAPI_ISteamUserStats_SetAchievement = NULL;
 }
 
-//NETWORK API Implementation
+/* NETWORK API Implementation */
 
 int32_t STEAM_init()
 {

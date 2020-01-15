@@ -1260,8 +1260,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( -1, 135, "the intermission levels.", tr, tg, tb, true);
         }else if (game.currentmenuname == "playerworlds")
         {   
-            auto fs = FSUtils::getInstance();
-						dwgfx.tempstring = fs->levelDirectory().string();
+						dwgfx.tempstring = FILESYSTEM_getUserLevelDirectory();
 						if(dwgfx.tempstring.length()>80){
 							dwgfx.Print( -1, 160, "To install new player levels, copy", tr, tg, tb, true);
 							dwgfx.Print( -1, 170, "the .vvvvvv files to this folder:", tr, tg, tb, true);

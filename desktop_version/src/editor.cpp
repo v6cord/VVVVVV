@@ -87,12 +87,11 @@ bool compare_nocase (std::string first, std::string second)
 
 void editorclass::getDirectoryData()
 {
-    auto fs = FSUtils::getInstance();
 
     ListOfMetaData.clear();
     directoryList.clear();
 
-    directoryList = fs->levelNames();
+    directoryList = FILESYSTEM_getLevelDirFileNames();
 
     for(size_t i = 0; i < directoryList.size(); i++)
     {
@@ -116,20 +115,20 @@ void editorclass::getDirectoryData()
     }
 
 }
-bool editorclass::getLevelMetaData(std::string& path, LevelMetaData& _data )
+bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
 {
-    std::vector<uint8_t> buffer;
-    auto fs = FSUtils::getInstance();
+    unsigned char *mem = NULL;
+    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
 
-    if (!fs->loadFile(path.c_str(), buffer))
+    if (mem == NULL)
     {
-        //TODO: Switch to std::clog
-        printf("Level %s not found :(\n", path.c_str());
+        printf("Level %s not found :(\n", _path.c_str());
         return false;
     }
 
     TiXmlDocument doc;
-    doc.Parse(reinterpret_cast<char*>(buffer.data()));
+    doc.Parse((const char*) mem);
+    FILESYSTEM_freeMemory(&mem);
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -168,7 +167,7 @@ bool editorclass::getLevelMetaData(std::string& path, LevelMetaData& _data )
                 {
                     pText = "";
                 }
-                _data.filename = path;
+                _data.filename = _path;
 
                 if(pKey == "Created")
                 {
@@ -1709,28 +1708,27 @@ void editorclass::countstuff()
     }
 }
 
-void editorclass::load(std::string& path)
+void editorclass::load(std::string& _path)
 {
-    std::vector<uint8_t> buffer;
-    auto fs = FSUtils::getInstance();
+    reset();
 
-    this->reset();
-
+    unsigned char *mem = NULL;
     static const char *levelDir = "levels/";
-    if (path.compare(0, strlen(levelDir), levelDir) != 0)
+    if (_path.compare(0, strlen(levelDir), levelDir) != 0)
     {
-        path = levelDir + path;
+        _path = levelDir + _path;
     }
+    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
 
-    if (!fs->loadFile(path, buffer))
+    if (mem == NULL)
     {
-        //TODO: Switch to std::clog
-        printf("No level %s to load :(\n", path.c_str());
+        printf("No level %s to load :(\n", _path.c_str());
         return;
     }
 
     TiXmlDocument doc;
-    doc.Parse(reinterpret_cast<char*>(buffer.data()));
+    doc.Parse((const char*) mem);
+    FILESYSTEM_freeMemory(&mem);
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;
@@ -1948,8 +1946,6 @@ void editorclass::load(std::string& path)
 
 void editorclass::save(std::string& _path)
 {
-    auto fs = FSUtils::getInstance();
-
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -2113,7 +2109,7 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( scriptString.c_str() ));
     data->LinkEndChild( msg );
 
-    fs->saveXml("levels/" + _path, doc);
+    FILESYSTEM_saveTiXmlDocument(("levels/" + _path).c_str(), &doc);
 }
 
 
@@ -3652,7 +3648,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     if (game.stretchMode == 1) {
         // In this mode specifically, we have to fix the mouse coordinates
         int winwidth, winheight;
-        dwgfx.screenbuffer->GetWindowSize(winwidth, winheight);
+        dwgfx.screenbuffer->GetWindowSize(&winwidth, &winheight);
         ed.tilex = ed.tilex * 320 / winwidth;
         ed.tiley = ed.tiley * 240 / winheight;
     }
