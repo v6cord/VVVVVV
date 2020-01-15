@@ -46,11 +46,17 @@ jobs:
     - name: Build
       run: ninja -C ${SRC_DIR_PATH}/build
 
-    - name: Build artifacts
+    - name: Show build artifacts
       run: tree ${SRC_DIR_PATH}/build
 
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ format('VVVVVV-CE-{0}', runner.os }}
+        path: desktop_version/build/VVVVVV
+
   build-win:
-    name: Build (windows-latest)
+    name: Build (ubuntu-latest MingwW64)
 
     runs-on: ubuntu-latest
 
@@ -60,8 +66,25 @@ jobs:
     - name: Install Nix
       uses: cachix/install-nix-action@v6
 
+    - name: Install zip
+      run: sudo apt-get install -y zip
+
     - name: Build
       run: |
         cd $SRC_DIR_PATH
         mkdir -p build
         nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH -DVVVVVV_CROSS_COMPILE=1 .. && make -j$(nproc)'
+
+    - name: Copy libraries
+      run: cp -rv .github/libs/* $SRC_DIR_PATH/build
+
+    - name: Produce zip
+      run: |
+        cd $SRC_DIR_PATH/build
+        zip -r VVVVVV.zip VVVVVV.exe *.dll
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: VVVVVV-CE-Windows.zip
+        path: desktop_version/build/VVVVVV.zip
