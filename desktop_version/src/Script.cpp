@@ -661,7 +661,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "play")
 			{
-				music.play(ss_toi(words[1]));
+                                auto fadeintime = 3000;
+                                if (words[1] != "") {
+                                    fadeintime = ss_toi(words[1]);
+                                }
+				music.play(ss_toi(words[1]), fadeintime);
 			}
 			if (words[0] == "niceplay")
 			{
