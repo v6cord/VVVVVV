@@ -25,7 +25,6 @@ int mkdir(char* path, int mode)
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
 #include <sys/stat.h>
 #include <limits.h>
-#define MAX_PATH PATH_MAX
 #define VNEEDS_MIGRATION (mkdirResult == 0)
 /* These are needed for PLATFORM_* crap */
 #include <unistd.h>
