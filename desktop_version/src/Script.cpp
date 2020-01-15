@@ -614,6 +614,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             SDL_FreeSurface(dwgfx.images[12]);
                             dwgfx.images[12] = LoadImage(words[1].c_str());
                         }
+                        if (words[0] == "automapimage")
+                        {
+                            ed.generatecustomminimap(dwgfx, map);
+                        }
                         if (words[0] == "disablefog")
                         {
                             map.nofog = true;
