@@ -393,6 +393,8 @@ int main(int argc, char *argv[])
         game.infocus = key.isActive;
         if(!game.infocus)
         {
+            Mix_Pause(-1);
+            Mix_PauseMusic();
             if(game.getGlobalSoundVol()> 0)
             {
                 game.setGlobalSoundVol(0);
@@ -407,6 +409,8 @@ int main(int argc, char *argv[])
         }
         else
         {
+            Mix_Resume(-1);
+            Mix_ResumeMusic();
             switch(game.gamestate)
             {
             case PRELOADER:
