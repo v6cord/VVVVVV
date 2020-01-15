@@ -44,15 +44,15 @@ void scriptclass::tokenize( std::string t )
 {
 	j = 0;
 	tempword = "";
+        words.clear();
 
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
 		if (currentletter == "(" || currentletter == ")" || currentletter == ",")
 		{
-			words[j] = tempword;
+			words.push_back(tempword);
 			std::transform(words[j].begin(), words[j].end(), words[j].begin(), ::tolower);
-			j++;
 			tempword = "";
 		}
 		else if (currentletter == " ")
@@ -65,8 +65,8 @@ void scriptclass::tokenize( std::string t )
 		}
 	}
 
-        words[j] = tempword;
-        words[j + 1] = "";
+        words.push_back(tempword);
+        words.push_back("");
 }
 
 void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
