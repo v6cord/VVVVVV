@@ -3494,7 +3494,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
     map.customy = 100;
 
     game.customstart(obj, music);
-		game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music);
+		game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
     game.jumpheld = true;
     game.gravitycontrol = game.savegc;
 
@@ -3521,7 +3521,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
       music.currentsong=-1;
 		}
 		*/
-		ed.generatecustomminimap(dwgfx, map);
+                ed.generatecustomminimap(dwgfx, map);
 		dwgfx.fademode = 4;
     //load("intro");
   break;

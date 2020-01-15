@@ -5031,7 +5031,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 
 }
 
-void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
+void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx )
 {
     std::string levelfile = savfile.substr(7);
     TiXmlDocument doc;
@@ -5278,6 +5278,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         else if (pKey == "showminimap")
         {
             map.customshowmm = atoi(pText);
+        }
+        else if (pKey == "mapimage")
+        {
+            dwgfx.mapimage.emplace(pText);
         }
         else if (pKey == "nofog")
         {

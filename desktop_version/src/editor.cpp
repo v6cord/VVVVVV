@@ -2214,6 +2214,12 @@ extern scriptclass script;
 
 void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
 {
+    if (auto mapimage = dwgfx.mapimage) {
+        SDL_FreeSurface(dwgfx.images[12]);
+        dwgfx.images[12] = LoadImage(mapimage->c_str());
+        return;
+    }
+
     map.customwidth=mapwidth;
     map.customheight=mapheight;
 

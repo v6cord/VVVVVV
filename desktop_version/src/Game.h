@@ -111,7 +111,7 @@ public:
 
     void deathsequence(mapclass& map, entityclass& obj, musicclass& music);
 
-    void customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music);
+    void customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx);
     void loadquick(mapclass& map, entityclass& obj, musicclass& music);
 
     void loadsummary(mapclass& map, UtilityClass& help);
