@@ -3,6 +3,8 @@
 
 #include "SDL.h"
 
+SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha = false);
+
 class GraphicsResources
 {
 public:

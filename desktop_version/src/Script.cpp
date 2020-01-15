@@ -609,6 +609,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					scriptdelay = 1;
 				}
 			}
+                        if (words[0] == "mapimage")
+                        {
+                            dwgfx.images[12] = LoadImage(words[1].c_str());
+                        }
 			if (words[0] == "playef")
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));
