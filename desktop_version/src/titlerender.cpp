@@ -3082,16 +3082,72 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
 
     //draw the map image
     dwgfx.drawpixeltextbox(35, 16, 250, 190, 32,24, 65, 185, 207,4,0);
-    dwgfx.drawimage(1, 40, 21, false);
+    if (map.custommode) {
+        dwgfx.drawimage(12, 40, 21, false);
+    } else {
+        dwgfx.drawimage(1, 40, 21, false);
+    }
     //black out areas we can't see yet
-    for (int j = 0; j < 20; j++)
-    {
-        for (int i = 0; i < 20; i++)
+    if (!map.custommode) {
+        for (int j = 0; j < 20; j++)
         {
-            if(map.explored[i+(j*20)]==0)
+            for (int i = 0; i < 20; i++)
             {
-                //dwgfx.drawfillrect(10 + (i * 12), 21 + (j * 9), 12, 9, 16, 16, 16);
-                dwgfx.drawimage(2, 40 + (i * 12), 21 + (j * 9), false);
+                if(map.explored[i+(j*20)]==0)
+                {
+                    //dwgfx.drawfillrect(10 + (i * 12), 21 + (j * 9), 12, 9, 16, 16, 16);
+                    dwgfx.drawimage(2, 40 + (i * 12), 21 + (j * 9), false);
+                }
+            }
+        }
+    } else {
+        if (map.customzoom==4) {
+            for (int j = 0; j < map.customheight; j++){
+            for (int i = 0; i < map.customwidth; i++){
+                if(map.explored[i+(j*20)]==0){
+                //Draw the fog of war on the map
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + (j * 36), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + (j * 36), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + 9 + (j * 36), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + 9+ (j * 36), false);
+
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48) + 24, map.custommmyoff+21 + (j * 36), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48) + 24, map.custommmyoff+21 + (j * 36), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48) + 24, map.custommmyoff+ 21 + 9 + (j * 36), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48) + 24, map.custommmyoff+21 + 9+ (j * 36), false);
+
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + (j * 36)+18, false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + (j * 36)+18, false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + 9 + (j * 36)+18, false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + 9+ (j * 36)+18, false);
+
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48) + 24, map.custommmyoff+21 + (j * 36)+18, false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48) + 24, map.custommmyoff+21 + (j * 36)+18, false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48) + 24, map.custommmyoff+21 + 9 + (j * 36)+18, false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48) + 24, map.custommmyoff+21 + 9+ (j * 36)+18, false);
+                }
+            }
+            }
+        }else if(map.customzoom==2){
+            for (int j = 0; j < map.customheight; j++){
+            for (int i = 0; i < map.customwidth; i++){
+                if(map.explored[i+(j*20)]==0){
+                //Draw the fog of war on the map
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 24), map.custommmyoff+21 + (j * 18), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 24), map.custommmyoff+21 + (j * 18), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 24), map.custommmyoff+21 + 9 + (j * 18), false);
+                dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 24), map.custommmyoff+21 + 9+ (j * 18), false);
+                }
+            }
+            }
+        }else{
+            for (int j = 0; j < map.customheight; j++){
+            for (int i = 0; i < map.customwidth; i++){
+                if(map.explored[i+(j*20)]==0){
+                //Draw the fog of war on the map
+                dwgfx.drawimage(2, map.custommmxoff+40 + (i * 12), map.custommmyoff+21 + (j * 9), false);
+                }
+            }
             }
         }
     }
