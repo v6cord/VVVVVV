@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include "Script.h"
 #include "Graphics.h"
@@ -616,6 +617,18 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 .y = ss_toi(words[2]),
                                 .tile = ss_toi(words[3]),
                                     });
+                        }
+                        if (words[0] == "unmarkmap")
+                        {
+                            auto x = ss_toi(words[1]);
+                            auto y = ss_toi(words[2]);
+                            game.scriptmarkers.erase(std::remove_if(
+                                game.scriptmarkers.begin(),
+                                game.scriptmarkers.end(),
+                                [=](const scriptmarker& marker) {
+                                    return marker.x == x && marker.y == y;
+                                }
+                            ));
                         }
                         if (words[0] == "mapimage")
                         {
