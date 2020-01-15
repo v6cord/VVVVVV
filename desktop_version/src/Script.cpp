@@ -1221,13 +1221,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				{
 					r=20;
 				}
-				else if (words[3] == "gray")
+				else if (strspn( words[3].c_str(), "-.0123456789" ) == words[3].size() && words[3].size() != 0)
 				{
-					r=19;
+					r=ss_toi(words[3]);
 				}
 				else
 				{
-					r=ss_toi(words[3]);
+					r=19;
 				}
 
 				//convert the command to the right index
