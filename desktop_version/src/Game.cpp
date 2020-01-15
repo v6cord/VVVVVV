@@ -6010,7 +6010,7 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
 
 }
 
-void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music )
+void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx)
 {
     quickcookieexists = true;
 
@@ -6253,6 +6253,12 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     std::string summary = savearea + ", " + timestring(tempUtil);
     msg->LinkEndChild( new TiXmlText( summary.c_str() ));
     msgs->LinkEndChild( msg );
+
+    if (auto mapimage = dwgfx.mapimage) {
+        msg = new TiXmlElement( "mapimage" );
+        msg->LinkEndChild( new TiXmlText( mapimage->c_str() ));
+        msgs->LinkEndChild( msg );
+    }
 
     customquicksummary = summary;
     //telecookie.flush();

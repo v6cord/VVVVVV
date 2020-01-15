@@ -42,7 +42,7 @@ public:
 
     void resetgameclock();
 
-    void customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music);
+    void customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx);
     void savequick(mapclass& map, entityclass& obj, musicclass& music);
 
     void gameclock();

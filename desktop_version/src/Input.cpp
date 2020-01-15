@@ -2386,7 +2386,7 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if (game.roomx >= 102 && game.roomx <= 104 && game.roomy >= 110 && game.roomy <= 111) game.savearea = "The Ship";
 
             if(map.custommodeforreal){
-              game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music);
+              game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
             }else{
               game.savequick(map, obj, music);
             }
