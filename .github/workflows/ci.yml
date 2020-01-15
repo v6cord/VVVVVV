@@ -66,6 +66,12 @@ jobs:
     - name: Install Nix
       uses: cachix/install-nix-action@v6
 
+    - name: Configure cachix
+      uses: cachix/cachix-action@v3
+      with:
+        name: v6cord
+        skipNixBuild: true
+
     - name: Build
       run: |
         cd $SRC_DIR_PATH
