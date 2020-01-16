@@ -105,9 +105,9 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - Added optional parameter to `play` to set the fade-in time in ms (default 3000)
 
-- `markmap(x, y, tile)` to put a tile on any minimap coordinate
+- `markmap(x,y,tile)` to put a tile on any minimap coordinate
 
-- `unmarkmap(x, y)` to undo
+- `unmarkmap(x,y)` to undo
 
 - `mapimage(path/name.png)` to use any map image
 
