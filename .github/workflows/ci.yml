@@ -85,7 +85,10 @@ jobs:
     - name: Build .app
       run: |
         mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/
+        mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources
         mv -v ${SRC_DIR_PATH}/build/VVVVVV ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
+        cp -v .github/resources/v6cord.icns ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources/v6cord.icns
+        cp -v .github/resources/Info.plist ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Info.plist
         mv -v ${SRC_DIR_PATH}/build/VVVVVV-app ${SRC_DIR_PATH}/build/VVVVVV
         dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV/VVVVVV-CE.app
 
