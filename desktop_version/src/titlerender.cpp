@@ -149,6 +149,8 @@ growing_vector<std::string> changelog = {
     "  (affected by inertia)",
     "- pinf - variant of inf to automatically",
     "  pdelay(1) if no delay occurred",
+    "- nobars() - to disable automatic",
+    "  cutscene bars from a script",
 
 };
 
