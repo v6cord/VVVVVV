@@ -671,6 +671,22 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             map.nofog = false;
                         }
+                        if (words[0] == "finalstretchon")
+                        {
+                            map.finalstretch = true;
+                            map.final_colormode = true;
+                            map.final_mapcol = 1;
+                            map.final_colorframe = 1;
+                            map.colsuperstate = 1;
+                        }
+                        if (words[0] == "finalstretchoff")
+                        {
+                            map.finalstretch = false;
+                            map.final_colormode = false;
+                            map.final_mapcol = 0;
+                            map.colsuperstate = 0;
+                            dwgfx.foregrounddrawn = false;
+                        }
                         if (words[0] == "setspeed")
                         {
                             game.playerspeed = std::stoi(words[1]);

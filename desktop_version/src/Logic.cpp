@@ -683,7 +683,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
     else
     {
         //Update colour thingy
-        if (map.finalmode)
+        if (map.finalmode || map.finalstretch)
         {
             if (map.final_colormode)
             {
