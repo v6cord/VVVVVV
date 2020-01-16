@@ -99,7 +99,7 @@ jobs:
         path: desktop_version/build/VVVVVV
 
   build-win:
-    name: Build (ubuntu-latest MinGW64)
+    name: Build (Ubuntu + MinGW64)
 
     runs-on: ubuntu-latest
 
