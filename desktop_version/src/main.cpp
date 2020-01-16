@@ -48,7 +48,6 @@ int main(int argc, char *argv[])
         SDL_INIT_JOYSTICK |
         SDL_INIT_GAMECONTROLLER
     );
-    SDL_ShowCursor(SDL_DISABLE);
 
     for (int i = 1; i < argc; ++i) {
         if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
