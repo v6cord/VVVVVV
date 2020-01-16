@@ -91,19 +91,19 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `gotocheckpoint()` - Teleports the player to their last checkpoint
 
-- Add 6th argument to `createentity` that sets the color (createentity crewmen numbers)
+- Added 6th argument to `createentity` that sets the raw color
 
-- Add 7th argument to `createentity` that sets entity 1/56 type (ved numbers)
+- Added 7th argument to `createentity` that sets entity 1/56 type (Ved numbers)
 
 - Automatically pause/unpause all audio on focus change
 
 - Instead of defaulting to gray, assume unknown colors in createcrewman/changecolor are internal ones
 
-- Add an argument to createcrewman to set a name (instead of pink/blue/etc.), useful in combination with the above or when having multiple crewmen of the same color
+- Added an argument to createcrewman to set a name (instead of pink/blue/etc.), useful in combination with the above or when having multiple crewmen of the same color
 
-- Add color aliases for all colour functions
+- Added color aliases for all colour functions
 
-- Add optional parameter to `play` to set the fade-in time in ms (default 3000)
+- Added optional parameter to `play` to set the fade-in time in ms (default 3000)
 
 - `markmap(x, y, tile)` to put a tile on any minimap coordinate
 
@@ -119,6 +119,6 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - All names (including `player`) now work with all functions
 
-- Add hourglasses as enemy type 10
+- Added hourglasses as enemy type 10
 
 - Fixed enemies in Warp Zone gray not being gray
