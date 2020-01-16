@@ -363,6 +363,7 @@ public:
 	growing_vector<SDL_GameControllerButton> controllerButton_esc;
     growing_vector<scriptmarker> scriptmarkers;
 
+    bool hidemarkers;
     bool skipfakeload;
 };
 

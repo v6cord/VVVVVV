@@ -2263,7 +2263,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
           }
             for (auto marker : game.scriptmarkers)
             {
-                dwgfx.drawtile(43 + (marker.x * 12), 22 + (marker.y * 9), marker.tile);
+                if (!game.hidemarkers) dwgfx.drawtile(43 + (marker.x * 12), 22 + (marker.y * 9), marker.tile);
             }
         }
         else
