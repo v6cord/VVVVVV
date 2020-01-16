@@ -7,24 +7,19 @@ env:
   SRC_DIR_PATH: desktop_version
 
 jobs:
-  build:
-    name: Build
+  build-lin:
+    name: Build (Ubuntu 18.04)
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-18.04
 
     env:
       CXXFLAGS: -I/usr/local/include/SDL2
       LDFLAGS: -L/usr/local/lib
 
-    strategy:
-      matrix:
-        os: [ubuntu-18.04, macos-latest]
-
     steps:
     - uses: actions/checkout@v1
 
-    - name: Install dependencies (Linux)
-      if: startsWith(matrix.os, 'ubuntu')
+    - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y apt-transport-https ca-certificates gnupg software-properties-common wget
@@ -35,8 +30,36 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
+    - name: CMake configure
+      run: |
+        mkdir ${SRC_DIR_PATH}/build && cd ${SRC_DIR_PATH}/build
+        cmake -GNinja ..
+
+    - name: Build
+      run: ninja -C ${SRC_DIR_PATH}/build
+
+    - name: Show build artifacts
+      run: tree ${SRC_DIR_PATH}/build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ format('VVVVVV-CE-{0}', runner.os) }}
+        path: desktop_version/build/VVVVVV
+
+  build-mac:
+    name: Build (macOS)
+
+    runs-on: macos-latest
+
+    env:
+      CXXFLAGS: -I/usr/local/include/SDL2
+      LDFLAGS: -L/usr/local/lib
+
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Install dependencies (macOS)
-      if: startsWith(matrix.os, 'macos')
       run: brew install ninja sdl2 sdl2_mixer tree
 
     - name: CMake configure
@@ -46,12 +69,25 @@ jobs:
     - name: Build
       run: ninja -C ${SRC_DIR_PATH}/build
 
+    - name: Checkout macdylibbundler
+      uses: actions/checkout@v2
+      with:
+        repository: SCG82/macdylibbundler
+        ref: bundle-frameworks
+        path: macdylibbundler
+
+    - name: Install macdylibbundler
+      run: |
+        cd macdylibbundler
+        make
+        sudo make install
+
     - name: Build .app
-      if: startsWith(matrix.os, 'macos')
       run: |
         mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/
         mv -v ${SRC_DIR_PATH}/build/VVVVVV ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
         mv -v ${SRC_DIR_PATH}/build/VVVVVV-app ${SRC_DIR_PATH}/build/VVVVVV
+        dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV/VVVVVV-CE.app
 
     - name: Show build artifacts
       run: tree ${SRC_DIR_PATH}/build
@@ -63,7 +99,7 @@ jobs:
         path: desktop_version/build/VVVVVV
 
   build-win:
-    name: Build (ubuntu-latest MingwW64)
+    name: Build (ubuntu-latest MinGW64)
 
     runs-on: ubuntu-latest
 
