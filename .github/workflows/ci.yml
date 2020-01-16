@@ -90,11 +90,9 @@ jobs:
         cp -v .github/resources/v6cord.icns ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources/v6cord.icns
         cp -v .github/resources/Info.plist ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Info.plist
         dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app
-        mv -v ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE.bin
-        cp -v .github/resources/VVVVVV-CE ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
 
     - name: Tar .app
-    - run: |
+      run: |
         cd ${SRC_DIR_PATH}/build/VVVVVV-app
         tar -czvf VVVVVV-CE.tgz VVVVVV-CE.app/
 
