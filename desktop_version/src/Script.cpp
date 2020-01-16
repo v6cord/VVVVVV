@@ -674,6 +674,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             game.playerspeed = std::stoi(words[1]);
                         }
+                        if (words[0] == "setvelocity")
+                        {
+                            obj.entities[obj.getplayer()].ax = std::stoi(words[1]);
+                        }
 			if (words[0] == "playef")
 			{
 				music.playef(std::stoi(words[1]), std::stoi(words[2]));
