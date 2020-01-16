@@ -120,3 +120,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Added hourglasses as enemy type 10
 
 - Fixed enemies in Warp Zone gray not being gray
+
+- `createroomtext(x,y)` - x,y in tiles, roomtext on next line
