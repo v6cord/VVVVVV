@@ -59,7 +59,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install dependencies (macOS)
+    - name: Install dependencies
       run: brew install ninja sdl2 sdl2_mixer tree
 
     - name: CMake configure
