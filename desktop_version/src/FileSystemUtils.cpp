@@ -1,8 +1,4 @@
 #include "FileSystemUtils.h"
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 96065bf... Cleanup
 #include <vector>
 #include "Game.h"
 #include <string>
@@ -213,11 +209,7 @@ void PLATFORM_migrateSaveData(char* output)
 	char oldLocation[MAX_PATH];
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
-<<<<<<< HEAD
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
-=======
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
->>>>>>> parent of 96065bf... Cleanup
 	DIR *dir = NULL;
 	struct dirent *de = NULL;
 	DIR *subDir = NULL;
