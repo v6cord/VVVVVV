@@ -359,6 +359,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[egi].active = false;
 				} else if (words[1] == "roomtext") {
 					map.roomtexton = false;
+					map.roomtextnumlines = 0;
 				} else if (words[1] == "crewmates") {
 					for (int eci = 0; eci < obj.nentity; eci++)
 						if (obj.entities[eci].type == 12 || obj.entities[eci].type == 14)
@@ -1291,6 +1292,15 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 } else if (words[7] != "") {
                                     obj.named_crewmen[words[7]] = id;
                                 }
+			}
+			else if (words[0] == "createroomtext")
+			{
+				map.roomtexton = true;
+				map.roomtextx[map.roomtextnumlines] = ss_toi(words[1]);
+				map.roomtexty[map.roomtextnumlines] = ss_toi(words[2]);
+				position++;
+				map.roomtext[map.roomtextnumlines] = commands[position];
+				map.roomtextnumlines++;
 			}
 			else if (words[0] == "changemood")
 			{
