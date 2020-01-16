@@ -176,7 +176,7 @@ public:
 
     void fixfriction(int t, float xfix, float xrate, float yrate);
 
-    void applyfriction(int t, float xrate, float yrate);
+    void applyfriction(int t, float xrate, float yrate, int speed);
 
     void cleanup();
 

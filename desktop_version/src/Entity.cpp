@@ -5097,7 +5097,7 @@ void entityclass::fixfriction( int t, float xfix, float xrate, float yrate )
     if (std::abs(entities[t].vy) < yrate) entities[t].vy = 0;
 }
 
-void entityclass::applyfriction( int t, float xrate, float yrate )
+void entityclass::applyfriction( int t, float xrate, float yrate, int speed )
 {
     if (entities[t].vx > 0.00f) entities[t].vx -= xrate;
     if (entities[t].vx < 0.00f) entities[t].vx += xrate;
@@ -5105,8 +5105,8 @@ void entityclass::applyfriction( int t, float xrate, float yrate )
     if (entities[t].vy < 0.00f) entities[t].vy += yrate;
     if (entities[t].vy > 10.00f) entities[t].vy = 10.0f;
     if (entities[t].vy < -10.00f) entities[t].vy = -10.0f;
-    if (entities[t].vx > 6.00f) entities[t].vx = 6.0f;
-    if (entities[t].vx < -6.00f) entities[t].vx = -6.0f;
+    if (entities[t].vx > (speed * 2)) entities[t].vx = 6.0f;
+    if (entities[t].vx < (speed * 2)) entities[t].vx = -6.0f;
 
     if (std::abs(entities[t].vx) < xrate) entities[t].vx = 0.0f;
     if (std::abs(entities[t].vy) < yrate) entities[t].vy = 0.0f;
@@ -5152,7 +5152,7 @@ void entityclass::updateentitylogic( int t, Game& game )
         {
             entities[t].ay = 3;
         }
-        applyfriction(t, game.inertia, 0.25f);
+        applyfriction(t, game.inertia, 0.25f, game.playerspeed);
     }
 
     entities[t].newxp = entities[t].xp + entities[t].vx;
