@@ -141,6 +141,8 @@ growing_vector<std::string> changelog = {
     "- Allowed placed terminals to use any",
     "  sprite they want",
     "- You can now place flipped terminals",
+    "- Add showmarkers/hidemarkers to",
+    "  temporarily disable markmap markers",
 
 };
 

@@ -102,3 +102,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Allowed placed terminals to use any sprite they want
 
 - You can now place flipped terminals
+
+- Add showmarkers/hidemarkers to temporarily disable markmap markers
