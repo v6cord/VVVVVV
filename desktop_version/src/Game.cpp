@@ -6314,6 +6314,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(hidemarkers).c_str() ));
     msgs->LinkEndChild( msg );
 
+    msg = new TiXmlElement( "playerspeed" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(playerspeed).c_str() ));
+    msgs->LinkEndChild( msg );
+
     customquicksummary = summary;
     //telecookie.flush();
     //telecookie.close();
