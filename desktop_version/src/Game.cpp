@@ -6304,6 +6304,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
         msgs->LinkEndChild( msg );
     }
 
+    msg = new TiXmlElement( "hidemarkers" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(hidemarkers).c_str() ));
+    msgs->LinkEndChild( msg );
+
     customquicksummary = summary;
     //telecookie.flush();
     //telecookie.close();
