@@ -2658,13 +2658,25 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), edentity[i].scriptname, 196, 196, 255 - help.glow);
                 break;
             case 18: //Terminals
-                dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8)+8,17,96,96,96);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,24,dwgfx.getRGB(164,164,164));
+                { // We declare variables here, so we have to put this in its own block
+                int usethistile = edentity[i].p1;
+                int usethisy = edentity[i].y;
+                int usethisheight = 16;
+                if (usethistile == 0) {
+                    usethistile = 1; // Unflipped
+                    usethisheight = 24;
+                } else if (usethistile == 1) {
+                    usethistile = 0; // Flipped
+                    usethisy--;
+                }
+                dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(usethisy*8)- (ed.levy*30*8)+8,16+usethistile,96,96,96);
+                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,usethisheight,dwgfx.getRGB(164,164,164));
                 if(ed.temp==i)
                 {
                     dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8)-8,edentity[i].scriptname,210,210,255);
                 }
                 break;
+                }
             case 19: //Script Triggers
                 fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),edentity[i].p1*8,edentity[i].p2*8,dwgfx.getRGB(255,164,255));
                 fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(255,255,255));
@@ -5185,6 +5197,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             key.enabletextentry();
                             key.keybuffer=edentity[tmp].scriptname;
                             ed.lclickdelay=1;
+                            // A bit meh that the easiest way is doing this at the same time you start changing the script name, but oh well
+                            if (edentity[tmp].p1 == 0) // Currently not flipped
+                                edentity[tmp].p1 = 1; // Flip it, then
+                            else if (edentity[tmp].p1 == 1) // Currently is flipped
+                                edentity[tmp].p1 = 0; // Unflip it, then
                         }
                     }
                 }
