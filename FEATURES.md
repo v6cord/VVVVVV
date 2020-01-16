@@ -94,3 +94,26 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Add 6th argument to `createentity` that sets the color (createentity crewmen numbers)
 
 - Add 7th argument to `createentity` that sets entity 1/56 type (ved numbers)
+
+- Automatically pause/unpause all audio on focus change
+
+- Instead of defaulting to gray, assume unknown colors in createcrewman/changecolor are internal ones
+
+- Add an argument to createcrewman to set a name (instead of pink/blue/etc.), useful in combination with the above or when having multiple crewmen of the same color
+
+- Add color aliases for all colour functions
+
+- Add optional parameter to `play` to set the fade-in time in ms (default 3000)
+
+- `markmap(x, y, tile)` to put a tile on any minimap coordinate
+
+- `unmarkmap(x, y)` to undo
+
+- `mapimage(path/name.png)` to use any map image
+
+- `automapimage` to undo
+
+- `enablefog`/`disablefog` to enable/disable hiding rooms (called fog in the code)
+
+- Automatic CI builds for all 3 OSes
+
