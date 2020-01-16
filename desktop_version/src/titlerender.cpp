@@ -140,6 +140,7 @@ growing_vector<std::string> changelog = {
     "  x,y,w,h in pixels",
     "- Allowed placed terminals to use any",
     "  sprite they want",
+    "- You can now place flipped terminals",
 
 };
 

@@ -126,3 +126,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `createscriptbox(x,y,w,h)` - x,y,w,h in pixels
 
 - Allowed placed terminals to use any sprite they want
+
+- You can now place flipped terminals
