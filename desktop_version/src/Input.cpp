@@ -123,6 +123,18 @@ void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, en
                     game.changelogoffset--;
                 }
             }
+            if (key.keymap[SDLK_PAGEUP]) {
+                game.changelogkeydelay = 3;
+                if (game.changelogoffset < 12) {
+                    game.changelogoffset = 0;
+                } else {
+                    game.changelogoffset -= 12;
+                }
+            }
+            if (key.keymap[SDLK_PAGEDOWN]) {
+                game.changelogkeydelay = 3;
+                game.changelogoffset += 12;
+            }
         } else {
             game.changelogkeydelay--;
         }
