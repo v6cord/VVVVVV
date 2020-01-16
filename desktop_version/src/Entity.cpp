@@ -2763,6 +2763,8 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
               entities[k].colour = 6;
             break;
           }
+          if (ed.grayenemieskludge)
+            entities[k].colour = 18;
         }
 
         break;

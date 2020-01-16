@@ -357,6 +357,8 @@ void editorclass::reset()
     hookmenu=0;
     numhooks=0;
     script.customscript.clear();
+
+    grayenemieskludge = false;
 }
 
 void editorclass::weirdloadthing(std::string t)
@@ -608,6 +610,9 @@ int editorclass::getlevelcol(int t)
     }
     else if(level[t].tileset==3)   //Warp Zone
     {
+        if (level[t].tilecol == 6)
+            // Fix gray enemies
+            grayenemieskludge = true;
         return 46+level[t].tilecol;
     }
     else if(level[t].tileset==4)   //Ship
@@ -2449,6 +2454,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     //Draw entities
     game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
     ed.entcol=ed.getenemycol(game.customcol);
+    if (ed.grayenemieskludge) {
+        ed.entcol = 18;
+        ed.grayenemieskludge = false;
+    }
     obj.customplatformtile=game.customcol*12;
 
     ed.temp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30));

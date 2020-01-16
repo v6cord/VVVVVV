@@ -1725,6 +1725,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			}
 			}
 			}
+		if (ed.grayenemieskludge)
+			ed.grayenemieskludge = false;
 
 		customtrinkets=ed.numtrinkets;
 		customcrewmates=ed.numcrewmates;
