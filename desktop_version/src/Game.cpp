@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include <sstream>
+#include <string>
 
 #include "FileSystemUtils.h"
 
@@ -5054,6 +5055,8 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         hRoot=TiXmlHandle(pElem);
     }
 
+    scriptmarkers.clear();
+
     for( pElem = hRoot.FirstChild( "Data" ).FirstChild().Element(); pElem; pElem=pElem->NextSiblingElement())
     {
         std::string pKey(pElem->Value());
@@ -5286,6 +5289,22 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         else if (pKey == "nofog")
         {
             map.nofog = atoi(pText);
+        }
+        else if (pKey == "scriptmarkers")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                for(auto iter = values.begin(); iter < values.end(); iter += 3)
+                {
+                    scriptmarkers.push_back(scriptmarker {
+                        .x = std::stoi(iter[0]),
+                        .y = std::stoi(iter[1]),
+                        .tile = std::stoi(iter[2]),
+                    });
+                }
+            }
         }
 
     }
