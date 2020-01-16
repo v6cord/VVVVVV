@@ -4611,6 +4611,8 @@ void Game::customstart( entityclass& obj, musicclass& music )
     deathseq = -1;
     lifeseq = 0;
 
+    hidemarkers = false;
+
     //let's teleport in!
     //state = 2500;
     //if (!nocutscenes) music.play(5);
