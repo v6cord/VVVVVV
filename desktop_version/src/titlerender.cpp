@@ -151,6 +151,10 @@ growing_vector<std::string> changelog = {
     "  pdelay(1) if no delay occurred",
     "- nobars() - to disable automatic",
     "  cutscene bars from a script",
+    "- finalstretchon - turn on Final Level",
+    "  palette swap",
+    "- finalstretchoff - turn off Final Level",
+    "  palette swap",
 
 };
 
