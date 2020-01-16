@@ -1154,6 +1154,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				looppoint = position;
 				loopcount = -1;
 			}
+			else if (words[0] == "pinf")
+			{
+				//right, loop from this point
+				looppoint = position;
+				loopcount = -2;
+			}
 			else if (words[0] == "loop")
 			{
 				//right, loop from this point
@@ -1161,9 +1167,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				{
                                         loopcount--;
 					position = looppoint;
-				} else if (loopcount == -1) {
+				} else if (loopcount < 0) {
                                         position = looppoint;
-                                        if (!loopdelay) {
+                                        if (loopcount == -2 && !loopdelay) {
                                             passive = true;
                                             scriptdelay = 1;
                                         }
