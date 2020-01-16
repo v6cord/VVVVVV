@@ -5312,6 +5312,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             hidemarkers = atoi(pText);
         }
+        else if (pKey == "playerspeed")
+        {
+            playerspeed = atoi(pText);
+        }
 
     }
 
