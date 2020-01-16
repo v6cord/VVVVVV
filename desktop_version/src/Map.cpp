@@ -1700,10 +1700,20 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				roomtextnumlines++;
 				break;
 				case 18: //Terminals
+				{ // We initialize variables here, so we have to put this in its own block
 				obj.customscript=edentity[edi].scriptname;
-				obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8)+8, 20, 1);
-				obj.createblock(5, (edentity[edi].x*8)- ((rx-100)*40*8)-8, (edentity[edi].y*8)- ((ry-100)*30*8)+8, 20, 16, 35);
+				int usethistile = edentity[edi].p1;
+				int usethisy = edentity[edi].y;
+				if (usethistile == 0) {
+					usethistile = 1; // Unflipped
+				} else if (usethistile == 1) {
+					usethistile = 0; // Flipped
+					usethisy--;
+				}
+				obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(usethisy*8)- ((ry-100)*30*8)+8, 20, usethistile);
+				obj.createblock(5, (edentity[edi].x*8)- ((rx-100)*40*8)-8, (usethisy*8)- ((ry-100)*30*8)+8, 20, 16, 35);
 				break;
+				}
 				case 19: //Script Box
 				game.customscript[tempscriptbox]=edentity[edi].scriptname;
 				obj.createblock(1, (edentity[edi].x*8)- ((rx-100)*40*8), (edentity[edi].y*8)- ((ry-100)*30*8),
