@@ -1173,6 +1173,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                             case 7:  obj.setenemyroom(k, 18+100, 3+100); break;
                                             case 8:  obj.setenemyroom(k, 16+100, 0+100); break;
                                             case 9:  obj.setenemyroom(k, 14+100, 2+100); break;
+                                            case 10:  obj.setenemyroom(k, 10+100, 7+100); break;
                                             default: obj.setenemyroom(k, 4+100, 0+100); break;
                                         }
                                     }

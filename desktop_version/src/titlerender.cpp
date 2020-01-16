@@ -129,6 +129,7 @@ growing_vector<std::string> changelog = {
     "- Automatic CI builds for all 3 OSes",
     "- All names (including player) now work",
     "  with all functions",
+    "- Add hourglasses as enemy type 10",
 
 };
 

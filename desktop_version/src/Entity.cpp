@@ -2720,6 +2720,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
           case 7: setenemyroom(k, 18+100, 3+100); break;
           case 8: setenemyroom(k, 16+100, 0+100); break;
           case 9: setenemyroom(k, 14+100, 2+100); break;
+          case 10: setenemyroom(k, 10+100, 7+100); break;
           default: setenemyroom(k, 4+100, 0+100); break;
         }
 
