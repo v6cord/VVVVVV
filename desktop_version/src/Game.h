@@ -365,6 +365,8 @@ public:
 
     bool hidemarkers;
     bool skipfakeload;
+
+    int playerspeed = 3;
 };
 
 #endif /* GAME_H */

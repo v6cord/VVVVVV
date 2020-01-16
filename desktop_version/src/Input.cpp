@@ -2199,13 +2199,13 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if(game.press_left)
                 {
                     //obj.entities[i].vx = -4;
-                    obj.entities[ie].ax = -3;
+                    obj.entities[ie].ax = -game.playerspeed;
                     obj.entities[ie].dir = 0;
                 }
                 else if (game.press_right)
                 {
                     //obj.entities[i].vx = 4;
-                    obj.entities[ie].ax = 3;
+                    obj.entities[ie].ax = game.playerspeed;
                     obj.entities[ie].dir = 1;
                 }
 
