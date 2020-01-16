@@ -1700,7 +1700,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				roomtextnumlines++;
 				break;
 				case 18: //Terminals
-				{ // We initialize variables here, so we have to put this in its own block
+				{ // We declare variables here, so we have to put this in its own block
 				obj.customscript=edentity[edi].scriptname;
 				int usethistile = edentity[edi].p1;
 				int usethisy = edentity[edi].y;
