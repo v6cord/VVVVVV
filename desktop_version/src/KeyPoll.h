@@ -6,7 +6,7 @@
 #include "Game.h"
 #include <map> // FIXME: I should feel very bad for using C++ -flibit
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 enum Kybrd
 {
