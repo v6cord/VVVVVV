@@ -46,6 +46,13 @@ jobs:
     - name: Build
       run: ninja -C ${SRC_DIR_PATH}/build
 
+    - name: Build .app
+      if: startsWith(matrix.os, 'macos')
+      run: |
+        mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/
+        mv -v ${SRC_DIR_PATH}/build/VVVVVV ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
+        mv -v ${SRC_DIR_PATH}/build/VVVVVV-app ${SRC_DIR_PATH}/build/VVVVVV
+
     - name: Show build artifacts
       run: tree ${SRC_DIR_PATH}/build
 
