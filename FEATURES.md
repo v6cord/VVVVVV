@@ -113,7 +113,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `automapimage` to undo
 
-- `enablefog`/`disablefog` to enable/disable hiding rooms (called fog in the code)
+- `enablefog`/`disablefog` to enable/disable hiding unexplored rooms (called fog in the code)
 
 - All names (including `player`) now work with all functions
 
