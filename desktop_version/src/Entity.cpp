@@ -5152,7 +5152,7 @@ void entityclass::updateentitylogic( int t, Game& game )
         {
             entities[t].ay = 3;
         }
-        applyfriction(t, game.inertia, 0.25f, game.playerspeed);
+        if (!game.nofriction) applyfriction(t, game.inertia, 0.25f, game.playerspeed);
     }
 
     entities[t].newxp = entities[t].xp + entities[t].vx;

@@ -367,6 +367,7 @@ public:
     bool skipfakeload;
 
     int playerspeed = 3;
+    bool nofriction;
 };
 
 #endif /* GAME_H */

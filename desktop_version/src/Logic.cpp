@@ -1543,4 +1543,6 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
 
     if (game.teleport_to_new_area)
         script.teleport(dwgfx, game, map,	obj, help, music);
+
+    game.nofriction = false;
 }

@@ -676,6 +676,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         }
                         if (words[0] == "setvelocity")
                         {
+                            game.nofriction = true;
                             obj.entities[obj.getplayer()].ax = std::stoi(words[1]);
                         }
 			if (words[0] == "playef")
