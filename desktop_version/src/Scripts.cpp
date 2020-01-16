@@ -60,6 +60,9 @@ void scriptclass::load(std::string t)
             customcutscenemode=1;
           }else if(words[0] == "reply"){
             customcutscenemode=1;
+          }else if(words[0] == "nobars"){
+            customcutscenemode=0;
+            break;
           }
         }
 
