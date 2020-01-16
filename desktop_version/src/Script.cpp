@@ -1,6 +1,7 @@
 #include <optional>
 #include <algorithm>
 #include <iostream>
+#include <cstring>
 #include "Script.h"
 #include "Graphics.h"
 
