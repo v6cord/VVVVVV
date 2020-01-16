@@ -55,14 +55,6 @@ const char *GCChar(SDL_GameControllerButton button)
 	return NULL;
 }
 
-int ss_toi( std::string _s )
-{
-	std::istringstream i(_s);
-	int x;
-	i >> x;
-	return x;
-}
-
 growing_vector<std::string> split( const std::string &s, char delim, growing_vector<std::string> &elems )
 {
 	std::stringstream ss(s);
