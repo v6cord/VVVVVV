@@ -115,8 +115,6 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `enablefog`/`disablefog` to enable/disable hiding rooms (called fog in the code)
 
-- Automatic CI builds for all 3 OSes
-
 - All names (including `player`) now work with all functions
 
 - Added hourglasses as enemy type 10
