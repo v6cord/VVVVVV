@@ -5306,6 +5306,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 }
             }
         }
+        else if (pKey == "hidemarkers")
+        {
+            hidemarkers = atoi(pText);
+        }
 
     }
 
