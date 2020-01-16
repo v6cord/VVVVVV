@@ -6272,6 +6272,19 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(map.nofog).c_str() ));
     msgs->LinkEndChild( msg );
 
+    if (!scriptmarkers.empty()) {
+        std::string markers;
+        for(auto marker : scriptmarkers)
+        {
+            markers += UtilityClass::String(marker.x) + ",";
+            markers += UtilityClass::String(marker.y) + ",";
+            markers += UtilityClass::String(marker.tile) + ",";
+        }
+        msg = new TiXmlElement( "markers" );
+        msg->LinkEndChild( new TiXmlText( markers.c_str() ));
+        msgs->LinkEndChild( msg );
+    }
+
     customquicksummary = summary;
     //telecookie.flush();
     //telecookie.close();
