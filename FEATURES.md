@@ -106,3 +106,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Add showmarkers/hidemarkers to temporarily disable markmap markers
 
 - `setspeed(x)` for player speed, 3 by default
+
+- `setvelocity(x)` to push the player (affected by inertia)

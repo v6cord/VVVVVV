@@ -145,6 +145,8 @@ growing_vector<std::string> changelog = {
     "  temporarily disable markmap markers",
     "- setspeed(x) for player speed, 3 by",
     "  default",
+    "- setvelocity(x) to push the player",
+    "  (affected by inertia)",
 
 };
 
