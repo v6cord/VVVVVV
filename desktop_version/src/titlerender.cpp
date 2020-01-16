@@ -138,6 +138,8 @@ growing_vector<std::string> changelog = {
     "  roomtext on next line",
     "- createscriptbox(x,y,w,h,script) -",
     "  x,y,w,h in pixels",
+    "- Allowed placed terminals to use any",
+    "  sprite they want",
 
 };
 
