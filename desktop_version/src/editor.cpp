@@ -361,12 +361,12 @@ void editorclass::reset()
     grayenemieskludge = false;
 }
 
-void editorclass::weirdloadthing(std::string t)
+void editorclass::weirdloadthing(std::string t, Graphics& dwgfx)
 {
     //Stupid pointless function because I hate C++ and everything to do with it
     //It's even stupider now that I don't need to append .vvvvvv anymore! bah, whatever
     //t=t+".vvvvvv";
-    load(t);
+    load(t, dwgfx);
 }
 
 void editorclass::gethooks()
@@ -1716,7 +1716,7 @@ void editorclass::countstuff()
     }
 }
 
-void editorclass::load(std::string& _path)
+void editorclass::load(std::string& _path, Graphics& dwgfx)
 {
     reset();
 
@@ -4016,7 +4016,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 else if(ed.loadmod)
                 {
                     std::string loadstring=ed.filename+".vvvvvv";
-                    ed.load(loadstring);
+                    ed.load(loadstring, dwgfx);
                     ed.note="[ Loaded map: " + ed.filename+ ".vvvvvv]";
                     ed.notedelay=45;
                     ed.loadmod=false;

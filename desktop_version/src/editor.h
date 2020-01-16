@@ -128,7 +128,7 @@ class editorclass{
 
   int backmatch(int x, int y);
 
-  void load(std::string& _path);
+  void load(std::string& _path, Graphics& dwgfx);
   void save(std::string& _path);
   void generatecustomminimap(Graphics& dwgfx, mapclass& map);
   int edgetile(int x, int y);
@@ -144,7 +144,7 @@ class editorclass{
   int findwarptoken(int t);
   void countstuff();
   void findstartpoint(Game& game);
-  void weirdloadthing(std::string t);
+  void weirdloadthing(std::string t, Graphics& dwgfx);
   int getlevelcol(int t);
   int getenemycol(int t);
   int entcol;

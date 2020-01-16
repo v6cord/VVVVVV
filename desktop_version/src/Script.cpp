@@ -3522,7 +3522,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
   case 22:  //play custom level (in game)
     //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -3565,7 +3565,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
   case 23: //Continue in custom level
       //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
