@@ -438,12 +438,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: delay(frames)
 				scriptdelay = std::stoi(words[1]);
+                                loopdelay = true;
 			}
 			if (words[0] == "pdelay")
 			{
 				//USAGE: pdelay(frames)
 				passive = true;
 				scriptdelay = std::stoi(words[1]);
+                                loopdelay = true;
 			}
 			if (words[0] == "settile")
 			{
@@ -1161,7 +1163,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position = looppoint;
 				} else if (loopcount == -1) {
                                         position = looppoint;
+                                        if (!loopdelay) {
+                                            passive = true;
+                                            scriptdelay = 1;
+                                        }
                                 }
+                                loopdelay = false;
 			}
 			else if (words[0] == "vvvvvvman")
 			{

@@ -74,6 +74,8 @@ public:
      growing_vector <std::string>  customscript;
 
     growing_vector<scriptimage> scriptrender;
+
+    bool loopdelay;
 };
 
 #endif /* SCRIPT_H */
