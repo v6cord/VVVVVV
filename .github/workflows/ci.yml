@@ -76,7 +76,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH
         mkdir -p build
-        nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH -DVVVVVV_CROSS_COMPILE=1 .. && make -j$(nproc)'
+        nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH .. && make -j$(nproc)'
 
     - name: Copy artifacts
       run: |
