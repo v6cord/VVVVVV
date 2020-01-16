@@ -136,6 +136,8 @@ growing_vector<std::string> changelog = {
     "  being gray",
     "- createroomtext(x,y) - x,y in tiles,",
     "  roomtext on next line",
+    "- createscriptbox(x,y,w,h,script) -",
+    "  x,y,w,h in pixels",
 
 };
 

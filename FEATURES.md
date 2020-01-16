@@ -122,3 +122,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Fixed enemies in Warp Zone gray not being gray
 
 - `createroomtext(x,y)` - x,y in tiles, roomtext on next line
+
+- `createscriptbox(x,y,w,h)` - x,y,w,h in pixels
