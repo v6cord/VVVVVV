@@ -104,3 +104,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - You can now place flipped terminals
 
 - Add showmarkers/hidemarkers to temporarily disable markmap markers
+
+- `setspeed(x)` for player speed, 3 by default

@@ -143,6 +143,8 @@ growing_vector<std::string> changelog = {
     "- You can now place flipped terminals",
     "- Add showmarkers/hidemarkers to",
     "  temporarily disable markmap markers",
+    "- setspeed(x) for player speed, 3 by",
+    "  default",
 
 };
 
