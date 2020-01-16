@@ -117,3 +117,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - Automatic CI builds for all 3 OSes
 
+- All names (including `player`) now work with all functions
+
