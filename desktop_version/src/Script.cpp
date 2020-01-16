@@ -643,6 +643,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 }
                             ));
                         }
+                        if (words[0] == "hidemarkers")
+                        {
+                            game.hidemarkers = true;
+                        }
                         if (words[0] == "mapimage")
                         {
                             SDL_FreeSurface(dwgfx.images[12]);
