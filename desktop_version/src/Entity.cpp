@@ -5105,8 +5105,8 @@ void entityclass::applyfriction( int t, float xrate, float yrate, int speed )
     if (entities[t].vy < 0.00f) entities[t].vy += yrate;
     if (entities[t].vy > 10.00f) entities[t].vy = 10.0f;
     if (entities[t].vy < -10.00f) entities[t].vy = -10.0f;
-    if (entities[t].vx > (speed * 2)) entities[t].vx = 6.0f;
-    if (entities[t].vx < (speed * 2)) entities[t].vx = -6.0f;
+    if (entities[t].vx > (float)(speed * 2)) entities[t].vx = speed * 2;
+    if (entities[t].vx < (float)(speed * 2)) entities[t].vx = speed * -2;
 
     if (std::abs(entities[t].vx) < xrate) entities[t].vx = 0.0f;
     if (std::abs(entities[t].vy) < yrate) entities[t].vy = 0.0f;
