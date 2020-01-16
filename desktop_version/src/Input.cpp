@@ -135,6 +135,15 @@ void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, en
                 game.changelogkeydelay = 3;
                 game.changelogoffset += 12;
             }
+            if (key.keymap[SDLK_HOME]) {
+                game.changelogkeydelay = 3;
+                game.changelogoffset = 0;
+            }
+            if (key.keymap[SDLK_END]) {
+                game.changelogkeydelay = 3;
+                // Not duping the clamp code from titlerender.cpp
+                game.changelogoffset = 999999999;
+            }
         } else {
             game.changelogkeydelay--;
         }
