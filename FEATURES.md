@@ -35,39 +35,13 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - All limits have been removed except for the 20x20 map size limit
 
-- `destroy(platformsreal)` - A version of `destroy(platforms)` that isn't bugged
-
-- `destroy(enemies)`
-
-- `destroy(trinkets)`
-
-- `destroy(warplines)`
-
-- `destroy(checkpoints)`
-
-- `destroy(all)`
-
-- `destroy(conveyors)`
-
-- `destroy(terminals)`
-
-- `destroy(scriptboxes)`
-
-- `destroy(disappearingplatforms)`
-
-- `destroy(1x1quicksand)`
-
-- `destroy(coins)`
-
-- `destroy(gravitytokens)`
-
-- `destroy(roomtext)`
-
 - `destroy(crewmates)` - destroy non-rescuable crewmates
 
 - `destroy(customcrewmates)` - destroy rescuable crewmates
 
-- `destroy(teleporter)`
+- `destroy(platformsreal)` - A version of `destroy(platforms)` that isn't bugged
+
+- `destroy(enemies|trinkets|warplines|checkpoints|all|conveyors|terminals|scriptboxes|disappearingplatforms|1x1quicksand|coins|gravitytokens|roomtext|teleporter)`
 
 - `killplayer()`
 
