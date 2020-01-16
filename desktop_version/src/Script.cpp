@@ -1302,6 +1302,22 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.roomtext[map.roomtextnumlines] = commands[position];
 				map.roomtextnumlines++;
 			}
+			else if (words[0] == "createscriptbox")
+			{
+				// Ok, first figure out the first available script box slot
+				int lastslot = 0;
+				for (int bsi = 0; bsi < obj.nblocks; bsi++)
+					if (obj.blocks[bsi].trigger > lastslot)
+						lastslot = obj.blocks[bsi].trigger;
+				int usethisslot;
+				if (lastslot == 0)
+					usethisslot = 300;
+				else
+					usethisslot = lastslot + 1;
+
+				obj.createblock(TRIGGER, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), usethisslot);
+				game.customscript[usethisslot - 300] = words[5];
+			}
 			else if (words[0] == "changemood")
 			{
                             i = obj.getcrewman(words[1]);
