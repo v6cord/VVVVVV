@@ -120,3 +120,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - All names (including `player`) now work with all functions
 
 - Add hourglasses as enemy type 10
+
+- Fixed enemies in Warp Zone gray not being gray
