@@ -41,7 +41,7 @@ Screen::Screen()
 		&m_window,
 		&m_renderer
 	);
-	SDL_SetWindowTitle(m_window, "VVVVVV");
+	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
 	unsigned char *fileIn = NULL;
 	size_t length = 0;
