@@ -25,7 +25,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `stopfile(id)` - stops playing a looping audio file
 
-- `ifnotflag()` - an inverted version of `ifflag()`. `customifnotflag` is the internal counterpart
+- `ifnotflag()` - an inverted version of `ifflag()`
 
 - `drawtext(x,y,r,g,b,center)` - draw text for one frame. The text you want to display should be after the command. `center` should be either 0 or 1.
 
