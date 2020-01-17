@@ -76,6 +76,8 @@ public:
 
     void removeallblocks();
 
+    void removeallresurrectblocks();
+
     void removeblock(int t);
 
     void removeblockat(int x, int y);
@@ -245,6 +247,9 @@ public:
     int customcrewmoods[6];
 
     std::map<std::string, int> named_crewmen;
+
+    growing_vector<blockclass> resurrectblocks;
+    int nresurrectblocks;
 };
 
 #endif /* ENTITY_H */

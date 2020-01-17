@@ -337,7 +337,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				} else if (words[1] == "scriptboxes") {
 					for (int bsi = 0; bsi < obj.nblocks; bsi++)
 						if (obj.blocks[bsi].type == TRIGGER)
-							obj.blocks[bsi].active = false;
+							obj.removetrigger(obj.blocks[bsi].trigger);
 				} else if (words[1] == "disappearingplatforms" || words[1] == "quicksand") {
 					for (int epi = 0; epi < obj.nentity; epi++)
 						if (obj.entities[epi].type == 2) {
@@ -769,6 +769,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: movetoroom(x,y)
 				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
+			}
+			if (words[0] == "reloadscriptboxes")
+			{
+				for (int brs = 0; brs < obj.nresurrectblocks; brs++) {
+					obj.createblock(TRIGGER, obj.resurrectblocks[brs].x, obj.resurrectblocks[brs].y, obj.resurrectblocks[brs].wp, obj.resurrectblocks[brs].hp, obj.resurrectblocks[brs].trigger);
+					obj.resurrectblocks[brs].clear();
+				}
+				obj.nresurrectblocks = 0;
 			}
 			if (words[0] == "cutscene")
 			{

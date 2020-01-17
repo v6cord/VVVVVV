@@ -882,6 +882,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 {
 	//First, destroy the current room
 	obj.removeallblocks();
+	obj.removeallresurrectblocks();
 	game.activetele = false;
 	game.readytotele = 0;
 

@@ -81,6 +81,9 @@ void entityclass::init()
     customcollect.resize(100);
 
     nlinecrosskludge = 0;
+
+    resurrectblocks.resize(500);
+    nresurrectblocks = 0;
 }
 
 void entityclass::resetallflags()
@@ -1184,8 +1187,24 @@ void entityclass::removeallblocks()
     nblocks=0;
 }
 
+void entityclass::removeallresurrectblocks()
+{
+    for(int i=0; i<nresurrectblocks; i++) resurrectblocks[i].clear();
+    nresurrectblocks=0;
+}
+
 void entityclass::removeblock( int t )
 {
+    if (blocks[t].type == TRIGGER) {
+        resurrectblocks[nresurrectblocks].active = true;
+        resurrectblocks[nresurrectblocks].type = TRIGGER;
+        resurrectblocks[nresurrectblocks].x = blocks[t].x;
+        resurrectblocks[nresurrectblocks].y = blocks[t].y;
+        resurrectblocks[nresurrectblocks].wp = blocks[t].wp;
+        resurrectblocks[nresurrectblocks].hp = blocks[t].hp;
+        resurrectblocks[nresurrectblocks].trigger = blocks[t].trigger;
+        nresurrectblocks++;
+    }
     blocks[t].clear();
     int i = nblocks - 1;
     while (i >= 0 && !(blocks[i].active))
