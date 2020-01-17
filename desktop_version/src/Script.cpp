@@ -408,23 +408,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
-			if (words[0] == "customifnotflag")
-			{
-				if (obj.flags[ss_toi(words[1])]!=1)
-				{
-					load("custom_"+words[2]);
-					position--;
-				}
-			}
-			if (words[0] == "customifrand")
-			{
-				int den = ss_toi(words[1]);
-				if (fRandom() < 1.0f/den)
-				{
-					load("custom_"+words[2]);
-					position--;
-				}
-			}
 			if (words[0] == "custommap")
 			{
 				if(words[1]=="on"){
@@ -1709,7 +1692,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]!=1)
 				{
-					load(words[2]);
+					load("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -1742,7 +1725,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int den = ss_toi(words[1]);
 				if (fRandom() < 1.0f/den)
 				{
-					load(words[2]);
+					load("custom_"+words[2]);
 					position--;
 				}
 			}
