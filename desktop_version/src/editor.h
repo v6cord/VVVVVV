@@ -9,15 +9,15 @@
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 
-std::string_view find_title(std::string_view buf);
-std::string_view find_desc1(std::string_view buf);
-std::string_view find_desc2(std::string_view buf);
-std::string_view find_desc3(std::string_view buf);
-std::string_view find_creator(std::string_view buf);
-std::string_view find_website(std::string_view buf);
-std::string_view find_created(std::string_view buf);
-std::string_view find_modified(std::string_view buf);
-std::string_view find_modifiers(std::string_view buf);
+std::string find_title(std::string_view buf);
+std::string find_desc1(std::string_view buf);
+std::string find_desc2(std::string_view buf);
+std::string find_desc3(std::string_view buf);
+std::string find_creator(std::string_view buf);
+std::string find_website(std::string_view buf);
+std::string find_created(std::string_view buf);
+std::string find_modified(std::string_view buf);
+std::string find_modifiers(std::string_view buf);
 
 class edentities{
 public:

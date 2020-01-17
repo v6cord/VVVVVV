@@ -5367,7 +5367,7 @@ std::string find_tag(std::string_view buf, std::string_view start, std::string_v
     return value;
 }
 
-#define TAG_FINDER(NAME, TAG) std::string_view NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
+#define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
 
 TAG_FINDER(find_title, "Title");
 TAG_FINDER(find_desc1, "Desc1");
