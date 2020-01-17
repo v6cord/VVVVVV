@@ -675,7 +675,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             map.finalstretch = true;
                             map.final_colormode = true;
-                            map.final_mapcol = 1;
                             map.final_colorframe = 1;
                             map.colsuperstate = 1;
                         }
