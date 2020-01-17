@@ -118,8 +118,10 @@ void editorclass::getDirectoryData()
 }
 bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
 {
-    unsigned char *mem = NULL;
-    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
+    unsigned char *uMem = NULL;
+    FILESYSTEM_loadFileToMemory(_path.c_str(), &uMem, NULL);
+
+    auto mem = (char*) uMem;
 
     if (mem == NULL)
     {
@@ -127,96 +129,19 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
         return false;
     }
 
-    TiXmlDocument doc;
-    doc.Parse((const char*) mem);
-    FILESYSTEM_freeMemory(&mem);
+    _data.timeCreated = find_created(mem);
+    _data.creator = find_creator(mem);
+    _data.title = find_title(mem);
+    _data.timeModified = find_modified(mem);
+    _data.modifier = find_modifiers(mem);
+    _data.Desc1 = find_desc1(mem);
+    _data.Desc2 = find_desc2(mem);
+    _data.Desc3 = find_desc3(mem);
+    _data.website = find_website(mem);
+    _data.filename = _path;
 
-    TiXmlHandle hDoc(&doc);
-    TiXmlElement* pElem;
-    TiXmlHandle hRoot(0);
+    FILESYSTEM_freeMemory(&uMem);
 
-
-    {
-        pElem=hDoc.FirstChildElement().Element();
-        // should always have a valid root but handle gracefully if it does
-        if (!pElem)
-        {
-            printf("No valid root! Corrupt level file?\n");
-        }
-
-        // save this for later
-        hRoot=TiXmlHandle(pElem);
-    }
-
-    for( pElem = hRoot.FirstChild( "Data" ).FirstChild().Element(); pElem; pElem=pElem->NextSiblingElement())
-    {
-        std::string pKey(pElem->Value());
-        const char* pText = pElem->GetText() ;
-        if(pText == NULL)
-        {
-            pText = "";
-        }
-
-        if (pKey == "MetaData")
-        {
-
-            for( TiXmlElement* subElem = pElem->FirstChildElement(); subElem; subElem= subElem->NextSiblingElement())
-            {
-                std::string pKey(subElem->Value());
-                const char* pText = subElem->GetText() ;
-                if(pText == NULL)
-                {
-                    pText = "";
-                }
-                _data.filename = _path;
-
-                if(pKey == "Created")
-                {
-                    _data.timeCreated = pText;
-                }
-
-                if(pKey == "Creator")
-                {
-                    _data.creator = pText;
-                }
-
-                if(pKey == "Title")
-                {
-                    _data.title = pText;
-                }
-
-                if(pKey == "Modified")
-                {
-                    _data.timeModified = pText;
-                }
-
-                if(pKey == "Modifiers")
-                {
-                    _data.modifier = pText;
-                }
-
-                if(pKey == "Desc1")
-                {
-                    _data.Desc1 = pText;
-                }
-
-                if(pKey == "Desc2")
-                {
-                    _data.Desc2 = pText;
-                }
-
-                if(pKey == "Desc3")
-                {
-                    _data.Desc3 = pText;
-                }
-
-                if(pKey == "website")
-                {
-                    _data.website = pText;
-                }
-            }
-        }
-    }
     return (_data.filename != "");
 }
 
@@ -5431,5 +5356,8 @@ TAG_FINDER(find_desc2, "Desc2");
 TAG_FINDER(find_desc3, "Desc3");
 TAG_FINDER(find_creator, "Creator");
 TAG_FINDER(find_website, "website");
+TAG_FINDER(find_created, "Created");
+TAG_FINDER(find_modified, "Modified");
+TAG_FINDER(find_modifiers, "Modifiers");
 
 #undef TAG_FINDER

@@ -15,6 +15,9 @@ std::string_view find_desc2(std::string_view buf);
 std::string_view find_desc3(std::string_view buf);
 std::string_view find_creator(std::string_view buf);
 std::string_view find_website(std::string_view buf);
+std::string_view find_created(std::string_view buf);
+std::string_view find_modified(std::string_view buf);
+std::string_view find_modifiers(std::string_view buf);
 
 class edentities{
 public:
