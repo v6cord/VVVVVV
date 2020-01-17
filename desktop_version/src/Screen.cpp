@@ -15,6 +15,9 @@ extern "C"
 		const unsigned char* in,
 		size_t insize
 	);
+
+        extern const unsigned char v6cord_png[];
+        extern const unsigned v6cord_png_size;
 }
 
 Screen::Screen()
@@ -43,13 +46,9 @@ Screen::Screen()
 	);
 	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
-	unsigned char *fileIn = NULL;
-	size_t length = 0;
 	unsigned char *data;
 	unsigned int width, height;
-	FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
-	lodepng_decode24(&data, &width, &height, fileIn, length);
-	FILESYSTEM_freeMemory(&fileIn);
+	lodepng_decode24(&data, &width, &height, v6cord_png, v6cord_png_size);
 	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(
 		data,
 		width,

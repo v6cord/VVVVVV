@@ -53,6 +53,24 @@ IF(NOT WIN32)
 	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 ENDIF()
 
+# Creates C resources file from files in given directory
+function(create_resource bin output)
+    # Create empty output file
+    file(WRITE ${output} "")
+    # Get short filename
+    string(REGEX MATCH "([^/]+)$" filename ${bin})
+    # Replace filename spaces & extension separator for C compatibility
+    string(REGEX REPLACE "\\.| |-" "_" filename ${filename})
+    # Read hex data from file
+    file(READ ${bin} filedata HEX)
+    # Convert hex data for C compatibility
+    string(REGEX REPLACE "([0-9a-f][0-9a-f])" "0x\\1," filedata ${filedata})
+    # Append data to output file
+    file(APPEND ${output} "const unsigned char ${filename}[] = {${filedata}};\nconst unsigned ${filename}_size = sizeof(${filename});\n")
+endfunction()
+
+create_resource(${CMAKE_SOURCE_DIR}/v6cord.png ${CMAKE_BINARY_DIR}/v6cord.png.c)
+
 # Include Directories
 INCLUDE_DIRECTORIES(
 	src
@@ -99,6 +117,7 @@ SET(VVV_SRC
 	src/Network.c
 	src/SteamNetwork.c
 	src/GOGNetwork.c
+        ${CMAKE_BINARY_DIR}/v6cord.png.c
 )
 SET(XML_SRC
 	../third_party/tinyxml/tinystr.cpp
