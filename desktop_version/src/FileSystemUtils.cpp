@@ -116,6 +116,16 @@ char *FILESYSTEM_getUserLevelDirectory()
 	return levelDir;
 }
 
+bool FILESYSTEM_directoryExists(const char *fname)
+{
+    return PHYSFS_exists(fname);
+}
+
+void FILESYSTEM_mount(const char *fname)
+{
+    PHYSFS_mount(fname, NULL, 1);
+}
+
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *len)
 {
 	PHYSFS_File *handle = PHYSFS_openRead(name);

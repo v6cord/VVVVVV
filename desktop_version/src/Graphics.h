@@ -192,6 +192,8 @@ public:
 
 	void setcol(int t, UtilityClass& help);
 	void drawfinalmap(mapclass & map);
+    
+    void reloadresources();
 
 	colourTransform ct;
 
@@ -281,6 +283,7 @@ public:
 
         std::map<int, int> font_positions;
         std::optional<std::string> mapimage;
+
 };
 
 #endif /* GRAPHICS_H */
