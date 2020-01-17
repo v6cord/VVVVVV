@@ -157,6 +157,8 @@ growing_vector<std::string> changelog = {
     "  palette swap",
     "- reloadscriptboxes() - Reload script",
     "  boxes without affecting entities",
+    "- puntilbars() - untilbars() with pdelay",
+    "- puntilfade() - untilfade() with pdelay",
 
 };
 
