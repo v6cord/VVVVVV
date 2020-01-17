@@ -694,6 +694,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             game.noflip = false;
                         }
+                        if (words[0] == "enableinfiniflip")
+                        {
+                            game.infiniflip = true;
+                        }
+                        if (words[0] == "disableinfiniflip")
+                        {
+                            game.infiniflip = false;
+                        }
                         if (words[0] == "setspeed")
                         {
                             game.playerspeed = std::stoi(words[1]);
