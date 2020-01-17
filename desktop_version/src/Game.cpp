@@ -5422,6 +5422,18 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             infiniflip = atoi(pText);
         }
+        else if (pKey == "customtracks")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                for(auto iter = values.begin(); iter < values.end(); iter += 2)
+                {
+                    music.playfile(iter[1].c_str(), iter[0]);
+                }
+            }
+        }
 
     }
 
