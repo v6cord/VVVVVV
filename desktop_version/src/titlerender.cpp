@@ -422,13 +422,13 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         }
         else if (game.currentmenuname == "credits_ce")
         {
-            dwgfx.Print( -1, 50, "VVVVVV: Community Edition has", tr, tg, tb, true);
-            dwgfx.Print( -1, 65, "accepted contributions from:", tr, tg, tb, true);
-            dwgfx.bigprint( -1, 80, "Info Teddy", tr, tg, tb, true, 2);
-            dwgfx.bigprint( -1, 110, "AllyTally",  tr, tg, tb, true, 2);
-            dwgfx.bigprint( -1, 140, "leo60228",  tr, tg, tb, true, 2);
-            dwgfx.bigprint( -1, 170, "FIQ",  tr, tg, tb, true, 2);
-            dwgfx.bigprint( -1, 200, "Stelpjo",  tr, tg, tb, true, 2);
+            dwgfx.Print( -1, 30, "VVVVVV: Community Edition has", tr, tg, tb, true);
+            dwgfx.Print( -1, 45, "accepted contributions from:", tr, tg, tb, true);
+            dwgfx.bigprint( -1, 60, "Info Teddy", tr, tg, tb, true, 2);
+            dwgfx.bigprint( -1, 90, "AllyTally",  tr, tg, tb, true, 2);
+            dwgfx.bigprint( -1, 120, "leo60228",  tr, tg, tb, true, 2);
+            dwgfx.bigprint( -1, 150, "FIQ",  tr, tg, tb, true, 2);
+            dwgfx.bigprint( -1, 180, "Stelpjo",  tr, tg, tb, true, 2);
         }
         else if (game.currentmenuname == "credits2")
         {
