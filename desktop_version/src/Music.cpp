@@ -369,6 +369,9 @@ void musicclass::processmusicfadein()
 {
 	musicVolume += FadeVolAmountPerFrame;
 	Mix_VolumeMusic(musicVolume);
+        for (auto&& [id, channel] : custom_file_channels) {
+            Mix_Volume(channel, musicVolume);
+        }
 	if (musicVolume >= MIX_MAX_VOLUME)
 	{
 		m_doFadeInVol = false;
