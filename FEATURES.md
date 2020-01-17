@@ -124,3 +124,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `puntilfade()` - `untilfade()` with `pdelay()`
 
 - You can now use the Warp Zone gray tileset in the editor
+
+- `disableflip` - disables flipping
+
+- `enableflip` - enables flipping

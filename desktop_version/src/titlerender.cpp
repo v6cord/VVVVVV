@@ -161,6 +161,8 @@ growing_vector<std::string> changelog = {
     "- puntilfade() - untilfade() with pdelay",
     "- You can now use the Warp Zone gray",
     "  tileset in the editor",
+    "- disableflip - disables flipping",
+    "- enableflip - enables flipping",
 
 };
 
