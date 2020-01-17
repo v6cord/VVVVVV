@@ -166,6 +166,9 @@ growing_vector<std::string> changelog = {
     "  mid-air",
     "- disableinfiniflip - disables flipping",
     "  in mid-air",
+    "- untilmusic() - wait until the current",
+    "  track has finished fading in or out",
+    "- puntilmusic() - untilmusic with pdelay",
 
 };
 

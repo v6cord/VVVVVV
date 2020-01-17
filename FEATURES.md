@@ -132,3 +132,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `enableinfiniflip` - enables flipping in mid-air
 
 - `disableinfiniflip` - disables flipping in mid-air
+
+- `untilmusic()` - wait until the current track has finished fading in or out
+
+- `puntilmusic()` - `untilmusic()` with `pdelay()`
