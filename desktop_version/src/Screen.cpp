@@ -4,6 +4,8 @@
 #include "GraphicsUtil.h"
 
 #include <stdlib.h>
+#include <cstring>
+#include <physfs.h>
 
 // Used to create the window icon
 extern "C"
@@ -46,9 +48,19 @@ Screen::Screen()
 	);
 	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
+	unsigned char *fileIn = (unsigned char*) v6cord_png;
+	size_t length = v6cord_png_size;
 	unsigned char *data;
 	unsigned int width, height;
-	lodepng_decode24(&data, &width, &height, v6cord_png, v6cord_png_size);
+        auto realPath = PHYSFS_getRealDir("VVVVVV.png");
+        if (realPath) {
+            auto end = strrchr(realPath, 'd');
+            if (!end || (end && strcmp(end, "data.zip") != 0)) {
+                FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
+            }
+        }
+	lodepng_decode24(&data, &width, &height, fileIn, length);
+	if (fileIn != v6cord_png) FILESYSTEM_freeMemory(&fileIn);
 	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(
 		data,
 		width,
