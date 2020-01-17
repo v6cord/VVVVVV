@@ -3251,7 +3251,7 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     {
                         game.state = 1000;
                         //music.haltdasmusik();
-                        if(music.currentsong!=-1) music.silencedasmusik();
+                        music.silencedasmusik();
                         music.playef(3,10);
                         collect[entities[i].para] = 1;
                         if (game.trinkets > game.stat_trinkets)
