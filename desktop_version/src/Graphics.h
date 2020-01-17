@@ -3,7 +3,7 @@
 
 #include "GraphicsResources.h"
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 
 
@@ -281,7 +281,7 @@ public:
 
 	int warpskip, warpfcol, warpbcol = 0;
 
-        std::map<int, int> font_positions;
+        std::unordered_map<int, int> font_positions;
         std::optional<std::string> mapimage;
 
 };

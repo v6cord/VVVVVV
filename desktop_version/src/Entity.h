@@ -8,7 +8,7 @@
 #include <vector>
 #include "Game.h"
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #define		rn( rx,  ry) ((rx) + ((ry) * 100))
 
@@ -246,7 +246,7 @@ public:
     std::string customscript;
     int customcrewmoods[6] = {0};
 
-    std::map<std::string, int> named_crewmen;
+    std::unordered_map<std::string, int> named_crewmen;
 
     growing_vector<blockclass> resurrectblocks;
     int nresurrectblocks = 0;

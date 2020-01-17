@@ -128,7 +128,7 @@ Graphics::Graphics()
 
 int Graphics::font_idx(char32_t ch) {
     if (font_positions.size() > 0) {
-        std::map<int, int>::iterator iter = font_positions.find(ch);
+        auto iter = font_positions.find(ch);
         if (iter == font_positions.end()) {
             return font_positions.at('?');
         } else {

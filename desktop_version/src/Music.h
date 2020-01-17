@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #define musicroom(rx, ry) ((rx) + ((ry) * 20))
 
@@ -70,8 +70,8 @@ public:
 
         bool muted = false;
 
-        std::map<std::string, SoundTrack> custom_files;
-        std::map<std::string, int> custom_file_channels;
+        std::unordered_map<std::string, SoundTrack> custom_files;
+        std::unordered_map<std::string, int> custom_file_channels;
 };
 
 
