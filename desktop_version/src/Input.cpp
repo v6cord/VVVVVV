@@ -2,8 +2,6 @@
 
 #include "MakeAndPlay.h"
 
-#include "tinyxml.h"
-
 #include "FileSystemUtils.h"
 
 // Found in titlerender.cpp

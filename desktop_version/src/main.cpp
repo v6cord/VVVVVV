@@ -260,8 +260,7 @@ int main(int argc, char *argv[])
         game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
         game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
         std::string name = game.saveFilePath + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
-        TiXmlDocument doc(name.c_str());
-	    game.mainmenu = 22;
+        game.mainmenu = 22;
         ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, graphics);
         ed.findstartpoint(game);
         game.gamestate = GAMEMODE;

@@ -10,8 +10,6 @@
 #include <SDL.h>
 #include <physfs.h>
 
-#include "tinyxml.h"
-
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>

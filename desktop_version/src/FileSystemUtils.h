@@ -3,11 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <pugixml.hpp>
 #include "Game.h"
-
-#include "tinyxml.h"
-
-#include "tinyxml.h"
 
 int FILESYSTEM_init(char *argvZero);
 void FILESYSTEM_deinit();
@@ -19,8 +16,8 @@ bool FILESYSTEM_directoryExists(const char *fname);
 void FILESYSTEM_mount(const char *fname);
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *len);
 void FILESYSTEM_freeMemory(unsigned char **mem);
-bool FILESYSTEM_saveTiXmlDocument(const char *name, TiXmlDocument *doc);
-bool FILESYSTEM_loadTiXmlDocument(const char *name, TiXmlDocument *doc);
+bool FILESYSTEM_saveXmlDocument(const char *name, pugi::xml_document *doc);
+bool FILESYSTEM_loadXmlDocument(const char *name, pugi::xml_document *doc);
 
 growing_vector<std::string> FILESYSTEM_getLevelDirFileNames();
 

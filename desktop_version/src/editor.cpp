@@ -9,8 +9,6 @@
 //#include "UtilityClass.h"
 #include "time.h"
 
-#include "tinyxml.h"
-
 #include "Enums.h"
 
 #include "FileSystemUtils.h"
