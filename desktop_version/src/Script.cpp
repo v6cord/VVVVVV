@@ -1846,6 +1846,15 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			else if (words[0] == "untilmusic" || words[0] == "puntilmusic")
+			{
+				if (Mix_FadingMusic() != MIX_NO_FADING)
+				{
+					scriptdelay = 1;
+					if (words[0] == "puntilmusic") passive = true;
+					position--;
+				}
+			}
 			else if (words[0] == "entersecretlab")
 			{
 				game.unlock[8] = true;
