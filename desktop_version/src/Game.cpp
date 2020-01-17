@@ -1998,7 +1998,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             completestop = false;
             state = 0;
             //music.play(music.resumesong);
-            if(!muted && music.currentsong>-1) music.fadeMusicVolumeIn(3000);
+            if(!muted) music.fadeMusicVolumeIn(3000);
             dwgfx.showcutscenebars = false;
             break;
 
