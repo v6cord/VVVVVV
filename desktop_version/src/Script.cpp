@@ -786,13 +786,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				dwgfx.showcutscenebars = false;
 			}
-			if (words[0] == "untilbars")
+			if (words[0] == "untilbars" || words[0] == "puntilbars")
 			{
 				if (dwgfx.showcutscenebars)
 				{
 					if (dwgfx.cutscenebarspos < 360)
 					{
 						scriptdelay = 1;
+						if (words[0] == "puntilbars") passive = true;
 						position--;
 					}
 				}
@@ -801,6 +802,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					if (dwgfx.cutscenebarspos > 0)
 					{
 						scriptdelay = 1;
+						if (words[0] == "puntilbars") passive = true;
 						position--;
 					}
 				}
@@ -1836,11 +1838,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				dwgfx.fademode = 2;
 			}
-			else if (words[0] == "untilfade")
+			else if (words[0] == "untilfade" || words[0] == "puntilfade")
 			{
 				if (dwgfx.fademode>1)
 				{
 					scriptdelay = 1;
+					if (words[0] == "puntilfade") passive = true;
 					position--;
 				}
 			}
