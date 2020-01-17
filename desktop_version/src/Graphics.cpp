@@ -3229,5 +3229,33 @@ bool Graphics::onscreen(int t)
 }
 
 void Graphics::reloadresources() {
-    GraphicsResources grphx();
+    grphx = GraphicsResources();
+
+    images.clear();
+    tiles.clear();
+    tiles2.clear();
+    tiles3.clear();
+    entcolours.clear();
+    sprites.clear();
+    flipsprites.clear();
+    tele.clear();
+
+    MakeTileArray();
+    MakeSpriteArray();
+    maketelearray();
+
+    images.push_back(grphx.im_image0);
+    images.push_back(grphx.im_image1);
+    images.push_back(grphx.im_image2);
+    images.push_back(grphx.im_image3);
+    images.push_back(grphx.im_image4);
+    images.push_back(grphx.im_image5);
+    images.push_back(grphx.im_image6);
+
+    images.push_back(grphx.im_image7);
+    images.push_back(grphx.im_image8);
+    images.push_back(grphx.im_image9);
+    images.push_back(grphx.im_image10);
+    images.push_back(grphx.im_image11);
+    images.push_back(grphx.im_image12);
 }
