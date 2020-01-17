@@ -2224,7 +2224,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (game.jumppressed > 0)
                 {
                     game.jumppressed--;
-                    if (obj.entities[ie].onground>0 && game.gravitycontrol == 0)
+                    if (obj.entities[ie].onground>0 && game.gravitycontrol == 0 && !game.noflip)
                     {
                         game.gravitycontrol = 1;
                         obj.entities[ie].vy = -4;
@@ -2233,7 +2233,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         game.jumppressed = 0;
                         game.totalflips++;
                     }
-                    if (obj.entities[ie].onroof>0 && game.gravitycontrol == 1)
+                    if (obj.entities[ie].onroof>0 && game.gravitycontrol == 1 && !game.noflip)
                     {
                         game.gravitycontrol = 0;
                         obj.entities[ie].vy = 4;

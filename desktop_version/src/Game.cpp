@@ -396,6 +396,8 @@ Game::Game(void):
     //updatestate(dwgfx, map, obj, help, music);
 
     skipfakeload = false;
+
+    noflip = false;
 }
 
 Game::~Game(void)

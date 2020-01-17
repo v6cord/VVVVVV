@@ -368,6 +368,8 @@ public:
 
     int playerspeed = 3;
     bool nofriction;
+
+    bool noflip;
 };
 
 #endif /* GAME_H */
