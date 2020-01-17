@@ -612,8 +612,9 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             {
                 //TODO: }else if (map.finallevel && map.finalstretch && obj.entities[i].type == 2) {
                 //for the final level. probably something 99% of players won't see.
-                while (obj.entities[i].state == 2) obj.updateentities(i, help, game, music);
-                obj.entities[i].state = 4;
+                // Don't know what this code here is for, but the visual glitch is fixed if I comment it out -Info Teddy
+                //while (obj.entities[i].state == 2) obj.updateentities(i, help, game, music);
+                //obj.entities[i].state = 4;
             }
             else if (obj.entities[i].type == 23 && game.swnmode && game.deathseq<15)
             {

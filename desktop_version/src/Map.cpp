@@ -537,19 +537,30 @@ void mapclass::changefinalcol(int t, entityclass& obj, Game& game)
 		{
 			if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) //treadmill
 			{
-				if(temp<3)
-				{
-					obj.entities[i].tile = 907 + (temp * 80);
+				if (custommode) {
+					obj.entities[i].tile = 568 + (temp * 12);
+				} else {
+					if(temp<3)
+					{
+						obj.entities[i].tile = 907 + (temp * 80);
+					}
+					else
+					{
+						obj.entities[i].tile = 911 + ((temp-3) * 80);
+					}
 				}
-				else
-				{
-					obj.entities[i].tile = 911 + ((temp-3) * 80);
+				if (custommode) {
+					if(obj.entities[i].animate == 10)	obj.entities[i].tile += 4;
+				} else {
+					if(obj.entities[i].animate == 10)	obj.entities[i].tile += 40;
 				}
-				if(obj.entities[i].animate == 10)	obj.entities[i].tile += 40;
 			}
 			else if (obj.entities[i].isplatform)
 			{
-				obj.entities[i].tile = 915+(temp*40);
+				if (custommode)
+					obj.entities[i].tile = 564+(temp*12);
+				else
+					obj.entities[i].tile = 915+(temp*40);
 			}
 			else	//just an enemy
 			{
@@ -558,7 +569,20 @@ void mapclass::changefinalcol(int t, entityclass& obj, Game& game)
 		}
 		else if (obj.entities[i].type == 2)	//disappearing platforms
 		{
-			obj.entities[i].tile = 915+(temp*40);
+			if (custommode) {
+				if (obj.entities[i].state == 3)
+					// It's disappeared, so its tile is offset, so we have to correct for that offset
+					obj.entities[i].tile = 568+(temp*12);
+				else
+					// Normal
+					obj.entities[i].tile = 564+(temp*12);
+
+				if (obj.entities[i].state == 5)
+					// Extra kludge for when it respawns
+					obj.entities[i].tile += 3 - obj.entities[i].life/3;
+			} else {
+				obj.entities[i].tile = 915+(temp*40);
+			}
 		}
 	}
 }
@@ -829,6 +853,9 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 	if (game.roomx != game.saverx || game.roomy != game.savery)
 	{
 		gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+		// If in finalstretch, update the colors of entities immediately
+		if (custommode && finalstretch)
+			changefinalcol(final_mapcol, obj, game);
 	}
 
 	game.deathseq = -1;
