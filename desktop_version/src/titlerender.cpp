@@ -159,6 +159,8 @@ growing_vector<std::string> changelog = {
     "  boxes without affecting entities",
     "- puntilbars() - untilbars() with pdelay",
     "- puntilfade() - untilfade() with pdelay",
+    "- You can now use the Warp Zone gray",
+    "  tileset in the editor",
 
 };
 

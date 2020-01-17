@@ -122,3 +122,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `puntilbars()` - `untilbars()` with `pdelay()`
 
 - `puntilfade()` - `untilfade()` with `pdelay()`
+
+- You can now use the Warp Zone gray tileset in the editor
