@@ -5,7 +5,7 @@
 
 struct colourTransform
 {
-    Uint32 colour;
+    Uint32 colour = 0;
 };
 
 

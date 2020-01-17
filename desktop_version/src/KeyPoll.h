@@ -34,15 +34,15 @@ class KeyPoll
 public:
 	std::map<SDL_Keycode, bool> keymap;
 
-	bool isActive;
+	bool isActive = false;
 
-	bool resetWindow;
+	bool resetWindow = false;
 
-	bool escapeWasPressedPreviously;
-	bool quitProgram;
-	bool toggleFullscreen;
+	bool escapeWasPressedPreviously = false;
+	bool quitProgram = false;
+	bool toggleFullscreen = false;
 
-	int sensitivity;
+	int sensitivity = 0;
 
 	void setSensitivity(int _value);
 
@@ -64,20 +64,20 @@ public:
 	bool controllerWantsLeft(bool includeVert);
 	bool controllerWantsRight(bool includeVert);
 
-	int leftbutton, rightbutton, middlebutton;
-	int mx, my;
+	int leftbutton, rightbutton, middlebutton = 0;
+	int mx, my = 0;
 
-	bool textentrymode;
-	int keyentered, keybufferlen;
-	bool pressedbackspace;
+	bool textentrymode = false;
+	int keyentered, keybufferlen = 0;
+	bool pressedbackspace = false;
 	std::string keybuffer;
 
 private:
 	std::map<SDL_JoystickID, SDL_GameController*> controllers;
 	std::map<SDL_GameControllerButton, bool> buttonmap;
-	int xVel, yVel;
-	bool useFullscreenSpaces;
-	Uint32 wasFullscreen;
+	int xVel, yVel = 0;
+	bool useFullscreenSpaces = false;
+	Uint32 wasFullscreen = 0;
 };
 
 

@@ -7,14 +7,14 @@
 
 // Script drawing stuff
 struct scriptimage {
-    int type; // 0 for text, 1 for image
-    int x;
-    int y;
-    int r;
-    int g;
-    int b;
+    int type = 0; // 0 for text, 1 for image
+    int x = 0;
+    int y = 0;
+    int r = 0;
+    int g = 0;
+    int b = 0;
     std::string text;
-    bool center;
+    bool center = false;
 };
 
 template<typename T>
@@ -70,12 +70,12 @@ public:
 
     void updateglow();
 
-    int glow;
-    int slowsine;
-    int glowdir;
-    int globaltemp;
-    int temp;
-    int temp2;
+    int glow = 0;
+    int slowsine = 0;
+    int glowdir = 0;
+    int globaltemp = 0;
+    int temp = 0;
+    int temp2 = 0;
     std::string tempstring;
     growing_vector<int> splitseconds;
 };

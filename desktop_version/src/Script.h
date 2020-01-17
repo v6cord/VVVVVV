@@ -52,30 +52,30 @@ public:
     growing_vector<std::string> words;
     growing_vector<std::string> txt;
     std::string scriptname;
-    int position, scriptlength;
-    int looppoint, loopcount;
+    int position, scriptlength = 0;
+    int looppoint, loopcount = 0;
 
-    int scriptdelay;
-    bool running;
-    bool passive;
+    int scriptdelay = 0;
+    bool running = false;
+    bool passive = false;
     std::string tempword;
     std::string currentletter;
 
     //Textbox stuff
-    int textx;
-    int texty;
-    int r,g,b;
-    int txtnumlines;
+    int textx = 0;
+    int texty = 0;
+    int r,g,b = 0;
+    int txtnumlines = 0;
 
     //Misc
-    int i, j, k;
+    int i, j, k = 0;
 
     //Custom level stuff
      growing_vector <std::string>  customscript;
 
     growing_vector<scriptimage> scriptrender;
 
-    bool loopdelay;
+    bool loopdelay = false;
 };
 
 #endif /* SCRIPT_H */

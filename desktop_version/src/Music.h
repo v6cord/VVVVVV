@@ -32,8 +32,8 @@ public:
 	// public var musicchannel:SoundChannel, musicchannel2:SoundChannel;
 	// public var currentmusicchan:int, musicchanlen:int, musicchancur:int, musicstopother:int, resumesong:int;
 	// public var currentsong:int, musicfade:int, musicfadein:int;
-	int currentsong, musicfade, musicfadein;
-	int resumesong;
+	int currentsong, musicfade, musicfadein = 0;
+	int resumesong = false;
 
 	//public var nicefade:int, nicechange:int;
 
@@ -48,27 +48,27 @@ public:
         std::vector<SoundTrack> soundTracks;
         std::vector<MusicTrack> musicTracks;
 	SoundSystem soundSystem;
-	bool safeToProcessMusic;
+	bool safeToProcessMusic = true;
 
-	int nicechange;
-	int nicefade;
+	int nicechange = 0;
+	int nicefade = 0;
 
-	bool m_doFadeInVol;
-	int FadeVolAmountPerFrame;
-	int musicVolume;
+	bool m_doFadeInVol = false;
+	int FadeVolAmountPerFrame = 0;
+	int musicVolume = 0;
 
-	float volume;
+	float volume = 1.0;
 
-	bool custompd;
+	bool custompd = false;
 
-	int fadeoutqueuesong; // -1 if no song queued
-	bool dontquickfade;
+	int fadeoutqueuesong = -1; // -1 if no song queued
+	bool dontquickfade = false;
 
 	// MMMMMM mod settings
-	bool mmmmmm;
-	bool usingmmmmmm;
+	bool mmmmmm = false;
+	bool usingmmmmmm = false;
 
-        bool muted;
+        bool muted = false;
 
         std::map<std::string, SoundTrack> custom_files;
         std::map<std::string, int> custom_file_channels;

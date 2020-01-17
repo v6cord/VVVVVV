@@ -37,18 +37,18 @@ public:
 public:
     //Fundamentals
     growing_vector<std::string> line;
-    int xp, yp, lw, w, h, numlines;
-    int x,y;
-    int r,g,b;
-    int tr,tg,tb;
-    SDL_Rect textrect;
-    bool active;
-    int timer;
+    int xp, yp, lw, w, h, numlines = 0;
+    int x,y = 0;
+    int r,g,b = 0;
+    int tr,tg,tb = 0;
+    SDL_Rect textrect = {0};
+    bool active = false;
+    int timer = 0;
 
-    float tl;
-    int tm;
+    float tl = 0.0;
+    int tm = 0;
 
-    int max;
+    int max = 0;
 
 };
 

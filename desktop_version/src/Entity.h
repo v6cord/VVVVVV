@@ -198,24 +198,24 @@ public:
 
     growing_vector<entclass> entities;
 
-    int nentity;
+    int nentity = 0;
 
     growing_vector<entclass> linecrosskludge;
-    int nlinecrosskludge;
+    int nlinecrosskludge = 0;
 
-    point colpoint1, colpoint2;
+    point colpoint1, colpoint2 = {0};
 
-    int tempx, tempy, tempw, temph, temp, temp2;
+    int tempx, tempy, tempw, temph, temp, temp2 = 0;
     //public var tempx:int, tempy:int, tempw:int, temph:int, temp:int, temp2:int;
-    int tpx1, tpy1, tpx2, tpy2;
+    int tpx1, tpy1, tpx2, tpy2 = 0;
 
-    SDL_Rect temprect, temprect2;
+    SDL_Rect temprect, temprect2 = {0};
 
-    int x, k;
-    float dx, dy, dr;
+    int x, k = 0;
+    float dx, dy, dr = 0.0;
 
-    int px, py, linetemp;
-    int activetrigger;
+    int px, py, linetemp = 0;
+    int activetrigger = 0;
 
 
     growing_vector<blockclass> blocks;
@@ -223,33 +223,33 @@ public:
     growing_vector<int> collect;
     growing_vector<int> customcollect;
 
-    int nblocks;
-    bool skipblocks, skipdirblocks;
+    int nblocks = 0;
+    bool skipblocks, skipdirblocks = false;
 
-    int platformtile;
-    bool vertplatforms, horplatforms;
+    int platformtile = 0;
+    bool vertplatforms, horplatforms = false;
 
     // :(
-    bool nearelephant, upsetmode;
-    int upset;
+    bool nearelephant, upsetmode = false;
+    int upset = 0;
 
     //Trophy Text
-    int trophytext, trophytype;
+    int trophytext, trophytype = 0;
 
     //Secret lab scripts
-    int altstates;
+    int altstates = 0;
 
     //Custom stuff
-    int customenemy;
-    int customplatformtile;
-    bool customwarpmode, customwarpmodevon, customwarpmodehon;
+    int customenemy = 0;
+    int customplatformtile = 0;
+    bool customwarpmode, customwarpmodevon, customwarpmodehon = false;
     std::string customscript;
-    int customcrewmoods[6];
+    int customcrewmoods[6] = {0};
 
     std::map<std::string, int> named_crewmen;
 
     growing_vector<blockclass> resurrectblocks;
-    int nresurrectblocks;
+    int nresurrectblocks = 0;
 };
 
 #endif /* ENTITY_H */

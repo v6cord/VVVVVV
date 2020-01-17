@@ -21,11 +21,11 @@ public:
 	void toggleStretchMode();
 	void toggleLinearFilter();
 
-	bool isWindowed;
-	bool isFiltered;
-	bool badSignalEffect;
-	bool glScreen;
-	int stretchMode;
+	bool isWindowed = false;
+	bool isFiltered = false;
+	bool badSignalEffect = false;
+	bool glScreen = false;
+	int stretchMode = 0;
 
 	SDL_Window *m_window;
 	SDL_Renderer *m_renderer;

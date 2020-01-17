@@ -195,15 +195,15 @@ public:
     
     void reloadresources();
 
-	colourTransform ct;
+	colourTransform ct = {0};
 
 	std::string tempstring;
 
-	int bcol, bcol2, rcol;
+	int bcol, bcol2, rcol = 0;
 
 
 
-	int j, k, m;
+	int j, k, m = 0;
 
 	std::vector <SDL_Surface*> backgrounds;
 	std::vector <SDL_Surface*> images;
@@ -220,9 +220,9 @@ public:
 	std::vector <SDL_Surface*> flipbfont;
 	std::vector <SDL_Surface*> flipbfontmask;
 
-	bool flipmode;
-	bool setflipmode;
-	point tl;
+	bool flipmode = false;
+	bool setflipmode = false;
+	point tl = {0};
 	//buffer objects. //TODO refactor buffer objects
 	SDL_Surface* backBuffer;
 	Screen* screenbuffer;
@@ -231,55 +231,55 @@ public:
 	SDL_Surface* foregroundBuffer;
 	SDL_Surface* tempBuffer;
 
-	SDL_Rect bfont_rect;
-	SDL_Rect tiles_rect;
-	SDL_Rect sprites_rect;
-	SDL_Rect bfontmask_rect;
-	SDL_Rect images_rect;
-	SDL_Rect bg_rect;
-	SDL_Rect line_rect;
-	SDL_Rect tele_rect;
+	SDL_Rect bfont_rect = {0};
+ 	SDL_Rect tiles_rect = {0};
+	SDL_Rect sprites_rect = {0};
+	SDL_Rect bfontmask_rect = {0};
+	SDL_Rect images_rect = {0};
+	SDL_Rect bg_rect = {0};
+	SDL_Rect line_rect = {0};
+	SDL_Rect tele_rect = {0};
 
-	SDL_Rect foot_rect;
-	SDL_Rect prect;
-	SDL_Rect footerrect;
+	SDL_Rect foot_rect = {0};
+	SDL_Rect prect = {0};
+	SDL_Rect footerrect = {0};
 
-	int linestate, linedelay;
-	int backoffset;
-	bool backgrounddrawn, foregrounddrawn;
+	int linestate, linedelay = 0;
+	int backoffset = 0;
+	bool backgrounddrawn, foregrounddrawn = false;
 
-	int menuoffset;
-	bool resumegamemode;
+	int menuoffset = 0;
+	bool resumegamemode = false;
 
-	SDL_Rect warprect;
+	SDL_Rect warprect = {0};
 
-	int crewframe;
-	int crewframedelay;
+	int crewframe = 0;
+	int crewframedelay = 0;
 
-	int fademode;
-	int fadeamount;
+	int fademode = 0;
+	int fadeamount = 0;
 	std::vector <int> fadebars;
 
-	bool trinketcolset;
-	int trinketr, trinketg, trinketb;
+	bool trinketcolset = false;
+	int trinketr, trinketg, trinketb = 0;
 
 	std::vector <textboxclass> textbox;
-	int ntextbox;
+	int ntextbox = 0;
 
-	bool showcutscenebars;
-	int cutscenebarspos;
+	bool showcutscenebars = false;
+	int cutscenebarspos = 0;
 
 	std::vector<SDL_Rect> stars;
 	std::vector<int> starsspeed;
 
-	int spcol, spcoldel;
+	int spcol, spcoldel = 0;
 	std::vector<SDL_Rect> backboxes;
 	std::vector<int> backboxvx;
 	std::vector<int> backboxvy;
 	std::vector<float> backboxint;
 	SDL_Rect backboxrect;
 
-	int warpskip, warpfcol, warpbcol;
+	int warpskip, warpfcol, warpbcol = 0;
 
         std::map<int, int> font_positions;
         std::optional<std::string> mapimage;

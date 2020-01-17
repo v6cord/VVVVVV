@@ -14,9 +14,9 @@ class Graphics;
 class musicclass;
 
 struct scriptmarker {
-    int x;
-    int y;
-    int tile;
+    int x = 0;
+    int y = 0;
+    int tile = 0;
 };
 
 class Game
@@ -121,126 +121,126 @@ public:
 	std::string saveFilePath;
 
 
-    int door_left;
-    int door_right;
-    int door_up;
-    int door_down;
-    int roomx, roomy, roomchangedir;
-    int temp, j, k;
+    int door_left = 0;
+    int door_right = 0;
+    int door_up = 0;
+    int door_down = 0;
+    int roomx, roomy, roomchangedir = 0;
+    int temp, j, k = 0;
 
-    int savex, savey, saverx, savery;
-    int savegc, savedir;
+    int savex, savey, saverx, savery = 0;
+    int savegc, savedir = 0;
 
     //Added for port
-    int edsavex, edsavey, edsaverx, edsavery;
-    int edsavegc, edsavedir;
+    int edsavex, edsavey, edsaverx, edsavery = 0;
+    int edsavegc, edsavedir = 0;
 
     //State logic stuff
-    int state, statedelay;
+    int state, statedelay = 0;
 
-		bool glitchrunkludge;
+		bool glitchrunkludge = false;
 
-		int usingmmmmmm;
+		int usingmmmmmm = 0;
 
-    int gamestate;
-    bool hascontrol, jumpheld;
-    int jumppressed;
-    int gravitycontrol;
+    int gamestate = 0;
+    bool hascontrol, jumpheld = false;
+    int jumppressed = 0;
+    int gravitycontrol = 0;
 
-    bool infocus;
-    bool muted;
-    int mutebutton;
+    bool infocus = false;
+    bool muted = false;
+    int mutebutton = 0;
 	private:
-    float m_globalVol;
+    float m_globalVol = 0.0;
 
 	public:
 
-    int tapleft, tapright;
+    int tapleft, tapright = 0;
 
     //Menu interaction stuff
-    bool mapheld;
-    int menupage;
+    bool mapheld = false;
+    int menupage = 0;
     //public var crewstats:Array = new Array();
-    int lastsaved;
-    int deathcounts;
-	int timerStartTime;
+    int lastsaved = 0;
+    int deathcounts = 0;
+	int timerStartTime = 0;
 
-    int frames, seconds, minutes, hours;
-    bool gamesaved;
+    int frames, seconds, minutes, hours = 0;
+    bool gamesaved = false;
     std::string savetime;
     std::string savearea;
-    int savetrinkets;
-    bool startscript;
+    int savetrinkets = 0;
+    bool startscript = false;
     std::string newscript;
 
-    int mainmenu;
-    bool menustart;
+    int mainmenu = 0;
+    bool menustart = false;
 
     unsigned changelogoffset = 0;
     int changelogkeydelay = 0;
 
     //Teleporting
-    bool teleport_to_new_area;
-    int teleport_to_x, teleport_to_y;
+    bool teleport_to_new_area = false;
+    int teleport_to_x, teleport_to_y = 0;
     std::string teleportscript;
-    bool useteleporter;
-    int teleport_to_teleporter;
+    bool useteleporter = false;
+    int teleport_to_teleporter = 0;
 
     //Main Menu Variables
     growing_vector<std::string> menuoptions;
     growing_vector<int> menuoptionsactive;
-    int nummenuoptions, currentmenuoption ;
+    int nummenuoptions, currentmenuoption = 0;
     std::string menuselection, currentmenuname, previousmenuname;
-    int menuxoff, menuyoff;
+    int menuxoff, menuyoff = 0;
 
-    int menucountdown;
+    int menucountdown = 0;
     std::string menudest;
 
-    int creditposx, creditposy, creditposdelay;
+    int creditposx, creditposy, creditposdelay = 0;
 
 
     //60 fps mode!
-    bool sfpsmode;
+    bool sfpsmode = false;
 
     //Sine Wave Ninja Minigame
-    bool swnmode;
-    int swngame, swnstate, swnstate2, swnstate3, swnstate4, swndelay, swndeaths;
-    int swntimer, swncolstate, swncoldelay;
-    int  swnrecord, swnbestrank, swnrank, swnmessage;
+    bool swnmode = false;
+    int swngame, swnstate, swnstate2, swnstate3, swnstate4, swndelay, swndeaths = 0;
+    int swntimer, swncolstate, swncoldelay = 0;
+    int  swnrecord, swnbestrank, swnrank, swnmessage = 0;
 
     //SuperCrewMate Stuff
-    bool supercrewmate, scmhurt, scmmoveme;
-    int scmprogress;
+    bool supercrewmate, scmhurt, scmmoveme = false;
+    int scmprogress = 0;
 
     //Accessibility Options
-    bool  colourblindmode;
-    bool noflashingmode;
-    int slowdown;
-    Uint32 gameframerate;
+    bool  colourblindmode = false;
+    bool noflashingmode = false;
+    int slowdown = 0;
+    Uint32 gameframerate = 0;
 
-    bool nodeathmode;
-    int gameoverdelay;
-    bool nocutscenes;
+    bool nodeathmode = false;
+    int gameoverdelay = 0;
+    bool nocutscenes = false;
 
     //Time Trials
-    bool intimetrial, timetrialparlost;
-    int timetrialcountdown, timetrialshinytarget, timetriallevel;
-    int timetrialpar, timetrialresulttime, timetrialrank;
+    bool intimetrial, timetrialparlost = false;
+    int timetrialcountdown, timetrialshinytarget, timetriallevel = 0;
+    int timetrialpar, timetrialresulttime, timetrialrank = 0;
 
-    int creditposition;
-    int creditmaxposition;
+    int creditposition = 0;
+    int creditmaxposition = 0;
     std::vector<const char*> superpatrons;
     std::vector<const char*> patrons;
     std::vector<const char*> githubfriends;
-    bool insecretlab;
+    bool insecretlab = false;
 
-    bool inintermission;
+    bool inintermission = false;
 
     growing_vector<int> crewstats;
 
-    bool alarmon;
-    int alarmdelay;
-    bool blackout;
+    bool alarmon = false;
+    int alarmdelay = 0;
+    bool blackout = false;
 
     growing_vector<int> tele_crewstats;
 
@@ -250,15 +250,15 @@ public:
     growing_vector<int> unlocknotify;
     growing_vector<int> temp_unlock;
     growing_vector<int> temp_unlocknotify;
-    int stat_trinkets;
-    bool fullscreen;
-    int bestgamedeaths;
+    int stat_trinkets = 0;
+    bool fullscreen = false;
+    int bestgamedeaths = 0;
 
-    bool stat_screenshakes;
-    bool stat_backgrounds;
-    bool stat_flipmode;
-    bool stat_invincibility;
-    int stat_slowdown;
+    bool stat_screenshakes = false;
+    bool stat_backgrounds = false;
+    bool stat_flipmode = false;
+    bool stat_invincibility = false;
+    int stat_slowdown = 0;
 
 
     growing_vector<int>besttimes;
@@ -266,88 +266,88 @@ public:
     growing_vector<int>bestlives;
     growing_vector<int> bestrank;
 
-    bool telecookieexists;
-    bool quickcookieexists;
+    bool telecookieexists = false;
+    bool quickcookieexists = false;
 
     std::string tele_gametime;
-    int tele_trinkets;
+    int tele_trinkets = 0;
     std::string tele_currentarea;
     std::string quick_gametime;
-    int quick_trinkets;
+    int quick_trinkets = 0;
     std::string quick_currentarea;
 
-    int mx, my;
-    int screenshake, flashlight;
-    bool test;
+    int mx, my = 0;
+    int screenshake, flashlight = 0;
+    bool test = false;
     std::string teststring, tempstring;
-    bool advancetext, pausescript;
+    bool advancetext, pausescript = false;
 
-    int deathseq, lifeseq;
+    int deathseq, lifeseq = 0;
 
-    int coins, trinkets, crewmates, trinkencollect;
-    int savepoint, teleport, teleportxpos;
-    int edteleportent;
-    bool completestop;
+    int coins, trinkets, crewmates, trinkencollect = 0;
+    int savepoint, teleport, teleportxpos = 0;
+    int edteleportent = 0;
+    bool completestop = false;
 
-    float inertia;
+    float inertia = 0.0;
 
-    int companion;
-    bool roomchange;
-    SDL_Rect teleblock;
-    bool activetele;
-    int readytotele;
-    int activity_r, activity_g, activity_b;
+    int companion = 0;
+    bool roomchange = false;
+    SDL_Rect teleblock = {0};
+    bool activetele = false;
+    int readytotele = 0;
+    int activity_r, activity_g, activity_b = 0;
     std::string activity_lastprompt;
 
     std::string telesummary, quicksummary, customquicksummary;
 
-    bool backgroundtext;
+    bool backgroundtext = false;
 
-    int activeactivity, act_fade;
+    int activeactivity, act_fade = 0;
 
-    bool press_left, press_right, press_action, press_map;
+    bool press_left, press_right, press_action, press_map = false;
 
     //Some stats:
-    int totalflips;
+    int totalflips = 0;
     std::string hardestroom;
-    int hardestroomdeaths, currentroomdeaths;
+    int hardestroomdeaths, currentroomdeaths = 0;
 
-    bool savemystats;
+    bool savemystats = false;
 
 
-    bool advanced_mode;
-    bool fullScreenEffect_badSignal;
-	bool useLinearFilter;
-	int stretchMode;
-	int controllerSensitivity;
+    bool advanced_mode = false;
+    bool fullScreenEffect_badSignal = false;
+	bool useLinearFilter = false;
+	int stretchMode = 0;
+	int controllerSensitivity = 0;
 
     //Screenrecording stuff, for beta/trailer
-    int recording;
+    int recording = 0;
     std::string recordstring;
-    bool combomode;
-    int combolen;
+    bool combomode = false;
+    int combolen = 0;
     std::string comboaction;
     std::string currentaction;
-    bool recordinit;
+    bool recordinit = false;
 
     growing_vector<int> playback;
-    int playbackpos;
-    int playbacksize;
-    int playmove;
-    int playcombo;
-    bool playbackfinished;
+    int playbackpos = 0;
+    int playbacksize = 0;
+    int playmove = 0;
+    int playcombo = 0;
+    bool playbackfinished = false;
 
-    bool menukludge;
-    bool quickrestartkludge;
+    bool menukludge = false;
+    bool quickrestartkludge = false;
 
-    bool paused;
-    int globalsound;
+    bool paused = false;
+    int globalsound = 0;
 
     //Custom stuff
     std::string customscript[50];
-    int customcol;
-    int levelpage;
-    int playcustomlevel;
+    int customcol = 0;
+    int levelpage = 0;
+    int playcustomlevel = 0;
     std::string customleveltitle;
     std::string customlevelfilename;
 
@@ -357,9 +357,9 @@ public:
     void updatecustomlevelstats(std::string clevel, int cscore);
 
     std::string customlevelstats[200]; //string array containing level filenames
-    int customlevelscore[200];//0 - not played, 1 - finished, 2 - all trinkets, 3 - finished, all trinkets
-    int numcustomlevelstats;
-    bool customlevelstatsloaded;
+    int customlevelscore[200] = {0};//0 - not played, 1 - finished, 2 - all trinkets, 3 - finished, all trinkets
+    int numcustomlevelstats = 0;
+    bool customlevelstatsloaded = false;
 
 
 	growing_vector<SDL_GameControllerButton> controllerButton_map;
@@ -367,14 +367,14 @@ public:
 	growing_vector<SDL_GameControllerButton> controllerButton_esc;
     growing_vector<scriptmarker> scriptmarkers;
 
-    bool hidemarkers;
-    bool skipfakeload;
+    bool hidemarkers = false;
+    bool skipfakeload = false;
 
     int playerspeed = 3;
-    bool nofriction;
+    bool nofriction = false;
 
-    bool noflip;
-    bool infiniflip;
+    bool noflip = false;
+    bool infiniflip = false;
 };
 
 #endif /* GAME_H */
