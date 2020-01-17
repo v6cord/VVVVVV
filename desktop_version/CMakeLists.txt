@@ -126,6 +126,8 @@ SET(PNG_SRC ../third_party/lodepng/lodepng.c)
 
 # Executable information
 IF(WIN32)
+        message(STATUS "Adding resources")
+        set(VVV_SRC ${VVV_SRC} "resources.rc")
 	ADD_EXECUTABLE(VVVVVV WIN32 ${VVV_SRC})
 ELSE()
 	ADD_EXECUTABLE(VVVVVV ${VVV_SRC})
