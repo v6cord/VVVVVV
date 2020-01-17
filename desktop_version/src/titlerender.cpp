@@ -163,6 +163,10 @@ growing_vector<std::string> changelog = {
     "  tileset in the editor",
     "- disableflip - disables flipping",
     "- enableflip - enables flipping",
+    "- enableinfiniflip - enables flipping in",
+    "  mid-air",
+    "- disableinfiniflip - disables flipping",
+    "  in mid-air",
 
 };
 
