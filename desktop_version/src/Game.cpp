@@ -5323,6 +5323,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             noflip = atoi(pText);
         }
+        else if (pKey == "infiniflip")
+        {
+            infiniflip = atoi(pText);
+        }
 
     }
 
@@ -6331,6 +6335,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
     msg = new TiXmlElement( "noflip" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(noflip).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "infiniflip" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(infiniflip).c_str() ));
     msgs->LinkEndChild( msg );
 
     customquicksummary = summary;
