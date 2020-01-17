@@ -155,6 +155,8 @@ growing_vector<std::string> changelog = {
     "  palette swap",
     "- finalstretchoff - turn off Final Level",
     "  palette swap",
+    "- reloadscriptboxes() - Reload script",
+    "  boxes without affecting entities",
 
 };
 

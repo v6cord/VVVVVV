@@ -116,3 +116,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `finalstretchon` - turn on Final Level palette swap
 
 - `finalstretchoff` - turn off Final Level palette swap
+
+- `reloadscriptboxes()` - Reload script boxes without affecting entities
