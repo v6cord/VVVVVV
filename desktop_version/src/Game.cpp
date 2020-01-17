@@ -5318,6 +5318,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             playerspeed = atoi(pText);
         }
+        else if (pKey == "noflip")
+        {
+            noflip = atoi(pText);
+        }
 
     }
 
@@ -6322,6 +6326,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
     msg = new TiXmlElement( "playerspeed" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(playerspeed).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "noflip" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(noflip).c_str() ));
     msgs->LinkEndChild( msg );
 
     customquicksummary = summary;
