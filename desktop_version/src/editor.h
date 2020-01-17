@@ -4,10 +4,17 @@
 #include <vector>
 #include "Game.h"
 #include <string>
+#include <string_view>
 #include "Script.h"
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 
+std::string_view find_title(std::string_view buf);
+std::string_view find_desc1(std::string_view buf);
+std::string_view find_desc2(std::string_view buf);
+std::string_view find_desc3(std::string_view buf);
+std::string_view find_creator(std::string_view buf);
+std::string_view find_website(std::string_view buf);
 
 class edentities{
 public:

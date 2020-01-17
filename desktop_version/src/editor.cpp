@@ -16,6 +16,7 @@
 #include "FileSystemUtils.h"
 
 #include <string>
+#include <string_view>
 #include <utf8/checked.h>
 
 edlevelclass::edlevelclass()
@@ -5413,3 +5414,22 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         }
     }
 }
+
+std::string_view find_tag(std::string_view buf, std::string_view start, std::string_view end) {
+    auto title_tag = buf.find("<Title>");
+    auto title_start = title_tag + 7;
+    auto title_close = buf.find("</Title>", title_start);
+    auto title_len = title_close - title_start;
+    return buf.substr(title_start, title_len);
+}
+
+#define TAG_FINDER(NAME, TAG) std::string_view NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
+
+TAG_FINDER(find_title, "Title");
+TAG_FINDER(find_desc1, "Desc1");
+TAG_FINDER(find_desc2, "Desc2");
+TAG_FINDER(find_desc3, "Desc3");
+TAG_FINDER(find_creator, "Creator");
+TAG_FINDER(find_website, "website");
+
+#undef TAG_FINDER
