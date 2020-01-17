@@ -17,6 +17,8 @@
 
 #include <string>
 #include <string_view>
+#include <memory>
+#include <stdexcept>
 #include <utf8/checked.h>
 
 edlevelclass::edlevelclass()
@@ -121,28 +123,29 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
     unsigned char *uMem = NULL;
     FILESYSTEM_loadFileToMemory(_path.c_str(), &uMem, NULL);
 
-    auto mem = (char*) uMem;
-
-    if (mem == NULL)
+    if (uMem == NULL)
     {
         printf("Level %s not found :(\n", _path.c_str());
         return false;
     }
 
-    _data.timeCreated = find_created(mem);
-    _data.creator = find_creator(mem);
-    _data.title = find_title(mem);
-    _data.timeModified = find_modified(mem);
-    _data.modifier = find_modifiers(mem);
-    _data.Desc1 = find_desc1(mem);
-    _data.Desc2 = find_desc2(mem);
-    _data.Desc3 = find_desc3(mem);
-    _data.website = find_website(mem);
-    _data.filename = _path;
+    std::unique_ptr<char[]> mem((char*) uMem);
 
-    FILESYSTEM_freeMemory(&uMem);
-
-    return (_data.filename != "");
+    try {
+        _data.timeCreated = find_created(mem.get());
+        _data.creator = find_creator(mem.get());
+        _data.title = find_title(mem.get());
+        _data.timeModified = find_modified(mem.get());
+        _data.modifier = find_modifiers(mem.get());
+        _data.Desc1 = find_desc1(mem.get());
+        _data.Desc2 = find_desc2(mem.get());
+        _data.Desc3 = find_desc3(mem.get());
+        _data.website = find_website(mem.get());
+        _data.filename = _path;
+        return true;
+    } catch (const std::out_of_range& ex) {
+        return false;
+    }
 }
 
 void editorclass::reset()
