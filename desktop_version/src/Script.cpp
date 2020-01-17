@@ -1803,7 +1803,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "killplayer")
 			{
-				game.deathseq = 30;
+				if (game.deathseq <= 0)
+					game.deathseq = 30;
 			}
 			else if (words[0] == "teleportscript")
 			{
