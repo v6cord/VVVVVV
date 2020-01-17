@@ -6436,6 +6436,19 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(infiniflip).c_str() ));
     msgs->LinkEndChild( msg );
 
+    if (!music.custom_file_paths.empty()) {
+        std::string tracks;
+        for(auto&& [id, path] : music.custom_file_paths)
+        {
+            tracks += id + ",";
+            tracks += path + ",";
+        }
+        msg = new TiXmlElement( "customtracks" );
+        msg->LinkEndChild( new TiXmlText( tracks.c_str() ));
+        msgs->LinkEndChild( msg );
+    }
+
+
     customquicksummary = summary;
     //telecookie.flush();
     //telecookie.close();
