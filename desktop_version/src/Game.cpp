@@ -398,6 +398,7 @@ Game::Game(void):
     skipfakeload = false;
 
     noflip = false;
+    infiniflip = false;
 }
 
 Game::~Game(void)

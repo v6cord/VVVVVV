@@ -370,6 +370,7 @@ public:
     bool nofriction;
 
     bool noflip;
+    bool infiniflip;
 };
 
 #endif /* GAME_H */
