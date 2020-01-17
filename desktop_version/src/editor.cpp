@@ -5343,12 +5343,28 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     }
 }
 
-std::string_view find_tag(std::string_view buf, std::string_view start, std::string_view end) {
-    auto title_tag = buf.find("<Title>");
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty())
+        return;
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
+
+std::string find_tag(std::string_view buf, std::string_view start, std::string_view end) {
+    auto title_tag = buf.find(start);
     auto title_start = title_tag + 7;
-    auto title_close = buf.find("</Title>", title_start);
+    auto title_close = buf.find(end, title_start);
     auto title_len = title_close - title_start;
-    return buf.substr(title_start, title_len);
+    std::string value(buf.substr(title_start, title_len));
+    replaceAll(value, "&quot;", "\"");
+    replaceAll(value, "&amp;", "&");
+    replaceAll(value, "&apos;", "'");
+    replaceAll(value, "&lt;", "<");
+    replaceAll(value, "&gt;", ">");
+    return value;
 }
 
 #define TAG_FINDER(NAME, TAG) std::string_view NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
