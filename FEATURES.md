@@ -150,3 +150,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `customactivityzone(x,y,w,h,color,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, prompt goes on the next line
 
 - `customactivityzonergb(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, prompt goes on the next line
+
+- Fixed the 2-frame delay to execute a script when entering a room

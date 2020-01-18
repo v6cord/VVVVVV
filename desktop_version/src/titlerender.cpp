@@ -191,6 +191,8 @@ growing_vector<std::string> changelog = {
     "- customactivityzonergb(x,y,w,h,r,g,b,",
     "  script) - x,y,w,h in pixels, prompt",
     "  goes on the next line",
+    "- Fixed the 2-frame delay to execute a",
+    "  script when entering a room",
 
 };
 
