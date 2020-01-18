@@ -20,6 +20,7 @@
 #include <memory>
 #include <stdexcept>
 #include <utf8/checked.h>
+#include <physfs.h>
 
 edlevelclass::edlevelclass()
 {
@@ -1648,21 +1649,36 @@ void editorclass::countstuff()
 void editorclass::load(std::string& _path, Graphics& dwgfx)
 {
     reset();
-    
+
     //Here lies the code to load custom assets. Yeet
-    
+
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
     {
         _path = levelDir + _path;
     }
 
+    char** path = PHYSFS_getSearchPath();
+    char** i = path;
+    int len = 0;
+    while (*i != nullptr) {
+        i++;
+        len++;
+    }
+    i = path + 2;
+    len -= 2;
+    for (; len > 0; len--) {
+        printf("Unmounting %s\n", *i);
+        PHYSFS_unmount(*i);
+        i++;
+    }
+    PHYSFS_freeList(path);
+
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
     if (FILESYSTEM_directoryExists(dirpath.c_str())) {
         printf("Custom asset directory exists at %s\n",dirpath.c_str());
         FILESYSTEM_mount(dirpath.c_str());
         dwgfx.reloadresources();
-        
     } else {
         printf("Custom asset directory does not exist\n");
     }
