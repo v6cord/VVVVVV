@@ -158,7 +158,7 @@ void entityclass::setblockcolour( int t, std::string col )
         blocks[t].g = 95;
         blocks[t].b = 255;
     }
-    else if (col == "purple")
+    else if (col == "purple" || col == "pink")
     {
         blocks[t].r = 255;
         blocks[t].g = 134;
