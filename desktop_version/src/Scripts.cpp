@@ -13,7 +13,6 @@ void scriptclass::load(std::string t)
     position = 0;
     scriptlength=0;
     running = true;
-    bool internalmode = false;
 
 	int maxlength = (std::min(int(t.length()),7));
     std::string customstring="";
