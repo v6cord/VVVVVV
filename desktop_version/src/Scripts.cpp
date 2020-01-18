@@ -312,6 +312,9 @@ void scriptclass::load(std::string t)
             customtextmode=1;
           }else{
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if (words[0] == "setroomname" || words[0] == "drawtext" || words[0] == "text" || words[0] == "textcolor" || words[0] == "textcolour" || words[0] == "createroomtext")
+              // Don't parse the next line if it has a say/reply
+              i++;
             add(script.customscript[i]);
           }
         }
