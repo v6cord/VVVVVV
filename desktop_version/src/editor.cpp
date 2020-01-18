@@ -1651,6 +1651,12 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
     
     //Here lies the code to load custom assets. Yeet
     
+    static const char *levelDir = "levels/";
+    if (_path.compare(0, strlen(levelDir), levelDir) != 0)
+    {
+        _path = levelDir + _path;
+    }
+
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
     if (FILESYSTEM_directoryExists(dirpath.c_str())) {
         printf("Custom asset directory exists at %s\n",dirpath.c_str());
@@ -1662,11 +1668,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
     }
 
     unsigned char *mem = NULL;
-    static const char *levelDir = "levels/";
-    if (_path.compare(0, strlen(levelDir), levelDir) != 0)
-    {
-        _path = levelDir + _path;
-    }
     
     FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
 
