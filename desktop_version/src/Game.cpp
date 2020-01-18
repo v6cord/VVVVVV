@@ -5433,6 +5433,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             infiniflip = atoi(pText);
         }
+        else if (pKey == "nosuicide")
+        {
+            nosuicide = atoi(pText);
+        }
         else if (pKey == "customtracks")
         {
             std::string TextString = (pText);
@@ -6457,6 +6461,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
     msg = new TiXmlElement( "infiniflip" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(infiniflip).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "nosuicide" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(nosuicide).c_str() ));
     msgs->LinkEndChild( msg );
 
     if (!music.custom_file_paths.empty()) {
