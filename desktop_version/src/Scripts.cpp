@@ -9,11 +9,6 @@ extern scriptclass script;
 
 void scriptclass::load(std::string t)
 {
-    //loads script name t into the array
-    position = 0;
-    scriptlength=0;
-    running = true;
-
 	int maxlength = (std::min(int(t.length()),7));
     std::string customstring="";
     for(int i=0; i<maxlength; i++){
@@ -26,6 +21,37 @@ void scriptclass::load(std::string t)
       for(size_t i=0; i<t.length(); i++){
         if(i>=7) cscriptname+=t[i];
       }
+
+      std::string thelabel;
+      // Is the script name a label, or a script name + label?
+      if (cscriptname.substr(0, 1) == "$" && cscriptname.substr(cscriptname.length()-1, 1) == "$") {
+        // It's fully a label
+        thelabel = cscriptname.substr(1, cscriptname.length()-2);
+
+        // And it's intended to be within the same script
+        std::string actualname = "";
+        // Code duplicate from above, lol
+        for (size_t i = 0; i < scriptname.length(); i++)
+          if (i >= 7)
+            actualname += scriptname[i];
+
+        cscriptname = actualname;
+        t = "custom_" + cscriptname;
+      } else if (cscriptname.substr(cscriptname.length()-1, 1) == "$" && cscriptname.substr(0, cscriptname.length()-1).find("$") != std::string::npos) {
+        // It's a script name concatenated with a label
+        int dollar = cscriptname.find("$");
+        thelabel = cscriptname.substr(0, cscriptname.length()-1).substr(dollar+1, std::string::npos);
+
+        // Remove the label from the script name!
+        t = t.substr(0, t.find("$"));
+        cscriptname = cscriptname.substr(0, dollar);
+      }
+
+      nlabels = 0;
+      scriptname = t;
+      scriptlength=0;
+      position = 0;
+      running = true;
 
       int scriptstart=-1;
       int scriptend=-1;
@@ -318,6 +344,19 @@ void scriptclass::load(std::string t)
               i++;
             }
             add(script.customscript[i]);
+
+            // Is this a label?
+            if (words[0].length() > 2 && words[0].substr(0, 1) == "$" && words[0].substr(words[0].length()-1, 1) == "$") {
+              std::string thislabel = words[0].substr(1, words[0].length()-2);
+              labelnames[nlabels] = thislabel;
+
+              // Important - use `scriptlength` instead of `i`
+              // The former is the internal script's position which is what we want,
+              // and the latter is the simplified script's position
+              labelpositions[nlabels] = scriptlength;
+
+              nlabels++;
+            }
           }
         }
 
@@ -326,9 +365,24 @@ void scriptclass::load(std::string t)
           add("endcutscene()");
           add("untilbars()");
         }
+
+        if (!thelabel.empty()) {
+          int labelnum = getlabelnum(thelabel);
+          if (labelnum != -1)
+            position = labelpositions[labelnum];
+        }
       }
+
+      return;
     }
-    else if (t == "intro")
+
+    scriptlength=0;
+    nlabels = 0;
+    position = 0;
+    running = true;
+    scriptname = t;
+
+    if (t == "intro")
     {
         add("ifskip(quickstart)");
         //add("createcrewman(232,113,cyan,0,faceright)");

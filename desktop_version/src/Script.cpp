@@ -36,6 +36,12 @@ scriptclass::scriptclass()
 	textx = 0;
 	texty = 0;
 	txtnumlines = 0;
+
+	labelnames.resize(100);
+	labelpositions.resize(100);
+	nlabels = 0;
+
+	scriptname = "";
 }
 
 void scriptclass::clearcustom(){
@@ -3832,7 +3838,15 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	position = 0;
 	scriptlength = 0;
 	scriptdelay = 0;
-	scriptname = "null";
+	scriptname = "";
 	running = false;
 	passive = false;
+}
+
+int scriptclass::getlabelnum(std::string thelabel)
+{
+	for (int n = 0; n < nlabels; n++)
+		if (labelnames[n] == thelabel)
+			return n;
+	return -1;
 }

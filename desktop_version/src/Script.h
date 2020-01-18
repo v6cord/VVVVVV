@@ -47,6 +47,8 @@ public:
     void hardreset(KeyPoll& key, Graphics& dwgfx, Game& game,mapclass& map,
                    entityclass& obj, UtilityClass& help, musicclass& music);
 
+    int getlabelnum(std::string thelabel);
+
     //Script contents
     growing_vector<std::string> commands;
     growing_vector<std::string> words;
@@ -76,6 +78,10 @@ public:
     growing_vector<scriptimage> scriptrender;
 
     bool loopdelay = false;
+
+    growing_vector<std::string> labelnames;
+    growing_vector<int> labelpositions;
+    int nlabels;
 };
 
 #endif /* SCRIPT_H */
