@@ -308,6 +308,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[eti].active = false;
 
 					game.activetele = false;
+				} else if (words[1] == "activityzones") {
+					for (int bai = 0; bai < obj.nblocks; bai++)
+						if (obj.blocks[bai].type == ACTIVITY)
+							obj.blocks[bai].active = false;
 				}
 
 				obj.cleanup();
