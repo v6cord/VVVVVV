@@ -205,8 +205,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[eci].active = false;
 				} else if (words[1] == "all" || words[1] == "everything") {
 					// Don't want to use obj.removeallblocks(), it'll remove all spikes and one-ways too
+					// And also we need to remove script boxes a certain way so reloadscriptboxes() will work
 					for (int bl = 0; bl < obj.nblocks; bl++)
-						if (obj.blocks[bl].type != DAMAGE && obj.blocks[bl].type != DIRECTIONAL)
+						if (obj.blocks[bl].type == TRIGGER)
+							obj.removetrigger(obj.blocks[bl].trigger);
+						else if (obj.blocks[bl].type != DAMAGE && obj.blocks[bl].type != DIRECTIONAL)
 							obj.blocks[bl].clear();
 
 					// Too bad there's no obj.removeallentities()
