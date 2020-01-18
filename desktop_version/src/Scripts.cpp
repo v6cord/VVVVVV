@@ -81,13 +81,7 @@ void scriptclass::load(std::string t)
           if (words[0] != "flash" && words[1] == "unused") {
             words[1] = "1";
           }
-          if (words[0] == "enableinternal") {
-            internalmode = true;
-          } else if (words[0] == "disableinternal") {
-            internalmode = false;
-          } else if (internalmode) {
-            add(script.customscript[i]);
-          } else if (words[0] == "music"){
+          if (words[0] == "music"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if(words[1]=="0"){
               tstring="stopmusic()";
