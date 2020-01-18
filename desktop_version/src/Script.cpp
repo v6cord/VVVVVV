@@ -1318,6 +1318,15 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				obj.createblock(TRIGGER, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), usethisslot);
 				game.customscript[usethisslot - 300] = words[5];
 			}
+			else if (words[0] == "customactivityzone")
+			{
+				position++;
+				obj.customprompt = commands[position];
+				obj.customscript = words[6];
+				obj.customcolour = words[5];
+
+				obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 100);
+			}
 			else if (words[0] == "changemood")
 			{
                             i = obj.getcrewman(words[1]);

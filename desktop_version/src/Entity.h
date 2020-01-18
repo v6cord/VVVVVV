@@ -244,6 +244,8 @@ public:
     int customplatformtile = 0;
     bool customwarpmode, customwarpmodevon, customwarpmodehon = false;
     std::string customscript;
+    std::string customprompt;
+    std::string customcolour;
     int customcrewmoods[6] = {0};
 
     std::unordered_map<std::string, int> named_crewmen;
