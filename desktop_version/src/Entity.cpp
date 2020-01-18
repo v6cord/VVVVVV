@@ -1181,6 +1181,14 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             setblockcolour(k, customcolour);
             trig=0;
             break;
+        case 101: // Used by customactivityzonergb()
+            blocks[k].prompt = customprompt;
+            blocks[k].script = "custom_"+customscript;
+            blocks[k].r = customr;
+            blocks[k].g = customg;
+            blocks[k].b = customb;
+            trig=0;
+            break;
         }
         nblocks++;
         break;
