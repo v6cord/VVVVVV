@@ -44,6 +44,8 @@ class growing_vector : public std::vector<T> {
 
 int ss_toi(std::string _s);
 
+bool is_number(const std::string& s);
+
 growing_vector<std::string> split(const std::string &s, char delim, growing_vector<std::string> &elems);
 
 growing_vector<std::string> split(const std::string &s, char delim);

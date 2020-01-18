@@ -41,6 +41,9 @@ scriptclass::scriptclass()
 	labelpositions.resize(100);
 	nlabels = 0;
 
+	variablenames.resize(100);
+	variablecontents.resize(100);
+
 	scriptname = "";
 }
 
@@ -48,12 +51,63 @@ void scriptclass::clearcustom(){
 	customscript.clear();
 }
 
+int scriptclass::getvar(std::string n) {
+	for(std::size_t i = 0; i < variablenames.size(); i++) {
+		if (variablenames[i] == n) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+std::string scriptclass::processvars(std::string t) {
+	tempstring = "";
+	tempvar = "";
+	readingvar = false;
+	foundvar = false;
+	for (size_t i = 0; i < t.length(); i++)
+	{
+		currentletter = t.substr(i, 1);
+		if (readingvar) {
+			if (currentletter == "%") {
+				readingvar = false;
+				for(std::size_t i_ = 0; i_ < variablenames.size(); i_++) {
+					if (variablenames[i_] == tempvar) {
+						foundvar = true;
+						tempstring += variablecontents[i_];
+						tempvar = "";
+						break;
+					}
+					//printf("var: %s", tempvar.c_str());
+				}
+				if (foundvar == false) {
+					tempstring += "%" + tempvar + "%";
+					tempvar = "";
+				}
+			} else {
+				tempvar += currentletter;
+			}
+		}
+		else if (currentletter == "%")
+		{
+			readingvar = true;
+		}
+		else
+		{
+			tempstring += currentletter;
+		}
+	}
+	return tempstring;
+}
+
 void scriptclass::tokenize( std::string t )
 {
 	j = 0;
 	tempword = "";
-        words.clear();
+    words.clear();
 
+	t = processvars(t);
+    
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
@@ -473,7 +527,46 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				// setroomname()
                                 position++;
-				map.roomname = commands[position];
+				map.roomname = processvars(commands[position]);
+			}
+			if (words[0] == "setvar")
+			{
+				// setvar(name, contents)
+				// OR
+				// setvar(name)
+				// <contents>
+				
+				variablenames.push_back(words[1]);
+				if (words[2] == "") {
+    	            position++;
+					variablecontents.push_back(processvars(commands[position]));
+				} else {
+					variablecontents.push_back(words[2]);
+				}
+			}
+			if (words[0] == "addvar")
+			{
+				// addvar(name, add)
+				// OR
+				// addvar(name)
+				// <add>
+				
+				int varid = getvar(words[1]);
+				if (varid != -1) {
+					if (words[2] == "") {
+    		            position++;
+						variablecontents[varid] += processvars(commands[position]);
+					} else {
+						if (is_number(variablecontents[varid]) && is_number(words[2])) {
+							std::string tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
+							tempcontents.erase ( tempcontents.find_last_not_of('0') + 1, std::string::npos );
+							tempcontents.erase ( tempcontents.find_last_not_of('.') + 1, std::string::npos );
+							variablecontents[varid] = tempcontents;
+						} else {
+							variablecontents[varid] += words[2];
+						}
+					}
+				}
 			}
 			if (words[0] == "drawtext")
 			{
@@ -487,7 +580,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.b      = ss_toi(words[5]);
 				temp.center = ss_toi(words[6]);
                 position++;
-				temp.text = commands[position];
+				temp.text = processvars(commands[position]);
 				scriptrender.push_back(temp);
 			}
       if (words[0] == "flag")
@@ -827,7 +920,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
-					txt[i] = commands[position];
+					txt[i] = processvars(commands[position]);
 				}
 			}
 			else if ((words[0] == "textcolor") || (words[0] == "textcolour"))
@@ -846,7 +939,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
-					txt[i] = commands[position];
+					txt[i] = processvars(commands[position]);
 				}
 			}
 			else if (words[0] == "position")
@@ -1302,7 +1395,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.roomtextx[map.roomtextnumlines] = ss_toi(words[1]);
 				map.roomtexty[map.roomtextnumlines] = ss_toi(words[2]);
 				position++;
-				map.roomtext[map.roomtextnumlines] = commands[position];
+				map.roomtext[map.roomtextnumlines] = processvars(commands[position]);
 				map.roomtextnumlines++;
 			}
 			else if (words[0] == "createscriptbox")
@@ -1324,7 +1417,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "customactivityzone")
 			{
 				position++;
-				obj.customprompt = commands[position];
+				obj.customprompt = processvars(commands[position]);
 				obj.customscript = words[6];
 				obj.customcolour = words[5];
 
@@ -1333,7 +1426,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "customactivityzonergb")
 			{
 				position++;
-				obj.customprompt = commands[position];
+				obj.customprompt = processvars(commands[position]);
 				obj.customscript = words[8];
 				obj.customr = ss_toi(words[5]);
 				obj.customg = ss_toi(words[6]);
@@ -3883,6 +3976,10 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	scriptname = "";
 	running = false;
 	passive = false;
+	variablenames.clear();
+	variablecontents.clear();
+	variablenames.resize(100);
+	variablecontents.resize(100);
 }
 
 int scriptclass::getlabelnum(std::string thelabel)

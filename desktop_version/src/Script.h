@@ -30,6 +30,10 @@ public:
 
     void clearcustom();
 
+    int getvar(std::string n);
+
+    std::string processvars(std::string t);
+
     void tokenize(std::string t);
 
     void run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
@@ -82,6 +86,14 @@ public:
     growing_vector<std::string> labelnames;
     growing_vector<int> labelpositions;
     int nlabels;
+
+    growing_vector<std::string> variablenames;
+    growing_vector<std::string> variablecontents;
+    bool readingvar = false;
+    bool foundvar = false;
+    std::string tempvar;
+    std::string tempstring;
+
 };
 
 #endif /* SCRIPT_H */

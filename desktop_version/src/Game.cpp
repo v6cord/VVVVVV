@@ -6470,6 +6470,16 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(nosuicide).c_str() ));
     msgs->LinkEndChild( msg );
 
+
+    //msg = new TiXmlElement( "variables" );
+    //for (std::size_t i = 0; i < variablenames.size(); i++)
+    //{
+    //    TiXmlElement *edentityElement = new TiXmlElement( "var" );
+    //    edentityElement->SetAttribute( "name", variablenames[i].c_str() );
+    //    edentityElement->LinkEndChild( new TiXmlText( variablecontents[i].c_str() )) ;
+    //    msg->LinkEndChild( edentityElement );
+    //}
+
     if (!music.custom_file_paths.empty()) {
         std::string tracks;
         for(auto&& [id, path] : music.custom_file_paths)
