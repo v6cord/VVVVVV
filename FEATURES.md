@@ -138,3 +138,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `puntilmusic()` - `untilmusic()` with `pdelay()`
 
 - Edentity conveyors no longer have tile 1s underneath them
+
+- Added a label and goto system - write down `$label$` on a line, then to go to it, use `$label$` as a script name if you're in the same script, or write `scriptname$label$` to jump to the label from another script
