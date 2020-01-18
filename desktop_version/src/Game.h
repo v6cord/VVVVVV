@@ -377,6 +377,9 @@ public:
     bool infiniflip = false;
 
     bool nosuicide = false;
+
+    bool kludgeroominitscript = false;
+    bool gotoroomfromscript = false;
 };
 
 #endif /* GAME_H */

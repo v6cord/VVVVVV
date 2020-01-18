@@ -402,6 +402,9 @@ Game::Game(void):
 
     nosuicide = false;
 
+    kludgeroominitscript = false;
+    gotoroomfromscript = false;
+
     /* Terry's Patrons... */
     superpatrons.push_back("Anders Ekermo");
     superpatrons.push_back("Andreas K|mper");

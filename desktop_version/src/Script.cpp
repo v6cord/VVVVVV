@@ -702,16 +702,19 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
 				map.gotoroom(ss_toi(words[1])+100, ss_toi(words[2])+100, dwgfx, game, obj, music);
+				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadroom")
 			{
 				//USAGE: reloadroom()
 				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
+				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "movetoroom")
 			{
 				//USAGE: movetoroom(x,y)
 				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
+				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadscriptboxes")
 			{

@@ -1230,6 +1230,12 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             }
         }
 
+        if (game.kludgeroominitscript) {
+            script.load(game.newscript);
+            game.startscript = false;
+            game.kludgeroominitscript = false;
+        }
+
         //Warp tokens
         if (map.custommode){
           if (game.teleport)
