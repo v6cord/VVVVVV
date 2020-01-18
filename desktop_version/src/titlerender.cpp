@@ -188,6 +188,9 @@ growing_vector<std::string> changelog = {
     "  /purple (actually pink)/white/gray, if",
     "  invalid it defaults to gray, prompt",
     "  goes on the next line",
+    "- customactivityzonergb(x,y,w,h,r,g,b,",
+    "  script) - x,y,w,h in pixels, prompt",
+    "  goes on the next line",
 
 };
 
