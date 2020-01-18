@@ -128,9 +128,21 @@ bool FILESYSTEM_directoryExists(const char *fname)
     return PHYSFS_exists(fname);
 }
 
+const char pathSeparator =
+#ifdef _WIN32
+                            '\\';
+#else
+                            '/';
+#endif
+
 void FILESYSTEM_mount(const char *fname)
 {
-    PHYSFS_mount(fname, NULL, 1);
+    std::string path(PHYSFS_getRealDir(fname));
+    path += pathSeparator;
+    path += fname;
+    if (!PHYSFS_mount(path.c_str(), NULL, 1)) {
+        printf("Error mounting: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+    }
 }
 
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *len)
