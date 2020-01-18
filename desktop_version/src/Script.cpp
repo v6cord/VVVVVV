@@ -618,6 +618,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             game.infiniflip = false;
                         }
+                        if (words[0] == "disablesuicide")
+                        {
+                            game.nosuicide = true;
+                        }
+                        if (words[0] == "enablesuicide")
+                        {
+                            game.nosuicide = false;
+                        }
                         if (words[0] == "setspeed")
                         {
                             game.playerspeed = std::stoi(words[1]);
