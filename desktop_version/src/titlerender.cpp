@@ -177,6 +177,8 @@ growing_vector<std::string> changelog = {
     "  you're in the same script, or write",
     "  scriptname$label$ to jump to the label",
     "  from another script",
+    "- ifvce() - detect if game is VVVVVV-CE",
+    "  or not",
 
 };
 
