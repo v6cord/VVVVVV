@@ -2166,7 +2166,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     if (map.extrarow) dwgfx.menuoffset -= 10;
                 }
 
-                if (key.keymap[SDLK_r] && game.deathseq<=0)// && map.custommode) //Have fun glitchrunners!
+                if (key.keymap[SDLK_r] && game.deathseq<=0 && !game.nosuicide)// && map.custommode) //Have fun glitchrunners!
                 {
                 	game.deathseq = 30;
                 }

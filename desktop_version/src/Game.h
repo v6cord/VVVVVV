@@ -375,6 +375,8 @@ public:
 
     bool noflip = false;
     bool infiniflip = false;
+
+    bool nosuicide = false;
 };
 
 #endif /* GAME_H */

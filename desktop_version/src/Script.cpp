@@ -3773,6 +3773,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	game.noflip = false;
 	game.infiniflip = false;
 
+	game.nosuicide = false;
+
 	//dwgraphicsclass
 	dwgfx.backgrounddrawn = false;
 	dwgfx.textboxremovefast();

@@ -400,6 +400,8 @@ Game::Game(void):
     noflip = false;
     infiniflip = false;
 
+    nosuicide = false;
+
     /* Terry's Patrons... */
     superpatrons.push_back("Anders Ekermo");
     superpatrons.push_back("Andreas K|mper");
