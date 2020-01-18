@@ -1662,6 +1662,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			else if (words[0] == "ifvce")
+			{
+				load("custom_"+words[1]);
+				position--;
+			}
 			else if (words[0] == "hidecoordinates")
 			{
 				map.explored[ss_toi(words[1]) + (20 * ss_toi(words[2]))] = 0;
