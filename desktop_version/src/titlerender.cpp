@@ -182,6 +182,12 @@ growing_vector<std::string> changelog = {
     "  or not",
     "- disablesuicide - Disable pressing R",
     "- enablesuicide - Enable pressing R",
+    "- customactivityzone(x,y,w,h,color,",
+    "  script) - x,y,w,h in pixels, color is",
+    "  red/orange/yellow/green/cyan/blue/pink",
+    "  /purple (actually pink)/white/gray, if",
+    "  invalid it defaults to gray, prompt",
+    "  goes on the next line",
 
 };
 
