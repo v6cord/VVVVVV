@@ -41,7 +41,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `destroy(platformsreal)` - A version of `destroy(platforms)` that isn't bugged
 
-- `destroy(enemies|trinkets|warplines|checkpoints|all|conveyors|terminals|scriptboxes|disappearingplatforms|1x1quicksand|coins|gravitytokens|roomtext|teleporter)`
+- `destroy(enemies|trinkets|warplines|checkpoints|all|conveyors|terminals|scriptboxes|disappearingplatforms|1x1quicksand|coins|gravitytokens|roomtext|teleporter|activityzones)`
 
 - `killplayer()`
 
