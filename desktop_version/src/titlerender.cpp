@@ -179,6 +179,8 @@ growing_vector<std::string> changelog = {
     "  from another script",
     "- ifvce() - detect if game is VVVVVV-CE",
     "  or not",
+    "- disablesuicide - Disable pressing R",
+    "- enablesuicide - Enable pressing R",
 
 };
 
