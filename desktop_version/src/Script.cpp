@@ -589,6 +589,20 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.text = processvars(commands[position]);
 				scriptrender.push_back(temp);
 			}
+			if (words[0] == "drawrect")
+			{
+				// drawrect(x,y,w,h,r,g,b)
+				scriptimage temp;
+				temp.type   = 2;
+				temp.x      = ss_toi(words[1]);
+				temp.y      = ss_toi(words[2]);
+				temp.w      = ss_toi(words[3]);
+				temp.h      = ss_toi(words[4]);
+				temp.r      = ss_toi(words[5]);
+				temp.g      = ss_toi(words[6]);
+				temp.b      = ss_toi(words[7]);
+				scriptrender.push_back(temp);
+			}
       if (words[0] == "flag")
 			{
 				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){

@@ -7,9 +7,11 @@
 
 // Script drawing stuff
 struct scriptimage {
-    int type = 0; // 0 for text, 1 for image
+    int type = 0; // 0 for text, 1 for image, 2 for rect
     int x = 0;
     int y = 0;
+    int w = 0;
+    int h = 0;
     int r = 0;
     int g = 0;
     int b = 0;

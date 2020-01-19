@@ -1800,6 +1800,14 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         scriptimage current = script.scriptrender[i];
         if (current.type == 0) {
             dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+        } else if (current.type == 2) {
+            SDL_Rect temprect;
+            temprect.x = current.x;
+            temprect.y = current.y;
+            temprect.w = current.w;
+            temprect.h = current.h;
+            SDL_FillRect(dwgfx.backBuffer, &temprect, dwgfx.getRGB(current.r,current.g,current.b));
+            //dwgfx.FillRect(dwgfx.backBuffer, current.x, current.y, current.w, current.h, current.r, current.g, current.b);
         }
     }
     script.scriptrender.clear();
