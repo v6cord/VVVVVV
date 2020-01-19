@@ -128,7 +128,6 @@ int FILESYSTEM_init(char *argvZero)
 		return 0;
 	}
 #ifdef __APPLE__
-        CFRelease(filePathRef);
         CFRelease(appUrlRef);
 #endif
 
