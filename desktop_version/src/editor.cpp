@@ -1199,10 +1199,15 @@ int editorclass::backfree( int x, int y )
 int editorclass::spikefree( int x, int y )
 {
     //Returns 0 if tile is not a block or spike, 1 otherwise
+    if(x==-1) return 1;
+    if(y==-1) return 1;
+    if(x==40) return 1;
+    if(y==30) return 1;
+
     temp = gettiletyp(x, y);
     if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
-        return 0;
-    return 1;
+        return 1;
+    return 0;
 }
 
 int editorclass::free( int x, int y )
