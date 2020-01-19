@@ -75,6 +75,7 @@ public:
     //Textbox stuff
     int textx = 0;
     int texty = 0;
+    int textcenterline = 0;
     int r,g,b = 0;
     int txtnumlines = 0;
 

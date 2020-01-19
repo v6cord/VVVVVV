@@ -2979,9 +2979,9 @@ void Graphics::textboxcenter()
 	textbox[m].centery();
 }
 
-void Graphics::textboxcenterx()
+void Graphics::textboxcenterx(int centerline)
 {
-	textbox[m].centerx();
+	textbox[m].centerx(centerline);
 }
 
 int Graphics::textboxwidth()
@@ -3000,9 +3000,9 @@ void Graphics::textboxmoveto(int xo)
 	textbox[m].xp = xo;
 }
 
-void Graphics::textboxcentery()
+void Graphics::textboxcentery(int centerline)
 {
-	textbox[m].centery();
+	textbox[m].centery(centerline);
 }
 
 int Graphics::crewcolour(const int t)

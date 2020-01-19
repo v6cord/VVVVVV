@@ -15,9 +15,9 @@ public:
 
     void clear();
 
-    void centerx();
+    void centerx(int centerline = 160);
 
-    void centery();
+    void centery(int centerline = 120);
 
     void adjust();
 

@@ -62,7 +62,7 @@ public:
 
 	void textboxcenter();
 
-	void textboxcenterx();
+	void textboxcenterx(int centerline = 160);
 
 	int textboxwidth();
 
@@ -70,7 +70,7 @@ public:
 
 	void textboxmoveto(int xo);
 
-	void textboxcentery();
+	void textboxcentery(int centerline = 120);
 
 	void textboxadjust();
 

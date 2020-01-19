@@ -35,6 +35,7 @@ scriptclass::scriptclass()
 	r = 0;
 	textx = 0;
 	texty = 0;
+	textcenterline = 0;
 	txtnumlines = 0;
 
 	labelnames.resize(100);
@@ -955,12 +956,22 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//the first word is the object to position relative to
 				if (words[1] == "centerx")
 				{
+					if (words[2] != "")
+						textcenterline = ss_toi(words[2]);
+					else
+						textcenterline = 0;
+
 					words[2] = "donothing";
 					j = -1;
 					textx = -500;
 				}
 				else if (words[1] == "centery")
 				{
+					if (words[2] != "")
+						textcenterline = ss_toi(words[2]);
+					else
+						textcenterline = 0;
+
 					words[2] = "donothing";
 					j = -1;
 					texty = -500;
@@ -1131,15 +1142,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500)
-				{
-					dwgfx.textboxcenterx();
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx(160);
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
 				}
 
-				if (texty == -500)
-				{
-					dwgfx.textboxcentery();
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery(120);
+
+					textcenterline = 0;
 				}
+
+				textcenterline = 0;
 
 				dwgfx.textboxadjust();
 				dwgfx.textboxactive();
@@ -1176,15 +1198,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500)
-				{
-					dwgfx.textboxcenterx();
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx();
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
 				}
 
-				if (texty == -500)
-				{
-					dwgfx.textboxcentery();
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery();
+
+					textcenterline = 0;
 				}
+
+				textcenterline = 0;
 
 				dwgfx.textboxadjust();
 				//dwgfx.textboxactive();
