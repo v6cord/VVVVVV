@@ -175,6 +175,8 @@ pkg_check_modules(FRIBIDI fribidi)
 find_path(FRIBIDI_INCLUDE_DIR
           NAMES fribidi/fribidi.h)
 
+target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
+
 find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
 # Static Dependencies
