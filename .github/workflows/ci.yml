@@ -60,7 +60,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install dependencies
-      run: brew install ninja sdl2 sdl2_mixer tree fribidi
+      run: brew install ninja sdl2 sdl2_mixer tree fribidi pkg-config
 
     - name: CMake configure
       run: |
