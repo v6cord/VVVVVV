@@ -89,7 +89,7 @@ int FILESYSTEM_init(char *argvZero)
             SDL_ShowSimpleMessageBox(
                     SDL_MESSAGEBOX_ERROR,
                     "Couldn't find data.zip in .app!",
-                    "Please place data.zip in MacOS/Resources\n"
+                    "Please place data.zip in Contents/Resources\n"
                     "inside VVVVVV-CE.app.",
                     NULL
                     );
