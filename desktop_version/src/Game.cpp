@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include <sstream>
+#include <string>
 
 #include "FileSystemUtils.h"
 
@@ -395,6 +396,109 @@ Game::Game(void):
     //updatestate(dwgfx, map, obj, help, music);
 
     skipfakeload = false;
+
+    noflip = false;
+    infiniflip = false;
+
+    nosuicide = false;
+
+    kludgeroominitscript = false;
+    gotoroomfromscript = false;
+
+    /* Terry's Patrons... */
+    superpatrons.push_back("Anders Ekermo");
+    superpatrons.push_back("Andreas K|mper");
+    superpatrons.push_back("Anthony Burch");
+    superpatrons.push_back("Bennett Foddy");
+    superpatrons.push_back("Brendan O'Sullivan");
+    superpatrons.push_back("Christopher Armstrong");
+    superpatrons.push_back("Daniel Benmergui");
+    superpatrons.push_back("David Pittman");
+    superpatrons.push_back("Ian Bogost");
+    superpatrons.push_back("Jaz McDougall");
+    superpatrons.push_back("John Faulkenbury");
+    superpatrons.push_back("Jonathan Whiting");
+    superpatrons.push_back("Kyle Pulver");
+    superpatrons.push_back("Markus Persson");
+    superpatrons.push_back("Nathan Ostgard");
+    superpatrons.push_back("Nick Easler");
+    superpatrons.push_back("Stephen Lavelle");
+    patrons.push_back("Adam Wendt");
+    patrons.push_back("Andreas J{rgensen");
+    patrons.push_back("}ngel Louzao Penalva");
+    patrons.push_back("Ashley Burton");
+    patrons.push_back("Aubrey Hesselgren");
+    patrons.push_back("Bradley Rose");
+    patrons.push_back("Brendan Urquhart");
+    patrons.push_back("Chris Ayotte");
+    patrons.push_back("Christopher Zamanillo");
+    patrons.push_back("Daniel Schuller");
+    patrons.push_back("Hybrid Mind Studios");
+    patrons.push_back("Emilie McGinley");
+    patrons.push_back("Francisco Solares");
+    patrons.push_back("Hal Helms");
+    patrons.push_back("Hayden Scott-Baron");
+    patrons.push_back("Hermit Games");
+    patrons.push_back("Ido Yehieli");
+    patrons.push_back("Jade Vault Games");
+    patrons.push_back("James Andrews");
+    patrons.push_back("James Riley");
+    patrons.push_back("James Hsieh");
+    patrons.push_back("Jasper Byrne");
+    patrons.push_back("Jedediah Baker");
+    patrons.push_back("Jens Bergensten");
+    patrons.push_back("Jeremy J. Penner");
+    patrons.push_back("Jeremy Peterson");
+    patrons.push_back("Jim McGinley");
+    patrons.push_back("Jonathan Cartwright");
+    patrons.push_back("John Nesky");
+    patrons.push_back("Jos Yule");
+    patrons.push_back("Jose Flores");
+    patrons.push_back("Josh Bizeau");
+    patrons.push_back("Joshua Buergel");
+    patrons.push_back("Joshua Hochner");
+    patrons.push_back("Kurt Ostfeld");
+    patrons.push_back("Magnus P~lsson");
+    patrons.push_back("Mark Neschadimenko");
+    patrons.push_back("Matt Antonellis");
+    patrons.push_back("Matthew Reppert");
+    patrons.push_back("Michael Falkensteiner");
+    patrons.push_back("Michael Vendittelli");
+    patrons.push_back("Mike Kasprzak");
+    patrons.push_back("Mitchel Stein");
+    patrons.push_back("Sean Murray");
+    patrons.push_back("Simon Michael");
+    patrons.push_back("Simon Schmid");
+    patrons.push_back("Stephen Maxwell");
+    patrons.push_back("Swing Swing Submarine");
+    patrons.push_back("Tam Toucan");
+    patrons.push_back("Terry Dooher");
+    patrons.push_back("Tim W.");
+    patrons.push_back("Timothy Bragan");
+
+    /* CONTRIBUTORS.txt, again listed alphabetically (according to `sort`) by last name */
+    githubfriends.push_back("Christoph B{hmwalder");
+    githubfriends.push_back("Charlie Bruce");
+    githubfriends.push_back("Brian Callahan");
+    githubfriends.push_back("Dav999");
+    githubfriends.push_back("Allison Fleischer");
+    githubfriends.push_back("Daniel Lee");
+    githubfriends.push_back("Elliott Saltar");
+    githubfriends.push_back("Marvin Scholz");
+    githubfriends.push_back("Keith Stellyes");
+    githubfriends.push_back("Elijah Stone");
+    githubfriends.push_back("Thomas S|nger");
+    githubfriends.push_back("Info Teddy");
+    githubfriends.push_back("leo60228");
+    githubfriends.push_back("Emmanuel Vadot");
+    githubfriends.push_back("Remi Verschelde"); // TODO: Change to "Rémi" if/when UTF-8 support is added
+    githubfriends.push_back("viri");
+    githubfriends.push_back("Wouter");
+
+    /* Calculate credits length, finally. */
+    creditmaxposition = 1050 + (10 * (
+        superpatrons.size() + patrons.size() + githubfriends.size()
+    ));
 }
 
 Game::~Game(void)
@@ -1899,7 +2003,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             completestop = false;
             state = 0;
             //music.play(music.resumesong);
-            if(!muted && music.currentsong>-1) music.fadeMusicVolumeIn(3000);
+            if(!muted) music.fadeMusicVolumeIn(3000);
             dwgfx.showcutscenebars = false;
             break;
 
@@ -4348,6 +4452,11 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
             music.muted = atoi(pText);
         }
 
+        if (pKey == "notextoutline")
+        {
+            dwgfx.notextoutline = atoi(pText);
+        }
+
 		if (pKey == "flipButton")
 		{
 			SDL_GameControllerButton newButton;
@@ -4561,6 +4670,10 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
     msg->LinkEndChild(new TiXmlText(tu.String((int) _music.muted).c_str()));
     dataNode->LinkEndChild(msg);
 
+    msg = new TiXmlElement("notextoutline");
+    msg->LinkEndChild(new TiXmlText(tu.String((int) _dwgfx.notextoutline).c_str()));
+    dataNode->LinkEndChild(msg);
+
     for (size_t i = 0; i < controllerButton_flip.size(); i += 1)
     {
         msg = new TiXmlElement("flipButton");
@@ -4609,6 +4722,8 @@ void Game::customstart( entityclass& obj, musicclass& music )
     state = 0;
     deathseq = -1;
     lifeseq = 0;
+
+    hidemarkers = false;
 
     //let's teleport in!
     //state = 2500;
@@ -5054,6 +5169,8 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         hRoot=TiXmlHandle(pElem);
     }
 
+    scriptmarkers.clear();
+
     for( pElem = hRoot.FirstChild( "Data" ).FirstChild().Element(); pElem; pElem=pElem->NextSiblingElement())
     {
         std::string pKey(pElem->Value());
@@ -5286,6 +5403,54 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         else if (pKey == "nofog")
         {
             map.nofog = atoi(pText);
+        }
+        else if (pKey == "scriptmarkers")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                for(auto iter = values.begin(); iter < values.end(); iter += 3)
+                {
+                    scriptmarkers.push_back(scriptmarker {
+                        .x = std::stoi(iter[0]),
+                        .y = std::stoi(iter[1]),
+                        .tile = std::stoi(iter[2]),
+                    });
+                }
+            }
+        }
+        else if (pKey == "hidemarkers")
+        {
+            hidemarkers = atoi(pText);
+        }
+        else if (pKey == "playerspeed")
+        {
+            playerspeed = atoi(pText);
+        }
+        else if (pKey == "noflip")
+        {
+            noflip = atoi(pText);
+        }
+        else if (pKey == "infiniflip")
+        {
+            infiniflip = atoi(pText);
+        }
+        else if (pKey == "nosuicide")
+        {
+            nosuicide = atoi(pText);
+        }
+        else if (pKey == "customtracks")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                for(auto iter = values.begin(); iter < values.end(); iter += 2)
+                {
+                    music.playfile(iter[1].c_str(), iter[0]);
+                }
+            }
         }
 
     }
@@ -6272,6 +6437,62 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(map.nofog).c_str() ));
     msgs->LinkEndChild( msg );
 
+    if (!scriptmarkers.empty()) {
+        std::string markers;
+        for(auto marker : scriptmarkers)
+        {
+            markers += UtilityClass::String(marker.x) + ",";
+            markers += UtilityClass::String(marker.y) + ",";
+            markers += UtilityClass::String(marker.tile) + ",";
+        }
+        msg = new TiXmlElement( "markers" );
+        msg->LinkEndChild( new TiXmlText( markers.c_str() ));
+        msgs->LinkEndChild( msg );
+    }
+
+    msg = new TiXmlElement( "hidemarkers" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(hidemarkers).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "playerspeed" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(playerspeed).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "noflip" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(noflip).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "infiniflip" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(infiniflip).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "nosuicide" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(nosuicide).c_str() ));
+    msgs->LinkEndChild( msg );
+
+
+    //msg = new TiXmlElement( "variables" );
+    //for (std::size_t i = 0; i < variablenames.size(); i++)
+    //{
+    //    TiXmlElement *edentityElement = new TiXmlElement( "var" );
+    //    edentityElement->SetAttribute( "name", variablenames[i].c_str() );
+    //    edentityElement->LinkEndChild( new TiXmlText( variablecontents[i].c_str() )) ;
+    //    msg->LinkEndChild( edentityElement );
+    //}
+
+    if (!music.custom_file_paths.empty()) {
+        std::string tracks;
+        for(auto&& [id, path] : music.custom_file_paths)
+        {
+            tracks += id + ",";
+            tracks += path + ",";
+        }
+        msg = new TiXmlElement( "customtracks" );
+        msg->LinkEndChild( new TiXmlText( tracks.c_str() ));
+        msgs->LinkEndChild( msg );
+    }
+
+
     customquicksummary = summary;
     //telecookie.flush();
     //telecookie.close();
@@ -6963,17 +7184,19 @@ void Game::createmenu( std::string t )
         menuoptionsactive[0] = true;
         menuoptions[1] = "screen effects";
         menuoptionsactive[1] = true;
-        menuoptions[2] = "invincibility";
+        menuoptions[2] = "text outline";
         menuoptionsactive[2] = true;
-        menuoptions[3] = "slowdown";
+        menuoptions[3] = "invincibility";
         menuoptionsactive[3] = true;
-        menuoptions[4] = "music";
-        menuoptionsactive[3] = true;
-        menuoptions[5] = "return";
+        menuoptions[4] = "slowdown";
+        menuoptionsactive[4] = true;
+        menuoptions[5] = "music";
         menuoptionsactive[5] = true;
-        nummenuoptions = 6;
-        menuxoff = -40;
-        menuyoff = 16;
+        menuoptions[6] = "return";
+        menuoptionsactive[6] = true;
+        nummenuoptions = 7;
+        menuxoff = -60;
+        menuyoff = 0;
     }
 	else if(t == "controller")
 	{

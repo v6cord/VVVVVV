@@ -7,9 +7,9 @@
 struct resourceheader
 {
 	char name[48];
-	int start;
-	int size;
-	bool valid;
+	int start = 0;
+	int size = 0;
+	bool valid = false;
 };
 
 class binaryBlob
@@ -32,7 +32,7 @@ public:
 	char* getAddress(int _index);
 
 private:
-	int numberofHeaders;
+	int numberofHeaders = 0;
 	resourceheader m_headers[128];
 	char* m_memblocks[128];
 };

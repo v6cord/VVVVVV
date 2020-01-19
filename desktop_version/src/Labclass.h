@@ -14,6 +14,6 @@ public:
     growing_vector<std::string>  loadlevel(int rx, int ry , Game& game, entityclass& obj);
 
     std::string roomname;
-    int coin, rcol;
+    int coin, rcol = 0;
 };
 #endif /* LABCLASS_H */

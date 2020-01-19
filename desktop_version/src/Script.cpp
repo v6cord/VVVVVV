@@ -1,6 +1,7 @@
 #include <optional>
 #include <algorithm>
 #include <iostream>
+#include <cstring>
 #include "Script.h"
 #include "Graphics.h"
 
@@ -34,19 +35,85 @@ scriptclass::scriptclass()
 	r = 0;
 	textx = 0;
 	texty = 0;
+	textcenterline = 0;
 	txtnumlines = 0;
+
+	labelnames.resize(100);
+	labelpositions.resize(100);
+	nlabels = 0;
+
+	variablenames.resize(100);
+	variablecontents.resize(100);
+
+	scriptname = "";
 }
 
 void scriptclass::clearcustom(){
 	customscript.clear();
 }
 
+void scriptclass::call(std::string script) {
+    callstack.push_back(stackframe { .script = scriptname, .line = position });
+    load(script);
+}
+
+int scriptclass::getvar(std::string n) {
+	for(std::size_t i = 0; i < variablenames.size(); i++) {
+		if (variablenames[i] == n) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+std::string scriptclass::processvars(std::string t) {
+	tempstring = "";
+	tempvar = "";
+	readingvar = false;
+	foundvar = false;
+	for (size_t i = 0; i < t.length(); i++)
+	{
+		currentletter = t.substr(i, 1);
+		if (readingvar) {
+			if (currentletter == "%") {
+				readingvar = false;
+				for(std::size_t i_ = 0; i_ < variablenames.size(); i_++) {
+					if (variablenames[i_] == tempvar) {
+						foundvar = true;
+						tempstring += variablecontents[i_];
+						tempvar = "";
+						break;
+					}
+					//printf("var: %s", tempvar.c_str());
+				}
+				if (foundvar == false) {
+					tempstring += "%" + tempvar + "%";
+					tempvar = "";
+				}
+			} else {
+				tempvar += currentletter;
+			}
+		}
+		else if (currentletter == "%")
+		{
+			readingvar = true;
+		}
+		else
+		{
+			tempstring += currentletter;
+		}
+	}
+	return tempstring;
+}
+
 void scriptclass::tokenize( std::string t )
 {
 	j = 0;
 	tempword = "";
-        words.clear();
+    words.clear();
 
+	t = processvars(t);
+    
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
@@ -139,7 +206,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (ed.level[ss_toi(words[1])-1+(ed.maxwidth*(ss_toi(words[2])-1))].warpdir == ss_toi(words[3]))
 				{
-					load("custom_"+words[4]);
+					call("custom_"+words[4]);
 					position--;
 				}
 			}
@@ -204,55 +271,17 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[eci].active = false;
 				} else if (words[1] == "all" || words[1] == "everything") {
 					// Don't want to use obj.removeallblocks(), it'll remove all spikes and one-ways too
+					// And also we need to remove script boxes a certain way so reloadscriptboxes() will work
 					for (int bl = 0; bl < obj.nblocks; bl++)
-						if (obj.blocks[bl].type != DAMAGE && obj.blocks[bl].type != DIRECTIONAL)
+						if (obj.blocks[bl].type == TRIGGER)
+							obj.removetrigger(obj.blocks[bl].trigger);
+						else if (obj.blocks[bl].type != DAMAGE && obj.blocks[bl].type != DIRECTIONAL)
 							obj.blocks[bl].clear();
 
 					// Too bad there's no obj.removeallentities()
-					// (Wouldn't want to use it anyway, we need to take care of the conveyors' tile 1s)
-					for (int ei = 0; ei < obj.nentity; ei++) {
-						if (obj.entities[ei].rule == 0) // Destroy everything except the player
-							continue;
-
-						obj.entities[ei].active = false;
-
-						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
-						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
-						// Also I don't care if there's not actually any tile 1s under it
-						if (!obj.entities[ei].active || obj.entities[ei].type != 1 ||
-						(obj.entities[ei].behave != 8 && obj.entities[ei].behave != 9))
-							continue;
-
-						// Ok, we've found a conveyor, is it aligned with the grid?
-						if (obj.entities[ei].xp % 8 != 0 || obj.entities[ei].yp % 8 != 0)
-							continue;
-
-						// Is its top-left corner outside the map?
-						if (obj.entities[ei].xp < 0 || obj.entities[ei].xp >= 320
-						|| obj.entities[ei].yp < 0 || obj.entities[ei].yp >= 240)
-							continue;
-
-						// Very well then, we might have an edentity conveyor...
-
-						int thisxp = obj.entities[ei].xp / 8;
-						int thisyp = obj.entities[ei].yp / 8;
-
-						int usethislength;
-						// Map.cpp uses this exact check to place 8 tiles down instead of 4,
-						// hope this conveyor's width didn't change in the meantime
-						if (obj.entities[ei].w == 64)
-							usethislength = 8;
-						else
-							usethislength = 4;
-
-						// Ok, finally fix the tiles
-						// I don't care enough to check for what was actually behind the tiles originally
-						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-							map.settile(tilex, thisyp, 0);
-
-						// And of course, we have to force the game to redraw the room
-						dwgfx.foregrounddrawn = false;
-					}
+					for (int ei = 0; ei < obj.nentity; ei++)
+						if (obj.entities[ei].rule != 0) // Destroy everything except the player
+							obj.entities[ei].active = false;
 
 					// Copy-pasted from above
 					obj.horplatforms = false;
@@ -274,7 +303,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						break;
 					}
 				} else if (words[1] == "conveyors") {
-					// Copy-pasted from above
 					for (int edc = 0; edc < obj.nentity; edc++) {
 						if (!obj.entities[edc].active || obj.entities[edc].type != 1 ||
 						(obj.entities[edc].behave != 8 && obj.entities[edc].behave != 9))
@@ -288,40 +316,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						// Important: set width and height to 0, or there will still be collision
 						obj.entities[edc].w = 0;
 						obj.entities[edc].h = 0;
-
-						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
-						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
-						// Also I don't care if there's not actually any tile 1s under it, even if it's a spike/one-way that's now invisible and can be touched by the player
-
-						// Ok, is it aligned with the grid?
-						if (obj.entities[edc].xp % 8 != 0 || obj.entities[edc].yp % 8 != 0)
-							continue;
-
-						// Is its top-left corner outside the map?
-						if (obj.entities[edc].xp < 0 || obj.entities[edc].xp >= 320
-						|| obj.entities[edc].yp < 0 || obj.entities[edc].yp >= 240)
-							continue;
-
-						// Very well then, we might have an edentity conveyor...
-
-						int thisxp = obj.entities[edc].xp / 8;
-						int thisyp = obj.entities[edc].yp / 8;
-
-						int usethislength;
-						// Map.cpp uses this exact check to place 8 tiles down instead of 4,
-						// hope this conveyor's width didn't change in the meantime
-						if (obj.entities[edc].w == 64)
-							usethislength = 8;
-						else
-							usethislength = 4;
-
-						// Ok, finally fix the tiles
-						// I don't care enough to check for what was actually behind the tiles originally
-						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
-							map.settile(tilex, thisyp, 0);
-
-						// And of course, we have to force the game to redraw the room
-						dwgfx.foregrounddrawn = false;
 					}
 				} else if (words[1] == "terminals") {
 					for (int eti = 0; eti < obj.nentity; eti++)
@@ -336,7 +330,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				} else if (words[1] == "scriptboxes") {
 					for (int bsi = 0; bsi < obj.nblocks; bsi++)
 						if (obj.blocks[bsi].type == TRIGGER)
-							obj.blocks[bsi].active = false;
+							obj.removetrigger(obj.blocks[bsi].trigger);
 				} else if (words[1] == "disappearingplatforms" || words[1] == "quicksand") {
 					for (int epi = 0; epi < obj.nentity; epi++)
 						if (obj.entities[epi].type == 2) {
@@ -374,6 +368,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[eti].active = false;
 
 					game.activetele = false;
+				} else if (words[1] == "activityzones") {
+					for (int bai = 0; bai < obj.nblocks; bai++)
+						if (obj.blocks[bai].type == ACTIVITY)
+							obj.blocks[bai].active = false;
 				}
 
 				obj.cleanup();
@@ -387,7 +385,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets >= ss_toi(words[1]))
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -395,7 +393,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets < ss_toi(words[1]))
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -403,24 +401,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]==1)
 				{
-					load("custom_"+words[2]);
-					position--;
-				}
-			}
-			if (words[0] == "customifnotflag")
-			{
-				if (obj.flags[ss_toi(words[1])]!=1)
-				{
-					load("custom_"+words[2]);
-					position--;
-				}
-			}
-			if (words[0] == "customifrand")
-			{
-				int den = ss_toi(words[1]);
-				if (fRandom() < 1.0f/den)
-				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -436,12 +417,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: delay(frames)
 				scriptdelay = ss_toi(words[1]);
+                                loopdelay = true;
 			}
 			if (words[0] == "pdelay")
 			{
 				//USAGE: pdelay(frames)
 				passive = true;
 				scriptdelay = ss_toi(words[1]);
+                                loopdelay = true;
 			}
 			if (words[0] == "settile")
 			{
@@ -550,7 +533,46 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				// setroomname()
                                 position++;
-				map.roomname = commands[position];
+				map.roomname = processvars(commands[position]);
+			}
+			if (words[0] == "setvar")
+			{
+				// setvar(name, contents)
+				// OR
+				// setvar(name)
+				// <contents>
+				
+				variablenames.push_back(words[1]);
+				if (words[2] == "") {
+    	            position++;
+					variablecontents.push_back(processvars(commands[position]));
+				} else {
+					variablecontents.push_back(words[2]);
+				}
+			}
+			if (words[0] == "addvar")
+			{
+				// addvar(name, add)
+				// OR
+				// addvar(name)
+				// <add>
+				
+				int varid = getvar(words[1]);
+				if (varid != -1) {
+					if (words[2] == "") {
+    		            position++;
+						variablecontents[varid] += processvars(commands[position]);
+					} else {
+						if (is_number(variablecontents[varid]) && is_number(words[2])) {
+							std::string tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
+							tempcontents.erase ( tempcontents.find_last_not_of('0') + 1, std::string::npos );
+							tempcontents.erase ( tempcontents.find_last_not_of('.') + 1, std::string::npos );
+							variablecontents[varid] = tempcontents;
+						} else {
+							variablecontents[varid] += words[2];
+						}
+					}
+				}
 			}
 			if (words[0] == "drawtext")
 			{
@@ -564,7 +586,21 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.b      = ss_toi(words[5]);
 				temp.center = ss_toi(words[6]);
                 position++;
-				temp.text = commands[position];
+				temp.text = processvars(commands[position]);
+				scriptrender.push_back(temp);
+			}
+			if (words[0] == "drawrect")
+			{
+				// drawrect(x,y,w,h,r,g,b)
+				scriptimage temp;
+				temp.type   = 2;
+				temp.x      = ss_toi(words[1]);
+				temp.y      = ss_toi(words[2]);
+				temp.w      = ss_toi(words[3]);
+				temp.h      = ss_toi(words[4]);
+				temp.r      = ss_toi(words[5]);
+				temp.g      = ss_toi(words[6]);
+				temp.b      = ss_toi(words[7]);
 				scriptrender.push_back(temp);
 			}
       if (words[0] == "flag")
@@ -641,6 +677,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 }
                             ));
                         }
+                        if (words[0] == "hidemarkers")
+                        {
+                            game.hidemarkers = true;
+                        }
+                        if (words[0] == "showmarkers")
+                        {
+                            game.hidemarkers = false;
+                        }
                         if (words[0] == "mapimage")
                         {
                             SDL_FreeSurface(dwgfx.images[12]);
@@ -660,6 +704,54 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             map.nofog = false;
                         }
+                        if (words[0] == "finalstretchon")
+                        {
+                            map.finalstretch = true;
+                            map.final_colormode = true;
+                            map.final_colorframe = 1;
+                            map.colsuperstate = 1;
+                        }
+                        if (words[0] == "finalstretchoff")
+                        {
+                            map.finalstretch = false;
+                            map.final_colormode = false;
+                            map.final_mapcol = 0;
+                            map.colsuperstate = 0;
+                            dwgfx.foregrounddrawn = false;
+                        }
+                        if (words[0] == "disableflip")
+                        {
+                            game.noflip = true;
+                        }
+                        if (words[0] == "enableflip")
+                        {
+                            game.noflip = false;
+                        }
+                        if (words[0] == "enableinfiniflip")
+                        {
+                            game.infiniflip = true;
+                        }
+                        if (words[0] == "disableinfiniflip")
+                        {
+                            game.infiniflip = false;
+                        }
+                        if (words[0] == "disablesuicide")
+                        {
+                            game.nosuicide = true;
+                        }
+                        if (words[0] == "enablesuicide")
+                        {
+                            game.nosuicide = false;
+                        }
+                        if (words[0] == "setspeed")
+                        {
+                            game.playerspeed = std::stoi(words[1]);
+                        }
+                        if (words[0] == "setvelocity")
+                        {
+                            game.nofriction = true;
+                            obj.entities[obj.getplayer()].ax = std::stoi(words[1]);
+                        }
 			if (words[0] == "playef")
 			{
 				music.playef(ss_toi(words[1]), ss_toi(words[2]));
@@ -675,8 +767,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			if (words[0] == "play")
 			{
                                 auto fadeintime = 3000;
-                                if (words[1] != "") {
-                                    fadeintime = ss_toi(words[1]);
+                                if (words[2] != "") {
+                                    fadeintime = ss_toi(words[2]);
                                 }
 				music.play(ss_toi(words[1]), fadeintime);
 			}
@@ -723,16 +815,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
 				map.gotoroom(ss_toi(words[1])+100, ss_toi(words[2])+100, dwgfx, game, obj, music);
+				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadroom")
 			{
 				//USAGE: reloadroom()
 				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
+				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "movetoroom")
 			{
 				//USAGE: movetoroom(x,y)
 				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
+				game.gotoroomfromscript = true;
+			}
+			if (words[0] == "reloadscriptboxes")
+			{
+				for (int brs = 0; brs < obj.nresurrectblocks; brs++) {
+					obj.createblock(TRIGGER, obj.resurrectblocks[brs].x, obj.resurrectblocks[brs].y, obj.resurrectblocks[brs].wp, obj.resurrectblocks[brs].hp, obj.resurrectblocks[brs].trigger);
+					obj.resurrectblocks[brs].clear();
+				}
+				obj.nresurrectblocks = 0;
 			}
 			if (words[0] == "cutscene")
 			{
@@ -742,13 +845,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				dwgfx.showcutscenebars = false;
 			}
-			if (words[0] == "untilbars")
+			if (words[0] == "untilbars" || words[0] == "puntilbars")
 			{
 				if (dwgfx.showcutscenebars)
 				{
 					if (dwgfx.cutscenebarspos < 360)
 					{
 						scriptdelay = 1;
+						if (words[0] == "puntilbars") passive = true;
 						position--;
 					}
 				}
@@ -757,6 +861,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					if (dwgfx.cutscenebarspos > 0)
 					{
 						scriptdelay = 1;
+						if (words[0] == "puntilbars") passive = true;
 						position--;
 					}
 				}
@@ -835,7 +940,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
-					txt[i] = commands[position];
+					txt[i] = processvars(commands[position]);
 				}
 			}
 			else if ((words[0] == "textcolor") || (words[0] == "textcolour"))
@@ -854,7 +959,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
-					txt[i] = commands[position];
+					txt[i] = processvars(commands[position]);
 				}
 			}
 			else if (words[0] == "position")
@@ -865,12 +970,22 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//the first word is the object to position relative to
 				if (words[1] == "centerx")
 				{
+					if (words[2] != "")
+						textcenterline = ss_toi(words[2]);
+					else
+						textcenterline = 0;
+
 					words[2] = "donothing";
 					j = -1;
 					textx = -500;
 				}
 				else if (words[1] == "centery")
 				{
+					if (words[2] != "")
+						textcenterline = ss_toi(words[2]);
+					else
+						textcenterline = 0;
+
 					words[2] = "donothing";
 					j = -1;
 					texty = -500;
@@ -1041,15 +1156,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500)
-				{
-					dwgfx.textboxcenterx();
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx(160);
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
 				}
 
-				if (texty == -500)
-				{
-					dwgfx.textboxcentery();
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery(120);
+
+					textcenterline = 0;
 				}
+
+				textcenterline = 0;
 
 				dwgfx.textboxadjust();
 				dwgfx.textboxactive();
@@ -1086,15 +1212,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500)
-				{
-					dwgfx.textboxcenterx();
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx();
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
 				}
 
-				if (texty == -500)
-				{
-					dwgfx.textboxcentery();
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery();
+
+					textcenterline = 0;
 				}
+
+				textcenterline = 0;
 
 				dwgfx.textboxadjust();
 				//dwgfx.textboxactive();
@@ -1133,6 +1270,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				looppoint = position;
 				loopcount = -1;
 			}
+			else if (words[0] == "pinf")
+			{
+				//right, loop from this point
+				looppoint = position;
+				loopcount = -2;
+			}
 			else if (words[0] == "loop")
 			{
 				//right, loop from this point
@@ -1140,9 +1283,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				{
                                         loopcount--;
 					position = looppoint;
-				} else if (loopcount == -1) {
+				} else if (loopcount < 0) {
                                         position = looppoint;
+                                        if (loopcount == -2 && !loopdelay) {
+                                            passive = true;
+                                            scriptdelay = 1;
+                                        }
                                 }
+                                loopdelay = false;
 			}
 			else if (words[0] == "vvvvvvman")
 			{
@@ -1299,7 +1447,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.roomtextx[map.roomtextnumlines] = ss_toi(words[1]);
 				map.roomtexty[map.roomtextnumlines] = ss_toi(words[2]);
 				position++;
-				map.roomtext[map.roomtextnumlines] = commands[position];
+				map.roomtext[map.roomtextnumlines] = processvars(commands[position]);
 				map.roomtextnumlines++;
 			}
 			else if (words[0] == "createscriptbox")
@@ -1317,6 +1465,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
 				obj.createblock(TRIGGER, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), usethisslot);
 				game.customscript[usethisslot - 300] = words[5];
+			}
+			else if (words[0] == "customactivityzone")
+			{
+				position++;
+				obj.customprompt = processvars(commands[position]);
+				obj.customscript = words[6];
+				obj.customcolour = words[5];
+
+				obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 100);
+			}
+			else if (words[0] == "customactivityzonergb")
+			{
+				position++;
+				obj.customprompt = processvars(commands[position]);
+				obj.customscript = words[8];
+				obj.customr = ss_toi(words[5]);
+				obj.customg = ss_toi(words[6]);
+				obj.customb = ss_toi(words[7]);
+
+				obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 101);
 			}
 			else if (words[0] == "changemood")
 			{
@@ -1605,7 +1773,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (map.explored[ss_toi(words[1]) + (20 * ss_toi(words[2]))] == 1)
 				{
-					load(words[3]);
+					call(words[3]);
 					position--;
 				}
 			}
@@ -1613,7 +1781,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.lastsaved==ss_toi(words[1]))
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1621,7 +1789,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.nocutscenes)
 				{
-					load(words[1]);
+					call(words[1]);
 					position--;
 				}
 			}
@@ -1629,7 +1797,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]==1)
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1637,7 +1805,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]!=1)
 				{
-					load(words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -1645,7 +1813,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.crewstats[ss_toi(words[1])]==false)
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1653,7 +1821,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets >= ss_toi(words[1]))
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1661,7 +1829,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.stat_trinkets < ss_toi(words[1]))
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1670,9 +1838,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int den = ss_toi(words[1]);
 				if (fRandom() < 1.0f/den)
 				{
-					load(words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
+			}
+			else if (words[0] == "ifvce")
+			{
+				call("custom_"+words[1]);
+				position--;
 			}
 			else if (words[0] == "hidecoordinates")
 			{
@@ -1746,7 +1919,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "killplayer")
 			{
-				game.deathseq = 30;
+				if (game.deathseq <= 0)
+					game.deathseq = 30;
 			}
 			else if (words[0] == "teleportscript")
 			{
@@ -1781,11 +1955,21 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				dwgfx.fademode = 2;
 			}
-			else if (words[0] == "untilfade")
+			else if (words[0] == "untilfade" || words[0] == "puntilfade")
 			{
 				if (dwgfx.fademode>1)
 				{
 					scriptdelay = 1;
+					if (words[0] == "puntilfade") passive = true;
+					position--;
+				}
+			}
+			else if (words[0] == "untilmusic" || words[0] == "puntilmusic")
+			{
+				if (Mix_FadingMusic() != MIX_NO_FADING)
+				{
+					scriptdelay = 1;
+					if (words[0] == "puntilmusic") passive = true;
 					position--;
 				}
 			}
@@ -1840,9 +2024,16 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.final_colorframe = 0;
 				map.finalstretch = false;
 			}
+			else if (words[0] == "returnscript")
+                        {
+                            auto frame = callstack.back();
+                            load(frame.script);
+                            position = frame.line;
+                            callstack.pop_back();
+                        }
 			else if (words[0] == "loadscript")
 			{
-				load(words[1]);
+				call(words[1]);
 				position--;
 			}
 			else if (words[0] == "rollcredits")
@@ -2305,17 +2496,17 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets == 20 && obj.flags[67] == 1)
 				{
-					load("talkblue_trinket6");
+					call("talkblue_trinket6");
 					position--;
 				}
 				else if (game.trinkets >= 19 && obj.flags[67] == 0)
 				{
-					load("talkblue_trinket5");
+					call("talkblue_trinket5");
 					position--;
 				}
 				else
 				{
-					load("talkblue_trinket4");
+					call("talkblue_trinket4");
 					position--;
 				}
 			}
@@ -2323,12 +2514,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets >= 19)
 				{
-					load("talkyellow_trinket3");
+					call("talkyellow_trinket3");
 					position--;
 				}
 				else
 				{
-					load("talkyellow_trinket2");
+					call("talkyellow_trinket2");
 					position--;
 				}
 			}
@@ -2336,84 +2527,84 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkred_14");
+					call("talkred_14");
 					position--;
 				}
 				else	if (game.roomx != 104)
 				{
 					if (game.roomx == 100)
 					{
-						load("talkred_10");
+						call("talkred_10");
 						position--;
 					}
 					else if (game.roomx == 107)
 					{
-						load("talkred_11");
+						call("talkred_11");
 						position--;
 					}
 					else if (game.roomx == 114)
 					{
-						load("talkred_12");
+						call("talkred_12");
 						position--;
 					}
 				}
 				else if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkred_13");
+					call("talkred_13");
 					position--;
 				}
 				else if (obj.flags[35] == 1 && obj.flags[52] == 0)
 				{
 					//Intermission level
 					obj.flags[52] = 1;
-					load("talkred_9");
+					call("talkred_9");
 					position--;
 				}
 				else if (obj.flags[51] == 0)
 				{
 					//We're back home!
 					obj.flags[51] = 1;
-					load("talkred_5");
+					call("talkred_5");
 					position--;
 				}
 				else if (obj.flags[48] == 0 && game.crewstats[5])
 				{
 					//Victoria's back
 					obj.flags[48] = 1;
-					load("talkred_6");
+					call("talkred_6");
 					position--;
 				}
 				else if (obj.flags[49] == 0 && game.crewstats[4])
 				{
 					//Verdigris' back
 					obj.flags[49] = 1;
-					load("talkred_7");
+					call("talkred_7");
 					position--;
 				}
 				else if (obj.flags[50] == 0 && game.crewstats[2])
 				{
 					//Vitellary's back
 					obj.flags[50] = 1;
-					load("talkred_8");
+					call("talkred_8");
 					position--;
 				}
 				else if (obj.flags[45] == 0 && !game.crewstats[5])
 				{
 					obj.flags[45] = 1;
-					load("talkred_2");
+					call("talkred_2");
 					position--;
 				}
 				else if (obj.flags[46] == 0 && !game.crewstats[4])
 				{
 					obj.flags[46] = 1;
-					load("talkred_3");
+					call("talkred_3");
 					position--;
 				}
 				else if (obj.flags[47] == 0 && !game.crewstats[2])
 				{
 					obj.flags[47] = 1;
-					load("talkred_4");
+					call("talkred_4");
 					position--;
 				}
 				else
@@ -2421,7 +2612,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					obj.flags[45] = 0;
 					obj.flags[46] = 0;
 					obj.flags[47] = 0;
-					load("talkred_1");
+					call("talkred_1");
 					position--;
 				}
 			}
@@ -2430,66 +2621,66 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkgreen_11");
+					call("talkgreen_11");
 					position--;
 				}
 				else	if (game.roomx == 103 && game.roomy == 109)
 				{
-					load("talkgreen_8");
+					call("talkgreen_8");
 					position--;
 				}
 				else if (game.roomx == 101 && game.roomy == 109)
 				{
-					load("talkgreen_9");
+					call("talkgreen_9");
 					position--;
 				}
 				else if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkgreen_10");
+					call("talkgreen_10");
 					position--;
 				}
 				else if (obj.flags[34] == 1 && obj.flags[57] == 0)
 				{
 					//Intermission level
 					obj.flags[57] = 1;
-					load("talkgreen_7");
+					call("talkgreen_7");
 					position--;
 				}
 				else if (obj.flags[53] == 0)
 				{
 					//Home!
 					obj.flags[53] = 1;
-					load("talkgreen_6");
+					call("talkgreen_6");
 					position--;
 				}
 				else if (obj.flags[54] == 0 && game.crewstats[2])
 				{
 					obj.flags[54] = 1;
-					load("talkgreen_5");
+					call("talkgreen_5");
 					position--;
 				}
 				else if (obj.flags[55] == 0 && game.crewstats[3])
 				{
 					obj.flags[55] = 1;
-					load("talkgreen_4");
+					call("talkgreen_4");
 					position--;
 				}
 				else if (obj.flags[56] == 0 && game.crewstats[5])
 				{
 					obj.flags[56] = 1;
-					load("talkgreen_3");
+					call("talkgreen_3");
 					position--;
 				}
 				else if (obj.flags[58] == 0)
 				{
 					obj.flags[58] = 1;
-					load("talkgreen_2");
+					call("talkgreen_2");
 					position--;
 				}
 				else
 				{
-					load("talkgreen_1");
+					call("talkgreen_1");
 					position--;
 				}
 			}
@@ -2497,7 +2688,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkblue_9");
+					call("talkblue_9");
 					position--;
 				}
 				else	if (obj.flags[67] == 1)
@@ -2507,14 +2698,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					{
 						//second trinket conversation
 						obj.flags[42] = 1;
-						load("talkblue_trinket2");
+						call("talkblue_trinket2");
 						position--;
 					}
 					else if (obj.flags[41] == 0 && obj.flags[42] == 0)
 					{
 						//Third trinket conversation
 						obj.flags[42] = 1;
-						load("talkblue_trinket3");
+						call("talkblue_trinket3");
 						position--;
 					}
 					else
@@ -2522,12 +2713,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						//Ok, we've already dealt with the trinket thing; so either you have them all, or you don't. If you do:
 						if (game.trinkets >= 20)
 						{
-							load("startepilogue");
+							call("startepilogue");
 							position--;
 						}
 						else
 						{
-							load("talkblue_8");
+							call("talkblue_8");
 							position--;
 						}
 					}
@@ -2536,53 +2727,53 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				{
 					//Intermission level
 					obj.flags[40] = 1;
-					load("talkblue_7");
+					call("talkblue_7");
 					position--;
 				}
 				else if (obj.flags[36] == 0 && game.crewstats[5])
 				{
 					//Back on the ship!
 					obj.flags[36] = 1;
-					load("talkblue_3");
+					call("talkblue_3");
 					position--;
 				}
 				else if (obj.flags[41] == 0 && game.crewrescued() <= 4)
 				{
 					//First trinket conversation
 					obj.flags[41] = 1;
-					load("talkblue_trinket1");
+					call("talkblue_trinket1");
 					position--;
 				}
 				else if (obj.flags[41] == 1 && obj.flags[42] == 0 && game.crewrescued() == 5)
 				{
 					//second trinket conversation
 					obj.flags[42] = 1;
-					load("talkblue_trinket2");
+					call("talkblue_trinket2");
 					position--;
 				}
 				else if (obj.flags[41] == 0 && obj.flags[42] == 0 && game.crewrescued() == 5)
 				{
 					//Third trinket conversation
 					obj.flags[42] = 1;
-					load("talkblue_trinket3");
+					call("talkblue_trinket3");
 					position--;
 				}
 				else if (obj.flags[37] == 0 && game.crewstats[2])
 				{
 					obj.flags[37] = 1;
-					load("talkblue_4");
+					call("talkblue_4");
 					position--;
 				}
 				else if (obj.flags[38] == 0 && game.crewstats[3])
 				{
 					obj.flags[38] = 1;
-					load("talkblue_5");
+					call("talkblue_5");
 					position--;
 				}
 				else if (obj.flags[39] == 0 && game.crewstats[4])
 				{
 					obj.flags[39] = 1;
-					load("talkblue_6");
+					call("talkblue_6");
 					position--;
 				}
 				else
@@ -2591,12 +2782,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					//if yellow is found
 					if (game.crewstats[2])
 					{
-						load("talkblue_2");
+						call("talkblue_2");
 						position--;
 					}
 					else
 					{
-						load("talkblue_1");
+						call("talkblue_1");
 						position--;
 					}
 				}
@@ -2605,27 +2796,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkyellow_12");
+					call("talkyellow_12");
 					position--;
 				}
 				else	if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkyellow_11");
+					call("talkyellow_11");
 					position--;
 				}
 				else if (obj.flags[32] == 1 && obj.flags[31] == 0)
 				{
 					//Intermission level
 					obj.flags[31] = 1;
-					load("talkyellow_6");
+					call("talkyellow_6");
 					position--;
 				}
 				else if (obj.flags[27] == 0 && game.crewstats[2])
 				{
 					//Back on the ship!
 					obj.flags[27] = 1;
-					load("talkyellow_10");
+					call("talkyellow_10");
 					position--;
 				}
 				else if (obj.flags[43] == 0 && game.crewrescued() == 5 && !game.crewstats[5])
@@ -2635,54 +2826,54 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					obj.flags[43] = 1;
 					obj.flags[42] = 1;
 					obj.flags[41] = 1;
-					load("talkyellow_trinket1");
+					call("talkyellow_trinket1");
 					position--;
 				}
 				else if (obj.flags[24] == 0 && game.crewstats[5])
 				{
 					obj.flags[24] = 1;
-					load("talkyellow_8");
+					call("talkyellow_8");
 					position--;
 				}
 				else if (obj.flags[26] == 0 && game.crewstats[4])
 				{
 					obj.flags[26] = 1;
-					load("talkyellow_7");
+					call("talkyellow_7");
 					position--;
 				}
 				else if (obj.flags[25] == 0 && game.crewstats[3])
 				{
 					obj.flags[25] = 1;
-					load("talkyellow_9");
+					call("talkyellow_9");
 					position--;
 				}
 				else if (obj.flags[28] == 0)
 				{
 					obj.flags[28] = 1;
-					load("talkyellow_3");
+					call("talkyellow_3");
 					position--;
 				}
 				else if (obj.flags[29] == 0)
 				{
 					obj.flags[29] = 1;
-					load("talkyellow_4");
+					call("talkyellow_4");
 					position--;
 				}
 				else if (obj.flags[30] == 0)
 				{
 					obj.flags[30] = 1;
-					load("talkyellow_5");
+					call("talkyellow_5");
 					position--;
 				}
 				else if (obj.flags[23] == 0)
 				{
 					obj.flags[23] = 1;
-					load("talkyellow_2");
+					call("talkyellow_2");
 					position--;
 				}
 				else
 				{
-					load("talkyellow_1");
+					call("talkyellow_1");
 					position--;
 					obj.flags[23] = 0;
 				}
@@ -2693,72 +2884,72 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//Crew rescued:
 				if (game.insecretlab)
 				{
-					load("talkpurple_9");
+					call("talkpurple_9");
 					position--;
 				}
 				else	if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkpurple_8");
+					call("talkpurple_8");
 					position--;
 				}
 				else if (obj.flags[17] == 0 && game.crewstats[4])
 				{
 					obj.flags[17] = 1;
-					load("talkpurple_6");
+					call("talkpurple_6");
 					position--;
 				}
 				else if (obj.flags[15] == 0 && game.crewstats[5])
 				{
 					obj.flags[15] = 1;
-					load("talkpurple_4");
+					call("talkpurple_4");
 					position--;
 				}
 				else if (obj.flags[16] == 0 && game.crewstats[3])
 				{
 					obj.flags[16] = 1;
-					load("talkpurple_5");
+					call("talkpurple_5");
 					position--;
 				}
 				else if (obj.flags[18] == 0 && game.crewstats[2])
 				{
 					obj.flags[18] = 1;
-					load("talkpurple_7");
+					call("talkpurple_7");
 					position--;
 				}
 				else if (obj.flags[19] == 1 && obj.flags[20] == 0 && obj.flags[21] == 0)
 				{
 					//intermission one: if played one / not had first conversation / not played two [conversation one]
 					obj.flags[21] = 1;
-					load("talkpurple_intermission1");
+					call("talkpurple_intermission1");
 					position--;
 				}
 				else if (obj.flags[20] == 1 && obj.flags[21] == 1 && obj.flags[22] == 0)
 				{
 					//intermission two: if played two / had first conversation / not had second conversation [conversation two]
 					obj.flags[22] = 1;
-					load("talkpurple_intermission2");
+					call("talkpurple_intermission2");
 					position--;
 				}
 				else if (obj.flags[20] == 1 && obj.flags[21] == 0 && obj.flags[22] == 0)
 				{
 					//intermission two: if played two / not had first conversation / not had second conversation [conversation three]
 					obj.flags[22] = 1;
-					load("talkpurple_intermission3");
+					call("talkpurple_intermission3");
 					position--;
 				}
 				else if (obj.flags[12] == 0)
 				{
 					//Intro conversation
 					obj.flags[12] = 1;
-					load("talkpurple_intro");
+					call("talkpurple_intro");
 					position--;
 				}
 				else if (obj.flags[14] == 0)
 				{
 					//Shorter intro conversation
 					obj.flags[14] = 1;
-					load("talkpurple_3");
+					call("talkpurple_3");
 					position--;
 				}
 				else
@@ -2767,12 +2958,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					//if green is found
 					if (game.crewstats[4])
 					{
-						load("talkpurple_2");
+						call("talkpurple_2");
 						position--;
 					}
 					else
 					{
-						load("talkpurple_1");
+						call("talkpurple_1");
 						position--;
 					}
 				}
@@ -2782,6 +2973,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		}
 		else
 		{
+                        if (!callstack.empty()) callstack.pop_back();
 			running = false;
 		}
 	}
@@ -2827,7 +3019,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intro");
+		call("intro");
 		break;
 	case 1:
 		game.gamestate = GAMEMODE;
@@ -3083,7 +3275,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
 
-		load("intro");
+		call("intro");
 		break;
 	case 10:
 		game.gamestate = GAMEMODE;
@@ -3112,7 +3304,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
 
-		load("intro");
+		call("intro");
 		break;
 	case 11:
 		game.gamestate = GAMEMODE;
@@ -3182,7 +3374,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 13:
 		game.gamestate = GAMEMODE;
@@ -3217,7 +3409,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 14:
 		game.gamestate = GAMEMODE;
@@ -3252,7 +3444,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 15:
 		game.gamestate = GAMEMODE;
@@ -3287,7 +3479,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 16:
 		game.gamestate = GAMEMODE;
@@ -3319,7 +3511,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 17:
 		game.gamestate = GAMEMODE;
@@ -3351,7 +3543,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 18:
 		game.gamestate = GAMEMODE;
@@ -3383,7 +3575,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 19:
 		game.gamestate = GAMEMODE;
@@ -3415,7 +3607,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 20:
 		//Level editor
@@ -3470,12 +3662,12 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}else{
 		  music.currentsong=-1;
 		}
-		//load("intro");
+		//call("intro");
 		break;
   case 22:  //play custom level (in game)
     //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -3513,12 +3705,12 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
       music.currentsong=-1;
 		}
 		dwgfx.fademode = 4;
-    //load("intro");
+    //call("intro");
   break;
   case 23: //Continue in custom level
       //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -3559,7 +3751,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		*/
                 ed.generatecustomminimap(dwgfx, map);
 		dwgfx.fademode = 4;
-    //load("intro");
+    //call("intro");
   break;
 	case 100:
 		game.savestats(map, dwgfx, music);
@@ -3647,7 +3839,7 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 	if (game.teleportscript != "")
 	{
 		game.state = 0;
-		load(game.teleportscript);
+		call(game.teleportscript);
 		game.teleportscript = "";
 	}
 	else
@@ -3766,6 +3958,11 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
   game.hascontrol = true;
   game.advancetext = false;
 
+	game.noflip = false;
+	game.infiniflip = false;
+
+	game.nosuicide = false;
+
 	//dwgraphicsclass
 	dwgfx.backgrounddrawn = false;
 	dwgfx.textboxremovefast();
@@ -3836,7 +4033,19 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	position = 0;
 	scriptlength = 0;
 	scriptdelay = 0;
-	scriptname = "null";
+	scriptname = "";
 	running = false;
 	passive = false;
+	variablenames.clear();
+	variablecontents.clear();
+	variablenames.resize(100);
+	variablecontents.resize(100);
+}
+
+int scriptclass::getlabelnum(std::string thelabel)
+{
+	for (int n = 0; n < nlabels; n++)
+		if (labelnames[n] == thelabel)
+			return n;
+	return -1;
 }

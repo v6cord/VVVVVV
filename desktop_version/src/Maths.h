@@ -21,8 +21,8 @@ inline int clamp(int x, int a, int b)
 
 struct point
 {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
 };
 
 #endif /* MATHGAME_H */

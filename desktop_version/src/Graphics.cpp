@@ -6,6 +6,8 @@
 #include "FileSystemUtils.h"
 #include <utf8/checked.h>
 #include <physfs.h>
+#include <iterator>
+#include <fribidi/fribidi.h>
 
 Graphics::Graphics()
 {
@@ -34,6 +36,7 @@ Graphics::Graphics()
 
     showcutscenebars = false;
     cutscenebarspos = 0;
+    notextoutline = false;
 
     flipmode = false;
     setflipmode = false;
@@ -128,7 +131,7 @@ Graphics::Graphics()
 
 int Graphics::font_idx(char32_t ch) {
     if (font_positions.size() > 0) {
-        std::map<int, int>::iterator iter = font_positions.find(ch);
+        auto iter = font_positions.find(ch);
         if (iter == font_positions.end()) {
             return font_positions.at('?');
         } else {
@@ -190,6 +193,12 @@ int Graphics::bfontlen(char32_t ch) {
     } else {
         return 8;
     }
+}
+
+std::vector<uint32_t> utf8to32(const std::string& src) {
+    std::vector<uint32_t> res;
+    utf8::utf8to32(src.begin(), src.end(), std::back_inserter(res));
+    return res;
 }
 
 void Graphics::MakeTileArray()
@@ -265,10 +274,14 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
     if (cen)
         _x = ((160 ) - ((len(_s)) / 2));
     int bfontpos = 0;
-    int curr;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
         point tpoint;
         tpoint.x = _x + bfontpos;
         tpoint.y = _y;
@@ -304,10 +317,14 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 	}
 
     int bfontpos = 0;
-    int curr;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
 
         /*
         point tpoint;
@@ -359,9 +376,14 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
     int bfontpos = 0;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        int curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
         point tpoint;
         tpoint.x = _x + bfontpos;
         tpoint.y = _y;
@@ -389,19 +411,22 @@ void Graphics::bprint( int x, int y, std::string t, int r, int g, int b, bool ce
 {
 
     //printmask(x, y, t, cen);
-    //Print(x, y - 1, t, 0, 0, 0, cen);
-    //if (cen)
-    //{
-    //	//TODO find different
-    //	PrintOff(-1, y, t, 0, 0, 0, cen);
-    //	PrintOff(1, y, t, 0, 0, 0, cen);
-    //}
-    //else
-    //{
-    //	Print(x  -1, y, t, 0, 0, 0, cen);
-    //	Print(x , y, t, 0, 0, 0, cen);
-    //}
-    //Print(x, y+1, t, 0, 0, 0, cen);
+    if (!notextoutline)
+    {
+        Print(x, y - 1, t, 0, 0, 0, cen);
+        if (cen)
+        {
+            //TODO find different
+            PrintOff(-1, y, t, 0, 0, 0, cen);
+            PrintOff(1, y, t, 0, 0, 0, cen);
+        }
+        else
+        {
+            Print(x  -1, y, t, 0, 0, 0, cen);
+            Print(x  +1, y, t, 0, 0, 0, cen);
+        }
+        Print(x, y+1, t, 0, 0, 0, cen);
+    }
 
     Print(x, y, t, r, g, b, cen);
 }
@@ -416,10 +441,14 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
     if (cen)
         _x = ((308) - (_s.length() / 2));
     int bfontpos = 0;
-    int curr;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
         point tpoint;
         tpoint.x = _x + bfontpos;
         tpoint.y = _y;
@@ -2967,9 +2996,9 @@ void Graphics::textboxcenter()
 	textbox[m].centery();
 }
 
-void Graphics::textboxcenterx()
+void Graphics::textboxcenterx(int centerline)
 {
-	textbox[m].centerx();
+	textbox[m].centerx(centerline);
 }
 
 int Graphics::textboxwidth()
@@ -2988,9 +3017,9 @@ void Graphics::textboxmoveto(int xo)
 	textbox[m].xp = xo;
 }
 
-void Graphics::textboxcentery()
+void Graphics::textboxcentery(int centerline)
 {
-	textbox[m].centery();
+	textbox[m].centery(centerline);
 }
 
 int Graphics::crewcolour(const int t)
@@ -3113,10 +3142,14 @@ void Graphics::bigrprint(int x, int y, std::string& t, int r, int g, int b, bool
 	}
 
 	int bfontpos = 0;
-	int cur;
-        std::string::iterator iter = t.begin();
-	while (iter != t.end()) {
-		cur = utf8::next(iter, t.end());
+        auto utf32 = utf8to32(t);
+        std::vector<uint32_t> bidi(utf32.size());
+        FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+        if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+            printf("fribidi error\n");
+            exit(1);
+        }
+        for (auto cur : bidi) {
 		if (flipmode)
 		{
 			SDL_Surface* tempPrint = ScaleSurfaceSlow(flipbfont[font_idx(cur)], bfont[font_idx(cur)]->w *sc,bfont[font_idx(cur)]->h *sc);
@@ -3243,4 +3276,36 @@ void Graphics::drawrect(int x, int y, int w, int h, int r, int g, int b)
 bool Graphics::onscreen(int t)
 {
 	return (t >= -40 && t <= 280);
+}
+
+void Graphics::reloadresources() {
+    grphx = GraphicsResources();
+
+    images.clear();
+    tiles.clear();
+    tiles2.clear();
+    tiles3.clear();
+    entcolours.clear();
+    sprites.clear();
+    flipsprites.clear();
+    tele.clear();
+
+    MakeTileArray();
+    MakeSpriteArray();
+    maketelearray();
+
+    images.push_back(grphx.im_image0);
+    images.push_back(grphx.im_image1);
+    images.push_back(grphx.im_image2);
+    images.push_back(grphx.im_image3);
+    images.push_back(grphx.im_image4);
+    images.push_back(grphx.im_image5);
+    images.push_back(grphx.im_image6);
+
+    images.push_back(grphx.im_image7);
+    images.push_back(grphx.im_image8);
+    images.push_back(grphx.im_image9);
+    images.push_back(grphx.im_image10);
+    images.push_back(grphx.im_image11);
+    images.push_back(grphx.im_image12);
 }

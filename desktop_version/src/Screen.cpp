@@ -4,17 +4,22 @@
 #include "GraphicsUtil.h"
 
 #include <stdlib.h>
+#include <cstring>
+#include <physfs.h>
 
 // Used to create the window icon
 extern "C"
 {
-	extern unsigned lodepng_decode24(
+	extern unsigned lodepng_decode32(
 		unsigned char** out,
 		unsigned* w,
 		unsigned* h,
 		const unsigned char* in,
 		size_t insize
 	);
+
+        extern const unsigned char v6cord_png[];
+        extern const unsigned v6cord_png_size;
 }
 
 Screen::Screen()
@@ -41,25 +46,31 @@ Screen::Screen()
 		&m_window,
 		&m_renderer
 	);
-	SDL_SetWindowTitle(m_window, "VVVVVV");
+	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
-	unsigned char *fileIn = NULL;
-	size_t length = 0;
+	unsigned char *fileIn = (unsigned char*) v6cord_png;
+	size_t length = v6cord_png_size;
 	unsigned char *data;
 	unsigned int width, height;
-	FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
-	lodepng_decode24(&data, &width, &height, fileIn, length);
-	FILESYSTEM_freeMemory(&fileIn);
+        auto realPath = PHYSFS_getRealDir("VVVVVV.png");
+        if (realPath) {
+            auto end = strrchr(realPath, 'd');
+            if (!end || (end && strcmp(end, "data.zip") != 0)) {
+                FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
+            }
+        }
+	lodepng_decode32(&data, &width, &height, fileIn, length);
+	if (fileIn != v6cord_png) FILESYSTEM_freeMemory(&fileIn);
 	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(
 		data,
 		width,
 		height,
-		24,
-		width * 3,
+		32,
+		width * 4,
 		0x000000FF,
 		0x0000FF00,
 		0x00FF0000,
-		0x00000000
+		0xFF000000
 	);
 	SDL_SetWindowIcon(m_window, icon);
 	SDL_FreeSurface(icon);

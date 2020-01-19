@@ -14,8 +14,8 @@ public:
     growing_vector<std::string> loadlevel(int rx, int ry, Game& game, entityclass& obj);
 
     std::string roomname;
-    int coin, rcol;
-    bool warpx, warpy;
+    int coin, rcol = 0;
+    bool warpx, warpy = false;
 };
 
 #endif /* FINALCLASS_H */

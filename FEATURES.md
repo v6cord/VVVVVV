@@ -25,9 +25,11 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `stopfile(id)` - stops playing a looping audio file
 
-- `ifnotflag()` - an inverted version of `ifflag()`. `customifnotflag` is the internal counterpart
+- `ifnotflag()` - an inverted version of `ifflag()`
 
 - `drawtext(x,y,r,g,b,center)` - draw text for one frame. The text you want to display should be after the command. `center` should be either 0 or 1.
+
+- `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame.
 
 - `followposition` now works for the player
 
@@ -35,39 +37,13 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - All limits have been removed except for the 20x20 map size limit
 
-- `destroy(platformsreal)` - A version of `destroy(platforms)` that isn't bugged
-
-- `destroy(enemies)`
-
-- `destroy(trinkets)`
-
-- `destroy(warplines)`
-
-- `destroy(checkpoints)`
-
-- `destroy(all)`
-
-- `destroy(conveyors)`
-
-- `destroy(terminals)`
-
-- `destroy(scriptboxes)`
-
-- `destroy(disappearingplatforms)`
-
-- `destroy(1x1quicksand)`
-
-- `destroy(coins)`
-
-- `destroy(gravitytokens)`
-
-- `destroy(roomtext)`
-
 - `destroy(crewmates)` - destroy non-rescuable crewmates
 
 - `destroy(customcrewmates)` - destroy rescuable crewmates
 
-- `destroy(teleporter)`
+- `destroy(platformsreal)` - A version of `destroy(platforms)` that isn't bugged
+
+- `destroy(enemies|trinkets|warplines|checkpoints|all|conveyors|terminals|scriptboxes|disappearingplatforms|1x1quicksand|coins|gravitytokens|roomtext|teleporter|activityzones)`
 
 - `killplayer()`
 
@@ -123,8 +99,62 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `createroomtext(x,y)` - x,y in tiles, roomtext on next line
 
-- `createscriptbox(x,y,w,h)` - x,y,w,h in pixels
+- `createscriptbox(x,y,w,h,script)` - x,y,w,h in pixels
 
 - Allowed placed terminals to use any sprite they want
 
 - You can now place flipped terminals
+
+- Add showmarkers/hidemarkers to temporarily disable markmap markers
+
+- `setspeed(x)` for player speed, 3 by default
+
+- `setvelocity(x)` to push the player (affected by inertia)
+
+- `pinf` - variant of `inf` to automatically `pdelay(1)` if no delay occurred
+
+- `nobars()` - to disable automatic cutscene bars from a script
+
+- `finalstretchon` - turn on Final Level palette swap
+
+- `finalstretchoff` - turn off Final Level palette swap
+
+- `reloadscriptboxes()` - reload script boxes without affecting entities
+
+- `puntilbars()` - `untilbars()` with `pdelay()`
+
+- `puntilfade()` - `untilfade()` with `pdelay()`
+
+- You can now use the Warp Zone gray tileset in the editor
+
+- `disableflip` - disables flipping
+
+- `enableflip` - enables flipping
+
+- `enableinfiniflip` - enables flipping in mid-air
+
+- `disableinfiniflip` - disables flipping in mid-air
+
+- `untilmusic()` - wait until the current track has finished fading in or out
+
+- `puntilmusic()` - `untilmusic()` with `pdelay()`
+
+- Edentity conveyors no longer have tile 1s underneath them
+
+- Added a label and goto system - write down `$label$` on a line, then to go to it, use `$label$` as a script name if you're in the same script, or write `scriptname$label$` to jump to the label from another script
+
+- `ifvce()` - detect if game is VVVVVV: Community Edition or not
+
+- `disablesuicide` - Disable pressing R
+
+- `enablesuicide` - Enable pressing R
+
+- `customactivityzone(x,y,w,h,color,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, prompt goes on the next line
+
+- `customactivityzonergb(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, prompt goes on the next line
+
+- Fixed the 2-frame delay to execute a script when entering a room
+
+- `position(centerx,<line>)` - Horizontally center the text box around the line x=\<line>
+
+- `position(centery,<line>)` - Vertically center the text box around the line y=\<line>

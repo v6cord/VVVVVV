@@ -16,7 +16,11 @@
 #include "FileSystemUtils.h"
 
 #include <string>
+#include <string_view>
+#include <memory>
+#include <stdexcept>
 #include <utf8/checked.h>
+#include <physfs.h>
 
 edlevelclass::edlevelclass()
 {
@@ -35,6 +39,19 @@ edlevelclass::edlevelclass()
     enemyy2=240;
     enemytype=0;
     directmode=0;
+}
+
+edaltstate::edaltstate()
+{
+    x = -1;
+    y = -1;
+    state = -1;
+    tiles.resize(40 * 30);
+}
+
+void edaltstate::reset()
+{
+    edaltstate();
 }
 
 editorclass::editorclass()
@@ -117,106 +134,32 @@ void editorclass::getDirectoryData()
 }
 bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
 {
-    unsigned char *mem = NULL;
-    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
+    unsigned char *uMem = NULL;
+    FILESYSTEM_loadFileToMemory(_path.c_str(), &uMem, NULL);
 
-    if (mem == NULL)
+    if (uMem == NULL)
     {
         printf("Level %s not found :(\n", _path.c_str());
         return false;
     }
 
-    TiXmlDocument doc;
-    doc.Parse((const char*) mem);
-    FILESYSTEM_freeMemory(&mem);
+    std::unique_ptr<char[]> mem((char*) uMem);
 
-    TiXmlHandle hDoc(&doc);
-    TiXmlElement* pElem;
-    TiXmlHandle hRoot(0);
-
-
-    {
-        pElem=hDoc.FirstChildElement().Element();
-        // should always have a valid root but handle gracefully if it does
-        if (!pElem)
-        {
-            printf("No valid root! Corrupt level file?\n");
-        }
-
-        // save this for later
-        hRoot=TiXmlHandle(pElem);
+    try {
+        _data.timeCreated = find_created(mem.get());
+        _data.creator = find_creator(mem.get());
+        _data.title = find_title(mem.get());
+        _data.timeModified = find_modified(mem.get());
+        _data.modifier = find_modifiers(mem.get());
+        _data.Desc1 = find_desc1(mem.get());
+        _data.Desc2 = find_desc2(mem.get());
+        _data.Desc3 = find_desc3(mem.get());
+        _data.website = find_website(mem.get());
+        _data.filename = _path;
+        return true;
+    } catch (const std::out_of_range& ex) {
+        return false;
     }
-
-    for( pElem = hRoot.FirstChild( "Data" ).FirstChild().Element(); pElem; pElem=pElem->NextSiblingElement())
-    {
-        std::string pKey(pElem->Value());
-        const char* pText = pElem->GetText() ;
-        if(pText == NULL)
-        {
-            pText = "";
-        }
-
-        if (pKey == "MetaData")
-        {
-
-            for( TiXmlElement* subElem = pElem->FirstChildElement(); subElem; subElem= subElem->NextSiblingElement())
-            {
-                std::string pKey(subElem->Value());
-                const char* pText = subElem->GetText() ;
-                if(pText == NULL)
-                {
-                    pText = "";
-                }
-                _data.filename = _path;
-
-                if(pKey == "Created")
-                {
-                    _data.timeCreated = pText;
-                }
-
-                if(pKey == "Creator")
-                {
-                    _data.creator = pText;
-                }
-
-                if(pKey == "Title")
-                {
-                    _data.title = pText;
-                }
-
-                if(pKey == "Modified")
-                {
-                    _data.timeModified = pText;
-                }
-
-                if(pKey == "Modifiers")
-                {
-                    _data.modifier = pText;
-                }
-
-                if(pKey == "Desc1")
-                {
-                    _data.Desc1 = pText;
-                }
-
-                if(pKey == "Desc2")
-                {
-                    _data.Desc2 = pText;
-                }
-
-                if(pKey == "Desc3")
-                {
-                    _data.Desc3 = pText;
-                }
-
-                if(pKey == "website")
-                {
-                    _data.website = pText;
-                }
-            }
-        }
-    }
-    return (_data.filename != "");
 }
 
 void editorclass::reset()
@@ -359,14 +302,18 @@ void editorclass::reset()
     script.customscript.clear();
 
     grayenemieskludge = false;
+
+    for (size_t i = 0; i < altstates.size(); i++) {
+        altstates[i].reset();
+    }
 }
 
-void editorclass::weirdloadthing(std::string t)
+void editorclass::weirdloadthing(std::string t, Graphics& dwgfx)
 {
     //Stupid pointless function because I hate C++ and everything to do with it
     //It's even stupider now that I don't need to append .vvvvvv anymore! bah, whatever
     //t=t+".vvvvvv";
-    load(t);
+    load(t, dwgfx);
 }
 
 void editorclass::gethooks()
@@ -575,7 +522,7 @@ void editorclass::insertline(int t)
     sblength++;
 }
 
-void editorclass::loadlevel( int rxi, int ryi )
+void editorclass::loadlevel( int rxi, int ryi, int altstate )
 {
     //Set up our buffer array to be picked up by mapclass
     rxi -= 100;
@@ -585,12 +532,19 @@ void editorclass::loadlevel( int rxi, int ryi )
     if(rxi>=mapwidth)rxi-=mapwidth;
     if(ryi>=mapheight)ryi-=mapheight;
 
-    for (int j = 0; j < 30; j++)
-    {
-        for (int i = 0; i < 40; i++)
-        {
-            swapmap[i+(j*40)]=contents[i+(rxi*40)+vmult[j+(ryi*30)]];
-        }
+    int thisstate = -1;
+    if (altstate != 0)
+        thisstate = getedaltstatenum(rxi, ryi, altstate);
+
+    if (thisstate == -1) { // Didn't find the alt state, or not using one
+        for (int j = 0; j < 30; j++)
+            for (int i = 0; i < 40; i++)
+                swapmap[i+(j*40)]=contents[i+(rxi*40)+vmult[j+(ryi*30)]];
+    } else {
+        for (int j = 0; j < 30; j++)
+            for (int i = 0; i < 40; i++)
+                // Not bothering with whatever that `vmult` shit is
+                swapmap[i + j*40] = altstates[thisstate].tiles[i + j*40];
     }
 }
 
@@ -1754,16 +1708,45 @@ void editorclass::countstuff()
     }
 }
 
-void editorclass::load(std::string& _path)
+void editorclass::load(std::string& _path, Graphics& dwgfx)
 {
     reset();
 
-    unsigned char *mem = NULL;
+    //Here lies the code to load custom assets. Yeet
+
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
     {
         _path = levelDir + _path;
     }
+
+    char** path = PHYSFS_getSearchPath();
+    char** i = path;
+    int len = 0;
+    while (*i != nullptr) {
+        i++;
+        len++;
+    }
+    i = path + 2;
+    len -= 2;
+    for (; len > 0; len--) {
+        printf("Unmounting %s\n", *i);
+        PHYSFS_unmount(*i);
+        i++;
+    }
+    PHYSFS_freeList(path);
+
+    std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
+    if (FILESYSTEM_directoryExists(dirpath.c_str())) {
+        printf("Custom asset directory exists at %s\n",dirpath.c_str());
+        FILESYSTEM_mount(dirpath.c_str());
+        dwgfx.reloadresources();
+    } else {
+        printf("Custom asset directory does not exist\n");
+    }
+
+    unsigned char *mem = NULL;
+    
     FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
 
     if (mem == NULL)
@@ -1888,6 +1871,33 @@ void editorclass::load(std::string& _path)
             }
         }
 
+        if (pKey == "altstates") {
+            int i = 0;
+            for (TiXmlElement* edAltstateEl = pElem->FirstChildElement(); edAltstateEl; edAltstateEl = edAltstateEl->NextSiblingElement()) {
+                std::string pKey(edAltstateEl->Value());
+                const char* pText = edAltstateEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                // Do we NEED the parentheses around `pText`? Whatever
+                std::string TextString = (pText);
+
+                if (TextString.length()) {
+                    edAltstateEl->QueryIntAttribute("x", &altstates[i].x);
+                    edAltstateEl->QueryIntAttribute("y", &altstates[i].y);
+                    edAltstateEl->QueryIntAttribute("state", &altstates[i].state);
+
+                    growing_vector<std::string> values = split(TextString, ',');
+
+                    for (size_t t = 0; t < values.size(); t++)
+                        altstates[i].tiles[t] = atoi(values[t].c_str());
+
+                    i++;
+                }
+            }
+        }
+
         /*else if(version==1){
           if (pKey == "contents")
           {
@@ -1927,6 +1937,8 @@ void editorclass::load(std::string& _path)
                 edEntityEl->QueryIntAttribute("p4", &edentity[i].p4);
                 edEntityEl->QueryIntAttribute("p5", &edentity[i].p5);
                 edEntityEl->QueryIntAttribute("p6", &edentity[i].p6);
+
+                edEntityEl->QueryIntAttribute("state", &edentity[i].state);
 
                 i++;
 
@@ -2159,7 +2171,7 @@ void editorclass::save(std::string& _path)
 }
 
 
-void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
+void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/, int state)
 {
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
@@ -2170,12 +2182,13 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     edentity[EditorData::GetInstance().numedentities].p4=p4;
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
+    edentity[EditorData::GetInstance().numedentities].state=state;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 
     EditorData::GetInstance().numedentities++;
 }
 
-void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
+void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/, int state)
 {
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
@@ -2186,6 +2199,7 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     edentity[EditorData::GetInstance().numedentities].p4=p4;
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
+    edentity[EditorData::GetInstance().numedentities].state=state;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 }
 
@@ -2200,6 +2214,7 @@ void copyedentity( int a, int b )
     edentity[a].p4=edentity[b].p4;
     edentity[a].p5=edentity[b].p5;
     edentity[a].p6=edentity[b].p6;
+    edentity[a].state=edentity[b].state;
     edentity[a].scriptname=edentity[b].scriptname;
 }
 
@@ -3221,10 +3236,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print( -1, 120, "2: Positive Force", tr, tg, tb, true);
                 break;
             case 3:
-                dwgfx.Print( -1, 120, "3: Potential For Anything", tr, tg, tb, true);
+                dwgfx.Print( -1, 120, "3: Potential for Anything", tr, tg, tb, true);
                 break;
             case 4:
-                dwgfx.Print( -1, 120, "4: Passion For Exploring", tr, tg, tb, true);
+                dwgfx.Print( -1, 120, "4: Passion for Exploring", tr, tg, tb, true);
                 break;
             case 6:
                 dwgfx.Print( -1, 120, "5: Presenting VVVVVV", tr, tg, tb, true);
@@ -3245,7 +3260,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print( -1, 120, "10: Paced Energy", tr, tg, tb, true);
                 break;
             case 14:
-                dwgfx.Print( -1, 120, "11: Piercing The Sky", tr, tg, tb, true);
+                dwgfx.Print( -1, 120, "11: Piercing the Sky", tr, tg, tb, true);
                 break;
             default:
                 dwgfx.Print( -1, 120, "?: something else", tr, tg, tb, true);
@@ -4084,7 +4099,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 else if(ed.loadmod)
                 {
                     std::string loadstring=ed.filename+".vvvvvv";
-                    ed.load(loadstring);
+                    ed.load(loadstring, dwgfx);
                     ed.note="[ Loaded map: " + ed.filename+ ".vvvvvv]";
                     ed.notedelay=45;
                     ed.loadmod=false;
@@ -4426,6 +4441,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
                 {
                     if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=30) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
+                }
+                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==3)
+                {
+                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=7) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
                 }
                 else
                 {
@@ -5490,3 +5509,50 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         }
     }
 }
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty())
+        return;
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
+
+std::string find_tag(std::string_view buf, std::string_view start, std::string_view end) {
+    auto title_tag = buf.find(start);
+    auto title_start = title_tag + start.size();
+    auto title_close = buf.find(end, title_start);
+    auto title_len = title_close - title_start;
+    std::string value(buf.substr(title_start, title_len));
+    replaceAll(value, "&quot;", "\"");
+    replaceAll(value, "&amp;", "&");
+    replaceAll(value, "&apos;", "'");
+    replaceAll(value, "&lt;", "<");
+    replaceAll(value, "&gt;", ">");
+    return value;
+}
+
+int editorclass::getedaltstatenum(int rxi, int ryi, int state)
+{
+    for (size_t i = 0; i < altstates.size(); i++)
+        if (altstates[i].x == rxi && altstates[i].y == ryi && altstates[i].state == state)
+            return i;
+
+    return -1;
+}
+
+#define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
+
+TAG_FINDER(find_title, "Title");
+TAG_FINDER(find_desc1, "Desc1");
+TAG_FINDER(find_desc2, "Desc2");
+TAG_FINDER(find_desc3, "Desc3");
+TAG_FINDER(find_creator, "Creator");
+TAG_FINDER(find_website, "website");
+TAG_FINDER(find_created, "Created");
+TAG_FINDER(find_modified, "Modified");
+TAG_FINDER(find_modifiers, "Modifiers");
+
+#undef TAG_FINDER

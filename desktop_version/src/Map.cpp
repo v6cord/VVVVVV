@@ -537,19 +537,30 @@ void mapclass::changefinalcol(int t, entityclass& obj, Game& game)
 		{
 			if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) //treadmill
 			{
-				if(temp<3)
-				{
-					obj.entities[i].tile = 907 + (temp * 80);
+				if (custommode) {
+					obj.entities[i].tile = 568 + (temp * 12);
+				} else {
+					if(temp<3)
+					{
+						obj.entities[i].tile = 907 + (temp * 80);
+					}
+					else
+					{
+						obj.entities[i].tile = 911 + ((temp-3) * 80);
+					}
 				}
-				else
-				{
-					obj.entities[i].tile = 911 + ((temp-3) * 80);
+				if (custommode) {
+					if(obj.entities[i].animate == 10)	obj.entities[i].tile += 4;
+				} else {
+					if(obj.entities[i].animate == 10)	obj.entities[i].tile += 40;
 				}
-				if(obj.entities[i].animate == 10)	obj.entities[i].tile += 40;
 			}
 			else if (obj.entities[i].isplatform)
 			{
-				obj.entities[i].tile = 915+(temp*40);
+				if (custommode)
+					obj.entities[i].tile = 564+(temp*12);
+				else
+					obj.entities[i].tile = 915+(temp*40);
 			}
 			else	//just an enemy
 			{
@@ -558,7 +569,20 @@ void mapclass::changefinalcol(int t, entityclass& obj, Game& game)
 		}
 		else if (obj.entities[i].type == 2)	//disappearing platforms
 		{
-			obj.entities[i].tile = 915+(temp*40);
+			if (custommode) {
+				if (obj.entities[i].state == 3)
+					// It's disappeared, so its tile is offset, so we have to correct for that offset
+					obj.entities[i].tile = 568+(temp*12);
+				else
+					// Normal
+					obj.entities[i].tile = 564+(temp*12);
+
+				if (obj.entities[i].state == 5)
+					// Extra kludge for when it respawns
+					obj.entities[i].tile += 3 - obj.entities[i].life/3;
+			} else {
+				obj.entities[i].tile = 915+(temp*40);
+			}
 		}
 	}
 }
@@ -830,6 +854,9 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 	if (game.roomx != game.saverx || game.roomy != game.savery)
 	{
 		gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+		// If in finalstretch, update the colors of entities immediately
+		if (custommode && finalstretch)
+			changefinalcol(final_mapcol, obj, game);
 	}
 
 	game.deathseq = -1;
@@ -883,6 +910,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 {
 	//First, destroy the current room
 	obj.removeallblocks();
+	obj.removeallresurrectblocks();
 	game.activetele = false;
 	game.readytotele = 0;
 
@@ -1111,6 +1139,16 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 			}
 		}
 	}
+
+	// Kludge to remove 2-frame-delay when loading init scripts for a room
+	if (!game.gotoroomfromscript && obj.checktrigger() > -1) {
+		game.startscript = true;
+		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
+		obj.removetrigger(obj.activetrigger);
+		game.state = 0;
+		game.kludgeroominitscript = true;
+	}
+	game.gotoroomfromscript = false;
 }
 
 std::string mapclass::currentarea(int t)
@@ -1621,7 +1659,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			roomname=ed.level[curlevel].roomname;
 		}
 		extrarow = 1;
-		ed.loadlevel(rx, ry);
+		ed.loadlevel(rx, ry, obj.altstates);
 
 
 		roomtexton = false;
@@ -1637,6 +1675,9 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		int tempcheckpoints=0;
 		int tempscriptbox=0;
 		for(int edi=0; edi<EditorData::GetInstance().numedentities; edi++){
+			if (edentity[edi].state != 0 && obj.altstates != edentity[edi].state)
+				continue;
+
 			//If entity is in this room, create it
 			int tsx=(edentity[edi].x-(edentity[edi].x%40))/40;
 			int tsy=(edentity[edi].y-(edentity[edi].y%30))/30;
@@ -1860,6 +1901,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			}
 		}
 
+		// Commenting this out because I see no reason to put tile 1s under conveyors -Info Teddy
+		/*
 		for (int i = 0; i < obj.nentity; i++)
 		{
 			if (obj.entities[i].active)
@@ -1882,7 +1925,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	//Special scripting: Create objects and triggers based on what crewmembers are rescued.

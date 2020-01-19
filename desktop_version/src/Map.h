@@ -91,78 +91,78 @@ public:
     growing_vector <int> vmult;
     growing_vector <std::string> tmap;
 
-    int temp;
-    int temp2;
-    int j;
-    int background;
-    int rcol;
-    int tileset;
-    bool warpx;
-    bool warpy;
+    int temp = 0;
+    int temp2 = 0;
+    int j = 0;
+    int background = 0;
+    int rcol = 0;
+    int tileset = 0;
+    bool warpx = false;
+    bool warpy = false;
 
 
     std::string roomname;
 
     //Special tower stuff
-    bool towermode;
-    float ypos;
-    int bypos;
-    int cameramode;
-    int cameraseek, cameraseekframe;
-    int resumedelay;
-    bool minitowermode;
-    int scrolldir;
+    bool towermode = false;
+    float ypos = 0.0;
+    int bypos = 0;
+    int cameramode = 0;
+    int cameraseek, cameraseekframe = 0;
+    int resumedelay = 0;
+    bool minitowermode = false;
+    int scrolldir = 0;
 
     //This is the old colour cycle
-    int r, g,b;
-    int check, cmode;
-    int towercol;
-    int colstate, colstatedelay;
-    int colsuperstate;
-    int spikeleveltop, spikelevelbottom;
-    bool tdrawback;
-    int bscroll;
+    int r, g,b = 0;
+    int check, cmode = 0;
+    int towercol = 0;
+    int colstate, colstatedelay = 0;
+    int colsuperstate = 0;
+    int spikeleveltop, spikelevelbottom = 0;
+    bool tdrawback = false;
+    int bscroll = 0;
     //final level navigation
-    int finalx;
-    int finaly;
-    bool finalmode;
-    bool finalstretch;
+    int finalx = 0;
+    int finaly = 0;
+    bool finalmode = false;
+    bool finalstretch = false;
 
     //Variables for playing custom levels
-    bool custommode;
-    bool custommodeforreal;
-    int customx, customy;
-    int customwidth, customheight;
-    int customtrinkets;
-    int customcrewmates;
-    int custommmxoff, custommmyoff, custommmxsize, custommmysize;
-    int customzoom;
-    bool customshowmm;
+    bool custommode = false;
+    bool custommodeforreal = false;
+    int customx, customy = 0;
+    int customwidth, customheight = 0;
+    int customtrinkets = 0;
+    int customcrewmates = 0;
+    int custommmxoff, custommmyoff, custommmxsize, custommmysize = 0;
+    int customzoom = 0;
+    bool customshowmm = false;
 
     growing_vector<std::string> specialnames;
-    int glitchmode;
-    int glitchdelay;
+    int glitchmode = 0;
+    int glitchdelay = 0;
     std::string glitchname;
 
     //final level colour cycling stuff
-    bool final_colormode;
-    int final_mapcol;
-    int final_aniframe;
-    int final_aniframedelay;
-    int final_colorframe, final_colorframedelay;
+    bool final_colormode = false;
+    int final_mapcol = 0;
+    int final_aniframe = 0;
+    int final_aniframedelay = 0;
+    int final_colorframe, final_colorframedelay = 0;
 
     //Teleporters and Trinkets on the map
     growing_vector<point> teleporters;
     growing_vector<point> shinytrinkets;
 
-    int numteleporters, numshinytrinkets;
-    bool showteleporters, showtargets, showtrinkets;
+    int numteleporters, numshinytrinkets = 0;
+    bool showteleporters, showtargets, showtrinkets = false;
 
     //Roomtext
-    int roomtextx[100], roomtexty[100];
-    bool roomtexton;
+    int roomtextx[100], roomtexty[100] = {0};
+    bool roomtexton = true;
     growing_vector<std::string> roomtext;
-    int roomtextnumlines;
+    int roomtextnumlines = 0;
 
     //Levels
     otherlevelclass otherlevel;
@@ -171,13 +171,13 @@ public:
     finalclass finallevel;
     warpclass warplevel;
     towerclass tower;
-    int extrarow;
+    int extrarow = 0;
 
     //Accessibility options
-    bool invincibility;
+    bool invincibility = false;
 
     //Map cursor
-    int cursorstate, cursordelay;
+    int cursorstate, cursordelay = 0;
 
     bool nofog = false;
 };

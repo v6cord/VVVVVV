@@ -310,6 +310,7 @@ void musicclass::stopmusic()
         Mix_HaltChannel(channel);
     }
     custom_file_channels.clear();
+    custom_file_paths.clear();
 }
 
 void musicclass::haltdasmusik()
@@ -350,6 +351,7 @@ void musicclass::fadeout()
         Mix_FadeOutChannel(channel, 2000);
     }
     custom_file_channels.clear();
+    custom_file_paths.clear();
 }
 
 void musicclass::processmusicfade()
@@ -367,6 +369,9 @@ void musicclass::processmusicfadein()
 {
 	musicVolume += FadeVolAmountPerFrame;
 	Mix_VolumeMusic(musicVolume);
+        for (auto&& [id, channel] : custom_file_channels) {
+            Mix_Volume(channel, musicVolume);
+        }
 	if (musicVolume >= MIX_MAX_VOLUME)
 	{
 		m_doFadeInVol = false;
@@ -487,6 +492,7 @@ void musicclass::playfile(const char* t, std::string track)
     if (track != "") {
         stopfile(track);
         if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+        custom_file_paths[track] = t;
     } else {
         channel = Mix_PlayChannel(-1, pair->second.sound, 0);
     }
@@ -504,6 +510,7 @@ void musicclass::stopfile(std::string track) {
         Mix_FadeOutChannel(iter->second, 100);
         custom_file_channels.erase(iter);
     }
+    custom_file_paths.erase(track);
 }
 
 void musicclass::playef(int t, int offset)

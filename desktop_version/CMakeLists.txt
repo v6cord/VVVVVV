@@ -53,6 +53,24 @@ IF(NOT WIN32)
 	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 ENDIF()
 
+# Creates C resources file from files in given directory
+function(create_resource bin output)
+    # Create empty output file
+    file(WRITE ${output} "")
+    # Get short filename
+    string(REGEX MATCH "([^/]+)$" filename ${bin})
+    # Replace filename spaces & extension separator for C compatibility
+    string(REGEX REPLACE "\\.| |-" "_" filename ${filename})
+    # Read hex data from file
+    file(READ ${bin} filedata HEX)
+    # Convert hex data for C compatibility
+    string(REGEX REPLACE "([0-9a-f][0-9a-f])" "0x\\1," filedata ${filedata})
+    # Append data to output file
+    file(APPEND ${output} "const unsigned char ${filename}[] = {${filedata}};\nconst unsigned ${filename}_size = sizeof(${filename});\n")
+endfunction()
+
+create_resource(${CMAKE_SOURCE_DIR}/v6cord.png ${CMAKE_BINARY_DIR}/v6cord.png.c)
+
 # Include Directories
 INCLUDE_DIRECTORIES(
 	src
@@ -99,6 +117,7 @@ SET(VVV_SRC
 	src/Network.c
 	src/SteamNetwork.c
 	src/GOGNetwork.c
+        ${CMAKE_BINARY_DIR}/v6cord.png.c
 )
 SET(XML_SRC
 	../third_party/tinyxml/tinystr.cpp
@@ -126,6 +145,8 @@ SET(PNG_SRC ../third_party/lodepng/lodepng.c)
 
 # Executable information
 IF(WIN32)
+        message(STATUS "Adding resources")
+        set(VVV_SRC ${VVV_SRC} "resources.rc")
 	ADD_EXECUTABLE(VVVVVV WIN32 ${VVV_SRC})
 ELSE()
 	ADD_EXECUTABLE(VVVVVV ${VVV_SRC})
@@ -147,12 +168,23 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
+# FriBidi (Detection pulled from HHVM)
+find_package(PkgConfig)
+pkg_check_modules(FRIBIDI fribidi)
+
+find_path(FRIBIDI_INCLUDE_DIR
+          NAMES fribidi/fribidi.h)
+
+target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
+
+find_library(FRIBIDI_LIBRARY NAMES fribidi)
+
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static)
+TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static fribidi)
 
 # SDL2 Dependency (Detection pulled from FAudio)
-if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND DEFINED VVVVVV_CROSS_COMPILE)
-	message(STATUS "Cross-compiling to Windows from Linux")
+if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
+        message(STATUS "Building using MingW SDL libraries")
 	target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
 	target_link_libraries(VVVVVV SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
 elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)

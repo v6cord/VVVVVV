@@ -46,16 +46,16 @@ void textboxclass::clear()
     timer = 0;
 }
 
-void textboxclass::centerx()
+void textboxclass::centerx(int centerline)
 {
     resize();
-    xp = 160 - (w / 2);
+    xp = centerline - (w / 2);
     resize();
 }
-void textboxclass::centery()
+void textboxclass::centery(int centerline)
 {
     resize();
-    yp = 120 - (h / 2);
+    yp = centerline - (h / 2);
     resize();
 }
 

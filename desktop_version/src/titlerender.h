@@ -11,7 +11,7 @@
 class Stage
 {
 public:
-    int frameRate;
+    int frameRate = 30;
 };
 
 extern Stage stage;

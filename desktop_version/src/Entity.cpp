@@ -81,6 +81,9 @@ void entityclass::init()
     customcollect.resize(100);
 
     nlinecrosskludge = 0;
+
+    resurrectblocks.resize(500);
+    nresurrectblocks = 0;
 }
 
 void entityclass::resetallflags()
@@ -155,7 +158,7 @@ void entityclass::setblockcolour( int t, std::string col )
         blocks[t].g = 95;
         blocks[t].b = 255;
     }
-    else if (col == "purple")
+    else if (col == "purple" || col == "pink")
     {
         blocks[t].r = 255;
         blocks[t].g = 134;
@@ -1107,19 +1110,19 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 25:
-            blocks[k].prompt = "Passion for exploring";
+            blocks[k].prompt = "Passion for Exploring";
             blocks[k].script = "terminal_juke1";
             setblockcolour(k, "orange");
             trig=0;
             break;
         case 26:
-            blocks[k].prompt = "Pushing onwards";
+            blocks[k].prompt = "Pushing Onwards";
             blocks[k].script = "terminal_juke2";
             setblockcolour(k, "orange");
             trig=0;
             break;
         case 27:
-            blocks[k].prompt = "Positive force";
+            blocks[k].prompt = "Positive Force";
             blocks[k].script = "terminal_juke3";
             setblockcolour(k, "orange");
             trig=0;
@@ -1131,13 +1134,13 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 29:
-            blocks[k].prompt = "Potential for anything";
+            blocks[k].prompt = "Potential for Anything";
             blocks[k].script = "terminal_juke5";
             setblockcolour(k, "orange");
             trig=0;
             break;
         case 30:
-            blocks[k].prompt = "Predestined fate";
+            blocks[k].prompt = "Predestined Fate";
             blocks[k].script = "terminal_juke6";
             setblockcolour(k, "orange");
             trig=0;
@@ -1161,7 +1164,7 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 34:
-            blocks[k].prompt = "ecrof evitisoP";
+            blocks[k].prompt = "ecroF evitisoP";
             blocks[k].script = "terminal_juke10";
             setblockcolour(k, "orange");
             trig=0;
@@ -1170,6 +1173,20 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             blocks[k].prompt = "Press ENTER to activate terminal";
             blocks[k].script = "custom_"+customscript;
             setblockcolour(k, "orange");
+            trig=0;
+            break;
+        case 100: // Used by customactivityzone()
+            blocks[k].prompt = customprompt;
+            blocks[k].script = "custom_"+customscript;
+            setblockcolour(k, customcolour);
+            trig=0;
+            break;
+        case 101: // Used by customactivityzonergb()
+            blocks[k].prompt = customprompt;
+            blocks[k].script = "custom_"+customscript;
+            blocks[k].r = customr;
+            blocks[k].g = customg;
+            blocks[k].b = customb;
             trig=0;
             break;
         }
@@ -1184,8 +1201,24 @@ void entityclass::removeallblocks()
     nblocks=0;
 }
 
+void entityclass::removeallresurrectblocks()
+{
+    for(int i=0; i<nresurrectblocks; i++) resurrectblocks[i].clear();
+    nresurrectblocks=0;
+}
+
 void entityclass::removeblock( int t )
 {
+    if (blocks[t].type == TRIGGER) {
+        resurrectblocks[nresurrectblocks].active = true;
+        resurrectblocks[nresurrectblocks].type = TRIGGER;
+        resurrectblocks[nresurrectblocks].x = blocks[t].x;
+        resurrectblocks[nresurrectblocks].y = blocks[t].y;
+        resurrectblocks[nresurrectblocks].wp = blocks[t].wp;
+        resurrectblocks[nresurrectblocks].hp = blocks[t].hp;
+        resurrectblocks[nresurrectblocks].trigger = blocks[t].trigger;
+        nresurrectblocks++;
+    }
     blocks[t].clear();
     int i = nblocks - 1;
     while (i >= 0 && !(blocks[i].active))
@@ -1839,7 +1872,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
 
         entities[k].gravity = true;
         break;
-    case 1: //Simple enemy, bouncing about like a spastic
+    case 1: //Simple enemy, bouncing off the walls
         entities[k].rule = 1;
         entities[k].xp = xp;
         entities[k].yp = yp;
@@ -3232,7 +3265,7 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     {
                         game.state = 1000;
                         //music.haltdasmusik();
-                        if(music.currentsong!=-1) music.silencedasmusik();
+                        music.silencedasmusik();
                         music.playef(3,10);
                         collect[entities[i].para] = 1;
                         if (game.trinkets > game.stat_trinkets)
@@ -5097,7 +5130,7 @@ void entityclass::fixfriction( int t, float xfix, float xrate, float yrate )
     if (std::abs(entities[t].vy) < yrate) entities[t].vy = 0;
 }
 
-void entityclass::applyfriction( int t, float xrate, float yrate )
+void entityclass::applyfriction( int t, float xrate, float yrate, int speed )
 {
     if (entities[t].vx > 0.00f) entities[t].vx -= xrate;
     if (entities[t].vx < 0.00f) entities[t].vx += xrate;
@@ -5105,8 +5138,8 @@ void entityclass::applyfriction( int t, float xrate, float yrate )
     if (entities[t].vy < 0.00f) entities[t].vy += yrate;
     if (entities[t].vy > 10.00f) entities[t].vy = 10.0f;
     if (entities[t].vy < -10.00f) entities[t].vy = -10.0f;
-    if (entities[t].vx > 6.00f) entities[t].vx = 6.0f;
-    if (entities[t].vx < -6.00f) entities[t].vx = -6.0f;
+    if (entities[t].vx > (float)(speed * 2)) entities[t].vx = speed * 2;
+    if (entities[t].vx < (float)(speed * -2)) entities[t].vx = speed * -2;
 
     if (std::abs(entities[t].vx) < xrate) entities[t].vx = 0.0f;
     if (std::abs(entities[t].vy) < yrate) entities[t].vy = 0.0f;
@@ -5152,7 +5185,7 @@ void entityclass::updateentitylogic( int t, Game& game )
         {
             entities[t].ay = 3;
         }
-        applyfriction(t, game.inertia, 0.25f);
+        if (!game.nofriction) applyfriction(t, game.inertia, 0.25f, game.playerspeed);
     }
 
     entities[t].newxp = entities[t].xp + entities[t].vx;

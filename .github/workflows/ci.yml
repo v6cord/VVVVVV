@@ -7,42 +7,34 @@ env:
   SRC_DIR_PATH: desktop_version
 
 jobs:
-  build:
-    name: Build
+  build-lin:
+    name: Build (Ubuntu 18.04)
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-18.04
 
     env:
       CXXFLAGS: -I/usr/local/include/SDL2
       LDFLAGS: -L/usr/local/lib
 
-    strategy:
-      matrix:
-        os: [ubuntu-18.04, macos-latest]
-
     steps:
     - uses: actions/checkout@v1
 
-    - name: Install dependencies (Linux)
-      if: startsWith(matrix.os, 'ubuntu')
+    - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y apt-transport-https ca-certificates gnupg software-properties-common wget
         wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
         sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-mixer-dev gcc-8 g++-8 tree
+        sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-mixer-dev gcc-8 g++-8 tree libfribidi-dev
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
-
-    - name: Install dependencies (macOS)
-      if: startsWith(matrix.os, 'macos')
-      run: brew install ninja sdl2 sdl2_mixer tree
 
     - name: CMake configure
       run: |
         mkdir ${SRC_DIR_PATH}/build && cd ${SRC_DIR_PATH}/build
         cmake -GNinja ..
+
     - name: Build
       run: ninja -C ${SRC_DIR_PATH}/build
 
@@ -55,8 +47,66 @@ jobs:
         name: ${{ format('VVVVVV-CE-{0}', runner.os) }}
         path: desktop_version/build/VVVVVV
 
+  build-mac:
+    name: Build (macOS)
+
+    runs-on: macos-latest
+
+    env:
+      CXXFLAGS: -I/usr/local/include/SDL2
+      LDFLAGS: -L/usr/local/lib
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: brew install ninja sdl2 sdl2_mixer tree fribidi pkg-config
+
+    - name: CMake configure
+      run: |
+        mkdir ${SRC_DIR_PATH}/build && cd ${SRC_DIR_PATH}/build
+        cmake -GNinja ..
+    - name: Build
+      run: ninja -C ${SRC_DIR_PATH}/build
+
+    - name: Checkout macdylibbundler
+      uses: actions/checkout@v2
+      with:
+        repository: SCG82/macdylibbundler
+        ref: bundle-frameworks
+        path: macdylibbundler
+
+    - name: Install macdylibbundler
+      run: |
+        cd macdylibbundler
+        make
+        sudo make install
+
+    - name: Build .app
+      run: |
+        mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/
+        mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources
+        mv -v ${SRC_DIR_PATH}/build/VVVVVV ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
+        cp -v .github/resources/v6cord.icns ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources/v6cord.icns
+        cp -v .github/resources/Info.plist ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Info.plist
+        dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app
+
+    - name: Tar .app
+      run: |
+        cd ${SRC_DIR_PATH}/build/VVVVVV-app
+        tar -czvf VVVVVV-CE.tgz VVVVVV-CE.app/
+
+    - name: Show build artifacts
+      run: tree ${SRC_DIR_PATH}/build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ format('VVVVVV-CE-{0}', runner.os) }}
+        path: desktop_version/build/VVVVVV-app/VVVVVV-CE.tgz
+
   build-win:
-    name: Build (ubuntu-latest MingwW64)
+    name: Build (Ubuntu + MinGW64)
 
     runs-on: ubuntu-latest
 
@@ -76,7 +126,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH
         mkdir -p build
-        nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH -DVVVVVV_CROSS_COMPILE=1 .. && make -j$(nproc)'
+        nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH .. && make -j$(nproc)'
 
     - name: Copy artifacts
       run: |

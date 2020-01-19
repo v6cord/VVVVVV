@@ -4,6 +4,8 @@
 
 #include <sstream>
 
+#include <algorithm>
+
 /* Used by UtilityClass::GCString to generate a button list */
 const char *GCChar(SDL_GameControllerButton button)
 {
@@ -53,6 +55,16 @@ const char *GCChar(SDL_GameControllerButton button)
 	}
 	SDL_assert(0 && "Unhandled button!");
 	return NULL;
+}
+
+bool is_number(const std::string& s)
+{
+    try {
+        (void)std::stod(s);
+        return true;
+    } catch (std::invalid_argument &) {
+        return false;
+    }
 }
 
 int ss_toi( std::string _s )

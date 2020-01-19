@@ -53,9 +53,9 @@ void gamecompletelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclas
     map.tdrawback = true;
 
     game.creditposition--;
-    if (game.creditposition <= -1650)
+    if (game.creditposition <= -game.creditmaxposition)
     {
-        game.creditposition = -1650;
+        game.creditposition = -game.creditmaxposition;
         map.bscroll = 0;
     }
     else
@@ -264,7 +264,7 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
     if (game.deathseq != -1)
     {
-        map.colsuperstate = 1;  //cause the palette to go spastic!
+        map.colsuperstate = 1;
         map.cameramode = 2;
         game.deathsequence(map, obj, music);
         game.deathseq--;
@@ -612,8 +612,9 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             {
                 //TODO: }else if (map.finallevel && map.finalstretch && obj.entities[i].type == 2) {
                 //for the final level. probably something 99% of players won't see.
-                while (obj.entities[i].state == 2) obj.updateentities(i, help, game, music);
-                obj.entities[i].state = 4;
+                // Don't know what this code here is for, but the visual glitch is fixed if I comment it out -Info Teddy
+                //while (obj.entities[i].state == 2) obj.updateentities(i, help, game, music);
+                //obj.entities[i].state = 4;
             }
             else if (obj.entities[i].type == 23 && game.swnmode && game.deathseq<15)
             {
@@ -683,7 +684,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
     else
     {
         //Update colour thingy
-        if (map.finalmode)
+        if (map.finalmode || map.finalstretch)
         {
             if (map.final_colormode)
             {
@@ -1229,6 +1230,12 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             }
         }
 
+        if (game.kludgeroominitscript) {
+            script.load(game.newscript);
+            game.startscript = false;
+            game.kludgeroominitscript = false;
+        }
+
         //Warp tokens
         if (map.custommode){
           if (game.teleport)
@@ -1543,4 +1550,6 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
 
     if (game.teleport_to_new_area)
         script.teleport(dwgfx, game, map,	obj, help, music);
+
+    game.nofriction = false;
 }

@@ -12,6 +12,10 @@
 
 #include "tinyxml.h"
 
+#ifdef __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
@@ -79,8 +83,31 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
+#ifdef __APPLE__
+        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
+        if (!appUrlRef) {
+            SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Couldn't find data.zip in .app!",
+                    "Please place data.zip in Contents/Resources\n"
+                    "inside VVVVVV-CE.app.",
+                    NULL
+                    );
+            return 0;
+        }
+        if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
+            SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Couldn't get data.zip path!",
+                    "Please report this error.",
+                    NULL
+                    );
+            return 0;
+        }
+#else
 	strcpy(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
+#endif
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
 		puts("Error: data.zip missing!");
@@ -88,15 +115,27 @@ int FILESYSTEM_init(char *argvZero)
 		puts("Grab it from your purchased copy of the game,");
 		puts("or get it from the free Make and Play Edition.");
 
+                std::string message = "You do not have data.zip at ";
+                message += output;
+                message += "!\n\nGrab it from your purchased copy of the game,"
+                            "\nor get it from the free Make and Play Edition.";
 		SDL_ShowSimpleMessageBox(
 			SDL_MESSAGEBOX_ERROR,
 			"data.zip missing!",
-			"You do not have data.zip!"
-			"\n\nGrab it from your purchased copy of the game,"
-			"\nor get it from the free Make and Play Edition.",
+                        message.c_str(),
 			NULL
 		);
 		return 0;
+	}
+#ifdef __APPLE__
+        CFRelease(appUrlRef);
+#endif
+
+	strcpy(output, PHYSFS_getBaseDir());
+	strcpy(output, "gamecontrollerdb.txt");
+	if (SDL_GameControllerAddMappingsFromFile(output) < 0)
+	{
+		printf("gamecontrollerdb.txt not found!\n");
 	}
 	return 1;
 }
@@ -114,6 +153,28 @@ char *FILESYSTEM_getUserSaveDirectory()
 char *FILESYSTEM_getUserLevelDirectory()
 {
 	return levelDir;
+}
+
+bool FILESYSTEM_directoryExists(const char *fname)
+{
+    return PHYSFS_exists(fname);
+}
+
+const char pathSeparator =
+#ifdef _WIN32
+                            '\\';
+#else
+                            '/';
+#endif
+
+void FILESYSTEM_mount(const char *fname)
+{
+    std::string path(PHYSFS_getRealDir(fname));
+    path += pathSeparator;
+    path += fname;
+    if (!PHYSFS_mount(path.c_str(), NULL, 1)) {
+        printf("Error mounting: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+    }
 }
 
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem, size_t *len)

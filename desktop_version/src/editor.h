@@ -4,6 +4,7 @@
 #include <vector>
 #include "Game.h"
 #include <string>
+#include <string_view>
 #include "Script.h"
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
@@ -15,11 +16,22 @@ enum tiletyp {
     TILE_FOREGROUND,
 };
 
+std::string find_title(std::string_view buf);
+std::string find_desc1(std::string_view buf);
+std::string find_desc2(std::string_view buf);
+std::string find_desc3(std::string_view buf);
+std::string find_creator(std::string_view buf);
+std::string find_website(std::string_view buf);
+std::string find_created(std::string_view buf);
+std::string find_modified(std::string_view buf);
+std::string find_modifiers(std::string_view buf);
+
 class edentities{
 public:
-	int x, y, t;
+	int x, y, t = 0;
 	//parameters
-	int p1, p2, p3, p4, p5, p6;
+	int p1, p2, p3, p4, p5, p6 = 0;
+	int state = 0;
 	std::string scriptname;
 };
 
@@ -27,12 +39,22 @@ public:
 class edlevelclass{
 public:
   edlevelclass();
-	int tileset, tilecol;
+	int tileset, tilecol = 0;
 	std::string roomname;
-	int warpdir;
-	int platx1, platy1, platx2, platy2, platv;
-	int enemyx1, enemyy1, enemyx2, enemyy2, enemytype;
-	int directmode;
+	int warpdir = 0;
+	int platx1, platy1, platx2, platy2, platv = 0;
+	int enemyx1, enemyy1, enemyx2, enemyy2, enemytype = 0;
+	int directmode = 0;
+};
+
+class edaltstate {
+public:
+	edaltstate();
+	int x, y = -1; // -1 means not set
+	int state = -1;
+	growing_vector<int> tiles;
+
+	void reset();
 };
 
 struct LevelMetaData
@@ -49,7 +71,7 @@ struct LevelMetaData
 	std::string timeCreated;
 	std::string timeModified;
 
-	int version;
+	int version = 0;
 };
 
 
@@ -105,7 +127,7 @@ class editorclass{
 
   void saveconvertor();
   void reset();
-  void loadlevel(int rxi, int ryi);
+  void loadlevel(int rxi, int ryi, int altstate);
 
   void placetile(int x, int y, int t);
 
@@ -137,7 +159,7 @@ class editorclass{
 
   int backmatch(int x, int y);
 
-  void load(std::string& _path);
+  void load(std::string& _path, Graphics& dwgfx);
   void save(std::string& _path);
   void generatecustomminimap(Graphics& dwgfx, mapclass& map);
   int toweredgetile(int x, int y);
@@ -156,10 +178,10 @@ class editorclass{
   int findwarptoken(int t);
   void countstuff();
   void findstartpoint(Game& game);
-  void weirdloadthing(std::string t);
+  void weirdloadthing(std::string t, Graphics& dwgfx);
   int getlevelcol(int t);
   int getenemycol(int t);
-  int entcol;
+  int entcol = 0;
 
   //Colouring stuff
   int getwarpbackground(int rx, int ry);
@@ -168,62 +190,62 @@ class editorclass{
   growing_vector <int> swapmap;
   growing_vector <int> contents;
   growing_vector <int> vmult;
-  int numtrinkets;
-  int numcrewmates;
+  int numtrinkets = 0;
+  int numcrewmates = 0;
   edlevelclass level[400]; //Maxwidth*maxheight
 
-  int temp;
-  int notedelay;
+  int temp = 0;
+  int notedelay = 0;
   std::string note;
   std::string keybuffer;
   std::string filename;
 
-  int drawmode;
-  int tilex, tiley;
-  int keydelay, lclickdelay;
-  bool savekey, loadkey;
-  int levx, levy;
-  int entframe, entframedelay;
+  int drawmode = 0;
+  int tilex, tiley = 0;
+  int keydelay, lclickdelay = 0;
+  bool savekey, loadkey = false;
+  int levx, levy = 0;
+  int entframe, entframedelay = 0;
 
-  bool roomtextmod;
-  int roomtextent;
+  bool roomtextmod = false;
+  int roomtextent = 0;
 
-  bool scripttextmod;
-  int scripttextent;
-  int scripttexttype;
+  bool scripttextmod = false;
+  int scripttextent = 0;
+  int scripttexttype = 0;
 
-  bool xmod, zmod, spacemod, warpmod, roomnamemod, textentry, savemod, loadmod;
-  bool titlemod, creatormod, desc1mod, desc2mod, desc3mod, websitemod;
+  bool xmod, zmod, spacemod, warpmod, roomnamemod, textentry, savemod, loadmod = false;
+  bool titlemod, creatormod, desc1mod, desc2mod, desc3mod, websitemod = false;
 
-  int roomnamehide;
-  bool saveandquit;
-  bool shiftmenu, shiftkey;
-  int spacemenu;
-  bool settingsmod, settingskey;
-  int warpent;
-  bool updatetiles, changeroom;
-  int deletekeyheld;
+  int roomnamehide = 0;
+  bool saveandquit = false;
+  bool shiftmenu, shiftkey = false;
+  int spacemenu = 0;
+  bool settingsmod, settingskey = false;
+  int warpent = 0;
+  bool updatetiles, changeroom = false;
+  int deletekeyheld = 0;
 
-  int boundarymod, boundarytype;
-  int boundx1, boundx2, boundy1, boundy2;
+  int boundarymod, boundarytype = 0;
+  int boundx1, boundx2, boundy1, boundy2 = 0;
 
-  int levmusic;
-  int mapwidth, mapheight; //Actual width and height of stage
-  int maxwidth, maxheight; //Special; the physical max the engine allows
+  int levmusic = 0;
+  int mapwidth, mapheight = 0; //Actual width and height of stage
+  int maxwidth, maxheight = 0; //Special; the physical max the engine allows
 
-  int version;
+  int version = 0;
 
   //Script editor stuff
   void removeline(int t);
   void insertline(int t);
 
-  bool scripteditmod;
-  int scripthelppage, scripthelppagedelay;
+  bool scripteditmod = false;
+  int scripthelppage, scripthelppagedelay = 0;
   std::string sb[500];
   std::string sbscript;
-  int sblength;
-  int sbx, sby;
-  int pagey;
+  int sblength = 0;
+  int sbx, sby = 0;
+  int pagey = 0;
 
   std::string author;
   std::string description;
@@ -239,20 +261,24 @@ class editorclass{
   void gethooks();
   bool checkhook(std::string t);
   std::string hooklist[500];
-  int numhooks;
+  int numhooks = 0;
 
-  int hookmenupage, hookmenu;
+  int hookmenupage, hookmenu = 0;
 
   //Direct Mode variables
-  int dmtile;
-  int dmtileeditor;
+  int dmtile = 0;
+  int dmtileeditor = 0;
 
-  bool grayenemieskludge;
+  bool grayenemieskludge = false;
+
+  growing_vector<edaltstate> altstates;
+
+  int getedaltstatenum(int rxi, int ryi, int state);
 };
 
-void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
+void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240, int state=0);
 
-void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
+void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240, int state=0);
 
 void copyedentity(int a, int b);
 

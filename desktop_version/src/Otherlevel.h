@@ -27,12 +27,12 @@ public:
 
     std::string roomname;
 
-    int roomtileset;
-    int i;
+    int roomtileset = 0;
+    int i = 0;
 
     // roomtext thing in other level
-    bool roomtexton;
-    int roomtextx, roomtexty, roomtextnumlines;
+    bool roomtexton = false;
+    int roomtextx, roomtexty, roomtextnumlines = 0;
     growing_vector<std::string> roomtext;
 };
 
