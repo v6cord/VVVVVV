@@ -86,7 +86,18 @@ int FILESYSTEM_init(char *argvZero)
 #ifdef __APPLE__
         CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
         CFStringRef filePathRef = CFURLCopyPath(appUrlRef);
-        const char* data_zip = CFStringGetCStringPtr(filePathRef, kCFStringEncodingUTF8);
+        CFIndex length = CFStringGetLength(filePathRef);
+        CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8) + 1;
+        char* data_zip = (char *)malloc(maxSize);
+        if (!CFStringGetCString(filePathRef, data_zip, maxSize, kCFStringEncodingUTF8)) {
+            SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Couldn't get data.zip path!",
+                    "Please report this error.",
+                    NULL
+                    );
+            return 0;
+        }
 #else
 	strcpy(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
@@ -110,8 +121,9 @@ int FILESYSTEM_init(char *argvZero)
 		return 0;
 	}
 #ifdef __APPLE__
-CFRelease(filePathRef);
-CFRelease(appUrlRef);
+        free(data_zip);
+        CFRelease(filePathRef);
+        CFRelease(appUrlRef);
 #endif
 
 	strcpy(output, PHYSFS_getBaseDir());
