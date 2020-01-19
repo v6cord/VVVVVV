@@ -84,7 +84,7 @@ int FILESYSTEM_init(char *argvZero)
 
 	/* Mount the stock content last */
 #ifdef __APPLE__
-        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("haarcascade_mcs_eyepair_big.xml"), NULL, NULL);
+        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
         CFStringRef filePathRef = CFURLCopyPath(appUrlRef);
         const char* data_zip = CFStringGetCStringPtr(filePathRef, kCFStringEncodingUTF8);
 #else
