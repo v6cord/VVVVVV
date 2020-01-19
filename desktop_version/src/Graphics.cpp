@@ -181,7 +181,7 @@ void Graphics::Makebfont()
         int pos = 0;
         while (current != end) {
             int codepoint = utf8::next(current, end);
-            font_positions[codepoint] = pos;
+            if (codepoint != 0x0a) font_positions[codepoint] = pos;
             ++pos;
         }
     }
