@@ -3975,7 +3975,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_DOWN] && ed.keydelay<=0)
             {
                 ed.keydelay=6;
-                if(ed.sby+ed.pagey<ed.sblength)
+                if(ed.sby+ed.pagey<ed.sblength-1)
                 {
                     ed.sby++;
                     if(ed.sby>=20)
@@ -3987,7 +3987,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 key.keybuffer=ed.sb[ed.pagey+ed.sby];
             }
 
-            if(key.pressedbackspace && ed.sb[ed.pagey+ed.sby]=="")
+            if(key.linealreadyemptykludge)
+            {
+                ed.keydelay=6;
+                key.linealreadyemptykludge=false;
+            }
+
+            if(key.pressedbackspace && ed.sb[ed.pagey+ed.sby]=="" && ed.keydelay<=0)
             {
                 //Remove this line completely
                 ed.removeline(ed.pagey+ed.sby);
@@ -4005,6 +4011,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     }
                 }
                 key.keybuffer=ed.sb[ed.pagey+ed.sby];
+                ed.keydelay=6;
             }
 
             ed.sb[ed.pagey+ed.sby]=key.keybuffer;

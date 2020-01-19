@@ -551,6 +551,9 @@ int main(int argc, char *argv[])
 
         }
 
+        //We did editorinput, now it's safe to turn this off
+        key.linealreadyemptykludge = false;
+
         if (game.savemystats)
         {
             game.savemystats = false;

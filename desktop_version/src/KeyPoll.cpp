@@ -51,6 +51,8 @@ KeyPoll::KeyPoll()
 			useFullscreenSpaces = (strcmp(hint, "1") == 0);
 		}
 	}
+
+	linealreadyemptykludge = false;
 }
 
 void KeyPoll::enabletextentry()
@@ -95,9 +97,14 @@ void KeyPoll::Poll()
 			{
 				if (evt.key.keysym.sym == SDLK_BACKSPACE && keybuffer.size() > 0)
 				{
+					bool kbemptybefore = keybuffer.empty();
 					std::string::iterator iter = keybuffer.end();
 					utf8::prior(iter, keybuffer.begin());
 					keybuffer = keybuffer.substr(0, iter - keybuffer.begin());
+					if (!kbemptybefore && keybuffer.empty())
+					{
+						linealreadyemptykludge = true;
+					}
 				}
 				else if (	evt.key.keysym.sym == SDLK_v &&
 						keymap[SDLK_LCTRL]	)
