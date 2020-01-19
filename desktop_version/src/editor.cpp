@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <utf8/checked.h>
 #include <physfs.h>
+#include <iterator>
 
 edlevelclass::edlevelclass()
 {
@@ -5531,6 +5532,15 @@ std::string find_tag(std::string_view buf, std::string_view start, std::string_v
     replaceAll(value, "&apos;", "'");
     replaceAll(value, "&lt;", "<");
     replaceAll(value, "&gt;", ">");
+    size_t start_pos = 0;
+    while ((start_pos = value.find("&#", start_pos)) != std::string::npos) {
+        auto end = value.find(';', start_pos);
+        int character = std::stoi(value.substr(start_pos + 2, end - start_pos));
+        int utf32[] = {character, 0};
+        std::string utf8;
+        utf8::utf32to8(utf32, utf32 + 1, std::back_inserter(utf8));
+        value.replace(start_pos, end - start_pos + 1, utf8);
+    }
     return value;
 }
 

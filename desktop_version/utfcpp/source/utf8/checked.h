@@ -70,6 +70,32 @@ namespace utf8
     /// The library API - functions intended to be called by the users
 
     template <typename octet_iterator>
+    octet_iterator append(uint32_t cp, octet_iterator result)
+    {
+        if (!utf8::internal::is_code_point_valid(cp))
+            throw invalid_code_point(cp);
+
+        if (cp < 0x80)                        // one octet
+            *(result++) = static_cast<uint8_t>(cp);
+        else if (cp < 0x800) {                // two octets
+            *(result++) = static_cast<uint8_t>((cp >> 6)            | 0xc0);
+            *(result++) = static_cast<uint8_t>((cp & 0x3f)          | 0x80);
+        }
+        else if (cp < 0x10000) {              // three octets
+            *(result++) = static_cast<uint8_t>((cp >> 12)           | 0xe0);
+            *(result++) = static_cast<uint8_t>(((cp >> 6) & 0x3f)   | 0x80);
+            *(result++) = static_cast<uint8_t>((cp & 0x3f)          | 0x80);
+        }
+        else {                                // four octets
+            *(result++) = static_cast<uint8_t>((cp >> 18)           | 0xf0);
+            *(result++) = static_cast<uint8_t>(((cp >> 12) & 0x3f)  | 0x80);
+            *(result++) = static_cast<uint8_t>(((cp >> 6) & 0x3f)   | 0x80);
+            *(result++) = static_cast<uint8_t>((cp & 0x3f)          | 0x80);
+        }
+        return result;
+    }
+
+    template <typename octet_iterator>
     uint32_t next(octet_iterator& it, octet_iterator end)
     {
         uint32_t cp = 0;
@@ -118,6 +144,15 @@ namespace utf8
         for (dist = 0; first < last; ++dist)
             utf8::next(first, last);
         return dist;
+    }
+
+    template <typename octet_iterator, typename u32bit_iterator>
+    octet_iterator utf32to8 (u32bit_iterator start, u32bit_iterator end, octet_iterator result)
+    {
+        while (start != end)
+            result = utf8::append(*(start++), result);
+
+        return result;
     }
 
     template <typename octet_iterator, typename u32bit_iterator>
