@@ -702,15 +702,16 @@ bool mapclass::collide(int x, int y)
 	}
 	else if (tileset == 2)
 	{
+		int tile = (contents[x + vmult[y]]) % 30;
 		if (y == -1) return collide(x, y + 1);
 		if (y == 29+extrarow) return collide(x, y - 1);
 		if (x == -1) return collide(x + 1, y);
 		if (x == 40) return collide(x - 1, y);
 		if (x < 0 || y < 0 || x >= 40 || y >= 29 + extrarow) return false;
-		if (contents[x + vmult[y]] >= 12 && contents[x + vmult[y]] <= 27) return true;
+		if (tile >= 12 && tile <= 27) return true;
 		if (invincibility)
 		{
-			if (contents[x + vmult[y]] >= 6 && contents[x + vmult[y]] <= 11) return true;
+			if (tile >= 6 && tile <= 11) return true;
 		}
 	}
 	else
@@ -1586,6 +1587,11 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			tileset = 1;
 			background = 1;
 			break;
+			case 5://Tower
+			tileset = 2;
+			background = 10;
+			dwgfx.rcol = ed.level[curlevel].tilecol;
+			break;
 			default:
 			tileset = 1;
 			background = 1;
@@ -1823,25 +1829,31 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				}
 				else if(tileset==2)
 				{
-					if (contents[i + vmult[j]] == 6 || contents[i + vmult[j]] == 8)
+					int tile = (contents[i + vmult[j]]) % 30;
+					if (tile == 6 || tile == 8)
 					{
 						//sticking up
 						obj.createblock(2, (i * 8), (j * 8)+4, 8, 4);
 					}
-					if (contents[i + vmult[j]] == 7 || contents[i + vmult[j]] == 9)
+					if (tile == 7 || tile == 9)
 					{
 						//Sticking down
 						obj.createblock(2, (i * 8), (j * 8), 8, 4);
 					}
+					if (tile == 10 || tile == 11)
+					{
+						//left or right
+						obj.createblock(2, (i * 8), (j * 8)+3, 8, 2);
+					}
 				}
 				//Breakable blocks
-				if (contents[i + vmult[j]] == 10)
+				if (contents[i + vmult[j]] == 10 && tileset!=2)
 				{
 					contents[i + vmult[j]] = 0;
 					obj.createentity(game, i * 8, j * 8, 4);
 				}
 				//Directional blocks
-				if (contents[i + vmult[j]] >= 14 && contents[i + vmult[j]] <= 17)
+				if (contents[i + vmult[j]] >= 14 && contents[i + vmult[j]] <= 17 && tileset!=2)
 				{
 					obj.createblock(3, i * 8, j * 8, 8, 8, contents[i + vmult[j]]-14);
 				}

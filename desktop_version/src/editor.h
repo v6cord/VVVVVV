@@ -8,6 +8,12 @@
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 
+enum tiletyp {
+    TILE_NONE,
+    TILE_BACKGROUND,
+    TILE_SPIKE,
+    TILE_FOREGROUND,
+};
 
 class edentities{
 public:
@@ -110,6 +116,9 @@ class editorclass{
 
   int backbase(int x, int y);
 
+  enum tiletyp gettiletyp(int tile);
+
+  int absat(int x, int y);
   int at(int x, int y);
 
   int freewrap(int x, int y);
@@ -131,6 +140,7 @@ class editorclass{
   void load(std::string& _path);
   void save(std::string& _path);
   void generatecustomminimap(Graphics& dwgfx, mapclass& map);
+  int toweredgetile(int x, int y);
   int edgetile(int x, int y);
   int warpzoneedgetile(int x, int y);
   int outsideedgetile(int x, int y);
@@ -138,7 +148,9 @@ class editorclass{
   int backedgetile(int x, int y);
 
   int labspikedir(int x, int y, int t);
+  int spikebase(int x, int y);
   int spikedir(int x, int y);
+  int towerspikedir(int x, int y);
   int findtrinket(int t);
   int findcrewmate(int t);
   int findwarptoken(int t);

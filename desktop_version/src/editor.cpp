@@ -596,7 +596,7 @@ void editorclass::loadlevel( int rxi, int ryi )
 
 int editorclass::getlevelcol(int t)
 {
-    if(level[t].tileset==0)  //Space Station
+    if(level[t].tileset==0 || level[t].tileset==2)  //Station or Tower
     {
         return level[t].tilecol;
     }
@@ -944,7 +944,31 @@ int editorclass::getwarpbackground(int rx, int ry)
         }
         break;
     case 5: //Tower
-        return 6;
+        temp = (level[tmp].tilecol) / 5;
+        switch(temp)
+        {
+        case 0:
+            return 1;
+            break;
+        case 1:
+            return 4;
+            break;
+        case 2:
+            return 5;
+            break;
+        case 3:
+            return 0;
+            break;
+        case 4:
+            return 3;
+            break;
+        case 5:
+            return 2;
+            break;
+        default:
+            return 6;
+            break;
+        }
         break;
     default:
         return 6;
@@ -1049,6 +1073,10 @@ int editorclass::base( int x, int y )
     {
         return 101 + (level[temp].tilecol*3);
     }
+    else if(level[temp].tileset==5)   //Tower
+    {
+        return 12 + (level[temp].tilecol*30);
+    }
     return 0;
 }
 
@@ -1133,7 +1161,31 @@ int editorclass::backbase( int x, int y )
     {
         return 741 + (level[temp].tilecol*3);
     }
+    else if(level[temp].tileset==5)   //Tower
+    {
+        return 28 + (level[temp].tilecol*30);
+    }
     return 0;
+}
+
+enum tiletyp
+editorclass::gettiletyp(int tile)
+{
+    if (tile == 0) return TILE_NONE;
+    if (ed.level[ed.levx + (ed.levy*ed.maxwidth)].tileset == 5) {
+        tile = tile % 30;
+        if (tile >= 6 && tile <= 11)
+            return TILE_SPIKE;
+        if (tile >= 12 && tile <= 27)
+            return TILE_FOREGROUND;
+        return TILE_BACKGROUND;
+    }
+
+    if ((tile >= 6 && tile <= 9) || tile == 49 || tile == 50)
+        return TILE_SPIKE;
+    if (tile >= 80 && tile <= 680)
+        return TILE_FOREGROUND;
+    return TILE_BACKGROUND;
 }
 
 int editorclass::at( int x, int y )
@@ -1142,15 +1194,18 @@ int editorclass::at( int x, int y )
     if(y<0) return at(x,0);
     if(x>=40) return at(39,y);
     if(y>=30) return at(x,29);
-
-    if(x>=0 && y>=0 && x<40 && y<30)
-    {
-        return contents[x+(levx*40)+vmult[y+(levy*30)]];
-    }
-    return 0;
+    return contents[x+(levx*40)+vmult[y+(levy*30)]];
 }
 
-
+int
+editorclass::absat(int x, int y)
+{
+    if(x<0) return absat(0,y);
+    if(y<0) return absat(x,0);
+    if(x>=40) return absat(39,y);
+    if(y>=30) return absat(x,29);
+    return contents[x+vmult[y]];
+}
 int editorclass::freewrap( int x, int y )
 {
     if(x<0) return freewrap(x+(mapwidth*40),y);
@@ -1160,21 +1215,8 @@ int editorclass::freewrap( int x, int y )
 
     if(x>=0 && y>=0 && x<(mapwidth*40) && y<(mapheight*30))
     {
-        if(contents[x+vmult[y]]==0)
-        {
-            return 0;
-        }
-        else
-        {
-            if(contents[x+vmult[y]]>=2 && contents[x+vmult[y]]<80)
-            {
-                return 0;
-            }
-            if(contents[x+vmult[y]]>=680)
-            {
-                return 0;
-            }
-        }
+        temp = gettiletyp(absat(x, y));
+        if (temp != TILE_FOREGROUND) return 0;
     }
     return 1;
 }
@@ -1182,67 +1224,26 @@ int editorclass::freewrap( int x, int y )
 int editorclass::backonlyfree( int x, int y )
 {
     //Returns 1 if tile is a background tile, 0 otherwise
-    if(x<0) return backonlyfree(0,y);
-    if(y<0) return backonlyfree(x,0);
-    if(x>=40) return backonlyfree(39,y);
-    if(y>=30) return backonlyfree(x,29);
-
-    if(x>=0 && y>=0 && x<40 && y<30)
-    {
-        if(contents[x+(levx*40)+vmult[y+(levy*30)]]>=680)
-        {
-            return 1;
-        }
-    }
+    temp = gettiletyp(at(x, y));
+    if (temp == TILE_BACKGROUND)
+        return 1;
     return 0;
 }
 
 int editorclass::backfree( int x, int y )
 {
-    //Returns 0 if tile is not a block or background tile, 1 otherwise
-    if(x<0) return backfree(0,y);
-    if(y<0) return backfree(x,0);
-    if(x>=40) return backfree(39,y);
-    if(y>=30) return backfree(x,29);
-
-    if(x>=0 && y>=0 && x<40 && y<30)
-    {
-        if(contents[x+(levx*40)+vmult[y+(levy*30)]]==0)
-        {
-            return 0;
-        }
-        else
-        {
-            //if(contents[x+(levx*40)+vmult[y+(levy*30)]]>=2 && contents[x+(levx*40)+vmult[y+(levy*30)]]<80){
-            //		return 0;
-            //}
-        }
-    }
+    //Returns 1 if tile is nonzero
+    if (gettiletyp(at(x, y)) == TILE_NONE)
+        return 0;
     return 1;
 }
 
 int editorclass::spikefree( int x, int y )
 {
     //Returns 0 if tile is not a block or spike, 1 otherwise
-    if(x==-1) return free(0,y);
-    if(y==-1) return free(x,0);
-    if(x==40) return free(39,y);
-    if(y==30) return free(x,29);
-
-    if(x>=0 && y>=0 && x<40 && y<30)
-    {
-        if(contents[x+(levx*40)+vmult[y+(levy*30)]]==0)
-        {
-            return 0;
-        }
-        else
-        {
-            if(contents[x+(levx*40)+vmult[y+(levy*30)]]>=680)
-            {
-                return 0;
-            }
-        }
-    }
+    temp = gettiletyp(at(x, y));
+    if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
+        return 0;
     return 1;
 }
 
@@ -1254,47 +1255,16 @@ int editorclass::free( int x, int y )
     if(x==40) return free(39,y);
     if(y==30) return free(x,29);
 
-    if(x>=0 && y>=0 && x<40 && y<30)
-    {
-        if(contents[x+(levx*40)+vmult[y+(levy*30)]]==0)
-        {
-            return 0;
-        }
-        else
-        {
-            if(contents[x+(levx*40)+vmult[y+(levy*30)]]>=2 && contents[x+(levx*40)+vmult[y+(levy*30)]]<80)
-            {
-                return 0;
-            }
-            if(contents[x+(levx*40)+vmult[y+(levy*30)]]>=680)
-            {
-                return 0;
-            }
-        }
-    }
-    return 1;
+    return absfree(x+(levx*40), y+(levy*30));
 }
 
 int editorclass::absfree( int x, int y )
 {
     //Returns 0 if tile is not a block, 1 otherwise, abs on grid
-    if(x>=0 && y>=0 && x<mapwidth*40 && y<mapheight*30)
-    {
-        if(contents[x+vmult[y]]==0)
-        {
+    if(x>=0 && y>=0 && x<mapwidth*40 && y<mapheight*30) {
+        temp = gettiletyp(absat(x, y));
+        if (temp != TILE_FOREGROUND)
             return 0;
-        }
-        else
-        {
-            if(contents[x+vmult[y]]>=2 && contents[x+vmult[y]]<80)
-            {
-                return 0;
-            }
-            if(contents[x+vmult[y]]>=680)
-            {
-                return 0;
-            }
-        }
     }
     return 1;
 }
@@ -1390,53 +1360,112 @@ int editorclass::backmatch( int x, int y )
     return 0;
 }
 
-int editorclass::edgetile( int x, int y )
+int editorclass::toweredgetile( int x, int y )
 {
     switch(match(x,y))
     {
-    case 14:
+    case 14: // true center
         return 0;
         break;
-    case 10:
-        return 80;
+    case 10: // top left
+        return 5;
         break;
-    case 11:
-        return 82;
+    case 11: // top right
+        return 7;
         break;
-    case 12:
-        return 160;
+    case 12: // bottom left
+        return 10;
         break;
-    case 13:
-        return 162;
+    case 13: // bottom right
+        return 12;
         break;
-    case 1:
-        return 81;
+    case 1: // top center
+        return 6;
         break;
-    case 2:
-        return 120;
+    case 2: // center left
+        return 8;
         break;
-    case 3:
-        return 161;
+    case 3: // bottom center
+        return 11;
         break;
-    case 4:
-        return 122;
+    case 4: // center right
+        return 9;
         break;
-    case 5:
-        return 42;
+    case 5: // reversed bottom right edge
+        return 4;
         break;
-    case 6:
-        return 41;
+    case 6: // reversed bottom left edge
+        return 3;
         break;
-    case 7:
+    case 7: // reversed top right edge
         return 2;
         break;
-    case 8:
+    case 8: // reversed top left edge
         return 1;
         break;
     case 0:
     default:
         return 0;
         break;
+    }
+    return 0;
+}
+int editorclass::edgetile( int x, int y )
+{
+    switch(match(x,y))
+    {
+    case 14: // true center
+        return 0;
+        break;
+    case 10: // top left
+        return 80;
+        break;
+    case 11: // top right
+        return 82;
+        break;
+    case 12: // bottom left
+        return 160;
+        break;
+    case 13: // bottom right
+        return 162;
+        break;
+    case 1: // top center
+        return 81;
+        break;
+    case 2: // center left
+        return 120;
+        break;
+    case 3: // bottom center
+        return 161;
+        break;
+    case 4: // center right
+        return 122;
+        break;
+    case 5: // reversed bottom right edge
+        return 42;
+        break;
+    case 6: // reversed bottom left edge
+        return 41;
+        break;
+    case 7: // reversed top right edge
+        return 2;
+        break;
+    case 8: // reversed top left edge
+        return 1;
+        break;
+    case 0:
+    default:
+        return 0;
+        break;
+    }
+    return 0;
+}
+
+int editorclass::spikebase(int x, int y)
+{
+    temp=x+(y*maxwidth);
+    if (level[temp].tileset==5) {
+        return level[temp].tilecol * 30;
     }
     return 0;
 }
@@ -1578,6 +1607,15 @@ int editorclass::spikedir( int x, int y )
     if(free(x,y-1)==1) return 9;
     if(free(x-1,y)==1) return 49;
     if(free(x+1,y)==1) return 50;
+    return 8;
+}
+
+int editorclass::towerspikedir( int x, int y )
+{
+    if(free(x,y+1)==1) return 8;
+    if(free(x,y-1)==1) return 9;
+    if(free(x-1,y)==1) return 10;
+    if(free(x+1,y)==1) return 11;
     return 8;
 }
 
@@ -2409,6 +2447,17 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             }
         }
     }
+    else if(ed.level[ed.levx+(ed.maxwidth*ed.levy)].tileset==5)
+    {
+        for (int j = 0; j < 30; j++)
+        {
+            for (int i = 0; i < 40; i++)
+            {
+                temp=ed.contents[i + (ed.levx*40) + ed.vmult[j+(ed.levy*30)]];
+                if(temp>0) dwgfx.drawtile3(i*8,j*8,temp,0,0,0);
+            }
+        }
+    }
     else
     {
         for (int j = 0; j < 30; j++)
@@ -2865,6 +2914,17 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.drawtile(i*8,32-t2,(temp+1200+160+i)%1200,0,0,0);
                 }
             }
+            else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
+            {
+                for(int i=0; i<40; i++)
+                {
+                    dwgfx.drawtile3(i*8,0-t2,(temp+900+i)%900,0,0,0);
+                    dwgfx.drawtile3(i*8,8-t2,(temp+900+30+i)%900,0,0,0);
+                    dwgfx.drawtile3(i*8,16-t2,(temp+900+60+i)%900,0,0,0);
+                    dwgfx.drawtile3(i*8,24-t2,(temp+900+90+i)%900,0,0,0);
+                    dwgfx.drawtile3(i*8,32-t2,(temp+900+120+i)%900,0,0,0);
+                }
+            }
             else
             {
                 for(int i=0; i<40; i++)
@@ -2892,6 +2952,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             {
                 dwgfx.drawtile(45,45-t2,ed.dmtile,0,0,0);
             }
+            else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
+            {
+                dwgfx.drawtile3(45,45-t2,ed.dmtile,0,0,0);
+            }
             else
             {
                 dwgfx.drawtile2(45,45-t2,ed.dmtile,0,0,0);
@@ -2907,6 +2971,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
             {
                 dwgfx.drawtile(45,12,ed.dmtile,0,0,0);
+            }
+            else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
+            {
+                dwgfx.drawtile3(45,12,ed.dmtile,0,0,0);
             }
             else
             {
@@ -4302,7 +4370,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             {
                 ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset++;
                 dwgfx.backgrounddrawn=false;
-                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset>=5) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset=0;
+                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset>=6) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset=0;
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
                 {
                     if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=32) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
@@ -4354,6 +4422,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==1)
                 {
                     if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=8) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
+                }
+                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
+                {
+                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=30) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
                 }
                 else
                 {
@@ -5373,7 +5445,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     else if(ed.contents[temp]==2 || ed.contents[temp]>=680)
                     {
                         //Fix background
-                        ed.contents[temp]=ed.backedgetile(i,j)+ed.backbase(ed.levx,ed.levy);
+                        ed.contents[temp]=ed.backbase(ed.levx,ed.levy);
                     }
                     else if(ed.contents[temp]>0)
                     {
@@ -5384,6 +5456,28 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             break;
         case 5: //The Tower
+            for(int j=0; j<30; j++)
+            {
+                for(int i=0; i<40; i++)
+                {
+                    temp=i+(ed.levx*40) + ed.vmult[j+(ed.levy*30)];
+                    if(ed.gettiletyp(ed.contents[temp]) == TILE_SPIKE)
+                    {
+                        //Fix spikes
+                        ed.contents[temp]=ed.towerspikedir(i,j)+ed.spikebase(ed.levx,ed.levy);
+                    }
+                    else if(ed.gettiletyp(ed.contents[temp]) == TILE_BACKGROUND)
+                    {
+                        //Fix background
+                        ed.contents[temp]=ed.backbase(ed.levx,ed.levy);
+                    }
+                    else if(ed.gettiletyp(ed.contents[temp]) == TILE_FOREGROUND)
+                    {
+                        //Fix tiles
+                        ed.contents[temp]=ed.toweredgetile(i,j)+ed.base(ed.levx,ed.levy);
+                    }
+                }
+            }
             break;
         case 6: //Custom Set 1
             break;
