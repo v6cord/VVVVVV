@@ -12,7 +12,7 @@
 
 #include "tinyxml.h"
 
-#ifdef __OSX__
+#ifdef __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
@@ -83,7 +83,7 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
-#ifdef __OSX__
+#ifdef __APPLE__
         CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("haarcascade_mcs_eyepair_big.xml"), NULL, NULL);
         CFStringRef filePathRef = CFURLCopyPath(appUrlRef);
         const char* data_zip = CFStringGetCStringPtr(filePathRef, kCFStringEncodingUTF8);
@@ -109,7 +109,7 @@ int FILESYSTEM_init(char *argvZero)
 		);
 		return 0;
 	}
-#ifdef __OSX__
+#ifdef __APPLE__
 CFRelease(filePathRef);
 CFRelease(appUrlRef);
 #endif
