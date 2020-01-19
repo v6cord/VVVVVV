@@ -110,12 +110,14 @@ int FILESYSTEM_init(char *argvZero)
 		puts("Grab it from your purchased copy of the game,");
 		puts("or get it from the free Make and Play Edition.");
 
+                std::string message = "You do not have data.zip at ";
+                message += data_zip;
+                message += "!\n\nGrab it from your purchased copy of the game,"
+                            "\nor get it from the free Make and Play Edition.";
 		SDL_ShowSimpleMessageBox(
 			SDL_MESSAGEBOX_ERROR,
 			"data.zip missing!",
-			"You do not have data.zip!"
-			"\n\nGrab it from your purchased copy of the game,"
-			"\nor get it from the free Make and Play Edition.",
+                        message.c_str(),
 			NULL
 		);
 		return 0;
