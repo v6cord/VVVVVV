@@ -168,8 +168,17 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
+# FriBidi (Detection pulled from HHVM)
+find_package(PkgConfig)
+pkg_check_modules(FRIBIDI fribidi)
+
+find_path(FRIBIDI_INCLUDE_DIR
+          NAMES fribidi/fribidi.h)
+
+find_library(FRIBIDI_LIBRARY NAMES fribidi)
+
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static)
+TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static fribidi)
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))

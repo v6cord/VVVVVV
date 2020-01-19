@@ -120,6 +120,15 @@ namespace utf8
         return dist;
     }
 
+    template <typename octet_iterator, typename u32bit_iterator>
+    u32bit_iterator utf8to32 (octet_iterator start, octet_iterator end, u32bit_iterator result)
+    {
+        while (start < end)
+            (*result++) = utf8::next(start, end);
+
+        return result;
+    }
+
 } // namespace utf8
 
 #endif //header guard

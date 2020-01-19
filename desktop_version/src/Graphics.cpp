@@ -6,6 +6,8 @@
 #include "FileSystemUtils.h"
 #include <utf8/checked.h>
 #include <physfs.h>
+#include <iterator>
+#include <fribidi/fribidi.h>
 
 Graphics::Graphics()
 {
@@ -193,6 +195,12 @@ int Graphics::bfontlen(char32_t ch) {
     }
 }
 
+std::vector<uint32_t> utf8to32(const std::string& src) {
+    std::vector<uint32_t> res;
+    utf8::utf8to32(src.begin(), src.end(), std::back_inserter(res));
+    return res;
+}
+
 void Graphics::MakeTileArray()
 {
     for(int j = 0; j <30; j++)
@@ -266,10 +274,14 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
     if (cen)
         _x = ((160 ) - ((len(_s)) / 2));
     int bfontpos = 0;
-    int curr;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
         point tpoint;
         tpoint.x = _x + bfontpos;
         tpoint.y = _y;
@@ -305,10 +317,14 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 	}
 
     int bfontpos = 0;
-    int curr;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
 
         /*
         point tpoint;
@@ -360,9 +376,14 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
     int bfontpos = 0;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        int curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
         point tpoint;
         tpoint.x = _x + bfontpos;
         tpoint.y = _y;
@@ -420,10 +441,14 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
     if (cen)
         _x = ((308) - (_s.length() / 2));
     int bfontpos = 0;
-    int curr;
-    std::string::iterator iter = _s.begin();
-    while (iter != _s.end()) {
-        curr = utf8::next(iter, _s.end());
+    auto utf32 = utf8to32(_s);
+    std::vector<uint32_t> bidi(utf32.size());
+    FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+    if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+        printf("fribidi error\n");
+        exit(1);
+    }
+    for (auto curr : bidi) {
         point tpoint;
         tpoint.x = _x + bfontpos;
         tpoint.y = _y;
@@ -3100,10 +3125,14 @@ void Graphics::bigrprint(int x, int y, std::string& t, int r, int g, int b, bool
 	}
 
 	int bfontpos = 0;
-	int cur;
-        std::string::iterator iter = t.begin();
-	while (iter != t.end()) {
-		cur = utf8::next(iter, t.end());
+        auto utf32 = utf8to32(t);
+        std::vector<uint32_t> bidi(utf32.size());
+        FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+        if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+            printf("fribidi error\n");
+            exit(1);
+        }
+        for (auto cur : bidi) {
 		if (flipmode)
 		{
 			SDL_Surface* tempPrint = ScaleSurfaceSlow(flipbfont[font_idx(cur)], bfont[font_idx(cur)]->w *sc,bfont[font_idx(cur)]->h *sc);
