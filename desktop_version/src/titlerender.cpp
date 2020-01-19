@@ -53,6 +53,8 @@ growing_vector<std::string> changelog = {
     "  for one frame. The text you want to",
     "  display should be after the command.",
     "  center should be either 0 or 1.",
+    "- drawrect(x,y,w,h,r,g,b) - draw a",
+    "  rectangle for one frame.",
     "- followposition now works for the",
     "  player",
     "- There's now an option to disable only",
