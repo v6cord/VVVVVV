@@ -86,7 +86,18 @@ int FILESYSTEM_init(char *argvZero)
 #ifdef __APPLE__
         CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
         CFStringRef filePathRef = CFURLCopyPath(appUrlRef);
-        const char* data_zip = CFStringGetCStringPtr(filePathRef, kCFStringEncodingUTF8);
+        CFIndex length = CFStringGetLength(filePathRef);
+        CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8) + 1;
+        char* data_zip = (char *)malloc(maxSize);
+        if (!CFStringGetCString(filePathRef, data_zip, maxSize, kCFStringEncodingUTF8)) {
+            SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Couldn't get data.zip path!",
+                    "Please report this error.",
+                    NULL
+                    );
+            return 0;
+        }
 #else
 	strcpy(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
@@ -99,19 +110,22 @@ int FILESYSTEM_init(char *argvZero)
 		puts("Grab it from your purchased copy of the game,");
 		puts("or get it from the free Make and Play Edition.");
 
+                std::string message = "You do not have data.zip at ";
+                message += data_zip;
+                message += "!\n\nGrab it from your purchased copy of the game,"
+                            "\nor get it from the free Make and Play Edition.";
 		SDL_ShowSimpleMessageBox(
 			SDL_MESSAGEBOX_ERROR,
 			"data.zip missing!",
-			"You do not have data.zip!"
-			"\n\nGrab it from your purchased copy of the game,"
-			"\nor get it from the free Make and Play Edition.",
+                        message.c_str(),
 			NULL
 		);
 		return 0;
 	}
 #ifdef __APPLE__
-CFRelease(filePathRef);
-CFRelease(appUrlRef);
+        free(data_zip);
+        CFRelease(filePathRef);
+        CFRelease(appUrlRef);
 #endif
 
 	strcpy(output, PHYSFS_getBaseDir());
