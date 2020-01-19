@@ -2407,6 +2407,22 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     }
 }
 
+int
+dmcap(void)
+{
+    if (ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset == 5)
+        return 900;
+    return 1200;
+}
+
+int
+dmwidth(void)
+{
+    if (ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset == 5)
+        return 30;
+    return 40;
+}
+
 void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help )
 {
     //TODO
@@ -2923,46 +2939,46 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             }
 
             //Draw five lines of the editor
-            temp=ed.dmtile-(ed.dmtile%40);
-            temp-=80;
+            temp=ed.dmtile-(ed.dmtile%dmwidth());
+            temp-=dmwidth()*2;
             FillRect(dwgfx.backBuffer, 0,-t2,320,40, dwgfx.getRGB(0,0,0));
             FillRect(dwgfx.backBuffer, 0,-t2+40,320,2, dwgfx.getRGB(255,255,255));
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
             {
-                for(int i=0; i<40; i++)
+                for(int i=0; i<dmwidth(); i++)
                 {
-                    dwgfx.drawtile(i*8,0-t2,(temp+1200+i)%1200,0,0,0);
-                    dwgfx.drawtile(i*8,8-t2,(temp+1200+40+i)%1200,0,0,0);
-                    dwgfx.drawtile(i*8,16-t2,(temp+1200+80+i)%1200,0,0,0);
-                    dwgfx.drawtile(i*8,24-t2,(temp+1200+120+i)%1200,0,0,0);
-                    dwgfx.drawtile(i*8,32-t2,(temp+1200+160+i)%1200,0,0,0);
+                    dwgfx.drawtile(i*8,0-t2,(temp+dmcap()+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap(),0,0,0);
                 }
             }
             else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
             {
-                for(int i=0; i<40; i++)
+                for(int i=0; i<dmwidth(); i++)
                 {
-                    dwgfx.drawtile3(i*8,0-t2,(temp+900+i)%900,0,0,0);
-                    dwgfx.drawtile3(i*8,8-t2,(temp+900+30+i)%900,0,0,0);
-                    dwgfx.drawtile3(i*8,16-t2,(temp+900+60+i)%900,0,0,0);
-                    dwgfx.drawtile3(i*8,24-t2,(temp+900+90+i)%900,0,0,0);
-                    dwgfx.drawtile3(i*8,32-t2,(temp+900+120+i)%900,0,0,0);
+                    dwgfx.drawtile3(i*8,0-t2,(temp+dmcap()+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile3(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile3(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile3(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile3(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap(),0,0,0);
                 }
             }
             else
             {
-                for(int i=0; i<40; i++)
+                for(int i=0; i<dmwidth(); i++)
                 {
-                    dwgfx.drawtile2(i*8,0-t2,(temp+1200+i)%1200,0,0,0);
-                    dwgfx.drawtile2(i*8,8-t2,(temp+1200+40+i)%1200,0,0,0);
-                    dwgfx.drawtile2(i*8,16-t2,(temp+1200+80+i)%1200,0,0,0);
-                    dwgfx.drawtile2(i*8,24-t2,(temp+1200+120+i)%1200,0,0,0);
-                    dwgfx.drawtile2(i*8,32-t2,(temp+1200+160+i)%1200,0,0,0);
+                    dwgfx.drawtile2(i*8,0-t2,(temp+dmcap()+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile2(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile2(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile2(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap(),0,0,0);
+                    dwgfx.drawtile2(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap(),0,0,0);
                 }
             }
             //Highlight our little block
-            fillboxabs(dwgfx,((ed.dmtile%40)*8)-2,16-2,12,12,dwgfx.getRGB(196, 196, 255 - help.glow));
-            fillboxabs(dwgfx,((ed.dmtile%40)*8)-1,16-1,10,10,dwgfx.getRGB(0,0,0));
+            fillboxabs(dwgfx,((ed.dmtile%dmwidth())*8)-2,16-2,12,12,dwgfx.getRGB(196, 196, 255 - help.glow));
+            fillboxabs(dwgfx,((ed.dmtile%dmwidth())*8)-1,16-1,10,10,dwgfx.getRGB(0,0,0));
         }
 
         if(ed.dmtileeditor>0 && t2<=30)
@@ -4794,27 +4810,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             ed.dmtile--;
                             ed.keydelay=3;
-                            if(ed.dmtile<0) ed.dmtile+=1200;
+                            if(ed.dmtile<0) ed.dmtile+=dmcap();
                         }
                         else if(key.keymap[SDLK_RIGHT])
                         {
                             ed.dmtile++;
                             ed.keydelay=3;
 
-                            if(ed.dmtile>=1200) ed.dmtile-=1200;
+                            if(ed.dmtile>=dmcap()) ed.dmtile-=dmcap();
                         }
                         if(key.keymap[SDLK_UP])
                         {
-                            ed.dmtile-=40;
+                            ed.dmtile-=dmwidth();
                             ed.keydelay=3;
-                            if(ed.dmtile<0) ed.dmtile+=1200;
+                            if(ed.dmtile<0) ed.dmtile+=dmcap();
                         }
                         else if(key.keymap[SDLK_DOWN])
                         {
-                            ed.dmtile+=40;
+                            ed.dmtile+=dmwidth();
                             ed.keydelay=3;
 
-                            if(ed.dmtile>=1200) ed.dmtile-=1200;
+                            if(ed.dmtile>=dmcap()) ed.dmtile-=dmcap();
                         }
                     }
                     else

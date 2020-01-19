@@ -294,6 +294,9 @@ void fillbox(Graphics& dwgfx, int x, int y, int x2, int y2, int c);
 
 void fillboxabs(Graphics& dwgfx, int x, int y, int x2, int y2, int c);
 
+int dmcap(void);
+int dmwidth(void);
+
 void editorrender(KeyPoll& key, Graphics& dwgfx, Game& game,  mapclass& map, entityclass& obj, UtilityClass& help);
 
 void editorlogic(KeyPoll& key, Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music, mapclass& map, UtilityClass& help);
