@@ -31,6 +31,7 @@
 
 scriptclass script;
 edentities edentity[3000];
+edaltstate altstates[1000];
 editorclass ed;
 
 bool startinplaytest = false;

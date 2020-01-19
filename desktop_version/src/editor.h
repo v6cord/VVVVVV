@@ -24,6 +24,7 @@ public:
 	int x, y, t = 0;
 	//parameters
 	int p1, p2, p3, p4, p5, p6 = 0;
+	int state = 0;
 	std::string scriptname;
 };
 
@@ -37,6 +38,16 @@ public:
 	int platx1, platy1, platx2, platy2, platv = 0;
 	int enemyx1, enemyy1, enemyx2, enemyy2, enemytype = 0;
 	int directmode = 0;
+};
+
+class edaltstate {
+public:
+	edaltstate();
+	int x, y = -1; // -1 means not set
+	int state = -1;
+	growing_vector<int> tiles;
+
+	void reset();
 };
 
 struct LevelMetaData
@@ -109,7 +120,7 @@ class editorclass{
 
   void saveconvertor();
   void reset();
-  void loadlevel(int rxi, int ryi);
+  void loadlevel(int rxi, int ryi, int altstate);
 
   void placetile(int x, int y, int t);
 
@@ -246,11 +257,15 @@ class editorclass{
   int dmtileeditor = 0;
 
   bool grayenemieskludge = false;
+
+  growing_vector<edaltstate> altstates;
+
+  int getedaltstatenum(int rxi, int ryi, int state);
 };
 
-void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
+void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240, int state=0);
 
-void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
+void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240, int state=0);
 
 void copyedentity(int a, int b);
 

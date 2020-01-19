@@ -41,6 +41,19 @@ edlevelclass::edlevelclass()
     directmode=0;
 }
 
+edaltstate::edaltstate()
+{
+    x = -1;
+    y = -1;
+    state = -1;
+    tiles.resize(40 * 30);
+}
+
+void edaltstate::reset()
+{
+    edaltstate();
+}
+
 editorclass::editorclass()
 {
     maxwidth=20;
@@ -289,6 +302,10 @@ void editorclass::reset()
     script.customscript.clear();
 
     grayenemieskludge = false;
+
+    for (size_t i = 0; i < altstates.size(); i++) {
+        altstates[i].reset();
+    }
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx)
@@ -505,7 +522,7 @@ void editorclass::insertline(int t)
     sblength++;
 }
 
-void editorclass::loadlevel( int rxi, int ryi )
+void editorclass::loadlevel( int rxi, int ryi, int altstate )
 {
     //Set up our buffer array to be picked up by mapclass
     rxi -= 100;
@@ -515,12 +532,19 @@ void editorclass::loadlevel( int rxi, int ryi )
     if(rxi>=mapwidth)rxi-=mapwidth;
     if(ryi>=mapheight)ryi-=mapheight;
 
-    for (int j = 0; j < 30; j++)
-    {
-        for (int i = 0; i < 40; i++)
-        {
-            swapmap[i+(j*40)]=contents[i+(rxi*40)+vmult[j+(ryi*30)]];
-        }
+    int thisstate = -1;
+    if (altstate != 0)
+        thisstate = getedaltstatenum(rxi, ryi, altstate);
+
+    if (thisstate == -1) { // Didn't find the alt state, or not using one
+        for (int j = 0; j < 30; j++)
+            for (int i = 0; i < 40; i++)
+                swapmap[i+(j*40)]=contents[i+(rxi*40)+vmult[j+(ryi*30)]];
+    } else {
+        for (int j = 0; j < 30; j++)
+            for (int i = 0; i < 40; i++)
+                // Not bothering with whatever that `vmult` shit is
+                swapmap[i + j*40] = altstates[thisstate].tiles[i + j*40];
     }
 }
 
@@ -1809,6 +1833,33 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
             }
         }
 
+        if (pKey == "altstates") {
+            int i = 0;
+            for (TiXmlElement* edAltstateEl = pElem->FirstChildElement(); edAltstateEl; edAltstateEl = edAltstateEl->NextSiblingElement()) {
+                std::string pKey(edAltstateEl->Value());
+                const char* pText = edAltstateEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                // Do we NEED the parentheses around `pText`? Whatever
+                std::string TextString = (pText);
+
+                if (TextString.length()) {
+                    edAltstateEl->QueryIntAttribute("x", &altstates[i].x);
+                    edAltstateEl->QueryIntAttribute("y", &altstates[i].y);
+                    edAltstateEl->QueryIntAttribute("state", &altstates[i].state);
+
+                    growing_vector<std::string> values = split(TextString, ',');
+
+                    for (size_t t = 0; t < values.size(); t++)
+                        altstates[i].tiles[t] = atoi(values[t].c_str());
+
+                    i++;
+                }
+            }
+        }
+
         /*else if(version==1){
           if (pKey == "contents")
           {
@@ -1848,6 +1899,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
                 edEntityEl->QueryIntAttribute("p4", &edentity[i].p4);
                 edEntityEl->QueryIntAttribute("p5", &edentity[i].p5);
                 edEntityEl->QueryIntAttribute("p6", &edentity[i].p6);
+
+                edEntityEl->QueryIntAttribute("state", &edentity[i].state);
 
                 i++;
 
@@ -2080,7 +2133,7 @@ void editorclass::save(std::string& _path)
 }
 
 
-void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
+void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/, int state)
 {
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
@@ -2091,12 +2144,13 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     edentity[EditorData::GetInstance().numedentities].p4=p4;
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
+    edentity[EditorData::GetInstance().numedentities].state=state;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 
     EditorData::GetInstance().numedentities++;
 }
 
-void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
+void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/, int state)
 {
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
@@ -2107,6 +2161,7 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     edentity[EditorData::GetInstance().numedentities].p4=p4;
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
+    edentity[EditorData::GetInstance().numedentities].state=state;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 }
 
@@ -2121,6 +2176,7 @@ void copyedentity( int a, int b )
     edentity[a].p4=edentity[b].p4;
     edentity[a].p5=edentity[b].p5;
     edentity[a].p6=edentity[b].p6;
+    edentity[a].state=edentity[b].state;
     edentity[a].scriptname=edentity[b].scriptname;
 }
 
@@ -5382,6 +5438,15 @@ std::string find_tag(std::string_view buf, std::string_view start, std::string_v
     replaceAll(value, "&lt;", "<");
     replaceAll(value, "&gt;", ">");
     return value;
+}
+
+int editorclass::getedaltstatenum(int rxi, int ryi, int state)
+{
+    for (size_t i = 0; i < altstates.size(); i++)
+        if (altstates[i].x == rxi && altstates[i].y == ryi && altstates[i].state == state)
+            return i;
+
+    return -1;
 }
 
 #define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
