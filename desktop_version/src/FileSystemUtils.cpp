@@ -12,6 +12,10 @@
 
 #include "tinyxml.h"
 
+#ifdef __OSX__
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
@@ -79,9 +83,16 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
+#ifdef __OSX__
+        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("haarcascade_mcs_eyepair_big.xml"), NULL, NULL);
+        CFStringRef filePathRef = CFURLCopyPath(appUrlRef);
+        const char* data_zip = CFStringGetCStringPtr(filePathRef, kCFStringEncodingUTF8);
+#else
 	strcpy(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
-	if (!PHYSFS_mount(output, NULL, 1))
+        const char* data_zip = output;
+#endif
+	if (!PHYSFS_mount(data_zip, NULL, 1))
 	{
 		puts("Error: data.zip missing!");
 		puts("You do not have data.zip!");
@@ -98,6 +109,10 @@ int FILESYSTEM_init(char *argvZero)
 		);
 		return 0;
 	}
+#ifdef __OSX__
+CFRelease(filePathRef);
+CFRelease(appUrlRef);
+#endif
 
 	strcpy(output, PHYSFS_getBaseDir());
 	strcpy(output, "gamecontrollerdb.txt");
