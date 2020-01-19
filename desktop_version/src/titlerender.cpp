@@ -193,6 +193,12 @@ growing_vector<std::string> changelog = {
     "  goes on the next line",
     "- Fixed the 2-frame delay to execute a",
     "  script when entering a room",
+    "- position(centerx,<line>) - ",
+    "  Horizontally center the text box",
+    "  around the line x=<line>",
+    "- position(centery,<line>) - Vertically",
+    "  center the text box around the line y=",
+    "  line",
 
 };
 
