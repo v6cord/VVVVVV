@@ -95,7 +95,7 @@ int FILESYSTEM_init(char *argvZero)
                     );
             return 0;
         }
-        if (!CFURLGetFileSystemRepresentation(appUrlRef, true, output, MAX_PATH)) {
+        if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
             SDL_ShowSimpleMessageBox(
                     SDL_MESSAGEBOX_ERROR,
                     "Couldn't get data.zip path!",
