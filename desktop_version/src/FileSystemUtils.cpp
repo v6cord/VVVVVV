@@ -85,6 +85,16 @@ int FILESYSTEM_init(char *argvZero)
 	/* Mount the stock content last */
 #ifdef __APPLE__
         CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
+        if (!appUrlRef) {
+            SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Couldn't find data.zip in .app!",
+                    "Please place data.zip in MacOS/Resources\n"
+                    "inside VVVVVV-CE.app.",
+                    NULL
+                    );
+            return 0;
+        }
         CFStringRef filePathRef = CFURLCopyPath(appUrlRef);
         CFIndex length = CFStringGetLength(filePathRef);
         CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8) + 1;
