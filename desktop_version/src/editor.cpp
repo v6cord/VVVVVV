@@ -1124,10 +1124,21 @@ int editorclass::backbase( int x, int y )
 }
 
 enum tiletyp
-editorclass::gettiletyp(int tile)
+editorclass::gettiletyp(int x, int y)
 {
-    if (tile == 0) return TILE_NONE;
-    if (ed.level[ed.levx + (ed.levy*ed.maxwidth)].tileset == 5) {
+    return getabstiletyp(x+(levx*40), y+(levy*30));
+}
+
+enum tiletyp
+editorclass::getabstiletyp(int x, int y)
+{
+    int tile = absat(&x, &y);
+    int room = x / 40 + ((y / 30)*ed.maxwidth);
+
+    if (tile == 0)
+        return TILE_NONE;
+
+    if (ed.level[room].tileset == 5) {
         tile = tile % 30;
         if (tile >= 6 && tile <= 11)
             return TILE_SPIKE;
@@ -1153,33 +1164,25 @@ int editorclass::at( int x, int y )
 }
 
 int
-editorclass::absat(int x, int y)
+editorclass::absat(int *x, int *y)
 {
-    if(x<0) return absat(0,y);
-    if(y<0) return absat(x,0);
-    if(x>=40) return absat(39,y);
-    if(y>=30) return absat(x,29);
-    return contents[x+vmult[y]];
+    if (*x < 0) *x = (*x) +mapwidth*40;
+    if (*y < 0) *y = (*y) +mapheight*30;
+    if (*x >= (mapwidth*40)) *x = (*x) - mapwidth*40;
+    if (*y >= (mapheight*30)) *y = (*y) - mapheight*30;
+    return contents[(*x) + vmult[*y]];
 }
 int editorclass::freewrap( int x, int y )
 {
-    if(x<0) return freewrap(x+(mapwidth*40),y);
-    if(y<0) return freewrap(x,y+(mapheight*30));
-    if(x>=(mapwidth*40)) return freewrap(x-(mapwidth*40),y);
-    if(y>=(mapheight*30)) return freewrap(x,y-(mapheight*30));
-
-    if(x>=0 && y>=0 && x<(mapwidth*40) && y<(mapheight*30))
-    {
-        temp = gettiletyp(absat(x, y));
-        if (temp != TILE_FOREGROUND) return 0;
-    }
+    temp = getabstiletyp(x, y);
+    if (temp != TILE_FOREGROUND) return 0;
     return 1;
 }
 
 int editorclass::backonlyfree( int x, int y )
 {
     //Returns 1 if tile is a background tile, 0 otherwise
-    temp = gettiletyp(at(x, y));
+    temp = gettiletyp(x, y);
     if (temp == TILE_BACKGROUND)
         return 1;
     return 0;
@@ -1188,7 +1191,7 @@ int editorclass::backonlyfree( int x, int y )
 int editorclass::backfree( int x, int y )
 {
     //Returns 1 if tile is nonzero
-    if (gettiletyp(at(x, y)) == TILE_NONE)
+    if (gettiletyp(x, y) == TILE_NONE)
         return 0;
     return 1;
 }
@@ -1196,7 +1199,7 @@ int editorclass::backfree( int x, int y )
 int editorclass::spikefree( int x, int y )
 {
     //Returns 0 if tile is not a block or spike, 1 otherwise
-    temp = gettiletyp(at(x, y));
+    temp = gettiletyp(x, y);
     if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
         return 0;
     return 1;
@@ -1217,7 +1220,7 @@ int editorclass::absfree( int x, int y )
 {
     //Returns 0 if tile is not a block, 1 otherwise, abs on grid
     if(x>=0 && y>=0 && x<mapwidth*40 && y<mapheight*30) {
-        temp = gettiletyp(absat(x, y));
+        temp = getabstiletyp(x, y);
         if (temp != TILE_FOREGROUND)
             return 0;
     }
@@ -5481,17 +5484,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 for(int i=0; i<40; i++)
                 {
                     temp=i+(ed.levx*40) + ed.vmult[j+(ed.levy*30)];
-                    if(ed.gettiletyp(ed.contents[temp]) == TILE_SPIKE)
+                    if(ed.gettiletyp(i, j) == TILE_SPIKE)
                     {
                         //Fix spikes
                         ed.contents[temp]=ed.towerspikedir(i,j)+ed.spikebase(ed.levx,ed.levy);
                     }
-                    else if(ed.gettiletyp(ed.contents[temp]) == TILE_BACKGROUND)
+                    else if(ed.gettiletyp(i, j) == TILE_BACKGROUND)
                     {
                         //Fix background
                         ed.contents[temp]=ed.backbase(ed.levx,ed.levy);
                     }
-                    else if(ed.gettiletyp(ed.contents[temp]) == TILE_FOREGROUND)
+                    else if(ed.gettiletyp(i, j) == TILE_FOREGROUND)
                     {
                         //Fix tiles
                         ed.contents[temp]=ed.toweredgetile(i,j)+ed.base(ed.levx,ed.levy);

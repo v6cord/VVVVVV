@@ -138,9 +138,10 @@ class editorclass{
 
   int backbase(int x, int y);
 
-  enum tiletyp gettiletyp(int tile);
+  enum tiletyp gettiletyp(int x, int y);
+  enum tiletyp getabstiletyp(int x, int y);
 
-  int absat(int x, int y);
+  int absat(int *x, int *y);
   int at(int x, int y);
 
   int freewrap(int x, int y);
