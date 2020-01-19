@@ -10,6 +10,10 @@
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;class musicclass;
 
+struct stackframe {
+    std::string script;
+    int line;
+};
 
 class scriptclass
 {
@@ -19,6 +23,7 @@ public:
     scriptclass();
 
 	void load(std::string t);
+	void call(std::string t);
 	void loadother(std::string t);
 
 
@@ -94,6 +99,7 @@ public:
     std::string tempvar;
     std::string tempstring;
 
+    std::vector<stackframe> callstack;
 };
 
 #endif /* SCRIPT_H */

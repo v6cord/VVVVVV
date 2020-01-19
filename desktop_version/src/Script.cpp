@@ -51,6 +51,11 @@ void scriptclass::clearcustom(){
 	customscript.clear();
 }
 
+void scriptclass::call(std::string script) {
+    callstack.push_back(stackframe { .script = scriptname, .line = position });
+    load(script);
+}
+
 int scriptclass::getvar(std::string n) {
 	for(std::size_t i = 0; i < variablenames.size(); i++) {
 		if (variablenames[i] == n) {
@@ -200,7 +205,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (ed.level[ss_toi(words[1])-1+(ed.maxwidth*(ss_toi(words[2])-1))].warpdir == ss_toi(words[3]))
 				{
-					load("custom_"+words[4]);
+					call("custom_"+words[4]);
 					position--;
 				}
 			}
@@ -379,7 +384,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets >= ss_toi(words[1]))
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -387,7 +392,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets < ss_toi(words[1]))
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -395,7 +400,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]==1)
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -1721,7 +1726,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (map.explored[ss_toi(words[1]) + (20 * ss_toi(words[2]))] == 1)
 				{
-					load(words[3]);
+					call(words[3]);
 					position--;
 				}
 			}
@@ -1729,7 +1734,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.lastsaved==ss_toi(words[1]))
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1737,7 +1742,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.nocutscenes)
 				{
-					load(words[1]);
+					call(words[1]);
 					position--;
 				}
 			}
@@ -1745,7 +1750,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]==1)
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1753,7 +1758,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (obj.flags[ss_toi(words[1])]!=1)
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -1761,7 +1766,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.crewstats[ss_toi(words[1])]==false)
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1769,7 +1774,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets >= ss_toi(words[1]))
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1777,7 +1782,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.stat_trinkets < ss_toi(words[1]))
 				{
-					load(words[2]);
+					call(words[2]);
 					position--;
 				}
 			}
@@ -1786,13 +1791,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int den = ss_toi(words[1]);
 				if (fRandom() < 1.0f/den)
 				{
-					load("custom_"+words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
 			else if (words[0] == "ifvce")
 			{
-				load("custom_"+words[1]);
+				call("custom_"+words[1]);
 				position--;
 			}
 			else if (words[0] == "hidecoordinates")
@@ -1972,9 +1977,16 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.final_colorframe = 0;
 				map.finalstretch = false;
 			}
+			else if (words[0] == "returnscript")
+                        {
+                            auto frame = callstack.back();
+                            load(frame.script);
+                            position = frame.line;
+                            callstack.pop_back();
+                        }
 			else if (words[0] == "loadscript")
 			{
-				load(words[1]);
+				call(words[1]);
 				position--;
 			}
 			else if (words[0] == "rollcredits")
@@ -2437,17 +2449,17 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets == 20 && obj.flags[67] == 1)
 				{
-					load("talkblue_trinket6");
+					call("talkblue_trinket6");
 					position--;
 				}
 				else if (game.trinkets >= 19 && obj.flags[67] == 0)
 				{
-					load("talkblue_trinket5");
+					call("talkblue_trinket5");
 					position--;
 				}
 				else
 				{
-					load("talkblue_trinket4");
+					call("talkblue_trinket4");
 					position--;
 				}
 			}
@@ -2455,12 +2467,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.trinkets >= 19)
 				{
-					load("talkyellow_trinket3");
+					call("talkyellow_trinket3");
 					position--;
 				}
 				else
 				{
-					load("talkyellow_trinket2");
+					call("talkyellow_trinket2");
 					position--;
 				}
 			}
@@ -2468,84 +2480,84 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkred_14");
+					call("talkred_14");
 					position--;
 				}
 				else	if (game.roomx != 104)
 				{
 					if (game.roomx == 100)
 					{
-						load("talkred_10");
+						call("talkred_10");
 						position--;
 					}
 					else if (game.roomx == 107)
 					{
-						load("talkred_11");
+						call("talkred_11");
 						position--;
 					}
 					else if (game.roomx == 114)
 					{
-						load("talkred_12");
+						call("talkred_12");
 						position--;
 					}
 				}
 				else if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkred_13");
+					call("talkred_13");
 					position--;
 				}
 				else if (obj.flags[35] == 1 && obj.flags[52] == 0)
 				{
 					//Intermission level
 					obj.flags[52] = 1;
-					load("talkred_9");
+					call("talkred_9");
 					position--;
 				}
 				else if (obj.flags[51] == 0)
 				{
 					//We're back home!
 					obj.flags[51] = 1;
-					load("talkred_5");
+					call("talkred_5");
 					position--;
 				}
 				else if (obj.flags[48] == 0 && game.crewstats[5])
 				{
 					//Victoria's back
 					obj.flags[48] = 1;
-					load("talkred_6");
+					call("talkred_6");
 					position--;
 				}
 				else if (obj.flags[49] == 0 && game.crewstats[4])
 				{
 					//Verdigris' back
 					obj.flags[49] = 1;
-					load("talkred_7");
+					call("talkred_7");
 					position--;
 				}
 				else if (obj.flags[50] == 0 && game.crewstats[2])
 				{
 					//Vitellary's back
 					obj.flags[50] = 1;
-					load("talkred_8");
+					call("talkred_8");
 					position--;
 				}
 				else if (obj.flags[45] == 0 && !game.crewstats[5])
 				{
 					obj.flags[45] = 1;
-					load("talkred_2");
+					call("talkred_2");
 					position--;
 				}
 				else if (obj.flags[46] == 0 && !game.crewstats[4])
 				{
 					obj.flags[46] = 1;
-					load("talkred_3");
+					call("talkred_3");
 					position--;
 				}
 				else if (obj.flags[47] == 0 && !game.crewstats[2])
 				{
 					obj.flags[47] = 1;
-					load("talkred_4");
+					call("talkred_4");
 					position--;
 				}
 				else
@@ -2553,7 +2565,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					obj.flags[45] = 0;
 					obj.flags[46] = 0;
 					obj.flags[47] = 0;
-					load("talkred_1");
+					call("talkred_1");
 					position--;
 				}
 			}
@@ -2562,66 +2574,66 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkgreen_11");
+					call("talkgreen_11");
 					position--;
 				}
 				else	if (game.roomx == 103 && game.roomy == 109)
 				{
-					load("talkgreen_8");
+					call("talkgreen_8");
 					position--;
 				}
 				else if (game.roomx == 101 && game.roomy == 109)
 				{
-					load("talkgreen_9");
+					call("talkgreen_9");
 					position--;
 				}
 				else if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkgreen_10");
+					call("talkgreen_10");
 					position--;
 				}
 				else if (obj.flags[34] == 1 && obj.flags[57] == 0)
 				{
 					//Intermission level
 					obj.flags[57] = 1;
-					load("talkgreen_7");
+					call("talkgreen_7");
 					position--;
 				}
 				else if (obj.flags[53] == 0)
 				{
 					//Home!
 					obj.flags[53] = 1;
-					load("talkgreen_6");
+					call("talkgreen_6");
 					position--;
 				}
 				else if (obj.flags[54] == 0 && game.crewstats[2])
 				{
 					obj.flags[54] = 1;
-					load("talkgreen_5");
+					call("talkgreen_5");
 					position--;
 				}
 				else if (obj.flags[55] == 0 && game.crewstats[3])
 				{
 					obj.flags[55] = 1;
-					load("talkgreen_4");
+					call("talkgreen_4");
 					position--;
 				}
 				else if (obj.flags[56] == 0 && game.crewstats[5])
 				{
 					obj.flags[56] = 1;
-					load("talkgreen_3");
+					call("talkgreen_3");
 					position--;
 				}
 				else if (obj.flags[58] == 0)
 				{
 					obj.flags[58] = 1;
-					load("talkgreen_2");
+					call("talkgreen_2");
 					position--;
 				}
 				else
 				{
-					load("talkgreen_1");
+					call("talkgreen_1");
 					position--;
 				}
 			}
@@ -2629,7 +2641,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkblue_9");
+					call("talkblue_9");
 					position--;
 				}
 				else	if (obj.flags[67] == 1)
@@ -2639,14 +2651,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					{
 						//second trinket conversation
 						obj.flags[42] = 1;
-						load("talkblue_trinket2");
+						call("talkblue_trinket2");
 						position--;
 					}
 					else if (obj.flags[41] == 0 && obj.flags[42] == 0)
 					{
 						//Third trinket conversation
 						obj.flags[42] = 1;
-						load("talkblue_trinket3");
+						call("talkblue_trinket3");
 						position--;
 					}
 					else
@@ -2654,12 +2666,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						//Ok, we've already dealt with the trinket thing; so either you have them all, or you don't. If you do:
 						if (game.trinkets >= 20)
 						{
-							load("startepilogue");
+							call("startepilogue");
 							position--;
 						}
 						else
 						{
-							load("talkblue_8");
+							call("talkblue_8");
 							position--;
 						}
 					}
@@ -2668,53 +2680,53 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				{
 					//Intermission level
 					obj.flags[40] = 1;
-					load("talkblue_7");
+					call("talkblue_7");
 					position--;
 				}
 				else if (obj.flags[36] == 0 && game.crewstats[5])
 				{
 					//Back on the ship!
 					obj.flags[36] = 1;
-					load("talkblue_3");
+					call("talkblue_3");
 					position--;
 				}
 				else if (obj.flags[41] == 0 && game.crewrescued() <= 4)
 				{
 					//First trinket conversation
 					obj.flags[41] = 1;
-					load("talkblue_trinket1");
+					call("talkblue_trinket1");
 					position--;
 				}
 				else if (obj.flags[41] == 1 && obj.flags[42] == 0 && game.crewrescued() == 5)
 				{
 					//second trinket conversation
 					obj.flags[42] = 1;
-					load("talkblue_trinket2");
+					call("talkblue_trinket2");
 					position--;
 				}
 				else if (obj.flags[41] == 0 && obj.flags[42] == 0 && game.crewrescued() == 5)
 				{
 					//Third trinket conversation
 					obj.flags[42] = 1;
-					load("talkblue_trinket3");
+					call("talkblue_trinket3");
 					position--;
 				}
 				else if (obj.flags[37] == 0 && game.crewstats[2])
 				{
 					obj.flags[37] = 1;
-					load("talkblue_4");
+					call("talkblue_4");
 					position--;
 				}
 				else if (obj.flags[38] == 0 && game.crewstats[3])
 				{
 					obj.flags[38] = 1;
-					load("talkblue_5");
+					call("talkblue_5");
 					position--;
 				}
 				else if (obj.flags[39] == 0 && game.crewstats[4])
 				{
 					obj.flags[39] = 1;
-					load("talkblue_6");
+					call("talkblue_6");
 					position--;
 				}
 				else
@@ -2723,12 +2735,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					//if yellow is found
 					if (game.crewstats[2])
 					{
-						load("talkblue_2");
+						call("talkblue_2");
 						position--;
 					}
 					else
 					{
-						load("talkblue_1");
+						call("talkblue_1");
 						position--;
 					}
 				}
@@ -2737,27 +2749,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.insecretlab)
 				{
-					load("talkyellow_12");
+					call("talkyellow_12");
 					position--;
 				}
 				else	if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkyellow_11");
+					call("talkyellow_11");
 					position--;
 				}
 				else if (obj.flags[32] == 1 && obj.flags[31] == 0)
 				{
 					//Intermission level
 					obj.flags[31] = 1;
-					load("talkyellow_6");
+					call("talkyellow_6");
 					position--;
 				}
 				else if (obj.flags[27] == 0 && game.crewstats[2])
 				{
 					//Back on the ship!
 					obj.flags[27] = 1;
-					load("talkyellow_10");
+					call("talkyellow_10");
 					position--;
 				}
 				else if (obj.flags[43] == 0 && game.crewrescued() == 5 && !game.crewstats[5])
@@ -2767,54 +2779,54 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					obj.flags[43] = 1;
 					obj.flags[42] = 1;
 					obj.flags[41] = 1;
-					load("talkyellow_trinket1");
+					call("talkyellow_trinket1");
 					position--;
 				}
 				else if (obj.flags[24] == 0 && game.crewstats[5])
 				{
 					obj.flags[24] = 1;
-					load("talkyellow_8");
+					call("talkyellow_8");
 					position--;
 				}
 				else if (obj.flags[26] == 0 && game.crewstats[4])
 				{
 					obj.flags[26] = 1;
-					load("talkyellow_7");
+					call("talkyellow_7");
 					position--;
 				}
 				else if (obj.flags[25] == 0 && game.crewstats[3])
 				{
 					obj.flags[25] = 1;
-					load("talkyellow_9");
+					call("talkyellow_9");
 					position--;
 				}
 				else if (obj.flags[28] == 0)
 				{
 					obj.flags[28] = 1;
-					load("talkyellow_3");
+					call("talkyellow_3");
 					position--;
 				}
 				else if (obj.flags[29] == 0)
 				{
 					obj.flags[29] = 1;
-					load("talkyellow_4");
+					call("talkyellow_4");
 					position--;
 				}
 				else if (obj.flags[30] == 0)
 				{
 					obj.flags[30] = 1;
-					load("talkyellow_5");
+					call("talkyellow_5");
 					position--;
 				}
 				else if (obj.flags[23] == 0)
 				{
 					obj.flags[23] = 1;
-					load("talkyellow_2");
+					call("talkyellow_2");
 					position--;
 				}
 				else
 				{
-					load("talkyellow_1");
+					call("talkyellow_1");
 					position--;
 					obj.flags[23] = 0;
 				}
@@ -2825,72 +2837,72 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//Crew rescued:
 				if (game.insecretlab)
 				{
-					load("talkpurple_9");
+					call("talkpurple_9");
 					position--;
 				}
 				else	if (obj.flags[67] == 1)
 				{
 					//game complete
-					load("talkpurple_8");
+					call("talkpurple_8");
 					position--;
 				}
 				else if (obj.flags[17] == 0 && game.crewstats[4])
 				{
 					obj.flags[17] = 1;
-					load("talkpurple_6");
+					call("talkpurple_6");
 					position--;
 				}
 				else if (obj.flags[15] == 0 && game.crewstats[5])
 				{
 					obj.flags[15] = 1;
-					load("talkpurple_4");
+					call("talkpurple_4");
 					position--;
 				}
 				else if (obj.flags[16] == 0 && game.crewstats[3])
 				{
 					obj.flags[16] = 1;
-					load("talkpurple_5");
+					call("talkpurple_5");
 					position--;
 				}
 				else if (obj.flags[18] == 0 && game.crewstats[2])
 				{
 					obj.flags[18] = 1;
-					load("talkpurple_7");
+					call("talkpurple_7");
 					position--;
 				}
 				else if (obj.flags[19] == 1 && obj.flags[20] == 0 && obj.flags[21] == 0)
 				{
 					//intermission one: if played one / not had first conversation / not played two [conversation one]
 					obj.flags[21] = 1;
-					load("talkpurple_intermission1");
+					call("talkpurple_intermission1");
 					position--;
 				}
 				else if (obj.flags[20] == 1 && obj.flags[21] == 1 && obj.flags[22] == 0)
 				{
 					//intermission two: if played two / had first conversation / not had second conversation [conversation two]
 					obj.flags[22] = 1;
-					load("talkpurple_intermission2");
+					call("talkpurple_intermission2");
 					position--;
 				}
 				else if (obj.flags[20] == 1 && obj.flags[21] == 0 && obj.flags[22] == 0)
 				{
 					//intermission two: if played two / not had first conversation / not had second conversation [conversation three]
 					obj.flags[22] = 1;
-					load("talkpurple_intermission3");
+					call("talkpurple_intermission3");
 					position--;
 				}
 				else if (obj.flags[12] == 0)
 				{
 					//Intro conversation
 					obj.flags[12] = 1;
-					load("talkpurple_intro");
+					call("talkpurple_intro");
 					position--;
 				}
 				else if (obj.flags[14] == 0)
 				{
 					//Shorter intro conversation
 					obj.flags[14] = 1;
-					load("talkpurple_3");
+					call("talkpurple_3");
 					position--;
 				}
 				else
@@ -2899,12 +2911,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					//if green is found
 					if (game.crewstats[4])
 					{
-						load("talkpurple_2");
+						call("talkpurple_2");
 						position--;
 					}
 					else
 					{
-						load("talkpurple_1");
+						call("talkpurple_1");
 						position--;
 					}
 				}
@@ -2914,6 +2926,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		}
 		else
 		{
+                        if (!callstack.empty()) callstack.pop_back();
 			running = false;
 		}
 	}
@@ -2959,7 +2972,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intro");
+		call("intro");
 		break;
 	case 1:
 		game.gamestate = GAMEMODE;
@@ -3215,7 +3228,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
 
-		load("intro");
+		call("intro");
 		break;
 	case 10:
 		game.gamestate = GAMEMODE;
@@ -3244,7 +3257,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
 
-		load("intro");
+		call("intro");
 		break;
 	case 11:
 		game.gamestate = GAMEMODE;
@@ -3314,7 +3327,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 13:
 		game.gamestate = GAMEMODE;
@@ -3349,7 +3362,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 14:
 		game.gamestate = GAMEMODE;
@@ -3384,7 +3397,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 15:
 		game.gamestate = GAMEMODE;
@@ -3419,7 +3432,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_1");
+		call("intermission_1");
 		break;
 	case 16:
 		game.gamestate = GAMEMODE;
@@ -3451,7 +3464,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 17:
 		game.gamestate = GAMEMODE;
@@ -3483,7 +3496,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 18:
 		game.gamestate = GAMEMODE;
@@ -3515,7 +3528,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 19:
 		game.gamestate = GAMEMODE;
@@ -3547,7 +3560,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 
-		load("intermission_2");
+		call("intermission_2");
 		break;
 	case 20:
 		//Level editor
@@ -3602,7 +3615,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		}else{
 		  music.currentsong=-1;
 		}
-		//load("intro");
+		//call("intro");
 		break;
   case 22:  //play custom level (in game)
     //Initilise the level
@@ -3645,7 +3658,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
       music.currentsong=-1;
 		}
 		dwgfx.fademode = 4;
-    //load("intro");
+    //call("intro");
   break;
   case 23: //Continue in custom level
       //Initilise the level
@@ -3691,7 +3704,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		*/
                 ed.generatecustomminimap(dwgfx, map);
 		dwgfx.fademode = 4;
-    //load("intro");
+    //call("intro");
   break;
 	case 100:
 		game.savestats(map, dwgfx, music);
@@ -3779,7 +3792,7 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 	if (game.teleportscript != "")
 	{
 		game.state = 0;
-		load(game.teleportscript);
+		call(game.teleportscript);
 		game.teleportscript = "";
 	}
 	else
