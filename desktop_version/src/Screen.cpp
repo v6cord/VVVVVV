@@ -10,7 +10,7 @@
 // Used to create the window icon
 extern "C"
 {
-	extern unsigned lodepng_decode24(
+	extern unsigned lodepng_decode32(
 		unsigned char** out,
 		unsigned* w,
 		unsigned* h,
@@ -59,18 +59,18 @@ Screen::Screen()
                 FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
             }
         }
-	lodepng_decode24(&data, &width, &height, fileIn, length);
+	lodepng_decode32(&data, &width, &height, fileIn, length);
 	if (fileIn != v6cord_png) FILESYSTEM_freeMemory(&fileIn);
 	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(
 		data,
 		width,
 		height,
-		24,
-		width * 3,
+		32,
+		width * 4,
 		0x000000FF,
 		0x0000FF00,
 		0x00FF0000,
-		0x00000000
+		0xFF000000
 	);
 	SDL_SetWindowIcon(m_window, icon);
 	SDL_FreeSurface(icon);
