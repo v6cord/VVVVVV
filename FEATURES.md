@@ -158,3 +158,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `position(centerx,<line>)` - Horizontally center the text box around the line x=\<line>
 
 - `position(centery,<line>)` - Vertically center the text box around the line y=\<line>
+
+- Added the Tower tileset

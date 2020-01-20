@@ -201,6 +201,7 @@ growing_vector<std::string> changelog = {
     "- position(centery,<line>) - Vertically",
     "  center the text box around the line y=",
     "  line",
+    "- Added the Tower tileset",
 
 };
 
