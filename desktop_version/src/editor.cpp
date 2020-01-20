@@ -223,6 +223,7 @@ void editorclass::reset()
     tiley=0;
     levx=0;
     levy=0;
+    levaltstate=0;
     keydelay=0;
     lclickdelay=0;
     savekey=false;
@@ -2265,20 +2266,20 @@ void removeedentity( int t )
     }
 }
 
-int edentat( int xp, int yp )
+int edentat( int xp, int yp, int state )
 {
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
-        if(edentity[i].x==xp && edentity[i].y==yp) return i;
+        if(edentity[i].x==xp && edentity[i].y==yp && edentity[i].state==state) return i;
     }
     return -1;
 }
 
-bool edentclear( int xp, int yp )
+bool edentclear( int xp, int yp, int state )
 {
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
-        if(edentity[i].x==xp && edentity[i].y==yp) return false;
+        if(edentity[i].x==xp && edentity[i].y==yp && edentity[i].state==state) return false;
     }
     return true;
 }
@@ -2574,7 +2575,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
     obj.customplatformtile=game.customcol*12;
 
-    ed.temp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30));
+    ed.temp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30), ed.levaltstate);
     for(int i=0; i< EditorData::GetInstance().numedentities; i++)
     {
         //if() on screen
@@ -2584,7 +2585,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         point tpoint;
         SDL_Rect drawRect;
 
-        if(tx==ed.levx && ty==ed.levy)
+        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
         {
             switch(edentity[i].t)
             {
@@ -4576,7 +4577,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     {
                         tx=(edentity[i].p1-(edentity[i].p1%40))/40;
                         ty=(edentity[i].p2-(edentity[i].p2%30))/30;
-                        if(tx==ed.levx && ty==ed.levy)
+                        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
                         {
                             j++;
                         }
@@ -4668,7 +4669,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             int tx=(edentity[i].x-(edentity[i].x%40))/40;
                             int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                            if(tx==ed.levx && ty==ed.levy)
+                            if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
                             {
                                 testeditor=i;
                                 startpoint=1;
@@ -4685,7 +4686,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 int tx=(edentity[i].x-(edentity[i].x%40))/40;
                                 int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                                if(tx==ed.levx && ty==ed.levy)
+                                if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
                                 {
                                     testeditor=i;
                                 }
@@ -5140,7 +5141,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.placetilelocal(ed.tilex, ed.tiley, 8);
                         }
 
-                        int tmp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30));
+                        int tmp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30), ed.levaltstate);
                         if(tmp==-1)
                         {
                             //Room text and script triggers can be placed in walls
@@ -5387,7 +5388,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     }
                     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
                     {
-                        if(edentity[i].x==ed.tilex + (ed.levx*40)&& edentity[i].y==ed.tiley+ (ed.levy*30))
+                        if(edentity[i].x==ed.tilex + (ed.levx*40)&& edentity[i].y==ed.tiley+ (ed.levy*30) && edentity[i].state==ed.levaltstate)
                         {
                             if(edentity[i].t==9) ed.numtrinkets--;
                             if(edentity[i].t==15) ed.numcrewmates--;
