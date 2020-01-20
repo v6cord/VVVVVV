@@ -1247,10 +1247,10 @@ int editorclass::getfree(enum tiletyp thistiletyp)
 int editorclass::free( int x, int y )
 {
     //Returns 0 if tile is not a block, 1 otherwise
-    if(x==-1) return free(0,y);
-    if(y==-1) return free(x,0);
-    if(x==40) return free(39,y);
-    if(y==30) return free(x,29);
+    if(x==-1) return 1;
+    if(y==-1) return 1;
+    if(x==40) return 1;
+    if(y==30) return 1;
 
     return getfree(gettiletyplocal(x, y));
 }
