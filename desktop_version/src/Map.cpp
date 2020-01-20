@@ -1674,8 +1674,9 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		//Entities have to be created HERE, akwardly
 		int tempcheckpoints=0;
 		int tempscriptbox=0;
+		bool altstateexists = ed.getedaltstatenum(rx-100, ry-100, obj.altstates) != -1;
 		for(int edi=0; edi<EditorData::GetInstance().numedentities; edi++){
-			if (edentity[edi].state != 0 && obj.altstates != edentity[edi].state)
+			if (altstateexists && obj.altstates != edentity[edi].state)
 				continue;
 
 			//If entity is in this room, create it
