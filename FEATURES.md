@@ -160,3 +160,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `position(centery,<line>)` - Vertically center the text box around the line y=\<line>
 
 - Added the Tower tileset
+
+- Added altstates - F6 to create, F7 to delete, press A to switch between
