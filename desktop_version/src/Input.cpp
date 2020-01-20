@@ -5,6 +5,7 @@
 #include "tinyxml.h"
 
 #include "FileSystemUtils.h"
+#include <cstdlib>
 
 // Found in titlerender.cpp
 void updategraphicsmode(Game& game, Graphics& dwgfx);
@@ -463,17 +464,23 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     game.mainmenu = 20;
                     dwgfx.fademode = 2;
                     ed.filename="";
-                  }/*else if(game.currentmenuoption==2){
-                    music.playef(11, 10);
-                    //"OPENFOLDERHOOK"
-                    //When the player selects the "open level folder" menu option,
-                    //this is where it should run the appropriate code.
-                    //This code should:
-                    // - Minimise the game
-                    // - Open the levels folder for whatever operating system we're on
-SDL_assert(0 && "Remove open level dir");
-
-                  }*/else if(game.currentmenuoption==2){
+                  }else if(game.currentmenuoption==2){
+#if defined(__linux__)
+                    std::string command = "xdg-open ";
+#elif defined(__APPLE__)
+                    std::string command = "open ";
+#elif defined(_WIN32)
+                    std::string command = "start ";
+#else
+                    std::string command = "";
+#endif
+                    command += FILESYSTEM_getUserLevelDirectory();
+                    if (std::system(command.c_str())) {
+                        music.playef(2, 10);
+                    } else {
+                        music.playef(11, 10);
+                    }
+                  }else if(game.currentmenuoption==3){
                     //back
                     music.playef(11, 10);
                     game.createmenu("mainmenu");

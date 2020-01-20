@@ -6909,11 +6909,11 @@ void Game::createmenu( std::string t )
         menuoptionsactive[0] = true;
         menuoptions[1] = "level editor";
         menuoptionsactive[1] = true;
-        //menuoptions[2] = "open level folder";
-        //menuoptionsactive[2] = true;
-        menuoptions[2] = "back to menu";
+        menuoptions[2] = "open level folder";
         menuoptionsactive[2] = true;
-        nummenuoptions = 3;
+        menuoptions[3] = "back to menu";
+        menuoptionsactive[3] = true;
+        nummenuoptions = 4;
         menuxoff = -30;
         menuyoff = -40;
     }
