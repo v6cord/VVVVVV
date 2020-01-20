@@ -603,6 +603,18 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.b      = ss_toi(words[7]);
 				scriptrender.push_back(temp);
 			}
+			if (words[0] == "drawpixel")
+			{
+				// drawpixel(x,y,r,g,b)
+				scriptimage temp;
+				temp.type   = 1;
+				temp.x      = ss_toi(words[1]);
+				temp.y      = ss_toi(words[2]);
+				temp.r      = ss_toi(words[3]);
+				temp.g      = ss_toi(words[4]);
+				temp.b      = ss_toi(words[5]);
+				scriptrender.push_back(temp);
+                        }
       if (words[0] == "flag")
 			{
 				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){

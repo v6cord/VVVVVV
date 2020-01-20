@@ -223,6 +223,7 @@ void editorclass::reset()
     tiley=0;
     levx=0;
     levy=0;
+    levaltstate=0;
     keydelay=0;
     lclickdelay=0;
     savekey=false;
@@ -1149,7 +1150,7 @@ editorclass::getabstiletyp(int x, int y)
 
     if ((tile >= 6 && tile <= 9) || tile == 49 || tile == 50)
         return TILE_SPIKE;
-    if (tile >= 80 && tile <= 680)
+    if (tile == 1 || (tile >= 80 && tile <= 679))
         return TILE_FOREGROUND;
     return TILE_BACKGROUND;
 }
@@ -2110,6 +2111,29 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( contentsString.c_str() ));
     data->LinkEndChild( msg );
 
+    msg = new TiXmlElement("altstates");
+
+    // Iterate through all the altstates. We'll know we reached the end when we get an altstate at -1,-1
+    TiXmlElement* alt;
+    for (size_t a = 0; a < altstates.size(); a++) {
+        if (altstates[a].x == -1 or altstates[a].y == -1)
+            break;
+
+        std::string tiles = "";
+        for (int y = 0; y < 30; y++)
+            for (int x = 0; x < 40; x++)
+                tiles += UtilityClass::String(altstates[a].tiles[x + y*40]) + ",";
+
+        alt = new TiXmlElement("altstate");
+        alt->SetAttribute("x", altstates[a].x);
+        alt->SetAttribute("y", altstates[a].y);
+        alt->SetAttribute("state", altstates[a].state);
+        alt->LinkEndChild(new TiXmlText(tiles.c_str()));
+        msg->LinkEndChild(alt);
+
+        a++;
+    }
+    data->LinkEndChild(msg);
 
     //Old save format
     /*
@@ -2136,6 +2160,8 @@ void editorclass::save(std::string& _path)
         edentityElement->SetAttribute( "p4", edentity[i].p4);
         edentityElement->SetAttribute( "p5", edentity[i].p5);
         edentityElement->SetAttribute(  "p6", edentity[i].p6);
+        if (edentity[i].state != 0)
+                edentityElement->SetAttribute("state", edentity[i].state);
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
         edentityElement->LinkEndChild( new TiXmlText( "" )) ;
         msg->LinkEndChild( edentityElement );
@@ -2240,20 +2266,20 @@ void removeedentity( int t )
     }
 }
 
-int edentat( int xp, int yp )
+int edentat( int xp, int yp, int state )
 {
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
-        if(edentity[i].x==xp && edentity[i].y==yp) return i;
+        if(edentity[i].x==xp && edentity[i].y==yp && edentity[i].state==state) return i;
     }
     return -1;
 }
 
-bool edentclear( int xp, int yp )
+bool edentclear( int xp, int yp, int state )
 {
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
-        if(edentity[i].x==xp && edentity[i].y==yp) return false;
+        if(edentity[i].x==xp && edentity[i].y==yp && edentity[i].state==state) return false;
     }
     return true;
 }
@@ -2549,7 +2575,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
     obj.customplatformtile=game.customcol*12;
 
-    ed.temp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30));
+    ed.temp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30), ed.levaltstate);
     for(int i=0; i< EditorData::GetInstance().numedentities; i++)
     {
         //if() on screen
@@ -2559,7 +2585,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         point tpoint;
         SDL_Rect drawRect;
 
-        if(tx==ed.levx && ty==ed.levy)
+        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
         {
             switch(edentity[i].t)
             {
@@ -4551,7 +4577,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     {
                         tx=(edentity[i].p1-(edentity[i].p1%40))/40;
                         ty=(edentity[i].p2-(edentity[i].p2%30))/30;
-                        if(tx==ed.levx && ty==ed.levy)
+                        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
                         {
                             j++;
                         }
@@ -4643,7 +4669,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             int tx=(edentity[i].x-(edentity[i].x%40))/40;
                             int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                            if(tx==ed.levx && ty==ed.levy)
+                            if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
                             {
                                 testeditor=i;
                                 startpoint=1;
@@ -4660,7 +4686,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 int tx=(edentity[i].x-(edentity[i].x%40))/40;
                                 int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                                if(tx==ed.levx && ty==ed.levy)
+                                if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
                                 {
                                     testeditor=i;
                                 }
@@ -5115,7 +5141,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.placetilelocal(ed.tilex, ed.tiley, 8);
                         }
 
-                        int tmp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30));
+                        int tmp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30), ed.levaltstate);
                         if(tmp==-1)
                         {
                             //Room text and script triggers can be placed in walls
@@ -5362,7 +5388,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     }
                     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
                     {
-                        if(edentity[i].x==ed.tilex + (ed.levx*40)&& edentity[i].y==ed.tiley+ (ed.levy*30))
+                        if(edentity[i].x==ed.tilex + (ed.levx*40)&& edentity[i].y==ed.tiley+ (ed.levy*30) && edentity[i].state==ed.levaltstate)
                         {
                             if(edentity[i].t==9) ed.numtrinkets--;
                             if(edentity[i].t==15) ed.numcrewmates--;

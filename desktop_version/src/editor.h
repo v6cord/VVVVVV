@@ -206,6 +206,7 @@ class editorclass{
   int keydelay, lclickdelay = 0;
   bool savekey, loadkey = false;
   int levx, levy = 0;
+  int levaltstate = 0;
   int entframe, entframedelay = 0;
 
   bool roomtextmod = false;
@@ -285,10 +286,10 @@ void copyedentity(int a, int b);
 
 void removeedentity(int t);
 
-int edentat(int xp, int yp);
+int edentat(int xp, int yp, int state = 0);
 
 
-bool edentclear(int xp, int yp);
+bool edentclear(int xp, int yp, int state = 0);
 
 void fillbox(Graphics& dwgfx, int x, int y, int x2, int y2, int c);
 

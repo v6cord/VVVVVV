@@ -1802,6 +1802,11 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         scriptimage current = script.scriptrender[i];
         if (current.type == 0) {
             dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+        } else if (current.type == 1) {
+            auto pixels = (uint8_t*) dwgfx.backBuffer->pixels;
+            auto row = pixels + dwgfx.backBuffer->pitch * current.y;
+            auto pixel = (uint32_t*) (row + current.x);
+            *pixel = dwgfx.getRGB(current.r, current.g, current.b);
         } else if (current.type == 2) {
             SDL_Rect temprect;
             temprect.x = current.x;
