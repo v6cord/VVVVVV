@@ -1149,7 +1149,7 @@ editorclass::getabstiletyp(int x, int y)
 
     if ((tile >= 6 && tile <= 9) || tile == 49 || tile == 50)
         return TILE_SPIKE;
-    if (tile >= 80 && tile <= 680)
+    if (tile == 1 || (tile >= 80 && tile <= 679))
         return TILE_FOREGROUND;
     return TILE_BACKGROUND;
 }
