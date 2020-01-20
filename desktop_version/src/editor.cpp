@@ -5766,13 +5766,21 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
 
     // Ok, now update the rest
     // This looks like it's O(n^2), and, well, it probably is lmao
+    int dothisstate = state;
     while (true) {
-        state++;
-        int nextstate = getedaltstatenum(rxi, ryi, state);
+        dothisstate++;
+        int nextstate = getedaltstatenum(rxi, ryi, dothisstate);
         if (nextstate == -1)
             break;
         altstates[nextstate].state--;
     }
+
+    // Don't forget to update entities
+    for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
+        if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
+        && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
+        && edentity[i].state > state)
+            edentity[i].state--;
 }
 
 int editorclass::getnumaltstates(int rxi, int ryi)
