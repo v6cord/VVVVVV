@@ -2110,6 +2110,29 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( contentsString.c_str() ));
     data->LinkEndChild( msg );
 
+    msg = new TiXmlElement("altstates");
+
+    // Iterate through all the altstates. We'll know we reached the end when we get an altstate at -1,-1
+    TiXmlElement* alt;
+    for (size_t a = 0; a < altstates.size(); a++) {
+        if (altstates[a].x == -1 or altstates[a].y == -1)
+            break;
+
+        std::string tiles = "";
+        for (int y = 0; y < 30; y++)
+            for (int x = 0; x < 40; x++)
+                tiles += UtilityClass::String(altstates[a].tiles[x + y*40]) + ",";
+
+        alt = new TiXmlElement("altstate");
+        alt->SetAttribute("x", altstates[a].x);
+        alt->SetAttribute("y", altstates[a].y);
+        alt->SetAttribute("state", altstates[a].state);
+        alt->LinkEndChild(new TiXmlText(tiles.c_str()));
+        msg->LinkEndChild(alt);
+
+        a++;
+    }
+    data->LinkEndChild(msg);
 
     //Old save format
     /*
@@ -2136,6 +2159,8 @@ void editorclass::save(std::string& _path)
         edentityElement->SetAttribute( "p4", edentity[i].p4);
         edentityElement->SetAttribute( "p5", edentity[i].p5);
         edentityElement->SetAttribute(  "p6", edentity[i].p6);
+        if (edentity[i].state != 0)
+                edentityElement->SetAttribute("state", edentity[i].state);
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
         edentityElement->LinkEndChild( new TiXmlText( "" )) ;
         msg->LinkEndChild( edentityElement );
