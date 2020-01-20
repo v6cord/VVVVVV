@@ -427,7 +427,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 	                    game.mainmenu = 22;
                       dwgfx.fademode = 2;
 	                  }else{
-                      music.playef(11, 10);
+                      //music.playef(11, 10);
                       game.createmenu("quickloadlevel");
                       map.nexttowercolour();
 	                  }
