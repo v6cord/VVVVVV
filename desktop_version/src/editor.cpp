@@ -1149,7 +1149,7 @@ editorclass::gettiletyplocal(int x, int y)
 enum tiletyp
 editorclass::getabstiletyp(int x, int y)
 {
-    int tile = absat(x, y);
+    int tile = absat(&x, &y);
     int room = x / 40 + ((y / 30)*ed.maxwidth);
 
     return gettiletyp(level[room].tileset, tile);
@@ -1190,13 +1190,13 @@ int editorclass::at( int x, int y )
 }
 
 int
-editorclass::absat(int x, int y)
+editorclass::absat(int *x, int *y)
 {
-    if (x < 0) x = x +mapwidth*40;
-    if (y < 0) y = y +mapheight*30;
-    if (x >= (mapwidth*40)) x = x - mapwidth*40;
-    if (y >= (mapheight*30)) y = y - mapheight*30;
-    return contents[x + vmult[y]];
+    if (*x < 0) *x = (*x) +mapwidth*40;
+    if (*y < 0) *y = (*y) +mapheight*30;
+    if (*x >= (mapwidth*40)) *x = (*x) - mapwidth*40;
+    if (*y >= (mapheight*30)) *y = (*y) - mapheight*30;
+    return contents[(*x) + vmult[*y]];
 }
 int editorclass::freewrap( int x, int y )
 {
