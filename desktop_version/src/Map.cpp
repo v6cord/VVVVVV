@@ -726,12 +726,12 @@ bool mapclass::collide(int x, int y)
 	}
 	else if (tileset == 2)
 	{
-		int tile = (contents[x + vmult[y]]) % 30;
 		if (y == -1) return collide(x, y + 1);
 		if (y == 29+extrarow) return collide(x, y - 1);
 		if (x == -1) return collide(x + 1, y);
 		if (x == 40) return collide(x - 1, y);
 		if (x < 0 || y < 0 || x >= 40 || y >= 29 + extrarow) return false;
+		int tile = (contents[x + vmult[y]]) % 30;
 		if (tile >= 12 && tile <= 27) return true;
 		if (invincibility)
 		{
