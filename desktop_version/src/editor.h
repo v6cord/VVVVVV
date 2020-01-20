@@ -133,12 +133,16 @@ class editorclass{
 
   void placetilelocal(int x, int y, int t);
 
+  int gettilelocal(int x, int y);
+  void settilelocal(int x, int y, int tile);
+
   int getenemyframe(int t);
   int base(int x, int y);
 
   int backbase(int x, int y);
 
-  enum tiletyp gettiletyp(int x, int y);
+  enum tiletyp gettiletyp(int room, int tile);
+  enum tiletyp gettiletyplocal(int x, int y);
   enum tiletyp getabstiletyp(int x, int y);
 
   int absat(int x, int y);
@@ -152,6 +156,7 @@ class editorclass{
 
   int spikefree(int x, int y);
   int free(int x, int y);
+  int getfree(enum tiletyp tile);
   int absfree(int x, int y);
 
   int match(int x, int y);
@@ -276,11 +281,14 @@ class editorclass{
   growing_vector<edaltstate> altstates;
 
   int getedaltstatenum(int rxi, int ryi, int state);
+  void addaltstate(int rxi, int ryi, int state);
+  void removealtstate(int rxi, int ryi, int state);
+  int getnumaltstates(int rxi, int ryi);
 };
 
-void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240, int state=0);
+void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
 
-void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240, int state=0);
+void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
 
 void copyedentity(int a, int b);
 
