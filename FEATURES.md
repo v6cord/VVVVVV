@@ -166,3 +166,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Added an "open level folder" option to the "player levels" screen
 
 - `reloadcustomactivityzones()` - Reload all non-terminal activity zones
+
+- `reloadterminalactivityzones()` - Reload all terminal activity zones

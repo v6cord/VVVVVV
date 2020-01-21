@@ -209,6 +209,8 @@ growing_vector<std::string> changelog = {
     "  the \"player levels\" screen",
     "- reloadcustomactivityzones() - Reload",
     "  all non-terminal activity zones",
+    "- reloadterminalactivityzones() - Reload",
+    "  all terminal activity zones",
 
 };
 
