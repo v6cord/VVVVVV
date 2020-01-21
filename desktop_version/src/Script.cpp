@@ -917,6 +917,33 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					}
 				obj.cleanupresurrectblocks();
 			}
+			if (words[0] == "reloadactivityzones")
+			{
+				// Copied and pasted from the above, with some slight tweaks (again)
+				for (int brz = 0; brz < obj.nresurrectblocks; brz++)
+					if (obj.resurrectblocks[brz].active && obj.resurrectblocks[brz].type == ACTIVITY) {
+						obj.customprompt = obj.resurrectblocks[brz].prompt;
+						if (obj.resurrectblocks[brz].script.length() < 7
+						|| obj.resurrectblocks[brz].script.substr(0, 7) != "custom_") {
+							// It's a main game activity zone, we won't reload it
+							obj.resurrectblocks[brz].clear();
+							continue;
+						}
+						obj.customscript = obj.resurrectblocks[brz].script.substr(7, std::string::npos);
+						obj.customr = obj.resurrectblocks[brz].r;
+						obj.customg = obj.resurrectblocks[brz].g;
+						obj.customb = obj.resurrectblocks[brz].b;
+
+						obj.createblock(
+							obj.resurrectblocks[brz].type,
+							obj.resurrectblocks[brz].x, obj.resurrectblocks[brz].y,
+							obj.resurrectblocks[brz].wp, obj.resurrectblocks[brz].hp,
+							101
+						);
+						obj.resurrectblocks[brz].clear();
+					}
+				obj.cleanupresurrectblocks();
+			}
 			if (words[0] == "cutscene")
 			{
 				dwgfx.showcutscenebars = true;
