@@ -1617,8 +1617,6 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             background = 3;
             towermode = true;
 
-            tower.loadcustomtower(ed.level[curlevel].tower);
-
             cameramode = 0;
             colstate = 0;
             colsuperstate = 0;
@@ -1629,7 +1627,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             ypos = tower_entry;
             bypos = ypos/2;
 
-            roomname = "Why?";
+            extrarow = 0;
         } else {
             switch(ed.level[curlevel].tileset){
             case 0: //Space Station
@@ -1684,14 +1682,21 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             }
 
             extrarow = 1;
-            ed.loadlevel(rx, ry, obj.altstates);
+        }
 
-            for (int edj = 0; edj < 30; edj++){
-                for(int edi = 0; edi < 40; edi++){
+        ed.loadlevel(rx, ry, obj.altstates);
+        int ymax = 30;
+        if (customtower)
+            ymax = ed.tower_size(customtower);
+
+        if (!customtower) {
+            for (int edj = 0; edj < ymax; edj++) {
+                for (int edi = 0; edi < 40; edi++) {
                     contents[edi + vmult[edj]] = ed.swapmap[edi + vmult[edj]];
                 }
             }
-        }
+        } else
+            tower.loadcustomtower(ed.swapmap, ymax);
 
         roomname="";
         if(ed.level[curlevel].roomname!=""){
@@ -1705,136 +1710,142 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         int tempcheckpoints=0;
         int tempscriptbox=0;
         for(int edi=0; edi<EditorData::GetInstance().numedentities; edi++){
-            if (obj.altstates != edentity[edi].state)
+            if (obj.altstates != edentity[edi].state ||
+                customtower != edentity[edi].intower)
                 continue;
 
-            if (customtower != edentity[edi].intower)
-                continue;
+            // If entity is in this room, create it
+            int bx1, by1, bx2, by2;
+            int tsx = (edentity[edi].x-(edentity[edi].x%40))/40;
+            int tsy = (edentity[edi].y-(edentity[edi].y%30))/30;
+            int ex = edentity[edi].x * 8;
+            int ey = edentity[edi].y * 8;
+            if (!customtower) {
+                /* Non-tower entity xy is stored with an xy offset denoting
+                   the room */
+                ex -= tsx * 40 * 8;
+                ey -= tsy * 30 * 8;
+            }
 
-            //If entity is in this room, create it
-            int tsx=(edentity[edi].x-(edentity[edi].x%40))/40;
-            int tsy=(edentity[edi].y-(edentity[edi].y%30))/30;
-            if(tsx==rx-100 && tsy==ry-100){
-            switch(edentity[edi].t){
-                case 1: //Enemies
-                int bx1, by1, bx2, by2;
-                bx1=ed.level[rx-100+((ry-100)*ed.maxwidth)].enemyx1;
-                by1=ed.level[rx-100+((ry-100)*ed.maxwidth)].enemyy1;
-                bx2=ed.level[rx-100+((ry-100)*ed.maxwidth)].enemyx2;
-                by2=ed.level[rx-100+((ry-100)*ed.maxwidth)].enemyy2;
+            /* Enemy or platform boundaries */
+            bx1=ed.level[curlevel].enemyx1;
+            by1=ed.level[curlevel].enemyy1;
+            bx2=ed.level[curlevel].enemyx2;
+            by2=ed.level[curlevel].enemyy2;
 
-                if(warpx){ if(bx1==0 && bx2==320){ bx1=-100; bx2=420; } }
-                if(warpy){ if(by1==0 && by2==240){ by1=-100; by2=340; } }
+            if (edentity[edi].t == 2) {
+                bx1=ed.level[curlevel].platx1;
+                by1=ed.level[curlevel].platy1;
+                bx2=ed.level[curlevel].platx2;
+                by2=ed.level[curlevel].platy2;
+            }
 
-                obj.customenemy=ed.level[tsx+((ed.maxwidth)*tsy)].enemytype;
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 56,
-                                 edentity[edi].p1, 4, bx1, by1, bx2, by2);
+            /* Allow wrap-around if the room wraps */
+            if (warpx && bx1 == 0 && bx2 == 320) {
+                bx1 -= 100;
+                bx2 += 100;
+            }
+
+            if (warpx && by1 == 0 && by2 == 240) {
+                by1 -= 100;
+                by2 += 100;
+            }
+
+            if (customtower || (tsx == rx-100 && tsy == ry-100)) {
+            switch (edentity[edi].t){
+            case 1: // Enemies
+                obj.customenemy=ed.level[curlevel].enemytype;
+                obj.createentity(game, ex, ey, 56, edentity[edi].p1,
+                                 4, bx1, by1, bx2, by2);
                 break;
-                case 2: //Platforms and Threadmills
-                if(edentity[edi].p1<=4){
-                    int bx1, by1, bx2, by2;
-                    bx1=ed.level[rx-100+((ry-100)*ed.maxwidth)].platx1;
-                    by1=ed.level[rx-100+((ry-100)*ed.maxwidth)].platy1;
-                    bx2=ed.level[rx-100+((ry-100)*ed.maxwidth)].platx2;
-                    by2=ed.level[rx-100+((ry-100)*ed.maxwidth)].platy2;
+            case 2: // Platforms and Threadmills
+                /* Conveyors */
+                if (edentity[edi].p1 > 4) {
+                    if (edentity[edi].p1 > 8)
+                        break;
 
-                    if(warpx){ if(bx1==0 && bx2==320){ bx1=-100; bx2=420; } }
-                    if(warpy){ if(by1==0 && by2==240){ by1=-100; by2=340; } }
-
-                    obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 2,
-                                     edentity[edi].p1, ed.level[rx-100+((ry-100)*ed.mapwidth)].platv, bx1, by1, bx2, by2);
-                }else if(edentity[edi].p1>=5 && edentity[edi].p1<=8){ //Threadmill
-                    obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 2,
-                                     edentity[edi].p1+3, 4);
+                    obj.createentity(game, ex, ey, 2, edentity[edi].p1 + 3, 4);
+                    break;
                 }
+
+                /* Just in case */
+                if (edentity[edi].p1 < 0)
+                    break;
+
+                obj.createentity(game, ex, ey, 2, edentity[edi].p1,
+                                 ed.level[curlevel].platv, bx1, by1, bx2, by2);
                 break;
-                case 3: //Disappearing platforms
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 3);
+            case 3: // Disappearing platforms
+                obj.createentity(game, ex, ey, 3);
                 break;
-                case 9:
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 9, ed.findtrinket(edi));
+            case 9: // Trinkets
+                obj.createentity(game, ex, ey, 9, ed.findtrinket(edi));
                 break;
-                case 10: //Checkpoints
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 10,
-                                edentity[edi].p1,((rx+(ry*100))*20)+tempcheckpoints);
+            case 10: // Checkpoints
+                obj.createentity(game, ex, ey, 10, edentity[edi].p1,
+                                 ((rx+(ry*100))*20)+tempcheckpoints);
                 tempcheckpoints++;
                 break;
-                case 11: //Gravity Lines
-                if(edentity[edi].p1==0){ //Horizontal
-                    obj.createentity(game, (edentity[edi].p2*8),(edentity[edi].y*8)- ((ry-100)*30*8)+4, 11, edentity[edi].p3);
-                }else{ //Vertical
-                    obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8)+3,(edentity[edi].p2*8), 12, edentity[edi].p3);
-                }
+            case 11: // Gravity Lines
+                if (edentity[edi].p1==0) //Horizontal
+                    obj.createentity(game, ex, ey, 11, edentity[edi].p3);
+                else // Vertical
+                    obj.createentity(game, ex, ey, 12, edentity[edi].p3);
                 break;
-                case 13: //Warp Tokens
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(edentity[edi].y*8)- ((ry-100)*30*8), 13, edentity[edi].p1, edentity[edi].p2);
+            case 13: // Warp Tokens
+                obj.createentity(game, ex, ey, 13, edentity[edi].p1,
+                                 edentity[edi].p2);
                 break;
-                case 15: //Collectable crewmate
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8)-4,(edentity[edi].y*8)- ((ry-100)*30*8)+1, 55, ed.findcrewmate(edi), edentity[edi].p1, edentity[edi].p2);
+            case 15: // Collectable crewmate
+                obj.createentity(game, ex, ey, 55, ed.findcrewmate(edi),
+                                 edentity[edi].p1, edentity[edi].p2);
                 break;
-                case 17: //Roomtext!
+            case 17: // Roomtext!
                 roomtexton = true;
-                roomtextx[roomtextnumlines] = edentity[edi].x - ((rx-100)*40);
-                roomtexty[roomtextnumlines] = edentity[edi].y - ((ry-100)*30);
+                roomtextx[roomtextnumlines] = ex / 8;
+                roomtexty[roomtextnumlines] = ey / 8;
                 roomtext[roomtextnumlines] = edentity[edi].scriptname;
                 roomtextnumlines++;
                 break;
-                case 18: //Terminals
-                { // We declare variables here, so we have to put this in its own block
-                obj.customscript=edentity[edi].scriptname;
-                int usethistile = edentity[edi].p1;
-                int usethisy = edentity[edi].y;
-                if (usethistile == 0) {
-                    usethistile = 1; // Unflipped
-                } else if (usethistile == 1) {
-                    usethistile = 0; // Flipped
-                    usethisy--;
-                }
-                obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8),(usethisy*8)- ((ry-100)*30*8)+8, 20, usethistile);
-                obj.createblock(5, (edentity[edi].x*8)- ((rx-100)*40*8)-8, (usethisy*8)- ((ry-100)*30*8)+8, 20, 16, 35);
+            case 18: // Terminals
+                obj.customscript = edentity[edi].scriptname;
+
+                if (edentity[edi].p1) // Flipped
+                    ey -= 8;
+
+                obj.createentity(game, ex, ey, 20, !edentity[edi].p1);
+                obj.createblock(5, ex, ey, 20, 16, 35);
                 break;
-                }
-                case 19: //Script Box
+            case 19: // Script Box
                 game.customscript[tempscriptbox]=edentity[edi].scriptname;
-                obj.createblock(1, (edentity[edi].x*8)- ((rx-100)*40*8), (edentity[edi].y*8)- ((ry-100)*30*8),
-                                edentity[edi].p1*8, edentity[edi].p2*8, 300+tempscriptbox);
+                obj.createblock(1, ex, ey, edentity[edi].p1*8,
+                                edentity[edi].p2*8, 300+tempscriptbox);
                 tempscriptbox++;
                 break;
-                case 50: //Warp Lines
+            case 50: // Warp Lines
                 obj.customwarpmode=true;
-                if(edentity[edi].p1==0){ //
-                    obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8)+4,(edentity[edi].p2*8), 51, edentity[edi].p3);
-                }else if(edentity[edi].p1==1){ //Horizontal, right
-                    obj.createentity(game, (edentity[edi].x*8)- ((rx-100)*40*8)+4,(edentity[edi].p2*8), 52, edentity[edi].p3);
-                }else if(edentity[edi].p1==2){ //Vertical, top
-                    obj.createentity(game, (edentity[edi].p2*8),(edentity[edi].y*8)- ((ry-100)*30*8)+7, 53, edentity[edi].p3);
-                }else if(edentity[edi].p1==3){
-                    obj.createentity(game, (edentity[edi].p2*8),(edentity[edi].y*8)- ((ry-100)*30*8), 54, edentity[edi].p3);
-                }
+                if (edentity[edi].p1==0) //
+                    obj.createentity(game, ex, (edentity[edi].p2*8), 51,
+                                     edentity[edi].p3);
+                else if (edentity[edi].p1==1) //Horizontal, right
+                    obj.createentity(game, ex + 4, (edentity[edi].p2*8), 52,
+                                     edentity[edi].p3);
+                else if (edentity[edi].p1==2) //Vertical, top
+                    obj.createentity(game, (edentity[edi].p2*8), ey + 7, 53,
+                                     edentity[edi].p3);
+                else if (edentity[edi].p1==3)
+                    obj.createentity(game, (edentity[edi].p2*8), ey, 54,
+                                     edentity[edi].p3);
                 break;
             }
             }
-            }
+        }
         if (ed.grayenemieskludge)
             ed.grayenemieskludge = false;
 
         customtrinkets=ed.numtrinkets;
         customcrewmates=ed.numcrewmates;
 
-        //do the appear/remove roomname here
-        /*
-
-        if (otherlevel.roomtexton)
-        {
-            roomtexton = true;
-            roomtextx[0] = otherlevel.roomtextx;
-            roomtexty[0] = otherlevel.roomtexty;
-            roomtextnumlines = otherlevel.roomtextnumlines;
-            for (int i = 0; i < roomtextnumlines; i++)
-            {
-                roomtext[i] = otherlevel.roomtext[i];
-            }
-        }*/
         break;
     }
     //The room's loaded: now we fill out damage blocks based on the tiles.

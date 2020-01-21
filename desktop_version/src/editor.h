@@ -171,6 +171,7 @@ public:
     bool intower(void);
     int tower_connection(int rx, int ry, bool entering);
     int get_tower(int rx, int ry);
+    int tower_size(int tower);
     int entering_tower(int rx, int ry, int *entry);
 
     void load(std::string& _path, Graphics& dwgfx);

@@ -534,10 +534,21 @@ void editorclass::loadlevel( int rxi, int ryi, int altstate )
     //Set up our buffer array to be picked up by mapclass
     rxi -= 100;
     ryi -= 100;
-    if(rxi<0)rxi+=mapwidth;
-    if(ryi<0)ryi+=mapheight;
-    if(rxi>=mapwidth)rxi-=mapwidth;
-    if(ryi>=mapheight)ryi-=mapheight;
+    if (rxi < 0) rxi += mapwidth;
+    if (ryi < 0) ryi += mapheight;
+    if (rxi >= mapwidth) rxi -= mapwidth;
+    if (ryi >= mapheight) ryi -= mapheight;
+
+    int tower = get_tower(rxi, ryi);
+
+    if (tower) {
+        int ymax = tower_size(tower);
+        for (int y = 0; y < ymax; y++)
+            for (int x = 0; x < 40; x++)
+                swapmap[x + y*40] = contents[x + vmult[y]];
+
+        return;
+    }
 
     int thisstate = -1;
     if (altstate != 0)
@@ -1762,6 +1773,10 @@ int editorclass::get_tower(int rx, int ry) {
     return ed.level[room].tower;
 }
 
+int editorclass::tower_size(int tower) {
+    return 100;
+}
+
 bool editorclass::intower(void) {
     if (get_tower(ed.levx, ed.levy))
         return true;
@@ -2240,8 +2255,7 @@ void editorclass::save(std::string& _path)
         edentityElement->SetAttribute(  "p6", edentity[i].p6);
         if (edentity[i].state != 0)
                 edentityElement->SetAttribute("state", edentity[i].state);
-        if (edentity[i].intower != 0)
-                edentityElement->SetAttribute("intower", edentity[i].intower);
+        edentityElement->SetAttribute("intower", edentity[i].intower);
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
         edentityElement->LinkEndChild( new TiXmlText( "" )) ;
         msg->LinkEndChild( edentityElement );
