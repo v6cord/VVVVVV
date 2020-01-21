@@ -5398,6 +5398,8 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         }
         else if (pKey == "mapimage")
         {
+            SDL_FreeSurface(dwgfx.images[12]);
+            dwgfx.images[12] = LoadImage(pText);
             dwgfx.mapimage.emplace(pText);
         }
         else if (pKey == "nofog")
