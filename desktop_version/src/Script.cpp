@@ -881,6 +881,32 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					}
 				obj.cleanupresurrectblocks();
 			}
+			if (words[0] == "reloadterminalactivityzones")
+			{
+				// Copied and pasted from the above, with some slight tweaks
+				// "Terminal" here being defined as activity zones whose prompts are terminals' prompts,
+				// e.g. "Press ENTER to activate terminal" or "Press ENTER to activate terminals"
+				for (int brt = 0; brt < obj.nresurrectblocks; brt++)
+					if (obj.resurrectblocks[brt].active && obj.resurrectblocks[brt].type == ACTIVITY
+					&& (obj.resurrectblocks[brt].prompt == "Press ENTER to activate terminal"
+					|| obj.resurrectblocks[brt].prompt == "Press ENTER to activate terminals")) {
+						obj.customprompt = obj.resurrectblocks[brt].prompt;
+						// I'm assuming "custom_" hasn't been removed or changed in the meantime
+						obj.customscript = obj.resurrectblocks[brt].script.substr(7, std::string::npos);
+						obj.customr = obj.resurrectblocks[brt].r;
+						obj.customg = obj.resurrectblocks[brt].g;
+						obj.customb = obj.resurrectblocks[brt].b;
+
+						obj.createblock(
+							obj.resurrectblocks[brt].type,
+							obj.resurrectblocks[brt].x, obj.resurrectblocks[brt].y,
+							obj.resurrectblocks[brt].wp, obj.resurrectblocks[brt].hp,
+							101
+						);
+						obj.resurrectblocks[brt].clear();
+					}
+				obj.cleanupresurrectblocks();
+			}
 			if (words[0] == "cutscene")
 			{
 				dwgfx.showcutscenebars = true;
