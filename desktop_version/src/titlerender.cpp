@@ -207,6 +207,8 @@ growing_vector<std::string> changelog = {
     "  delete, press A to switch between",
     "- Added an \"open level folder\" option to",
     "  the \"player levels\" screen",
+    "- reloadcustomactivityzones() - Reload",
+    "  all non-terminal activity zones",
 
 };
 

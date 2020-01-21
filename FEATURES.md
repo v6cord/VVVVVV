@@ -164,3 +164,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Added altstates - F6 to create, F7 to delete, press A to switch between
 
 - Added an "open level folder" option to the "player levels" screen
+
+- `reloadcustomactivityzones()` - Reload all non-terminal activity zones
