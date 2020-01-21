@@ -44,15 +44,15 @@ edlevelclass::edlevelclass()
 
 edaltstate::edaltstate()
 {
-    x = -1;
-    y = -1;
-    state = -1;
-    tiles.resize(40 * 30);
+    reset();
 }
 
 void edaltstate::reset()
 {
-    edaltstate();
+    x = -1;
+    y = -1;
+    state = -1;
+    tiles.resize(40 * 30);
 }
 
 editorclass::editorclass()
