@@ -162,3 +162,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Added the Tower tileset
 
 - Added altstates - F6 to create, F7 to delete, press A to switch between
+
+- Added an "open level folder" option to the "player levels" screen
