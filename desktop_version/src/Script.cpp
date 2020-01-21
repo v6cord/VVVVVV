@@ -865,7 +865,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					&& obj.resurrectblocks[brz].prompt != "Press ENTER to activate terminal"
 					&& obj.resurrectblocks[brz].prompt != "Press ENTER to activate terminals") {
 						obj.customprompt = obj.resurrectblocks[brz].prompt;
-						// I'm assuming "custom_" hasn't been removed or changed in the meantime
+						if (obj.resurrectblocks[brz].script.length() < 7
+						|| obj.resurrectblocks[brz].script.substr(0, 7) != "custom_") {
+							// It's a main game activity zone, we won't reload it
+							obj.resurrectblocks[brz].clear();
+							continue;
+						}
 						obj.customscript = obj.resurrectblocks[brz].script.substr(7, std::string::npos);
 						obj.customr = obj.resurrectblocks[brz].r;
 						obj.customg = obj.resurrectblocks[brz].g;
@@ -891,7 +896,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					&& (obj.resurrectblocks[brt].prompt == "Press ENTER to activate terminal"
 					|| obj.resurrectblocks[brt].prompt == "Press ENTER to activate terminals")) {
 						obj.customprompt = obj.resurrectblocks[brt].prompt;
-						// I'm assuming "custom_" hasn't been removed or changed in the meantime
+						if (obj.resurrectblocks[brt].script.length() < 7
+						|| obj.resurrectblocks[brt].script.substr(0, 7) != "custom_") {
+							// It's a main game activity zone, we won't reload it
+							obj.resurrectblocks[brt].clear();
+							continue;
+						}
 						obj.customscript = obj.resurrectblocks[brt].script.substr(7, std::string::npos);
 						obj.customr = obj.resurrectblocks[brt].r;
 						obj.customg = obj.resurrectblocks[brt].g;
