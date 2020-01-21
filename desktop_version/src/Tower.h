@@ -20,6 +20,8 @@ public:
 
     void fillminitower(growing_vector<std::string>& tmap);
 
+    void loadcustomtower(int tower);
+
     void loadminitower1();
 
     void loadminitower2();

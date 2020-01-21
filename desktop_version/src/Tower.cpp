@@ -128,6 +128,11 @@ void towerclass::fillminitower(growing_vector<std::string>& tmap)
 	}
 }
 
+void towerclass::loadcustomtower(int tower)
+{
+    loadminitower1();
+}
+
 void towerclass::loadminitower1()
 {
 	growing_vector<std::string> tmap;

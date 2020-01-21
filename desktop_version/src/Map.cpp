@@ -1603,54 +1603,93 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         int curlevel=(rx-100)+((ry-100)*ed.maxwidth);
         game.customcol=ed.getlevelcol(curlevel)+1;
         obj.customplatformtile=game.customcol*12;
-        switch(ed.level[curlevel].tileset){
-            case 0: //Space Station
-            tileset = 0;
-            background = 1;
-            break;
-            case 1: //Outside
-            tileset = 1;
-            background = 1;
-            break;
-            case 2: //Lab
-            tileset = 1;
-            background = 2;
-            dwgfx.rcol = ed.level[curlevel].tilecol;
-            break;
-            case 3: //Warp Zone/intermission
-            tileset = 1;
-            background = 6;
-            break;
-            case 4://Ship
-            tileset = 1;
-            background = 1;
-            break;
-            case 5://Tower
-            tileset = 2;
-            background = 10;
-            dwgfx.rcol = ed.level[curlevel].tilecol;
-            break;
-            default:
-            tileset = 1;
-            background = 1;
-            break;
-        }
 
-        //If screen warping, then override all that:
-        dwgfx.backgrounddrawn = false;
-        if(ed.level[curlevel].warpdir>0){
-            if(ed.level[curlevel].warpdir==1){
-            warpx=true;
-            background=3;
-            dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
-            }else if(ed.level[curlevel].warpdir==2){
-            warpy=true;
-            background=4;
-            dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
-            }else if(ed.level[curlevel].warpdir==3){
-            warpx=true; warpy=true;
-            background = 5;
-            dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+        int tower_entry = 0;
+        int customtower = ed.entering_tower(rx, ry, &tower_entry);
+        if (customtower) {
+            tdrawback = true;
+            minitowermode = true;
+            tower.minitowermode = true;
+            bscroll = 0;
+            scrolldir = 1;
+
+            tileset = 1;
+            background = 3;
+            towermode = true;
+
+            tower.loadcustomtower(ed.level[curlevel].tower);
+
+            cameramode = 0;
+            colstate = 0;
+            colsuperstate = 0;
+
+            int i = obj.getplayer();
+            obj.entities[i].yp += tower_entry;
+
+            ypos = tower_entry;
+            bypos = ypos/2;
+
+            roomname = "Why?";
+        } else {
+            switch(ed.level[curlevel].tileset){
+            case 0: //Space Station
+                tileset = 0;
+                background = 1;
+                break;
+            case 1: //Outside
+                tileset = 1;
+                background = 1;
+                break;
+            case 2: //Lab
+                tileset = 1;
+                background = 2;
+                dwgfx.rcol = ed.level[curlevel].tilecol;
+                break;
+            case 3: //Warp Zone/intermission
+                tileset = 1;
+                background = 6;
+                break;
+            case 4://Ship
+                tileset = 1;
+                background = 1;
+                break;
+            case 5://Tower
+                tileset = 2;
+                background = 10;
+                dwgfx.rcol = ed.level[curlevel].tilecol;
+                break;
+            default:
+                tileset = 1;
+                background = 1;
+                break;
+            }
+
+            //If screen warping, then override all that:
+            dwgfx.backgrounddrawn = false;
+
+            if (ed.level[curlevel].warpdir > 0) {
+                if(ed.level[curlevel].warpdir==1){
+                    warpx=true;
+                    background=3;
+                    dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+                }else if(ed.level[curlevel].warpdir==2){
+                    warpy=true;
+                    background=4;
+                    dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+                }else if(ed.level[curlevel].warpdir==3){
+                    warpx=true; warpy=true;
+                    background = 5;
+                    dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+                }
+            }
+
+            extrarow = 1;
+            ed.loadlevel(rx, ry, obj.altstates);
+
+            for (int edj = 0; edj < 30; edj++){
+                for(int edi = 0; edi < 40; edi++){
+                    contents[edi + vmult[edj]] = ed.swapmap[edi + vmult[edj]];
+                }
             }
         }
 
@@ -1658,24 +1697,18 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         if(ed.level[curlevel].roomname!=""){
             roomname=ed.level[curlevel].roomname;
         }
-        extrarow = 1;
-        ed.loadlevel(rx, ry, obj.altstates);
-
 
         roomtexton = false;
         roomtextnumlines=0;
-
-        for (int edj = 0; edj < 30; edj++){
-            for(int edi = 0; edi < 40; edi++){
-            contents[edi + vmult[edj]] = ed.swapmap[edi + vmult[edj]];
-            }
-        }
 
         //Entities have to be created HERE, akwardly
         int tempcheckpoints=0;
         int tempscriptbox=0;
         for(int edi=0; edi<EditorData::GetInstance().numedentities; edi++){
             if (obj.altstates != edentity[edi].state)
+                continue;
+
+            if (customtower != edentity[edi].intower)
                 continue;
 
             //If entity is in this room, create it

@@ -32,6 +32,7 @@ public:
     //parameters
     int p1, p2, p3, p4, p5, p6 = 0;
     int state = 0;
+    int intower = 0;
     std::string scriptname;
 };
 
@@ -45,6 +46,8 @@ public:
     int platx1, platy1, platx2, platy2, platv = 0;
     int enemyx1, enemyy1, enemyx2, enemyy2, enemytype = 0;
     int directmode = 0;
+    int tower = 0;
+    int tower_row = 0;
 };
 
 class edaltstate {
@@ -164,6 +167,11 @@ public:
     int outsidematch(int x, int y);
 
     int backmatch(int x, int y);
+
+    bool intower(void);
+    int tower_connection(int rx, int ry, bool entering);
+    int get_tower(int rx, int ry);
+    int entering_tower(int rx, int ry, int *entry);
 
     void load(std::string& _path, Graphics& dwgfx);
     void save(std::string& _path);

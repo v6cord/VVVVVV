@@ -40,6 +40,8 @@ edlevelclass::edlevelclass()
     enemyy2=240;
     enemytype=0;
     directmode=0;
+    tower=0;
+    tower_row=0;
 }
 
 edaltstate::edaltstate()
@@ -1751,6 +1753,47 @@ void editorclass::countstuff()
     }
 }
 
+int editorclass::get_tower(int rx, int ry) {
+    /* Returns the tower of this room */
+    int room = rx + ry * ed.maxwidth;
+    if (ry < 0 || rx < 0)
+        return 0;
+
+    return ed.level[room].tower;
+}
+
+bool editorclass::intower(void) {
+    if (get_tower(ed.levx, ed.levy))
+        return true;
+    return false;
+}
+
+/* Returns y+camera offset upon tower entry, or room y coordinate upon
+   leaving */
+int editorclass::tower_connection(int rx, int ry, bool entering) {
+    /* Figure out the location of tower connections */
+    int room = rx + ry * ed.maxwidth;
+    if (entering) {
+        return ed.level[room].tower_row * 8;
+    } else {
+        /* TODO */
+        return ry;
+    }
+}
+
+/* Returns tower ID upon entering a tower */
+int editorclass::entering_tower(int rx, int ry, int *entry) {
+    int tower = 0;
+    rx %= 100;
+    ry %= 100;
+    tower = get_tower(rx, ry);
+    if (!tower)
+        return 0;
+
+    *entry = tower_connection(rx, ry, true);
+    return tower;
+}
+
 void editorclass::load(std::string& _path, Graphics& dwgfx)
 {
     reset();
@@ -1982,6 +2025,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
                 edEntityEl->QueryIntAttribute("p6", &edentity[i].p6);
 
                 edEntityEl->QueryIntAttribute("state", &edentity[i].state);
+                edEntityEl->QueryIntAttribute("intower", &edentity[i].intower);
 
                 i++;
 
@@ -2014,7 +2058,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
                 edLevelClassElement->QueryIntAttribute("enemyy2", &level[i].enemyy2);
                 edLevelClassElement->QueryIntAttribute("enemytype", &level[i].enemytype);
                 edLevelClassElement->QueryIntAttribute("directmode", &level[i].directmode);
-
+                edLevelClassElement->QueryIntAttribute("tower", &level[i].tower);
+                edLevelClassElement->QueryIntAttribute("tower_row", &level[i].tower_row);
                 edLevelClassElement->QueryIntAttribute("warpdir", &level[i].warpdir);
 
                 i++;
@@ -2195,6 +2240,8 @@ void editorclass::save(std::string& _path)
         edentityElement->SetAttribute(  "p6", edentity[i].p6);
         if (edentity[i].state != 0)
                 edentityElement->SetAttribute("state", edentity[i].state);
+        if (edentity[i].intower != 0)
+                edentityElement->SetAttribute("intower", edentity[i].intower);
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
         edentityElement->LinkEndChild( new TiXmlText( "" )) ;
         msg->LinkEndChild( edentityElement );
@@ -2219,6 +2266,8 @@ void editorclass::save(std::string& _path)
         edlevelclassElement->SetAttribute(  "enemyy2", level[i].enemyy2);
         edlevelclassElement->SetAttribute(  "enemytype", level[i].enemytype);
         edlevelclassElement->SetAttribute(  "directmode", level[i].directmode);
+        edlevelclassElement->SetAttribute(  "tower", level[i].tower);
+        edlevelclassElement->SetAttribute(  "tower_row", level[i].tower_row);
         edlevelclassElement->SetAttribute(  "warpdir", level[i].warpdir);
 
         edlevelclassElement->LinkEndChild( new TiXmlText( level[i].roomname.c_str() )) ;
@@ -2251,6 +2300,7 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
     edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
+    edentity[EditorData::GetInstance().numedentities].intower=0;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 
     EditorData::GetInstance().numedentities++;
@@ -2268,6 +2318,7 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
     edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
+    edentity[EditorData::GetInstance().numedentities].intower=0;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 }
 
@@ -2283,6 +2334,7 @@ void copyedentity( int a, int b )
     edentity[a].p5=edentity[b].p5;
     edentity[a].p6=edentity[b].p6;
     edentity[a].state=edentity[b].state;
+    edentity[a].intower=edentity[b].intower;
     edentity[a].scriptname=edentity[b].scriptname;
 }
 
@@ -2303,7 +2355,8 @@ int edentat( int xp, int yp, int state )
 {
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
-        if(edentity[i].x==xp && edentity[i].y==yp && edentity[i].state==state) return i;
+        if (edentity[i].x==xp && edentity[i].y==yp &&
+            edentity[i].state==state && edentity[i].intower==0) return i;
     }
     return -1;
 }
@@ -2312,7 +2365,8 @@ bool edentclear( int xp, int yp, int state )
 {
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
-        if(edentity[i].x==xp && edentity[i].y==yp && edentity[i].state==state) return false;
+        if (edentity[i].x==xp && edentity[i].y==yp &&
+            edentity[i].state==state && edentity[i].intower==0) return false;
     }
     return true;
 }
@@ -2531,6 +2585,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         default:
             break;
         }
+
+        if (ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower)
+            dwgfx.drawbackground(9, map);
     }
 
     //Draw map, in function
@@ -2618,7 +2675,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         point tpoint;
         SDL_Rect drawRect;
 
-        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
+        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate &&
+           edentity[i].intower == 0)
         {
             switch(edentity[i].t)
             {
@@ -3683,16 +3741,18 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
         if(ed.shiftmenu)
         {
-            fillboxabs(dwgfx, 0, 127-40,161+8,140+40,dwgfx.getRGB(64,64,64));
-            FillRect(dwgfx.backBuffer, 0,128-40,160+8,140+40, dwgfx.getRGB(0,0,0));
-            dwgfx.Print(4,  90, "F1: Change Tileset",164,164,164,false);
-            dwgfx.Print(4, 100, "F2: Change Colour",164,164,164,false);
-            dwgfx.Print(4, 110, "F3: Change Enemies",164,164,164,false);
-            dwgfx.Print(4, 120, "F4: Enemy Bounds",164,164,164,false);
-            dwgfx.Print(4, 130, "F5: Platform Bounds",164,164,164,false);
+            fillboxabs(dwgfx, 0, 67,161+8,200,dwgfx.getRGB(64,64,64));
+            FillRect(dwgfx.backBuffer, 0,68,160+8,200, dwgfx.getRGB(0,0,0));
+            dwgfx.Print(4,  70, "F1: Change Tileset",164,164,164,false);
+            dwgfx.Print(4,  80, "F2: Change Colour",164,164,164,false);
+            dwgfx.Print(4,  90, "F3: Change Enemies",164,164,164,false);
+            dwgfx.Print(4, 100, "F4: Enemy Bounds",164,164,164,false);
+            dwgfx.Print(4, 110, "F5: Platform Bounds",164,164,164,false);
 
-            dwgfx.Print(4, 150, "F6: New Alt State",164,164,164,false);
-            dwgfx.Print(4, 160, "F7: Remove Alt State",164,164,164,false);
+            dwgfx.Print(4, 130, "F6: New Alt State",164,164,164,false);
+            dwgfx.Print(4, 140, "F7: Remove Alt State",164,164,164,false);
+
+            dwgfx.Print(4, 160, "F8: Tower Mode",164,164,164,false);
 
             dwgfx.Print(4, 180, "F10: Direct Mode",164,164,164,false);
 
@@ -4487,6 +4547,15 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         {
             //Shortcut keys
             //TO DO: make more user friendly
+            if (ed.intower() && ed.keydelay==0 &&
+                (key.keymap[SDLK_F1] || key.keymap[SDLK_F2] ||
+                 key.keymap[SDLK_F6] || key.keymap[SDLK_F7] ||
+                 key.keymap[SDLK_w] || key.keymap[SDLK_a])) {
+                ed.notedelay=45;
+                ed.note="Unavailable in Tower Mode";
+                ed.updatetiles=true;
+                ed.keydelay=6;
+            }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
             {
                 ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset++;
@@ -4605,6 +4674,22 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.keydelay = 6;
                 ed.notedelay = 45;
             }
+            if(key.keymap[SDLK_F8] && ed.keydelay==0) {
+                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower==1) {
+                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=0;
+                    ed.note="Tower Mode Disabled";
+                } else {
+                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=1;
+                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset=5;
+                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
+                    ed.note="Tower Mode Enabled";
+                }
+                dwgfx.backgrounddrawn=false;
+
+                ed.notedelay=45;
+                ed.updatetiles=true;
+                ed.keydelay=6;
+            }
             if(key.keymap[SDLK_F10] && ed.keydelay==0)
             {
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
@@ -4650,7 +4735,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     {
                         tx=(edentity[i].p1-(edentity[i].p1%40))/40;
                         ty=(edentity[i].p2-(edentity[i].p2%30))/30;
-                        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
+                        if(tx==ed.levx && ty==ed.levy &&
+                           edentity[i].state==ed.levaltstate &&
+                           edentity[i].intower==0)
                         {
                             j++;
                         }
@@ -4755,7 +4842,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             int tx=(edentity[i].x-(edentity[i].x%40))/40;
                             int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                            if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
+                            if(tx==ed.levx && ty==ed.levy &&
+                               edentity[i].state==ed.levaltstate &&
+                               edentity[i].intower==0)
                             {
                                 testeditor=i;
                                 startpoint=1;
@@ -4772,7 +4861,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 int tx=(edentity[i].x-(edentity[i].x%40))/40;
                                 int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                                if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate)
+                                if(tx==ed.levx && ty==ed.levy &&
+                                   edentity[i].state==ed.levaltstate &&
+                                   edentity[i].intower==0)
                                 {
                                     testeditor=i;
                                 }
@@ -5483,7 +5574,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     }
                     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
                     {
-                        if(edentity[i].x==ed.tilex + (ed.levx*40)&& edentity[i].y==ed.tiley+ (ed.levy*30) && edentity[i].state==ed.levaltstate)
+                        if (edentity[i].x==ed.tilex + (ed.levx*40) &&
+                            edentity[i].y==ed.tiley+ (ed.levy*30) &&
+                            edentity[i].state==ed.levaltstate &&
+                            edentity[i].intower==0)
                         {
                             if(edentity[i].t==9) ed.numtrinkets--;
                             if(edentity[i].t==15) ed.numcrewmates--;
@@ -5718,7 +5812,7 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
             for (int i = 0; i < limit; i++)
                 if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
                 && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
-                && edentity[i].state == 0) {
+                && edentity[i].state == 0 && edentity[i].intower == 0) {
                     if (edentity[i].t == 9) {
                         // TODO: If removing the 20 trinkets limit, update this
                         if (numtrinkets >= 20)
@@ -5736,6 +5830,7 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                     // Why does copyedentity() copy from argument #2 to argument #1 instead of 1 to 2??? Makes no sense
                     copyedentity(EditorData::GetInstance().numedentities, i);
                     edentity[EditorData::GetInstance().numedentities].state = state;
+                    edentity[EditorData::GetInstance().numedentities].intower = 0;
                     EditorData::GetInstance().numedentities++;
                 }
 
@@ -5757,7 +5852,7 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
     for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
         if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
         && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
-        && edentity[i].state == state) {
+        && edentity[i].state == state && edentity[i].intower == 0) {
             removeedentity(i);
             if (edentity[i].t == 9)
                 numtrinkets--;
@@ -5780,7 +5875,7 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
     for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
         if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
         && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
-        && edentity[i].state > state)
+        && edentity[i].state > state && edentity[i].intower == 0)
             edentity[i].state--;
 }
 
