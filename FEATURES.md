@@ -27,7 +27,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifnotflag()` - an inverted version of `ifflag()`
 
-- `drawtext(x,y,r,g,b,center)` - draw text for one frame. The text you want to display should be after the command. `center` should be either 0 or 1.
+- `drawtext(x,y,r,g,b,center)` - draw text for one frame. The text you want to display should be after the command. `center` should be either 0 or 1, or "true" or "false"
 
 - `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame.
 
