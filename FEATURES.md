@@ -168,3 +168,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `reloadcustomactivityzones()` - Reload all non-terminal activity zones
 
 - `reloadterminalactivityzones()` - Reload all terminal activity zones
+
+- `reloadactivityzones()` - Reload all activity zones, regardless of what they are
