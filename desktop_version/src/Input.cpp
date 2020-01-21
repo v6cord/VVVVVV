@@ -465,20 +465,10 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     dwgfx.fademode = 2;
                     ed.filename="";
                   }else if(game.currentmenuoption==2){
-#if defined(__linux__)
-                    std::string command = "xdg-open ";
-#elif defined(__APPLE__)
-                    std::string command = "open ";
-#elif defined(_WIN32)
-                    std::string command = "start ";
-#else
-                    std::string command = "";
-#endif
-                    command += FILESYSTEM_getUserLevelDirectory();
-                    if (std::system(command.c_str())) {
-                        music.playef(2, 10);
-                    } else {
+                    if (FILESYSTEM_openDirectory(FILESYSTEM_getUserLevelDirectory())) {
                         music.playef(11, 10);
+                    } else {
+                        music.playef(2, 10);
                     }
                   }else if(game.currentmenuoption==3){
                     //back

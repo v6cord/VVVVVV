@@ -33,6 +33,8 @@ int mkdir(char* path, int mode)
 /* These are needed for PLATFORM_* crap */
 #include <unistd.h>
 #include <dirent.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #define MAX_PATH PATH_MAX
 #endif
 
@@ -465,3 +467,29 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 	/* WTF did we just do */
 	printf("Copied:\n\tOld: %s\n\tNew: %s\n", oldLocation, newLocation);
 }
+
+#ifdef _WIN32
+#include <shellapi.h>
+
+bool FILESYSTEM_openDirectory(const char *dname) {
+    ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
+    return true;
+}
+#else
+#ifdef __linux__
+const char* open_cmd = "xdg-open";
+#else
+const char* open_cmd = "open";
+#endif
+
+bool FILESYSTEM_openDirectory(const char *dname) {
+    pid_t child = fork();
+    if (child == 0) {
+        execlp(open_cmd, open_cmd, dname, nullptr);
+        exit(1); // should be unreachable
+    }
+    int status = 0;
+    waitpid(child, &status, 0);
+    return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+}
+#endif

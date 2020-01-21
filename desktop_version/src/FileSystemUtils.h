@@ -24,4 +24,6 @@ bool FILESYSTEM_loadTiXmlDocument(const char *name, TiXmlDocument *doc);
 
 growing_vector<std::string> FILESYSTEM_getLevelDirFileNames();
 
+bool FILESYSTEM_openDirectory(const char *dname);
+
 #endif /* FILESYSTEMUTILS_H */
