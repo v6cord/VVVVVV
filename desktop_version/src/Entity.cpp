@@ -1209,14 +1209,19 @@ void entityclass::removeallresurrectblocks()
 
 void entityclass::removeblock( int t )
 {
-    if (blocks[t].type == TRIGGER) {
+    if (blocks[t].type == TRIGGER || blocks[t].type == ACTIVITY) {
         resurrectblocks[nresurrectblocks].active = true;
-        resurrectblocks[nresurrectblocks].type = TRIGGER;
+        resurrectblocks[nresurrectblocks].type = blocks[t].type;
         resurrectblocks[nresurrectblocks].x = blocks[t].x;
         resurrectblocks[nresurrectblocks].y = blocks[t].y;
         resurrectblocks[nresurrectblocks].wp = blocks[t].wp;
         resurrectblocks[nresurrectblocks].hp = blocks[t].hp;
+        resurrectblocks[nresurrectblocks].r = blocks[t].r;
+        resurrectblocks[nresurrectblocks].g = blocks[t].g;
+        resurrectblocks[nresurrectblocks].b = blocks[t].b;
         resurrectblocks[nresurrectblocks].trigger = blocks[t].trigger;
+        resurrectblocks[nresurrectblocks].prompt = blocks[t].prompt;
+        resurrectblocks[nresurrectblocks].script = blocks[t].script;
         nresurrectblocks++;
     }
     blocks[t].clear();
@@ -5151,6 +5156,15 @@ void entityclass::cleanup()
     while (i >= 0 && !entities[i].active)
     {
         nentity--;
+        i--;
+    }
+}
+
+void entityclass::cleanupresurrectblocks()
+{
+    int i = nresurrectblocks - 1;
+    while (i >= 0 && !(resurrectblocks[i].active)) {
+        nresurrectblocks--;
         i--;
     }
 }

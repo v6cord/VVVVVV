@@ -271,12 +271,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.entities[eci].active = false;
 				} else if (words[1] == "all" || words[1] == "everything") {
 					// Don't want to use obj.removeallblocks(), it'll remove all spikes and one-ways too
-					// And also we need to remove script boxes a certain way so reloadscriptboxes() will work
 					for (int bl = 0; bl < obj.nblocks; bl++)
-						if (obj.blocks[bl].type == TRIGGER)
-							obj.removetrigger(obj.blocks[bl].trigger);
-						else if (obj.blocks[bl].type != DAMAGE && obj.blocks[bl].type != DIRECTIONAL)
-							obj.blocks[bl].clear();
+						if (obj.blocks[bl].type != DAMAGE && obj.blocks[bl].type != DIRECTIONAL)
+							obj.removeblock(bl);
 
 					// Too bad there's no obj.removeallentities()
 					for (int ei = 0; ei < obj.nentity; ei++)
@@ -371,7 +368,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				} else if (words[1] == "activityzones") {
 					for (int bai = 0; bai < obj.nblocks; bai++)
 						if (obj.blocks[bai].type == ACTIVITY)
-							obj.blocks[bai].active = false;
+							obj.removeblock(bai);
 				}
 
 				obj.cleanup();
@@ -847,11 +844,42 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "reloadscriptboxes")
 			{
-				for (int brs = 0; brs < obj.nresurrectblocks; brs++) {
-					obj.createblock(TRIGGER, obj.resurrectblocks[brs].x, obj.resurrectblocks[brs].y, obj.resurrectblocks[brs].wp, obj.resurrectblocks[brs].hp, obj.resurrectblocks[brs].trigger);
-					obj.resurrectblocks[brs].clear();
-				}
-				obj.nresurrectblocks = 0;
+				for (int brs = 0; brs < obj.nresurrectblocks; brs++)
+					if (obj.resurrectblocks[brs].active && obj.resurrectblocks[brs].type == TRIGGER) {
+						obj.createblock(
+							obj.resurrectblocks[brs].type,
+							obj.resurrectblocks[brs].x, obj.resurrectblocks[brs].y,
+							obj.resurrectblocks[brs].wp, obj.resurrectblocks[brs].hp,
+							obj.resurrectblocks[brs].trigger
+						);
+						obj.resurrectblocks[brs].clear();
+					}
+				obj.cleanupresurrectblocks();
+			}
+			if (words[0] == "reloadcustomactivityzones")
+			{
+				// "Custom" here being defined as activity zones whose prompts are NOT terminals' prompts,
+				// e.g. "Press ENTER to activate terminal" or "Press ENTER to activate terminals"
+				for (int brz = 0; brz < obj.nresurrectblocks; brz++)
+					if (obj.resurrectblocks[brz].active && obj.resurrectblocks[brz].type == ACTIVITY
+					&& obj.resurrectblocks[brz].prompt != "Press ENTER to activate terminal"
+					&& obj.resurrectblocks[brz].prompt != "Press ENTER to activate terminals") {
+						obj.customprompt = obj.resurrectblocks[brz].prompt;
+						// I'm assuming "custom_" hasn't been removed or changed in the meantime
+						obj.customscript = obj.resurrectblocks[brz].script.substr(7, std::string::npos);
+						obj.customr = obj.resurrectblocks[brz].r;
+						obj.customg = obj.resurrectblocks[brz].g;
+						obj.customb = obj.resurrectblocks[brz].b;
+
+						obj.createblock(
+							obj.resurrectblocks[brz].type,
+							obj.resurrectblocks[brz].x, obj.resurrectblocks[brz].y,
+							obj.resurrectblocks[brz].wp, obj.resurrectblocks[brz].hp,
+							101
+						);
+						obj.resurrectblocks[brz].clear();
+					}
+				obj.cleanupresurrectblocks();
 			}
 			if (words[0] == "cutscene")
 			{
