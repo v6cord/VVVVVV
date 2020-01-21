@@ -1209,7 +1209,7 @@ void entityclass::removeallresurrectblocks()
 
 void entityclass::removeblock( int t )
 {
-    if (blocks[t].active)
+    if (!blocks[t].active)
         // Don't remove it twice, that'll wreak havoc with resurrectblocks
         return;
     if (blocks[t].type == TRIGGER || blocks[t].type == ACTIVITY) {
