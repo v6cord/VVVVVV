@@ -116,8 +116,6 @@ void towerclass::fillbackground(growing_vector<std::string>& tmap)
 
 void towerclass::fillminitower(growing_vector<std::string>& tmap)
 {
-
-
 	for (int j = 0; j < 100; j++)
 	{
 		growing_vector<std::string> maprow = split(tmap[j], ',');

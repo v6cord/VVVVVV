@@ -223,9 +223,9 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
     }
     if (map.minitowermode)
     {
-        if (map.ypos >= 568)
+        if (map.ypos >= map.minitowersize * 8 - 232)
         {
-            map.ypos = 568;
+            map.ypos = map.minitowersize * 8 - 232;
             map.bypos = map.ypos / 2;
             map.bscroll = 0;
         } //100-29 * 8 = 568

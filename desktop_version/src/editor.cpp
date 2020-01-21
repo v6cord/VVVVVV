@@ -1774,7 +1774,7 @@ int editorclass::get_tower(int rx, int ry) {
 }
 
 int editorclass::tower_size(int tower) {
-    return 100;
+    return 60;
 }
 
 bool editorclass::intower(void) {

@@ -111,6 +111,7 @@ public:
     int cameraseek, cameraseekframe = 0;
     int resumedelay = 0;
     bool minitowermode = false;
+    int minitowersize = 0;
     int scrolldir = 0;
 
     //This is the old colour cycle

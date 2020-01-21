@@ -1453,6 +1453,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         tdrawback = true;
         minitowermode = true;
         tower.minitowermode = true;
+        minitowersize = 100;
         bscroll = 0;
         scrolldir = 1;
 
@@ -1474,6 +1475,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         tdrawback = true;
         minitowermode = true;
         tower.minitowermode = true;
+        minitowersize = 100;
         bscroll = 0;
         scrolldir = 1;
 
@@ -1500,6 +1502,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         tdrawback = true;
         minitowermode = true;
         tower.minitowermode = true;
+        minitowersize = 100;
         bscroll = 0;
         scrolldir = 0;
         final_colorframe = 2;
@@ -1610,6 +1613,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             tdrawback = true;
             minitowermode = true;
             tower.minitowermode = true;
+            minitowersize = ed.tower_size(customtower);
             bscroll = 0;
             scrolldir = 1;
 
@@ -1687,7 +1691,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         ed.loadlevel(rx, ry, obj.altstates);
         int ymax = 30;
         if (customtower)
-            ymax = ed.tower_size(customtower);
+            ymax = minitowersize;
 
         if (!customtower) {
             for (int edj = 0; edj < ymax; edj++) {
