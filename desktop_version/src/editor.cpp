@@ -2007,10 +2007,16 @@ void editorclass::shift_tower(int tower, int y) {
 
     // Shift tower downwards
     if (y > 0) {
-        for (ny = size - 1; ny >= y; ny--)
-            for (x = 0; x < 40; x++)
-                towers[tower-1].tiles[x + ny*40] =
-                    towers[tower-1].tiles[x + (ny - y)*40];
+        for (ny = size - 1; ny >= 0; ny--) {
+            for (x = 0; x < 40; x++) {
+                if (ny >= y)
+                    towers[tower-1].tiles[x + ny*40] =
+                        towers[tower-1].tiles[x + (ny - y)*40];
+                else
+                    towers[tower-1].tiles[x + ny*40] = 0;
+            }
+        }
+
         return;
     }
 
