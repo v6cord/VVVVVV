@@ -1950,6 +1950,7 @@ void editorclass::downsize_tower(int tower) {
     }
 
     // Check unused bottom edges
+    size = tower_size(tower);
     for (by = size * 40 - 1; by; by--)
         if (towers[tower-1].tiles[by] != 0)
             break;
