@@ -1882,7 +1882,7 @@ void editorclass::upsize_tower(int tower, int y)
         return;
 
     if (y > 0) {
-        towers[tower-1].size = y;
+        towers[tower-1].size = y + 1;
         resize_tower_tiles(tower);
         return;
     }
@@ -1902,7 +1902,7 @@ void editorclass::downsize_tower(int tower) {
 
     // Check unused topmost edges
     for (ty = 0; ty < size * 40; ty++)
-        if (towers[tower-1].tiles[ty])
+        if (towers[tower-1].tiles[ty] != 0)
             break;
     ty /= 40;
 
@@ -1917,8 +1917,9 @@ void editorclass::downsize_tower(int tower) {
 
     // Check unused bottom edges
     for (by = size * 40 - 1; by; by--)
-        if (towers[tower-1].tiles[by])
+        if (towers[tower-1].tiles[by] != 0)
             break;
+    by = size * 40 - 1 - by;
     by /= 40;
 
     if (by > (size - 40))
@@ -1979,7 +1980,7 @@ void editorclass::shift_tower(int tower, int y) {
     }
 
     // Shift tower upwards
-    for (ny = -y; ny < size; ny++)
+    for (ny = 0; ny < size + y; ny++)
         for (x = 0; x < 40; x++)
             towers[tower-1].tiles[x + ny*40] =
                 towers[tower-1].tiles[x + (ny - y)*40];
