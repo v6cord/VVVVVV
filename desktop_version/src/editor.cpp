@@ -2295,7 +2295,7 @@ void editorclass::save(std::string& _path)
 
     // Figure out amount of towers used
     int twx, twy;
-    int max_tower = 1;
+    int max_tower = 0;
     for (twx = 0; twx < maxwidth; twx++)
         for (twy = 0; twy < maxheight; twy++)
             if (max_tower < get_tower(twx, twy))
@@ -2304,14 +2304,13 @@ void editorclass::save(std::string& _path)
     TiXmlElement* tw;
     for (int t = 0; t < max_tower; t++) {
         // Don't save unused towers
-        int twx, twy;
         bool found = false;
         for (twx = 0; twx < maxwidth && !found; twx++)
             for (twy = 0; twy < maxheight && !found; twy++)
                 if ((t + 1) == get_tower(twx, twy))
                     found = true;
 
-        if (!found && t) {
+        if (!found) {
             // If this was the last tower, just abort
             if ((t + 1) >= max_tower)
                 break;
@@ -2343,7 +2342,7 @@ void editorclass::save(std::string& _path)
         tw->SetAttribute("size", towers[t].size);
         tw->SetAttribute("scroll", towers[t].scroll);
         tw->LinkEndChild(new TiXmlText(tiles.c_str()));
-        tw->LinkEndChild(tw);
+        msg->LinkEndChild(tw);
 
         t++;
     }
