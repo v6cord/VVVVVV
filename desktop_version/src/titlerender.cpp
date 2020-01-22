@@ -216,6 +216,10 @@ growing_vector<std::string> changelog = {
     "- reloadactivityzones() - Reload all",
     "  activity zones, regardless of what",
     "  they are",
+    "- speak_fast - Remove text box fade-in",
+    "- speak_active_fast - Remove text box",
+    "  fade-in, while also removing all other",
+    "  text boxes",
 
 };
 
