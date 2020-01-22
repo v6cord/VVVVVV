@@ -1557,6 +1557,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				game.hascontrol = true;
 				game.advancetext = false;
 			}
+			else if (words[0] == "textboxtimer")
+			{
+				dwgfx.textboxtimer(ss_toi(words[1]));
+			}
 			else if (words[0] == "do")
 			{
 				//right, loop from this point
