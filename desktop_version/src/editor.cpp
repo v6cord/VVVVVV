@@ -1059,10 +1059,12 @@ void editorclass::settilelocal(int x, int y, int tile)
     if (tower) {
         y += ypos;
 
-        if (y < 0 || y >= tower_size(tower))
-            return;
+        upsize_tower(tower, y);
+        if (y < 0)
+            y = 0;
 
         towers[tower-1].tiles[x + y*40] = tile % 30;
+        downsize_tower(tower);
     } else if (levaltstate == 0)
         contents[x + levx*40 + vmult[y + levy*30]] = tile;
     else
@@ -1867,6 +1869,120 @@ void editorclass::snap_tower_entry(int rx, int ry) {
     // Useful to avoid using the room as exit point.
     if (level[rx + ry*maxwidth].tower_row >= size)
         level[rx + ry*maxwidth].tower_row = size - 1;
+}
+
+// Enlarge a tower, downwards to y or shifting down if y is negative
+void editorclass::upsize_tower(int tower, int y)
+{
+    if (!y || !tower)
+        return;
+
+    // Check if we actually need to upsize it
+    if (y > 0 && towers[tower-1].size > y)
+        return;
+
+    if (y > 0) {
+        towers[tower-1].size = y;
+        resize_tower_tiles(tower);
+        return;
+    }
+
+    towers[tower-1].size = towers[tower-1].size - y;
+    resize_tower_tiles(tower);
+    shift_tower(tower, -y);
+}
+
+// Remove vertical edges lacking tiles (down to a minimum of 40)
+void editorclass::downsize_tower(int tower) {
+    if (!tower)
+        return;
+
+    int ty, by, size;
+    size = tower_size(tower);
+
+    // Check unused topmost edges
+    for (ty = 0; ty < size * 40; ty++)
+        if (towers[tower-1].tiles[ty])
+            break;
+    ty /= 40;
+
+    // Don't resize below 40
+    if (ty > (size - 40))
+        ty = size - 40;
+    if (ty > 0) {
+        shift_tower(tower, -ty);
+        towers[tower-1].size -= ty;
+        resize_tower_tiles(tower);
+    }
+
+    // Check unused bottom edges
+    for (by = size * 40 - 1; by; by--)
+        if (towers[tower-1].tiles[by])
+            break;
+    by /= 40;
+
+    if (by > (size - 40))
+        by = size - 40;
+    if (by > 0) {
+        towers[tower-1].size -= by;
+        resize_tower_tiles(tower);
+    }
+}
+
+// Resizes the tower tile size. If enlarged, zerofill the new tiles
+void editorclass::resize_tower_tiles(int tower) {
+    if (!tower)
+        return;
+
+    int oldsize = towers[tower-1].tiles.size() / 40 + 1;
+    int newsize = tower_size(tower);
+    towers[tower-1].tiles.resize(40 * newsize);
+
+    // Zerofill new rows
+    for (; oldsize < newsize; oldsize++)
+        for (int x = 0; x < 40; x++)
+            towers[tower-1].tiles[x + oldsize*40] = 0;
+}
+
+// Shift tower downwards (positive y) or upwards (negative y).
+// Also shifts tower entry position
+void editorclass::shift_tower(int tower, int y) {
+    if (!tower || !y)
+        return;
+
+    int x, ny, size;
+    size = tower_size(tower);
+
+    // Shift entry points
+    for (int rx = 0; rx < maxwidth; rx++) {
+        for (int ry = 0; ry < maxheight; ry++) {
+            if (tower == get_tower(rx, ry)) {
+                level[rx + ry*maxwidth].tower_row += y;
+                if (level[rx + ry*maxwidth].tower_row < 0)
+                    level[rx + ry*maxwidth].tower_row = 0;
+                if (level[rx + ry*maxwidth].tower_row >= size)
+                    level[rx + ry*maxwidth].tower_row = size - 1;
+            }
+        }
+    }
+
+    // Shift editor scroll position
+    ypos += y;
+
+    // Shift tower downwards
+    if (y > 0) {
+        for (ny = size - 1; ny >= y; ny--)
+            for (x = 0; x < 40; x++)
+                towers[tower-1].tiles[x + ny*40] =
+                    towers[tower-1].tiles[x + (ny - y)*40];
+        return;
+    }
+
+    // Shift tower upwards
+    for (ny = -y; ny < size; ny++)
+        for (x = 0; x < 40; x++)
+            towers[tower-1].tiles[x + ny*40] =
+                towers[tower-1].tiles[x + (ny - y)*40];
 }
 
 int editorclass::get_tower(int rx, int ry) {
@@ -3956,8 +4072,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             dwgfx.Print(4, 180, "F10: Direct Mode",164,164,164,false);
 
-            dwgfx.Print(4, 200, "A: Change Alt State",164,164,164,false);
-            dwgfx.Print(4, 210, "W: Change Warp Dir",164,164,164,false);
+            if (tower) {
+                dwgfx.Print(4, 200, "+: Scroll Down",164,164,164,false);
+                dwgfx.Print(4, 210, "-: Scroll Up",164,164,164,false);
+            } else {
+                dwgfx.Print(4, 200, "A: Change Alt State",164,164,164,false);
+                dwgfx.Print(4, 210, "W: Change Warp Dir",164,164,164,false);
+            }
             dwgfx.Print(4, 220, "E: Change Roomname",164,164,164,false);
 
             fillboxabs(dwgfx, 220, 207,100,60,dwgfx.getRGB(64,64,64));
@@ -5963,8 +6084,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             break;
         case 5: //The Tower
-            for(int j=0; j<30; j++)
-            {
+            for(int j=0; j<30; j++) {
+                if ((j + ed.ypos) < 0 ||
+                    (j + ed.ypos) >= ed.tower_size(ed.get_tower(ed.levx,
+                                                                ed.levy)))
+                    continue;
+
                 for(int i=0; i<40; i++)
                 {
                     if(ed.gettiletyplocal(i, j) == TILE_SPIKE)

@@ -180,6 +180,10 @@ public:
 
     void enable_tower(void);
     void snap_tower_entry(int rx, int ry);
+    void upsize_tower(int tower, int y);
+    void downsize_tower(int tower);
+    void resize_tower_tiles(int tower);
+    void shift_tower(int tower, int y);
     int get_tower(int rx, int ry);
     int tower_size(int tower);
     int tower_scroll(int tower);
