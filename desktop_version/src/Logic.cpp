@@ -374,54 +374,38 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
             obj.entitycollisioncheck(dwgfx, game, map, music);         // Check ent v ent collisions, update states
             //special for tower: is the player touching any spike blocks?
             int player = obj.getplayer();
+
             if(obj.checktowerspikes(player, map) && dwgfx.fademode==0)
             {
                 game.deathseq = 30;
             }
 
+            // Check for vertical (not horizontal!) warp lines
+            if (obj.customwarpmode) {
+                obj.customwarpmodehon = false;
+                obj.customwarpmodevon = false;
+                if ((game.door_left > -2 && obj.entities[player].xp < -14+16) ||
+                    (game.door_right > -2 && obj.entities[player].xp >= 308-16))
+                    obj.customwarplinecheck(player);
+
+                map.warpy = obj.customwarpmodehon;
+            }
+
             //Right so! Screenwraping for tower:
-            if (map.minitowermode) {
-                if ((game.door_left > -2 && obj.entities[player].xp < -14) ||
-                    (game.door_right > -2 && obj.entities[player].xp >= 308)) {
-                    map.leaving_tower(&game.roomx, &game.roomy, obj);
-                    map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
-                                 music);
+            if (map.warpy ||
+                (!map.minitowermode && map.ypos >= 500 && map.ypos <= 5000)) {
+                for (int i = 0; i < obj.nentity; i++) {
+                    if (obj.entities[i].xp <= -10)
+                        obj.entities[i].xp += 320;
+                    else if (obj.entities[i].xp > 310)
+                        obj.entities[i].xp -= 320;
                 }
-            } else {
-                //Always wrap except for the very top and very bottom of the tower
-                if(map.ypos>=500 && map.ypos <=5000)
-                {
-                    for (int i = 0; i < obj.nentity;  i++)
-                    {
-                        if (obj.entities[i].xp <= -10)
-                        {
-                            obj.entities[i].xp += 320;
-                        }
-                        else
-                        {
-                            if (obj.entities[i].xp > 310)
-                            {
-                                obj.entities[i].xp -= 320;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //Do not wrap! Instead, go to the correct room
-                    player = obj.getplayer();
-                    if (game.door_left > -2 && obj.entities[player].xp < -14)
-                    {
-                        obj.entities[player].xp += 320;
-                        obj.entities[player].yp -= (671 * 8);
-                        map.gotoroom(108, 109, dwgfx, game, obj, music);
-                    }
-                    if (game.door_right > -2 && obj.entities[player].xp >= 308)
-                    {
-                        obj.entities[player].xp -= 320;
-                        map.gotoroom(110, 104, dwgfx, game, obj, music);
-                    }
-                }
+            } else if ((game.door_left > -2 &&
+                        obj.entities[player].xp < -14) ||
+                       (game.door_right > -2 &&
+                        obj.entities[player].xp >= 308)) {
+                map.leaving_tower(&game.roomx, &game.roomy, obj);
+                map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
             }
 
             if(game.lifeseq==0)

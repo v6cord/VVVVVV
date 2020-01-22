@@ -898,11 +898,7 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 }
 
 // Moves player y appropriate and possibly change destination screen.
-// Only works for minitowers (both ingame and custom levels)
 void mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
-    if (!minitowermode)
-        return;
-
     int i = obj.getplayer();
 
     // Fix x position
@@ -922,7 +918,14 @@ void mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
         return;
     }
 
-    if (scrolldir == 1) { // Panic Room
+    if (!minitowermode) { // The Tower
+        if (obj.entities[i].yp > 500) {
+            obj.entities[i].yp -= (671*8);
+            *ry = 109;
+        } else {
+            *ry = 104;
+        }
+    } else if (scrolldir == 1) { // Panic Room
         if (obj.entities[i].yp >= (71*8)) {
             obj.entities[i].yp -= (71*8);
             *ry = 53;
