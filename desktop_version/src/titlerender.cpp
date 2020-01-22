@@ -173,8 +173,6 @@ growing_vector<std::string> changelog = {
     "- untilmusic() - wait until the current",
     "  track has finished fading in or out",
     "- puntilmusic() - untilmusic with pdelay",
-    "- Edentity conveyors no longer have tile",
-    "  1s underneath them",
     "- Added a label and goto system - write",
     "  down $label$ on a line, then to go to",
     "  it, use $label$ as a script name if",
