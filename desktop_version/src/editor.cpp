@@ -6109,9 +6109,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             break;
         case 5: //The Tower
             for(int j=0; j<30; j++) {
-                if ((j + ed.ypos) < 0 ||
-                    (j + ed.ypos) >= ed.tower_size(ed.get_tower(ed.levx,
-                                                                ed.levy)))
+                if (ed.intower() &&
+                    ((j + ed.ypos) < 0 ||
+                     (j + ed.ypos) >= ed.tower_size(ed.get_tower(ed.levx,
+                                                                 ed.levy))))
                     continue;
 
                 for(int i=0; i<40; i++)
