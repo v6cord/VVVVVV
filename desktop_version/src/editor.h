@@ -60,6 +60,16 @@ public:
     void reset();
 };
 
+class edtower {
+public:
+    edtower();
+    int size = 40; // minimum size
+    int scroll = 0; // scroll direction (0=The Tower, 1=Panic Room)
+    growing_vector<int> tiles;
+
+    void reset(void);
+};
+
 struct LevelMetaData
 {
     std::string title;
@@ -288,6 +298,9 @@ public:
     bool grayenemieskludge = false;
 
     growing_vector<edaltstate> altstates;
+    growing_vector<edtower> towers;
+
+    int ypos; // tower mode y position
 
     int getedaltstatenum(int rxi, int ryi, int state);
     void addaltstate(int rxi, int ryi, int state);

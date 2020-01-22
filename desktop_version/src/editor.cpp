@@ -57,6 +57,16 @@ void edaltstate::reset()
     tiles.resize(40 * 30);
 }
 
+edtower::edtower() {
+    reset();
+}
+
+void edtower::reset(void) {
+    size = 40;
+    scroll = 0;
+    tiles.resize(40 * size);
+}
+
 editorclass::editorclass()
 {
     maxwidth=20;
@@ -85,6 +95,7 @@ editorclass::editorclass()
     }
 
     altstates.resize(500);
+    towers.resize(400);
 
     reset();
 }
@@ -310,9 +321,10 @@ void editorclass::reset()
 
     grayenemieskludge = false;
 
-    for (size_t i = 0; i < altstates.size(); i++) {
+    for (size_t i = 0; i < altstates.size(); i++)
         altstates[i].reset();
-    }
+    for (size_t i = 0; i < towers.size(); i++)
+        towers[i].reset();
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx)
@@ -545,7 +557,7 @@ void editorclass::loadlevel( int rxi, int ryi, int altstate )
         int ymax = tower_size(tower);
         for (int y = 0; y < ymax; y++)
             for (int x = 0; x < 40; x++)
-                swapmap[x + y*40] = contents[x + vmult[y]];
+                swapmap[x + y*40] = towers[tower-1].tiles[x + y*40];
 
         return;
     }
@@ -1010,6 +1022,25 @@ void editorclass::placetilelocal( int x, int y, int t )
 
 int editorclass::gettilelocal(int x, int y)
 {
+    int tower = get_tower(levx, levy);
+    if (tower) {
+        y += ypos;
+
+        // Show spikes beyond the tower boundaries
+        if (y < 0)
+            return 159;
+        if (y >= tower_size(tower))
+            return 158;
+
+        // Mark tower entry point for current screen with green
+        int tile = towers[tower-1].tiles[x + y*40];
+        int entrypos = level[levx + levy*maxwidth].tower_row;
+        if (y >= entrypos && y <= (entrypos + 29) && tile)
+            tile += 300;
+
+        return tile;
+    }
+
     if (levaltstate == 0)
         return contents[x + levx*40 + vmult[y + levy*30]];
     else
@@ -1018,7 +1049,15 @@ int editorclass::gettilelocal(int x, int y)
 
 void editorclass::settilelocal(int x, int y, int tile)
 {
-    if (levaltstate == 0)
+    int tower = get_tower(levx, levy);
+    if (tower) {
+        y += ypos;
+
+        if (y < 0 || y >= tower_size(tower))
+            return;
+
+        towers[tower-1].tiles[x + y*40] = tile % 30;
+    } else if (levaltstate == 0)
         contents[x + levx*40 + vmult[y + levy*30]] = tile;
     else
         altstates[getedaltstatenum(levx, levy, levaltstate)].tiles[x + y*40] = tile;
@@ -1157,7 +1196,7 @@ int editorclass::backbase( int x, int y )
 enum tiletyp
 editorclass::gettiletyplocal(int x, int y)
 {
-    return gettiletyp(level[levx + levy*20].tileset, at(x, y));
+    return gettiletyp(level[levx + levy*maxwidth].tileset, at(x, y));
 }
 
 enum tiletyp
@@ -1197,10 +1236,8 @@ int editorclass::at( int x, int y )
     if(y<0) return at(x,0);
     if(x>=40) return at(39,y);
     if(y>=30) return at(x,29);
-    if (levaltstate == 0)
-        return contents[x+(levx*40)+vmult[y+(levy*30)]];
-    else
-        return altstates[getedaltstatenum(levx, levy, levaltstate)].tiles[x + y*40];
+
+    return gettilelocal(x, y);
 }
 
 int
@@ -1774,7 +1811,7 @@ int editorclass::get_tower(int rx, int ry) {
 }
 
 int editorclass::tower_size(int tower) {
-    return 60;
+    return towers[tower-1].size;
 }
 
 bool editorclass::intower(void) {
@@ -1993,6 +2030,32 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
 
                     for (size_t t = 0; t < values.size(); t++)
                         altstates[i].tiles[t] = atoi(values[t].c_str());
+
+                    i++;
+                }
+            }
+        }
+
+        if (pKey == "towers") {
+            int i = 0;
+            for (TiXmlElement *edTowerEl = pElem->FirstChildElement();
+                 edTowerEl; edTowerEl = edTowerEl->NextSiblingElement()) {
+                std::string pKey(edTowerEl->Value());
+                const char* pText = edTowerEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                std::string TextString = pText;
+
+                if (TextString.length()) {
+                    edTowerEl->QueryIntAttribute("size", &towers[i].size);
+                    edTowerEl->QueryIntAttribute("scroll", &towers[i].scroll);
+
+                    growing_vector<std::string> values = split(TextString, ',');
+
+                    for (size_t t = 0; t < values.size(); t++)
+                        towers[i].tiles[t] = atoi(values[t].c_str());
 
                     i++;
                 }
@@ -2225,6 +2288,64 @@ void editorclass::save(std::string& _path)
         msg->LinkEndChild(alt);
 
         a++;
+    }
+    data->LinkEndChild(msg);
+
+    msg = new TiXmlElement("towers");
+
+    // Figure out amount of towers used
+    int twx, twy;
+    int max_tower = 1;
+    for (twx = 0; twx < maxwidth; twx++)
+        for (twy = 0; twy < maxheight; twy++)
+            if (max_tower < get_tower(twx, twy))
+                max_tower = get_tower(twx, twy);
+
+    TiXmlElement* tw;
+    for (int t = 0; t < max_tower; t++) {
+        // Don't save unused towers
+        int twx, twy;
+        bool found = false;
+        for (twx = 0; twx < maxwidth && !found; twx++)
+            for (twy = 0; twy < maxheight && !found; twy++)
+                if ((t + 1) == get_tower(twx, twy))
+                    found = true;
+
+        if (!found && t) {
+            // If this was the last tower, just abort
+            if ((t + 1) >= max_tower)
+                break;
+
+            // Otherwise, delete this tower since it's no longer used
+            for (int u = (t + 1); u < max_tower; u++) {
+                towers[u - 1].size = towers[u].size;
+                towers[u - 1].scroll = towers[u].scroll;
+                towers[u - 1].tiles.resize(40 * towers[u - 1].size);
+                for (int i = 0; i < 40 * towers[u - 1].size; i++)
+                    towers[u - 1].tiles[i] = towers[u].tiles[i];
+            }
+
+            for (twx = 0; twx < maxwidth; twx++)
+                for (twy = 0; twy < maxheight; twy++)
+                    if (level[twx + twy * maxwidth].tower > t)
+                        level[twx + twy * maxwidth].tower--;
+
+            t--;
+            continue;
+        }
+
+        std::string tiles = "";
+        for (int y = 0; y < towers[t].size; y++)
+            for (int x = 0; x < 40; x++)
+                tiles += UtilityClass::String(towers[t].tiles[x + y*40]) + ",";
+
+        tw = new TiXmlElement("tower");
+        tw->SetAttribute("size", towers[t].size);
+        tw->SetAttribute("scroll", towers[t].scroll);
+        tw->LinkEndChild(new TiXmlText(tiles.c_str()));
+        tw->LinkEndChild(tw);
+
+        t++;
     }
     data->LinkEndChild(msg);
 
