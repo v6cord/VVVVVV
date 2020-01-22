@@ -13,7 +13,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `settile(x,y,tile)` - place a tile temporarily in the room
 
-- `textcolo(u)r(r,g,b,x,y,lines)` - `text()` but you can set the color directly
+- `textcolo(u)r(r,g,b,x,y,lines)` - `text()` but you can set the color directly - r,g,b is 0-255
 
 - `reloadroom()` - reloads the current room
 
@@ -27,9 +27,9 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifnotflag()` - an inverted version of `ifflag()`
 
-- `drawtext(x,y,r,g,b,center)` - draw text for one frame. The text you want to display should be after the command. `center` should be either 0 or 1, or "true" or "false"
+- `drawtext(x,y,r,g,b,center)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` should be either 0 or 1, or "true" or "false"
 
-- `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame.
+- `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame - r,g,b is 0-255
 
 - `followposition` now works for the player
 
@@ -149,7 +149,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `customactivityzone(x,y,w,h,color,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, prompt goes on the next line
 
-- `customactivityzonergb(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, prompt goes on the next line
+- `customactivityzonergb(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, r,g,b is 0-255, prompt goes on the next line
 
 - Fixed the 2-frame delay to execute a script when entering a room
 
