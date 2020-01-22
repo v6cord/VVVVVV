@@ -1901,8 +1901,6 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             }
         }
 
-        // Commenting this out because I see no reason to put tile 1s under conveyors -Info Teddy
-        /*
         for (int i = 0; i < obj.nentity; i++)
         {
             if (obj.entities[i].active)
@@ -1925,7 +1923,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                     }
                 }
             }
-        }*/
+        }
     }
 
     //Special scripting: Create objects and triggers based on what crewmembers are rescued.
