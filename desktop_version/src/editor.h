@@ -167,7 +167,9 @@ public:
 
     int backfree(int x, int y);
 
+    int towerspikefree(int x, int y);
     int spikefree(int x, int y);
+    int towerfree(int x, int y);
     int free(int x, int y);
     int getfree(enum tiletyp tile);
     int absfree(int x, int y);
@@ -323,10 +325,10 @@ void copyedentity(int a, int b);
 
 void removeedentity(int t);
 
-int edentat(int xp, int yp, int state = 0);
+int edentat(int x, int y, int state = 0, int tower = 0);
 
 
-bool edentclear(int xp, int yp, int state = 0);
+bool edentclear(int x, int y, int state = 0, int tower = 0);
 
 void fillbox(Graphics& dwgfx, int x, int y, int x2, int y2, int c);
 

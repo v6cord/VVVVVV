@@ -1867,8 +1867,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             case 18: // Terminals
                 obj.customscript = edentity[edi].scriptname;
 
-                if (edentity[edi].p1) // Flipped
-                    ey -= 8;
+                if (!edentity[edi].p1) // Unflipped
+                    ey += 8;
 
                 obj.createentity(game, ex, ey, 20, !edentity[edi].p1);
                 obj.createblock(5, ex, ey, 20, 16, 35);

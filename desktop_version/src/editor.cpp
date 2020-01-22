@@ -1281,8 +1281,26 @@ int editorclass::backfree( int x, int y )
     return 1;
 }
 
-int editorclass::spikefree( int x, int y )
-{
+int editorclass::towerspikefree(int x, int y) {
+    // Uses absolute y in tower mode
+    int tower = ed.get_tower(ed.levx, ed.levy);
+    int size = ed.tower_size(tower);
+    if (!ed.intower())
+        return spikefree(x, y);
+
+    if (x == -1) return 1;
+    if (x == 40) return 1;
+    if (y == -1) return 1;
+    if (y >= size) return 1;
+
+    int tile = towers[tower-1].tiles[x + y*40];
+    temp = gettiletyp(ed.level[ed.levx + ed.levy * ed.maxwidth].tileset, tile);
+    if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
+        return 1;
+    return 0;
+}
+
+int editorclass::spikefree(int x, int y) {
     //Returns 0 if tile is not a block or spike, 1 otherwise
     if(x==-1) return 1;
     if(y==-1) return 1;
@@ -1303,8 +1321,24 @@ int editorclass::getfree(enum tiletyp thistiletyp)
     return 1;
 }
 
-int editorclass::free( int x, int y )
-{
+int editorclass::towerfree(int x, int y) {
+    // Uses absolute y in tower mode
+    int tower = ed.get_tower(ed.levx, ed.levy);
+    int size = ed.tower_size(tower);
+    if (!ed.intower())
+        return free(x, y);
+
+    if (x == -1) return 1;
+    if (x == 40) return 1;
+    if (y == -1) return 1;
+    if (y >= size) return 1;
+
+    int tile = towers[tower-1].tiles[x + y*40];
+    return getfree(gettiletyp(ed.level[ed.levx + ed.levy * ed.maxwidth].tileset,
+                              tile));
+}
+
+int editorclass::free(int x, int y) {
     //Returns 0 if tile is not a block, 1 otherwise
     if(x==-1) return 1;
     if(y==-1) return 1;
@@ -2629,6 +2663,7 @@ void editorclass::save(std::string& _path)
 
 void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
 {
+    int tower = ed.get_tower(ed.levx, ed.levy);
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
     edentity[EditorData::GetInstance().numedentities].t=tp;
@@ -2639,7 +2674,7 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
     edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
-    edentity[EditorData::GetInstance().numedentities].intower=0;
+    edentity[EditorData::GetInstance().numedentities].intower=tower;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 
     EditorData::GetInstance().numedentities++;
@@ -2647,6 +2682,7 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
 
 void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
 {
+    int tower = ed.get_tower(ed.levx, ed.levy);
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
     edentity[EditorData::GetInstance().numedentities].t=tp;
@@ -2657,7 +2693,7 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     edentity[EditorData::GetInstance().numedentities].p5=p5;
     edentity[EditorData::GetInstance().numedentities].p6=p6;
     edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
-    edentity[EditorData::GetInstance().numedentities].intower=0;
+    edentity[EditorData::GetInstance().numedentities].intower=tower;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
 }
 
@@ -2690,23 +2726,23 @@ void removeedentity( int t )
     }
 }
 
-int edentat( int xp, int yp, int state )
-{
+int edentat(int x, int y, int state, int tower) {
+    if (!tower) {
+        x += ed.levx * 40;
+        y += ed.levy * 30;
+    } else
+        y += ed.ypos;
+
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-    {
-        if (edentity[i].x==xp && edentity[i].y==yp &&
-            edentity[i].state==state && edentity[i].intower==0) return i;
-    }
+        if (edentity[i].x==x && edentity[i].y==y &&
+            edentity[i].state==state && edentity[i].intower==tower)
+            return i;
     return -1;
 }
 
-bool edentclear( int xp, int yp, int state )
-{
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-    {
-        if (edentity[i].x==xp && edentity[i].y==yp &&
-            edentity[i].state==state && edentity[i].intower==0) return false;
-    }
+bool edentclear(int x, int y, int state, int tower) {
+    if (edentat(x, y, state, tower) >= 0)
+        return false;
     return true;
 }
 
@@ -3011,261 +3047,207 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
     obj.customplatformtile=game.customcol*12;
 
-    ed.temp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30), ed.levaltstate);
-    for(int i=0; i< EditorData::GetInstance().numedentities; i++)
-    {
-        //if() on screen
-        int tx=(edentity[i].x-(edentity[i].x%40))/40;
-        int ty=(edentity[i].y-(edentity[i].y%30))/30;
+    ed.temp=edentat(ed.tilex, ed.tiley, ed.levaltstate, tower);
+    for(int i=0; i< EditorData::GetInstance().numedentities; i++) {
+        // Entity locations
+        int ex = edentity[i].x;
+        int ey = edentity[i].y;
+        if (!tower) {
+            ex -= ed.levx * 40;
+            ey -= ed.levy * 30;
+        } else
+            ey -= ed.ypos;
 
-        point tpoint;
+        ex *= 8;
+        ey *= 8;
+
+        // Warp line/gravity line area
+        int tx = ex / 8;
+        int tx2 = ex / 8;
+        int ty = ey / 8;
+        int ty2 = ey / 8;
+        if (tower) {
+            ty += ed.ypos;
+            ty2 += ed.ypos;
+        }
+
+        int len;
         SDL_Rect drawRect;
 
-        if(tx==ed.levx && ty==ed.levy && edentity[i].state==ed.levaltstate &&
-           edentity[i].intower == 0)
-        {
-            switch(edentity[i].t)
-            {
-            case 1: //Entities
-                //FillRect(dwgfx.backBuffer, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), 16,16, dwgfx.getRGB(64,32,64));
-                //dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype),164,48,48);
-                dwgfx.drawspritesetcol((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype),ed.entcol,help);
-                if(edentity[i].p1==0) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+4,(edentity[i].y*8)- (ed.levy*30*8)+4, "V", 255, 255, 255 - help.glow, false);
-                if(edentity[i].p1==1) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+4,(edentity[i].y*8)- (ed.levy*30*8)+4, "^", 255, 255, 255 - help.glow, false);
-                if(edentity[i].p1==2) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+4,(edentity[i].y*8)- (ed.levy*30*8)+4, "<", 255, 255, 255 - help.glow, false);
-                if(edentity[i].p1==3) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+4,(edentity[i].y*8)- (ed.levy*30*8)+4, ">", 255, 255, 255 - help.glow, false);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,16,dwgfx.getBGR(255,164,255));
-                break;
-            case 2: //Threadmills & platforms
-                tpoint.x = (edentity[i].x*8)- (ed.levx*40*8);
-                tpoint.y = (edentity[i].y*8)- (ed.levy*30*8);
-                drawRect = dwgfx.tiles_rect;
-                drawRect.x += tpoint.x;
-                drawRect.y += tpoint.y;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
+        if (edentity[i].state != ed.levaltstate ||
+            edentity[i].intower != tower ||
+            ex < 0 || ex >= 320 || ey < 0 || ey >= 240)
+            continue;
+
+        switch(edentity[i].t) {
+        case 1: // Enemies
+            dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype),ed.entcol,help);
+            if(edentity[i].p1==0)
+                dwgfx.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
+            if(edentity[i].p1==1)
+                dwgfx.Print(ex+4,ey+4, "^", 255, 255, 255 - help.glow, false);
+            if(edentity[i].p1==2)
+                dwgfx.Print(ex+4,ey+4, "<", 255, 255, 255 - help.glow, false);
+            if(edentity[i].p1==3)
+                dwgfx.Print(ex+4,ey+4, ">", 255, 255, 255 - help.glow, false);
+            break;
+        case 2: // Moving platforms, conveyors
+        case 3: // Disappearing platforms
+            drawRect = dwgfx.tiles_rect;
+            drawRect.x += ex;
+            drawRect.y += ey;
+
+            len = 32;
+            if (edentity[i].t == 2 && edentity[i].p1 >= 7)
+                len *= 2;
+            while (drawRect.x < (ex + len)) {
+                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],
+                                    NULL, dwgfx.backBuffer, &drawRect);
                 drawRect.x += 8;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL,dwgfx.backBuffer, &drawRect);
+            }
 
-                if(edentity[i].p1<=4)
-                {
-                    if(edentity[i].p1==0) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+12,(edentity[i].y*8)- (ed.levy*30*8), "V", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    if(edentity[i].p1==1) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+12,(edentity[i].y*8)- (ed.levy*30*8), "^", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    if(edentity[i].p1==2) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+12,(edentity[i].y*8)- (ed.levy*30*8), "<", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    if(edentity[i].p1==3) dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+12,(edentity[i].y*8)- (ed.levy*30*8), ">", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),32,8,dwgfx.getBGR(255,255,255));
-                }
-
-                if(edentity[i].p1==5)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), ">>>>", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),32,8,dwgfx.getBGR(255,255,255));
-                }
-                else if(edentity[i].p1==6)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), "<<<<", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),32,8,dwgfx.getBGR(255,255,255));
-                }
-
-                if(edentity[i].p1>=7)
-                {
-                    //FillRect(dwgfx.backBuffer, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), 32,8, dwgfx.getBGR(64,128,64));
-                    tpoint.x = (edentity[i].x*8)- (ed.levx*40*8)+32;
-                    tpoint.y = (edentity[i].y*8)- (ed.levy*30*8);
-                    drawRect = dwgfx.tiles_rect;
-                    drawRect.x += tpoint.x;
-                    drawRect.y += tpoint.y;
-                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                    drawRect.x += 8;
-                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                    drawRect.x += 8;
-                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                    drawRect.x += 8;
-                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL,dwgfx.backBuffer, &drawRect);
-
-                }
-
-                if(edentity[i].p1==7)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+4,(edentity[i].y*8)- (ed.levy*30*8), "> > > > ", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),64,8,dwgfx.getBGR(255,255,255));
-                }
-                else if(edentity[i].p1==8)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)+4,(edentity[i].y*8)- (ed.levy*30*8), "< < < < ", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),64,8,dwgfx.getBGR(255,255,255));
-                }
-                break;
-            case 3: //Disappearing Platform
-                //FillRect(dwgfx.backBuffer, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), 32,8, dwgfx.getBGR(64,64,128));
-
-                tpoint.x = (edentity[i].x*8)- (ed.levx*40*8);
-                tpoint.y = (edentity[i].y*8)- (ed.levy*30*8);
-                drawRect = dwgfx.tiles_rect;
-                drawRect.x += tpoint.x;
-                drawRect.y += tpoint.y;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL, dwgfx.backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],NULL,dwgfx.backBuffer, &drawRect);
-
-                dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), "////", 255 - help.glow, 255 - help.glow, 255 - help.glow, false);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),32,8,dwgfx.getBGR(255,255,255));
-                break;
-            case 9: //Shiny Trinket
-                dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),22,196,196,196);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(164,164,255));
-                break;
-            case 10: //Checkpoints
-                if(edentity[i].p1==0)  //From roof
-                {
-                    dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),20,196,196,196);
-                }
-                else if(edentity[i].p1==1)   //From floor
-                {
-                    dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),21,196,196,196);
-                }
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(164,164,255));
-                break;
-            case 11: //Gravity lines
-                if(edentity[i].p1==0)  //Horizontal
-                {
-                    int tx=edentity[i].x-(ed.levx*40);
-                    int tx2=edentity[i].x-(ed.levx*40);
-                    int ty=edentity[i].y-(ed.levy*30);
-                    while(ed.spikefree(tx,ty)==0) tx--;
-                    while(ed.spikefree(tx2,ty)==0) tx2++;
-                    tx++;
-                    FillRect(dwgfx.backBuffer, (tx*8),(ty*8)+4, (tx2-tx)*8,1, dwgfx.getRGB(194,194,194));
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(164,255,164));
-                    edentity[i].p2=tx;
-                    edentity[i].p3=(tx2-tx)*8;
-                }
-                else  //Vertical
-                {
-                    int tx=edentity[i].x-(ed.levx*40);
-                    int ty=edentity[i].y-(ed.levy*30);
-                    int ty2=edentity[i].y-(ed.levy*30);
-                    while(ed.spikefree(tx,ty)==0) ty--;
-                    while(ed.spikefree(tx,ty2)==0) ty2++;
-                    ty++;
-                    FillRect(dwgfx.backBuffer, (tx*8)+3,(ty*8), 1,(ty2-ty)*8, dwgfx.getRGB(194,194,194));
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(164,255,164));
-                    edentity[i].p2=ty;
-                    edentity[i].p3=(ty2-ty)*8;
-                }
-                break;
-            case 13://Warp tokens
-                dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),18+(ed.entframe%2),196,196,196);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(164,164,255));
-                if(ed.temp==i)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8)-8,
-                                "("+help.String(((edentity[i].p1-int(edentity[i].p1%40))/40)+1)+","+help.String(((edentity[i].p2-int(edentity[i].p2%30))/30)+1)+")",210,210,255);
-                }
-                else
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8)-8,help.String(ed.findwarptoken(i)),210,210,255);
-                }
-                break;
-            case 15: //Crewmates
-                dwgfx.drawspritesetcol((edentity[i].x*8)- (ed.levx*40*8)-4,(edentity[i].y*8)- (ed.levy*30*8),144,obj.crewcolour(edentity[i].p1), help);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,24,dwgfx.getRGB(164,164,164));
-                break;
-            case 16: //Start
-                if(edentity[i].p1==0)  //Left
-                {
-                    dwgfx.drawspritesetcol((edentity[i].x*8)- (ed.levx*40*8)-4,(edentity[i].y*8)- (ed.levy*30*8),0,obj.crewcolour(0), help);
-                }
-                else if(edentity[i].p1==1)
-                {
-                    dwgfx.drawspritesetcol((edentity[i].x*8)- (ed.levx*40*8)-4,(edentity[i].y*8)- (ed.levy*30*8),3,obj.crewcolour(0), help);
-                }
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,24,dwgfx.getRGB(164,255,255));
-                if(ed.entframe<2)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)-12,(edentity[i].y*8)- (ed.levy*30*8)-8,"START",255,255,255);
-                }
-                else
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8)-12,(edentity[i].y*8)- (ed.levy*30*8)-8,"START",196,196,196);
-                }
-                break;
-            case 17: //Roomtext
-                if(edentity[i].scriptname.length()<1)
-                {
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(96,96,96));
-                }
-                else
-                {
-                    auto length = utf8::distance(edentity[i].scriptname.begin(), edentity[i].scriptname.end());
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),length*8,8,dwgfx.getRGB(96,96,96));
-                }
-                dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), edentity[i].scriptname, 196, 196, 255 - help.glow);
-                break;
-            case 18: //Terminals
-                { // We declare variables here, so we have to put this in its own block
-                int usethistile = edentity[i].p1;
-                int usethisy = edentity[i].y;
-                int usethisheight = 16;
-                if (usethistile == 0) {
-                    usethistile = 1; // Unflipped
-                    usethisheight = 24;
-                } else if (usethistile == 1) {
-                    usethistile = 0; // Flipped
-                    usethisy--;
-                }
-                dwgfx.drawsprite((edentity[i].x*8)- (ed.levx*40*8),(usethisy*8)- (ed.levy*30*8)+8,16+usethistile,96,96,96);
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),16,usethisheight,dwgfx.getRGB(164,164,164));
-                if(ed.temp==i)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8)-8,edentity[i].scriptname,210,210,255);
-                }
-                break;
-                }
-            case 19: //Script Triggers
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),edentity[i].p1*8,edentity[i].p2*8,dwgfx.getRGB(255,164,255));
-                fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(255,255,255));
-                if(ed.temp==i)
-                {
-                    dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8)-8,edentity[i].scriptname,210,210,255);
-                }
-                break;
-            case 50: //Warp lines
-                if(edentity[i].p1>=2)  //Horizontal
-                {
-                    int tx=edentity[i].x-(ed.levx*40);
-                    int tx2=edentity[i].x-(ed.levx*40);
-                    int ty=edentity[i].y-(ed.levy*30);
-                    while(ed.free(tx,ty)==0) tx--;
-                    while(ed.free(tx2,ty)==0) tx2++;
-                    tx++;
-                    fillboxabs(dwgfx, (tx*8),(ty*8)+1, (tx2-tx)*8,6, dwgfx.getRGB(255,255,194));
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(255,255,164));
-                    edentity[i].p2=tx;
-                    edentity[i].p3=(tx2-tx)*8;
-                }
-                else  //Vertical
-                {
-                    int tx=edentity[i].x-(ed.levx*40);
-                    int ty=edentity[i].y-(ed.levy*30);
-                    int ty2=edentity[i].y-(ed.levy*30);
-                    while(ed.free(tx,ty)==0) ty--;
-                    while(ed.free(tx,ty2)==0) ty2++;
-                    ty++;
-                    fillboxabs(dwgfx, (tx*8)+1,(ty*8), 6,(ty2-ty)*8, dwgfx.getRGB(255,255,194));
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(255,255,164));
-                    edentity[i].p2=ty;
-                    edentity[i].p3=(ty2-ty)*8;
-                }
+            fillboxabs(dwgfx, ex, ey, len, 8, dwgfx.getBGR(255, 255, 255));
+            if (edentity[i].t == 3) {
+                dwgfx.Print(ex, ey, "////", 255, 255, 255 - help.glow, false);
                 break;
             }
+
+            if (edentity[i].p1 == 5) {
+                dwgfx.Print(ex, ey, ">>>>", 255, 255, 255 - help.glow, false);
+                break;
+            }
+
+            if (edentity[i].p1 == 6) {
+                dwgfx.Print(ex, ey, "<<<<", 255, 255, 255 - help.glow, false);
+                break;
+            }
+
+            if (edentity[i].p1 == 7) {
+                dwgfx.Print(ex, ey, "> > > >", 255, 255, 255 - help.glow,
+                            false);
+                break;
+            }
+
+            if (edentity[i].p1 == 8) {
+                dwgfx.Print(ex, ey, "< < < <", 255, 255, 255 - help.glow,
+                            false);
+                break;
+            }
+
+            if(edentity[i].p1==0)
+                dwgfx.Print(ex+12,ey, "V", 255, 255, 255 - help.glow, false);
+            if(edentity[i].p1==1)
+                dwgfx.Print(ex+12,ey, "^", 255, 255, 255 - help.glow, false);
+            if(edentity[i].p1==2)
+                dwgfx.Print(ex+12,ey, "<", 255, 255, 255 - help.glow, false);
+            if(edentity[i].p1==3)
+                dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
+            break;
+
+        case 9: // Shiny Trinket
+            dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
+            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
+            break;
+        case 10: // Checkpoints
+            dwgfx.drawsprite(ex, ey, 20 + edentity[i].p1, 196, 196, 196);
+            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
+            break;
+        case 11: // Gravity lines
+            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
+            if(edentity[i].p1 == 0) { //Horizontal
+                while (!ed.spikefree(tx, ey / 8)) tx--;
+                while (!ed.spikefree(tx2, ey / 8)) tx2++;
+                tx++;
+                FillRect(dwgfx.backBuffer, (tx*8), ey+4, (tx2-tx)*8, 1,
+                         dwgfx.getRGB(194,194,194));
+                edentity[i].p2 = tx;
+                edentity[i].p3 = (tx2-tx)*8;
+            } else { // Vertical
+                while (!ed.towerspikefree(tx, ty)) ty--;
+                while (!ed.towerspikefree(tx, ty2)) ty2++;
+                ty++;
+                FillRect(dwgfx.backBuffer, (tx*8)+3, (ty*8) - (ed.ypos*8), 1,
+                         (ty2-ty)*8, dwgfx.getRGB(194,194,194));
+                edentity[i].p2 = ty;
+                edentity[i].p3 = (ty2-ty) * 8;
+            }
+            break;
+        case 13: // Warp tokens
+            dwgfx.drawsprite(ex, ey, 18+(ed.entframe%2),196,196,196);
+            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
+            if(ed.temp==i)
+                dwgfx.Print(ex, ey - 8,
+                            "("+help.String(((edentity[i].p1-int(edentity[i].p1%40))/40)+1)+","+help.String(((edentity[i].p2-int(edentity[i].p2%30))/30)+1)+")",210,210,255);
+            else
+                dwgfx.Print(ex, ey - 8,
+                            help.String(ed.findwarptoken(i)),210,210,255);
+            break;
+        case 15: // Crewmates
+            dwgfx.drawspritesetcol(ex - 4, ey, 144,
+                                   obj.crewcolour(edentity[i].p1), help);
+            fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
+            break;
+        case 16: // Start
+            if (edentity[i].p1==0) // Left
+                dwgfx.drawspritesetcol(ex - 4, ey, 0,
+                                       obj.crewcolour(0), help);
+            else if (edentity[i].p1==1)
+                dwgfx.drawspritesetcol(ex - 4, ey, 3,
+                                       obj.crewcolour(0), help);
+            fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
+            if(ed.entframe<2)
+                dwgfx.Print(ex - 12, ey - 8, "START", 255, 255, 255);
+            else
+                dwgfx.Print(ex - 12, ey - 8, "START", 196, 196, 196);
+            break;
+        case 17: // Roomtext
+            if(edentity[i].scriptname.length()<1) {
+                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(96, 96, 96));
+            } else {
+                auto length = utf8::distance(edentity[i].scriptname.begin(),
+                                             edentity[i].scriptname.end());
+                fillboxabs(dwgfx, ex, ey, length*8, 8, dwgfx.getRGB(96,96,96));
+            }
+            dwgfx.Print(ex, ey, edentity[i].scriptname,
+                        196, 196, 255 - help.glow);
+            break;
+        case 18: // Terminals
+            ty = ey;
+            if (!edentity[i].p1) // Unflipped
+                ty += 8;
+
+            dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+            fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
+            if(ed.temp==i)
+                dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
+            break;
+        case 19: // Script Triggers
+            fillboxabs(dwgfx, ex, ey, edentity[i].p1*8, edentity[i].p2*8,
+                       dwgfx.getRGB(255,164,255));
+            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
+            if(ed.temp==i)
+                dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
+            break;
+        case 50: // Warp lines
+            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
+            if (edentity[i].p1>=2) { //Horizontal
+                while (!ed.free(tx, ey / 8)) tx--;
+                while (!ed.free(tx2, ey / 8)) tx2++;
+                tx++;
+                fillboxabs(dwgfx, (tx*8), ey+1, (tx2-tx)*8, 6,
+                           dwgfx.getRGB(255,255,194));
+                edentity[i].p2=tx;
+                edentity[i].p3=(tx2-tx)*8;
+            } else { // Vertical
+                while (!ed.towerfree(tx, ty)) ty--;
+                while (!ed.towerfree(tx, ty2)) ty2++;
+                ty++;
+                fillboxabs(dwgfx, (tx*8)+1, (ty*8) - (ed.ypos*8), 6,
+                           (ty2-ty)*8, dwgfx.getRGB(255,255,194));
+                edentity[i].p2=ty;
+                edentity[i].p3=(ty2-ty)*8;
+            }
+            break;
         }
 
         //Need to also check warp point destinations
@@ -4906,7 +4888,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
                 ed.notedelay=45;
                 if (ed.towers[tower-1].scroll)
-                    ed.note="Tower now Descendingg";
+                    ed.note="Tower now Descending";
                 else
                     ed.note="Tower now Ascending";
                 ed.updatetiles=true;
@@ -5123,7 +5105,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ty=(edentity[i].p2-(edentity[i].p2%30))/30;
                         if(tx==ed.levx && ty==ed.levy &&
                            edentity[i].state==ed.levaltstate &&
-                           edentity[i].intower==0)
+                           edentity[i].intower==tower)
                         {
                             j++;
                         }
@@ -5230,7 +5212,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             int ty=(edentity[i].y-(edentity[i].y%30))/30;
                             if(tx==ed.levx && ty==ed.levy &&
                                edentity[i].state==ed.levaltstate &&
-                               edentity[i].intower==0)
+                               edentity[i].intower==tower)
                             {
                                 testeditor=i;
                                 startpoint=1;
@@ -5249,7 +5231,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 int ty=(edentity[i].y-(edentity[i].y%30))/30;
                                 if(tx==ed.levx && ty==ed.levy &&
                                    edentity[i].state==ed.levaltstate &&
-                                   edentity[i].intower==0)
+                                   edentity[i].intower==tower)
                                 {
                                     testeditor=i;
                                 }
@@ -5713,7 +5695,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.placetilelocal(ed.tilex, ed.tiley, 8);
                         }
 
-                        int tmp=edentat(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30), ed.levaltstate);
+                        int tmp=edentat(ed.tilex, ed.tiley, ed.levaltstate,
+                                        tower);
                         if(tmp==-1)
                         {
                             //Room text and script triggers can be placed in walls
@@ -5968,7 +5951,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         if (edentity[i].x==ed.tilex + (ed.levx*40) &&
                             edentity[i].y==ed.tiley+ (ed.levy*30) &&
                             edentity[i].state==ed.levaltstate &&
-                            edentity[i].intower==0)
+                            edentity[i].intower==tower)
                         {
                             if(edentity[i].t==9) ed.numtrinkets--;
                             if(edentity[i].t==15) ed.numcrewmates--;
