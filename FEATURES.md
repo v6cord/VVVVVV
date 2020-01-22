@@ -172,3 +172,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `speak_fast` - Remove text box fade-in
 
 - `speak_active_fast` - Remove text box fade-in, while also removing all other text boxes
+
+- `textboxtimer(n)` - Fades out the text box after *n* frames, use this after a `speak`, `speak_active`, `speak_fast`, or `speak_active_fast`
