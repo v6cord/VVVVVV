@@ -3361,6 +3361,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             case 3:
                 dwgfx.Print(4, 232, "COPY TILES: Click on top left", 255,255,255, false);
                 break;
+            case 4:
+                dwgfx.Print(4, 232, "TOWER ENTRY: Click on top row", 255,255,255, false);
+                break;
             default:
                 dwgfx.Print(4, 232, "Click on top left", 255,255,255, false);
                 break;
@@ -3922,8 +3925,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         {
             fillboxabs(dwgfx, 0, 67,161+8,200,dwgfx.getRGB(64,64,64));
             FillRect(dwgfx.backBuffer, 0,68,160+8,200, dwgfx.getRGB(0,0,0));
-            dwgfx.Print(4,  70, "F1: Change Tileset",164,164,164,false);
-            dwgfx.Print(4,  80, "F2: Change Colour",164,164,164,false);
+            if (tower) {
+                dwgfx.Print(4, 70, "F1: Tower Direction",164,164,164,false);
+                dwgfx.Print(4, 80, "F2: Tower Entry",164,164,164,false);
+            } else {
+                dwgfx.Print(4,  70, "F1: Change Tileset",164,164,164,false);
+                dwgfx.Print(4,  80, "F2: Change Colour",164,164,164,false);
+            }
             dwgfx.Print(4,  90, "F3: Change Enemies",164,164,164,false);
             dwgfx.Print(4, 100, "F4: Enemy Bounds",164,164,164,false);
             dwgfx.Print(4, 110, "F5: Platform Bounds",164,164,164,false);
@@ -4734,15 +4742,14 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             //Shortcut keys
             //TO DO: make more user friendly
             if (tower && ed.keydelay==0 &&
-                (key.keymap[SDLK_F2] ||
-                 key.keymap[SDLK_w] || key.keymap[SDLK_a])) {
+                (key.keymap[SDLK_w] || key.keymap[SDLK_a])) {
                 ed.notedelay=45;
                 ed.note="Unavailable in Tower Mode";
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
-            if (tower && ed.keydelay == 0 &&
-                key.keymap[SDLK_F1]) {
+            if (tower && ed.keydelay == 0 && key.keymap[SDLK_F1]) {
+                // Change Scroll Direction
                 ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
                 ed.notedelay=45;
                 if (ed.towers[tower-1].scroll)
@@ -4751,6 +4758,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.note="Tower Scrolling now Downwards";
                 ed.updatetiles=true;
                 ed.keydelay=6;
+            }
+            if (tower && ed.keydelay == 0 && key.keymap[SDLK_F2]) {
+                // Change Tower Entry
+                ed.keydelay=6;
+                ed.boundarytype=4;
+                ed.boundarymod=1;
+            }
+            if (tower && ed.keydelay == 0 &&
+                (key.keymap[SDLK_F6] || key.keymap[SDLK_F7])) {
+                // Change Used Tower
+                if (key.keymap[SDLK_F7]) {
+                    if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1)
+                        ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
+                } else if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < 400)
+                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
+
+                ed.note = "Tower Changed";
+                ed.keydelay = 6;
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
             {
@@ -4844,20 +4872,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.keydelay=6;
                 ed.boundarytype=2;
                 ed.boundarymod=1;
-            }
-            if (tower && ed.keydelay == 0 &&
-                (key.keymap[SDLK_F6] || key.keymap[SDLK_F7])) {
-                if (key.keymap[SDLK_F7]) {
-                    if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1)
-                        ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
-                } else if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < 400)
-                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
-
-                ed.note = "Tower Changed";
-                ed.keydelay = 6;
-                ed.notedelay = 45;
-                ed.updatetiles = true;
-                ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if (key.keymap[SDLK_F6] && ed.keydelay == 0) {
                 int newaltstate = ed.getnumaltstates(ed.levx, ed.levy) + 1;
@@ -5338,6 +5352,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.boundx1=(ed.tilex*8);
                             ed.boundy1=(ed.tiley*8);
                             ed.boundarymod=2;
+                            if (ed.boundarytype == 4) {
+                                int tmp=ed.levx+(ed.levy*ed.maxwidth);
+                                ed.level[tmp].tower_row=ed.tiley + ed.ypos;
+                                ed.boundarymod = 0;
+                            }
                         }
                         else if(ed.boundarymod==2)
                         {
