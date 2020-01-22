@@ -2998,7 +2998,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     std::string roomstr = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
     int tower = ed.get_tower(ed.levx, ed.levy);
     if (tower)
-        roomstr += "T" + help.String(tower);
+        roomstr += "T" + help.String(tower) + ":" + help.String(ed.ypos);
     else if (ed.levaltstate != 0)
         roomstr += "@" + help.String(ed.levaltstate);
 
@@ -4041,7 +4041,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             FillRect(dwgfx.backBuffer, 260-24,198,80+24,10, dwgfx.getRGB(32,32,32));
             FillRect(dwgfx.backBuffer, 261-24,199,80+24,9, dwgfx.getRGB(0,0,0));
-            dwgfx.Print(268-24,199, roomstr, 196, 196, 255 - help.glow, false);
+            dwgfx.Print(228,199, roomstr, 196, 196, 255 - help.glow, false);
         } else {
             //FillRect(dwgfx.backBuffer, 0,230,72,240, dwgfx.RGB(32,32,32));
             //FillRect(dwgfx.backBuffer, 0,231,71,240, dwgfx.RGB(0,0,0));
@@ -4060,12 +4060,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.Print(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 }
                 dwgfx.Print(4, 222, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                dwgfx.Print(268-24,222, roomstr,196, 196, 255 - help.glow, false);
+                dwgfx.Print(228,222, roomstr,196, 196, 255 - help.glow, false);
             }
             else
             {
                 dwgfx.Print(4, 232, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                dwgfx.Print(268-24,232, roomstr,196, 196, 255 - help.glow, false);
+                dwgfx.Print(228,232, roomstr,196, 196, 255 - help.glow, false);
             }
         }
 
