@@ -2043,6 +2043,7 @@ bool editorclass::intower(void) {
 }
 
 // Returns y offset upon tower entry/exit. ypos is negative if entering.
+// Returns -1 for an invalid boundary.
 int editorclass::tower_connection(int *rx, int *ry, int ypos) {
     /* Figure out the location of tower connections */
     int ix, iy, rix, riy, rpos;
@@ -2074,8 +2075,8 @@ int editorclass::tower_connection(int *rx, int *ry, int ypos) {
         }
     }
 
-    // If we don't have any proper exits, just exit at top of adjacant room
-    return 0;
+    // We failed to find an exit boundary!
+    return -1;
 }
 
 /* Returns tower ID upon entering a tower */

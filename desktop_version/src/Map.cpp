@@ -898,8 +898,23 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 }
 
 // Moves player y appropriate and possibly change destination screen.
-void mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
+bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
     int i = obj.getplayer();
+
+    // For custom towers, check if we're inside a valid exit boundary
+    int yp = 0;
+    if (custommode) {
+        yp = ed.tower_connection(rx, ry, obj.entities[i].yp);
+
+        // Invalid exit boundary. Treat as implied warp lines
+        if (yp < 0) {
+            if (obj.entities[i].xp <= -10)
+                obj.entities[i].xp += 320;
+            if (obj.entities[i].xp > 310)
+                obj.entities[i].xp -= 320;
+            return false;
+        }
+    }
 
     // Fix x position
     if (obj.entities[i].xp < -14) {
@@ -913,9 +928,9 @@ void mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
 
     // Custom towers
     if (custommode) {
-        obj.entities[i].yp = ed.tower_connection(rx, ry, obj.entities[i].yp);
+        obj.entities[i].yp = yp;
         *rx = (((*rx) - 100) % ed.maxwidth) + 100;
-        return;
+        return true;
     }
 
     if (!minitowermode) { // The Tower
@@ -940,6 +955,8 @@ void mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
             *ry = 53;
         }
     }
+
+    return true;
 }
 
 void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)

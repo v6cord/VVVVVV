@@ -404,8 +404,9 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                         obj.entities[player].xp < -14) ||
                        (game.door_right > -2 &&
                         obj.entities[player].xp >= 308)) {
-                map.leaving_tower(&game.roomx, &game.roomy, obj);
-                map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
+                if (map.leaving_tower(&game.roomx, &game.roomy, obj))
+                    map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
+                                 music);
             }
 
             if(game.lifeseq==0)
