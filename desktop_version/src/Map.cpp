@@ -1843,9 +1843,11 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                 break;
             case 11: // Gravity Lines
                 if (edentity[edi].p1==0) //Horizontal
-                    obj.createentity(game, ex, ey, 11, edentity[edi].p3);
+                    obj.createentity(game, edentity[edi].p2 * 8, ey + 4, 11,
+                                     edentity[edi].p3);
                 else // Vertical
-                    obj.createentity(game, ex, ey, 12, edentity[edi].p3);
+                    obj.createentity(game, ex + 3, edentity[edi].p2 * 8, 12,
+                                     edentity[edi].p3);
                 break;
             case 13: // Warp Tokens
                 obj.createentity(game, ex, ey, 13, edentity[edi].p1,
