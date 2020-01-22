@@ -34,6 +34,8 @@ public:
     void resize();
 
     void addline(std::string t);
+
+    void createfast();
 public:
     //Fundamentals
     growing_vector<std::string> line;

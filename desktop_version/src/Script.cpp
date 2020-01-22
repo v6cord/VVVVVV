@@ -276,9 +276,50 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 							obj.removeblock(bl);
 
 					// Too bad there's no obj.removeallentities()
-					for (int ei = 0; ei < obj.nentity; ei++)
-						if (obj.entities[ei].rule != 0) // Destroy everything except the player
-							obj.entities[ei].active = false;
+					// (Wouldn't want to use it anyway, we need to take care of the conveyors' tile 1s)
+					for (int ei = 0; ei < obj.nentity; ei++) {
+						if (obj.entities[ei].rule == 0) // Destroy everything except the player
+							continue;
+
+						obj.entities[ei].active = false;
+
+						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
+						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+						// Also I don't care if there's not actually any tile 1s under it
+						if (!obj.entities[ei].active || obj.entities[ei].type != 1 ||
+						(obj.entities[ei].behave != 8 && obj.entities[ei].behave != 9))
+							continue;
+
+						// Ok, we've found a conveyor, is it aligned with the grid?
+						if (obj.entities[ei].xp % 8 != 0 || obj.entities[ei].yp % 8 != 0)
+							continue;
+
+						// Is its top-left corner outside the map?
+						if (obj.entities[ei].xp < 0 || obj.entities[ei].xp >= 320
+						|| obj.entities[ei].yp < 0 || obj.entities[ei].yp >= 240)
+							continue;
+
+						// Very well then, we might have an edentity conveyor...
+
+						int thisxp = obj.entities[ei].xp / 8;
+						int thisyp = obj.entities[ei].yp / 8;
+
+						int usethislength;
+						// Map.cpp uses this exact check to place 8 tiles down instead of 4,
+						// hope this conveyor's width didn't change in the meantime
+						if (obj.entities[ei].w == 64)
+							usethislength = 8;
+						else
+							usethislength = 4;
+
+						// Ok, finally fix the tiles
+						// I don't care enough to check for what was actually behind the tiles originally
+						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+							map.settile(tilex, thisyp, 0);
+
+						// And of course, we have to force the game to redraw the room
+						dwgfx.foregrounddrawn = false;
+					}
 
 					// Copy-pasted from above
 					obj.horplatforms = false;
@@ -300,6 +341,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						break;
 					}
 				} else if (words[1] == "conveyors") {
+					// Copy-pasted from above
 					for (int edc = 0; edc < obj.nentity; edc++) {
 						if (!obj.entities[edc].active || obj.entities[edc].type != 1 ||
 						(obj.entities[edc].behave != 8 && obj.entities[edc].behave != 9))
@@ -313,6 +355,40 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						// Important: set width and height to 0, or there will still be collision
 						obj.entities[edc].w = 0;
 						obj.entities[edc].h = 0;
+
+						// Actually hold up, maybe this is an edentity conveyor, we want to remove all the tile 1s under it before deactivating it
+						// Of course this could be a createentity conveyor and someone placed tile 1s under it manually, but I don't care
+						// Also I don't care if there's not actually any tile 1s under it, even if it's a spike/one-way that's now invisible and can be touched by the player
+
+						// Ok, is it aligned with the grid?
+						if (obj.entities[edc].xp % 8 != 0 || obj.entities[edc].yp % 8 != 0)
+							continue;
+
+						// Is its top-left corner outside the map?
+						if (obj.entities[edc].xp < 0 || obj.entities[edc].xp >= 320
+						|| obj.entities[edc].yp < 0 || obj.entities[edc].yp >= 240)
+							continue;
+
+						// Very well then, we might have an edentity conveyor...
+
+						int thisxp = obj.entities[edc].xp / 8;
+						int thisyp = obj.entities[edc].yp / 8;
+
+						int usethislength;
+						// Map.cpp uses this exact check to place 8 tiles down instead of 4,
+						// hope this conveyor's width didn't change in the meantime
+						if (obj.entities[edc].w == 64)
+							usethislength = 8;
+						else
+							usethislength = 4;
+
+						// Ok, finally fix the tiles
+						// I don't care enough to check for what was actually behind the tiles originally
+						for (int tilex = thisxp; tilex < thisxp + usethislength; tilex++)
+							map.settile(tilex, thisyp, 0);
+
+						// And of course, we have to force the game to redraw the room
+						dwgfx.foregrounddrawn = false;
 					}
 				} else if (words[1] == "terminals") {
 					for (int eti = 0; eti < obj.nentity; eti++)
@@ -1353,6 +1429,122 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				}
 				game.backgroundtext = false;
 			}
+			else if (words[0] == "speak_active_fast")
+			{
+				// Copied and pasted from the above
+				//Ok, actually display the textbox we've initilised now!
+				dwgfx.createtextbox(txt[0], textx, texty, r, g, b);
+				if (txtnumlines > 1)
+				{
+					for (i = 1; i < txtnumlines; i++)
+					{
+						dwgfx.addline(txt[i]);
+					}
+				}
+
+				//the textbox cannot be outside the screen. Fix if it is.
+				if (textx <= -1000)
+				{
+					//position to the left of the player
+					textx += 10000;
+					textx -= dwgfx.textboxwidth();
+					textx += 16;
+					dwgfx.textboxmoveto(textx);
+				}
+
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx(160);
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
+				}
+
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery(120);
+
+					textcenterline = 0;
+				}
+
+				textcenterline = 0;
+
+				dwgfx.textboxadjust();
+				dwgfx.textboxactive();
+				dwgfx.textboxcreatefast();
+
+				if (!game.backgroundtext)
+				{
+					game.advancetext = true;
+					game.hascontrol = false;
+					game.pausescript = true;
+					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
+				}
+				game.backgroundtext = false;
+			}
+			else if (words[0] == "speak_fast")
+			{
+				// Copied and pasted from the above, again
+				//Exactly as above, except don't make the textbox active (so we can use multiple textboxes)
+				dwgfx.createtextbox(txt[0], textx, texty, r, g, b);
+				if (txtnumlines > 1)
+				{
+					for (i = 1; i < txtnumlines; i++)
+					{
+						dwgfx.addline(txt[i]);
+					}
+				}
+
+				//the textbox cannot be outside the screen. Fix if it is.
+				if (textx <= -1000)
+				{
+					//position to the left of the player
+					textx += 10000;
+					textx -= dwgfx.textboxwidth();
+					textx += 16;
+					dwgfx.textboxmoveto(textx);
+				}
+
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx();
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
+				}
+
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery();
+
+					textcenterline = 0;
+				}
+
+				textcenterline = 0;
+
+				dwgfx.textboxadjust();
+				//dwgfx.textboxactive();
+				dwgfx.textboxcreatefast();
+
+				if (!game.backgroundtext)
+				{
+					game.advancetext = true;
+					game.hascontrol = false;
+					game.pausescript = true;
+					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
+				}
+				game.backgroundtext = false;
+			}
 			else if (words[0] == "endtext")
 			{
 				dwgfx.textboxremove();
@@ -1364,6 +1556,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				dwgfx.textboxremovefast();
 				game.hascontrol = true;
 				game.advancetext = false;
+			}
+			else if (words[0] == "textboxtimer")
+			{
+				dwgfx.textboxtimer(ss_toi(words[1]));
 			}
 			else if (words[0] == "do")
 			{
@@ -4075,6 +4271,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	dwgfx.textboxremovefast();
 	dwgfx.flipmode = false; //This will be reset if needs be elsewhere
 	dwgfx.showcutscenebars = false;
+	dwgfx.cutscenebarspos = 0;
 
   //mapclass
 	map.warpx = false;

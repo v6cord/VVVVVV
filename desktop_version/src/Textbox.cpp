@@ -154,3 +154,10 @@ void textboxclass::addline(std::string t)
     resize();
     if (numlines >= 12) numlines = 0;
 }
+
+void textboxclass::createfast()
+{
+    tm = 1;
+    tl = 1.0f;
+    setcol(int(tr * tl), int(tg * tl), int(tb * tl));
+}

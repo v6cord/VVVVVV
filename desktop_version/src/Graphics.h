@@ -196,6 +196,8 @@ public:
     
     void reloadresources();
 
+	void textboxcreatefast();
+
 	colourTransform ct = {0};
 
 	std::string tempstring;

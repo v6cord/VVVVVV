@@ -260,32 +260,7 @@ int main(int argc, char *argv[])
         }
         game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
         game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
-        std::string name = game.saveFilePath + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
-        TiXmlDocument doc(name.c_str());
-	    game.mainmenu = 22;
-        ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, graphics);
-        ed.findstartpoint(game);
-        game.gamestate = GAMEMODE;
-        script.hardreset(key, graphics, game, map, obj, help, music);
-        game.customstart(obj, music);
-        game.jumpheld = true;
-		map.custommodeforreal = true;
-        map.custommode = true;
-        map.customx = 100;
-        map.customy = 100;
-        if(obj.nentity==0) {
-            obj.createentity(game, game.savex, game.savey, 0, 0);
-        } else {
-            map.resetplayer(graphics, game, obj, music);
-        }
-        map.gotoroom(game.saverx, game.savery, graphics, game, obj, music);
-		ed.generatecustomminimap(graphics, map);
-		map.customshowmm=true;
-        if(ed.levmusic>0){
-            music.play(ed.levmusic);
-        } else {
-            music.currentsong=-1;
-		}
+        script.startgamemode(22, key, graphics, game, map, obj, help, music);
 		//dwgfx.fademode = 4;
 
     }
