@@ -65,6 +65,10 @@ void edtower::reset(void) {
     size = 40;
     scroll = 0;
     tiles.resize(40 * size);
+    int x, y;
+    for (x = 0; x < 40; x++)
+        for (y = 0; y < size; y++)
+            tiles[x + y*40] = 0;
 }
 
 editorclass::editorclass()
@@ -258,9 +262,9 @@ void editorclass::reset()
     roomtextmod=false;
     roomtextent=0;
 
-    for (int j = 0; j < maxheight; j++)
+    for (int j = 0; j < 20; j++)
     {
-        for (int i = 0; i < maxwidth; i++)
+        for (int i = 0; i < 20; i++)
         {
             level[i+(j*maxwidth)].tileset=0;
             level[i+(j*maxwidth)].tilecol=(i+j)%32;
@@ -276,6 +280,8 @@ void editorclass::reset()
             level[i+(j*maxwidth)].enemyx2=320;
             level[i+(j*maxwidth)].enemyy2=240;
             level[i+(j*maxwidth)].directmode=0;
+            level[i+(j*maxwidth)].tower=0;
+            level[i+(j*maxwidth)].tower_row=0;
         }
     }
 
@@ -1850,9 +1856,12 @@ void editorclass::snap_tower_entry(int rx, int ry) {
     int tower = get_tower(rx, ry);
     int size = tower_size(tower);
 
-    // Snap editor position to the whole tower bottom
-    if (ypos >= size)
-        ypos = size - 30;
+    // Snap editor position to the whole tower bottom or top with a 10 offset
+    if (ypos > size - 20)
+        ypos = size - 20;
+
+    if (ypos < -10)
+        ypos = -10;
 
     // Snap entry row to the bottom row.
     // Useful to avoid using the room as exit point.
@@ -1863,7 +1872,7 @@ void editorclass::snap_tower_entry(int rx, int ry) {
 int editorclass::get_tower(int rx, int ry) {
     /* Returns the tower of this room */
     int room = rx + ry * ed.maxwidth;
-    if (ry < 0 || rx < 0 || rx > maxwidth || ry > maxheight)
+    if (ry < 0 || rx < 0 || rx >= maxwidth || ry >= maxheight)
         return 0;
 
     return ed.level[room].tower;
@@ -4752,9 +4761,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
                 ed.notedelay=45;
                 if (ed.towers[tower-1].scroll)
-                    ed.note="Tower Scrolling now Upwards";
+                    ed.note="Tower now Descendingg";
                 else
-                    ed.note="Tower Scrolling now Downwards";
+                    ed.note="Tower now Ascending";
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
@@ -4777,6 +4786,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.keydelay = 6;
                 ed.notedelay = 45;
                 ed.updatetiles = true;
+                ed.snap_tower_entry(ed.levx, ed.levy);
+            }
+            if (tower && ed.keydelay == 0 &&
+                (key.keymap[SDLK_PLUS] || key.keymap[SDLK_KP_PLUS] ||
+                 key.keymap[SDLK_EQUALS] || key.keymap[SDLK_KP_EQUALS])) {
+                ed.ypos++;
+                ed.snap_tower_entry(ed.levx, ed.levy);
+            }
+            if (tower && ed.keydelay == 0 &&
+                (key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS])) {
+                ed.ypos--;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
