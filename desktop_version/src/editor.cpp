@@ -2008,17 +2008,40 @@ bool editorclass::intower(void) {
     return false;
 }
 
-/* Returns y+camera offset upon tower entry, or room y coordinate upon
-   leaving */
-int editorclass::tower_connection(int rx, int ry, bool entering) {
+// Returns y offset upon tower entry/exit. ypos is negative if entering.
+int editorclass::tower_connection(int *rx, int *ry, int ypos) {
     /* Figure out the location of tower connections */
-    int room = rx + ry * ed.maxwidth;
-    if (entering) {
-        return ed.level[room].tower_row * 8;
-    } else {
-        /* TODO */
-        return ry;
+    int ix, iy, rix, riy, rpos;
+    rix = (*rx) % 100;
+    riy = (*ry) % 100;
+    ix = rix;
+    iy = riy;
+
+    int room = ix + iy * maxwidth;
+    int tower = get_tower(ix, iy);
+    if (ypos < 0) // entering
+        return level[room].tower_row * 8;
+
+    /* Iterate all rooms connected to this tower and figure out our exit
+       position. */
+    for (iy = riy; tower == get_tower(ix, iy); iy--) {
+        rpos = level[ix + iy*maxwidth].tower_row * 8;
+        if (ypos >= rpos && ypos < rpos + 240) {
+            *ry += (iy - riy);
+            return ypos - rpos;
+        }
     }
+
+    for (iy = riy; tower == get_tower(ix, iy); iy++) {
+        rpos = level[ix + iy*maxwidth].tower_row * 8;
+        if (ypos >= rpos && ypos < rpos + 240) {
+            *ry = (iy - riy);
+            return ypos - rpos;
+        }
+    }
+
+    // If we don't have any proper exits, just exit at top of adjacant room
+    return 0;
 }
 
 /* Returns tower ID upon entering a tower */
@@ -2030,7 +2053,7 @@ int editorclass::entering_tower(int rx, int ry, int *entry) {
     if (!tower)
         return 0;
 
-    *entry = tower_connection(rx, ry, true);
+    *entry = tower_connection(&rx, &ry, -1);
     return tower;
 }
 

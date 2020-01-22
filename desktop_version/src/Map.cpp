@@ -897,6 +897,48 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
     }
 }
 
+// Moves player y appropriate and possibly change destination screen.
+// Only works for minitowers (both ingame and custom levels)
+void mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
+    if (!minitowermode)
+        return;
+
+    int i = obj.getplayer();
+
+    // Fix x position
+    if (obj.entities[i].xp < -14) {
+        (*rx)--;
+        obj.entities[i].xp += 320;
+    } else {
+        if (obj.entities[i].xp >= 308)
+            obj.entities[i].xp -= 320;
+        (*rx)++;
+    }
+
+    // Custom towers
+    if (custommode) {
+        obj.entities[i].yp = ed.tower_connection(rx, ry, obj.entities[i].yp);
+        *rx = (((*rx) - 100) % ed.maxwidth) + 100;
+        return;
+    }
+
+    if (scrolldir == 1) { // Panic Room
+        if (obj.entities[i].yp >= (71*8)) {
+            obj.entities[i].yp -= (71*8);
+            *ry = 53;
+        } else {
+            *ry = 52;
+        }
+    } else { // The Final Challenge
+        if (obj.entities[i].yp >= (71*8)) {
+            obj.entities[i].yp -= (71*8);
+            *ry = 54;
+        } else {
+            *ry = 53;
+        }
+    }
+}
+
 void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
     gotoroom(rx, ry, dwgfx, game, obj, music);

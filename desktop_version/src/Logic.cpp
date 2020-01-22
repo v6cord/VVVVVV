@@ -380,51 +380,14 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
             }
 
             //Right so! Screenwraping for tower:
-            if (map.minitowermode)
-            {
-                if (map.scrolldir == 1)
-                {
-                    //This is minitower 1!
-                    player = obj.getplayer();
-                    if (game.door_left > -2 && obj.entities[player].xp < -14)
-                    {
-                        obj.entities[player].xp += 320;
-                        map.gotoroom(48, 52, dwgfx, game, obj, music);
-                    }
-                    if (game.door_right > -2 && obj.entities[player].xp >= 308)
-                    {
-                        obj.entities[player].xp -= 320;
-                        obj.entities[player].yp -= (71*8);
-                        map.gotoroom(game.roomx + 1, game.roomy+1, dwgfx, game, obj, music);
-                    }
+            if (map.minitowermode) {
+                if ((game.door_left > -2 && obj.entities[player].xp < -14) ||
+                    (game.door_right > -2 && obj.entities[player].xp >= 308)) {
+                    map.leaving_tower(&game.roomx, &game.roomy, obj);
+                    map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
+                                 music);
                 }
-                else
-                {
-                    //This is minitower 2!
-                    player = obj.getplayer();
-                    if (game.door_left > -2 && obj.entities[player].xp < -14)
-                    {
-                        if (obj.entities[player].yp > 300)
-                        {
-                            obj.entities[player].xp += 320;
-                            obj.entities[player].yp -= (71 * 8);
-                            map.gotoroom(50, 54, dwgfx, game, obj, music);
-                        }
-                        else
-                        {
-                            obj.entities[player].xp += 320;
-                            map.gotoroom(50, 53, dwgfx, game, obj, music);
-                        }
-                    }
-                    if (game.door_right > -2 && obj.entities[player].xp >= 308)
-                    {
-                        obj.entities[player].xp -= 320;
-                        map.gotoroom(52, 53, dwgfx, game, obj, music);
-                    }
-                }
-            }
-            else
-            {
+            } else {
                 //Always wrap except for the very top and very bottom of the tower
                 if(map.ypos>=500 && map.ypos <=5000)
                 {

@@ -74,6 +74,7 @@ public:
 
     void resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
+    void leaving_tower(int *rx, int *ry, entityclass &obj);
     void warpto(int rx, int ry , int t, int tx, int ty,  Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
     void gotoroom(int rx, int ry, Graphics& dwgfx,  Game& game, entityclass& obj, musicclass& music);
