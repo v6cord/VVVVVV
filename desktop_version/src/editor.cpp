@@ -1636,8 +1636,7 @@ void editorclass::findstartpoint(Game& game)
         game.edsavery = 100;
         game.edsavegc = 0;
         game.edsavey--;
-        // i'm not sure what this line is supposed to do, but it can never be correct
-        //game.edsavedir=1-edentity[testeditor].p1;
+        game.edsavedir=1;
     }
     else
     {
