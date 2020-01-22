@@ -1429,6 +1429,122 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				}
 				game.backgroundtext = false;
 			}
+			else if (words[0] == "speak_active_fast")
+			{
+				// Copied and pasted from the above
+				//Ok, actually display the textbox we've initilised now!
+				dwgfx.createtextbox(txt[0], textx, texty, r, g, b);
+				if (txtnumlines > 1)
+				{
+					for (i = 1; i < txtnumlines; i++)
+					{
+						dwgfx.addline(txt[i]);
+					}
+				}
+
+				//the textbox cannot be outside the screen. Fix if it is.
+				if (textx <= -1000)
+				{
+					//position to the left of the player
+					textx += 10000;
+					textx -= dwgfx.textboxwidth();
+					textx += 16;
+					dwgfx.textboxmoveto(textx);
+				}
+
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx(160);
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
+				}
+
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery(120);
+
+					textcenterline = 0;
+				}
+
+				textcenterline = 0;
+
+				dwgfx.textboxadjust();
+				dwgfx.textboxactive();
+				dwgfx.textboxcreatefast();
+
+				if (!game.backgroundtext)
+				{
+					game.advancetext = true;
+					game.hascontrol = false;
+					game.pausescript = true;
+					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
+				}
+				game.backgroundtext = false;
+			}
+			else if (words[0] == "speak_fast")
+			{
+				// Copied and pasted from the above, again
+				//Exactly as above, except don't make the textbox active (so we can use multiple textboxes)
+				dwgfx.createtextbox(txt[0], textx, texty, r, g, b);
+				if (txtnumlines > 1)
+				{
+					for (i = 1; i < txtnumlines; i++)
+					{
+						dwgfx.addline(txt[i]);
+					}
+				}
+
+				//the textbox cannot be outside the screen. Fix if it is.
+				if (textx <= -1000)
+				{
+					//position to the left of the player
+					textx += 10000;
+					textx -= dwgfx.textboxwidth();
+					textx += 16;
+					dwgfx.textboxmoveto(textx);
+				}
+
+				if (textx == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcenterx(textcenterline);
+					else
+						dwgfx.textboxcenterx();
+
+					// So it doesn't use the same line but Y instead of X for texty=-500
+					textcenterline = 0;
+				}
+
+				if (texty == -500) {
+					if (textcenterline != 0)
+						dwgfx.textboxcentery(textcenterline);
+					else
+						dwgfx.textboxcentery();
+
+					textcenterline = 0;
+				}
+
+				textcenterline = 0;
+
+				dwgfx.textboxadjust();
+				//dwgfx.textboxactive();
+				dwgfx.textboxcreatefast();
+
+				if (!game.backgroundtext)
+				{
+					game.advancetext = true;
+					game.hascontrol = false;
+					game.pausescript = true;
+					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
+				}
+				game.backgroundtext = false;
+			}
 			else if (words[0] == "endtext")
 			{
 				dwgfx.textboxremove();
