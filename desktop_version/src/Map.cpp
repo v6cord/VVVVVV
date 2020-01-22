@@ -1615,7 +1615,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             tower.minitowermode = true;
             minitowersize = ed.tower_size(customtower);
             bscroll = 0;
-            scrolldir = 1;
+            scrolldir = ed.tower_scroll(customtower);
 
             tileset = 1;
             background = 3;

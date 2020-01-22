@@ -178,10 +178,13 @@ public:
 
     int backmatch(int x, int y);
 
-    bool intower(void);
-    int tower_connection(int rx, int ry, bool entering);
+    void enable_tower(void);
+    void snap_tower_entry(int rx, int ry);
     int get_tower(int rx, int ry);
     int tower_size(int tower);
+    int tower_scroll(int tower);
+    bool intower(void);
+    int tower_connection(int rx, int ry, bool entering);
     int entering_tower(int rx, int ry, int *entry);
 
     void load(std::string& _path, Graphics& dwgfx);

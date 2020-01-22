@@ -1801,10 +1801,70 @@ void editorclass::countstuff()
     }
 }
 
+// Performs tasks needed when enabling Tower Mode
+void editorclass::enable_tower(void) {
+    int room = levx + levy*maxwidth;
+
+    // Set Tower Tileset and color 0
+    level[room].tileset = 5;
+    level[room].tilecol = 0;
+
+    /* Place the player at the level's tower destination.
+       Defaults to zero, but might be something else if we've
+       had tower mode enabled in this room previously. */
+    ypos = level[room].tower_row;
+
+    // If we have an adjacant tower room, reuse its tower
+    int rx = levx;
+    int ry = levy;
+    int tower = 0;
+    if (get_tower(rx, ry - 1))
+        tower = get_tower(rx, ry - 1);
+    else if (get_tower(rx, ry + 1))
+        tower = get_tower(rx, ry + 1);
+
+    if (!tower) {
+        // Find an unused tower ID
+        int i;
+        bool unused = false;
+        for (i = 1; i <= 400; i++) {
+            unused = true;
+
+            for (rx = 0; rx < maxwidth && unused; rx++)
+                for (ry = 0; ry < maxheight && unused; ry++)
+                    if (get_tower(rx, ry) == i)
+                        unused = false;
+
+            if (unused)
+                break;
+        }
+
+        tower = i;
+    }
+
+    level[room].tower = tower;
+    snap_tower_entry(levx, levy);
+}
+
+// Move tower entry and editor position within tower boundaries
+void editorclass::snap_tower_entry(int rx, int ry) {
+    int tower = get_tower(rx, ry);
+    int size = tower_size(tower);
+
+    // Snap editor position to the whole tower bottom
+    if (ypos >= size)
+        ypos = size - 30;
+
+    // Snap entry row to the bottom row.
+    // Useful to avoid using the room as exit point.
+    if (level[rx + ry*maxwidth].tower_row >= size)
+        level[rx + ry*maxwidth].tower_row = size - 1;
+}
+
 int editorclass::get_tower(int rx, int ry) {
     /* Returns the tower of this room */
     int room = rx + ry * ed.maxwidth;
-    if (ry < 0 || rx < 0)
+    if (ry < 0 || rx < 0 || rx > maxwidth || ry > maxheight)
         return 0;
 
     return ed.level[room].tower;
@@ -1812,6 +1872,9 @@ int editorclass::get_tower(int rx, int ry) {
 
 int editorclass::tower_size(int tower) {
     return towers[tower-1].size;
+}
+int editorclass::tower_scroll(int tower) {
+    return towers[tower-1].scroll;
 }
 
 bool editorclass::intower(void) {
@@ -2311,11 +2374,6 @@ void editorclass::save(std::string& _path)
                     found = true;
 
         if (!found) {
-            // If this was the last tower, just abort
-            if ((t + 1) >= max_tower)
-                break;
-
-            // Otherwise, delete this tower since it's no longer used
             for (int u = (t + 1); u < max_tower; u++) {
                 towers[u - 1].size = towers[u].size;
                 towers[u - 1].scroll = towers[u].scroll;
@@ -2330,6 +2388,7 @@ void editorclass::save(std::string& _path)
                         level[twx + twy * maxwidth].tower--;
 
             t--;
+            max_tower--;
             continue;
         }
 
@@ -2343,8 +2402,6 @@ void editorclass::save(std::string& _path)
         tw->SetAttribute("scroll", towers[t].scroll);
         tw->LinkEndChild(new TiXmlText(tiles.c_str()));
         msg->LinkEndChild(tw);
-
-        t++;
     }
     data->LinkEndChild(msg);
 
@@ -2790,6 +2847,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         }
     }
 
+    std::string roomstr = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
+    int tower = ed.get_tower(ed.levx, ed.levy);
+    if (tower)
+        roomstr += "T" + help.String(tower);
+    else if (ed.levaltstate != 0)
+        roomstr += "@" + help.String(ed.levaltstate);
+
     //Draw entities
     game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
     ed.entcol=ed.getenemycol(game.customcol);
@@ -3067,10 +3131,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 fillboxabs(dwgfx, (edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(64,64,96));
                 if(ed.tilex+(ed.levx*40)==edentity[i].p1 && ed.tiley+(ed.levy*30)==edentity[i].p2)
                 {
-                    std::string thestring = "("+help.String(((edentity[i].x-int(edentity[i].x%40))/40)+1)+","+help.String(((edentity[i].y-int(edentity[i].y%30))/30)+1)+")";
-                    if (edentity[i].state != 0)
-                        thestring += "@" + help.String(edentity[i].state);
-                    dwgfx.Print((edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8)-8, thestring,190,190,225);
+                    dwgfx.Print((edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8)-8, roomstr,190,190,225);
                 }
                 else
                 {
@@ -3714,13 +3775,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 }
 
                 dwgfx.Print(4, 232, "1/2", 196, 196, 255 - help.glow, false);
-            }
-            else
-            {
+            } else {
                 for(int i=0; i<7; i++)
-                {
                     FillRect(dwgfx.backBuffer, 4+(i*tg), 209,20,20,dwgfx.getRGB(32,32,32));
-                }
                 FillRect(dwgfx.backBuffer, 4+((ed.drawmode-10)*tg), 209,20,20,dwgfx.getRGB(64,64,64));
                 //10:
                 dwgfx.Print(tx,ty,"A",196, 196, 255 - help.glow, false);
@@ -3833,14 +3890,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             FillRect(dwgfx.backBuffer, 260-24,198,80+24,10, dwgfx.getRGB(32,32,32));
             FillRect(dwgfx.backBuffer, 261-24,199,80+24,9, dwgfx.getRGB(0,0,0));
-            std::string thestring = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
-            if (ed.levaltstate != 0)
-                thestring += "@" + help.String(ed.levaltstate);
-            dwgfx.Print(268-24,199, thestring,196, 196, 255 - help.glow, false);
-
-        }
-        else
-        {
+            dwgfx.Print(268-24,199, roomstr, 196, 196, 255 - help.glow, false);
+        } else {
             //FillRect(dwgfx.backBuffer, 0,230,72,240, dwgfx.RGB(32,32,32));
             //FillRect(dwgfx.backBuffer, 0,231,71,240, dwgfx.RGB(0,0,0));
             if(ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname!="")
@@ -3858,18 +3909,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.Print(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 }
                 dwgfx.Print(4, 222, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                std::string thestring = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
-                if (ed.levaltstate != 0)
-                    thestring += "@" + help.String(ed.levaltstate);
-                dwgfx.Print(268-24,222, thestring,196, 196, 255 - help.glow, false);
+                dwgfx.Print(268-24,222, roomstr,196, 196, 255 - help.glow, false);
             }
             else
             {
                 dwgfx.Print(4, 232, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                std::string thestring = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
-                if (ed.levaltstate != 0)
-                    thestring += "@" + help.String(ed.levaltstate);
-                dwgfx.Print(268-24,232, thestring,196, 196, 255 - help.glow, false);
+                dwgfx.Print(268-24,232, roomstr,196, 196, 255 - help.glow, false);
             }
         }
 
@@ -3883,8 +3928,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.Print(4, 100, "F4: Enemy Bounds",164,164,164,false);
             dwgfx.Print(4, 110, "F5: Platform Bounds",164,164,164,false);
 
-            dwgfx.Print(4, 130, "F6: New Alt State",164,164,164,false);
-            dwgfx.Print(4, 140, "F7: Remove Alt State",164,164,164,false);
+            if (tower) {
+                dwgfx.Print(4, 130, "F6: Next Tower",164,164,164,false);
+                dwgfx.Print(4, 140, "F7: Previous Tower",164,164,164,false);
+            } else {
+                dwgfx.Print(4, 130, "F6: New Alt State",164,164,164,false);
+                dwgfx.Print(4, 140, "F7: Remove Alt State",164,164,164,false);
+            }
 
             dwgfx.Print(4, 160, "F8: Tower Mode",164,164,164,false);
 
@@ -4077,6 +4127,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         // || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)
         game.press_action = true;
     };
+
+    int tower = ed.get_tower(ed.levx, ed.levy);
 
     if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
     if (key.isDown(27) && !ed.settingskey)
@@ -4681,12 +4733,22 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         {
             //Shortcut keys
             //TO DO: make more user friendly
-            if (ed.intower() && ed.keydelay==0 &&
-                (key.keymap[SDLK_F1] || key.keymap[SDLK_F2] ||
-                 key.keymap[SDLK_F6] || key.keymap[SDLK_F7] ||
+            if (tower && ed.keydelay==0 &&
+                (key.keymap[SDLK_F2] ||
                  key.keymap[SDLK_w] || key.keymap[SDLK_a])) {
                 ed.notedelay=45;
                 ed.note="Unavailable in Tower Mode";
+                ed.updatetiles=true;
+                ed.keydelay=6;
+            }
+            if (tower && ed.keydelay == 0 &&
+                key.keymap[SDLK_F1]) {
+                ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
+                ed.notedelay=45;
+                if (ed.towers[tower-1].scroll)
+                    ed.note="Tower Scrolling now Upwards";
+                else
+                    ed.note="Tower Scrolling now Downwards";
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
@@ -4783,6 +4845,20 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.boundarytype=2;
                 ed.boundarymod=1;
             }
+            if (tower && ed.keydelay == 0 &&
+                (key.keymap[SDLK_F6] || key.keymap[SDLK_F7])) {
+                if (key.keymap[SDLK_F7]) {
+                    if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1)
+                        ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
+                } else if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < 400)
+                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
+
+                ed.note = "Tower Changed";
+                ed.keydelay = 6;
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.snap_tower_entry(ed.levx, ed.levy);
+            }
             if (key.keymap[SDLK_F6] && ed.keydelay == 0) {
                 int newaltstate = ed.getnumaltstates(ed.levx, ed.levy) + 1;
                 ed.addaltstate(ed.levx, ed.levy, newaltstate);
@@ -4809,13 +4885,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.notedelay = 45;
             }
             if(key.keymap[SDLK_F8] && ed.keydelay==0) {
-                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower==1) {
+                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower) {
                     ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=0;
                     ed.note="Tower Mode Disabled";
                 } else {
-                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=1;
-                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset=5;
-                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
+                    ed.enable_tower();
                     ed.note="Tower Mode Enabled";
                 }
                 dwgfx.backgrounddrawn=false;
