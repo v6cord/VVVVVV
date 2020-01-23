@@ -6481,6 +6481,7 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
         edentityElement->LinkEndChild( new TiXmlText( script.variablecontents[i].c_str() )) ;
         msg->LinkEndChild( edentityElement );
     }
+    msgs->LinkEndChild(msg);
 
     if (!music.custom_file_paths.empty()) {
         std::string tracks;
