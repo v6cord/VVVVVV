@@ -5751,7 +5751,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             if(ed.drawmode==3)
                             {
-                                if(ed.numtrinkets<20)
+                                if(ed.numtrinkets<100)
                                 {
                                     addedentity(tx, ty, 9);
                                     ed.lclickdelay=1;
@@ -5759,7 +5759,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 }
                                 else
                                 {
-                                    ed.note="ERROR: Max number of trinkets is 20";
+                                    ed.note="ERROR: Max number of trinkets is 100";
                                     ed.notedelay=45;
                                 }
                             }
@@ -5838,14 +5838,14 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==15)  //Crewmate
                             {
-                                if(ed.numcrewmates<20)
+                                if(ed.numcrewmates<100)
                                 {
                                     addedentity(tx, ty, 15,
                                                 1 + int(fRandom() * 5));
                                     ed.lclickdelay=1;
                                     ed.numcrewmates++;
                                 } else {
-                                    ed.note="ERROR: Max number of crewmates is 20";
+                                    ed.note="ERROR: Max number of crewmates is 100";
                                     ed.notedelay=45;
                                 }
                             }
@@ -6209,13 +6209,13 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                 && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
                 && edentity[i].state == 0 && edentity[i].intower == 0) {
                     if (edentity[i].t == 9) {
-                        // TODO: If removing the 20 trinkets limit, update this
-                        if (numtrinkets >= 20)
+                        // TODO: If removing the 100 trinkets limit, update this
+                        if (numtrinkets >= 100)
                             continue;
                         numtrinkets++;
                     } else if (edentity[i].t == 15) {
-                        // TODO: If removing the 20 crewmates limit, update this
-                        if (numcrewmates >= 20)
+                        // TODO: If removing the 100 crewmates limit, update this
+                        if (numcrewmates >= 100)
                             continue;
                         numcrewmates++;
                     } else if (edentity[i].t == 16) {
