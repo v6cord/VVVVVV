@@ -6473,14 +6473,14 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msgs->LinkEndChild( msg );
 
 
-    //msg = new TiXmlElement( "variables" );
-    //for (std::size_t i = 0; i < variablenames.size(); i++)
-    //{
-    //    TiXmlElement *edentityElement = new TiXmlElement( "var" );
-    //    edentityElement->SetAttribute( "name", variablenames[i].c_str() );
-    //    edentityElement->LinkEndChild( new TiXmlText( variablecontents[i].c_str() )) ;
-    //    msg->LinkEndChild( edentityElement );
-    //}
+    msg = new TiXmlElement( "variables" );
+    for (std::size_t i = 0; i < script.variablenames.size(); i++)
+    {
+        TiXmlElement *edentityElement = new TiXmlElement( "var" );
+        edentityElement->SetAttribute( "name", script.variablenames[i].c_str() );
+        edentityElement->LinkEndChild( new TiXmlText( script.variablecontents[i].c_str() )) ;
+        msg->LinkEndChild( edentityElement );
+    }
 
     if (!music.custom_file_paths.empty()) {
         std::string tracks;
