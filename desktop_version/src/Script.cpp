@@ -1644,7 +1644,21 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                             case 7:  obj.setenemyroom(k, 18+100, 3+100); break;
                                             case 8:  obj.setenemyroom(k, 16+100, 0+100); break;
                                             case 9:  obj.setenemyroom(k, 14+100, 2+100); break;
-                                            case 10:  obj.setenemyroom(k, 10+100, 7+100); break;
+                                            case 10: obj.setenemyroom(k, 10+100, 7+100); break;
+											case 11: obj.setenemyroom(k, 12+100, 5+100); break; // yes man
+        									case 12: obj.setenemyroom(k, 15+100, 3+100); break; // STOP
+        									case 13: obj.setenemyroom(k, 13+100, 3+100); break; // wave duude
+        									case 14: obj.setenemyroom(k, 15+100, 2+100); break; // numbers
+        									case 15: obj.setenemyroom(k, 16+100, 2+100); break; // the dudes that walk
+        									case 16: obj.setenemyroom(k, 18+100, 2+100); break; // boob
+        									case 17: obj.setenemyroom(k, 18+100, 0+100); break; // OBEY
+        									case 18: obj.setenemyroom(k, 17+100, 3+100); break; // edge games
+        									case 19: obj.setenemyroom(k, 13+100, 6+100); break; // sent over the bottom gottem lmao
+        									case 20: obj.setenemyroom(k, 16+100, 7+100); break; // ghos
+        									case 21: obj.setenemyroom(k, 17+100, 7+100); break; // they b walkin 2.0
+        									case 22: obj.setenemyroom(k, 14+100, 8+100); break; // what the fuck is this
+        									case 23: obj.setenemyroom(k, 11+100, 13+100); break; // TRUTH
+        									case 24: obj.setenemyroom(k, 14+100, 13+100); break; // DABBING SKELETON
                                             default: obj.setenemyroom(k, 4+100, 0+100); break;
                                         }
                                     }

@@ -2762,6 +2762,21 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
           case 8: setenemyroom(k, 16+100, 0+100); break;
           case 9: setenemyroom(k, 14+100, 2+100); break;
           case 10: setenemyroom(k, 10+100, 7+100); break;
+
+          case 11: setenemyroom(k, 12+100, 5+100); break; // yes man
+          case 12: setenemyroom(k, 15+100, 3+100); break; // STOP
+          case 13: setenemyroom(k, 13+100, 3+100); break; // wave duude
+          case 14: setenemyroom(k, 15+100, 2+100); break; // numbers
+          case 15: setenemyroom(k, 16+100, 2+100); break; // the dudes that walk
+          case 16: setenemyroom(k, 18+100, 2+100); break; // boob
+          case 17: setenemyroom(k, 18+100, 0+100); break; // OBEY
+          case 18: setenemyroom(k, 17+100, 3+100); break; // edge games
+          case 19: setenemyroom(k, 13+100, 6+100); break; // sent over the bottom gottem lmao
+          case 20: setenemyroom(k, 16+100, 7+100); break; // ghos
+          case 21: setenemyroom(k, 17+100, 7+100); break; // they b walkin 2.0
+          case 22: setenemyroom(k, 14+100, 8+100); break; // what the fuck is this
+          case 23: setenemyroom(k, 11+100, 13+100); break; // TRUTH
+          case 24: setenemyroom(k, 14+100, 13+100); break; // DABBING SKELETON
           default: setenemyroom(k, 4+100, 0+100); break;
         }
 
