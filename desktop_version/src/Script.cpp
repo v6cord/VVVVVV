@@ -1028,6 +1028,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				dwgfx.showcutscenebars = false;
 			}
+			if (words[0] == "cutscenefast")
+			{
+				dwgfx.showcutscenebars = true;
+				dwgfx.cutscenebarspos = 360;
+			}
 			if (words[0] == "untilbars" || words[0] == "puntilbars")
 			{
 				if (dwgfx.showcutscenebars)
