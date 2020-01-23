@@ -176,3 +176,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `textboxtimer(n)` - fades out the text box after *n* frames, use this after a `speak`, `speak_active`, `speak_fast`, or `speak_active_fast`
 
 - `befadeout()` - instantly make the screen black
+
+- `cutscenefast()` - instantly appear cutscene bars

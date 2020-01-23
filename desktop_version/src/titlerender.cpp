@@ -226,6 +226,8 @@ growing_vector<std::string> changelog = {
     "  speak_active_fast",
     "- befadeout() - instantly make the",
     "  screen black",
+    "- cutscenefast() - instantly appear",
+    "  cutscene bars",
 
 };
 
