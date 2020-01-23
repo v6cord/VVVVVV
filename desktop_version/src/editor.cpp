@@ -266,30 +266,30 @@ void editorclass::reset()
     {
         for (int i = 0; i < 20; i++)
         {
-            level[i+(j*maxwidth)].tileset=0;
-            level[i+(j*maxwidth)].tilecol=(i+j)%32;
-            level[i+(j*maxwidth)].roomname="";
-            level[i+(j*maxwidth)].warpdir=0;
-            level[i+(j*maxwidth)].platx1=0;
-            level[i+(j*maxwidth)].platy1=0;
-            level[i+(j*maxwidth)].platx2=320;
-            level[i+(j*maxwidth)].platy2=240;
-            level[i+(j*maxwidth)].platv=4;
-            level[i+(j*maxwidth)].enemyx1=0;
-            level[i+(j*maxwidth)].enemyy1=0;
-            level[i+(j*maxwidth)].enemyx2=320;
-            level[i+(j*maxwidth)].enemyy2=240;
-            level[i+(j*maxwidth)].directmode=0;
-            level[i+(j*maxwidth)].tower=0;
-            level[i+(j*maxwidth)].tower_row=0;
+            level[i+(j*20)].tileset=0;
+            level[i+(j*20)].tilecol=(i+j)%32;
+            level[i+(j*20)].roomname="";
+            level[i+(j*20)].warpdir=0;
+            level[i+(j*20)].platx1=0;
+            level[i+(j*20)].platy1=0;
+            level[i+(j*20)].platx2=320;
+            level[i+(j*20)].platy2=240;
+            level[i+(j*20)].platv=4;
+            level[i+(j*20)].enemyx1=0;
+            level[i+(j*20)].enemyy1=0;
+            level[i+(j*20)].enemyx2=320;
+            level[i+(j*20)].enemyy2=240;
+            level[i+(j*20)].directmode=0;
+            level[i+(j*20)].tower=0;
+            level[i+(j*20)].tower_row=0;
         }
     }
 
-    for (int j = 0; j < 30 * maxwidth; j++)
+    for (int j = 0; j < 30 * 20; j++)
     {
         for (int i = 0; i < 40 * maxheight; i++)
         {
-            contents[i+(j*30*maxwidth)]=0;
+            contents[i+(j*30*20)]=0;
         }
     }
 
@@ -1701,12 +1701,14 @@ int editorclass::spikedir( int x, int y )
     return 8;
 }
 
-int editorclass::towerspikedir( int x, int y )
-{
-    if(free(x,y+1)==1) return 8;
-    if(free(x,y-1)==1) return 9;
-    if(free(x-1,y)==1) return 10;
-    if(free(x+1,y)==1) return 11;
+int editorclass::towerspikedir(int x, int y) {
+    if (ed.intower())
+        y += ed.ypos;
+
+    if(towerfree(x,y+1) == 1) return 8;
+    if(towerfree(x,y-1) == 1) return 9;
+    if(towerfree(x-1,y) == 1) return 10;
+    if(towerfree(x+1,y) == 1) return 11;
     return 8;
 }
 
