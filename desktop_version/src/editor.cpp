@@ -4989,13 +4989,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 (key.keymap[SDLK_PLUS] || key.keymap[SDLK_KP_PLUS] ||
                  key.keymap[SDLK_EQUALS] || key.keymap[SDLK_KP_EQUALS])) {
                 ed.ypos++;
-                ed.keydelay = 2;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if (tower && ed.keydelay == 0 &&
                 (key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS])) {
                 ed.ypos--;
-                ed.keydelay = 2;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
