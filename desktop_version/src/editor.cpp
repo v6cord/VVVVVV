@@ -2083,6 +2083,11 @@ void editorclass::shift_tower(int tower, int y) {
 
 int editorclass::get_tower(int rx, int ry) {
     /* Returns the tower of this room */
+    if (rx >= 100)
+        rx -= 100;
+    if (ry >= 100)
+        ry -= 100;
+
     int room = rx + ry * ed.maxwidth;
     if (ry < 0 || rx < 0 || rx >= maxwidth || ry >= maxheight)
         return 0;

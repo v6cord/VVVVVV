@@ -849,10 +849,26 @@ void mapclass::showship()
     explored[4 + (11 * 20)] = 1;
 }
 
-void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
-{
-    if (game.roomx != game.saverx || game.roomy != game.savery)
-    {
+void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
+                           musicclass& music) {
+    // Possibly warp if we died in a different room than our checkpoint is
+    bool room_different = true;
+
+    // No maingame towers are within the same column
+    if (towermode && !custommode && game.roomx == game.saverx)
+        room_different = false;
+
+    // For custom towers, they might be, so verify tower ID
+    if (minitowermode && custommode &&
+        ed.get_tower(game.roomx, game.roomy) ==
+        ed.get_tower(game.saverx, game.savery))
+        room_different = false;
+
+    // Obviously, identical death room and checkpoint room isn't different
+    if (game.roomx == game.saverx && game.roomy == game.savery)
+        room_different = false;
+
+    if (room_different) {
         gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
         // If in finalstretch, update the colors of entities immediately
         if (custommode && finalstretch)
