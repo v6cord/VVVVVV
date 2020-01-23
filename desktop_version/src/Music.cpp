@@ -433,7 +433,11 @@ void musicclass::niceplay(int t)
 	// important: do nothing if the correct song is playing!
 	if(currentsong!=t)
 	{
-		fadeout();
+		if(currentsong!=-1)
+		{
+			dontquickfade = true;
+			fadeout();
+		}
 		nicefade = 1;
 		nicechange = t;
 	}
