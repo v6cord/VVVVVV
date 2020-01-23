@@ -5442,6 +5442,27 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             nosuicide = atoi(pText);
         }
+        else if (pKey == "variables")
+        {
+            for (TiXmlElement* varEl = pElem->FirstChildElement(); varEl; varEl = pElem->NextSiblingElement()) {
+                std::string pKey(varEl->Value());
+                const char* pText = varEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                // Do we NEED the parentheses around `pText`? Whatever
+                std::string TextString = (pText);
+
+                if (TextString.length()) {
+                    const char* cStrName;
+                    cStrName = varEl->Attribute("name");
+                    std::string name = (cStrName);
+                    script.variablenames.push_back(name);
+                    script.variablecontents.push_back(TextString);
+                }
+            }
+        }
         else if (pKey == "customtracks")
         {
             std::string TextString = (pText);
