@@ -2002,6 +2002,11 @@ void editorclass::shift_tower(int tower, int y) {
         }
     }
 
+    // Shift entities
+    for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
+        if (tower == edentity[i].intower)
+            edentity[i].y += y;
+
     // Shift editor scroll position
     ypos += y;
 
