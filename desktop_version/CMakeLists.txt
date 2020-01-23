@@ -122,6 +122,7 @@ SET(VVV_SRC
 	src/SteamNetwork.c
 	src/GOGNetwork.c
         ${CMAKE_BINARY_DIR}/v6cord.png.c
+	src/Utilities.cpp
 )
 SET(XML_SRC
 	../third_party/tinyxml/tinystr.cpp
