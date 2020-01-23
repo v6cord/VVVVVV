@@ -1713,10 +1713,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
             int ix = rx - 100;
             int iy;
-            for (iy = ry - 100; iy >= 0; iy--)
-                if (ed.get_tower(ix, iy) == customtower)
-                    explored[ix + iy*20] = 1;
-            for (iy = ry - 100; iy < ed.maxheight; iy++)
+            for (iy = 0; iy < ed.maxheight; iy++)
                 if (ed.get_tower(ix, iy) == customtower)
                     explored[ix + iy*20] = 1;
         } else {
