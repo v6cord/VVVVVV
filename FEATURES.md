@@ -178,3 +178,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `befadeout()` - instantly make the screen black
 
 - `cutscenefast()` - instantly appear cutscene bars
+
+- `endcutscenefast()` - instantly remove cutscene bars

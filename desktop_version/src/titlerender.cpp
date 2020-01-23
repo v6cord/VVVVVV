@@ -228,6 +228,8 @@ growing_vector<std::string> changelog = {
     "  screen black",
     "- cutscenefast() - instantly appear",
     "  cutscene bars",
+    "- endcutscenefast() - instantly remove",
+    "  cutscene bars",
 
 };
 
