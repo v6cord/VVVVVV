@@ -121,16 +121,17 @@ void scriptclass::tokenize( std::string t )
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
-
-		if (currentletter == " ") {
-
-		} else if (((currentletter == "=") ||
+		if ((currentletter == "(") ||
+		   (currentletter == ",") ||
+		   (currentletter == ")")) {
+			   break;
+	    } else if (((currentletter == "=") ||
 		   (currentletter == "+") ||
 		   (currentletter == "-")) &&
 		   !readop) {
 			op += currentletter;
 			readingrest = true;
-		} else {
+		} else if (currentletter != " ") {
 			if (readingrest) {
 				rest += currentletter;
 				readop = true;
