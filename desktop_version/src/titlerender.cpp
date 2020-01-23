@@ -224,6 +224,8 @@ growing_vector<std::string> changelog = {
     "  box after n frames, use this after a",
     "  speak, speak_active, speak_fast, or",
     "  speak_active_fast",
+    "- befadeout() - instantly make the",
+    "  screen black",
 
 };
 
