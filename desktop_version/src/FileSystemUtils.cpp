@@ -1,6 +1,7 @@
 #include "FileSystemUtils.h"
 #include <vector>
 #include "Game.h"
+#include "Utilities.h"
 #include <string>
 
 #include <stdio.h>
@@ -65,14 +66,14 @@ int FILESYSTEM_init(char *argvZero)
 	printf("Base directory: %s\n", output);
 
 	/* Create save directory */
-	strcpy(saveDir, output);
+	strcpy_safe(saveDir, output);
 	strcat(saveDir, "saves");
 	strcat(saveDir, PHYSFS_getDirSeparator());
 	mkdir(saveDir, 0777);
 	printf("Save directory: %s\n", saveDir);
 
 	/* Create level directory */
-	strcpy(levelDir, output);
+	strcpy_safe(levelDir, output);
 	strcat(levelDir, "levels");
 	strcat(levelDir, PHYSFS_getDirSeparator());
 	mkdirResult |= mkdir(levelDir, 0777);
@@ -107,7 +108,7 @@ int FILESYSTEM_init(char *argvZero)
             return 0;
         }
 #else
-	strcpy(output, PHYSFS_getBaseDir());
+	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
 #endif
 	if (!PHYSFS_mount(output, NULL, 1))
@@ -133,8 +134,8 @@ int FILESYSTEM_init(char *argvZero)
         CFRelease(appUrlRef);
 #endif
 
-	strcpy(output, PHYSFS_getBaseDir());
-	strcpy(output, "gamecontrollerdb.txt");
+	strcpy_safe(output, PHYSFS_getBaseDir());
+	strcpy_safe(output, "gamecontrollerdb.txt");
 	if (SDL_GameControllerAddMappingsFromFile(output) < 0)
 	{
 		printf("gamecontrollerdb.txt not found!\n");
@@ -263,7 +264,7 @@ void PLATFORM_getOSDirectory(char* output)
 	WideCharToMultiByte(CP_UTF8, 0, utf16_path, -1, output, MAX_PATH, NULL, NULL);
 	strcat(output, "\\VVVVVV\\");
 #else
-	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
+	strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif
 }
 
@@ -284,7 +285,7 @@ void PLATFORM_migrateSaveData(char* output)
 		/* Uhh, I don't want to get near this. -flibit */
 		return;
 	}
-	strcpy(oldDirectory, homeDir);
+	strcpy_safe(oldDirectory, homeDir);
 #if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
 	strcat(oldDirectory, "/.vvvvvv/");
 #elif defined(__APPLE__)
@@ -308,9 +309,9 @@ void PLATFORM_migrateSaveData(char* output)
 		#define COPY_SAVEFILE(name) \
 			else if (strcmp(de->d_name, name) == 0) \
 			{ \
-				strcpy(oldLocation, oldDirectory); \
+				strcpy_safe(oldLocation, oldDirectory); \
 				strcat(oldLocation, name); \
-				strcpy(newLocation, output); \
+				strcpy_safe(newLocation, output); \
 				strcat(newLocation, "saves/"); \
 				strcat(newLocation, name); \
 				PLATFORM_copyFile(oldLocation, newLocation); \
@@ -321,25 +322,25 @@ void PLATFORM_migrateSaveData(char* output)
 		#undef COPY_SAVEFILE
 		else if (strstr(de->d_name, ".vvvvvv.vvv") != NULL)
 		{
-			strcpy(oldLocation, oldDirectory);
+			strcpy_safe(oldLocation, oldDirectory);
 			strcat(oldLocation, de->d_name);
-			strcpy(newLocation, output);
+			strcpy_safe(newLocation, output);
 			strcat(newLocation, "saves/");
 			strcat(newLocation, de->d_name);
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 		else if (strstr(de->d_name, ".vvvvvv") != NULL)
 		{
-			strcpy(oldLocation, oldDirectory);
+			strcpy_safe(oldLocation, oldDirectory);
 			strcat(oldLocation, de->d_name);
-			strcpy(newLocation, output);
+			strcpy_safe(newLocation, output);
 			strcat(newLocation, "levels/");
 			strcat(newLocation, de->d_name);
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 		else if (strcmp(de->d_name, "Saves") == 0)
 		{
-			strcpy(subDirLocation, oldDirectory);
+			strcpy_safe(subDirLocation, oldDirectory);
 			strcat(subDirLocation, "Saves/");
 			subDir = opendir(subDirLocation);
 			if (!subDir)
@@ -355,9 +356,9 @@ void PLATFORM_migrateSaveData(char* output)
 				#define COPY_SAVEFILE(name) \
 					(strcmp(subDe->d_name, name) == 0) \
 					{ \
-						strcpy(oldLocation, subDirLocation); \
+						strcpy_safe(oldLocation, subDirLocation); \
 						strcat(oldLocation, name); \
-						strcpy(newLocation, output); \
+						strcpy_safe(newLocation, output); \
 						strcat(newLocation, "saves/"); \
 						strcat(newLocation, name); \
 						PLATFORM_copyFile(oldLocation, newLocation); \
@@ -375,7 +376,7 @@ void PLATFORM_migrateSaveData(char* output)
 	char fileSearch[MAX_PATH + 9];
 
 	/* Same place, different layout. */
-	strcpy(oldDirectory, output);
+	strcpy_safe(oldDirectory, output);
 
 	/* In theory we don't need to worry about this, thanks case insensitivity!
 	sprintf(fileSearch, "%s\\Saves\\*.vvv", oldDirectory);
@@ -391,10 +392,10 @@ void PLATFORM_migrateSaveData(char* output)
 			#define COPY_SAVEFILE(name) \
 				(strcmp(findHandle.cFileName, name) == 0) \
 				{ \
-					strcpy(oldLocation, oldDirectory); \
+					strcpy_safe(oldLocation, oldDirectory); \
 					strcat(oldLocation, "Saves\\"); \
 					strcat(oldLocation, name); \
-					strcpy(newLocation, output); \
+					strcpy_safe(newLocation, output); \
 					strcat(newLocation, "saves\\"); \
 					strcat(newLocation, name); \
 					PLATFORM_copyFile(oldLocation, newLocation); \
@@ -417,9 +418,9 @@ void PLATFORM_migrateSaveData(char* output)
 	{
 		if ((findHandle.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 		{
-			strcpy(oldLocation, oldDirectory);
+			strcpy_safe(oldLocation, oldDirectory);
 			strcat(oldLocation, findHandle.cFileName);
-			strcpy(newLocation, output);
+			strcpy_safe(newLocation, output);
 			strcat(newLocation, "levels\\");
 			strcat(newLocation, findHandle.cFileName);
 			PLATFORM_copyFile(oldLocation, newLocation);
