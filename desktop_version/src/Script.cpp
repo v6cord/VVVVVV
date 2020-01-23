@@ -647,6 +647,76 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					}
 				}
 			}
+            if (words[0] == "ifvar")
+            {
+                int varid = getvar(words[1]);
+				if (varid != -1)
+                {
+                    if (words[4] == "") //fourth argument doesn't exist: this is a string
+                    {
+                        printf("ifvar: Is a string, checking for %s\n",words[2].c_str());
+                        position++;
+                        if (words[2] == "equal")
+                        {
+                            if (variablecontents[varid] == processvars(commands[position]))
+                            {
+                                call(words[3]);
+                            }
+                        }
+                        if (words[2] == "notequal")
+                        {
+                            if (variablecontents[varid] != processvars(commands[position]))
+                            {
+                                call(words[3]);
+                            }
+                        }
+                    } else { // fourth argument does exist, this is an integer
+                        printf("ifvar: Is an integer, checking for %s\n",words[2].c_str());
+                        if (words[2] == "equal")
+                        {
+                            if (variablecontents[varid] == words[3])
+                            {
+                                call(words[4]);
+                            }
+                        }
+                        if (words[2] == "notequal")
+                        {
+                            if (variablecontents[varid] != words[3])
+                            {
+                                call(words[4]);
+                            }
+                        }
+                        if (words[2] == "less")
+                        {
+                            if (variablecontents[varid] < words[3])
+                            {
+                                call(words[4]);
+                            }
+                        }
+                        if (words[2] == "lesseq")
+                        {
+                            if (variablecontents[varid] <= words[3])
+                            {
+                                call(words[4]);
+                            }
+                        }
+                        if (words[2] == "greater")
+                        {
+                            if (variablecontents[varid] > words[3])
+                            {
+                                call(words[4]);
+                            }
+                        }
+                        if (words[2] == "greatereq")
+                        {
+                            if (variablecontents[varid] >= words[3])
+                            {
+                                call(words[4]);
+                            }
+                        }
+                    }
+                }
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)
