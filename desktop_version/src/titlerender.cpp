@@ -230,6 +230,9 @@ growing_vector<std::string> changelog = {
     "  cutscene bars",
     "- endcutscenefast() - instantly remove",
     "  cutscene bars",
+    "- setvar(name [, contents]) - set a",
+    "  variable to a given argument, or to",
+    "  whatever is on the next line",
 
 };
 
