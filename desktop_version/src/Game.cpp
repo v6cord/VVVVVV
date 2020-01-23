@@ -6474,8 +6474,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
 
     msg = new TiXmlElement( "variables" );
-    for (std::size_t i = 0; i < script.variablenames.size(); i++)
-    {
+    for (std::size_t i = 0; i < script.variablenames.size(); i++) {
+        if (script.variablenames[i].empty())
+            continue;
+
         TiXmlElement *varEl = new TiXmlElement( "var" );
         varEl->SetAttribute( "name", script.variablenames[i].c_str() );
         varEl->LinkEndChild( new TiXmlText( script.variablecontents[i].c_str() )) ;
