@@ -2125,7 +2125,10 @@ int editorclass::tower_connection(int *rx, int *ry, int ypos) {
 
     /* Iterate all rooms connected to this tower and figure out our exit
        position. */
-    for (iy = riy; tower == get_tower(ix, iy); iy--) {
+    for (iy = riy; iy >= 0; iy--) {
+        if (tower != get_tower(ix, iy))
+            continue;
+
         rpos = level[ix + iy*maxwidth].tower_row * 8;
         if (ypos >= rpos && ypos < rpos + 240) {
             *ry += (iy - riy);
@@ -2133,7 +2136,10 @@ int editorclass::tower_connection(int *rx, int *ry, int ypos) {
         }
     }
 
-    for (iy = riy; tower == get_tower(ix, iy); iy++) {
+    for (iy = riy; iy < maxwidth; iy++) {
+        if (tower != get_tower(ix, iy))
+            continue;
+
         rpos = level[ix + iy*maxwidth].tower_row * 8;
         if (ypos >= rpos && ypos < rpos + 240) {
             *ry = (iy - riy);
