@@ -112,6 +112,42 @@ void scriptclass::tokenize( std::string t )
 	tempword = "";
     words.clear();
 
+	std::string varname = "";
+	std::string op = "";
+	std::string rest = "";
+	bool readop = false;
+	bool readingrest = false;
+
+	for (size_t i = 0; i < t.length(); i++)
+	{
+		currentletter = t.substr(i, 1);
+
+		if (currentletter == " ") {
+
+		} else if (((currentletter == "=") ||
+		   (currentletter == "+") ||
+		   (currentletter == "-")) &&
+		   !readop) {
+			op += currentletter;
+			readingrest = true;
+		} else {
+			if (readingrest) {
+				rest += currentletter;
+				readop = true;
+			} else {
+				varname += currentletter;
+			}
+		}
+	}
+
+	if (op == "+=") t = "addvar(" + varname + "," + rest + ")";
+	if (op == "++") t = "addvar(" + varname + ",1)";
+	if (op == "-=") t = "addvar(" + varname + ",-" + rest + ")";
+	if (op == "--") t = "addvar(" + varname + ",-1)";
+	if (op == "=")  t = "setvar(" + varname + "," + rest + ")";
+
+	tempword = "";
+
 	t = processvars(t);
     
 	for (size_t i = 0; i < t.length(); i++)
@@ -133,8 +169,8 @@ void scriptclass::tokenize( std::string t )
 		}
 	}
 
-        words.push_back(tempword);
-        words.push_back("");
+    words.push_back(tempword);
+    words.push_back("");
 }
 
 void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
