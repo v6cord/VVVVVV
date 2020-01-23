@@ -67,10 +67,10 @@ int scriptclass::getvar(std::string n) {
 }
 
 std::string scriptclass::processvars(std::string t) {
-	tempstring = "";
-	tempvar = "";
-	readingvar = false;
-	foundvar = false;
+	std::string tempstring = "";
+	std::string tempvar = "";
+	bool readingvar = false;
+	bool foundvar = false;
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);

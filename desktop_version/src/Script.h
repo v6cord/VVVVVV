@@ -95,10 +95,6 @@ public:
 
     growing_vector<std::string> variablenames;
     growing_vector<std::string> variablecontents;
-    bool readingvar = false;
-    bool foundvar = false;
-    std::string tempvar;
-    std::string tempstring;
 
     std::vector<stackframe> callstack;
 };
