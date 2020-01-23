@@ -117,6 +117,7 @@ void scriptclass::tokenize( std::string t )
 	std::string rest = "";
 	bool readop = false;
 	bool readingrest = false;
+	bool parseops = true;
 
 	for (size_t i = 0; i < t.length(); i++)
 	{
@@ -124,6 +125,7 @@ void scriptclass::tokenize( std::string t )
 		if ((currentletter == "(") ||
 		   (currentletter == ",") ||
 		   (currentletter == ")")) {
+			   parseops = false;
 			   break;
 	    } else if (((currentletter == "=") ||
 		   (currentletter == "+") ||
@@ -140,12 +142,13 @@ void scriptclass::tokenize( std::string t )
 			}
 		}
 	}
-
-	if (op == "+=") t = "addvar(" + varname + "," + rest + ")";
-	if (op == "++") t = "addvar(" + varname + ",1)";
-	if (op == "-=") t = "addvar(" + varname + ",-" + rest + ")";
-	if (op == "--") t = "addvar(" + varname + ",-1)";
-	if (op == "=")  t = "setvar(" + varname + "," + rest + ")";
+	if (parseops) {
+		if (op == "+=") t = "addvar(" + varname + "," + rest + ")";
+		if (op == "++") t = "addvar(" + varname + ",1)";
+		if (op == "-=") t = "addvar(" + varname + ",-" + rest + ")";
+		if (op == "--") t = "addvar(" + varname + ",-1)";
+		if (op == "=")  t = "setvar(" + varname + "," + rest + ")";
+	}
 
 	tempword = "";
 
