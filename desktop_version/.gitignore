@@ -1,5 +1,6 @@
 # Build objects
-build/
+build*
+!build.sh
 flibitBuild/
 CMakeCache.txt
 CMakeFiles/

@@ -8,7 +8,7 @@ let pkgsNative = import (builtins.fetchTarball {
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
   pkgs.callPackage (
-    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig}:
+    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig, ninja}:
     (mkShell.override { inherit stdenv; }) (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
         outputs = ["out"];
         outputBin = "out";
@@ -17,7 +17,13 @@ in
         };
         postInstall = "rm $out/lib/*.la";
       }); in {
-      nativeBuildInputs = [ cmake pkgconfig ]; # you build dependencies here
+      nativeBuildInputs = [
+        cmake # build generator
+        pkgconfig # find fribidi
+        ninja # this isn't needed on CI, but it's annoying to disable
+        pkgsNative.gdb # we don't want a cross gdb
+        pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
+      ];
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl
         ((SDL2_mixer.override {
