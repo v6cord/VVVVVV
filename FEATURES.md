@@ -182,3 +182,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `endcutscenefast()` - instantly remove cutscene bars
 
 - `setvar(name [, contents])` - set a variable to a given argument, or to whatever is on the next line
+
+- `addvar(name [, value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
