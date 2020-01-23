@@ -164,7 +164,9 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
         }
         else if (map.cameramode == 4)
         {
+            // Reset player position from checkpoint
             int i = obj.getplayer();
+            obj.entities[i].yp = game.savey;
             map.cameraseek = map.ypos - (obj.entities[i].yp - 120);
 
             map.cameraseek = map.cameraseek / 10;
@@ -176,12 +178,15 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
         }
         else if (map.cameramode == 5)
         {
-            //actually do it
+            // Reset player position from checkpoint
+            int i = obj.getplayer();
+            obj.entities[i].yp = game.savey;
+
+            // Realign tower
             if (map.spikeleveltop > 0) map.spikeleveltop-=2;
             if (map.spikelevelbottom > 0) map.spikelevelbottom-=2;
             if (map.cameraseekframe > 0)
             {
-                int i = obj.getplayer();
                 map.ypos -= map.cameraseek;
                 if (map.cameraseek > 0)
                 {
@@ -257,6 +262,9 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
             }
             else
             {
+                // Reset player position from checkpoint
+                int i = obj.getplayer();
+                obj.entities[i].yp = game.savey;
                 map.resumedelay--;
             }
         }
