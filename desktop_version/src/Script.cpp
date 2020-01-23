@@ -647,7 +647,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					}
 				}
 			}
-            if (words[0] == "ifvar") || (words[0] == "if")
+            if ((words[0] == "ifvar") || (words[0] == "if"))
             {
                 int varid = getvar(words[1]);
 				if (varid != -1)
