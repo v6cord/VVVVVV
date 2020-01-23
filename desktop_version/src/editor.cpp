@@ -3096,7 +3096,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
         if (edentity[i].state != ed.levaltstate ||
             edentity[i].intower != tower ||
-            ex < 0 || ex >= 320 || ey < 0 || ey >= 240)
+            (!tower && (ex < 0 || ex >= 320 || ey < 0 || ey >= 240)))
             continue;
 
         switch(edentity[i].t) {
