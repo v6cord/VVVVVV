@@ -55,17 +55,17 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - Added a seventh argument to `createcrewman`, if it is `flip` it spawns a flipped crewmate
 
-- `fatal_left()` - Makes the left side of the screen deadly
+- `fatal_left()` - makes the left side of the screen deadly
 
-- `fatal_right()` - Makes the right side of the screen deadly
+- `fatal_right()` - makes the right side of the screen deadly
 
-- `fatal_top()` - Makes the top of the screen deadly
+- `fatal_top()` - makes the top of the screen deadly
 
-- `fatal_bottom()` - Makes the bottom of the screen deadly
+- `fatal_bottom()` - makes the bottom of the screen deadly
 
-- `ifrand(n,script)` - Has a 1 in *n* chance to execute the script
+- `ifrand(n,script)` - has a 1 in *n* chance to execute the script
 
-- `gotocheckpoint()` - Teleports the player to their last checkpoint
+- `gotocheckpoint()` - teleports the player to their last checkpoint
 
 - Added 6th argument to `createentity` that sets the raw color
 
@@ -143,9 +143,9 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifvce()` - detect if game is VVVVVV: Community Edition or not
 
-- `disablesuicide` - Disable pressing R
+- `disablesuicide` - disable pressing R
 
-- `enablesuicide` - Enable pressing R
+- `enablesuicide` - enable pressing R
 
 - `customactivityzone(x,y,w,h,color,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, prompt goes on the next line
 
@@ -153,9 +153,9 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - Fixed the 2-frame delay to execute a script when entering a room
 
-- `position(centerx,<line>)` - Horizontally center the text box around the line x=\<line>
+- `position(centerx,<line>)` - horizontally center the text box around the line x=\<line>
 
-- `position(centery,<line>)` - Vertically center the text box around the line y=\<line>
+- `position(centery,<line>)` - vertically center the text box around the line y=\<line>
 
 - Added the Tower tileset
 
@@ -163,14 +163,16 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - Added an "open level folder" option to the "player levels" screen
 
-- `reloadcustomactivityzones()` - Reload all non-terminal activity zones
+- `reloadcustomactivityzones()` - reload all non-terminal activity zones
 
-- `reloadterminalactivityzones()` - Reload all terminal activity zones
+- `reloadterminalactivityzones()` - reload all terminal activity zones
 
-- `reloadactivityzones()` - Reload all activity zones, regardless of what they are
+- `reloadactivityzones()` - reload all activity zones, regardless of what they are
 
-- `speak_fast` - Remove text box fade-in
+- `speak_fast` - remove text box fade-in
 
-- `speak_active_fast` - Remove text box fade-in, while also removing all other text boxes
+- `speak_active_fast` - remove text box fade-in, while also removing all other text boxes
 
-- `textboxtimer(n)` - Fades out the text box after *n* frames, use this after a `speak`, `speak_active`, `speak_fast`, or `speak_active_fast`
+- `textboxtimer(n)` - fades out the text box after *n* frames, use this after a `speak`, `speak_active`, `speak_fast`, or `speak_active_fast`
+
+- `befadeout()` - instantly make the screen black
