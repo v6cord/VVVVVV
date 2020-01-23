@@ -2440,6 +2440,7 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if(dwgfx.setflipmode) dwgfx.flipmode = true;
                 dwgfx.fademode = 2;
                 music.fadeout();
+                map.nexttowercolour();
             }
         }
 

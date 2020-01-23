@@ -4265,6 +4265,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
   game.hascontrol = true;
   game.advancetext = false;
 
+	game.pausescript = false;
+
 	game.noflip = false;
 	game.infiniflip = false;
 
