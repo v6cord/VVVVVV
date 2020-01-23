@@ -585,7 +585,7 @@ void editorclass::loadlevel( int rxi, int ryi, int altstate )
 
 int editorclass::getlevelcol(int t)
 {
-    if(level[t].tileset==0 || level[t].tileset==2)  //Station or Tower
+    if(level[t].tileset==0 || level[t].tileset==5)  //Station or Tower
     {
         return level[t].tilecol;
     }
