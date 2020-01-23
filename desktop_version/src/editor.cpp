@@ -1358,21 +1358,25 @@ int editorclass::absfree( int x, int y )
 
 int editorclass::match( int x, int y )
 {
-    if(free(x-1,y)==0 && free(x,y-1)==0 && free(x+1,y)==0 && free(x,y+1)==0) return 0;
+    if (ed.intower())
+        y += ed.ypos;
 
-    if(free(x-1,y)==0 && free(x,y-1)==0) return 10;
-    if(free(x+1,y)==0 && free(x,y-1)==0) return 11;
-    if(free(x-1,y)==0 && free(x,y+1)==0) return 12;
-    if(free(x+1,y)==0 && free(x,y+1)==0) return 13;
+    if(towerfree(x-1,y)==0 && towerfree(x,y-1)==0 &&
+       towerfree(x+1,y)==0 && towerfree(x,y+1)==0) return 0;
 
-    if(free(x,y-1)==0) return 1;
-    if(free(x-1,y)==0) return 2;
-    if(free(x,y+1)==0) return 3;
-    if(free(x+1,y)==0) return 4;
-    if(free(x-1,y-1)==0) return 5;
-    if(free(x+1,y-1)==0) return 6;
-    if(free(x-1,y+1)==0) return 7;
-    if(free(x+1,y+1)==0) return 8;
+    if(towerfree(x-1,y)==0 && towerfree(x,y-1)==0) return 10;
+    if(towerfree(x+1,y)==0 && towerfree(x,y-1)==0) return 11;
+    if(towerfree(x-1,y)==0 && towerfree(x,y+1)==0) return 12;
+    if(towerfree(x+1,y)==0 && towerfree(x,y+1)==0) return 13;
+
+    if(towerfree(x,y-1)==0) return 1;
+    if(towerfree(x-1,y)==0) return 2;
+    if(towerfree(x,y+1)==0) return 3;
+    if(towerfree(x+1,y)==0) return 4;
+    if(towerfree(x-1,y-1)==0) return 5;
+    if(towerfree(x+1,y-1)==0) return 6;
+    if(towerfree(x-1,y+1)==0) return 7;
+    if(towerfree(x+1,y+1)==0) return 8;
 
     return 0;
 }
@@ -1447,7 +1451,7 @@ int editorclass::backmatch( int x, int y )
     return 0;
 }
 
-int editorclass::toweredgetile( int x, int y )
+int editorclass::toweredgetile(int x, int y)
 {
     switch(match(x,y))
     {
@@ -4934,11 +4938,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 (key.keymap[SDLK_PLUS] || key.keymap[SDLK_KP_PLUS] ||
                  key.keymap[SDLK_EQUALS] || key.keymap[SDLK_KP_EQUALS])) {
                 ed.ypos++;
+                ed.keydelay = 2;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if (tower && ed.keydelay == 0 &&
                 (key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS])) {
                 ed.ypos--;
+                ed.keydelay = 2;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
