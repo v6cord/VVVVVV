@@ -35,6 +35,10 @@ ENDIF()
 # Compiler Flags
 ADD_DEFINITIONS(-DPHYSFS_SUPPORTS_DEFAULT=0 -DPHYSFS_SUPPORTS_ZIP=1)
 
+if (MINGW OR MSYS)
+    add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+endif()
+
 # RPATH
 IF(NOT WIN32)
 	IF(APPLE)
@@ -184,7 +188,7 @@ TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static fribidi
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
-        message(STATUS "Building using MingW SDL libraries")
+        message(STATUS "Building using MinGW SDL libraries")
 	target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
 	target_link_libraries(VVVVVV SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
 elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
