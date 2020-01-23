@@ -2740,12 +2740,6 @@ void removeedentity( int t )
 }
 
 int edentat(int x, int y, int state, int tower) {
-    if (!tower) {
-        x += ed.levx * 40;
-        y += ed.levy * 30;
-    } else
-        y += ed.ypos;
-
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
         if (edentity[i].x==x && edentity[i].y==y &&
             edentity[i].state==state && edentity[i].intower==tower)
@@ -3060,7 +3054,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
     obj.customplatformtile=game.customcol*12;
 
-    ed.temp=edentat(ed.tilex, ed.tiley, ed.levaltstate, tower);
+    int tx = ed.tilex;
+    int ty = ed.tiley;
+    if (!tower) {
+        tx += ed.levx * 40;
+        ty += ed.levy * 30;
+    } else
+        ty += ed.ypos;
+
+    ed.temp=edentat(tx, ty, ed.levaltstate, tower);
     for(int i=0; i< EditorData::GetInstance().numedentities; i++) {
         // Entity locations
         int ex = edentity[i].x;
@@ -3075,9 +3077,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         ey *= 8;
 
         // Warp line/gravity line area
-        int tx = ex / 8;
+        tx = ex / 8;
+        ty = ey / 8;
         int tx2 = ex / 8;
-        int ty = ey / 8;
         int ty2 = ey / 8;
         if (tower) {
             ty += ed.ypos;
@@ -5606,9 +5608,15 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.warpmod=false;
                     ed.warpent=-1;
                 }
-            }
-            else
-            {
+            } else {
+                int tx = ed.tilex;
+                int ty = ed.tiley;
+                if (!tower) {
+                    tx += (ed.levx * 40);
+                    ty += (ed.levy * 30);
+                } else
+                    ty += ed.ypos;
+
                 //Mouse input
                 if(key.leftbutton)
                 {
@@ -5708,8 +5716,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.placetilelocal(ed.tilex, ed.tiley, 8);
                         }
 
-                        int tmp=edentat(ed.tilex, ed.tiley, ed.levaltstate,
-                                        tower);
+                        int tmp=edentat(tx, ty, ed.levaltstate, tower);
                         if(tmp==-1)
                         {
                             //Room text and script triggers can be placed in walls
@@ -5721,7 +5728,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 key.enabletextentry();
                                 key.keybuffer="";
                                 dwgfx.backgrounddrawn=false;
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),17);
+                                addedentity(tx, ty, 17);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==12)   //Script Trigger
@@ -5739,7 +5746,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 if(ed.numtrinkets<20)
                                 {
-                                    addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),9);
+                                    addedentity(tx, ty, 9);
                                     ed.lclickdelay=1;
                                     ed.numtrinkets++;
                                 }
@@ -5751,32 +5758,32 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==4)
                             {
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),10, 1);
+                                addedentity(tx, ty, 10, 1);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==5)
                             {
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),3);
+                                addedentity(tx, ty, 3);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==6)
                             {
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),2,5);
+                                addedentity(tx, ty, 2, 5);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==7)
                             {
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),2,0);
+                                addedentity(tx, ty, 2, 0);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==8)
                             {
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),1,0);
+                                addedentity(tx, ty, 1, 0);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==9)
                             {
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),11,0);
+                                addedentity(tx, ty, 11, 0);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==11)
@@ -5786,14 +5793,14 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.textentry=true;
                                 key.enabletextentry();
 
-                                addedentity(ed.tilex+(ed.levx*40),ed.tiley+ (ed.levy*30),18,0);
+                                addedentity(tx, ty, 18, 0);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==13)
                             {
                                 ed.warpmod=true;
                                 ed.warpent=EditorData::GetInstance().numedentities;
-                                addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),13);
+                                addedentity(tx, ty, 13);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==14)
@@ -5801,30 +5808,22 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 //Warp lines
                                 if(ed.level[ed.levx+(ed.maxwidth*ed.levy)].warpdir==0)
                                 {
-                                    if(ed.tilex==0)
-                                    {
-                                        addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),50,0);
-                                    }
-                                    else if(ed.tilex==39)
-                                    {
-                                        addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),50,1);
-                                    }
-                                    else if(ed.tiley==0)
-                                    {
-                                        addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),50,2);
-                                    }
-                                    else if(ed.tiley==29)
-                                    {
-                                        addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),50,3);
-                                    }
-                                    else
-                                    {
+                                    if (ed.tilex == 0)
+                                        addedentity(tx, ty, 50, 0);
+                                    else if (ed.tilex == 39)
+                                        addedentity(tx, ty, 50, 1);
+                                    else if (!tower && ed.tiley == 0)
+                                        addedentity(tx, ty, 50, 2);
+                                    else if (!tower && ed.tiley == 29)
+                                        addedentity(tx, ty, 50, 3);
+                                    else if (tower) {
+                                        ed.note = "ERROR: Warp lines must be on vertical edges";
+                                        ed.notedelay=45;
+                                    } else {
                                         ed.note="ERROR: Warp lines must be on edges";
                                         ed.notedelay=45;
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     ed.note="ERROR: Cannot have both warp types";
                                     ed.notedelay=45;
                                 }
@@ -5834,12 +5833,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 if(ed.numcrewmates<20)
                                 {
-                                    addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),15,1 + int(fRandom() * 5));
+                                    addedentity(tx, ty, 15,
+                                                1 + int(fRandom() * 5));
                                     ed.lclickdelay=1;
                                     ed.numcrewmates++;
-                                }
-                                else
-                                {
+                                } else {
                                     ed.note="ERROR: Max number of crewmates is 20";
                                     ed.notedelay=45;
                                 }
@@ -5859,7 +5857,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                             i--;
                                         }
                                     }
-                                    addedentity(ed.tilex+ (ed.levx*40),ed.tiley+ (ed.levy*30),16,0);
+                                    addedentity(tx, ty, 16, 0);
                                 }
                                 ed.lclickdelay=1;
                             }
@@ -5961,13 +5959,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     }
                     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
                     {
-                        if (edentity[i].x==ed.tilex + (ed.levx*40) &&
-                            edentity[i].y==ed.tiley+ (ed.levy*30) &&
+                        if (edentity[i].x==tx && edentity[i].y==ty &&
                             edentity[i].state==ed.levaltstate &&
-                            edentity[i].intower==tower)
-                        {
-                            if(edentity[i].t==9) ed.numtrinkets--;
-                            if(edentity[i].t==15) ed.numcrewmates--;
+                            edentity[i].intower==tower) {
+                            if (edentity[i].t==9) ed.numtrinkets--;
+                            if (edentity[i].t==15) ed.numcrewmates--;
                             removeedentity(i);
                         }
                     }
