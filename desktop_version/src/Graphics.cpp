@@ -251,7 +251,6 @@ void Graphics::maketelearray()
 void Graphics::MakeSpriteArray()
 {
     int sprites_height = grphx.im_sprites->h;
-
     for(int j = 0; j < sprites_height / 32; j++)
     {
         for(int i = 0; i <12; i++)
@@ -261,8 +260,8 @@ void Graphics::MakeSpriteArray()
         }
     }
 
-    sprites_height = grphx.im_flipsprites->h;
-    for(int j = 0; j < sprites_height / 32; j++)
+    int flip_sprites_height = grphx.im_flipsprites->h;
+    for(int j = 0; j < flip_sprites_height / 32; j++)
     {
         for(int i = 0; i <12; i++)
         {
@@ -270,6 +269,18 @@ void Graphics::MakeSpriteArray()
             flipsprites.push_back(temp);
         }
     }
+
+    int needed_sprites = (sprites_height - flip_sprites_height) / 32;
+
+    for(int j = 0; j < needed_sprites / 32; j++)
+    {
+        for(int i = 0; i <12; i++)
+        {
+            SDL_Surface* temp = GetSubSurface(grphx.im_flipsprites,i*32,flip_sprites_height + (j*32),32,32);
+            flipsprites.push_back(temp);
+        }
+    }
+
 }
 
 
