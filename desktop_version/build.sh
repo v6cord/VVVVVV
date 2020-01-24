@@ -16,10 +16,24 @@ mkdir -pv build.$CC/
 ln -sfvn build.$CC build
 cd build/
 
+timestamp_ref="$(mktemp)"
+function finish {
+    rm -f "$timestamp_ref"
+}
+trap finish EXIT
+
+if [ -e v6cord.png.c ]; then
+    cp -a v6cord.png.c "$timestamp_ref"
+fi
+
 cmake -G Ninja \
     ${debug:+-DCMAKE_BUILD_TYPE=Debug} \
     ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
     ..
+
+if cmp -s "$timestamp_ref" v6cord.png.c; then
+    touch -r "$timestamp_ref" v6cord.png.c
+fi
 
 ninja
 
