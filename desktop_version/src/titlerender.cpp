@@ -64,8 +64,7 @@ growing_vector<std::string> changelog = {
     "  player",
     "- There's now an option to disable only",
     "  the music",
-    "- All limits have been removed except",
-    "  for the 20x20 map size limit",
+    "- All limits have been removed",
     "- destroy(platformsreal) - A version of",
     "  destroy(platforms) that isn't bugged",
     "- destroy(enemies)",
@@ -241,6 +240,7 @@ growing_vector<std::string> changelog = {
     "  line",
     "- Upped the trinkets/crewmates limit to",
     "  100",
+    "- Upped the map size limit to 100 by 100",
 
 };
 

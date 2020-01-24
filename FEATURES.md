@@ -35,7 +35,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - There's now an option to disable only the music
 
-- All limits have been removed except for the 20x20 map size limit
+- All limits have been removed
 
 - `destroy(crewmates)` - destroy non-rescuable crewmates
 
@@ -186,3 +186,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `addvar(name [, value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
 
 - Upped the trinkets/crewmates limit to 100
+
+- Upped the map size limit to 100 by 100
