@@ -2710,6 +2710,7 @@ void editorclass::save(std::string& _path)
         usethislimit = 20 * 20;
     else
         usethislimit = maxwidth * maxheight;
+    int row20 = 0;
     for (int i = 0; i < usethislimit; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
@@ -2732,8 +2733,13 @@ void editorclass::save(std::string& _path)
         edlevelclassElement->LinkEndChild( new TiXmlText( level[i].roomname.c_str() )) ;
         msg->LinkEndChild( edlevelclassElement );
 
-        if (mapwidth <= 20 && mapheight <= 20)
-            i += 100 - 20;
+        if (mapwidth <= 20 && mapheight <= 20) {
+            row20++;
+            if (row20 == 20) {
+                row20 = 0;
+                i += 100 - 20;
+            }
+        }
     }
     data->LinkEndChild( msg );
 
