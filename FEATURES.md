@@ -212,3 +212,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Flip tokens are now placeable in the editor using the F tool
 
 - `stop()` - A command for convenience: stops the script, also runs `endcutscene()`
+
+- You can place activity zones in the editor by holding down `Z` while placing a script box

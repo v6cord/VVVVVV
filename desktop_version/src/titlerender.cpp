@@ -271,6 +271,9 @@ growing_vector<std::string> changelog = {
     "  cutscene bars",
     "- Flip tokens are now placeable in the",
     "  editor using the F tool",
+    "- You can place activity zones in the",
+    "  editor by holding down Z while placing",
+    "  a script box"
 
 };
 
