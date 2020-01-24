@@ -66,6 +66,16 @@ int scriptclass::getvar(std::string n) {
 	return -1;
 }
 
+void scriptclass::setvar(std::string n, std::string c) {
+	int tempvar = getvar(n);
+	if (tempvar == -1) {
+		variablenames.push_back(n);
+		variablecontents.push_back(c);
+	} else {
+		variablecontents[tempvar] = c;
+	}
+}
+
 std::string scriptclass::processvars(std::string t) {
 	std::string tempstring = "";
 	std::string tempvar = "";
@@ -654,13 +664,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				// OR
 				// setvar(name)
 				// <contents>
-				
-				variablenames.push_back(words[1]);
 				if (words[2] == "") {
     	            position++;
-					variablecontents.push_back(processvars(commands[position]));
+					setvar(words[1],processvars(commands[position]));
 				} else {
-					variablecontents.push_back(words[2]);
+					setvar(words[1],words[2]);
 				}
 			}
 			if (words[0] == "addvar")

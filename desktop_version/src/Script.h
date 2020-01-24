@@ -36,6 +36,8 @@ public:
     void clearcustom();
 
     int getvar(std::string n);
+    
+    void setvar(std::string n, std::string c);
 
     std::string processvars(std::string t);
 
