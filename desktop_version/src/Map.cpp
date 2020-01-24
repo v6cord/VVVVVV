@@ -945,7 +945,7 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
     // Custom towers
     if (custommode) {
         obj.entities[i].yp = yp;
-        *rx = (((*rx) - 100) % ed.maxwidth) + 100;
+        *rx = (((*rx) - 100) % ed.mapwidth) + 100;
         return true;
     }
 
