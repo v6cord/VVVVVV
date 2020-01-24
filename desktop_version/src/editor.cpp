@@ -153,7 +153,7 @@ void editorclass::getDirectoryData()
 bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
 {
     unsigned char *uMem = NULL;
-    FILESYSTEM_loadFileToMemory(_path.c_str(), &uMem, NULL);
+    FILESYSTEM_loadFileToMemory(_path.c_str(), &uMem, NULL, true);
 
     if (uMem == NULL)
     {
@@ -2183,8 +2183,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
 {
     reset();
 
-    //Here lies the code to load custom assets. Yeet
-
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
     {
@@ -2216,19 +2214,13 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         printf("Custom asset directory does not exist\n");
     }
 
-    unsigned char *mem = NULL;
-    
-    FILESYSTEM_loadFileToMemory(_path.c_str(), &mem, NULL);
-
-    if (mem == NULL)
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument(_path.c_str(), &doc))
     {
         printf("No level %s to load :(\n", _path.c_str());
         return;
     }
 
-    TiXmlDocument doc;
-    doc.Parse((const char*) mem);
-    FILESYSTEM_freeMemory(&mem);
 
     TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem;

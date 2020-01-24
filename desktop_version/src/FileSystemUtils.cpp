@@ -196,7 +196,7 @@ void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
 	if (addnull)
 	{
 		*mem = (unsigned char *) malloc(length + 1);
-		mem[length] = 0;
+		(*mem)[length] = 0;
 	}
 	else
 	{
