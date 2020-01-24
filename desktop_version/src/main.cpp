@@ -31,7 +31,6 @@
 
 scriptclass script;
 growing_vector<edentities> edentity;
-edaltstate altstates[1000];
 editorclass ed;
 
 bool startinplaytest = false;
