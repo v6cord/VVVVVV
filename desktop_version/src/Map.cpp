@@ -1063,6 +1063,11 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
     }
     else if (custommode)
     {
+        // Modulo can produce negative results in C++!
+        while (rx < 100)
+            rx += 100;
+        while (ry < 100)
+            ry += 100;
         game.roomx = ((rx-100) % ed.mapwidth) + 100;
         game.roomy = ((ry-100) % ed.mapheight) + 100;
         game.roomchange = true;

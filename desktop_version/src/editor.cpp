@@ -2448,7 +2448,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         if (pKey == "levelMetaData")
         {
             int i = 0;
-            int row20 = 0;
+            int rowwidth = 0;
+            int maxrowwidth = std::max(mapwidth, 20);
             for( TiXmlElement* edLevelClassElement = pElem->FirstChildElement(); edLevelClassElement; edLevelClassElement=edLevelClassElement->NextSiblingElement())
             {
                 std::string pKey(edLevelClassElement->Value());
@@ -2476,12 +2477,10 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
 
                 i++;
 
-                if (mapwidth <= 20 && mapheight <= 20) {
-                    row20++;
-                    if (row20 == 20) {
-                        row20 = 0;
-                        i += 100 - 20;
-                    }
+                rowwidth++;
+                if (rowwidth == maxrowwidth) {
+                    rowwidth = 0;
+                    i += maxwidth - maxrowwidth;
                 }
             }
         }
@@ -2724,7 +2723,8 @@ void editorclass::save(std::string& _path)
         usethislimit = 20 * 20;
     else
         usethislimit = maxwidth * maxheight;
-    int row20 = 0;
+    int rowwidth = 0;
+    int maxrowwidth = std::max(mapwidth, 20);
     for (int i = 0; i < usethislimit; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
@@ -2747,12 +2747,10 @@ void editorclass::save(std::string& _path)
         edlevelclassElement->LinkEndChild( new TiXmlText( level[i].roomname.c_str() )) ;
         msg->LinkEndChild( edlevelclassElement );
 
-        if (mapwidth <= 20 && mapheight <= 20) {
-            row20++;
-            if (row20 == 20) {
-                row20 = 0;
-                i += 100 - 20;
-            }
+        rowwidth++;
+        if (rowwidth == maxrowwidth) {
+            rowwidth = 0;
+            i += maxwidth - maxrowwidth;
         }
     }
     data->LinkEndChild( msg );
