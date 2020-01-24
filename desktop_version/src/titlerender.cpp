@@ -253,6 +253,10 @@ growing_vector<std::string> changelog = {
     "- Coins display in the roomname if there's",
     "  any coins in the map",
     "- Coins and trinkets no longer share IDs",
+    "- Large enemies are now enemy types you",
+    "  can select in the editor",
+    "- Selecting level music from the editor is",
+    "  no longer limited",
 
 };
 
