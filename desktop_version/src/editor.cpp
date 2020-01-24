@@ -1256,7 +1256,7 @@ enum tiletyp
 editorclass::getabstiletyp(int x, int y)
 {
     int tile = absat(&x, &y);
-    int room = x / 40 + ((y / 30)*ed.maxwidth);
+    int room = x / 40 + ((y / 30)*maxwidth);
 
     return gettiletyp(level[room].tileset, tile);
 }
@@ -1328,9 +1328,9 @@ int editorclass::backfree( int x, int y )
 
 int editorclass::towerspikefree(int x, int y) {
     // Uses absolute y in tower mode
-    int tower = ed.get_tower(ed.levx, ed.levy);
-    int size = ed.tower_size(tower);
-    if (!ed.intower())
+    int tower = get_tower(levx, levy);
+    int size = tower_size(tower);
+    if (!intower())
         return spikefree(x, y);
 
     if (x == -1) return 1;
@@ -1339,7 +1339,7 @@ int editorclass::towerspikefree(int x, int y) {
     if (y >= size) return 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
-    temp = gettiletyp(ed.level[ed.levx + ed.levy * ed.maxwidth].tileset, tile);
+    temp = gettiletyp(level[levx + levy * maxwidth].tileset, tile);
     if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
         return 1;
     return 0;
@@ -1368,9 +1368,9 @@ int editorclass::getfree(enum tiletyp thistiletyp)
 
 int editorclass::towerfree(int x, int y) {
     // Uses absolute y in tower mode
-    int tower = ed.get_tower(ed.levx, ed.levy);
-    int size = ed.tower_size(tower);
-    if (!ed.intower())
+    int tower = get_tower(levx, levy);
+    int size = tower_size(tower);
+    if (!intower())
         return free(x, y);
 
     if (x == -1) return 1;
@@ -1379,7 +1379,7 @@ int editorclass::towerfree(int x, int y) {
     if (y >= size) return 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
-    return getfree(gettiletyp(ed.level[ed.levx + ed.levy * ed.maxwidth].tileset,
+    return getfree(gettiletyp(level[levx + levy * maxwidth].tileset,
                               tile));
 }
 
@@ -1403,8 +1403,8 @@ int editorclass::absfree( int x, int y )
 
 int editorclass::match( int x, int y )
 {
-    if (ed.intower())
-        y += ed.ypos;
+    if (intower())
+        y += ypos;
 
     if(towerfree(x-1,y)==0 && towerfree(x,y-1)==0 &&
        towerfree(x+1,y)==0 && towerfree(x,y+1)==0) return 0;
@@ -1747,8 +1747,8 @@ int editorclass::spikedir( int x, int y )
 }
 
 int editorclass::towerspikedir(int x, int y) {
-    if (ed.intower())
-        y += ed.ypos;
+    if (intower())
+        y += ypos;
 
     if(towerfree(x,y+1) == 1) return 8;
     if(towerfree(x,y-1) == 1) return 9;
@@ -2098,16 +2098,12 @@ void editorclass::shift_tower(int tower, int y) {
 
 int editorclass::get_tower(int rx, int ry) {
     /* Returns the tower of this room */
-    if (rx >= 100)
-        rx -= 100;
-    if (ry >= 100)
-        ry -= 100;
 
-    int room = rx + ry * ed.maxwidth;
+    int room = rx + ry * maxwidth;
     if (ry < 0 || rx < 0 || rx >= maxwidth || ry >= maxheight)
         return 0;
 
-    return ed.level[room].tower;
+    return level[room].tower;
 }
 
 int editorclass::tower_size(int tower) {
@@ -2118,9 +2114,7 @@ int editorclass::tower_scroll(int tower) {
 }
 
 bool editorclass::intower(void) {
-    if (get_tower(ed.levx, ed.levy))
-        return true;
-    return false;
+    return !!get_tower(levx, levy);
 }
 
 // Returns y offset upon tower entry/exit. ypos is negative if entering.
@@ -2918,22 +2912,22 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     int tm=0;
     int temp=0;
     //Scan over the map size
-    if(ed.mapheight<=5 && ed.mapwidth<=5)
+    if(mapheight<=5 && mapwidth<=5)
     {
         //4x map
-        for(int j2=0; j2<ed.mapheight; j2++)
+        for(int j2=0; j2<mapheight; j2++)
         {
-            for(int i2=0; i2<ed.mapwidth; i2++)
+            for(int i2=0; i2<mapwidth; i2++)
             {
                 //Ok, now scan over each square
                 tm=196;
-                if(ed.level[i2 + (j2*ed.maxwidth)].tileset==1) tm=96;
+                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<36; j++)
                 {
                     for(int i=0; i<48; i++)
                     {
-                        temp=ed.absfree(int(i*0.83) + (i2*40),int(j*0.83)+(j2*30));
+                        temp=absfree(int(i*0.83) + (i2*40),int(j*0.83)+(j2*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -2944,22 +2938,22 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
             }
         }
     }
-    else if(ed.mapheight<=10 && ed.mapwidth<=10)
+    else if(mapheight<=10 && mapwidth<=10)
     {
         //2x map
-        for(int j2=0; j2<ed.mapheight; j2++)
+        for(int j2=0; j2<mapheight; j2++)
         {
-            for(int i2=0; i2<ed.mapwidth; i2++)
+            for(int i2=0; i2<mapwidth; i2++)
             {
                 //Ok, now scan over each square
                 tm=196;
-                if(ed.level[i2 + (j2*ed.maxwidth)].tileset==1) tm=96;
+                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<18; j++)
                 {
                     for(int i=0; i<24; i++)
                     {
-                        temp=ed.absfree(int(i*1.6) + (i2*40),int(j*1.6)+(j2*30));
+                        temp=absfree(int(i*1.6) + (i2*40),int(j*1.6)+(j2*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -2972,19 +2966,19 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     }
     else
     {
-        for(int j2=0; j2<ed.mapheight; j2++)
+        for(int j2=0; j2<mapheight; j2++)
         {
-            for(int i2=0; i2<ed.mapwidth; i2++)
+            for(int i2=0; i2<mapwidth; i2++)
             {
                 //Ok, now scan over each square
                 tm=196;
-                if(ed.level[i2 + (j2*ed.maxwidth)].tileset==1) tm=96;
+                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<9; j++)
                 {
                     for(int i=0; i<12; i++)
                     {
-                        temp=ed.absfree(3+(i*3) + (i2*40),(j*3)+(j2*30));
+                        temp=absfree(3+(i*3) + (i2*40),(j*3)+(j2*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -3133,12 +3127,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         }
     }
 
-    std::string roomstr = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
+    std::string rmstr;
+    rmstr = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
     int tower = ed.get_tower(ed.levx, ed.levy);
     if (tower)
-        roomstr += "T" + help.String(tower) + ":" + help.String(ed.ypos);
+        rmstr += "T" + help.String(tower) + ":" + help.String(ed.ypos);
     else if (ed.levaltstate != 0)
-        roomstr += "@" + help.String(ed.levaltstate);
+        rmstr += "@" + help.String(ed.levaltstate);
+
+    int rmstrx = 318 - rmstr.length() * 8;
 
     //Draw entities
     game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
@@ -3375,7 +3372,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 fillboxabs(dwgfx, (edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(64,64,96));
                 if(ed.tilex+(ed.levx*40)==edentity[i].p1 && ed.tiley+(ed.levy*30)==edentity[i].p2)
                 {
-                    dwgfx.bprint((edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8)-8, roomstr,190,190,225);
+                    dwgfx.bprint(ex, ey - 8, rmstr, 190, 190, 225);
                 }
                 else
                 {
@@ -4142,7 +4139,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             FillRect(dwgfx.backBuffer, 260-24,198,80+24,10, dwgfx.getRGB(32,32,32));
             FillRect(dwgfx.backBuffer, 261-24,199,80+24,9, dwgfx.getRGB(0,0,0));
-            dwgfx.bprint(228,199, roomstr, 196, 196, 255 - help.glow, false);
+            dwgfx.bprint(rmstrx, 199, rmstr, 196, 196, 255 - help.glow, false);
         } else {
             //FillRect(dwgfx.backBuffer, 0,230,72,240, dwgfx.RGB(32,32,32));
             //FillRect(dwgfx.backBuffer, 0,231,71,240, dwgfx.RGB(0,0,0));
@@ -4161,12 +4158,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.Print(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 }
                 dwgfx.bprint(4, 222, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                dwgfx.bprint(228,222, roomstr,196, 196, 255 - help.glow, false);
+                dwgfx.bprint(rmstrx, 222, rmstr,196, 196, 255 - help.glow, false);
             }
             else
             {
                 dwgfx.bprint(4, 232, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                dwgfx.bprint(228,232, roomstr,196, 196, 255 - help.glow, false);
+                dwgfx.bprint(rmstrx,232, rmstr,196, 196, 255 - help.glow, false);
             }
         }
 
