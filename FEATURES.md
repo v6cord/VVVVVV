@@ -195,6 +195,8 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifcoins(x)` - Run a script if the player has collected at least `x` coins
 
+- `ifcoinsless(x)` - Run a script if the player has less than `x` coins
+
 - Coins are now placeable in the editor using the F tool
 
 - Coins display in the roomname if there's any coins in the map
