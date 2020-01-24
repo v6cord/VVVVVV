@@ -2113,8 +2113,8 @@ bool editorclass::intower(void) {
 int editorclass::tower_connection(int *rx, int *ry, int ypos) {
     /* Figure out the location of tower connections */
     int ix, iy, rix, riy, rpos;
-    rix = (*rx) % 100;
-    riy = (*ry) % 100;
+    rix = (*rx) - 100;
+    riy = (*ry) - 100;
     ix = rix;
     iy = riy;
 
@@ -2154,8 +2154,8 @@ int editorclass::tower_connection(int *rx, int *ry, int ypos) {
 /* Returns tower ID upon entering a tower */
 int editorclass::entering_tower(int rx, int ry, int *entry) {
     int tower = 0;
-    rx %= 100;
-    ry %= 100;
+    rx -= 100;
+    ry -= 100;
     tower = get_tower(rx, ry);
     if (!tower)
         return 0;
