@@ -226,7 +226,7 @@ public:
     growing_vector <int> vmult;
     int numtrinkets = 0;
     int numcrewmates = 0;
-    edlevelclass level[400]; //Maxwidth*maxheight
+    growing_vector<edlevelclass> level;
 
     int temp = 0;
     int notedelay = 0;
@@ -266,7 +266,10 @@ public:
 
     int levmusic = 0;
     int mapwidth, mapheight = 0; //Actual width and height of stage
-    int maxwidth, maxheight = 0; //Special; the physical max the engine allows
+
+    //Special; the physical max the engine allows
+    int maxwidth = 100;
+    int maxheight = 100;
 
     int version = 0;
 

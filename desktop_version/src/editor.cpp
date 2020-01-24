@@ -73,9 +73,6 @@ void edtower::reset(void) {
 
 editorclass::editorclass()
 {
-    maxwidth=20;
-    maxheight=20;
-
     //We create a blank map
     for (int j = 0; j < 30 * maxwidth; j++)
     {
@@ -100,6 +97,7 @@ editorclass::editorclass()
 
     altstates.resize(500);
     towers.resize(400);
+    level.resize(maxwidth * maxheight);
 
     reset();
 }
@@ -1917,7 +1915,7 @@ void editorclass::enable_tower(void) {
         // Find an unused tower ID
         int i;
         bool unused = false;
-        for (i = 1; i <= 400; i++) {
+        for (i = 1; i <= maxwidth * maxheight; i++) {
             unused = true;
 
             for (rx = 0; rx < maxwidth && unused; rx++)
@@ -2696,7 +2694,7 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "levelMetaData" );
-    for(int i = 0; i < 400; i++)
+    for(int i = 0; i < maxwidth * maxheight; i++)
     {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
@@ -4982,7 +4980,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 if (key.keymap[SDLK_F7]) {
                     if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1)
                         ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
-                } else if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < 400)
+                } else if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < ed.maxwidth * ed.maxheight)
                     ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
 
                 ed.note = "Tower Changed";

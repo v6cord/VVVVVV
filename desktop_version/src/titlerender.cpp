@@ -2259,7 +2259,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             if(map.customzoom==4){
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*20)]==0){
+                    if(map.explored[i+(j*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + (j * 36), false);
                     dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + (j * 36), false);
@@ -2286,7 +2286,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }else if(map.customzoom==2){
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*20)]==0){
+                    if(map.explored[i+(j*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 24), map.custommmyoff+21 + (j * 18), false);
                     dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 24), map.custommmyoff+21 + (j * 18), false);
@@ -2298,7 +2298,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }else{
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*20)]==0){
+                    if(map.explored[i+(j*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 12), map.custommmyoff+21 + (j * 9), false);
                     }
@@ -2371,7 +2371,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             {
                 for (int i = 0; i < 20; i++)
                 {
-                    if(map.explored[i+(j*20)]==0)
+                    if(map.explored[i+(j*ed.maxwidth)]==0)
                     {
                         //Draw the fog of war on the map
                         dwgfx.drawimage(2, 40 + (i * 12), 21 + (j * 9), false);
@@ -2449,15 +2449,15 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             //draw legend details
             for (int i = 0; i < map.numteleporters; i++)
             {
-                if (map.showteleporters && map.explored[map.teleporters[i].x + (20 * map.teleporters[i].y)] > 0)
+                if (map.showteleporters && map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)] > 0)
                 {
-                    temp = 1126 + map.explored[map.teleporters[i].x + (20 * map.teleporters[i].y)];
+                    temp = 1126 + map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)];
                     if (dwgfx.flipmode) temp += 3;
                     dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
                 }
-                else if(map.showtargets && map.explored[map.teleporters[i].x+(20*map.teleporters[i].y)]==0)
+                else if(map.showtargets && map.explored[map.teleporters[i].x+(ed.maxwidth*map.teleporters[i].y)]==0)
                 {
-                    temp = 1126 + map.explored[map.teleporters[i].x + (20 * map.teleporters[i].y)];
+                    temp = 1126 + map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)];
                     if (dwgfx.flipmode) temp += 3;
                     dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
                 }
@@ -3242,7 +3242,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         if (map.customzoom==4) {
             for (int j = 0; j < map.customheight; j++){
             for (int i = 0; i < map.customwidth; i++){
-                if(map.explored[i+(j*20)]==0){
+                if(map.explored[i + j*ed.maxwidth]==0){
                 //Draw the fog of war on the map
                 dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + (j * 36), false);
                 dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + (j * 36), false);
@@ -3269,7 +3269,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         }else if(map.customzoom==2){
             for (int j = 0; j < map.customheight; j++){
             for (int i = 0; i < map.customwidth; i++){
-                if(map.explored[i+(j*20)]==0){
+                if(map.explored[i + j*ed.maxwidth]==0){
                 //Draw the fog of war on the map
                 dwgfx.drawimage(2, map.custommmxoff+40 + (i * 24), map.custommmyoff+21 + (j * 18), false);
                 dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 24), map.custommmyoff+21 + (j * 18), false);
@@ -3281,7 +3281,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         }else{
             for (int j = 0; j < map.customheight; j++){
             for (int i = 0; i < map.customwidth; i++){
-                if(map.explored[i+(j*20)]==0){
+                if(map.explored[i + j*ed.maxwidth]==0){
                 //Draw the fog of war on the map
                 dwgfx.drawimage(2, map.custommmxoff+40 + (i * 12), map.custommmyoff+21 + (j * 9), false);
                 }
@@ -3315,15 +3315,15 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
     //draw legend details
     for (int i = 0; i < map.numteleporters; i++)
     {
-        if (map.showteleporters && map.explored[map.teleporters[i].x + (20 * map.teleporters[i].y)] > 0)
+        if (map.showteleporters && map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)] > 0)
         {
-            temp = 1126 + map.explored[map.teleporters[i].x + (20 * map.teleporters[i].y)];
+            temp = 1126 + map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)];
             if (dwgfx.flipmode) temp += 3;
             dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
         }
-        else if(map.showtargets && map.explored[map.teleporters[i].x+(20*map.teleporters[i].y)]==0)
+        else if(map.showtargets && map.explored[map.teleporters[i].x+(ed.maxwidth*map.teleporters[i].y)]==0)
         {
-            temp = 1126 + map.explored[map.teleporters[i].x + (20 * map.teleporters[i].y)];
+            temp = 1126 + map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)];
             if (dwgfx.flipmode) temp += 3;
             dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
         }
