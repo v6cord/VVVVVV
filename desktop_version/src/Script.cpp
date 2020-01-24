@@ -2277,7 +2277,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				if (game.coins >= ss_toi(words[1]))
 				{
-					call(words[2]);
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
