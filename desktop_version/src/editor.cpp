@@ -2699,8 +2699,12 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "levelMetaData" );
-    for(int i = 0; i < maxwidth * maxheight; i++)
-    {
+    int usethislimit;
+    if (mapwidth <= 20 && mapheight <= 20)
+        usethislimit = 20 * 20;
+    else
+        usethislimit = maxwidth * maxheight;
+    for (int i = 0; i < usethislimit; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
@@ -2721,6 +2725,9 @@ void editorclass::save(std::string& _path)
 
         edlevelclassElement->LinkEndChild( new TiXmlText( level[i].roomname.c_str() )) ;
         msg->LinkEndChild( edlevelclassElement );
+
+        if (mapwidth <= 20 && mapheight <= 20)
+            i += 100 - 20;
     }
     data->LinkEndChild( msg );
 
