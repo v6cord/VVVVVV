@@ -241,6 +241,10 @@ growing_vector<std::string> changelog = {
     "  line",
     "- Upped the trinkets/crewmates limit to",
     "  100",
+    "- Variable assignments (var = contents,",
+    "  var++, var += 1, var -= 1, var--)",
+    "- Built-in variables (%deaths%, %player_x%,",
+    "  %player_y%, %trinkets%)",
 
 };
 

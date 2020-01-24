@@ -76,6 +76,14 @@ void scriptclass::setvar(std::string n, std::string c) {
 	}
 }
 
+void scriptclass::updatevars(Game& game, entityclass& obj) {
+	int player = obj.getplayer();
+	setvar("deaths",   std::to_string(game.deathcounts));
+	setvar("player_x", std::to_string(obj.entities[player].xp));
+	setvar("player_y", std::to_string(obj.entities[player].yp));
+	setvar("trinkets", std::to_string(game.trinkets));
+}
+
 std::string scriptclass::processvars(std::string t) {
 	std::string tempstring = "";
 	std::string tempvar = "";
@@ -197,6 +205,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		if (position < scriptlength)
 		{
 			//Let's split or command in an array of words
+
+			updatevars(game, obj);
+
 			tokenize(commands[position]);
 
 			//For script assisted input

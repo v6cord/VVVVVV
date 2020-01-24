@@ -186,3 +186,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `addvar(name [, value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
 
 - Upped the trinkets/crewmates limit to 100
+
+- Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
+
+- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%trinkets%`)

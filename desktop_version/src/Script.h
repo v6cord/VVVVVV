@@ -39,6 +39,8 @@ public:
     
     void setvar(std::string n, std::string c);
 
+    void updatevars(Game& game, entityclass& obj);
+
     std::string processvars(std::string t);
 
     void tokenize(std::string t);
