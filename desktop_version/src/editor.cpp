@@ -262,35 +262,35 @@ void editorclass::reset()
     roomtextmod=false;
     roomtextent=0;
 
-    for (int j = 0; j < 20; j++)
+    for (int j = 0; j < maxheight; j++)
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < maxwidth; i++)
         {
-            level[i+(j*20)].tileset=0;
-            level[i+(j*20)].tilecol=(i+j)%32;
-            level[i+(j*20)].roomname="";
-            level[i+(j*20)].warpdir=0;
-            level[i+(j*20)].platx1=0;
-            level[i+(j*20)].platy1=0;
-            level[i+(j*20)].platx2=320;
-            level[i+(j*20)].platy2=240;
-            level[i+(j*20)].platv=4;
-            level[i+(j*20)].enemyx1=0;
-            level[i+(j*20)].enemyy1=0;
-            level[i+(j*20)].enemyx2=320;
-            level[i+(j*20)].enemyy2=240;
-            level[i+(j*20)].enemytype=0;
-            level[i+(j*20)].directmode=0;
-            level[i+(j*20)].tower=0;
-            level[i+(j*20)].tower_row=0;
+            level[i+(j*maxwidth)].tileset=0;
+            level[i+(j*maxwidth)].tilecol=(i+j)%32;
+            level[i+(j*maxwidth)].roomname="";
+            level[i+(j*maxwidth)].warpdir=0;
+            level[i+(j*maxwidth)].platx1=0;
+            level[i+(j*maxwidth)].platy1=0;
+            level[i+(j*maxwidth)].platx2=320;
+            level[i+(j*maxwidth)].platy2=240;
+            level[i+(j*maxwidth)].platv=4;
+            level[i+(j*maxwidth)].enemyx1=0;
+            level[i+(j*maxwidth)].enemyy1=0;
+            level[i+(j*maxwidth)].enemyx2=320;
+            level[i+(j*maxwidth)].enemyy2=240;
+            level[i+(j*maxwidth)].enemytype=0;
+            level[i+(j*maxwidth)].directmode=0;
+            level[i+(j*maxwidth)].tower=0;
+            level[i+(j*maxwidth)].tower_row=0;
         }
     }
 
-    for (int j = 0; j < 30 * 20; j++)
+    for (int j = 0; j < 30 * maxheight; j++)
     {
-        for (int i = 0; i < 40 * 20; i++)
+        for (int i = 0; i < 40 * maxwidth; i++)
         {
-            contents[i+(j*40*20)]=0;
+            contents[i+(j*40*maxwidth)]=0;
         }
     }
 
