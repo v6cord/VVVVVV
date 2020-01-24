@@ -3254,8 +3254,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
             break;
         case 8: // Coin
-            dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
-            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164, 164, 255));
+            dwgfx.drawhuetile(ex, ey, 48, 8);
+            //dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
+            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,164,164));
             break;
         case 9: // Shiny Trinket
             dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
