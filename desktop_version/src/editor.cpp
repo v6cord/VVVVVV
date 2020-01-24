@@ -2107,6 +2107,9 @@ int editorclass::get_tower(int rx, int ry) {
 }
 
 int editorclass::tower_size(int tower) {
+    if (!tower)
+        return 0;
+
     return towers[tower-1].size;
 }
 int editorclass::tower_scroll(int tower) {
