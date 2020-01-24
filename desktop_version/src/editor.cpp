@@ -2118,9 +2118,7 @@ int editorclass::tower_scroll(int tower) {
 }
 
 bool editorclass::intower(void) {
-    if (get_tower(levx, levy))
-        return true;
-    return false;
+    return !!get_tower(levx, levy);
 }
 
 // Returns y offset upon tower entry/exit. ypos is negative if entering.
@@ -3133,12 +3131,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         }
     }
 
-    std::string roomstr = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
+    std::string rmstr;
+    rmstr = "("+help.String(ed.levx+1)+","+help.String(ed.levy+1)+")";
     int tower = ed.get_tower(ed.levx, ed.levy);
     if (tower)
-        roomstr += "T" + help.String(tower) + ":" + help.String(ed.ypos);
+        rmstr += "T" + help.String(tower) + ":" + help.String(ed.ypos);
     else if (ed.levaltstate != 0)
-        roomstr += "@" + help.String(ed.levaltstate);
+        rmstr += "@" + help.String(ed.levaltstate);
+
+    int rmstrx = 318 - rmstr.length() * 8;
 
     //Draw entities
     game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
@@ -3375,7 +3376,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 fillboxabs(dwgfx, (edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(64,64,96));
                 if(ed.tilex+(ed.levx*40)==edentity[i].p1 && ed.tiley+(ed.levy*30)==edentity[i].p2)
                 {
-                    dwgfx.bprint((edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8)-8, roomstr,190,190,225);
+                    dwgfx.bprint(ex, ey - 8, rmstr, 190, 190, 225);
                 }
                 else
                 {
@@ -4142,7 +4143,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             FillRect(dwgfx.backBuffer, 260-24,198,80+24,10, dwgfx.getRGB(32,32,32));
             FillRect(dwgfx.backBuffer, 261-24,199,80+24,9, dwgfx.getRGB(0,0,0));
-            dwgfx.bprint(228,199, roomstr, 196, 196, 255 - help.glow, false);
+            dwgfx.bprint(rmstrx, 199, rmstr, 196, 196, 255 - help.glow, false);
         } else {
             //FillRect(dwgfx.backBuffer, 0,230,72,240, dwgfx.RGB(32,32,32));
             //FillRect(dwgfx.backBuffer, 0,231,71,240, dwgfx.RGB(0,0,0));
@@ -4161,12 +4162,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.Print(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 }
                 dwgfx.bprint(4, 222, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                dwgfx.bprint(228,222, roomstr,196, 196, 255 - help.glow, false);
+                dwgfx.bprint(rmstrx, 222, rmstr,196, 196, 255 - help.glow, false);
             }
             else
             {
                 dwgfx.bprint(4, 232, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
-                dwgfx.bprint(228,232, roomstr,196, 196, 255 - help.glow, false);
+                dwgfx.bprint(rmstrx,232, rmstr,196, 196, 255 - help.glow, false);
             }
         }
 
