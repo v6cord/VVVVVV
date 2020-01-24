@@ -250,13 +250,23 @@ void Graphics::maketelearray()
 
 void Graphics::MakeSpriteArray()
 {
-    for(int j = 0; j <16; j++)
+    int sprites_height = grphx.im_sprites->h;
+
+    for(int j = 0; j < sprites_height / 32; j++)
     {
         for(int i = 0; i <12; i++)
         {
             SDL_Surface* temp = GetSubSurface(grphx.im_sprites,i*32,j*32,32,32);
             sprites.push_back(temp);
-            temp = GetSubSurface(grphx.im_flipsprites,i*32,j*32,32,32);
+        }
+    }
+
+    sprites_height = grphx.im_flipsprites->h;
+    for(int j = 0; j < sprites_height / 32; j++)
+    {
+        for(int i = 0; i <12; i++)
+        {
+            SDL_Surface* temp = GetSubSurface(grphx.im_flipsprites,i*32,j*32,32,32);
             flipsprites.push_back(temp);
         }
     }
