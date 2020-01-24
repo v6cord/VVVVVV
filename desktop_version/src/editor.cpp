@@ -3287,7 +3287,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
             break;
         case 10: // Checkpoints
-            dwgfx.drawsprite(ex, ey, 20 + edentity[i].p1, 196, 196, 196);
+            if (edentity[i].p1 == 0 || edentity[i].p1 == 1)
+                dwgfx.drawsprite(ex, ey, 20 + edentity[i].p1, 196, 196, 196);
+            else
+                dwgfx.drawsprite(ex, ey, 190, 196, 196, 196);
             fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
             break;
         case 11: // Gravity lines
@@ -6143,9 +6146,15 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             ed.lclickdelay=1;
                         }
-                        else if(edentity[tmp].t==10)
+                        else if(edentity[tmp].t==10) //Checkpoint sprite changing
                         {
-                            edentity[tmp].p1=(edentity[tmp].p1+1)%2;
+                                 if (edentity[tmp].p1 == 0)
+                                     edentity[tmp].p1 = 2;
+                            else if (edentity[tmp].p1 == 2)
+                                     edentity[tmp].p1 = 1;
+                            else if (edentity[tmp].p1 == 1)
+                                     edentity[tmp].p1 = 0;
+
                             ed.lclickdelay=1;
                         }
                         else if(edentity[tmp].t==11)

@@ -5081,6 +5081,7 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
         else if (pKey == "savedir")
         {
             savedir= atoi(pText);
+            printf("%s\n",pText);
         }
         else if (pKey == "savepoint")
         {
@@ -5369,6 +5370,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         else if (pKey == "savedir")
         {
             savedir= atoi(pText);
+printf("%s\n",pText);
         }
         else if (pKey == "savepoint")
         {
@@ -6795,6 +6797,7 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
         else if (pKey == "savedir")
         {
             savedir= atoi(pText);
+printf("%s\n",pText);
         }
         else if (pKey == "savepoint")
         {
