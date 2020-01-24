@@ -3273,7 +3273,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
             break;
         case 5: // Flip Tokens
-            dwgfx.drawspritesetcol(ex, ey, 190, obj.crewcolour(0), help);
+            dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
             //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
             fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,164));
             break;
@@ -6118,7 +6118,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==17)  // Flip Tokens
                             {
-                                addedentity(tx, ty, 5, 179);
+                                addedentity(tx, ty, 5, 181);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==18)  // Coins

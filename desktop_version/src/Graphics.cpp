@@ -250,13 +250,23 @@ void Graphics::maketelearray()
 
 void Graphics::MakeSpriteArray()
 {
-    for(int j = 0; j <16; j++)
+    int sprites_height = grphx.im_sprites->h;
+
+    for(int j = 0; j < sprites_height / 32; j++)
     {
         for(int i = 0; i <12; i++)
         {
             SDL_Surface* temp = GetSubSurface(grphx.im_sprites,i*32,j*32,32,32);
             sprites.push_back(temp);
-            temp = GetSubSurface(grphx.im_flipsprites,i*32,j*32,32,32);
+        }
+    }
+
+    sprites_height = grphx.im_flipsprites->h;
+    for(int j = 0; j < sprites_height / 32; j++)
+    {
+        for(int i = 0; i <12; i++)
+        {
+            SDL_Surface* temp = GetSubSurface(grphx.im_flipsprites,i*32,j*32,32,32);
             flipsprites.push_back(temp);
         }
     }
@@ -2699,9 +2709,15 @@ void Graphics::setcol( int t, UtilityClass& help )
 {
 	int temp;
 
+        ct.nocolor = false;
+
 	//Setup predefinied colours as per our zany palette
 	switch(t)
 	{
+                //No color
+        case -1:
+                ct.nocolor = true;
+                break;
 		//Player Normal
 	case 0:
 		ct.colour = getRGB(160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
