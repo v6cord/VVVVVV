@@ -2149,7 +2149,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         entities[k].rule = 3;
         entities[k].type = 8;
         entities[k].size = 0;
-        entities[k].tile = 20 + vx;
+        if (vx == 0 || vx == 1) entities[k].tile = 20 + vx; else entities[k].tile = 190;
         entities[k].xp = xp;
         entities[k].yp = yp;
         entities[k].w = 16;
@@ -3330,6 +3330,11 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     else if (entities[i].tile == 21)
                     {
                         game.savey = entities[i].yp-8;
+                        game.savegc = 0;
+                    }
+                    else if (entities[i].tile == 190)
+                    {
+                        game.savey = entities[i].yp - 4;
                         game.savegc = 0;
                     }
 
