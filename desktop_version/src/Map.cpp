@@ -1913,6 +1913,14 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                                 edentity[edi].p2*8, 300+tempscriptbox);
                 tempscriptbox++;
                 break;
+            case 20: // Activity Zone
+                obj.customprompt = edentity[edi].activityname;
+                obj.customcolour = edentity[edi].activitycolor;
+                obj.customscript = edentity[edi].scriptname;
+                obj.createblock(ACTIVITY, ex, ey, edentity[edi].p1*8,
+                                edentity[edi].p2*8, 100);
+                //tempscriptbox++;
+                break;
             case 50: // Warp Lines
                 obj.customwarpmode=true;
                 if (edentity[edi].p1==0) //

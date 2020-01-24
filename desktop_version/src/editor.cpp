@@ -228,6 +228,9 @@ void editorclass::reset()
     boundy2=0;
 
     scripttextmod=false;
+    activitynamemod=false;
+    activitycolormod=false;
+    activitytextmod=false;
     scripttextent=0;
     scripttexttype=0;
 
@@ -2421,6 +2424,19 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
                 {
                     edentity[i].scriptname = std::string(edEntityEl->GetText()) ;
                 }
+
+                if (edEntityEl->Attribute("activityname")) {
+                    edentity[i].activityname = edEntityEl->Attribute("activityname");
+                } else {
+                    edentity[i].activityname = "";
+                }
+                
+                if (edEntityEl->Attribute("activitycolor")) {
+                    edentity[i].activitycolor = edEntityEl->Attribute("activitycolor");
+                } else {
+                    edentity[i].activitycolor = "";
+                }
+
                 edEntityEl->QueryIntAttribute("x", &edentity[i].x);
                 edEntityEl->QueryIntAttribute("y", &edentity[i].y);
                 edEntityEl->QueryIntAttribute("t", &edentity[i].t);
@@ -2707,6 +2723,12 @@ void editorclass::save(std::string& _path)
         if (edentity[i].state != 0)
                 edentityElement->SetAttribute("state", edentity[i].state);
         edentityElement->SetAttribute("intower", edentity[i].intower);
+        if (edentity[i].activityname != "") {
+            edentityElement->SetAttribute(  "activityname", edentity[i].activityname.c_str());
+        }
+        if (edentity[i].activitycolor != "") {
+            edentityElement->SetAttribute(  "activitycolor", edentity[i].activitycolor.c_str());
+        }
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
         edentityElement->LinkEndChild( new TiXmlText( "" )) ;
         msg->LinkEndChild( edentityElement );
@@ -2780,6 +2802,8 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
     edentity[EditorData::GetInstance().numedentities].intower=tower;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
+    edentity[EditorData::GetInstance().numedentities].activityname="";
+    edentity[EditorData::GetInstance().numedentities].activitycolor="";
 
     EditorData::GetInstance().numedentities++;
 }
@@ -2799,6 +2823,8 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
     edentity[EditorData::GetInstance().numedentities].intower=tower;
     edentity[EditorData::GetInstance().numedentities].scriptname="";
+    edentity[EditorData::GetInstance().numedentities].activityname="";
+    edentity[EditorData::GetInstance().numedentities].activitycolor="";
 }
 
 void copyedentity( int a, int b )
@@ -2815,6 +2841,8 @@ void copyedentity( int a, int b )
     edentity[a].state=edentity[b].state;
     edentity[a].intower=edentity[b].intower;
     edentity[a].scriptname=edentity[b].scriptname;
+    edentity[a].activityname=edentity[b].activityname;
+    edentity[a].activitycolor=edentity[b].activitycolor;
 }
 
 void removeedentity( int t )
@@ -3347,6 +3375,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             if(ed.temp==i)
                 dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
             break;
+        case 20: // Activity Zones
+            fillboxabs(dwgfx, ex, ey, edentity[i].p1*8, edentity[i].p2*8,
+                       dwgfx.getRGB(164,255,164));
+            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
+            if(ed.temp==i)
+                dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
+            break;
         case 50: // Warp lines
             fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
             if (edentity[i].p1>=2) { //Horizontal
@@ -3638,6 +3673,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             case 3:
                 dwgfx.Print(4, 232, "COPY TILES: Click on bottom right", 255,255,255, false);
                 break;
+            case 4:
+                dwgfx.Print(4, 232, "ACTIVITY ZONE: Click on top left", 255,255,255, false);
+                break;
             default:
                 dwgfx.Print(4, 232, "Click on bottom right", 255,255,255, false);
                 break;
@@ -3877,7 +3915,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         }
         */
     }
-    else if(ed.scripttextmod)
+    else if((ed.scripttextmod) || (ed.activitytextmod))
     {
         FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
         FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
@@ -3889,6 +3927,34 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         else
         {
             dwgfx.Print(4, 232, edentity[ed.scripttextent].scriptname+" ", 196, 196, 255 - help.glow, true);
+        }
+    }
+    else if(ed.activitynamemod)
+    {
+        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
+        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
+        dwgfx.Print(4, 224, "Enter activity zone text:", 255,255,255, false);
+        if(ed.entframe<2)
+        {
+            dwgfx.Print(4, 232, edentity[ed.scripttextent].activityname+"_", 196, 196, 255 - help.glow, true);
+        }
+        else
+        {
+            dwgfx.Print(4, 232, edentity[ed.scripttextent].activityname+" ", 196, 196, 255 - help.glow, true);
+        }
+    }
+    else if(ed.activitycolormod)
+    {
+        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
+        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
+        dwgfx.Print(4, 224, "Enter activity zone color:", 255,255,255, false);
+        if(ed.entframe<2)
+        {
+            dwgfx.Print(4, 232, edentity[ed.scripttextent].activitycolor+"_", 196, 196, 255 - help.glow, true);
+        }
+        else
+        {
+            dwgfx.Print(4, 232, edentity[ed.scripttextent].activitycolor+" ", 196, 196, 255 - help.glow, true);
         }
     }
     else if(ed.savemod)
@@ -4279,7 +4345,11 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bprint(2,2, "T: Terminal",196, 196, 255 - help.glow);
             break;
         case 12:
-            dwgfx.bprint(2,2, "Y: Script Box",196, 196, 255 - help.glow);
+            if (ed.zmod) {
+                dwgfx.bprint(2,2, "Y+Z: Activity Zone",196, 196, 255 - help.glow);
+            } else {
+                dwgfx.bprint(2,2, "Y: Script Box",196, 196, 255 - help.glow);
+            }
             break;
         case 13:
             dwgfx.bprint(2,2, "U: Warp Token",196, 196, 255 - help.glow);
@@ -4682,9 +4752,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         {
             edentity[ed.roomtextent].scriptname=key.keybuffer;
         }
-        else if(ed.scripttextmod)
+        else if((ed.scripttextmod) || (ed.activitytextmod))
         {
             edentity[ed.scripttextent].scriptname=key.keybuffer;
+        }
+        else if(ed.activitynamemod)
+        {
+            edentity[ed.scripttextent].activityname=key.keybuffer;
+        }
+        else if(ed.activitycolormod)
+        {
+            edentity[ed.scripttextent].activitycolor=key.keybuffer;
         }
         else if(ed.titlemod)
         {
@@ -4768,6 +4846,32 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ed.addhook(edentity[ed.scripttextent].scriptname);
                     }
                 }
+                else if(ed.activitynamemod)
+                {
+                    edentity[ed.scripttextent].activityname=key.keybuffer;
+                    ed.activitynamemod=false;
+                    ed.activitycolormod=true;
+                    key.keybuffer = "";
+                        //ed.clearscriptbuffer();
+                }
+                else if(ed.activitycolormod)
+                {
+                    edentity[ed.scripttextent].activitycolor=key.keybuffer;
+                    ed.activitycolormod=false;
+                    ed.activitytextmod=true;
+                    key.keybuffer = "";
+                    //ed.clearscriptbuffer();
+                }
+                else if(ed.activitytextmod)
+                {
+                    edentity[ed.scripttextent].scriptname=key.keybuffer;
+                    ed.activitytextmod=false;
+                    ed.clearscriptbuffer();
+                    if(!ed.checkhook(edentity[ed.scripttextent].scriptname))
+                    {
+                        ed.addhook(edentity[ed.scripttextent].scriptname);
+                    }
+                }
                 else if(ed.titlemod)
                 {
                     EditorData::GetInstance().title=key.keybuffer;
@@ -4796,8 +4900,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.Desc3=key.keybuffer;
                     ed.desc3mod=false;
                 }
-                key.disabletextentry();
-                ed.textentry=false;
+
+                if (!ed.activitycolormod && !ed.activitytextmod) {
+                    key.disabletextentry();
+                    ed.textentry=false;
+                }
 
                 if(ed.desc1mod)
                 {
@@ -5681,6 +5788,20 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 key.keybuffer="";
                                 ed.lclickdelay=1;
                             }
+                            else if(ed.boundarytype==4)
+                            {
+                                //Activity zone
+                                ed.activitynamemod=true;
+                                ed.scripttextent=EditorData::GetInstance().numedentities;
+                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
+                                            (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
+                                ed.lclickdelay=1;
+
+                                ed.textentry=true;
+                                key.enabletextentry();
+                                key.keybuffer="";
+                                ed.lclickdelay=1;
+                            }
                             else if(ed.boundarytype==1)
                             {
                                 //Enemy bounds
@@ -5869,7 +5990,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==12)   //Script Trigger
                             {
-                                ed.boundarytype=0;
+                                if (ed.zmod) {
+                                    ed.boundarytype=4;
+                                } else {
+                                    ed.boundarytype=0;
+                                }
                                 ed.boundx1=ed.tilex*8;
                                 ed.boundy1=ed.tiley*8;
                                 ed.boundarymod=2;

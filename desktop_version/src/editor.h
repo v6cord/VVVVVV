@@ -34,6 +34,8 @@ public:
     int state = 0;
     int intower = 0;
     std::string scriptname;
+    std::string activityname;
+    std::string activitycolor;
 };
 
 
@@ -248,6 +250,9 @@ public:
     int roomtextent = 0;
 
     bool scripttextmod = false;
+    bool activitynamemod=false;
+    bool activitycolormod=false;
+    bool activitytextmod=false;
     int scripttextent = 0;
     int scripttexttype = 0;
 
