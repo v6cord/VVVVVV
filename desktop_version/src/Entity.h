@@ -222,6 +222,7 @@ public:
     growing_vector<blockclass> blocks;
     growing_vector<int> flags;
     growing_vector<int> collect;
+    growing_vector<int> coincollect;
     growing_vector<int> customcollect;
 
     int nblocks = 0;

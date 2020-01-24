@@ -78,6 +78,7 @@ void entityclass::init()
     entities.resize(200);
     linecrosskludge.resize(100);
     collect.resize(100);
+    coincollect.resize(100);
     customcollect.resize(100);
 
     nlinecrosskludge = 0;
@@ -2124,7 +2125,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
 
         //Check if it's already been collected
         entities[k].para = vx;
-        if (collect[vx] == 1) entities[k].active = false;
+        if (coincollect[vx] == 1) entities[k].active = false;
         break;
     case 9: //Something Shiny
         entities[k].rule = 3;
@@ -3269,7 +3270,7 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 {
                     game.coins++;
                     music.playef(4,10);
-                    collect[entities[i].para] = 1;
+                    coincollect[entities[i].para] = 1;
 
                     entities[i].active = false;
                 }

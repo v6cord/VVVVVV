@@ -208,6 +208,7 @@ public:
     int spikedir(int x, int y);
     int towerspikedir(int x, int y);
     int findtrinket(int t);
+    int findcoin(int t);
     int findcrewmate(int t);
     int findwarptoken(int t);
     void countstuff();
@@ -225,6 +226,7 @@ public:
     growing_vector <int> contents;
     growing_vector <int> vmult;
     int numtrinkets = 0;
+    int numcoins = 0;
     int numcrewmates = 0;
     growing_vector<edlevelclass> level;
 

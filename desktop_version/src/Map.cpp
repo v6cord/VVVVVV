@@ -41,6 +41,7 @@ mapclass::mapclass()
     custommode=false;
     custommodeforreal=false;
     customtrinkets=0;
+    customcoins=0;
     customx=0; customy=0;
     customwidth=20; customheight=20;
     custommmxoff=0; custommmyoff=0; custommmxsize=0; custommmysize=0;
@@ -1855,6 +1856,9 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             case 3: // Disappearing platforms
                 obj.createentity(game, ex, ey, 3);
                 break;
+            case 8: // Coins
+                obj.createentity(game, ex, ey, 8, ed.findcoin(edi));
+                break;
             case 9: // Trinkets
                 obj.createentity(game, ex, ey, 9, ed.findtrinket(edi));
                 break;
@@ -1923,6 +1927,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             ed.grayenemieskludge = false;
 
         customtrinkets=ed.numtrinkets;
+        customcoins=ed.numcoins;
         customcrewmates=ed.numcrewmates;
 
         break;

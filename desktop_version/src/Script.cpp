@@ -2449,6 +2449,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				for (i = 0; i < 100; i++)
 				{
 					obj.collect[i] = 0;
+					obj.coincollect[i] = 0;
 					obj.customcollect[i] = 0;
 				}
 				game.deathcounts = 0;
@@ -4484,6 +4485,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	for (i = 0; i < 100; i++)
 	{
 		obj.collect[i] = 0;
+		obj.coincollect[i] = 0;
 		obj.customcollect[i] = 0;
 	}
 

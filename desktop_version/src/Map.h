@@ -136,6 +136,7 @@ public:
     int customx, customy = 0;
     int customwidth, customheight = 0;
     int customtrinkets = 0;
+    int customcoins=0;
     int customcrewmates = 0;
     int custommmxoff, custommmyoff, custommmxsize, custommmysize = 0;
     int customzoom = 0;

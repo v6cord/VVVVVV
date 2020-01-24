@@ -253,6 +253,7 @@ void editorclass::reset()
     entframedelay=0;
 
     numtrinkets=0;
+    numcoins=0;
     numcrewmates=0;
     EditorData::GetInstance().numedentities=0;
     levmusic=0;
@@ -1859,6 +1860,17 @@ int editorclass::findtrinket(int t)
     return 0;
 }
 
+int editorclass::findcoin(int t)
+{
+    int tcoin=0;
+    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    {
+        if(i==t) return tcoin;
+        if(edentity[i].t==8) tcoin++;
+    }
+    return 0;
+}
+
 int editorclass::findcrewmate(int t)
 {
     int ttrinket=0;
@@ -1884,10 +1896,12 @@ int editorclass::findwarptoken(int t)
 void editorclass::countstuff()
 {
     numtrinkets=0;
+    numcoins=0;
     numcrewmates=0;
     for(int i=0; i<EditorData::GetInstance().numedentities; i++)
     {
         if(edentity[i].t==9) numtrinkets++;
+        if(edentity[i].t==8) numcoins++;
         if(edentity[i].t==15) numcrewmates++;
     }
 }
@@ -3241,7 +3255,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             if(edentity[i].p1==3)
                 dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
             break;
-
+        case 8: // Coin
+            dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
+            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164, 164, 255));
+            break;
         case 9: // Shiny Trinket
             dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
             fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
@@ -3424,7 +3441,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     case 2:
     case 9:
     case 10:
-    case 12: //Single point
+    case 12:
+    case 17: //Single point
         fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8,8, dwgfx.getRGB(200,32,32));
         break;
     case 3:
@@ -4041,6 +4059,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if(ed.drawmode==14)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"I",255,255,255,false);
                 if(ed.drawmode==15)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"O",255,255,255,false);
                 if(ed.drawmode==16)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"P",255,255,255,false);
+                if(ed.drawmode==17)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"F",255,255,255,false);
 
                 fillboxabs(dwgfx, 4+(0*tg), 209,20,20,dwgfx.getRGB(96,96,96));
                 dwgfx.Print(22+(0*tg)-4, 225-4, "R",164,164,164,false);
@@ -4116,6 +4135,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 break;
             case 16:
                 dwgfx.bprint(2,199, "P: Start Point",196, 196, 255 - help.glow);
+                break;
+            case 17:
+                dwgfx.bprint(2,199, "F: Coin",196, 196, 255 - help.glow);
                 break;
             }
 
@@ -4248,6 +4270,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             break;
         case 16:
             dwgfx.bprint(2,2, "P: Start Point",196, 196, 255 - help.glow);
+            break;
+        case 17:
+            dwgfx.bprint(2,2, "F: Coin",196, 196, 255 - help.glow);
             break;
         }
 
@@ -4911,10 +4936,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         if (game.currentmenuoption == 0)
                         {
                             ed.levmusic++;
-                            if(ed.levmusic==5) ed.levmusic=6;
-                            if(ed.levmusic==7) ed.levmusic=8;
-                            if(ed.levmusic==9) ed.levmusic=10;
-                            if(ed.levmusic==15) ed.levmusic=0;
+                            //if(ed.levmusic==5) ed.levmusic=6;
+                            //if(ed.levmusic==7) ed.levmusic=8;
+                            //if(ed.levmusic==9) ed.levmusic=10;
+                            //if(ed.levmusic==15) ed.levmusic=0;
+                            if(ed.levmusic==16) ed.levmusic=0;
                             if(ed.levmusic>0)
                             {
                                 music.play(ed.levmusic);
@@ -5191,6 +5217,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_i]) ed.drawmode=14;
             if(key.keymap[SDLK_o]) ed.drawmode=15;
             if(key.keymap[SDLK_p]) ed.drawmode=16;
+            if(key.keymap[SDLK_f]) ed.drawmode=17;
 
             if(key.keymap[SDLK_w] && ed.keydelay==0)
             {
@@ -5466,10 +5493,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
                     if(ed.drawmode<0)
                     {
-                        ed.drawmode=16;
+                        ed.drawmode=17;
                         if(ed.spacemod) ed.spacemenu=0;
                     }
-                    if(ed.drawmode>16) ed.drawmode=0;
+                    if(ed.drawmode>17) ed.drawmode=0;
                     if(ed.drawmode>9)
                     {
                         if(ed.spacemod) ed.spacemenu=1;
@@ -5944,6 +5971,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 }
                                 ed.lclickdelay=1;
                             }
+                            else if(ed.drawmode==17)  // Coins
+                            {
+                                addedentity(tx, ty, 8, 0);
+                                ed.numcoins++;
+                                ed.lclickdelay=1;
+                            }
                         }
                         else if(edentity[tmp].t==1)
                         {
@@ -6046,6 +6079,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             edentity[i].state==ed.levaltstate &&
                             edentity[i].intower==tower) {
                             if (edentity[i].t==9) ed.numtrinkets--;
+                            if (edentity[i].t==8) ed.numcoins++;
                             if (edentity[i].t==15) ed.numcrewmates--;
                             removeedentity(i);
                         }

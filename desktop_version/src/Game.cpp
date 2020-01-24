@@ -5020,6 +5020,20 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             }
         }
 
+        if (pKey == "coincollect")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                obj.coincollect.clear();
+                for(size_t i = 0; i < values.size(); i++)
+                {
+                    obj.coincollect.push_back(atoi(values[i].c_str()));
+                }
+            }
+        }
+
         if (pKey == "finalmode")
         {
             map.finalmode = atoi(pText);
@@ -5261,6 +5275,20 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 for(size_t i = 0; i < values.size(); i++)
                 {
                     obj.collect.push_back(atoi(values[i].c_str()));
+                }
+            }
+        }
+
+        if (pKey == "coincollect")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                obj.coincollect.clear();
+                for(size_t i = 0; i < values.size(); i++)
+                {
+                    obj.coincollect.push_back(atoi(values[i].c_str()));
                 }
             }
         }
@@ -5805,6 +5833,15 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
     msg->LinkEndChild( new TiXmlText( collect.c_str() ));
     msgs->LinkEndChild( msg );
 
+    std::string coincollect;
+    for(size_t i = 0; i < obj.coincollect.size(); i++ )
+    {
+        coincollect += UtilityClass::String(obj.coincollect[i]) + ",";
+    }
+    msg = new TiXmlElement( "coincollect" );
+    msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
+    msgs->LinkEndChild( msg );
+
     //telecookie.data.finalx = map.finalx;
     //telecookie.data.finaly = map.finaly;
     //Position
@@ -6046,6 +6083,15 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
     }
     msg = new TiXmlElement( "collect" );
     msg->LinkEndChild( new TiXmlText( collect.c_str() ));
+    msgs->LinkEndChild( msg );
+
+    std::string coincollect;
+    for(size_t i = 0; i < obj.coincollect.size(); i++ )
+    {
+        coincollect += UtilityClass::String(obj.coincollect[i]) + ",";
+    }
+    msg = new TiXmlElement( "coincollect" );
+    msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
     msgs->LinkEndChild( msg );
 
     //telecookie.data.finalx = map.finalx;
@@ -6299,6 +6345,15 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     }
     msg = new TiXmlElement( "collect" );
     msg->LinkEndChild( new TiXmlText( collect.c_str() ));
+    msgs->LinkEndChild( msg );
+
+    std::string coincollect;
+    for(size_t i = 0; i < obj.coincollect.size(); i++ )
+    {
+        coincollect += UtilityClass::String(obj.coincollect[i]) + ",";
+    }
+    msg = new TiXmlElement( "coincollect" );
+    msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
     msgs->LinkEndChild( msg );
 
     std::string customcollect;
@@ -6644,6 +6699,20 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
                 for(size_t i = 0; i < values.size(); i++)
                 {
                     obj.collect.push_back(atoi(values[i].c_str()));
+                }
+            }
+        }
+
+        if (pKey == "coincollect")
+        {
+            std::string TextString = (pText);
+            if(TextString.length())
+            {
+                growing_vector<std::string> values = split(TextString,',');
+                obj.coincollect.clear();
+                for(size_t i = 0; i < values.size(); i++)
+                {
+                    obj.coincollect.push_back(atoi(values[i].c_str()));
                 }
             }
         }
