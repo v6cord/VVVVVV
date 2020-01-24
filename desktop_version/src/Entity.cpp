@@ -78,6 +78,7 @@ void entityclass::init()
     entities.resize(200);
     linecrosskludge.resize(100);
     collect.resize(100);
+    coincollect.clear();
     coincollect.resize(100);
     customcollect.resize(100);
 
