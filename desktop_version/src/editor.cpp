@@ -2434,6 +2434,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         if (pKey == "levelMetaData")
         {
             int i = 0;
+            int row20 = 0;
             for( TiXmlElement* edLevelClassElement = pElem->FirstChildElement(); edLevelClassElement; edLevelClassElement=edLevelClassElement->NextSiblingElement())
             {
                 std::string pKey(edLevelClassElement->Value());
@@ -2461,6 +2462,13 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
 
                 i++;
 
+                if (mapwidth <= 20 && mapheight <= 20) {
+                    row20++;
+                    if (row20 == 20) {
+                        row20 = 0;
+                        i += 100 - 20;
+                    }
+                }
             }
         }
 
@@ -2697,8 +2705,13 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "levelMetaData" );
-    for(int i = 0; i < maxwidth * maxheight; i++)
-    {
+    int usethislimit;
+    if (mapwidth <= 20 && mapheight <= 20)
+        usethislimit = 20 * 20;
+    else
+        usethislimit = maxwidth * maxheight;
+    int row20 = 0;
+    for (int i = 0; i < usethislimit; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
@@ -2719,6 +2732,14 @@ void editorclass::save(std::string& _path)
 
         edlevelclassElement->LinkEndChild( new TiXmlText( level[i].roomname.c_str() )) ;
         msg->LinkEndChild( edlevelclassElement );
+
+        if (mapwidth <= 20 && mapheight <= 20) {
+            row20++;
+            if (row20 == 20) {
+                row20 = 0;
+                i += 100 - 20;
+            }
+        }
     }
     data->LinkEndChild( msg );
 

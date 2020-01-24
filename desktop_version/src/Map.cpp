@@ -939,7 +939,6 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
     // Custom towers
     if (custommode) {
         obj.entities[i].yp = yp;
-        *rx = (((*rx) - 100) % ed.mapwidth) + 100;
         return true;
     }
 
@@ -1063,8 +1062,8 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
     }
     else if (custommode)
     {
-        game.roomx = (rx % ed.mapwidth) + 100;
-        game.roomy = (ry % ed.mapheight) + 100;
+        game.roomx = ((rx-100) % ed.mapwidth) + 100;
+        game.roomy = ((ry-100) % ed.mapheight) + 100;
         game.roomchange = true;
     }
     else
