@@ -243,8 +243,16 @@ growing_vector<std::string> changelog = {
     "- Variable assignments (var = contents,",  
     "  var++, var += 1, var -= 1, var--)",
     "- Built-in variables (%deaths%,",
-    "  %player_x%, %player_y%, %trinkets%)",
+    "  %player_x%, %player_y%, %trinkets%,",
+    "  %coins%)",
     "- Upped the map size limit to 100 by 100",
+    "- ifcoins(x) - Run a script if the player",
+    "  has collected at least x coins",
+    "- Coins are now placeable in the editor",
+    "  using the F tool",
+    "- Coins display in the roomname if there's",
+    "  any coins in the map",
+    "- Coins and trinkets no longer share IDs",
 
 };
 

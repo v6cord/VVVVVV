@@ -191,4 +191,12 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
 
-- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%trinkets%`)
+- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%trinkets%`, `%coins%`)
+
+- `ifcoins(x)` - Run a script if the player has collected at least `x` coins
+
+- Coins are now placeable in the editor using the F tool
+
+- Coins display in the roomname if there's any coins in the map
+
+- Coins and trinkets no longer share IDs
