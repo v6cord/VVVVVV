@@ -5371,6 +5371,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             trinkets = atoi(pText);
         }
+        else if (pKey == "coins")
+        {
+            coins = atoi(pText);
+        }
         else if (pKey == "crewmates")
         {
             crewmates = atoi(pText);
@@ -5895,6 +5899,10 @@ void Game::savetele( mapclass& map, entityclass& obj, musicclass& music )
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(trinkets).c_str() ));
     msgs->LinkEndChild( msg );
 
+    msg = new TiXmlElement( "coins" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(coins).c_str() ));
+    msgs->LinkEndChild( msg );
+
 
     //if (music.nicechange != -1) {
     //telecookie.data.currentsong = music.nicechange;
@@ -6145,6 +6153,10 @@ void Game::savequick( mapclass& map, entityclass& obj, musicclass& music )
 
     msg = new TiXmlElement( "trinkets" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(trinkets).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "coins" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(coins).c_str() ));
     msgs->LinkEndChild( msg );
 
 
@@ -6416,6 +6428,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
 
     msg = new TiXmlElement( "trinkets" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(trinkets).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "coins" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(coins).c_str() ));
     msgs->LinkEndChild( msg );
 
     msg = new TiXmlElement( "crewmates" );
@@ -6780,6 +6796,10 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
         else if (pKey == "trinkets")
         {
             trinkets = atoi(pText);
+        }
+        else if (pKey == "coins")
+        {
+            coins = atoi(pText);
         }
         else if (pKey == "companion")
         {

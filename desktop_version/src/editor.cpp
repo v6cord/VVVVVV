@@ -5974,7 +5974,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 addedentity(tx, ty, 8, 0);
                                 ed.numcoins++;
-                                ed.lclickdelay=1;
+                                //ed.lclickdelay=1;
                             }
                         }
                         else if(edentity[tmp].t==1)
@@ -6078,7 +6078,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             edentity[i].state==ed.levaltstate &&
                             edentity[i].intower==tower) {
                             if (edentity[i].t==9) ed.numtrinkets--;
-                            if (edentity[i].t==8) ed.numcoins++;
+                            if (edentity[i].t==8) ed.numcoins--;
                             if (edentity[i].t==15) ed.numcrewmates--;
                             removeedentity(i);
                         }

@@ -82,6 +82,7 @@ void scriptclass::updatevars(Game& game, entityclass& obj) {
 	setvar("player_x", std::to_string(obj.entities[player].xp));
 	setvar("player_y", std::to_string(obj.entities[player].yp));
 	setvar("trinkets", std::to_string(game.trinkets));
+	setvar("coins", std::to_string(game.coins));
 }
 
 std::string scriptclass::processvars(std::string t) {
@@ -2267,6 +2268,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "iftrinkets")
 			{
 				if (game.trinkets >= ss_toi(words[1]))
+				{
+					call(words[2]);
+					position--;
+				}
+			}
+			else if (words[0] == "ifcoins")
+			{
+				if (game.coins >= ss_toi(words[1]))
 				{
 					call(words[2]);
 					position--;

@@ -1837,7 +1837,10 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         	map.glitchname = map.getglitchname(game.roomx, game.roomy);
           dwgfx.Print(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }else{
-          dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
+            
+            dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
+            //dwgfx.Print(304 - (map.customcoins / 10) * 8, 231, std::to_string(map.customcoins), 255, 255, 255);
+            //dwgfx.drawhuetile(312, 231, 48, 8);
         }
     }
 
@@ -1848,6 +1851,16 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         {
             dwgfx.Print(map.roomtextx[i]*8, (map.roomtexty[i]*8), map.roomtext[i], 196, 196, 255 - help.glow);
         }
+    }
+
+    if (map.customcoins > 0) {
+        std::string coinstring = std::to_string(game.coins);
+        if (game.coins == map.customcoins) {
+            dwgfx.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
+        } else {
+            dwgfx.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);
+        }
+        dwgfx.drawhuetile(311, 230, 48, 1);
     }
 
     // scriptrender
@@ -3117,9 +3130,6 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
 
     FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0x000000);
     dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
-
-    //dwgfx.rprint(5, 231,help.String(game.coins), 255 - help.glow/2, 255 - help.glow/2, 196, true);
-    //dwgfx.drawhuetile(311, 230, 48, 1);
 
     if (game.intimetrial && dwgfx.fademode==0)
     {
