@@ -7293,11 +7293,13 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[0] = true;
 					menuoptions[1] = "game pad options";
 					menuoptionsactive[1] = true;
-					menuoptions[2] = "clear data";
+                    menuoptions[2] = "flip mode";
 					menuoptionsactive[2] = true;
-					menuoptions[3] = "return";
+					menuoptions[3] = "clear data";
 					menuoptionsactive[3] = true;
-					nummenuoptions = 4;
+					menuoptions[4] = "return";
+					menuoptionsactive[4] = true;
+					nummenuoptions = 5;
 					menuxoff = -40;
 					menuyoff = 0;
 				#elif !defined(MAKEANDPLAY)

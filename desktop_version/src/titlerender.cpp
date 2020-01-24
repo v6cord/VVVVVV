@@ -419,12 +419,25 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
 								dwgfx.Print( -1, 65, "Rebind your controllers buttons", tr, tg, tb, true);
 								dwgfx.Print( -1, 75, "and adjust sensitivity", tr, tg, tb, true);
 							}
-							else if (game.currentmenuoption == 2)
+                            else if (game.currentmenuoption == 2)
+							{
+                                    dwgfx.bigprint( -1, 30, "Flip Mode", tr, tg, tb, true);
+                                    dwgfx.Print( -1, 65, "Flip the entire game vertically.", tr, tg, tb, true);
+                                    if (dwgfx.setflipmode)
+                                    {
+                                        dwgfx.Print( -1, 105, "Currently ENABLED!", tr, tg, tb, true);
+                                    }
+                                    else
+                                    {
+                                        dwgfx.Print( -1, 105, "Currently Disabled.", tr/2, tg/2, tb/2, true);
+                                    }
+							}
+							else if (game.currentmenuoption == 3)
 							{
 									dwgfx.bigprint( -1, 30, "Clear Data", tr, tg, tb, true);
 									dwgfx.Print( -1, 65, "Delete your save data", tr, tg, tb, true);
 									dwgfx.Print( -1, 75, "and unlocked play modes", tr, tg, tb, true);
-							}else if (game.currentmenuoption == 3){
+							}else if (game.currentmenuoption == 4){
 								if(music.mmmmmm){
 									dwgfx.bigprint( -1, 30, "Soundtrack", tr, tg, tb, true);
 									dwgfx.Print( -1, 65, "Toggle between MMMMMM and PPPPPP", tr, tg, tb, true);

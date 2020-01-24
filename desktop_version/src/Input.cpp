@@ -863,7 +863,15 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 						game.createmenu("controller");
 						map.nexttowercolour();
 					}
-                    else if (game.currentmenuoption == 2)
+                    else if (game.currentmenuoption == 2)    //enable/disable flip mode
+                    {
+                        music.playef(18, 10);
+                        game.screenshake = 10;
+                        game.flashlight = 5;
+                        dwgfx.setflipmode = !dwgfx.setflipmode;
+                        game.savemystats = true;
+                    }
+                    else if (game.currentmenuoption == 3)
                     {
                         //clear data menu
                         music.playef(11, 10);
@@ -872,7 +880,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     }
 
 										if(music.mmmmmm){
-											if (game.currentmenuoption == 3)
+											if (game.currentmenuoption == 4)
 											{
 													//**** TOGGLE MMMMMM
 													if(game.usingmmmmmm > 0){
@@ -887,7 +895,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 													game.createmenu("mainmenu");
 													map.nexttowercolour();
 											}
-											if (game.currentmenuoption == 4)
+											if (game.currentmenuoption == 5)
 											{
 													//back
 													music.playef(11, 10);
@@ -895,7 +903,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 													map.nexttowercolour();
 											}
 										}else{
-											if (game.currentmenuoption == 3)
+											if (game.currentmenuoption == 4)
 											{
 													//back
 													music.playef(11, 10);
