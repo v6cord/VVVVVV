@@ -27,7 +27,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifnotflag()` - an inverted version of `ifflag()`
 
-- `drawtext(x,y,r,g,b,center)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` should be either 0 or 1, or "true" or "false"
+- `drawtext(x,y,r,g,b,center,border)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` and `border` should be either 0 or 1, or "true" or "false"
 
 - `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame - r,g,b is 0-255
 
