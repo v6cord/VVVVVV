@@ -88,7 +88,7 @@ struct LevelMetaData
 };
 
 
-extern edentities edentity[3000];
+extern growing_vector<edentities> edentity;
 extern scriptclass script;
 
 class EditorData

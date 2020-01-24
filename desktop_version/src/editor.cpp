@@ -330,6 +330,9 @@ void editorclass::reset()
         altstates[i].reset();
     for (size_t i = 0; i < towers.size(); i++)
         towers[i].reset();
+
+    edentity.clear();
+    edentity.resize(3000);
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx)
@@ -2829,7 +2832,7 @@ void fillboxabs( Graphics& dwgfx, int x, int y, int x2, int y2, int c )
 
 
 extern editorclass ed;
-extern edentities edentity[3000];
+extern growing_vector<edentities> edentity;
 
 extern int temp;
 

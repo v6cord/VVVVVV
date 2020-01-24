@@ -30,7 +30,7 @@
 #include <string.h>
 
 scriptclass script;
-edentities edentity[3000];
+growing_vector<edentities> edentity;
 edaltstate altstates[1000];
 editorclass ed;
 
