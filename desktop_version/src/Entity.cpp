@@ -2078,7 +2078,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         entities[k].rule = 3;
         entities[k].type = 4;
         entities[k].size = 0;
-        entities[k].tile = 11;
+        entities[k].tile = 11 + vx;
         entities[k].xp = xp;
         entities[k].yp = yp;
         entities[k].w = 16;

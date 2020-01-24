@@ -3250,6 +3250,11 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             if(edentity[i].p1==3)
                 dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
             break;
+        case 5: // Flip Tokens
+            dwgfx.drawspritesetcol(ex, ey, 190, obj.crewcolour(0), help);
+            //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,164));
+            break;
         case 8: // Coin
             dwgfx.drawhuetile(ex, ey, 48, 8);
             //dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
@@ -3438,13 +3443,14 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     case 9:
     case 10:
     case 12:
-    case 17: //Single point
+    case 18: //Single point
         fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8,8, dwgfx.getRGB(200,32,32));
         break;
     case 3:
     case 4:
     case 8:
-    case 13://2x2
+    case 13:
+    case 17: //2x2
         fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,16, dwgfx.getRGB(200,32,32));
         break;
     case 5:
@@ -4021,7 +4027,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
                 dwgfx.Print(4, 232, "1/2", 196, 196, 255 - help.glow, false);
             } else {
-                for(int i=0; i<7; i++)
+                for(int i=0; i<9; i++) 
                     FillRect(dwgfx.backBuffer, 4+(i*tg), 209,20,20,dwgfx.getRGB(32,32,32));
                 FillRect(dwgfx.backBuffer, 4+((ed.drawmode-10)*tg), 209,20,20,dwgfx.getRGB(64,64,64));
                 //10:
@@ -4047,6 +4053,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 //16:
                 tx+=tg;
                 dwgfx.drawsprite(tx,ty,184,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
+                //17:
+                tx+=tg;
+                dwgfx.drawsprite(tx,ty,190,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
+                //18:
+                tx+=tg;
+                dwgfx.drawhuetile(tx,   ty,   48, 8);
+                dwgfx.drawhuetile(tx+8, ty,   48, 8);
+                dwgfx.drawhuetile(tx,   ty+8, 48, 8);
+                dwgfx.drawhuetile(tx+8, ty+8, 48, 8);
 
                 if(ed.drawmode==10)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"R",255,255,255,false);
                 if(ed.drawmode==11)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"T",255,255,255,false);
@@ -4056,6 +4071,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if(ed.drawmode==15)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"O",255,255,255,false);
                 if(ed.drawmode==16)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"P",255,255,255,false);
                 if(ed.drawmode==17)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"F",255,255,255,false);
+                if(ed.drawmode==18)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"G",255,255,255,false);
 
                 fillboxabs(dwgfx, 4+(0*tg), 209,20,20,dwgfx.getRGB(96,96,96));
                 dwgfx.Print(22+(0*tg)-4, 225-4, "R",164,164,164,false);
@@ -4071,6 +4087,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print(22+(5*tg)-4, 225-4, "O",164,164,164,false);
                 fillboxabs(dwgfx, 4+(6*tg), 209,20,20,dwgfx.getRGB(96,96,96));
                 dwgfx.Print(22+(6*tg)-4, 225-4, "P",164,164,164,false);
+                fillboxabs(dwgfx, 4+(7*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(7*tg)-4, 225-4, "F",164,164,164,false);
+                fillboxabs(dwgfx, 4+(8*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(8*tg)-4, 225-4, "G",164,164,164,false);
 
                 dwgfx.Print(4, 232, "2/2", 196, 196, 255 - help.glow, false);
             }
@@ -4133,7 +4153,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.bprint(2,199, "P: Start Point",196, 196, 255 - help.glow);
                 break;
             case 17:
-                dwgfx.bprint(2,199, "F: Coin",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "F: Flip Token",196, 196, 255 - help.glow);
+                break;
+            case 18:
+                dwgfx.bprint(2,199, "G: Coin",196, 196, 255 - help.glow);
                 break;
             }
 
@@ -4268,7 +4291,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bprint(2,2, "P: Start Point",196, 196, 255 - help.glow);
             break;
         case 17:
-            dwgfx.bprint(2,2, "F: Coin",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "F: Flip Token",196, 196, 255 - help.glow);
+            break;
+        case 18:
+            dwgfx.bprint(2,2, "G: Coin",196, 196, 255 - help.glow);
             break;
         }
 
@@ -5214,6 +5240,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_o]) ed.drawmode=15;
             if(key.keymap[SDLK_p]) ed.drawmode=16;
             if(key.keymap[SDLK_f]) ed.drawmode=17;
+            if(key.keymap[SDLK_g]) ed.drawmode=18;
 
             if(key.keymap[SDLK_w] && ed.keydelay==0)
             {
@@ -5489,10 +5516,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
                     if(ed.drawmode<0)
                     {
-                        ed.drawmode=17;
+                        ed.drawmode=18;
                         if(ed.spacemod) ed.spacemenu=0;
                     }
-                    if(ed.drawmode>17) ed.drawmode=0;
+                    if(ed.drawmode>18) ed.drawmode=0;
                     if(ed.drawmode>9)
                     {
                         if(ed.spacemod) ed.spacemenu=1;
@@ -5967,7 +5994,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 }
                                 ed.lclickdelay=1;
                             }
-                            else if(ed.drawmode==17)  // Coins
+                            else if(ed.drawmode==17)  // Flip Tokens
+                            {
+                                addedentity(tx, ty, 5, 179);
+                                ed.lclickdelay=1;
+                            }
+                            else if(ed.drawmode==18)  // Coins
                             {
                                 addedentity(tx, ty, 8, 0);
                                 ed.numcoins++;

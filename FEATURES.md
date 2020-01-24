@@ -195,7 +195,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifcoins(x)` - Run a script if the player has collected at least `x` coins
 
-- Coins are now placeable in the editor using the F tool
+- Coins are now placeable in the editor using the G tool
 
 - Coins display in the roomname if there's any coins in the map
 
@@ -206,3 +206,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Selecting level music from the editor is no longer limited
 
 - `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
+
+- Flip tokens are now placeable in the editor using the F tool
