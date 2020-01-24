@@ -252,7 +252,7 @@ growing_vector<std::string> changelog = {
     "- ifcoinsless(x) - Run a script if the",
     "  player has less than x coins",
     "- Coins are now placeable in the editor",
-    "  using the F tool",
+    "  using the G tool",
     "- Coins display in the roomname if there's",
     "  any coins in the map",
     "- Coins and trinkets no longer share IDs",
@@ -269,6 +269,8 @@ growing_vector<std::string> changelog = {
     "  text from the next line.",
     "- stop() - Stop the script and remove",
     "  cutscene bars",
+    "- Flip tokens are now placeable in the",
+    "  editor using the F tool",
 
 };
 

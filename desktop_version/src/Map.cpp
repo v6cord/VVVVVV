@@ -1861,6 +1861,9 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             case 3: // Disappearing platforms
                 obj.createentity(game, ex, ey, 3);
                 break;
+            case 5: // Flip tokens
+                obj.createentity(game, ex, ey, 5, edentity[edi].p1);
+                break;
             case 8: // Coins
                 obj.createentity(game, ex, ey, 8, ed.findcoin(edi));
                 break;
