@@ -238,16 +238,13 @@ growing_vector<std::string> changelog = {
     "  variable, using either a given",
     "  argument or whatever is on the next",
     "  line",
-<<<<<<< HEAD
     "- Upped the trinkets/crewmates limit to",
     "  100",
-    "- Variable assignments (var = contents,",
+    "- Variable assignments (var = contents,",  
     "  var++, var += 1, var -= 1, var--)",
     "- Built-in variables (%deaths%, %player_x%,",
     "  %player_y%, %trinkets%)",
-=======
     "- Upped the map size limit to 100 by 100",
->>>>>>> ceb28428511a8094321830adc346c0a0f9d3d16f
 
 };
 
