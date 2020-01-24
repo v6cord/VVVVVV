@@ -1256,7 +1256,7 @@ enum tiletyp
 editorclass::getabstiletyp(int x, int y)
 {
     int tile = absat(&x, &y);
-    int room = x / 40 + ((y / 30)*ed.maxwidth);
+    int room = x / 40 + ((y / 30)*maxwidth);
 
     return gettiletyp(level[room].tileset, tile);
 }
@@ -1328,9 +1328,9 @@ int editorclass::backfree( int x, int y )
 
 int editorclass::towerspikefree(int x, int y) {
     // Uses absolute y in tower mode
-    int tower = ed.get_tower(ed.levx, ed.levy);
-    int size = ed.tower_size(tower);
-    if (!ed.intower())
+    int tower = get_tower(levx, levy);
+    int size = tower_size(tower);
+    if (!intower())
         return spikefree(x, y);
 
     if (x == -1) return 1;
@@ -1339,7 +1339,7 @@ int editorclass::towerspikefree(int x, int y) {
     if (y >= size) return 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
-    temp = gettiletyp(ed.level[ed.levx + ed.levy * ed.maxwidth].tileset, tile);
+    temp = gettiletyp(level[levx + levy * maxwidth].tileset, tile);
     if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
         return 1;
     return 0;
@@ -1368,9 +1368,9 @@ int editorclass::getfree(enum tiletyp thistiletyp)
 
 int editorclass::towerfree(int x, int y) {
     // Uses absolute y in tower mode
-    int tower = ed.get_tower(ed.levx, ed.levy);
-    int size = ed.tower_size(tower);
-    if (!ed.intower())
+    int tower = get_tower(levx, levy);
+    int size = tower_size(tower);
+    if (!intower())
         return free(x, y);
 
     if (x == -1) return 1;
@@ -1379,7 +1379,7 @@ int editorclass::towerfree(int x, int y) {
     if (y >= size) return 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
-    return getfree(gettiletyp(ed.level[ed.levx + ed.levy * ed.maxwidth].tileset,
+    return getfree(gettiletyp(level[levx + levy * maxwidth].tileset,
                               tile));
 }
 
@@ -1403,8 +1403,8 @@ int editorclass::absfree( int x, int y )
 
 int editorclass::match( int x, int y )
 {
-    if (ed.intower())
-        y += ed.ypos;
+    if (intower())
+        y += ypos;
 
     if(towerfree(x-1,y)==0 && towerfree(x,y-1)==0 &&
        towerfree(x+1,y)==0 && towerfree(x,y+1)==0) return 0;
@@ -1747,8 +1747,8 @@ int editorclass::spikedir( int x, int y )
 }
 
 int editorclass::towerspikedir(int x, int y) {
-    if (ed.intower())
-        y += ed.ypos;
+    if (intower())
+        y += ypos;
 
     if(towerfree(x,y+1) == 1) return 8;
     if(towerfree(x,y-1) == 1) return 9;
@@ -2103,11 +2103,11 @@ int editorclass::get_tower(int rx, int ry) {
     if (ry >= 100)
         ry -= 100;
 
-    int room = rx + ry * ed.maxwidth;
+    int room = rx + ry * maxwidth;
     if (ry < 0 || rx < 0 || rx >= maxwidth || ry >= maxheight)
         return 0;
 
-    return ed.level[room].tower;
+    return level[room].tower;
 }
 
 int editorclass::tower_size(int tower) {
@@ -2118,7 +2118,7 @@ int editorclass::tower_scroll(int tower) {
 }
 
 bool editorclass::intower(void) {
-    if (get_tower(ed.levx, ed.levy))
+    if (get_tower(levx, levy))
         return true;
     return false;
 }
@@ -2918,22 +2918,22 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     int tm=0;
     int temp=0;
     //Scan over the map size
-    if(ed.mapheight<=5 && ed.mapwidth<=5)
+    if(mapheight<=5 && mapwidth<=5)
     {
         //4x map
-        for(int j2=0; j2<ed.mapheight; j2++)
+        for(int j2=0; j2<mapheight; j2++)
         {
-            for(int i2=0; i2<ed.mapwidth; i2++)
+            for(int i2=0; i2<mapwidth; i2++)
             {
                 //Ok, now scan over each square
                 tm=196;
-                if(ed.level[i2 + (j2*ed.maxwidth)].tileset==1) tm=96;
+                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<36; j++)
                 {
                     for(int i=0; i<48; i++)
                     {
-                        temp=ed.absfree(int(i*0.83) + (i2*40),int(j*0.83)+(j2*30));
+                        temp=absfree(int(i*0.83) + (i2*40),int(j*0.83)+(j2*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -2944,22 +2944,22 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
             }
         }
     }
-    else if(ed.mapheight<=10 && ed.mapwidth<=10)
+    else if(mapheight<=10 && mapwidth<=10)
     {
         //2x map
-        for(int j2=0; j2<ed.mapheight; j2++)
+        for(int j2=0; j2<mapheight; j2++)
         {
-            for(int i2=0; i2<ed.mapwidth; i2++)
+            for(int i2=0; i2<mapwidth; i2++)
             {
                 //Ok, now scan over each square
                 tm=196;
-                if(ed.level[i2 + (j2*ed.maxwidth)].tileset==1) tm=96;
+                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<18; j++)
                 {
                     for(int i=0; i<24; i++)
                     {
-                        temp=ed.absfree(int(i*1.6) + (i2*40),int(j*1.6)+(j2*30));
+                        temp=absfree(int(i*1.6) + (i2*40),int(j*1.6)+(j2*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -2972,19 +2972,19 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     }
     else
     {
-        for(int j2=0; j2<ed.mapheight; j2++)
+        for(int j2=0; j2<mapheight; j2++)
         {
-            for(int i2=0; i2<ed.mapwidth; i2++)
+            for(int i2=0; i2<mapwidth; i2++)
             {
                 //Ok, now scan over each square
                 tm=196;
-                if(ed.level[i2 + (j2*ed.maxwidth)].tileset==1) tm=96;
+                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<9; j++)
                 {
                     for(int i=0; i<12; i++)
                     {
-                        temp=ed.absfree(3+(i*3) + (i2*40),(j*3)+(j2*30));
+                        temp=absfree(3+(i*3) + (i2*40),(j*3)+(j2*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
