@@ -2130,15 +2130,22 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             else
             {
-                savetele(map, obj, music);
+                std::string gamesavedtext = "    Game Saved    ";
+                if (map.custommodeforreal) {
+                    customsavequick(ed.ListOfMetaData[playcustomlevel].filename, map, obj, music, dwgfx);
+                } else if (!map.custommode) {
+                    savetele(map, obj, music);
+                } else {
+                    gamesavedtext = " Game (Not) Saved ";
+                }
                 if (dwgfx.flipmode)
                 {
-                    dwgfx.createtextbox("    Game Saved    ", -1, 202, 174, 174, 174);
+                    dwgfx.createtextbox(gamesavedtext, -1, 202, 174, 174, 174);
                     dwgfx.textboxtimer(25);
                 }
                 else
                 {
-                    dwgfx.createtextbox("    Game Saved    ", -1, 12, 174, 174, 174);
+                    dwgfx.createtextbox(gamesavedtext, -1, 12, 174, 174, 174);
                     dwgfx.textboxtimer(25);
                 }
                 state = 0;
