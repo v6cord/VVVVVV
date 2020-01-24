@@ -1465,6 +1465,10 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                     case 13:
                         obj.createentity(game, 10, 177, 24, dwgfx.crewcolour(game.lastsaved));
                         break;
+                    default:
+                        int i = obj.getplayer();
+                        obj.createentity(game, obj.entities[i].xp, obj.entities[i].yp, 24, dwgfx.crewcolour(game.lastsaved));
+                        break;
                     }
                 }
 

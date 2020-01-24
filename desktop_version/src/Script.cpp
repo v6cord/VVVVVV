@@ -1814,6 +1814,18 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				obj.fatal_bottom();
 			}
+			else if (words[0] == "supercrewmateon")
+			{
+				game.supercrewmate = true;
+			}
+			else if (words[0] == "supercrewmateoff")
+			{
+				game.supercrewmate = false;
+			}
+			else if (words[0] == "supercrewmateroom")
+			{
+				game.scmprogress = game.roomx - 41;
+			}
 			else if (words[0] == "createcrewman")
 			{
 				if (words[3] == "cyan")
