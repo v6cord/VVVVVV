@@ -3290,7 +3290,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             if (edentity[i].p1 == 0 || edentity[i].p1 == 1)
                 dwgfx.drawsprite(ex, ey, 20 + edentity[i].p1, 196, 196, 196);
             else
-                dwgfx.drawsprite(ex, ey, 191, 196, 196, 196);
+                dwgfx.drawsprite(ex, ey, 190, 196, 196, 196);
             fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
             break;
         case 11: // Gravity lines
