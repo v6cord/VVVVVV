@@ -2461,6 +2461,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
 
                 i++;
 
+                if (mapwidth <= 20 && mapheight <= 20 && i == 20)
+                    i += 100 - 20;
             }
         }
 
