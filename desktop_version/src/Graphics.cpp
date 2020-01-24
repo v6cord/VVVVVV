@@ -276,7 +276,7 @@ void Graphics::MakeSpriteArray()
     {
         for(int i = 0; i <12; i++)
         {
-            SDL_Surface* temp = GetSubSurface(grphx.im_flipsprites,i*32,flip_sprites_height + (j*32),32,32);
+            SDL_Surface* temp = GetSubSurface(grphx.im_sprites,i*32,flip_sprites_height + (j*32),32,32);
             flipsprites.push_back(temp);
         }
     }
