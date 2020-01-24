@@ -208,3 +208,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Selecting level music from the editor is no longer limited
 
 - `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
+
+- `stop()` - A command for convenience: stops the script, also runs `endcutscene()`

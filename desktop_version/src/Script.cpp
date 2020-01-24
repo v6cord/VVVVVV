@@ -770,6 +770,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     }
                 }
             }
+            if (words[0] == "stop")
+            {
+                dwgfx.showcutscenebars = false;
+                call("stop");
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)
