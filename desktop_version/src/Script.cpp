@@ -784,7 +784,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					words[6] = "1";
 				else if (words[6] == "false")
 					words[6] = "0";
+                if (words[7] == "true")
+					words[7] = "1";
+				else if (words[7] == "false" || words[7] == "")
+					words[7] = "0";
 				temp.center = ss_toi(words[6]);
+                temp.bord   = ss_toi(words[7]);
                 position++;
 				temp.text = processvars(commands[position]);
 				scriptrender.push_back(temp);

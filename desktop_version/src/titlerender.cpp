@@ -1887,7 +1887,10 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
         scriptimage current = script.scriptrender[i];
         if (current.type == 0) {
-            dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+            if (current.bord == 0)
+                dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+            else if (current.bord == 1)
+                dwgfx.bprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
         } else if (current.type == 1) {
             auto pixels = (uint8_t*) dwgfx.backBuffer->pixels;
             auto row = pixels + dwgfx.backBuffer->pitch * current.y;
