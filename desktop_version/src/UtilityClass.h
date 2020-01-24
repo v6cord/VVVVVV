@@ -17,6 +17,7 @@ struct scriptimage {
     int b = 0;
     std::string text;
     bool center = false;
+    bool bord = false;
 };
 
 template<typename T>

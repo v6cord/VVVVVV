@@ -27,7 +27,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifnotflag()` - an inverted version of `ifflag()`
 
-- `drawtext(x,y,r,g,b,center)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` should be either 0 or 1, or "true" or "false"
+- `drawtext(x,y,r,g,b,center,border)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` and `border` should be either 0 or 1, or "true" or "false"
 
 - `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame - r,g,b is 0-255
 
@@ -195,6 +195,8 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifcoins(x)` - Run a script if the player has collected at least `x` coins
 
+- `ifcoinsless(x)` - Run a script if the player has less than `x` coins
+
 - Coins are now placeable in the editor using the G tool
 
 - Coins display in the roomname if there's any coins in the map
@@ -208,3 +210,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
 
 - Flip tokens are now placeable in the editor using the F tool
+
+- `stop()` - A command for convenience: stops the script, also runs `endcutscene()`

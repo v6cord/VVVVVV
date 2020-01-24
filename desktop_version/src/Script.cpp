@@ -770,6 +770,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     }
                 }
             }
+            if (words[0] == "stop")
+            {
+                dwgfx.showcutscenebars = false;
+                call("stop");
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)
@@ -784,7 +789,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					words[6] = "1";
 				else if (words[6] == "false")
 					words[6] = "0";
+                if (words[7] == "true")
+					words[7] = "1";
+				else if (words[7] == "false" || words[7] == "")
+					words[7] = "0";
 				temp.center = ss_toi(words[6]);
+                temp.bord   = ss_toi(words[7]);
                 position++;
 				temp.text = processvars(commands[position]);
 				scriptrender.push_back(temp);
@@ -2288,6 +2298,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				if (game.stat_trinkets < ss_toi(words[1]))
 				{
 					call(words[2]);
+					position--;
+				}
+			}
+			else if (words[0] == "ifcoinsless")
+			{
+				if (game.coins < ss_toi(words[1]))
+				{
+					call("custom_"+words[2]);
 					position--;
 				}
 			}
