@@ -290,6 +290,8 @@ int main(int argc, char *argv[])
     game.infocus = true;
     key.isActive = true;
 
+    game.gametimer = 0;
+
     while(!key.quitProgram)
     {
 		//gameScreen.ClearScreen(0x00);
@@ -321,7 +323,6 @@ int main(int argc, char *argv[])
           timePrev = time;
 
         }
-
 
 
         key.Poll();
@@ -385,6 +386,7 @@ int main(int argc, char *argv[])
         {
             Mix_Resume(-1);
             Mix_ResumeMusic();
+            game.gametimer++;
             switch(game.gamestate)
             {
             case PRELOADER:

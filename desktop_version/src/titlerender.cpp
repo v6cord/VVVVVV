@@ -298,7 +298,17 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.drawsprite((160 - 96) + 3 * 32, 50, 23, tr, tg, tb);
             dwgfx.drawsprite((160 - 96) + 4 * 32, 50, 23, tr, tg, tb);
             dwgfx.drawsprite((160 - 96) + 5 * 32, 50, 23, tr, tg, tb);
-            dwgfx.Print(-1,95,"COMMUNITY EDITION",tr, tg, tb, true);
+            //dwgfx.Print(-1,95,"COMMUNITY EDITION",tr, tg, tb, true);
+
+            std::string cestr = "COMMUNITY EDITION";
+            for(std::string::size_type i = 0; i < cestr.size(); ++i) {
+                if (((game.gametimer / 2) % 40) == (int)i) {
+                    dwgfx.Print(92 + (i * 8), 95, cestr.substr(i, 1), tr/2, tg/2, tb/2);
+                } else {
+                    dwgfx.Print(92 + (i * 8), 95, cestr.substr(i, 1), tr, tg, tb);
+                }
+            }
+
             dwgfx.Print( 310 - (4*8), 230, "c1.0", tr/2, tg/2, tb/2);
 			if (music.mmmmmm) {
 			    dwgfx.Print( 10, 230, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);

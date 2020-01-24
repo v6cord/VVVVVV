@@ -380,6 +380,8 @@ public:
 
     bool kludgeroominitscript = false;
     bool gotoroomfromscript = false;
+
+    int gametimer = 0;
 };
 
 #endif /* GAME_H */
