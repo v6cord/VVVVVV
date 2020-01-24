@@ -2699,9 +2699,15 @@ void Graphics::setcol( int t, UtilityClass& help )
 {
 	int temp;
 
+        ct.nocolor = false;
+
 	//Setup predefinied colours as per our zany palette
 	switch(t)
 	{
+                //No color
+        case -1:
+                ct.nocolor = true;
+                break;
 		//Player Normal
 	case 0:
 		ct.colour = getRGB(160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
