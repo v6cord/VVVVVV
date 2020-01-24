@@ -270,7 +270,7 @@ growing_vector<std::string> changelog = {
     "- stop() - Stop the script and remove",
     "  cutscene bars",
     "- Flip tokens are now placeable in the",
-    "  editor using the G tool",
+    "  editor using the F tool",
 
 };
 
