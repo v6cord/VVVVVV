@@ -4788,8 +4788,8 @@ void Game::deathsequence( mapclass& map, entityclass& obj, musicclass& music )
         }
         else
         {
-            map.roomdeaths[roomx - 100 + (20*(roomy - 100))]++;
-            currentroomdeaths = map.roomdeaths[roomx - 100 + (20 * (roomy - 100))];
+            map.roomdeaths[roomx - 100 + (ed.maxwidth*(roomy - 100))]++;
+            currentroomdeaths = map.roomdeaths[roomx - 100 + (ed.maxwidth * (roomy - 100))];
         }
     }
     if (deathseq == 25) obj.entities[i].invis = true;
@@ -4963,9 +4963,17 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
             {
                 growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    map.explored.push_back(atoi(values[i].c_str()));
+                // Backwards compatibility with 20x20 explored status arrays
+                if (values.size() <= 20 * 20) {
+                    for (int y = 0; y < ed.maxheight; y++)
+                        for (int x = 0; x < ed.maxwidth; x++)
+                            if (x * y <= 20 * 20)
+                                map.explored.push_back(atoi(values[x + y*20].c_str()));
+                            else
+                                map.explored.push_back(0);
+                } else {
+                    for (size_t i = 0; i < values.size(); i++)
+                        map.explored.push_back(atoi(values[i].c_str()));
                 }
             }
         }
@@ -5187,9 +5195,17 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             {
                 growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    map.explored.push_back(atoi(values[i].c_str()));
+                // Backwards compatibility with 20x20 explored status arrays
+                if (values.size() <= 20 * 20) {
+                    for (int y = 0; y < ed.maxheight; y++)
+                        for (int x = 0; x < ed.maxwidth; x++)
+                            if (x * y <= 20 * 20)
+                                map.explored.push_back(atoi(values[x + y*20].c_str()));
+                            else
+                                map.explored.push_back(0);
+                } else {
+                    for (size_t i = 0; i < values.size(); i++)
+                        map.explored.push_back(atoi(values[i].c_str()));
                 }
             }
         }
@@ -6575,9 +6591,17 @@ void Game::loadtele( mapclass& map, entityclass& obj, musicclass& music )
             {
                 growing_vector<std::string> values = split(TextString,',');
                 map.explored.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    map.explored.push_back(atoi(values[i].c_str()));
+                // Backwards compatibility with 20x20 explored status arrays
+                if (values.size() <= 20 * 20) {
+                    for (int y = 0; y < ed.maxheight; y++)
+                        for (int x = 0; x < ed.maxwidth; x++)
+                            if (x * y <= 20 * 20)
+                                map.explored.push_back(atoi(values[x + y*20].c_str()));
+                            else
+                                map.explored.push_back(0);
+                } else {
+                    for (size_t i = 0; i < values.size(); i++)
+                        map.explored.push_back(atoi(values[i].c_str()));
                 }
             }
         }

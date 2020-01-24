@@ -2218,7 +2218,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "ifexplored")
 			{
-				if (map.explored[ss_toi(words[1]) + (20 * ss_toi(words[2]))] == 1)
+				if (map.explored[ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]))] == 1)
 				{
 					call(words[3]);
 					position--;
@@ -2296,11 +2296,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "hidecoordinates")
 			{
-				map.explored[ss_toi(words[1]) + (20 * ss_toi(words[2]))] = 0;
+				map.explored[ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]))] = 0;
 			}
 			else if (words[0] == "showcoordinates")
 			{
-				map.explored[ss_toi(words[1]) + (20 * ss_toi(words[2]))] = 1;
+				map.explored[ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]))] = 1;
 			}
 			else if (words[0] == "hideship")
 			{
@@ -2312,25 +2312,25 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "showsecretlab")
 			{
-				map.explored[16 + (20 * 5)] = 1;
-				map.explored[17 + (20 * 5)] = 1;
-				map.explored[18 + (20 * 5)] = 1;
-				map.explored[17 + (20 * 6)] = 1;
-				map.explored[18 + (20 * 6)] = 1;
-				map.explored[19 + (20 * 6)] = 1;
-				map.explored[19 + (20 * 7)] = 1;
-				map.explored[19 + (20 * 8)] = 1;
+				map.explored[16 + (ed.maxwidth * 5)] = 1;
+				map.explored[17 + (ed.maxwidth * 5)] = 1;
+				map.explored[18 + (ed.maxwidth * 5)] = 1;
+				map.explored[17 + (ed.maxwidth * 6)] = 1;
+				map.explored[18 + (ed.maxwidth * 6)] = 1;
+				map.explored[19 + (ed.maxwidth * 6)] = 1;
+				map.explored[19 + (ed.maxwidth * 7)] = 1;
+				map.explored[19 + (ed.maxwidth * 8)] = 1;
 			}
 			else if (words[0] == "hidesecretlab")
 			{
-				map.explored[16 + (20 * 5)] = 0;
-				map.explored[17 + (20 * 5)] = 0;
-				map.explored[18 + (20 * 5)] = 0;
-				map.explored[17 + (20 * 6)] = 0;
-				map.explored[18 + (20 * 6)] = 0;
-				map.explored[19 + (20 * 6)] = 0;
-				map.explored[19 + (20 * 7)] = 0;
-				map.explored[19 + (20 * 8)] = 0;
+				map.explored[16 + (ed.maxwidth * 5)] = 0;
+				map.explored[17 + (ed.maxwidth * 5)] = 0;
+				map.explored[18 + (ed.maxwidth * 5)] = 0;
+				map.explored[17 + (ed.maxwidth * 6)] = 0;
+				map.explored[18 + (ed.maxwidth * 6)] = 0;
+				map.explored[19 + (ed.maxwidth * 6)] = 0;
+				map.explored[19 + (ed.maxwidth * 7)] = 0;
+				map.explored[19 + (ed.maxwidth * 8)] = 0;
 			}
 			else if (words[0] == "showteleporters")
 			{
@@ -3774,14 +3774,12 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		game.jumpheld = true;
 
 		//Secret lab, so reveal the map, give them all 20 trinkets
+		for (int j = 0; j < ed.maxheight; j++)
+			for (i = 0; i < ed.maxwidth; i++)
+				map.explored[i + (j * ed.maxwidth)] = 1;
+
 		for (int j = 0; j < 20; j++)
-		{
 			obj.collect[j] = true;
-			for (i = 0; i < 20; i++)
-			{
-				map.explored[i + (j * 20)] = 1;
-			}
-		}
 		game.trinkets = 20;
 		game.insecretlab = true;
 		map.showteleporters = true;
@@ -4455,15 +4453,16 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	map.customshowmm=true;
 
-	for (j = 0; j < 20; j++)
-	{
-		for (i = 0; i < 20; i++)
-		{
-			map.roomdeaths[i + (j * 20)] = 0;
-			map.roomdeathsfinal[i + (j * 20)] = 0;
-			map.explored[i + (j * 20)] = 0;
+	for (j = 0; j < ed.maxheight; j++)
+		for (i = 0; i < ed.maxwidth; i++) {
+			map.roomdeaths[i + j*ed.maxwidth] = 0;
+			map.explored[i + j*ed.maxwidth] = 0;
 		}
-	}
+
+	for (j = 0; j < 20; j++)
+		for (i = 0; i < 20; i++)
+			map.roomdeathsfinal[i + j*20] = 0;
+
 	//entityclass
 	obj.nearelephant = false;
 	obj.upsetmode = false;

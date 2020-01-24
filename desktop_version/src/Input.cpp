@@ -2517,7 +2517,7 @@ void teleporterinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if (game.teleport_to_teleporter < 0) game.teleport_to_teleporter = map.numteleporters - 1;
             tempx = map.teleporters[game.teleport_to_teleporter].x;
             tempy = map.teleporters[game.teleport_to_teleporter].y;
-            while (map.explored[tempx + (20 * tempy)] == 0)
+            while (map.explored[tempx + (ed.maxwidth * tempy)] == 0)
             {
                 game.teleport_to_teleporter--;
                 if (game.teleport_to_teleporter < 0) game.teleport_to_teleporter = map.numteleporters - 1;
@@ -2531,7 +2531,7 @@ void teleporterinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if (game.teleport_to_teleporter >= map.numteleporters) game.teleport_to_teleporter = 0;
             tempx = map.teleporters[game.teleport_to_teleporter].x;
             tempy = map.teleporters[game.teleport_to_teleporter].y;
-            while (map.explored[tempx + (20 * tempy)] == 0)
+            while (map.explored[tempx + (ed.maxwidth * tempy)] == 0)
             {
                 game.teleport_to_teleporter++;
                 if (game.teleport_to_teleporter >= map.numteleporters) game.teleport_to_teleporter = 0;

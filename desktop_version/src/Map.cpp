@@ -68,16 +68,10 @@ mapclass::mapclass()
         }
     }
 
-    for (int j = 0; j < 20; j++)
-    {
-        for (int i = 0; i < 20; i++)
-        {
-            areamap.push_back(0);
-            roomdeaths.push_back(0);
-            roomdeathsfinal.push_back(0);
-            explored.push_back(0);
-        }
-    }
+    areamap.resize(20 * 20);
+    roomdeaths.resize(ed.maxwidth * ed.maxheight);
+    roomdeathsfinal.push_back(20 * 20);
+    explored.push_back(ed.maxwidth * ed.maxheight);
 
     tileset = 0;
     initmapdata();
@@ -149,11 +143,11 @@ void mapclass::settrinket(int t, int x, int y)
 void mapclass::resetmap()
 {
     //clear the explored area of the map
-    for (int j = 0; j < 20; j++)
+    for (int j = 0; j < ed.maxheight; j++)
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < ed.maxwidth; i++)
         {
-            explored[i + (j * 20)] = 0;
+            explored[i + (j * ed.maxwidth)] = 0;
         }
     }
 }
@@ -823,30 +817,30 @@ void mapclass::exploretower()
 {
     for (int i = 0; i < 20; i++)
     {
-        explored[9 + (i * 20)] = 1;
+        explored[9 + (i * ed.maxwidth)] = 1;
     }
 }
 
 void mapclass::hideship()
 {
     //remove the ship from the explored areas
-    explored[2 + (10 * 20)] = 0;
-    explored[3 + (10 * 20)] = 0;
-    explored[4 + (10 * 20)] = 0;
-    explored[2 + (11 * 20)] = 0;
-    explored[3 + (11 * 20)] = 0;
-    explored[4 + (11 * 20)] = 0;
+    explored[2 + (10 * ed.maxwidth)] = 0;
+    explored[3 + (10 * ed.maxwidth)] = 0;
+    explored[4 + (10 * ed.maxwidth)] = 0;
+    explored[2 + (11 * ed.maxwidth)] = 0;
+    explored[3 + (11 * ed.maxwidth)] = 0;
+    explored[4 + (11 * ed.maxwidth)] = 0;
 }
 
 void mapclass::showship()
 {
     //remove the ship from the explored areas
-    explored[2 + (10 * 20)] = 1;
-    explored[3 + (10 * 20)] = 1;
-    explored[4 + (10 * 20)] = 1;
-    explored[2 + (11 * 20)] = 1;
-    explored[3 + (11 * 20)] = 1;
-    explored[4 + (11 * 20)] = 1;
+    explored[2 + (10 * ed.maxwidth)] = 1;
+    explored[3 + (10 * ed.maxwidth)] = 1;
+    explored[4 + (10 * ed.maxwidth)] = 1;
+    explored[2 + (11 * ed.maxwidth)] = 1;
+    explored[3 + (11 * ed.maxwidth)] = 1;
+    explored[4 + (11 * ed.maxwidth)] = 1;
 }
 
 void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
@@ -945,7 +939,7 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
     // Custom towers
     if (custommode) {
         obj.entities[i].yp = yp;
-        *rx = (((*rx) - 100) % ed.maxwidth) + 100;
+        *rx = (((*rx) - 100) % ed.mapwidth) + 100;
         return true;
     }
 
@@ -1069,13 +1063,9 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
     }
     else if (custommode)
     {
-        game.roomx = rx;
-        game.roomy = ry;
+        game.roomx = (rx % ed.mapwidth) + 100;
+        game.roomy = (ry % ed.mapheight) + 100;
         game.roomchange = true;
-        if (game.roomx < 100) game.roomx = 100 + ed.mapwidth-1;
-        if (game.roomy < 100) game.roomy = 100 + ed.mapheight-1;
-        if (game.roomx > 100 + ed.mapwidth-1) game.roomx = 100;
-        if (game.roomy > 100 + ed.mapheight-1) game.roomy = 100;
     }
     else
     {
@@ -1087,7 +1077,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
         if (game.roomx > 119) game.roomx = 100;
         if (game.roomy > 119) game.roomy = 100;
 
-        game.currentroomdeaths = roomdeaths[game.roomx - 100 + (20 * (game.roomy - 100))];
+        game.currentroomdeaths = roomdeaths[game.roomx - 100 + (ed.maxwidth * (game.roomy - 100))];
 
         //Alright, change music depending on where we are:
         //Tower
@@ -1280,7 +1270,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
     //roomname = "[UNTITLED] (" + String(rx)+","+String(ry)+")";
     if (!finalmode)
     {
-        explored[rx - 100 + ((ry - 100) * 20)] = 1;
+        explored[rx - 100 + ((ry - 100) * ed.maxwidth)] = 1;
         if (rx == 109 && !custommode)
         {
             exploretower();
@@ -1715,7 +1705,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             int iy;
             for (iy = 0; iy < ed.maxheight; iy++)
                 if (ed.get_tower(ix, iy) == customtower)
-                    explored[ix + iy*20] = 1;
+                    explored[ix + iy*ed.maxwidth] = 1;
         } else {
             switch(ed.level[curlevel].tileset){
             case 0: //Space Station

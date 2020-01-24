@@ -30,8 +30,7 @@
 #include <string.h>
 
 scriptclass script;
-edentities edentity[3000];
-edaltstate altstates[1000];
+growing_vector<edentities> edentity;
 editorclass ed;
 
 bool startinplaytest = false;
