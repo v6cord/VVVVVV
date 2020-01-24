@@ -726,7 +726,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						   (words[2] == "noteq") ||
 						   (words[2] == "neq") ||
 						   (words[2] == "not") ||
-						   (words[2] == "notequal")) {
+						   (words[2] == "notequal") ||
+						   (words[2] == "!=")) {
                             if (variablecontents[varid] != processvars(commands[position])) call("custom_" + words[3]);
                         }
 
@@ -742,7 +743,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 						   (words[2] == "noteq") ||
 						   (words[2] == "neq") ||
 						   (words[2] == "not") ||
-						   (words[2] == "notequal")) {
+						   (words[2] == "notequal") ||
+						   (words[2] == "!=")) {
                             if (variablecontents[varid] != words[3]) call("custom_" + words[4]);
                         }
                         if ((words[2] == "less") ||

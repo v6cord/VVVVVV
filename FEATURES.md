@@ -204,3 +204,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Large enemies are now enemy types you can select in the editor
 
 - Selecting level music from the editor is no longer limited
+
+- `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
