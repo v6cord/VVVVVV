@@ -2434,6 +2434,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         if (pKey == "levelMetaData")
         {
             int i = 0;
+            int row20 = 0;
             for( TiXmlElement* edLevelClassElement = pElem->FirstChildElement(); edLevelClassElement; edLevelClassElement=edLevelClassElement->NextSiblingElement())
             {
                 std::string pKey(edLevelClassElement->Value());
@@ -2461,8 +2462,13 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
 
                 i++;
 
-                if (mapwidth <= 20 && mapheight <= 20 && i == 20)
-                    i += 100 - 20;
+                if (mapwidth <= 20 && mapheight <= 20) {
+                    row20++;
+                    if (row20 == 20) {
+                        row20 = 0;
+                        i += 100 - 20;
+                    }
+                }
             }
         }
 
