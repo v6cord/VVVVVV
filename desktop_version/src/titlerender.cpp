@@ -242,8 +242,8 @@ growing_vector<std::string> changelog = {
     "  100",
     "- Variable assignments (var = contents,",  
     "  var++, var += 1, var -= 1, var--)",
-    "- Built-in variables (%deaths%, %player_x%,",
-    "  %player_y%, %trinkets%)",
+    "- Built-in variables (%deaths%,",
+    "  %player_x%, %player_y%, %trinkets%)",
     "- Upped the map size limit to 100 by 100",
 
 };
