@@ -277,6 +277,8 @@ void BlitSurfaceColoured(
     SDL_Rect* _destRect,
     colourTransform& ct
 ) {
+    if (ct.nocolor) return BlitSurfaceStandard(_src, _srcRect, _dest, _destRect);
+
     SDL_Rect *tempRect = _destRect;
 
     const SDL_PixelFormat& fmt = *(_src->format);
