@@ -2730,7 +2730,6 @@ void editorclass::save(std::string& _path)
             edentityElement->SetAttribute(  "activitycolor", edentity[i].activitycolor.c_str());
         }
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
-        edentityElement->LinkEndChild( new TiXmlText( "" )) ;
         msg->LinkEndChild( edentityElement );
     }
 
