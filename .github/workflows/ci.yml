@@ -30,22 +30,23 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
-    - name: CMake configure
-      run: |
-        mkdir ${SRC_DIR_PATH}/build && cd ${SRC_DIR_PATH}/build
-        cmake -GNinja ..
-
-    - name: Build
-      run: ninja -C ${SRC_DIR_PATH}/build
+    - name: CPack build
+      run: cd ${SRC_DIR_PATH} && ./cpack.sh
 
     - name: Show build artifacts
       run: tree ${SRC_DIR_PATH}/build
 
-    - name: Upload artifacts
+    - name: Upload binary
       uses: actions/upload-artifact@v1
       with:
-        name: ${{ format('VVVVVV-CE-{0}', runner.os) }}
+        name: VVVVVV-CE-LinuxBinary
         path: desktop_version/build/VVVVVV-CE
+
+    - name: Upload .deb
+      uses: actions/upload-artifact@v1
+      with:
+        name: VVVVVV-CE-LinuxDeb
+        path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
 
   build-mac:
     name: Build (macOS)
