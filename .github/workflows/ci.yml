@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: ${{ format('VVVVVV-CE-{0}', runner.os) }}
-        path: desktop_version/build/VVVVVV
+        path: desktop_version/build/VVVVVV-CE
 
   build-mac:
     name: Build (macOS)
@@ -86,7 +86,7 @@ jobs:
       run: |
         mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/
         mkdir -pv ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources
-        mv -v ${SRC_DIR_PATH}/build/VVVVVV ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
+        mv -v ${SRC_DIR_PATH}/build/VVVVVV-CE ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
         cp -v .github/resources/v6cord.icns ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources/v6cord.icns
         cp -v .github/resources/Info.plist ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Info.plist
         dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app
@@ -131,7 +131,7 @@ jobs:
     - name: Copy artifacts
       run: |
         mkdir -p $SRC_DIR_PATH/build/VVVVVV-CE-Windows
-        cp -rv .github/libs/* $SRC_DIR_PATH/build/VVVVVV.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
+        cp -rv .github/libs/* $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1

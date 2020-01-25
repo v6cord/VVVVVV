@@ -30,7 +30,7 @@ IF(APPLE)
 	ADD_COMPILE_OPTIONS(-Werror=partial-availability)
 ENDIF()
 
-PROJECT(VVVVVV)
+PROJECT(VVVVVV-CE)
 
 IF(APPLE)
 	MESSAGE(STATUS "Using macOS SDK at ${CMAKE_OSX_SYSROOT}")
@@ -158,16 +158,16 @@ SET(PNG_SRC ../third_party/lodepng/lodepng.c)
 IF(WIN32)
         message(STATUS "Adding resources")
         set(VVV_SRC ${VVV_SRC} "resources.rc")
-	ADD_EXECUTABLE(VVVVVV WIN32 ${VVV_SRC})
+	ADD_EXECUTABLE(VVVVVV-CE WIN32 ${VVV_SRC})
 ELSE()
-	ADD_EXECUTABLE(VVVVVV ${VVV_SRC})
+	ADD_EXECUTABLE(VVVVVV-CE ${VVV_SRC})
 ENDIF()
 
 # Build options
 IF(ENABLE_WARNINGS)
 	# The weird syntax is due to CMake generator expressions.
 	# Saves quite a few lines and boilerplate at the price of readability.
-	TARGET_COMPILE_OPTIONS(VVVVVV PRIVATE
+	TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE
 		$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
 			-Wall $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
 		$<$<CXX_COMPILER_ID:MSVC>:
@@ -186,35 +186,35 @@ pkg_check_modules(FRIBIDI fribidi)
 find_path(FRIBIDI_INCLUDE_DIR
           NAMES fribidi/fribidi.h)
 
-target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
+target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
 
 find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static fribidi)
+TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
         message(STATUS "Building using MinGW SDL libraries")
-	target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-	target_link_libraries(VVVVVV SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
+	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
+	target_link_libraries(VVVVVV-CE SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
 elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
 	message(STATUS "Using pre-defined SDL2 variables SDL2_INCLUDE_DIRS and SDL2_LIBRARIES")
-	target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-	target_link_libraries(VVVVVV ${SDL2_LIBRARIES})
+	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
+	target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES})
 else()
 	# Only try to autodetect if both SDL2 variables aren't explicitly set
 	find_package(SDL2 CONFIG)
 	if (TARGET SDL2::SDL2)
 		message(STATUS "Using TARGET SDL2::SDL2")
-		target_link_libraries(VVVVVV SDL2::SDL2 SDL2_mixer)
+		target_link_libraries(VVVVVV-CE SDL2::SDL2 SDL2_mixer)
 	elseif (TARGET SDL2)
 		message(STATUS "Using TARGET SDL2")
-		target_link_libraries(VVVVVV SDL2 SDL2_mixer)
+		target_link_libraries(VVVVVV-CE SDL2 SDL2_mixer)
 	else()
 		message(STATUS "No TARGET SDL2::SDL2, or SDL2, using variables")
-		target_include_directories(VVVVVV PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-		target_link_libraries(VVVVVV ${SDL2_LIBRARIES} SDL2_mixer)
+		target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
+		target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES} SDL2_mixer)
 	endif()
 endif()
 
@@ -222,11 +222,11 @@ endif()
 IF(APPLE)
 	FIND_LIBRARY(FOUNDATION NAMES Foundation)
 	FIND_LIBRARY(IOKIT NAMES IOKit)
-	TARGET_LINK_LIBRARIES(VVVVVV objc ${IOKIT} ${FOUNDATION})
+	TARGET_LINK_LIBRARIES(VVVVVV-CE objc ${IOKIT} ${FOUNDATION})
 ENDIF()
 # But hey, also some Haiku crap
 IF(HAIKU)
 	FIND_LIBRARY(BE_LIBRARY be)
 	FIND_LIBRARY(ROOT_LIBRARY root)
-	TARGET_LINK_LIBRARIES(VVVVVV ${BE_LIBRARY} ${ROOT_LIBRARY})
+	TARGET_LINK_LIBRARIES(VVVVVV-CE ${BE_LIBRARY} ${ROOT_LIBRARY})
 ENDIF()
