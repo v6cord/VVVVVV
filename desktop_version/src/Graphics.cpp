@@ -272,9 +272,9 @@ void Graphics::MakeSpriteArray()
 
     int needed_sprites = (sprites_height - flip_sprites_height) / 32;
 
-    for(int j = 0; j < needed_sprites / 32; j++)
+    for(int j = 0; j < needed_sprites; j++)
     {
-        for(int i = 0; i <12; i++)
+        for(int i = 0; i < 12; i++)
         {
             SDL_Surface* temp = GetSubSurface(grphx.im_sprites,i*32,flip_sprites_height + (j*32),32,32);
             flipsprites.push_back(temp);
