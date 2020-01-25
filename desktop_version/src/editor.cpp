@@ -4482,6 +4482,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         game.press_action = true;
     };
 
+    if (key.keymap[SDLK_F11] && (ed.keydelay==0)) {
+        ed.keydelay = 30;
+        ed.note="Reloaded resources";
+        ed.notedelay=45;
+        dwgfx.reloadresources();
+    }
+
     int tower = ed.get_tower(ed.levx, ed.levy);
 
     if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
