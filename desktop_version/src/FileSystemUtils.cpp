@@ -175,7 +175,7 @@ void FILESYSTEM_mount(const char *fname)
     std::string path(PHYSFS_getRealDir(fname));
     path += pathSeparator;
     path += fname;
-    if (!PHYSFS_mount(path.c_str(), NULL, 1)) {
+    if (!PHYSFS_mount(path.c_str(), NULL, 0)) {
         printf("Error mounting: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
     }
 }
