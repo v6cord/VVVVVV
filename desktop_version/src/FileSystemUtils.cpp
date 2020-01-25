@@ -4,6 +4,8 @@
 #include "Utilities.h"
 #include <string>
 
+#include "Graphics.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -170,14 +172,15 @@ const char pathSeparator =
                             '/';
 #endif
 
-void FILESYSTEM_mount(const char *fname)
+void FILESYSTEM_mount(const char *fname, Graphics& dwgfx)
 {
     std::string path(PHYSFS_getRealDir(fname));
     path += pathSeparator;
     path += fname;
     if (!PHYSFS_mount(path.c_str(), NULL, 0)) {
         printf("Error mounting: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
-    }
+    } else
+        dwgfx.assetdir = path.c_str();
 }
 
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,

@@ -2196,19 +2196,16 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         i++;
         len++;
     }
-    i = path + 2;
-    len -= 2;
-    for (; len > 0; len--) {
-        printf("Unmounting %s\n", *i);
-        PHYSFS_unmount(*i);
-        i++;
-    }
-    PHYSFS_freeList(path);
+
+    printf("Unmounting %s\n", dwgfx.assetdir.c_str());
+    PHYSFS_unmount(dwgfx.assetdir.c_str());
+    dwgfx.assetdir = "";
+    dwgfx.reloadresources();
 
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
     if (FILESYSTEM_directoryExists(dirpath.c_str())) {
         printf("Custom asset directory exists at %s\n",dirpath.c_str());
-        FILESYSTEM_mount(dirpath.c_str());
+        FILESYSTEM_mount(dirpath.c_str(), dwgfx);
         dwgfx.reloadresources();
     } else {
         printf("Custom asset directory does not exist\n");
