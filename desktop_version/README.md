@@ -48,6 +48,9 @@ available to download separately for free in the
 edition of the game. Put this file next to your executable and the game should
 run.
 
+To use the new CE assets, you'll also want to extract the contents of data.zip,
+add the contents of the data folder, and rebuild data.zip.
+
 This is intended for personal use only - our license doesn't allow you to
 actually distribute this data.zip file with your own forks without getting
 permission from us first. See [LICENSE.md](../LICENSE.md) for more details. (If
