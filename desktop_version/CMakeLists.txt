@@ -87,7 +87,7 @@ INCLUDE_DIRECTORIES(
 	../third_party/tinyxml
 	../third_party/physfs
 	../third_party/lodepng
-	utfcpp/source
+	../third_party/utfcpp/source
 )
 include(sdl2-config OPTIONAL)
 

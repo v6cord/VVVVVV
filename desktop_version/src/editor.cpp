@@ -2163,58 +2163,13 @@ bool editorclass::intower(void) {
     return !!get_tower(levx, levy);
 }
 
-// Returns y offset upon tower entry/exit. ypos is negative if entering.
-// Returns -1 for an invalid boundary.
-int editorclass::tower_connection(int *rx, int *ry, int ypos) {
-    /* Figure out the location of tower connections */
-    int ix, iy, rix, riy, rpos;
-    rix = (*rx) - 100;
-    riy = (*ry) - 100;
-    ix = rix;
-    iy = riy;
-
-    int room = ix + iy * maxwidth;
-    int tower = get_tower(ix, iy);
-    if (ypos < 0) // entering
-        return level[room].tower_row * 8;
-
-    /* Iterate all rooms connected to this tower and figure out our exit
-       position. */
-    for (iy = riy; iy >= 0; iy--) {
-        if (tower != get_tower(ix, iy))
-            continue;
-
-        rpos = level[ix + iy*maxwidth].tower_row * 8;
-        if (ypos >= rpos && ypos < rpos + 240) {
-            *ry += (iy - riy);
-            return ypos - rpos;
-        }
-    }
-
-    for (iy = riy; iy < maxwidth; iy++) {
-        if (tower != get_tower(ix, iy))
-            continue;
-
-        rpos = level[ix + iy*maxwidth].tower_row * 8;
-        if (ypos >= rpos && ypos < rpos + 240) {
-            *ry = (iy - riy);
-            return ypos - rpos;
-        }
-    }
-
-    // We failed to find an exit boundary!
-    return -1;
-}
-
-/* Returns tower ID upon entering a tower */
-int editorclass::entering_tower(int rx, int ry, int *entry) {
-    int tower = 0;
-    tower = get_tower(rx - 100, ry - 100);
+int editorclass::tower_row(int rx, int ry) {
+    int tower = get_tower(rx, ry);
     if (!tower)
-        return 0;
+        return -1;
 
-    *entry = tower_connection(&rx, &ry, -1);
-    return tower;
+    int room = rx + ry * maxwidth;
+    return level[room].tower_row;
 }
 
 void editorclass::load(std::string& _path, Graphics& dwgfx)

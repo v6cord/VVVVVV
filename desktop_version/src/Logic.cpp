@@ -400,21 +400,27 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
             }
 
             //Right so! Screenwraping for tower:
-            if (map.warpy ||
-                (!map.minitowermode && map.ypos >= 500 && map.ypos <= 5000)) {
+            bool dowrap = false;
+            if (map.warpy)
+                dowrap = true;
+            else if ((game.door_left > -2 &&
+                      obj.entities[player].xp < -14) ||
+                     (game.door_right > -2 &&
+                      obj.entities[player].xp >= 308)) {
+                if (map.leaving_tower(&game.roomx, &game.roomy, obj))
+                    map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
+                                 music);
+                else
+                    dowrap = true;
+            }
+
+            if (dowrap) {
                 for (int i = 0; i < obj.nentity; i++) {
                     if (obj.entities[i].xp <= -10)
                         obj.entities[i].xp += 320;
                     else if (obj.entities[i].xp > 310)
                         obj.entities[i].xp -= 320;
                 }
-            } else if ((game.door_left > -2 &&
-                        obj.entities[player].xp < -14) ||
-                       (game.door_right > -2 &&
-                        obj.entities[player].xp >= 308)) {
-                if (map.leaving_tower(&game.roomx, &game.roomy, obj))
-                    map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
-                                 music);
             }
 
             if(game.lifeseq==0)
