@@ -436,14 +436,15 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
+                        gameinput(key, graphics, game, map, obj, help, music);
+                        //}
+                        gamerender(graphics,map, game,  obj, help);
+
                         if (script.running)
                         {
                             script.run(key, graphics, game, map, obj, help, music);
                         }
 
-                        gameinput(key, graphics, game, map, obj, help, music);
-                        //}
-                        gamerender(graphics,map, game,  obj, help);
                         gamelogic(graphics, game,obj, music, map,  help);
 
 
