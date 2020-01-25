@@ -4118,7 +4118,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.drawsprite(tx,ty,184,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
                 //17:
                 tx+=tg;
-                dwgfx.drawsprite(tx,ty,190,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
+                dwgfx.drawsprite(tx,ty,192,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
                 //18:
                 tx+=tg;
                 dwgfx.drawhuetile(tx,   ty,   48, 8);
