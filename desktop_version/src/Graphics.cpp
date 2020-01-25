@@ -283,8 +283,8 @@ void Graphics::MakeSpriteArray()
         }
     }
 
-    if (sprites_height / 32 < default_rows) {
-        int rest = (sprites_height / 32) - default_rows;
+    if ((sprites_height / 32) < default_rows) {
+        int rest = default_rows - (sprites_height / 32);
         for (int j = 0; j < rest; j++) {
             for(int i = 0; i < 12; i++) {
                 SDL_Surface* temp = GetSubSurface(grphx.im_sprites,0,0,32,32);
