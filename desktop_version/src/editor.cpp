@@ -2169,9 +2169,7 @@ int editorclass::tower_connection(int *rx, int *ry, int ypos) {
 /* Returns tower ID upon entering a tower */
 int editorclass::entering_tower(int rx, int ry, int *entry) {
     int tower = 0;
-    rx -= 100;
-    ry -= 100;
-    tower = get_tower(rx, ry);
+    tower = get_tower(rx - 100, ry - 100);
     if (!tower)
         return 0;
 
