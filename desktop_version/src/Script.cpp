@@ -785,7 +785,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if (words[0] == "clear") {
                 auto alpha = ss_toi(words[1]);
                 if (words[1] == "") alpha = 255;
-                printf("%i\n", alpha);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
                 auto rmask = 0xff000000;
                 auto gmask = 0x00ff0000;
