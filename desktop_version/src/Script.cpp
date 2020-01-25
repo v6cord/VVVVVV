@@ -802,6 +802,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 SDL_BlitSurface(s, nullptr, dwgfx.backBuffer, nullptr);
                 SDL_FreeSurface(s);
             }
+            if (words[0] == "drawentities") {
+                dwgfx.drawentities(map, obj, help);
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)
