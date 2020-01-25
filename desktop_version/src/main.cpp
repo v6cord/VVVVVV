@@ -34,6 +34,14 @@ growing_vector<edentities> edentity;
 editorclass ed;
 
 bool startinplaytest = false;
+bool savefileplaytest = false;
+int savex = 0;
+int savey = 0;
+int saverx = 0;
+int savery = 0;
+int savegc = 0;
+int savemusic = 0;
+
 std::string playtestname;
 
 int main(int argc, char *argv[])
@@ -57,6 +65,27 @@ int main(int argc, char *argv[])
                 playtestname = std::string("levels/");
                 playtestname.append(argv[i]);
                 playtestname.append(std::string(".vvvvvv"));
+            } else {
+                printf("--playing option requires one argument.\n");
+                return 1;
+            }
+        }
+        if (strcmp(argv[i], "--playx") == 0 ||
+                strcmp(argv[i], "--playy") == 0 ||
+                strcmp(argv[i], "--playrx") == 0 ||
+                strcmp(argv[i], "--playry") == 0 ||
+                strcmp(argv[i], "--playgc") == 0 ||
+                strcmp(argv[i], "--playmusic") == 0) {
+            if (i + 1 < argc) {
+                savefileplaytest = true;
+                auto v = std::atoi(argv[i+1]);
+                if (strcmp(argv[i], "--playx") == 0) savex = v;
+                else if (strcmp(argv[i], "--playy") == 0) savey = v;
+                else if (strcmp(argv[i], "--playrx") == 0) saverx = v;
+                else if (strcmp(argv[i], "--playry") == 0) savery = v;
+                else if (strcmp(argv[i], "--playgc") == 0) savegc = v;
+                else if (strcmp(argv[i], "--playmusic") == 0) savemusic = v;
+                i++;
             } else {
                 printf("--playing option requires one argument.\n");
                 return 1;
@@ -259,7 +288,18 @@ int main(int argc, char *argv[])
         }
         game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
         game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
-        script.startgamemode(22, key, graphics, game, map, obj, help, music);
+        if (savefileplaytest) {
+            game.playx = savex;
+            game.playy = savey;
+            game.playrx = saverx;
+            game.playry = savery;
+            game.playgc = savegc;
+            game.cliplaytest = true;
+            music.play(savemusic);
+            script.startgamemode(23, key, graphics, game, map, obj, help, music);
+        } else {
+            script.startgamemode(22, key, graphics, game, map, obj, help, music);
+        }
 		//dwgfx.fademode = 4;
 
     }
