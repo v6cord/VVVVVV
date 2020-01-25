@@ -27,7 +27,7 @@ if [ -e v6cord.png.c ]; then
 fi
 
 cmake -G Ninja \
-    ${debug:+-DCMAKE_BUILD_TYPE=Debug} \
+    ${debug:+-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=-Og} \
     ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
     ..
 
