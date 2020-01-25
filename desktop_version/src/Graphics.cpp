@@ -1476,6 +1476,8 @@ void Graphics::drawtrophytext( entityclass& obj, UtilityClass& help )
 
 void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help )
 {
+    ct.nocolor = false;
+
     //Update line colours!
     if (linedelay <= 0)
     {
@@ -2003,6 +2005,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             }
         }
     }
+
+    ct.nocolor = false;
 }
 
 void Graphics::drawbackground( int t, mapclass& map )
