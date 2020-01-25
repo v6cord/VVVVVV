@@ -194,8 +194,7 @@ public:
     int tower_size(int tower);
     int tower_scroll(int tower);
     bool intower(void);
-    int tower_connection(int *rx, int *ry, int ypos);
-    int entering_tower(int rx, int ry, int *entry);
+    int tower_row(int rx, int ry);
 
     void load(std::string& _path, Graphics& dwgfx);
     void save(std::string& _path);

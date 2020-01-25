@@ -908,24 +908,110 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
     }
 }
 
+// Returns tower row for given room, or -1 if invalid
+int mapclass::tower_row(int rx, int ry) {
+    if (custommode)
+        return ed.tower_row(rx - 100, ry - 100);
+
+    int tower = get_tower(rx, ry);
+    if (tower == 1 && ry == 109)
+        return 671;
+    else if ((tower == 2 && ry == 53) ||
+             (tower == 3 && ry == 54))
+        return 71;
+    else if (!tower || (tower == 1 && ry != 104))
+        return -1;
+    return 0;
+}
+
+int mapclass::get_tower_offset(int tower, int ix, int iy, int *ry, int ypos) {
+    if (tower != get_tower(ix, iy))
+        return -1;
+
+    int rpos = tower_row(ix, iy) * 8;
+    if (rpos >= 0 && ypos >= rpos && ypos < rpos + 240) {
+        *ry += (iy - (*ry));
+        return ypos - rpos;
+    }
+
+    return -1;
+}
+
+// Returns y offset upon tower entry/exit. ypos is negative if entering.
+// Returns -1 for an invalid boundary.
+int mapclass::tower_connection(int *rx, int *ry, int ypos) {
+    /* Figure out the location of tower connections */
+    int ix, iy, rix, riy, rpos;
+    rix = (*rx);
+    riy = (*ry);
+    ix = rix;
+    iy = riy;
+
+    if (ypos < 0) // entering
+        return tower_row(ix, iy) * 8;
+
+    /* Iterate all rooms connected to this tower and figure out our exit
+       position. */
+    int ymin = 100;
+    int ymax = 100 + ed.maxheight - 1;
+    int tower = get_tower(ix, iy);
+    if (!custommode) {
+        ymax = 119;
+        if (rix < 100) {
+            ymin = 52;
+            ymax = 54;
+        }
+    }
+
+    for (iy = riy; iy >= ymin; iy--)
+        if ((rpos = get_tower_offset(tower, ix, iy, ry, ypos)) >= 0)
+            return rpos;
+
+    for (iy = riy + 1; iy <= ymax; iy++)
+        if ((rpos = get_tower_offset(tower, ix, iy, ry, ypos)) >= 0)
+            return rpos;
+
+    // We failed to find an exit boundary!
+    return -1;
+}
+
+/* Returns custom tower ID or for the maingame 1 (The Tower), 2 (Panic Room),
+   3 (The Final Challenge) */
+int mapclass::get_tower(int rx, int ry) {
+    if (custommode)
+        return ed.get_tower(rx - 100, ry - 100);
+
+    if (rx == 109)
+        return 1; // The Tower
+
+    if (rx == 49 && ry >= 52 && ry <= 53)
+        return 2; // Panic Room
+
+    if (rx == 51 && ry >= 53 && ry <= 54)
+        return 3; // The Final Challenge
+
+    return 0; // Not a tower
+}
+
+// Returns tower ID like get_tower() and updates entry with entry row
+int mapclass::entering_tower(int rx, int ry, int *entry) {
+    int tower = get_tower(rx, ry);
+    if (!tower)
+        return 0;
+
+    *entry = tower_connection(&rx, &ry, -1);
+    return tower;
+}
+
 // Moves player y appropriate and possibly change destination screen.
 bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
     int i = obj.getplayer();
 
-    // For custom towers, check if we're inside a valid exit boundary
-    int yp = 0;
-    if (custommode) {
-        yp = ed.tower_connection(rx, ry, obj.entities[i].yp);
+    // Check if we're inside a valid exit boundary
+    int yp = tower_connection(rx, ry, obj.entities[i].yp);
 
-        // Invalid exit boundary. Treat as implied warp lines
-        if (yp < 0) {
-            if (obj.entities[i].xp <= -10)
-                obj.entities[i].xp += 320;
-            if (obj.entities[i].xp > 310)
-                obj.entities[i].xp -= 320;
-            return false;
-        }
-    }
+    if (yp < 0)
+        return false;
 
     // Fix x position
     if (obj.entities[i].xp < -14) {
@@ -937,35 +1023,7 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
         (*rx)++;
     }
 
-    // Custom towers
-    if (custommode) {
-        obj.entities[i].yp = yp;
-        return true;
-    }
-
-    if (!minitowermode) { // The Tower
-        if (obj.entities[i].yp > 500) {
-            obj.entities[i].yp -= (671*8);
-            *ry = 109;
-        } else {
-            *ry = 104;
-        }
-    } else if (scrolldir == 1) { // Panic Room
-        if (obj.entities[i].yp >= (71*8)) {
-            obj.entities[i].yp -= (71*8);
-            *ry = 53;
-        } else {
-            *ry = 52;
-        }
-    } else { // The Final Challenge
-        if (obj.entities[i].yp >= (71*8)) {
-            obj.entities[i].yp -= (71*8);
-            *ry = 54;
-        } else {
-            *ry = 53;
-        }
-    }
-
+    obj.entities[i].yp = yp;
     return true;
 }
 
@@ -1308,6 +1366,32 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
     growing_vector<std::string> tmap;
 
+    int tower_entry = 0;
+    int newtower = entering_tower(rx, ry, &tower_entry);
+    if (newtower) {
+        // Set up baseline tower settings
+        tdrawback = true;
+        minitowermode = false;
+        tower.minitowermode = false;
+        minitowersize = 100;
+        bscroll = 0;
+        scrolldir = 0;
+
+        tileset = 1;
+        background = 3;
+        towermode = true;
+
+        cameramode = 0;
+        colstate = 0;
+        colsuperstate = 0;
+
+        int i = obj.getplayer();
+        obj.entities[i].yp += tower_entry;
+
+        ypos = tower_entry;
+        bypos = ypos/2;
+    }
+
     if (finalmode)
     {
         t = 6;
@@ -1340,32 +1424,6 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
     else
     {
         t = area(rx, ry);
-
-        if (t == 3)
-        {
-            //correct position for tower
-            if (ry == 109)
-            {
-                //entered from ground floor
-                int player = obj.getplayer();
-                obj.entities[player].yp += (671 * 8);
-
-                ypos = (700-29) * 8;
-                bypos = ypos / 2;
-                cameramode = 0;
-                colstate = 0;
-                colsuperstate = 0;
-            }
-            else if (ry == 104)
-            {
-                //you've entered from the top floor
-                ypos = 0;
-                bypos = 0;
-                cameramode = 0;
-                colstate = 0;
-                colsuperstate = 0;
-            }
-        }
 
         if (t < 2) //on the world map, want to test if we're in the secret lab
         {
@@ -1439,17 +1497,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         dwgfx.rcol = lablevel.rcol;
         break;
     case 3: //The Tower
-        tdrawback = true;
-        minitowermode = false;
-        tower.minitowermode = false;
-        bscroll = 0;
-        scrolldir = 0;
-
         roomname = "The Tower";
-        tileset = 1;
-        background = 3;
-        towermode = true;
-        //bypos = 0; ypos = 0; cameramode = 0;
 
         //All the entities for here are just loaded here; it's essentially one room after all
 
@@ -1525,67 +1573,19 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         changefinalcol(final_mapcol, obj, game);
         break;
     case 7: //Final Level, Tower 1
-        tdrawback = true;
+    case 8:
+        roomname = "Panic Room";
         minitowermode = true;
         tower.minitowermode = true;
-        minitowersize = 100;
-        bscroll = 0;
         scrolldir = 1;
 
-        roomname = "Panic Room";
-        tileset = 1;
-        background = 3;
-        towermode = true;
-
         tower.loadminitower1();
-
-        ypos = 0;
-        bypos = 0;
-        cameramode = 0;
-        colstate = 0;
-        colsuperstate = 0;
-        break;
-    case 8: //Final Level, Tower 1 (reentered from below)
-    {
-        tdrawback = true;
-        minitowermode = true;
-        tower.minitowermode = true;
-        minitowersize = 100;
-        bscroll = 0;
-        scrolldir = 1;
-
-        roomname = "Panic Room";
-        tileset = 1;
-        background = 3;
-        towermode = true;
-
-        tower.loadminitower1();
-
-        int i = obj.getplayer();
-        obj.entities[i].yp += (71 * 8);
-        game.roomy--;
-        finaly--;
-
-        ypos = (100-29) * 8;
-        bypos = ypos/2;
-        cameramode = 0;
-        colstate = 0;
-        colsuperstate = 0;}
         break;
     case 9: //Final Level, Tower 2
-    {
-        tdrawback = true;
+    case 10:
+        roomname = "The Final Challenge";
         minitowermode = true;
         tower.minitowermode = true;
-        minitowersize = 100;
-        bscroll = 0;
-        scrolldir = 0;
-        final_colorframe = 2;
-
-        roomname = "The Final Challenge";
-        tileset = 1;
-        background = 3;
-        towermode = true;
 
         tower.loadminitower2();
 
@@ -1602,56 +1602,6 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         obj.createentity(game, 56, 212, 11, 144); // (horizontal gravity line)
         obj.createentity(game, 32, 20, 11, 96); // (horizontal gravity line)
         obj.createentity(game, 72, 156, 11, 200); // (horizontal gravity line)
-
-        int i = obj.getplayer();
-        obj.entities[i].yp += (71 * 8);
-        game.roomy--;
-        finaly--;
-
-        ypos = (100-29) * 8;
-        bypos = ypos/2;
-        cameramode = 0;
-        colstate = 0;
-        colsuperstate = 0;
-    }
-        break;
-    case 10: //Final Level, Tower 2
-    {
-
-        tdrawback = true;
-        minitowermode = true;
-        tower.minitowermode = true;
-        bscroll = 0;
-        scrolldir = 0;
-        final_colorframe = 2;
-
-        roomname = "The Final Challenge";
-        tileset = 1;
-        background = 3;
-        towermode = true;
-
-        tower.loadminitower2();
-
-        obj.createentity(game, 56, 556, 11, 136); // (horizontal gravity line)
-        obj.createentity(game, 184, 592, 10, 0, 50500); // (savepoint)
-        obj.createentity(game, 184, 644, 11, 88); // (horizontal gravity line)
-        obj.createentity(game, 56, 460, 11, 136); // (horizontal gravity line)
-        obj.createentity(game, 216, 440, 10, 0, 50501); // (savepoint)
-        obj.createentity(game, 104, 508, 11, 168); // (horizontal gravity line)
-        obj.createentity(game, 219, 264, 12, 56); // (vertical gravity line)
-        obj.createentity(game, 120, 332, 11, 96); // (horizontal gravity line)
-        obj.createentity(game, 219, 344, 12, 56); // (vertical gravity line)
-        obj.createentity(game, 224, 332, 11, 48); // (horizontal gravity line)
-        obj.createentity(game, 56, 212, 11, 144); // (horizontal gravity line)
-        obj.createentity(game, 32, 20, 11, 96); // (horizontal gravity line)
-        obj.createentity(game, 72, 156, 11, 200); // (horizontal gravity line)
-
-        ypos = 0;
-        bypos = 0;
-        cameramode = 0;
-        colstate = 0;
-        colsuperstate = 0;
-    }
         break;
     case 11: //Tower Hallways //Content is held in final level routine
     {
@@ -1682,36 +1632,18 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         game.customcol=ed.getlevelcol(curlevel)+1;
         obj.customplatformtile=game.customcol*12;
 
-        int tower_entry = 0;
-        int customtower = ed.entering_tower(rx, ry, &tower_entry);
-        if (customtower) {
-            tdrawback = true;
+        if (newtower) {
             minitowermode = true;
             tower.minitowermode = true;
-            minitowersize = ed.tower_size(customtower);
-            bscroll = 0;
-            scrolldir = ed.tower_scroll(customtower);
-
-            tileset = 1;
-            background = 3;
-            towermode = true;
-
-            cameramode = 0;
-            colstate = 0;
-            colsuperstate = 0;
-
-            int i = obj.getplayer();
-            obj.entities[i].yp += tower_entry;
-
-            ypos = tower_entry;
-            bypos = ypos/2;
+            minitowersize = ed.tower_size(newtower);
+            scrolldir = ed.tower_scroll(newtower);
 
             extrarow = 0;
 
             int ix = rx - 100;
             int iy;
             for (iy = 0; iy < ed.maxheight; iy++)
-                if (ed.get_tower(ix, iy) == customtower)
+                if (ed.get_tower(ix, iy) == newtower)
                     explored[ix + iy*ed.maxwidth] = 1;
         } else {
             switch(ed.level[curlevel].tileset){
@@ -1771,17 +1703,16 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
         ed.loadlevel(rx, ry, obj.altstates);
         int ymax = 30;
-        if (customtower)
+        if (newtower) {
             ymax = minitowersize;
-
-        if (!customtower) {
+            tower.loadcustomtower(ed.swapmap, ymax);
+        } else {
             for (int edj = 0; edj < ymax; edj++) {
                 for (int edi = 0; edi < 40; edi++) {
                     contents[edi + vmult[edj]] = ed.swapmap[edi + vmult[edj]];
                 }
             }
-        } else
-            tower.loadcustomtower(ed.swapmap, ymax);
+        }
 
         roomname="";
         if(ed.level[curlevel].roomname!=""){
@@ -1796,7 +1727,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
         int tempscriptbox=0;
         for(int edi=0; edi<EditorData::GetInstance().numedentities; edi++){
             if (obj.altstates != edentity[edi].state ||
-                customtower != edentity[edi].intower)
+                newtower != edentity[edi].intower)
                 continue;
 
             // If entity is in this room, create it
@@ -1805,7 +1736,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             int tsy = (edentity[edi].y-(edentity[edi].y%30))/30;
             int ex = edentity[edi].x * 8;
             int ey = edentity[edi].y * 8;
-            if (!customtower) {
+            if (!newtower) {
                 /* Non-tower entity xy is stored with an xy offset denoting
                    the room */
                 ex -= tsx * 40 * 8;
@@ -1836,7 +1767,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                 by2 += 100;
             }
 
-            if (customtower || (tsx == rx-100 && tsy == ry-100)) {
+            if (newtower || (tsx == rx-100 && tsy == ry-100)) {
             switch (edentity[edi].t){
             case 1: // Enemies
                 obj.customenemy=ed.level[curlevel].enemytype;
