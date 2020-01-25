@@ -49,4 +49,20 @@ SDL_Surface * FlipSurfaceVerticle(SDL_Surface* _src);
 SDL_Surface * ScaleSurfaceSlow( SDL_Surface *_surface, int Width, int Height );
 SDL_Surface* ApplyFilter( SDL_Surface* _src );
 
+struct RgbColor {
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+};
+
+struct HsvColor {
+    unsigned char h;
+    unsigned char s;
+    unsigned char v;
+};
+
+RgbColor HsvToRgb(HsvColor hsv);
+
+HsvColor RgbToHsv(RgbColor rgb);
+
 #endif /* GRAPHICSUTIL_H */

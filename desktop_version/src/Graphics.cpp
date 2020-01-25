@@ -2930,6 +2930,13 @@ void Graphics::setcol( int t, UtilityClass& help )
 			ct.colour = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
 		}
 		break;
+	case 200: //HSV glow
+                { // C++ *please*
+                    HsvColor hsv = { .h = (unsigned char)(help.glow * 4), .s = 255, .v = 255};
+                    auto rgb = HsvToRgb(hsv);
+                    ct.colour = getRGB(rgb.r, rgb.g, rgb.b);
+                }
+		break;
 
 	default:
 		ct.colour = 0xFFFFFF;
