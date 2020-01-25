@@ -199,10 +199,13 @@ void FILESYSTEM_mount(const char *fname, Graphics& dwgfx)
 
 void FILESYSTEM_unmountassets(Graphics& dwgfx)
 {
-    printf("Unmounting %s\n", dwgfx.assetdir.c_str());
-    PHYSFS_unmount(dwgfx.assetdir.c_str());
-    dwgfx.assetdir = "";
-    dwgfx.reloadresources();
+    if (dwgfx.assetdir != "")
+    {
+        printf("Unmounting %s\n", dwgfx.assetdir.c_str());
+        PHYSFS_unmount(dwgfx.assetdir.c_str());
+        dwgfx.assetdir = "";
+        dwgfx.reloadresources();
+    } else printf("Cannot unmount when no asset directory is mounted\n");
 }
 
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
