@@ -2449,6 +2449,7 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 dwgfx.fademode = 2;
                 music.fadeout();
                 map.nexttowercolour();
+                FILESYSTEM_unmountassets(dwgfx);
             }
         }
 

@@ -2197,10 +2197,12 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         len++;
     }
 
-    printf("Unmounting %s\n", dwgfx.assetdir.c_str());
-    PHYSFS_unmount(dwgfx.assetdir.c_str());
-    dwgfx.assetdir = "";
-    dwgfx.reloadresources();
+    //printf("Unmounting %s\n", dwgfx.assetdir.c_str());
+    //PHYSFS_unmount(dwgfx.assetdir.c_str());
+    //dwgfx.assetdir = "";
+    //dwgfx.reloadresources();
+
+    FILESYSTEM_unmountassets(dwgfx);
 
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
     if (FILESYSTEM_directoryExists(dirpath.c_str())) {

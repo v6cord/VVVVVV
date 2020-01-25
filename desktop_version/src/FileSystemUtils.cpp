@@ -183,6 +183,14 @@ void FILESYSTEM_mount(const char *fname, Graphics& dwgfx)
         dwgfx.assetdir = path.c_str();
 }
 
+void FILESYSTEM_unmountassets(Graphics& dwgfx)
+{
+    printf("Unmounting %s\n", dwgfx.assetdir.c_str());
+    PHYSFS_unmount(dwgfx.assetdir.c_str());
+    dwgfx.assetdir = "";
+    dwgfx.reloadresources();
+}
+
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
                                  size_t *len, bool addnull)
 {

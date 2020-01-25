@@ -9,6 +9,7 @@
 #include "Music.h"
 #include "KeyPoll.h"
 #include "Map.h"
+#include "FileSystemUtils.h"
 
 scriptclass::scriptclass()
 {
@@ -3491,6 +3492,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 void scriptclass::resetgametomenu( Graphics& dwgfx, Game& game,mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
 {
 	game.gamestate = TITLEMODE;
+    FILESYSTEM_unmountassets(dwgfx);
 	dwgfx.flipmode = false;
 	obj.nentity = 0;
 	dwgfx.fademode = 4;

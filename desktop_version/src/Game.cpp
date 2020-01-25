@@ -2099,6 +2099,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
         case 1015:
             dwgfx.flipmode = false;
             gamestate = TITLEMODE;
+            FILESYSTEM_unmountassets(dwgfx);
             dwgfx.fademode = 4;
             music.play(6);
             dwgfx.backgrounddrawn = true;
