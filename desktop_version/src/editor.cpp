@@ -2727,6 +2727,8 @@ void editorclass::save(std::string& _path)
     msg = new TiXmlElement( "levelMetaData" );
     int rowwidth = 0;
     int maxrowwidth = std::max(mapwidth, 20);
+    int rows = 0;
+    int maxrows = mapwidth <= 20 && mapheight <= 20 ? 20 : mapheight;
     for (int i = 0; i < maxwidth * maxheight; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
@@ -2753,6 +2755,9 @@ void editorclass::save(std::string& _path)
         if (rowwidth == maxrowwidth) {
             rowwidth = 0;
             i += maxwidth - maxrowwidth;
+            rows++;
+            if (rows == maxrows)
+                break;
         }
     }
     data->LinkEndChild( msg );
