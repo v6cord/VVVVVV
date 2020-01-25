@@ -35,6 +35,8 @@ public:
 
 	void Makebfont();
 
+    std::string assetdir;
+
 	void drawhuetile(int x, int y, int t, int c);
 
 	void drawgravityline(int t, entityclass& obj);

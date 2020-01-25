@@ -2196,19 +2196,16 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         i++;
         len++;
     }
-    i = path + 2;
-    len -= 2;
-    for (; len > 0; len--) {
-        printf("Unmounting %s\n", *i);
-        PHYSFS_unmount(*i);
-        i++;
-    }
-    PHYSFS_freeList(path);
+
+    printf("Unmounting %s\n", dwgfx.assetdir.c_str());
+    PHYSFS_unmount(dwgfx.assetdir.c_str());
+    dwgfx.assetdir = "";
+    dwgfx.reloadresources();
 
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
     if (FILESYSTEM_directoryExists(dirpath.c_str())) {
         printf("Custom asset directory exists at %s\n",dirpath.c_str());
-        FILESYSTEM_mount(dirpath.c_str());
+        FILESYSTEM_mount(dirpath.c_str(), dwgfx);
         dwgfx.reloadresources();
     } else {
         printf("Custom asset directory does not exist\n");
@@ -2728,14 +2725,11 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "levelMetaData" );
-    int usethislimit;
-    if (mapwidth <= 20 && mapheight <= 20)
-        usethislimit = 20 * 20;
-    else
-        usethislimit = maxwidth * maxheight;
     int rowwidth = 0;
     int maxrowwidth = std::max(mapwidth, 20);
-    for (int i = 0; i < usethislimit; i++) {
+    int rows = 0;
+    int maxrows = mapwidth <= 20 && mapheight <= 20 ? 20 : mapheight;
+    for (int i = 0; i < maxwidth * maxheight; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
@@ -2761,6 +2755,9 @@ void editorclass::save(std::string& _path)
         if (rowwidth == maxrowwidth) {
             rowwidth = 0;
             i += maxwidth - maxrowwidth;
+            rows++;
+            if (rows == maxrows)
+                break;
         }
     }
     data->LinkEndChild( msg );

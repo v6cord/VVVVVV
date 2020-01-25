@@ -4,6 +4,8 @@
 #include "Utilities.h"
 #include <string>
 
+#include "Graphics.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,6 +48,11 @@ void PLATFORM_getOSDirectory(char* output);
 void PLATFORM_migrateSaveData(char* output);
 void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
 
+extern "C" {
+    extern const unsigned char vce_zip[];
+    extern const unsigned vce_zip_size;
+}
+
 int FILESYSTEM_init(char *argvZero)
 {
 	char output[MAX_PATH];
@@ -64,6 +71,8 @@ int FILESYSTEM_init(char *argvZero)
 	PHYSFS_mount(output, NULL, 1);
 	PHYSFS_setWriteDir(output);
 	printf("Base directory: %s\n", output);
+
+        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
 
 	/* Create save directory */
 	strcpy_safe(saveDir, output);
@@ -170,14 +179,15 @@ const char pathSeparator =
                             '/';
 #endif
 
-void FILESYSTEM_mount(const char *fname)
+void FILESYSTEM_mount(const char *fname, Graphics& dwgfx)
 {
     std::string path(PHYSFS_getRealDir(fname));
     path += pathSeparator;
     path += fname;
     if (!PHYSFS_mount(path.c_str(), NULL, 0)) {
         printf("Error mounting: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
-    }
+    } else
+        dwgfx.assetdir = path.c_str();
 }
 
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
