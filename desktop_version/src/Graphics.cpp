@@ -816,6 +816,30 @@ void Graphics::drawimagecol( int t, int xp, int yp, int r = 0, int g = 0, int b 
     }
 }
 
+void Graphics::drawscriptimage( Game& game, int t, int xp, int yp, bool cent/*=false*/ )
+{
+
+    SDL_Rect trect;
+    if (cent)
+    {
+        trect.x = 160 - int(game.script_images[t]->w / 2);
+        trect.y = yp;
+        trect.w = game.script_images[t]->w;
+        trect.h = game.script_images[t]->h;
+        BlitSurfaceStandard(game.script_images[t], NULL, backBuffer, &trect);
+    }
+    else
+    {
+
+        trect.x = xp;
+        trect.y = yp;
+        trect.w = game.script_images[t]->w;
+        trect.h= game.script_images[t]->h;
+
+        BlitSurfaceStandard(game.script_images[t], NULL, backBuffer, &trect);
+    }
+}
+
 void Graphics::drawimage( int t, int xp, int yp, bool cent/*=false*/ )
 {
 

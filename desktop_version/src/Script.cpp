@@ -67,6 +67,15 @@ int scriptclass::getvar(std::string n) {
 	return -1;
 }
 
+int scriptclass::getimage(Game& game, std::string n) {
+	for(std::size_t i = 0; i < game.script_images.size(); i++) {
+		if (game.script_image_names[i] == n) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 void scriptclass::setvar(std::string n, std::string c) {
 	int tempvar = getvar(n);
 	if (tempvar == -1) {
@@ -855,6 +864,34 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.b      = ss_toi(words[5]);
 				scriptrender.push_back(temp);
                         }
+			if (words[0] == "loadimage")
+			{
+				game.script_images.push_back(LoadImage(words[1].c_str()));
+				game.script_image_names.push_back(words[1]);
+            }
+			if (words[0] == "drawimage")
+			{
+				// drawimage(x,y,name[, centered])
+				int tempindex = getimage(game, words[3]);
+				if (tempindex == -1) {
+					game.script_images.push_back(LoadImage(words[3].c_str()));
+					game.script_image_names.push_back(words[3]);
+					tempindex = (int)game.script_images.size() - 1;
+				}
+				if ((tempindex <= (int)game.script_images.size()) && tempindex >= 0) {
+					if (words[4] == "true" || words[4] == "1")
+						words[4] = "1";
+					else
+						words[4] = "0";
+					scriptimage temp;
+					temp.type   = 3;
+					temp.x      = ss_toi(words[1]);
+					temp.y      = ss_toi(words[2]);
+					temp.index  = tempindex;
+					temp.center = ss_toi(words[4]);
+					scriptrender.push_back(temp);
+				}
+            }
       if (words[0] == "flag")
 			{
 				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){
@@ -4587,6 +4624,9 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	variablecontents.clear();
 	variablenames.resize(100);
 	variablecontents.resize(100);
+
+	game.script_images.clear();
+	game.script_image_names.clear();
 }
 
 int scriptclass::getlabelnum(std::string thelabel)

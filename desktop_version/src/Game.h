@@ -390,6 +390,9 @@ public:
     int playry = 0;
     int playgc = 0;
 
+    growing_vector<SDL_Surface*> script_images;
+    growing_vector<std::string> script_image_names;
+
 };
 
 #endif /* GAME_H */

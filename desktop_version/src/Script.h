@@ -35,6 +35,8 @@ public:
 
     void clearcustom();
 
+    int getimage(Game& game, std::string n);
+
     int getvar(std::string n);
     
     void setvar(std::string n, std::string c);

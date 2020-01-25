@@ -15,6 +15,7 @@ struct scriptimage {
     int r = 0;
     int g = 0;
     int b = 0;
+    int index = 0;
     std::string text;
     bool center = false;
     bool bord = false;

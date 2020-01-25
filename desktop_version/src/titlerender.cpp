@@ -65,6 +65,14 @@ growing_vector<std::string> changelog = {
     "- drawrect(x,y,w,h,r,g,b) - draw a",
     "  rectangle for one frame - r,g,b is 0-",
     "  255",
+    "- drawimage(x,y,filename[, centered]) -",
+    "  draw an image on the screen for one",
+    "  frame",
+    "- loadimage(filename) - add the image",
+    "  to the cache without actually drawing",
+    "  it",
+    "- drawpixel(x,y,r,g,b) - draw a pixel",
+    "  on the screen for one frame",
     "- followposition now works for the",
     "  player",
     "- There's now an option to disable only",
@@ -277,7 +285,7 @@ growing_vector<std::string> changelog = {
     "  editor using the F tool",
     "- You can place activity zones in the",
     "  editor by holding down Z while placing",
-    "  a script box"
+    "  a script box",
 
 };
 
@@ -1934,7 +1942,8 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             temprect.w = current.w;
             temprect.h = current.h;
             SDL_FillRect(dwgfx.backBuffer, &temprect, dwgfx.getRGB(current.r,current.g,current.b));
-            //dwgfx.FillRect(dwgfx.backBuffer, current.x, current.y, current.w, current.h, current.r, current.g, current.b);
+        } else if (current.type == 3) {
+            dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center );
         }
     }
     script.scriptrender.clear();

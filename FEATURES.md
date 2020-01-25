@@ -33,6 +33,12 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame - r,g,b is 0-255
 
+- `drawimage(x,y,filename[, centered])` - draw an image on the screen for one frame
+
+- `loadimage(filename)` - add the image to the cache without actually drawing it
+
+- `drawpixel(x,y,r,g,b)` - draw a pixel on the screen for one frame
+
 - `followposition` now works for the player
 
 - There's now an option to disable only the music
