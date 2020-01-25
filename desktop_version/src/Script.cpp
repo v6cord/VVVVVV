@@ -782,6 +782,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if (words[0] == "clearoff") {
                 dwgfx.noclear = true;
             }
+            if (words[0] == "clear") {
+                auto alpha = ss_toi(words[1]);
+                if (words[1] == "") alpha = 255;
+                printf("%i\n", alpha);
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+                auto rmask = 0xff000000;
+                auto gmask = 0x00ff0000;
+                auto bmask = 0x0000ff00;
+                auto amask = 0x000000ff;
+#else
+                auto rmask = 0x000000ff;
+                auto gmask = 0x0000ff00;
+                auto bmask = 0x00ff0000;
+                auto amask = 0xff000000;
+#endif
+
+                auto s = SDL_CreateRGBSurface(0, dwgfx.backBuffer->w, dwgfx.backBuffer->h, 32, rmask, gmask, bmask, amask);
+                SDL_FillRect(s, nullptr, SDL_MapRGBA(s->format, 0, 0, 0, alpha));
+                SDL_BlitSurface(s, nullptr, dwgfx.backBuffer, nullptr);
+                SDL_FreeSurface(s);
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)
