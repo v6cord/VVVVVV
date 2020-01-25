@@ -3266,26 +3266,35 @@ void Graphics::drawtile(int x, int y, int t)
 
 void Graphics::drawforetile(int x, int y, int t)
 {
-	//frontbuffer.copyPixels(tiles[t], tiles_rect, tpoint);
-	SDL_Rect rect;
-	setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-	BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
+        auto tile = t;
+        if (!noclear || (tile >= 6 && tile <= 9) || tile == 49 || tile == 50 || tile == 1 || (tile >= 80 && tile <= 679)) {
+            //frontbuffer.copyPixels(tiles[t], tiles_rect, tpoint);
+            SDL_Rect rect;
+            setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
+            BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
+        }
 }
 
 void Graphics::drawforetile2(int x, int y, int t)
 {
-	//frontbuffer.copyPixels(tiles2[t], tiles_rect, tpoint);
-	SDL_Rect rect;
-	setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-	BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
+        auto tile = t;
+        if (!noclear || (tile >= 6 && tile <= 9) || tile == 49 || tile == 50 || tile == 1 || (tile >= 80 && tile <= 679)) {
+            //frontbuffer.copyPixels(tiles2[t], tiles_rect, tpoint);
+            SDL_Rect rect;
+            setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
+            BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
+        }
 }
 
 void Graphics::drawforetile3(int x, int y, int t, int off)
 {
-	SDL_Rect rect;
-	setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-	BlitSurfaceStandard(tiles3[t+(off*30)],NULL, foregroundBuffer, &rect  );
-	//frontbuffer.copyPixels(tiles3[t+(off*30)], tiles_rect, tpoint);
+        auto tile = t % 30;
+        if (!noclear || (tile >= 6 && tile <= 11) || (tile >= 12 && tile <= 27)) {
+            SDL_Rect rect;
+            setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
+            BlitSurfaceStandard(tiles3[t+(off*30)],NULL, foregroundBuffer, &rect  );
+            //frontbuffer.copyPixels(tiles3[t+(off*30)], tiles_rect, tpoint);
+        }
 }
 
 void Graphics::drawrect(int x, int y, int w, int h, int r, int g, int b)

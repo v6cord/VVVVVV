@@ -1820,14 +1820,16 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     if(!game.blackout)
     {
 
-        if(!game.colourblindmode)
-		{
-        dwgfx.drawbackground(map.background, map);
-		}
-		else
-		{
-			FillRect(dwgfx.backBuffer,0x00000);
-		}
+        if (!dwgfx.noclear) {
+            if(!game.colourblindmode)
+            {
+                dwgfx.drawbackground(map.background, map);
+            }
+            else
+            {
+                FillRect(dwgfx.backBuffer,0x00000);
+            }
+        }
         if (map.final_colormode)
 		{
         	dwgfx.drawfinalmap(map);

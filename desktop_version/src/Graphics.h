@@ -290,6 +290,7 @@ public:
         std::unordered_map<int, int> font_positions;
         std::optional<std::string> mapimage;
 
+        bool noclear = false;
 };
 
 #endif /* GRAPHICS_H */

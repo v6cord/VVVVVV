@@ -980,6 +980,8 @@ void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, G
 
 void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
+    FillRect(dwgfx.backBuffer,0x00000);
+
     //First, destroy the current room
     obj.removeallblocks();
     obj.removeallresurrectblocks();
