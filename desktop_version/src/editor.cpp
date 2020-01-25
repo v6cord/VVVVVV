@@ -99,6 +99,8 @@ editorclass::editorclass()
     towers.resize(400);
     level.resize(maxwidth * maxheight);
 
+    enemyspeed = 0;
+
     reset();
 }
 
@@ -4374,7 +4376,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bprint(2,2, "8: Moving",196, 196, 255 - help.glow);
             break;
         case 8:
-            dwgfx.bprint(2,2, "9: Enemies",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "9: Enemies, Speed: " + std::to_string(ed.enemyspeed + 4),196, 196, 255 - help.glow);
             break;
         case 9:
             dwgfx.bprint(2,2, "0: Grav Line",196, 196, 255 - help.glow);
@@ -4535,6 +4537,18 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         ed.note="Reloaded resources";
         ed.notedelay=45;
         dwgfx.reloadresources();
+    }
+
+    if (key.keymap[SDLK_LEFTBRACKET] && (ed.keydelay==0)) {
+        ed.keydelay = 6;
+        ed.enemyspeed--;
+        if (ed.enemyspeed < -4) ed.enemyspeed = 4;
+    }
+
+    if (key.keymap[SDLK_RIGHTBRACKET] && (ed.keydelay==0)) {
+        ed.keydelay = 6;
+        ed.enemyspeed++;
+        if (ed.enemyspeed > 4) ed.enemyspeed = -4;
     }
 
     int tower = ed.get_tower(ed.levx, ed.levy);
@@ -6090,9 +6104,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 addedentity(tx, ty, 2, 0);
                                 ed.lclickdelay=1;
                             }
-                            else if(ed.drawmode==8)
+                            else if(ed.drawmode==8) // Enemies
                             {
-                                addedentity(tx, ty, 1, 0);
+                                addedentity(tx, ty, 1, 0, ed.enemyspeed);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==9)
