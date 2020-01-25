@@ -855,8 +855,8 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
 
     // For custom towers, they might be, so verify tower ID
     if (towermode && minitowermode && custommode &&
-        ed.get_tower(game.roomx, game.roomy) ==
-        ed.get_tower(game.saverx, game.savery))
+        ed.get_tower(game.roomx - 100, game.roomy - 100) ==
+        ed.get_tower(game.saverx - 100, game.savery - 100))
         room_different = false;
 
     // Obviously, identical death room and checkpoint room isn't different
