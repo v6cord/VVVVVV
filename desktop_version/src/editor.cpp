@@ -3275,7 +3275,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         case 5: // Flip Tokens
             dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
             //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
-            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,164));
+            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
             break;
         case 8: // Coin
             dwgfx.drawhuetile(ex, ey, 48, 8);
