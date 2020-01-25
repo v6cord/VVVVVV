@@ -172,6 +172,8 @@ void Graphics::Makebfont()
         }
     }
 
+    if (PHYSFS_getRealDir("graphics/font.txt") != PHYSFS_getRealDir("graphics/font.png")) return;
+
     unsigned char* charmap = NULL;
     size_t length;
     FILESYSTEM_loadFileToMemory("graphics/font.txt", &charmap, &length);
