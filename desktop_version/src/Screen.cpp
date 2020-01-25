@@ -17,9 +17,6 @@ extern "C"
 		const unsigned char* in,
 		size_t insize
 	);
-
-        extern const unsigned char v6cord_png[];
-        extern const unsigned v6cord_png_size;
 }
 
 Screen::Screen()
@@ -48,19 +45,12 @@ Screen::Screen()
 	);
 	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
-	unsigned char *fileIn = (unsigned char*) v6cord_png;
-	size_t length = v6cord_png_size;
+	unsigned char *fileIn;
+	size_t length;
 	unsigned char *data;
 	unsigned int width, height;
-        auto realPath = PHYSFS_getRealDir("VVVVVV.png");
-        if (realPath) {
-            auto end = strrchr(realPath, 'd');
-            if (!end || (end && strcmp(end, "data.zip") != 0)) {
-                FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
-            }
-        }
+        FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
 	lodepng_decode32(&data, &width, &height, fileIn, length);
-	if (fileIn != v6cord_png) FILESYSTEM_freeMemory(&fileIn);
 	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(
 		data,
 		width,
