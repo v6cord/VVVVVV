@@ -4247,6 +4247,25 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                     break;
                 }
                 break;
+
+            case 4: // Gravity token anim
+                entities[_i].framedelay--;
+                if(entities[_i].framedelay<=0)
+                {
+                    entities[_i].framedelay = 8;
+                    entities[_i].walkingframe++;
+                    if (entities[_i].walkingframe == 4)
+                    {
+                        entities[_i].walkingframe = 0;
+                    }
+                }
+
+                entities[_i].drawframe = entities[_i].tile;
+                if (entities[_i].para != 0) {
+                    entities[_i].drawframe += (entities[_i].walkingframe);
+                }
+                break;
+
             case 11:
                 entities[_i].drawframe = entities[_i].tile;
                 if(entities[_i].animate==2)

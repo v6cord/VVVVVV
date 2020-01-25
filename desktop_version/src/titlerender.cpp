@@ -558,6 +558,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( -1, base + 70,  "leo60228",   tr, tg, tb, true);
             dwgfx.Print( -1, base + 85,  "FIQ",        tr, tg, tb, true);
             dwgfx.Print( -1, base + 100, "Stelpjo",    tr, tg, tb, true);
+            dwgfx.Print( -1, base + 115, "mothbeanie", tr, tg, tb, true);
         }
         else if (game.currentmenuname == "credits2")
         {

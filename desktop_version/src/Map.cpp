@@ -1862,7 +1862,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                 obj.createentity(game, ex, ey, 3);
                 break;
             case 5: // Flip tokens
-                obj.createentity(game, ex, ey, 5, edentity[edi].p1);
+                obj.createentity(game, ex, ey, 5, edentity[edi].p1, edentity[edi].p2);
                 break;
             case 8: // Coins
                 obj.createentity(game, ex, ey, 8, ed.findcoin(edi));
