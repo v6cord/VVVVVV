@@ -22,8 +22,8 @@ function finish {
 }
 trap finish EXIT
 
-if [ -e v6cord.png.c ]; then
-    cp -a v6cord.png.c "$timestamp_ref"
+if [ -e vce.zip.c ]; then
+    cp -a vce.zip.c "$timestamp_ref"
 fi
 
 cmake -G Ninja \
@@ -31,8 +31,8 @@ cmake -G Ninja \
     ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
     ..
 
-if cmp -s "$timestamp_ref" v6cord.png.c; then
-    touch -r "$timestamp_ref" v6cord.png.c
+if cmp -s "$timestamp_ref" vce.zip.c; then
+    touch -r "$timestamp_ref" vce.zip.c
 fi
 
 ninja

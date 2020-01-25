@@ -48,6 +48,11 @@ void PLATFORM_getOSDirectory(char* output);
 void PLATFORM_migrateSaveData(char* output);
 void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
 
+extern "C" {
+    extern const unsigned char vce_zip[];
+    extern const unsigned vce_zip_size;
+}
+
 int FILESYSTEM_init(char *argvZero)
 {
 	char output[MAX_PATH];
@@ -66,6 +71,8 @@ int FILESYSTEM_init(char *argvZero)
 	PHYSFS_mount(output, NULL, 1);
 	PHYSFS_setWriteDir(output);
 	printf("Base directory: %s\n", output);
+
+        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
 
 	/* Create save directory */
 	strcpy_safe(saveDir, output);

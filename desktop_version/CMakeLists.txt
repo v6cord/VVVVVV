@@ -77,7 +77,9 @@ function(create_resource bin output)
     file(APPEND ${output} "const unsigned char ${filename}[] = {${filedata}};\nconst unsigned ${filename}_size = sizeof(${filename});\n")
 endfunction()
 
-create_resource(${CMAKE_SOURCE_DIR}/v6cord.png ${CMAKE_BINARY_DIR}/v6cord.png.c)
+file(GLOB_RECURSE data RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/data" data/*)
+execute_process(COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/vce.zip" --format=zip ${data} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data")
+create_resource(${CMAKE_BINARY_DIR}/vce.zip ${CMAKE_BINARY_DIR}/vce.zip.c)
 
 # Include Directories
 INCLUDE_DIRECTORIES(
@@ -125,7 +127,7 @@ SET(VVV_SRC
 	src/Network.c
 	src/SteamNetwork.c
 	src/GOGNetwork.c
-        ${CMAKE_BINARY_DIR}/v6cord.png.c
+        ${CMAKE_BINARY_DIR}/vce.zip.c
 	src/Utilities.cpp
 )
 SET(XML_SRC

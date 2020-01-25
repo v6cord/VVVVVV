@@ -172,6 +172,8 @@ void Graphics::Makebfont()
         }
     }
 
+    if (PHYSFS_getRealDir("graphics/font.txt") != PHYSFS_getRealDir("graphics/font.png")) return;
+
     unsigned char* charmap = NULL;
     size_t length;
     FILESYSTEM_loadFileToMemory("graphics/font.txt", &charmap, &length);
@@ -250,6 +252,8 @@ void Graphics::maketelearray()
 
 void Graphics::MakeSpriteArray()
 {
+    int default_rows = 17;
+
     int sprites_height = grphx.im_sprites->h;
     for(int j = 0; j < sprites_height / 32; j++)
     {
@@ -281,6 +285,16 @@ void Graphics::MakeSpriteArray()
         }
     }
 
+    if ((sprites_height / 32) < default_rows) {
+        int rest = default_rows - (sprites_height / 32);
+        for (int j = 0; j < rest; j++) {
+            for(int i = 0; i < 12; i++) {
+                SDL_Surface* temp = GetSubSurface(grphx.im_sprites,0,0,32,32);
+                sprites.push_back(temp);
+                flipsprites.push_back(temp);
+            }
+        }
+    }
 }
 
 

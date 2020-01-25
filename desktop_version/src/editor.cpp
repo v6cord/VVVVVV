@@ -2727,14 +2727,11 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "levelMetaData" );
-    int usethislimit;
-    if (mapwidth <= 20 && mapheight <= 20)
-        usethislimit = 20 * 20;
-    else
-        usethislimit = maxwidth * maxheight;
     int rowwidth = 0;
     int maxrowwidth = std::max(mapwidth, 20);
-    for (int i = 0; i < usethislimit; i++) {
+    int rows = 0;
+    int maxrows = mapwidth <= 20 && mapheight <= 20 ? 20 : mapheight;
+    for (int i = 0; i < maxwidth * maxheight; i++) {
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
@@ -2760,6 +2757,9 @@ void editorclass::save(std::string& _path)
         if (rowwidth == maxrowwidth) {
             rowwidth = 0;
             i += maxwidth - maxrowwidth;
+            rows++;
+            if (rows == maxrows)
+                break;
         }
     }
     data->LinkEndChild( msg );
@@ -3274,7 +3274,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         case 5: // Flip Tokens
             dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
             //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
-            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,164));
+            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
             break;
         case 8: // Coin
             dwgfx.drawhuetile(ex, ey, 48, 8);

@@ -51,6 +51,7 @@ void entityclass::init()
     nentity = 0;
     nblocks = 0;
 
+    skipblocks = false;
     skipdirblocks = false;
     platformtile = 0;
     customplatformtile=0;
@@ -3255,7 +3256,13 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 {
                     entities[i].active = false;
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
-
+                    if (entities[getplayer()].onground > 0) {
+                        music.playef(0, 10);
+                    } else if (entities[getplayer()].onroof > 0) {
+                        music.playef(1, 10);
+                    } else {
+                        music.playef(8, 10);
+                    }
                 }
                 break;
             case 5:  //Particle sprays
