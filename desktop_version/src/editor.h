@@ -182,6 +182,8 @@ public:
 
     int backmatch(int x, int y);
 
+    void switch_tileset(int from, int to);
+
     void enable_tower(void);
     void snap_tower_entry(int rx, int ry);
     void upsize_tower(int tower, int y);

@@ -1279,7 +1279,12 @@ editorclass::gettiletyp(int tileset, int tile)
         return TILE_BACKGROUND;
     }
 
-    if ((tile >= 6 && tile <= 9) || tile == 49 || tile == 50)
+    // non-space station has more spikes
+    int lastspike = 50;
+    if (tileset != 0)
+        lastspike = 74;
+
+    if ((tile >= 6 && tile <= 9) || (tile >= 49 && tile <= lastspike))
         return TILE_SPIKE;
     if (tile == 1 || (tile >= 80 && tile <= 679))
         return TILE_FOREGROUND;
@@ -1906,6 +1911,39 @@ void editorclass::countstuff()
         if(edentity[i].t==9) numtrinkets++;
         if(edentity[i].t==8) numcoins++;
         if(edentity[i].t==15) numcrewmates++;
+    }
+}
+
+// Gracefully switches to and from Tower Tileset if autotilig is on
+void editorclass::switch_tileset(int from, int to) {
+    // Do nothing in Direct Mode
+    if (level[levx + levy*maxwidth].directmode)
+        return;
+
+    // Otherwise, set tiles naively to one of the correct type.
+    // Autotiling will fix them automatically later.
+    int tile;
+    enum tiletyp typ;
+    int newfg = 80;
+    int newbg = 680;
+    int newspike = 6;
+
+    if (to == 5) {
+        newfg = 12;
+        newbg = 28;
+    }
+
+    for (int x = 0; x < 40; x++) {
+        for (int y = 0; y < 30; y++) {
+            tile = gettilelocal(x, y);
+            typ = gettiletyp(from, tile);
+            if (typ == TILE_FOREGROUND)
+                settilelocal(x, y, newfg);
+            else if (typ == TILE_BACKGROUND)
+                settilelocal(x, y, newbg);
+            else if (typ == TILE_SPIKE)
+                settilelocal(x, y, newspike);
+        }
     }
 }
 
@@ -5182,6 +5220,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
             {
+                int oldtiles = ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset;
                 ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset++;
                 dwgfx.backgrounddrawn=false;
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset>=6) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset=0;
@@ -5197,6 +5236,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 {
                     if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=6) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
                 }
+                int newtiles = ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset;
+
+                // Graceful tileset switching to/from tower if autotiling is on
+                ed.switch_tileset(oldtiles, newtiles);
                 ed.notedelay=45;
                 switch(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset)
                 {
