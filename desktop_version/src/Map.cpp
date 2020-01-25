@@ -854,7 +854,7 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
         room_different = false;
 
     // For custom towers, they might be, so verify tower ID
-    if (minitowermode && custommode &&
+    if (towermode && minitowermode && custommode &&
         ed.get_tower(game.roomx, game.roomy) ==
         ed.get_tower(game.saverx, game.savery))
         room_different = false;
