@@ -3180,9 +3180,18 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         if (game.advancetext) dwgfx.bprint(5, 5, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
-
     FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0x000000);
     dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
+
+    if (map.customcoins > 0) {
+        std::string coinstring = std::to_string(game.coins);
+        if (game.coins == map.customcoins) {
+            dwgfx.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
+        } else {
+            dwgfx.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);
+        }
+        dwgfx.drawhuetile(311, 230, 48, 1);
+    }
 
     if (game.intimetrial && dwgfx.fademode==0)
     {
