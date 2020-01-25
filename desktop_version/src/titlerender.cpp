@@ -286,6 +286,11 @@ growing_vector<std::string> changelog = {
     "- You can place activity zones in the",
     "  editor by holding down Z while placing",
     "  a script box",
+    "  - You can change the speed of enemies",
+    "  you're placing down by using the [ and",
+    "  ] keys. Speeds are 0 - 8, but since by",
+    "  default p2 is 0, the speeds are saved",
+    "  as -4 to 4.",
 
 };
 
