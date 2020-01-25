@@ -776,6 +776,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 dwgfx.showcutscenebars = false;
                 call("stop");
             }
+            if (words[0] == "clearon") {
+                dwgfx.noclear = false;
+            }
+            if (words[0] == "clearoff") {
+                dwgfx.noclear = true;
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)
@@ -3501,6 +3507,7 @@ void scriptclass::resetgametomenu( Graphics& dwgfx, Game& game,mapclass& map, en
 
 void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music )
 {
+    dwgfx.noclear = false;
     dwgfx.mapimage = std::nullopt;
 	switch(t)
 	{
