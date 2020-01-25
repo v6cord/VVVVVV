@@ -3901,11 +3901,20 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             case 4:
                 dwgfx.Print( -1, 120, "4: Passion for Exploring", tr, tg, tb, true);
                 break;
+            case 5:
+                dwgfx.Print( -1, 120, "N/A: Pause", tr, tg, tb, true);
+                break;
             case 6:
                 dwgfx.Print( -1, 120, "5: Presenting VVVVVV", tr, tg, tb, true);
                 break;
+            case 7:
+                dwgfx.Print( -1, 120, "N/A: Plenary", tr, tg, tb, true);
+                break;
             case 8:
                 dwgfx.Print( -1, 120, "6: Predestined Fate", tr, tg, tb, true);
+                break;
+            case 9:
+                dwgfx.Print( -1, 120, "N/A: Positive Force Reversed", tr, tg, tb, true);
                 break;
             case 10:
                 dwgfx.Print( -1, 120, "7: Popular Potpourri", tr, tg, tb, true);
@@ -3921,6 +3930,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 break;
             case 14:
                 dwgfx.Print( -1, 120, "11: Piercing the Sky", tr, tg, tb, true);
+                break;
+            case 15:
+                dwgfx.Print( -1, 120, "N/A: Predestined Fate Remix", tr, tg, tb, true);
                 break;
             default:
                 dwgfx.Print( -1, 120, "?: something else", tr, tg, tb, true);

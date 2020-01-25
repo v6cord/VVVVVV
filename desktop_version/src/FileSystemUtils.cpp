@@ -22,6 +22,8 @@
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
+#include <winbase.h>
+#define getcwd(buf, size) GetCurrentDirectory((size), (buf))
 int mkdir(char* path, int mode)
 {
 	WCHAR utf16_path[MAX_PATH];
@@ -55,7 +57,7 @@ extern "C" {
 
 int FILESYSTEM_init(char *argvZero)
 {
-	char output[MAX_PATH];
+	char output[MAX_PATH + 9];
 	int mkdirResult;
 
 	PHYSFS_init(argvZero);
@@ -122,23 +124,28 @@ int FILESYSTEM_init(char *argvZero)
 #endif
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
-		puts("Error: data.zip missing!");
-		puts("You do not have data.zip!");
-		puts("Grab it from your purchased copy of the game,");
-		puts("or get it from the free Make and Play Edition.");
+                if (!getcwd(output, MAX_PATH)) ;
+                strcat(output, "/data.zip");
+                if (!PHYSFS_mount(output, NULL, 1))
+                {
+                        puts("Error: data.zip missing!");
+                        puts("You do not have data.zip!");
+                        puts("Grab it from your purchased copy of the game,");
+                        puts("or get it from the free Make and Play Edition.");
 
-                std::string message = "You do not have data.zip at ";
-                message += output;
-                message += "!\n\nGrab it from your purchased copy of the game,"
-                            "\nor get it from the free Make and Play Edition.";
-		SDL_ShowSimpleMessageBox(
-			SDL_MESSAGEBOX_ERROR,
-			"data.zip missing!",
-                        message.c_str(),
-			NULL
-		);
-		return 0;
-	}
+                        std::string message = "You do not have data.zip at ";
+                        message += output;
+                        message += "!\n\nGrab it from your purchased copy of the game,"
+                                    "\nor get it from the free Make and Play Edition.";
+                        SDL_ShowSimpleMessageBox(
+                                SDL_MESSAGEBOX_ERROR,
+                                "data.zip missing!",
+                                message.c_str(),
+                                NULL
+                        );
+                        return 0;
+                }
+        }
 #ifdef __APPLE__
         CFRelease(appUrlRef);
 #endif
