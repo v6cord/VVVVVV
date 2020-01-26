@@ -895,6 +895,16 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                     dwgfx.Print( -1, 85, "Music is OFF.", tr/2, tg/2, tb/2, true);
                 }
             }
+            else if (game.currentmenuoption == 6)
+            {
+                dwgfx.bigprint(-1, 30, "Room Name BG", tr, tg, tb, true);
+                dwgfx.Print( -1, 75, "Lets you see through what is behind", tr, tg, tb, true);
+                dwgfx.Print( -1, 85, "the name at the bottom of the screen.", tr, tg, tb, true);
+                if (dwgfx.translucentroomname)
+                    dwgfx.Print(-1, 105, "Room name background is TRANSLUCENT", tr/2, tg/2, tb/2, true);
+                else
+                    dwgfx.Print(-1, 105, "Room name background is OPAQUE", tr, tg, tb, true);
+            }
         }
         else if (game.currentmenuname == "playint1" || game.currentmenuname == "playint2")
         {
@@ -1896,12 +1906,20 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
     if(map.extrarow==0 || (map.custommode && map.roomname!=""))
     {
-        FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0);
+        dwgfx.footerrect.y = 230;
+        if (dwgfx.translucentroomname)
+        {
+            SDL_BlitSurface(dwgfx.footerbuffer, NULL, dwgfx.backBuffer, &dwgfx.footerrect);
+        }
+        else
+        {
+            FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0);
+        }
 
         if (map.finalmode)
         {
         	map.glitchname = map.getglitchname(game.roomx, game.roomy);
-          dwgfx.Print(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
+          dwgfx.bprint(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }else{
             
             dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
@@ -3197,8 +3215,17 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         if (game.advancetext) dwgfx.bprint(5, 5, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
-    FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0x000000);
-    dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
+
+    dwgfx.footerrect.y = 230;
+    if (dwgfx.translucentroomname)
+    {
+        SDL_BlitSurface(dwgfx.footerbuffer, NULL, dwgfx.backBuffer, &dwgfx.footerrect);
+    }
+    else
+    {
+        FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0);
+    }
+    dwgfx.bprint(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
 
     if (map.customcoins > 0) {
         std::string coinstring = std::to_string(game.coins);

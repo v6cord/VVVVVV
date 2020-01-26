@@ -4465,6 +4465,11 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
             dwgfx.notextoutline = atoi(pText);
         }
 
+        if (pKey == "translucentroomname")
+        {
+            dwgfx.translucentroomname = atoi(pText);
+        }
+
 		if (pKey == "flipButton")
 		{
 			SDL_GameControllerButton newButton;
@@ -4680,6 +4685,10 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
 
     msg = new TiXmlElement("notextoutline");
     msg->LinkEndChild(new TiXmlText(tu.String((int) _dwgfx.notextoutline).c_str()));
+    dataNode->LinkEndChild(msg);
+
+    msg = new TiXmlElement("translucentroomname");
+    msg->LinkEndChild(new TiXmlText(tu.String((int) _dwgfx.translucentroomname).c_str()));
     dataNode->LinkEndChild(msg);
 
     for (size_t i = 0; i < controllerButton_flip.size(); i += 1)
@@ -7353,11 +7362,13 @@ void Game::createmenu( std::string t )
         menuoptionsactive[4] = true;
         menuoptions[5] = "music";
         menuoptionsactive[5] = true;
-        menuoptions[6] = "return";
+        menuoptions[6] = "room name bg";
         menuoptionsactive[6] = true;
-        nummenuoptions = 7;
-        menuxoff = -60;
-        menuyoff = 0;
+        menuoptions[7] = "return";
+        menuoptionsactive[7] = true;
+        nummenuoptions = 8;
+        menuxoff = -85;
+        menuyoff = -10;
     }
 	else if(t == "controller")
 	{
