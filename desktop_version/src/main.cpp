@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
 
             }else{
             unsigned useframerate = game.gameframerate;
-            if (game.sfpsmode) useframerate = useframerate / 2;
+            //if (game.sfpsmode) useframerate = useframerate / 2;
             if (timetaken < useframerate)
             {
                 volatile Uint32 delay = useframerate - timetaken;
