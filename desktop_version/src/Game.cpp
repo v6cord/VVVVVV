@@ -3514,7 +3514,8 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             else
             {
-                savetele(map, obj, music);
+                if (!map.custommode)
+                    savetele(map, obj, music);
             }
             i = obj.getteleporter();
             activetele = true;

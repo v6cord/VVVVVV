@@ -196,8 +196,8 @@ public:
     bool intower(void);
     int tower_row(int rx, int ry);
 
-    void load(std::string& _path, Graphics& dwgfx);
-    void save(std::string& _path);
+    void load(std::string& _path, Graphics& dwgfx, mapclass& map);
+    void save(std::string& _path, mapclass& map);
     void generatecustomminimap(Graphics& dwgfx, mapclass& map);
     int toweredgetile(int x, int y);
     int edgetile(int x, int y);
@@ -216,7 +216,7 @@ public:
     int findwarptoken(int t);
     void countstuff();
     void findstartpoint(Game& game);
-    void weirdloadthing(std::string t, Graphics& dwgfx);
+    void weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map);
     int getlevelcol(int t);
     int getenemycol(int t);
     int entcol = 0;

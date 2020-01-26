@@ -341,12 +341,12 @@ void editorclass::reset()
     edentity.resize(3000);
 }
 
-void editorclass::weirdloadthing(std::string t, Graphics& dwgfx)
+void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map)
 {
     //Stupid pointless function because I hate C++ and everything to do with it
     //It's even stupider now that I don't need to append .vvvvvv anymore! bah, whatever
     //t=t+".vvvvvv";
-    load(t, dwgfx);
+    load(t, dwgfx, map);
 }
 
 void editorclass::gethooks()
@@ -2172,7 +2172,7 @@ int editorclass::tower_row(int rx, int ry) {
     return level[room].tower_row;
 }
 
-void editorclass::load(std::string& _path, Graphics& dwgfx)
+void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
 {
     reset();
 
@@ -2298,6 +2298,11 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
             levmusic = atoi(pText);
         }
 
+        if (pKey == "numteleporters")
+        {
+            map.numteleporters = atoi(pText);
+        }
+
 
         if (pKey == "contents")
         {
@@ -2396,6 +2401,20 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
         //}
         */
 
+        if (pKey == "teleporters")
+        {
+            map.teleporters.clear();
+            for( TiXmlElement* teleporterEl = pElem->FirstChildElement(); teleporterEl; teleporterEl=teleporterEl->NextSiblingElement())
+            {
+                point temp;
+                teleporterEl->QueryIntAttribute("x", &temp.x);
+                teleporterEl->QueryIntAttribute("y", &temp.y);
+
+                map.setteleporter(temp.x,temp.y);
+
+            }
+
+        }
 
         if (pKey == "edEntities")
         {
@@ -2505,7 +2524,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx)
     //saveconvertor();
 }
 
-void editorclass::save(std::string& _path)
+void editorclass::save(std::string& _path, mapclass& map)
 {
     TiXmlDocument doc;
     TiXmlElement* msg;
@@ -2589,6 +2608,10 @@ void editorclass::save(std::string& _path)
 
     msg = new TiXmlElement( "levmusic" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(levmusic).c_str() ));
+    data->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "numteleporters" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(map.numteleporters).c_str() ));
     data->LinkEndChild( msg );
 
     //New save format
@@ -2690,6 +2713,17 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( contentsString.c_str() ));
     data->LinkEndChild( msg );
     */
+
+    msg = new TiXmlElement( "teleporters" );
+    for(size_t i = 0; i < map.teleporters.size(); i++)
+    {
+        TiXmlElement *teleporterElement = new TiXmlElement( "teleporter" );
+        teleporterElement->SetAttribute( "x", map.teleporters[i].x);
+        teleporterElement->SetAttribute( "y", map.teleporters[i].y);
+        msg->LinkEndChild( teleporterElement );
+    }
+
+    data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "edEntities" );
     for(int i = 0; i < EditorData::GetInstance().numedentities; i++)
@@ -3315,6 +3349,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print(ex, ey - 8,
                             help.String(ed.findwarptoken(i)),210,210,255);
             break;
+        case 14: // Teleporter
+            dwgfx.drawtele(ex, ey, 1, 100, help);
+            fillboxabs(dwgfx, ex, ey, 8*12, 8*12, dwgfx.getRGB(164,164,255));
+            break;
         case 15: // Crewmates
             dwgfx.drawspritesetcol(ex - 4, ey, 144,
                                    obj.crewcolour(edentity[i].p1), help);
@@ -3496,6 +3534,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     case 15:
     case 16: //2x3
         fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,24, dwgfx.getRGB(200,32,32));
+        break;
+    case 19: //12x12 :))))))
+        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8*12,8*12, dwgfx.getRGB(200,32,32));
         break;
     }
 
@@ -4139,6 +4180,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if(ed.drawmode==16)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"P",255,255,255,false);
                 if(ed.drawmode==17)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"F",255,255,255,false);
                 if(ed.drawmode==18)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"G",255,255,255,false);
+                if(ed.drawmode==19)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"H",255,255,255,false);
 
                 fillboxabs(dwgfx, 4+(0*tg), 209,20,20,dwgfx.getRGB(96,96,96));
                 dwgfx.Print(22+(0*tg)-4, 225-4, "R",164,164,164,false);
@@ -4224,6 +4266,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 break;
             case 18:
                 dwgfx.bprint(2,199, "G: Coin",196, 196, 255 - help.glow);
+                break;
+            case 19:
+                dwgfx.bprint(2,199, "H: Teleporter",196, 196, 255 - help.glow);
                 break;
             }
 
@@ -4366,6 +4411,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             break;
         case 18:
             dwgfx.bprint(2,2, "G: Coin",196, 196, 255 - help.glow);
+            break;
+        case 19:
+            dwgfx.bprint(2,2, "H: Teleporter",196, 196, 255 - help.glow);
             break;
         }
 
@@ -4820,7 +4868,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 else if(ed.savemod)
                 {
                     std::string savestring=ed.filename+".vvvvvv";
-                    ed.save(savestring);
+                    ed.save(savestring, map);
                     ed.note="[ Saved map: " + ed.filename+ ".vvvvvv]";
                     ed.notedelay=45;
                     ed.savemod=false;
@@ -4837,7 +4885,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 else if(ed.loadmod)
                 {
                     std::string loadstring=ed.filename+".vvvvvv";
-                    ed.load(loadstring, dwgfx);
+                    ed.load(loadstring, dwgfx, map);
                     ed.note="[ Loaded map: " + ed.filename+ ".vvvvvv]";
                     ed.notedelay=45;
                     ed.loadmod=false;
@@ -5373,6 +5421,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_p]) ed.drawmode=16;
             if(key.keymap[SDLK_f]) ed.drawmode=17;
             if(key.keymap[SDLK_g]) ed.drawmode=18;
+            if(key.keymap[SDLK_h]) ed.drawmode=19;
 
             if(key.keymap[SDLK_w] && ed.keydelay==0)
             {
@@ -5648,10 +5697,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
                     if(ed.drawmode<0)
                     {
-                        ed.drawmode=18;
+                        ed.drawmode=19;
                         if(ed.spacemod) ed.spacemenu=0;
                     }
-                    if(ed.drawmode>18) ed.drawmode=0;
+                    if(ed.drawmode>19) ed.drawmode=0;
                     if(ed.drawmode>9)
                     {
                         if(ed.spacemod) ed.spacemenu=1;
@@ -6155,6 +6204,14 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.numcoins++;
                                 //ed.lclickdelay=1;
                             }
+                            else if(ed.drawmode==19)  // Teleporter
+                            {
+                                addedentity(tx, ty, 14);
+                                ed.lclickdelay=1;
+                                map.remteleporter(ed.levx, ed.levy);
+                                map.setteleporter(ed.levx, ed.levy);
+				                map.numteleporters++;
+                            }
                         }
                         else if(edentity[tmp].t==1)
                         {
@@ -6267,6 +6324,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             if (edentity[i].t==9) ed.numtrinkets--;
                             if (edentity[i].t==8) ed.numcoins--;
                             if (edentity[i].t==15) ed.numcrewmates--;
+                            if (edentity[i].t==14) {
+                                map.remteleporter(ed.levx, ed.levy);
+                                map.numteleporters--;
+                            }
                             removeedentity(i);
                         }
                     }

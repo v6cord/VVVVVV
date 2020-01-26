@@ -129,10 +129,22 @@ int mapclass::intpol(int a, int b, float c)
     return static_cast<int>(a + ((b - a) * c));
 }
 
-void mapclass::setteleporter(int t, int x, int y)
+void mapclass::setteleporter(int x, int y)
 {
-    teleporters[t].x = x;
-    teleporters[t].y = y;
+    point temp;
+    temp.x = x;
+    temp.y = y;
+    teleporters.push_back(temp);
+}
+
+void mapclass::remteleporter(int x, int y)
+{
+    for (size_t i = 0; i < teleporters.size(); i++) {
+        if (teleporters[i].x == x && teleporters[i].y == y) {
+            teleporters.erase(teleporters.begin() + i);
+            break;
+        }
+    }
 }
 
 void mapclass::settrinket(int t, int x, int y)
@@ -422,23 +434,23 @@ void mapclass::initmapdata()
 {
     //Set up static map information like teleporters and shiny trinkets.
     numteleporters = 17;
-    setteleporter(0, 0, 0);
-    setteleporter(1, 0, 16);
-    setteleporter(2, 2, 4);
-    setteleporter(3, 2, 11);
-    setteleporter(4, 7, 9);
-    setteleporter(5, 7, 15);
-    setteleporter(6, 8, 11);
-    setteleporter(7, 10, 5);
-    setteleporter(8, 11, 4);
-    setteleporter(9, 13, 2);
-    setteleporter(10, 13, 8);
-    setteleporter(11, 14, 19);
-    setteleporter(12, 15, 0);
-    setteleporter(13, 17, 12);
-    setteleporter(14, 17, 17);
-    setteleporter(15, 18, 1);
-    setteleporter(16, 18, 7);
+    setteleporter(0, 0);
+    setteleporter(0, 16);
+    setteleporter(2, 4);
+    setteleporter(2, 11);
+    setteleporter(7, 9);
+    setteleporter(7, 15);
+    setteleporter(8, 11);
+    setteleporter(10, 5);
+    setteleporter(11, 4);
+    setteleporter(13, 2);
+    setteleporter(13, 8);
+    setteleporter(14, 19);
+    setteleporter(15, 0);
+    setteleporter(17, 12);
+    setteleporter(17, 17);
+    setteleporter(18, 1);
+    setteleporter(18, 7);
 
     numshinytrinkets = 18;
     settrinket(0, 14, 4);
@@ -1819,6 +1831,10 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             case 13: // Warp Tokens
                 obj.createentity(game, ex, ey, 13, edentity[edi].p1,
                                  edentity[edi].p2);
+                break;
+            case 14: // Round teleporter (whyy)
+                obj.createentity(game, ex, ey, 14, 0, ((rx+(ry*100))*20)+tempcheckpoints);
+                tempcheckpoints++;
                 break;
             case 15: // Collectable crewmate
                 obj.createentity(game, ex, ey, 55, ed.findcrewmate(edi),

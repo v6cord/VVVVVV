@@ -4249,7 +4249,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
   case 22:  //play custom level (in game)
     //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -4292,7 +4292,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
   case 23: //Continue in custom level
       //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx, map);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -4353,7 +4353,8 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 	i = obj.getplayer(); //less likely to have a serious collision error if the player is centered
 	obj.entities[i].xp = 150;
 	obj.entities[i].yp = 110;
-	if(game.teleport_to_x==17 && game.teleport_to_y==17) obj.entities[i].xp = 88; //prevent falling!
+	if (!map.custommode)
+		if(game.teleport_to_x==17 && game.teleport_to_y==17) obj.entities[i].xp = 88; //prevent falling!
 
 	if (game.teleportscript == "levelonecomplete")
 	{
@@ -4381,40 +4382,45 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 	game.savery = game.roomy;
 	game.savedir = obj.entities[obj.getplayer()].dir;
 
-	if(game.teleport_to_x==0 && game.teleport_to_y==0)
-	{
-		game.state = 4020;
-	}
-	else if(game.teleport_to_x==0 && game.teleport_to_y==16)
-	{
-		game.state = 4030;
-	}
-	else if(game.teleport_to_x==7 && game.teleport_to_y==9)
-	{
-		game.state = 4040;
-	}
-	else if(game.teleport_to_x==8 && game.teleport_to_y==11)
-	{
-		game.state = 4050;
-	}
-	else if(game.teleport_to_x==14 && game.teleport_to_y==19)
-	{
-		game.state = 4030;
-	}
-	else if(game.teleport_to_x==17 && game.teleport_to_y==12)
-	{
-		game.state = 4020;
-	}
-	else if(game.teleport_to_x==17 && game.teleport_to_y==17)
-	{
-		game.state = 4020;
-	}
-	else if(game.teleport_to_x==18 && game.teleport_to_y==7)
-	{
-		game.state = 4060;
-	}
-	else
-	{
+	if (!map.custommode) {
+
+		if(game.teleport_to_x==0 && game.teleport_to_y==0)
+		{
+			game.state = 4020;
+		}
+		else if(game.teleport_to_x==0 && game.teleport_to_y==16)
+		{
+			game.state = 4030;
+		}
+		else if(game.teleport_to_x==7 && game.teleport_to_y==9)
+		{
+			game.state = 4040;
+		}
+		else if(game.teleport_to_x==8 && game.teleport_to_y==11)
+		{
+			game.state = 4050;
+		}
+		else if(game.teleport_to_x==14 && game.teleport_to_y==19)
+		{
+			game.state = 4030;
+		}
+		else if(game.teleport_to_x==17 && game.teleport_to_y==12)
+		{
+			game.state = 4020;
+		}
+		else if(game.teleport_to_x==17 && game.teleport_to_y==17)
+		{
+			game.state = 4020;
+		}
+		else if(game.teleport_to_x==18 && game.teleport_to_y==7)
+		{
+			game.state = 4060;
+		}
+		else
+		{
+			game.state = 4010;
+		}
+	} else {
 		game.state = 4010;
 	}
 
@@ -4427,15 +4433,17 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 	else
 	{
 		//change music based on location
-		if (dwgfx.setflipmode && game.teleport_to_x == 11 && game.teleport_to_y == 4)
-		{
-			music.niceplay(9);
+		if (!map.custommode) {
+			if (dwgfx.setflipmode && game.teleport_to_x == 11 && game.teleport_to_y == 4)
+			{
+				music.niceplay(9);
+			}
+			else
+			{
+				music.changemusicarea(game.teleport_to_x, game.teleport_to_y);
+			}
 		}
-		else
-		{
-			music.changemusicarea(game.teleport_to_x, game.teleport_to_y);
-		}
-		if (!game.intimetrial && !game.nodeathmode && !game.inintermission)
+			if (!game.intimetrial && !game.nodeathmode && !game.inintermission)
 		{
 			if (dwgfx.flipmode)
 			{
@@ -4447,6 +4455,7 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 				dwgfx.createtextbox("    Game Saved    ", -1, 12, 174, 174, 174);
 				dwgfx.textboxtimer(25);
 			}
+			if (!map.custommode) // lets just not save it for now. kinda lazy
 			game.savetele(map, obj, music);
 		}
 	}
@@ -4638,6 +4647,9 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	game.script_images.clear();
 	game.script_image_names.clear();
+
+	map.teleporters.clear(); // You know what, let's just reset the teleporter list too
+	map.numteleporters = 0;
 }
 
 int scriptclass::getlabelnum(std::string thelabel)
