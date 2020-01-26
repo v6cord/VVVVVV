@@ -206,11 +206,9 @@ void editorclass::reset()
     saveandquit=false;
     note="";
     notedelay=0;
-    roomnamemod=false;
     textentry=false;
-    savemod=false;
-    loadmod=false;
     deletekeyheld=false;
+    textmod = TEXT_NONE;
 
     titlemod=false;
     creatormod=false;
@@ -262,9 +260,6 @@ void editorclass::reset()
     numcrewmates=0;
     EditorData::GetInstance().numedentities=0;
     levmusic=0;
-
-    roomtextmod=false;
-    roomtextent=0;
 
     for (int j = 0; j < maxheight; j++)
     {
@@ -553,6 +548,20 @@ void editorclass::insertline(int t)
     }
     sb[t]="";
     sblength++;
+}
+
+void editorclass::getlin(KeyPoll& key, enum textmode mode, std::string prompt,
+                         std::string *ptr) {
+    ed.textmod = mode;
+    ed.textptr = ptr;
+    ed.textdesc = prompt;
+    key.enabletextentry();
+    if (ptr)
+        key.keybuffer = *ptr;
+    else {
+        key.keybuffer = "";
+        ed.textptr = &(key.keybuffer);
+    }
 }
 
 void editorclass::loadlevel( int rxi, int ryi, int altstate )
@@ -3961,6 +3970,16 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
           dwgfx.Print(4, 232, ed.filename+" ", 196, 196, 255 - help.glow, true);
         }
         */
+    } else if (ed.textmod) {
+        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
+        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
+        dwgfx.Print(4, 224, ed.textdesc, 255,255,255, false);
+        std::string input = key.keybuffer;
+        if (ed.entframe < 2)
+            input += "_";
+        else
+            input += " ";
+        dwgfx.Print(4, 232, input, 196, 196, 255 - help.glow, true);
     }
     else if((ed.scripttextmod) || (ed.activitytextmod))
     {
@@ -4002,62 +4021,6 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         else
         {
             dwgfx.Print(4, 232, edentity[ed.scripttextent].activitycolor+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
-    else if(ed.savemod)
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter filename to save map as:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, ed.filename+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, ed.filename+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
-    else if(ed.loadmod)
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter map filename to load:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, ed.filename+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, ed.filename+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
-    else if(ed.roomnamemod)
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter new room name:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
-    else if(ed.roomtextmod)
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter text string:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, edentity[ed.roomtextent].scriptname+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, edentity[ed.roomtextent].scriptname+" ", 196, 196, 255 - help.glow, true);
         }
     }
     else if(ed.warpmod)
@@ -4574,12 +4537,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     if (key.isDown(27) && !ed.settingskey)
     {
         ed.settingskey=true;
-        if(ed.textentry)
-        {
+        if (ed.textmod) {
             key.disabletextentry();
-            ed.roomnamemod=false;
-            ed.loadmod=false;
-            ed.savemod=false;
+            if (ed.textmod == TEXT_ROOMTEXT)
+                removeedentity(ed.textent);
+
+            ed.textmod = TEXT_NONE;
+
+            ed.shiftmenu = false;
+            ed.shiftkey = false;
+        } else if (ed.textentry) {
+            key.disabletextentry();
             ed.textentry=false;
             ed.titlemod=false;
             ed.desc1mod=false;
@@ -4812,26 +4780,52 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
             }
         }
-    }
-    else if(ed.textentry)
-    {
-        if(ed.roomnamemod)
-        {
-            ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname=key.keybuffer;
+    } else if (ed.textmod) {
+        *ed.textptr = key.keybuffer;
+
+        if (!game.press_map && !key.isDown(27))
+            game.mapheld = false;
+        if (!game.mapheld && game.press_map) {
+            game.mapheld = true;
+            key.disabletextentry();
+            growing_vector<std::string> coords;
+            std::string filename = ed.filename+".vvvvvv";
+            switch (ed.textmod) {
+            case TEXT_GOTOROOM:
+                coords = split(key.keybuffer, ',');
+                if (coords.size() == 2) {
+                    ed.levx = (atoi(coords[0].c_str()) - 1) % ed.mapwidth;
+                    if (ed.levx < 0)
+                        ed.levx = 0;
+                    ed.levy = (atoi(coords[1].c_str()) - 1) % ed.mapheight;
+                    if (ed.levy < 0)
+                        ed.levy = 0;
+                }
+                break;
+            case TEXT_LOAD:
+                ed.load(filename, dwgfx, map);
+                // don't use filename, it has the full path
+                ed.note = "[ Loaded map: "+ed.filename+".vvvvvv ]";
+                ed.notedelay = 45;
+                break;
+            case TEXT_SAVE:
+                ed.save(filename, map);
+                ed.note="[ Saved map: " + ed.filename+".vvvvvv ]";
+                ed.notedelay=45;
+
+                if(ed.saveandquit)
+                    dwgfx.fademode = 2; // quit editor
+                break;
+            default:
+                break;
+            }
+
+            ed.shiftmenu = false;
+            ed.shiftkey = false;
+            ed.textmod = TEXT_NONE;
         }
-        else if(ed.savemod)
-        {
-            ed.filename=key.keybuffer;
-        }
-        else if(ed.loadmod)
-        {
-            ed.filename=key.keybuffer;
-        }
-        else if(ed.roomtextmod)
-        {
-            edentity[ed.roomtextent].scriptname=key.keybuffer;
-        }
-        else if((ed.scripttextmod) || (ed.activitytextmod))
+    } else if (ed.textentry) {
+        if((ed.scripttextmod) || (ed.activitytextmod))
         {
             edentity[ed.scripttextent].scriptname=key.keybuffer;
         }
@@ -4874,48 +4868,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(game.press_map)
             {
                 game.mapheld=true;
-                if(ed.roomnamemod)
-                {
-                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname=key.keybuffer;
-                    ed.roomnamemod=false;
-                }
-                else if(ed.savemod)
-                {
-                    std::string savestring=ed.filename+".vvvvvv";
-                    ed.save(savestring, map);
-                    ed.note="[ Saved map: " + ed.filename+ ".vvvvvv]";
-                    ed.notedelay=45;
-                    ed.savemod=false;
-
-                    ed.shiftmenu=false;
-                    ed.shiftkey=false;
-
-                    if(ed.saveandquit)
-                    {
-                        //quit editor
-                        dwgfx.fademode = 2;
-                    }
-                }
-                else if(ed.loadmod)
-                {
-                    std::string loadstring=ed.filename+".vvvvvv";
-                    ed.load(loadstring, dwgfx, map);
-                    ed.note="[ Loaded map: " + ed.filename+ ".vvvvvv]";
-                    ed.notedelay=45;
-                    ed.loadmod=false;
-
-                    ed.shiftmenu=false;
-                    ed.shiftkey=false;
-                }
-                else if(ed.roomtextmod)
-                {
-                    edentity[ed.roomtextent].scriptname=key.keybuffer;
-                    ed.roomtextmod=false;
-
-                    ed.shiftmenu=false;
-                    ed.shiftkey=false;
-                }
-                else if(ed.scripttextmod)
+                if(ed.scripttextmod)
                 {
                     edentity[ed.scripttextent].scriptname=key.keybuffer;
                     ed.scripttextmod=false;
@@ -5109,14 +5062,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             //Load level
                             ed.settingsmod=false;
-                            dwgfx.backgrounddrawn=false;
                             map.nexttowercolour();
 
-                            ed.loadmod=true;
-                            ed.textentry=true;
-                            key.enabletextentry();
-                            key.keybuffer=ed.filename;
-                            ed.keydelay=6;
+                            ed.keydelay = 6;
+                            ed.getlin(key, TEXT_LOAD, "Enter map filename "
+                                      "to load:", &(ed.filename));
                             game.mapheld=true;
                             dwgfx.backgrounddrawn=false;
                         }
@@ -5124,14 +5074,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             //Save level
                             ed.settingsmod=false;
-                            dwgfx.backgrounddrawn=false;
                             map.nexttowercolour();
 
-                            ed.savemod=true;
-                            ed.textentry=true;
-                            key.enabletextentry();
-                            key.keybuffer=ed.filename;
-                            ed.keydelay=6;
+                            ed.keydelay = 6;
+                            ed.getlin(key, TEXT_SAVE, "Enter map filename "
+                                      "to save map as:", &(ed.filename));
                             game.mapheld=true;
                             dwgfx.backgrounddrawn=false;
                         }
@@ -5176,16 +5123,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         {
                             //Saving and quit
                             ed.saveandquit=true;
-
                             ed.settingsmod=false;
-                            dwgfx.backgrounddrawn=false;
                             map.nexttowercolour();
 
-                            ed.savemod=true;
-                            ed.textentry=true;
-                            key.enabletextentry();
-                            key.keybuffer=ed.filename;
-                            ed.keydelay=6;
+                            ed.keydelay = 6;
+                            ed.getlin(key, TEXT_SAVE, "Enter map filename "
+                                      "to save map as:", &(ed.filename));
                             game.mapheld=true;
                             dwgfx.backgrounddrawn=false;
                         }
@@ -5490,13 +5433,16 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
                 ed.keydelay=6;
             }
-            if(key.keymap[SDLK_e] && ed.keydelay==0)
-            {
-                ed.roomnamemod=true;
-                ed.textentry=true;
-                key.enabletextentry();
-                key.keybuffer=ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname;
-                ed.keydelay=6;
+            if (key.keymap[SDLK_e] && ed.keydelay==0) {
+                ed.keydelay = 6;
+                ed.getlin(key, TEXT_ROOMNAME, "Enter new room name:",
+                          &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
+                game.mapheld=true;
+            }
+            if (key.keymap[SDLK_q] && ed.keydelay==0) {
+                ed.keydelay = 6;
+                ed.getlin(key, TEXT_GOTOROOM, "Enter room coordinates (x,y):",
+                          NULL);
                 game.mapheld=true;
             }
             if (key.keymap[SDLK_a] && ed.keydelay == 0) {
@@ -5516,22 +5462,18 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             //Save and load
             if(key.keymap[SDLK_s] && ed.keydelay==0)
             {
-                ed.savemod=true;
-                ed.textentry=true;
-                key.enabletextentry();
-                key.keybuffer=ed.filename;
-                ed.keydelay=6;
+                ed.keydelay = 6;
+                ed.getlin(key, TEXT_SAVE, "Enter map filename to save map as:",
+                          &(ed.filename));
                 game.mapheld=true;
                 dwgfx.backgrounddrawn=false;
             }
 
             if(key.keymap[SDLK_l] && ed.keydelay==0)
             {
-                ed.loadmod=true;
-                ed.textentry=true;
-                key.enabletextentry();
-                key.keybuffer=ed.filename;
-                ed.keydelay=6;
+                ed.keydelay = 6;
+                ed.getlin(key, TEXT_LOAD, "Enter map filename to load:",
+                          &(ed.filename));
                 game.mapheld=true;
                 dwgfx.backgrounddrawn=false;
             }
@@ -6069,14 +6011,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             //Room text and script triggers can be placed in walls
                             if(ed.drawmode==10)
                             {
-                                ed.roomtextmod=true;
-                                ed.roomtextent=EditorData::GetInstance().numedentities;
-                                ed.textentry=true;
-                                key.enabletextentry();
-                                key.keybuffer="";
+                                ed.lclickdelay=1;
+                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
+                                          &(edentity[ed.textent].scriptname));
                                 dwgfx.backgrounddrawn=false;
                                 addedentity(tx, ty, 17);
-                                ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==12)   //Script Trigger
                             {
@@ -6279,12 +6219,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         else if(edentity[tmp].t==17)
                         {
-                            ed.roomtextmod=true;
-                            ed.roomtextent=tmp;
-                            ed.textentry=true;
-                            key.enabletextentry();
-                            key.keybuffer=edentity[tmp].scriptname;
                             ed.lclickdelay=1;
+                            ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
+                                      &(edentity[tmp].scriptname));
+                            ed.textent=tmp;
                         }
                         else if(edentity[tmp].t==18)
                         {

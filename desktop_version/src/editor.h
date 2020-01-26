@@ -16,6 +16,29 @@ enum tiletyp {
     TILE_FOREGROUND,
 };
 
+// Text entry field type
+enum textmode {
+    TEXT_NONE,
+
+    // In-editor text fields
+    TEXT_LOAD,
+    TEXT_SAVE,
+    TEXT_SCRIPT,
+    TEXT_ROOMNAME,
+    TEXT_ROOMTEXT,
+    TEXT_GOTOROOM,
+    TEXT_ACTIVITYZONE,
+    TEXT_ACTIVITYZONECOL,
+    LAST_EDTEXT = TEXT_ACTIVITYZONECOL,
+
+    // Settings-mode text fields
+    TEXT_TITLE,
+    TEXT_DESC,
+    TEXT_WEBSITE,
+    TEXT_CREATOR,
+    NUM_TEXTMODES
+};
+
 std::string find_title(std::string_view buf);
 std::string find_desc1(std::string_view buf);
 std::string find_desc2(std::string_view buf);
@@ -143,6 +166,7 @@ public:
 
     void saveconvertor();
     void reset();
+    void getlin(KeyPoll& key, enum textmode mode, std::string prompt, std::string *ptr);
     void loadlevel(int rxi, int ryi, int altstate);
 
     void placetile(int x, int y, int t);
@@ -248,9 +272,6 @@ public:
     int levaltstate = 0;
     int entframe, entframedelay = 0;
 
-    bool roomtextmod = false;
-    int roomtextent = 0;
-
     bool scripttextmod = false;
     bool activitynamemod=false;
     bool activitycolormod=false;
@@ -258,7 +279,15 @@ public:
     int scripttextent = 0;
     int scripttexttype = 0;
 
-    bool xmod, zmod, spacemod, warpmod, roomnamemod, textentry, savemod, loadmod = false;
+    enum textmode textmod; // In text entry
+    std::string *textptr; // Pointer to text we're changing
+    std::string textdesc; // Description (for editor mode text fields)
+    union {
+        int desc; // Which description row we're changing
+        int textent; // Entity ID for text prompt
+    };
+
+    bool xmod, zmod, spacemod, warpmod, textentry = false;
     bool titlemod, creatormod, desc1mod, desc2mod, desc3mod, websitemod = false;
 
     int roomnamehide = 0;
