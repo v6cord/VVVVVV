@@ -1316,6 +1316,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					g = 134;
 					b = 255;
 				}
+				else if (words[1] == "orange")
+				{
+					r = 255;
+					g = 130;
+					b = 20;
+				}
 				else if (words[1] == "gray")
 				{
 					r = 174;
