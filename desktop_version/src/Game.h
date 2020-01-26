@@ -202,6 +202,8 @@ public:
     //60 fps mode!
     bool sfpsmode = false;
 
+    int fpskeytimer = 0;
+
     //Sine Wave Ninja Minigame
     bool swnmode = false;
     int swngame, swnstate, swnstate2, swnstate3, swnstate4, swndelay, swndeaths = 0;
