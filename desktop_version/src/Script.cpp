@@ -4197,6 +4197,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		ed.reset();
 		music.fadeout();
 
+		map.teleporters.clear();
 		game.gamestate = EDITORMODE;
 		game.jumpheld = true;
 

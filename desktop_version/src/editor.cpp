@@ -2175,6 +2175,7 @@ int editorclass::tower_row(int rx, int ry) {
 void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
 {
     reset();
+    map.teleporters.clear();
 
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
@@ -2398,7 +2399,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
 
         if (pKey == "teleporters")
         {
-            map.teleporters.clear();
             for( TiXmlElement* teleporterEl = pElem->FirstChildElement(); teleporterEl; teleporterEl=teleporterEl->NextSiblingElement())
             {
                 point temp;
