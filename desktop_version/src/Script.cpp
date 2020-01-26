@@ -343,7 +343,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
           map.warpx=false; map.warpy=false;
           if(ed.level[curlevel].warpdir==0){
             map.background = 1;
-            //Be careful, we could be in a Lab or Warp Zone room...
+            //Be careful, we could be in a Lab or Warp Zone or Tower room...
             if(ed.level[curlevel].tileset==2){
               //Lab
               map.background = 2;
@@ -351,6 +351,9 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             }else if(ed.level[curlevel].tileset==3){
               //Warp Zone
               map.background = 6;
+            }else if(ed.level[curlevel].tileset==5){
+              //Tower
+              map.background = 10;
             }
           }else if(ed.level[curlevel].warpdir==1){
             map.warpx=true;
@@ -1315,6 +1318,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					r = 255;
 					g = 134;
 					b = 255;
+				}
+				else if (words[1] == "orange")
+				{
+					r = 255;
+					g = 130;
+					b = 20;
 				}
 				else if (words[1] == "gray")
 				{
