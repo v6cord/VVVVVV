@@ -300,6 +300,8 @@ growing_vector<std::string> changelog = {
     "  Station color in the editor",
     "- Enemies in the unpatterned Space",
     "  Station color are now gray",
+    "- Added sub-tile positioning of",
+    "  edentities",
 
 };
 

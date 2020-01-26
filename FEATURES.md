@@ -232,3 +232,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - You can now use one unpatterned Space Station color in the editor
 
 - Enemies in the unpatterned Space Station color are now gray
+
+- Added sub-tile positioning of edentities
