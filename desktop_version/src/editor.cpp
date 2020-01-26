@@ -5198,11 +5198,18 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if (tower && ed.keydelay == 0 &&
                 (key.keymap[SDLK_PLUS] || key.keymap[SDLK_KP_PLUS] ||
                  key.keymap[SDLK_EQUALS] || key.keymap[SDLK_KP_EQUALS] ||
-                 key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS])) {
+                 key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS] ||
+                 key.keymap[SDLK_HOME] || key.keymap[SDLK_END] ||
+                 key.keymap[SDLK_PAGEUP] || key.keymap[SDLK_PAGEDOWN])) {
                 int modpos = 1;
                 if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT])
                     modpos = 5;
-                if (key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS])
+                if (key.keymap[SDLK_PAGEUP] || key.keymap[SDLK_PAGEDOWN])
+                    modpos = 30;
+                if (key.keymap[SDLK_HOME] || key.keymap[SDLK_END])
+                    modpos = ed.tower_size(tower);
+                if (key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS] ||
+                    key.keymap[SDLK_HOME] || key.keymap[SDLK_PAGEUP])
                     modpos *= -1;
                 ed.ypos += modpos;
                 ed.snap_tower_entry(ed.levx, ed.levy);
