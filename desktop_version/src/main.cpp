@@ -340,12 +340,7 @@ int main(int argc, char *argv[])
 
     while(!key.quitProgram)
     {
-		//gameScreen.ClearScreen(0x00);
-
         time = SDL_GetTicks();
-
-        // Update network per frame.
-        NETWORK_update();
 
         //framerate limit to 30
         Uint32 timetaken = time - timePrev;
@@ -372,134 +367,21 @@ int main(int argc, char *argv[])
 
         }
 
-
         key.Poll();
-		if(key.toggleFullscreen)
-		{
-			if(!gameScreen.isWindowed)
-			{
-				//SDL_WM_GrabInput(SDL_GRAB_ON);
-				SDL_ShowCursor(SDL_DISABLE);
-				SDL_ShowCursor(SDL_ENABLE);
-			}
-			else
-			{
-				SDL_ShowCursor(SDL_ENABLE);
-			}
 
-
-			if(game.gamestate == EDITORMODE)
-			{
-				SDL_ShowCursor(SDL_ENABLE);
-			}
-
-			gameScreen.toggleFullScreen();
-			game.fullscreen = !game.fullscreen;
-			key.toggleFullscreen = false;
-
-				key.keymap.clear(); //we lost the input due to a new window.
-				game.press_left = false;
-				game.press_right = false;
-				game.press_action = true;
-				game.press_map = false;
-			printf("Error: failed: %s\n", SDL_GetError());
-
-
-
-
-		}
-		/*if(key.quitProgram)
-		{
-			music.playef(2);
-		}*/
-
-        game.infocus = key.isActive;
-        if(!game.infocus)
-        {
-            Mix_Pause(-1);
-            Mix_PauseMusic();
-            if(game.getGlobalSoundVol()> 0)
-            {
-                game.setGlobalSoundVol(0);
-            }
-            FillRect(graphics.backBuffer, 0x00000000);
-            graphics.bprint(5, 110, "Game paused", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
-            graphics.bprint(5, 120, "[click to resume]", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
-            graphics.bprint(5, 230, "Press M to mute in game", 164 - help.glow, 196 - help.glow, 164 - help.glow, true);
-            graphics.render();
-            //We are minimised, so lets put a bit of a delay to save CPU
-            SDL_Delay(100);
+        if (key.isDown(SDLK_j) && (game.fpskeytimer == 0)) { // DEBUG 60 FPS MODE
+            game.sfpsmode = !game.sfpsmode;
+            game.fpskeytimer = 16;
+            if (game.sfpsmode) game.fpskeytimer = 32;
         }
-        else
-        {
-            Mix_Resume(-1);
-            Mix_ResumeMusic();
-            game.gametimer++;
+        if (game.fpskeytimer > 0) game.fpskeytimer--;
 
-            if (key.isDown(SDLK_j) && (game.fpskeytimer == 0)) { // DEBUG 60 FPS MODE
-                game.sfpsmode = !game.sfpsmode;
-                game.fpskeytimer = 16;
-                if (game.sfpsmode) game.fpskeytimer = 32;
-            }
-            if (game.fpskeytimer > 0) game.fpskeytimer--;
-
-            changeloginput(key, graphics, map, game, obj, help, music);
-            titleinput(key, graphics, map, game, obj, help, music);
-            //Render
-            titlerender(graphics, map, game, obj, help, music);
-            ////Logic
-            titlelogic(graphics, game, obj, help, music, map);
-        }
-
-        //We did editorinput, now it's safe to turn this off
-        key.linealreadyemptykludge = false;
-
-        if (game.savemystats)
-        {
-            game.savemystats = false;
-            game.savestats(map, graphics, music);
-        }
-
-        //Mute button
-        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry && ed.scripthelppage != 1)
-        {
-            game.mutebutton = 8;
-            if (game.muted)
-            {
-                game.muted = false;
-            }
-            else
-            {
-                game.muted = true;
-            }
-        }
-        if(game.mutebutton>0)
-        {
-            game.mutebutton--;
-        }
-
-        if (game.muted)
-        {
-            //if (game.globalsound == 1)
-            //{
-                game.globalsound = 0;
-                Mix_VolumeMusic(0) ;
-                Mix_Volume(-1,0);
-            //}
-        }
-
-        if (!game.muted && game.globalsound == 0)
-        {
-            game.globalsound = 1;
-            Mix_VolumeMusic(MIX_MAX_VOLUME) ;
-            Mix_Volume(-1,MIX_MAX_VOLUME);
-        }
-
-		if(key.resetWindow)
-		{
-			key.resetWindow = false;
-			gameScreen.ResizeScreen(-1, -1);
-		}
+        changeloginput(key, graphics, map, game, obj, help, music);
+        titleinput(key, graphics, map, game, obj, help, music);
+        //Render
+        titlerender(graphics, map, game, obj, help, music);
+        ////Logic
+        titlelogic(graphics, game, obj, help, music, map);
 
         music.processmusic();
         graphics.processfade();
