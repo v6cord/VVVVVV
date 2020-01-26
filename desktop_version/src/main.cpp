@@ -338,6 +338,8 @@ int main(int argc, char *argv[])
 
     game.gametimer = 0;
 
+    std::atomic<bool> exit = false;
+
     std::thread logicthread([&](){
         while(!key.quitProgram)
         {
@@ -380,7 +382,10 @@ int main(int argc, char *argv[])
             if (game.fpskeytimer > 0) game.fpskeytimer--;
 
             changeloginput(key, graphics, map, game, obj, help, music);
-            titleinput(key, graphics, map, game, obj, help, music);
+            if (!titleinput(key, graphics, map, game, obj, help, music)) {
+                exit.store(true);
+                return;
+            }
             ////Logic
             titlelogic(graphics, game, obj, help, music, map);
 
@@ -392,6 +397,8 @@ int main(int argc, char *argv[])
 
     while(!key.quitProgram)
     {
+        if (exit.load()) break;
+
         std::atomic_thread_fence(std::memory_order_seq_cst);
 
         titlerender(graphics, map, game, obj, help, music);
@@ -402,6 +409,8 @@ int main(int argc, char *argv[])
 
         //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
     }
+
+    logicthread.join();
 
 
 	  //SDL_Delay(300);

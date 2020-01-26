@@ -12,7 +12,7 @@
 void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game,
                 entityclass& obj, UtilityClass& help, musicclass& music);
 
-void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game,
+bool titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game,
                 entityclass& obj, UtilityClass& help, musicclass& music);
 
 void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,

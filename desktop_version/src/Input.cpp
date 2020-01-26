@@ -151,7 +151,7 @@ void changeloginput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, en
     }
 }
 
-void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music)
+bool titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music)
 {
     //game.mx = (mouseX / 4);
     //game.my = (mouseY / 4);
@@ -1818,8 +1818,14 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
     }
 
+    if (game.mainmenu == 100) {
+        return false;
+    }
+
     if (dwgfx.fademode == 1)
         script.startgamemode(game.mainmenu, key, dwgfx, game, map, obj, help, music);
+
+    return true;
 }
 
 void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
