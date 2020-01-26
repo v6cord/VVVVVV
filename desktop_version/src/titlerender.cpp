@@ -3227,6 +3227,15 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
     }
     dwgfx.bprint(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
 
+    if (map.roomtexton)
+    {
+        //Draw room text!
+        for (int i = 0; i < map.roomtextnumlines; i++)
+        {
+            dwgfx.Print(map.roomtextx[i]*8, (map.roomtexty[i]*8) - map.ypos, map.roomtext[i], 196, 196, 255 - help.glow);
+        }
+    }
+
     if (map.customcoins > 0) {
         std::string coinstring = std::to_string(game.coins);
         if (game.coins == map.customcoins) {
