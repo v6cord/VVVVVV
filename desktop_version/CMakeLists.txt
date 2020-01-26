@@ -190,8 +190,10 @@ target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE
 
 find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
+find_package(Threads)
+
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
+TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi Threads::Threads)
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
