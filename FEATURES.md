@@ -230,3 +230,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Added being able to use orange as a color in `text()`
 
 - You can now use one unpatterned Space Station color in the editor
+
+- Enemies in the unpatterned Space Station color are now gray

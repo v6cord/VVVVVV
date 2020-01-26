@@ -298,6 +298,8 @@ growing_vector<std::string> changelog = {
     "  color in text()",
     "- You can now use one unpatterned Space",
     "  Station color in the editor",
+    "- Enemies in the unpatterned Space",
+    "  Station color are now gray",
 
 };
 
