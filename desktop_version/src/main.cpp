@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
         } else {
             script.startgamemode(22, key, graphics, game, map, obj, help, music);
         }
-		//dwgfx.fademode = 4;
+        graphics.fademode = 0;
 
     }
     //Quick hack to start in final level ---- //Might be useful to leave this commented in for testing
