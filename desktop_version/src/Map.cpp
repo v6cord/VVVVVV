@@ -992,6 +992,10 @@ int mapclass::get_tower(int rx, int ry) {
     if (custommode)
         return ed.get_tower(rx - 100, ry - 100);
 
+#if defined(MAKEANDPLAY)
+    return 0;
+#endif
+
     if (rx == 109)
         return 1; // The Tower
 
