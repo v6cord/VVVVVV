@@ -165,7 +165,7 @@ public:
     growing_vector<point> teleporters;
     growing_vector<point> shinytrinkets;
 
-    int numteleporters, numshinytrinkets = 0;
+    int numshinytrinkets = 0;
     bool showteleporters, showtargets, showtrinkets = false;
 
     //Roomtext

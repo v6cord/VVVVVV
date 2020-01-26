@@ -4648,8 +4648,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	game.script_images.clear();
 	game.script_image_names.clear();
 
-	map.teleporters.clear(); // You know what, let's just reset the teleporter list too
-	map.numteleporters = 0;
+	// WARNING: Don't reset teleporter locations, at this point we've already loaded the level!
 }
 
 int scriptclass::getlabelnum(std::string thelabel)

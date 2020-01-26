@@ -2562,7 +2562,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }
 
             //draw legend details
-            for (int i = 0; i < map.numteleporters; i++)
+            for (size_t i = 0; i < map.teleporters.size(); i++)
             {
                 if (map.showteleporters && map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)] > 0)
                 {
@@ -3443,7 +3443,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
     }
 
     //draw legend details
-    for (int i = 0; i < map.numteleporters; i++)
+    for (size_t i = 0; i < map.teleporters.size(); i++)
     {
         if (map.showteleporters && map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)] > 0)
         {

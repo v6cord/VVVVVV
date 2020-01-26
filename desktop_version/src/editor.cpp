@@ -2298,11 +2298,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
             levmusic = atoi(pText);
         }
 
-        if (pKey == "numteleporters")
-        {
-            map.numteleporters = atoi(pText);
-        }
-
 
         if (pKey == "contents")
         {
@@ -2608,10 +2603,6 @@ void editorclass::save(std::string& _path, mapclass& map)
 
     msg = new TiXmlElement( "levmusic" );
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(levmusic).c_str() ));
-    data->LinkEndChild( msg );
-
-    msg = new TiXmlElement( "numteleporters" );
-    msg->LinkEndChild( new TiXmlText( UtilityClass::String(map.numteleporters).c_str() ));
     data->LinkEndChild( msg );
 
     //New save format
@@ -6216,7 +6207,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.lclickdelay=1;
                                 map.remteleporter(ed.levx, ed.levy);
                                 map.setteleporter(ed.levx, ed.levy);
-				                map.numteleporters++;
                             }
                         }
                         else if(edentity[tmp].t==1)
@@ -6332,7 +6322,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             if (edentity[i].t==15) ed.numcrewmates--;
                             if (edentity[i].t==14) {
                                 map.remteleporter(ed.levx, ed.levy);
-                                map.numteleporters--;
                             }
                             removeedentity(i);
                         }
