@@ -595,6 +595,9 @@ int editorclass::getlevelcol(int t)
 {
     if(level[t].tileset==0 || level[t].tileset==5)  //Station or Tower
     {
+        if (level[t].tilecol == -1)
+            // Fix gray enemies
+            grayenemieskludge = true;
         return level[t].tilecol;
     }
     else if(level[t].tileset==1)   //Outside
