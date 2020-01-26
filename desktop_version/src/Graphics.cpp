@@ -2689,32 +2689,17 @@ void Graphics::drawtowerbackgroundsolo( mapclass& map )
 
     int temp = 0;
 
-    if (map.tdrawback)
+    //Draw the whole thing; needed for every colour cycle!
+    for (int j = 0; j < 31; j++)
     {
-        //Draw the whole thing; needed for every colour cycle!
-        for (int j = 0; j < 31; j++)
+        for (int  i = 0; i < 40; i++)
         {
-            for (int  i = 0; i < 40; i++)
-            {
-                temp = map.tower.backat(i, j, map.bypos);
-                drawtowertile3(i * 8, (j * 8) - (map.bypos % 8), temp, map.colstate);
-            }
+            temp = map.tower.backat(i, j, map.bypos);
+            drawtowertile3(i * 8, (j * 8) - (map.bypos % 8), temp, map.colstate);
         }
-        SDL_BlitSurface(towerbuffer,NULL, backBuffer,NULL);
-        map.tdrawback = false;
     }
-    else
-    {
-        //just update the bottom
-        ScrollSurface(towerbuffer,0, -map.bscroll);
-        for (int i = 0; i < 40; i++)
-        {
-            temp = map.tower.backat(i, 0, map.bypos);
-            drawtowertile3(i * 8, -(map.bypos % 8), temp, map.colstate);
-        }
-
-        SDL_BlitSurface(towerbuffer, NULL, backBuffer,NULL);
-    }
+    SDL_BlitSurface(towerbuffer,NULL, backBuffer,NULL);
+    map.tdrawback = false;
 }
 
 void Graphics::drawtowerbackground( mapclass& map )
