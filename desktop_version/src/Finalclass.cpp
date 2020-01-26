@@ -1,5 +1,7 @@
 #include "Finalclass.h"
 
+#include "MakeAndPlay.h"
+
 growing_vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, entityclass& obj)
 {
 	int t;
@@ -15,6 +17,7 @@ growing_vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, en
 
 	switch(t)
 	{
+#if !defined(MAKEANDPLAY)
 	case rn(50,52):
 
 		tmap.push_back("98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,220,0,0,0,0,0,0,0,218,98,98,98");
@@ -2311,6 +2314,7 @@ growing_vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, en
 		//game.test = true;
 		//game.teststring = "ERROR: Map not found in Final Area";
 		break;
+#endif
 	}
 
 	return tmap;

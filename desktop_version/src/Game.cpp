@@ -269,7 +269,6 @@ Game::Game(void):
     currentroomdeaths=0;
 
     sfpsmode = false; //by default, play at 30 fps
-    fpskeytimer = 0;
     inertia = 1.1f;
     swnmode = false;
     swntimer = 0;
