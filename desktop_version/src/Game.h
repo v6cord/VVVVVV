@@ -200,7 +200,7 @@ public:
 
 
     //60 fps mode!
-    int sfpsmode = 1;
+    bool sfpsmode = false;
 
     int fpskeytimer = 0;
 

@@ -358,9 +358,11 @@ int main(int argc, char *argv[])
           timePrev = time;
 
         }else{
-          if (timetaken < (game.gameframerate / game.sfpsmode))
+          unsigned useframerate = game.gameframerate;
+          if (game.sfpsmode) useframerate = useframerate / 2;
+          if (timetaken < useframerate)
           {
-              volatile Uint32 delay = (game.gameframerate / game.sfpsmode) - timetaken;
+              volatile Uint32 delay = useframerate - timetaken;
               SDL_Delay( delay );
               time = SDL_GetTicks();
           }
@@ -433,13 +435,9 @@ int main(int argc, char *argv[])
             game.gametimer++;
 
             if (key.isDown(SDLK_j) && (game.fpskeytimer == 0)) { // DEBUG 60 FPS MODE
-                if (game.sfpsmode == 1) {
-                    game.sfpsmode = 2;
-                    game.fpskeytimer = 32;
-                } else {
-                    game.sfpsmode = 1;
-                    game.fpskeytimer = 16;
-                }
+                game.sfpsmode = !game.sfpsmode;
+                game.fpskeytimer = 16;
+                if (game.sfpsmode) game.fpskeytimer = 32;
             }
             if (game.fpskeytimer > 0) game.fpskeytimer--;
 
