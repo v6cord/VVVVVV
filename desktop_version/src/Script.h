@@ -35,6 +35,8 @@ public:
 
     void clearcustom();
 
+    void settile_special(int x, int y, int tile, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj);
+
     int getimage(Game& game, std::string n);
 
     int getvar(std::string n);

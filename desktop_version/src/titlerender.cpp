@@ -290,7 +290,10 @@ growing_vector<std::string> changelog = {
     "  you're placing down by using the [ and",
     "  ] keys. Speeds are 0 - 8, but since by",
     "  default p2 is 0, the speeds are saved",
-    "  as -4 to 4.",
+    "  as -4 to 4",
+    "- replacetiles(a,b) - Replace all",
+    "  instances of tile a with tile b in the",
+    "  room"
 
 };
 
