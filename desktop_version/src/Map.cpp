@@ -1759,6 +1759,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                 ex -= tsx * 40 * 8;
                 ey -= tsy * 30 * 8;
             }
+            ex += edentity[edi].subx;
+            ey += edentity[edi].suby;
 
             /* Enemy or platform boundaries */
             bx1=ed.level[curlevel].enemyx1;

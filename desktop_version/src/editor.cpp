@@ -1801,6 +1801,8 @@ void editorclass::findstartpoint(Game& game)
         int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
         game.edsavex = ((edentity[testeditor].x%40)*8)-4;
         game.edsavey = (edentity[testeditor].y%30)*8;
+        game.edsavex += edentity[testeditor].subx;
+        game.edsavey += edentity[testeditor].suby;
         game.edsaverx = 100+tx;
         game.edsavery = 100+ty;
         game.edsavegc = 0;
@@ -2440,6 +2442,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
 
                 edEntityEl->QueryIntAttribute("x", &edentity[i].x);
                 edEntityEl->QueryIntAttribute("y", &edentity[i].y);
+                edEntityEl->QueryIntAttribute("subx", &edentity[i].subx);
+                edEntityEl->QueryIntAttribute("suby", &edentity[i].suby);
                 edEntityEl->QueryIntAttribute("t", &edentity[i].t);
 
                 edEntityEl->QueryIntAttribute("p1", &edentity[i].p1);
@@ -2725,6 +2729,8 @@ void editorclass::save(std::string& _path, mapclass& map)
         TiXmlElement *edentityElement = new TiXmlElement( "edentity" );
         edentityElement->SetAttribute( "x", edentity[i].x);
         edentityElement->SetAttribute(  "y", edentity[i].y);
+        edentityElement->SetAttribute( "subx", edentity[i].subx);
+        edentityElement->SetAttribute(  "suby", edentity[i].suby);
         edentityElement->SetAttribute(  "t", edentity[i].t);
         edentityElement->SetAttribute(  "p1", edentity[i].p1);
         edentityElement->SetAttribute(  "p2", edentity[i].p2);
@@ -2803,6 +2809,8 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     int tower = ed.get_tower(ed.levx, ed.levy);
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
+    edentity[EditorData::GetInstance().numedentities].subx=0;
+    edentity[EditorData::GetInstance().numedentities].suby=0;
     edentity[EditorData::GetInstance().numedentities].t=tp;
     edentity[EditorData::GetInstance().numedentities].p1=p1;
     edentity[EditorData::GetInstance().numedentities].p2=p2;
@@ -2824,6 +2832,8 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     int tower = ed.get_tower(ed.levx, ed.levy);
     edentity[EditorData::GetInstance().numedentities].x=xp;
     edentity[EditorData::GetInstance().numedentities].y=yp;
+    edentity[EditorData::GetInstance().numedentities].subx=0;
+    edentity[EditorData::GetInstance().numedentities].suby=0;
     edentity[EditorData::GetInstance().numedentities].t=tp;
     edentity[EditorData::GetInstance().numedentities].p1=p1;
     edentity[EditorData::GetInstance().numedentities].p2=p2;
@@ -2842,6 +2852,8 @@ void copyedentity( int a, int b )
 {
     edentity[a].x=edentity[b].x;
     edentity[a].y=edentity[b].y;
+    edentity[a].subx=edentity[b].subx;
+    edentity[a].suby=edentity[b].suby;
     edentity[a].t=edentity[b].t;
     edentity[a].p1=edentity[b].p1;
     edentity[a].p2=edentity[b].p2;
@@ -3219,6 +3231,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             ty += ed.ypos;
             ty2 += ed.ypos;
         }
+        ex += edentity[i].subx;
+        ey += edentity[i].suby;
 
         int len;
         SDL_Rect drawRect;
@@ -5582,6 +5596,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
                             game.edsavex = (edentity[testeditor].x%40)*8;
                             game.edsavey = (edentity[testeditor].y%30)*8;
+                            game.edsavex += edentity[testeditor].subx;
+                            game.edsavey += edentity[testeditor].suby;
                             game.edsaverx = 100+tx;
                             game.edsavery = 100+ty;
                             game.edsavegc = edentity[testeditor].p1;
@@ -5602,6 +5618,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
                             game.edsavex = ((edentity[testeditor].x%40)*8)-4;
                             game.edsavey = (edentity[testeditor].y%30)*8;
+                            game.edsavex += edentity[testeditor].subx;
+                            game.edsavey += edentity[testeditor].suby;
                             game.edsaverx = 100+tx;
                             game.edsavery = 100+ty;
                             game.edsavegc = 0;

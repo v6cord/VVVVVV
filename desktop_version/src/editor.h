@@ -29,6 +29,7 @@ std::string find_modifiers(std::string_view buf);
 class edentities{
 public:
     int x, y, t = 0;
+    int subx, suby = 0;
     //parameters
     int p1, p2, p3, p4, p5, p6 = 0;
     int state = 0;
