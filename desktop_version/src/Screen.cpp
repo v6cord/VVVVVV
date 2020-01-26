@@ -36,14 +36,15 @@ Screen::Screen()
 
 	// Uncomment this next line when you need to debug -flibit
 	// SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "software", SDL_HINT_OVERRIDE);
-	SDL_CreateWindowAndRenderer(
-		640,
-		480,
-		SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE,
-		&m_window,
-		&m_renderer
-	);
-	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
+    m_window = SDL_CreateWindow(
+            "VVVVVV-CE",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            640,
+            480,
+            SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE
+    );
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 	unsigned char *fileIn;
 	size_t length;

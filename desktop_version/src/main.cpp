@@ -394,33 +394,6 @@ int main(int argc, char *argv[])
     {
         std::atomic_thread_fence(std::memory_order_seq_cst);
 
-        time = SDL_GetTicks();
-
-        //framerate limit to 30
-        Uint32 timetaken = time - timePrev;
-        if(game.gamestate==EDITORMODE)
-		{
-          if (timetaken < 24)
-          {
-              volatile Uint32 delay = 24 - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
-        }else{
-          unsigned useframerate = game.gameframerate;
-          if (game.sfpsmode) useframerate = useframerate / 2;
-          if (timetaken < useframerate)
-          {
-              volatile Uint32 delay = useframerate - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
-        }
-
         titlerender(graphics, map, game, obj, help, music);
 
         music.processmusic();
