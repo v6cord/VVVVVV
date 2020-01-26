@@ -4446,18 +4446,24 @@ void scriptclass::teleport( Graphics& dwgfx, Game& game, mapclass& map, entitycl
 		}
 			if (!game.intimetrial && !game.nodeathmode && !game.inintermission)
 		{
+			std::string gamesavedtext = "    Game Saved    ";
+			if (!map.custommodeforreal && map.custommode) {
+                gamesavedtext = " Game (Not) Saved ";
+            }
 			if (dwgfx.flipmode)
 			{
-				dwgfx.createtextbox("    Game Saved    ", -1, 202, 174, 174, 174);
+				dwgfx.createtextbox(gamesavedtext, -1, 202, 174, 174, 174);
 				dwgfx.textboxtimer(25);
 			}
 			else
 			{
-				dwgfx.createtextbox("    Game Saved    ", -1, 12, 174, 174, 174);
+				dwgfx.createtextbox(gamesavedtext, -1, 12, 174, 174, 174);
 				dwgfx.textboxtimer(25);
 			}
-			if (!map.custommode) // lets just not save it for now. kinda lazy
-			game.savetele(map, obj, music);
+			if (map.custommodeforreal)
+				game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
+			else if (!map.custommode)
+    			game.savetele(map, obj, music);
 		}
 	}
 }

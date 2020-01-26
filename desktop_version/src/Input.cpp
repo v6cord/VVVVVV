@@ -1996,7 +1996,9 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 script.load(obj.blocks[game.activeactivity].script);
                 obj.removeblock(game.activeactivity);
             }
-        }else{
+        } else if (game.activetele && game.readytotele > 20) {
+            game.mapheld = false;
+        } else {
           game.gamestate = EDITORMODE;
 
           dwgfx.textboxremove();
