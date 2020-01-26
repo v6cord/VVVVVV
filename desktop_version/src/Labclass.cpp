@@ -1,5 +1,7 @@
 #include "Labclass.h"
 
+#include "MakeAndPlay.h"
+
 growing_vector<std::string> labclass::loadlevel(int rx, int ry , Game& game, entityclass& obj)
 {
 	int t;
@@ -26,6 +28,7 @@ growing_vector<std::string> labclass::loadlevel(int rx, int ry , Game& game, ent
 	switch(t)
 	{
 
+#if !defined(MAKEANDPLAY)
 	case rn(50,50):
 
 		tmap.push_back("283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283,283");
@@ -1856,6 +1859,7 @@ growing_vector<std::string> labclass::loadlevel(int rx, int ry , Game& game, ent
 		game.test = true;
 		game.teststring = "ERROR: Map not found in Lab Area";
 		break;
+#endif
 	}
 
 	return tmap;
