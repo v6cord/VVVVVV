@@ -251,6 +251,7 @@ public:
 	SDL_Rect foot_rect = {0};
 	SDL_Rect prect = {0};
 	SDL_Rect footerrect = {0};
+	SDL_Surface* footerbuffer;
 
 	int linestate, linedelay = 0;
 	int backoffset = 0;
@@ -293,6 +294,7 @@ public:
         std::optional<std::string> mapimage;
 
         bool noclear = false;
+        bool translucentroomname = false;;
 };
 
 #endif /* GRAPHICS_H */

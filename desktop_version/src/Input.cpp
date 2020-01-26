@@ -815,6 +815,12 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     }
                     else if (game.currentmenuoption == 6)
                     {
+                        // toggle translucent roomname BG
+                        dwgfx.translucentroomname = !dwgfx.translucentroomname;
+                        music.playef(11, 10);
+                    }
+                    else if (game.currentmenuoption == 7)
+                    {
                         //back
                         music.playef(11, 10);
                         game.createmenu("options");

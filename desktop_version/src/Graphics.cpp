@@ -127,6 +127,8 @@ Graphics::Graphics()
     trinketg = 0;
     trinketb = 0;
     warprect = SDL_Rect();
+
+    translucentroomname = false;
 }
 
 int Graphics::font_idx(char32_t ch) {

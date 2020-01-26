@@ -4283,15 +4283,21 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if(ed.tiley<28)
                 {
                     if(ed.roomnamehide>0) ed.roomnamehide--;
-                    FillRect(dwgfx.backBuffer, 0,230+ed.roomnamehide,320,10, dwgfx.getRGB(0,0,0));
-                    dwgfx.Print(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 }
                 else
                 {
                     if(ed.roomnamehide<12) ed.roomnamehide++;
-                    FillRect(dwgfx.backBuffer, 0,230+ed.roomnamehide,320,10, dwgfx.getRGB(0,0,0));
-                    dwgfx.Print(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 }
+                if (dwgfx.translucentroomname)
+                {
+                    dwgfx.footerrect.y = 230+ed.roomnamehide;
+                    SDL_BlitSurface(dwgfx.footerbuffer, NULL, dwgfx.backBuffer, &dwgfx.footerrect);
+                }
+                else
+                {
+                    FillRect(dwgfx.backBuffer, 0,230+ed.roomnamehide,320,10, dwgfx.getRGB(0,0,0));
+                }
+                dwgfx.bprint(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
                 dwgfx.bprint(4, 222, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
                 dwgfx.bprint(rmstrx, 222, rmstr,196, 196, 255 - help.glow, false);
             }
