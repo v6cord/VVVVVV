@@ -295,6 +295,8 @@ public:
 
         bool noclear = false;
         bool translucentroomname = false;;
+
+        uint32_t deltatime = 0;
 };
 
 #endif /* GRAPHICS_H */

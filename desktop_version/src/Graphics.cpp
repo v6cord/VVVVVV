@@ -8,6 +8,7 @@
 #include <physfs.h>
 #include <iterator>
 #include <fribidi/fribidi.h>
+#include <cmath>
 
 Graphics::Graphics()
 {
@@ -2688,6 +2689,8 @@ void Graphics::drawtowerbackgroundsolo( mapclass& map )
     }
 
     int temp = 0;
+    int adjscroll = std::round((double)(map.bscroll) * (deltatime / (1000.0 / 30.0)));
+    map.bypos += adjscroll;
 
     if (map.tdrawback)
     {
@@ -2706,7 +2709,7 @@ void Graphics::drawtowerbackgroundsolo( mapclass& map )
     else
     {
         //just update the bottom
-        ScrollSurface(towerbuffer,0, -map.bscroll);
+        ScrollSurface(towerbuffer,0,-adjscroll);
         for (int i = 0; i < 40; i++)
         {
             temp = map.tower.backat(i, 0, map.bypos);

@@ -395,11 +395,17 @@ int main(int argc, char *argv[])
         }
     });
 
+    int lasttime = SDL_GetTicks();
+
     while(!key.quitProgram)
     {
         if (exit.load()) break;
 
         std::atomic_thread_fence(std::memory_order_seq_cst);
+
+        int now = SDL_GetTicks();
+        graphics.deltatime = now - lasttime;
+        lasttime = now;
 
         titlerender(graphics, map, game, obj, help, music);
 

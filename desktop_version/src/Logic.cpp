@@ -9,7 +9,6 @@ void titlelogic( Graphics& dwgfx, Game& game, entityclass& obj, UtilityClass& he
     //map.updatetowerglow();
     help.updateglow();
 
-    map.bypos -= 2;
     map.bscroll = -2;
     //if (map.ypos <= 0) { map.ypos = 0; map.bypos = 0; map.bscroll = 0; }
     //if (map.ypos >= 5368) { map.ypos = 5368; map.bypos = map.ypos / 2; } //700-29 * 8 = 5368
