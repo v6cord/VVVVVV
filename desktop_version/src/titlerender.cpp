@@ -296,6 +296,8 @@ growing_vector<std::string> changelog = {
     "  room",
     "- Added being able to use orange as a",
     "  color in text()",
+    "- You can now use one unpatterned Space",
+    "  Station color in the editor",
 
 };
 

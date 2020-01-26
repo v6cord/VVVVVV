@@ -228,3 +228,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `replacetiles(a,b)` - Replace all instances of tile `a` with tile `b` in the room 
 
 - Added being able to use orange as a color in `text()`
+
+- You can now use one unpatterned Space Station color in the editor
