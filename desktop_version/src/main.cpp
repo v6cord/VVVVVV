@@ -1,4 +1,6 @@
 #include <SDL.h>
+#include <thread>
+#include <atomic>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
@@ -441,144 +443,12 @@ int main(int argc, char *argv[])
             }
             if (game.fpskeytimer > 0) game.fpskeytimer--;
 
-            switch(game.gamestate)
-            {
-            case PRELOADER:
-                //Render
-                preloaderrender(graphics, game, help);
-                break;
-            case EDITORMODE:
-				graphics.flipmode = false;
-                //Input
-                editorinput(key, graphics, game, map, obj, help, music);
-                //Render
-                editorrender(key, graphics, game, map, obj, help);
-                ////Logic
-                editorlogic(key, graphics, game, obj, music, map, help);
-                break;
-            case TITLEMODE:
-                //Input
-                changeloginput(key, graphics, map, game, obj, help, music);
-                titleinput(key, graphics, map, game, obj, help, music);
-                //Render
-                titlerender(graphics, map, game, obj, help, music);
-                ////Logic
-                titlelogic(graphics, game, obj, help, music, map);
-                break;
-            case GAMEMODE:
-                if (map.towermode)
-                {
-					gameinput(key, graphics, game, map, obj, help, music);
-
-                    //if(game.recording==1)
-                    //{
-                    // ///recordinput(key, graphics, game, map, obj, help, music);
-                    //}
-                    //else
-                    //{
-                    //}
-                    towerrender(graphics, game, map, obj, help);
-                    towerlogic(graphics, game,  obj,  music, map, help);
-
-                }
-                else
-                {
-
-                    if (game.recording == 1)
-                    {
-                        //recordinput(key, dwgfx, game, map, obj, help, music);
-                    }
-                    else
-                    {
-                        if (script.running)
-                        {
-                            script.run(key, graphics, game, map, obj, help, music);
-                        }
-
-                        gameinput(key, graphics, game, map, obj, help, music);
-                        //}
-                        gamerender(graphics,map, game,  obj, help);
-                        gamelogic(graphics, game,obj, music, map,  help);
-
-
-                    }
-                    break;
-                case MAPMODE:
-                    maprender(graphics, game, map, obj, help);
-                    if (game.recording == 1)
-                    {
-                        //recordinput(key, dwgfx, game, map, obj, help, music); //will implement this later if it's actually needed
-                    }
-                    else
-                    {
-                        mapinput(key, graphics, game, map, obj, help, music);
-                    }
-                    maplogic(graphics, game, obj ,music , map, help );
-                    break;
-                case TELEPORTERMODE:
-                    teleporterrender(graphics, game, map, obj, help);
-                    if (game.recording == 1)
-                    {
-                        //recordinput(key, graphics, game, map, obj, help, music);
-                    }
-                    else
-                    {
-                        if(game.useteleporter)
-                        {
-                            teleporterinput(key, graphics, game, map, obj, help, music);
-                        }
-                        else
-                        {
-                            if (script.running)
-                            {
-                                script.run(key, graphics, game, map, obj, help, music);
-                            }
-                            gameinput(key, graphics, game, map, obj, help, music);
-                        }
-                    }
-                    maplogic(graphics, game,  obj, music, map, help);
-                    break;
-                case GAMECOMPLETE:
-                    gamecompleterender(graphics, game, obj, help, map);
-                    //Input
-                    gamecompleteinput(key, graphics, game, map, obj, help, music);
-                    //Logic
-                    gamecompletelogic(graphics, game,  obj, music, map, help);
-                    break;
-                case GAMECOMPLETE2:
-                    gamecompleterender2(graphics, game, obj, help);
-                    //Input
-                    gamecompleteinput2(key, graphics, game, map, obj, help, music);
-                    //Logic
-                    gamecompletelogic2(graphics, game,  obj, music, map, help);
-                    break;
-                case CLICKTOSTART:
-
-                    //dwgfx.bprint(5, 115, "[Click to start]", 196 - help.glow, 196 - help.glow, 255 - help.glow, true);
-                    //dwgfx.drawgui(help);
-                    //dwgfx.render();
-                    //dwgfx.backbuffer.unlock();
-
-                    help.updateglow();
-                    // if (key.click) {
-                    //  dwgfx.textboxremove();
-                    // }
-                    // if (dwgfx.ntextbox == 0) {
-                    //  //music.play(6);
-                    //  map.ypos = (700-29) * 8;
-                    //  map.bypos = map.ypos / 2;
-                    //  map.cameramode = 0;
-
-                    //  game.gamestate = TITLEMODE;
-                    // }
-                    break;
-                default:
-
-                break;
-                }
-
-            }
-
+            changeloginput(key, graphics, map, game, obj, help, music);
+            titleinput(key, graphics, map, game, obj, help, music);
+            //Render
+            titlerender(graphics, map, game, obj, help, music);
+            ////Logic
+            titlelogic(graphics, game, obj, help, music, map);
         }
 
         //We did editorinput, now it's safe to turn this off
