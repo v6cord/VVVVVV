@@ -5300,7 +5300,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 dwgfx.backgrounddrawn=false;
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
                 {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=32) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
+                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=32) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=-1;
                 }
                 else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==1)
                 {
