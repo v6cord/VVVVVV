@@ -293,7 +293,9 @@ growing_vector<std::string> changelog = {
     "  as -4 to 4",
     "- replacetiles(a,b) - Replace all",
     "  instances of tile a with tile b in the",
-    "  room"
+    "  room",
+    "- Added being able to use orange as a",
+    "  color in text()",
 
 };
 
