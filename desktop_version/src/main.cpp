@@ -338,8 +338,62 @@ int main(int argc, char *argv[])
 
     game.gametimer = 0;
 
+    std::thread logicthread([&](){
+        while(!key.quitProgram)
+        {
+            std::atomic_thread_fence(std::memory_order_seq_cst);
+
+            time = SDL_GetTicks();
+
+            //framerate limit to 30
+            Uint32 timetaken = time - timePrev;
+            if(game.gamestate==EDITORMODE)
+                    {
+            if (timetaken < 24)
+            {
+                volatile Uint32 delay = 24 - timetaken;
+                SDL_Delay( delay );
+                time = SDL_GetTicks();
+            }
+            timePrev = time;
+
+            }else{
+            unsigned useframerate = game.gameframerate;
+            if (game.sfpsmode) useframerate = useframerate / 2;
+            if (timetaken < useframerate)
+            {
+                volatile Uint32 delay = useframerate - timetaken;
+                SDL_Delay( delay );
+                time = SDL_GetTicks();
+            }
+            timePrev = time;
+
+            }
+
+            key.Poll();
+
+            if (key.isDown(SDLK_j) && (game.fpskeytimer == 0)) { // DEBUG 60 FPS MODE
+                game.sfpsmode = !game.sfpsmode;
+                game.fpskeytimer = 16;
+                if (game.sfpsmode) game.fpskeytimer = 32;
+            }
+            if (game.fpskeytimer > 0) game.fpskeytimer--;
+
+            changeloginput(key, graphics, map, game, obj, help, music);
+            titleinput(key, graphics, map, game, obj, help, music);
+            ////Logic
+            titlelogic(graphics, game, obj, help, music, map);
+
+            game.gameclock();
+
+            //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
+        }
+    });
+
     while(!key.quitProgram)
     {
+        std::atomic_thread_fence(std::memory_order_seq_cst);
+
         time = SDL_GetTicks();
 
         //framerate limit to 30
@@ -367,25 +421,10 @@ int main(int argc, char *argv[])
 
         }
 
-        key.Poll();
-
-        if (key.isDown(SDLK_j) && (game.fpskeytimer == 0)) { // DEBUG 60 FPS MODE
-            game.sfpsmode = !game.sfpsmode;
-            game.fpskeytimer = 16;
-            if (game.sfpsmode) game.fpskeytimer = 32;
-        }
-        if (game.fpskeytimer > 0) game.fpskeytimer--;
-
-        changeloginput(key, graphics, map, game, obj, help, music);
-        titleinput(key, graphics, map, game, obj, help, music);
-        //Render
         titlerender(graphics, map, game, obj, help, music);
-        ////Logic
-        titlelogic(graphics, game, obj, help, music, map);
 
         music.processmusic();
         graphics.processfade();
-        game.gameclock();
         gameScreen.FlipScreen();
 
         //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
