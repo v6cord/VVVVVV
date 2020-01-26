@@ -1135,13 +1135,15 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
     }
     else if (custommode)
     {
-        // Modulo can produce negative results in C++!
-        while (rx < 100)
-            rx += 100;
-        while (ry < 100)
-            ry += 100;
-        game.roomx = ((rx-100) % ed.mapwidth) + 100;
-        game.roomy = ((ry-100) % ed.mapheight) + 100;
+        // Get a positive modulo
+        int ix = rx - 100;
+        int iy = ry - 100;
+        int ih = ed.mapheight;
+        int iw = ed.mapwidth;
+        ix = (iw + (ix % iw)) % iw;
+        iy = (ih + (iy % ih)) % ih;
+        game.roomx = ix + 100;
+        game.roomy = iy + 100;
         game.roomchange = true;
     }
     else
