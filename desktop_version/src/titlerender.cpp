@@ -3360,7 +3360,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
     //draw the map image
     dwgfx.drawpixeltextbox(35, 16, 250, 190, 32,24, 65, 185, 207,4,0);
     if (map.custommode) {
-        dwgfx.drawimage(12, 40, 21, false);
+        dwgfx.drawpartimage(12, 40+map.custommmxoff, 21+map.custommmyoff, map.custommmxsize, map.custommmysize);
     } else {
         dwgfx.drawimage(1, 40, 21, false);
     }
@@ -3430,14 +3430,21 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
     }
 
     //draw the coordinates //current
-    if (game.roomx == 109)
+    if (game.roomx == 109 && !map.custommode)
     {
         //tower!instead of room y, scale map.ypos
         dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2, 21  + 2, 12 - 4, 180 - 4, 16, 245 - (help.glow * 2), 245 - (help.glow * 2));
     }
     else
     {
-        dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2, 21 + ((game.roomy - 100) * 9) + 2, 12 - 4, 9 - 4, 16, 245 - (help.glow * 2), 245 - (help.glow * 2));
+        if (map.custommode && map.customzoom == 4)
+            dwgfx.drawrect(map.custommmxoff+40 + ((game.roomx - 100) * 48) + 2, map.custommmyoff+21 + ((game.roomy - 100) * 36) + 2, 48 - 4, 36 - 4, 16, 245 - (help.glow * 2), 245 - (help.glow * 2));
+        else if (map.custommode && map.customzoom == 2)
+            dwgfx.drawrect(map.custommmxoff+40 + ((game.roomx - 100) * 24) + 2, map.custommmyoff+21 + ((game.roomy - 100) * 18) + 2, 24 - 4, 18 - 4, 16, 245 - (help.glow * 2), 245 - (help.glow * 2));
+        else if (map.custommode)
+            dwgfx.drawrect(map.custommmxoff+40 + ((game.roomx - 100) * 12) + 2, map.custommmyoff+21 + ((game.roomy - 100) * 9) + 2, 12 - 4, 9 - 4, 16, 245 - (help.glow * 2), 245 - (help.glow * 2));
+        else
+            dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2, 21 + ((game.roomy - 100) * 9) + 2, 12 - 4, 9 - 4, 16, 245 - (help.glow * 2), 245 - (help.glow * 2));
     }
 
     if (game.useteleporter)
@@ -3447,8 +3454,19 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         //draw the coordinates //destination
         int tempx = map.teleporters[game.teleport_to_teleporter].x;
         int tempy = map.teleporters[game.teleport_to_teleporter].y;
-        dwgfx.drawrect(40 + (tempx * 12) + 1, 21 + (tempy * 9) + 1, 12 - 2, 9 - 2, 245 - (help.glow * 2), 16, 16);
-        dwgfx.drawrect(40 + (tempx * 12) + 3, 21 + (tempy * 9) + 3, 12 - 6, 9 - 6, 245 - (help.glow * 2), 16, 16);
+        if (map.custommode && map.customzoom == 4) {
+            dwgfx.drawrect(map.custommmxoff+40 + (tempx * 48) + 1, map.custommmyoff+21 + (tempy * 36) + 1, 48 - 2, 36 - 2, 245 - (help.glow * 2), 16, 16);
+            dwgfx.drawrect(map.custommmxoff+40 + (tempx * 48) + 3, map.custommmyoff+21 + (tempy * 36) + 3, 48 - 6, 36 - 6, 245 - (help.glow * 2), 16, 16);
+        } else if (map.custommode && map.customzoom == 2) {
+            dwgfx.drawrect(map.custommmxoff+40 + (tempx * 24) + 1, map.custommmyoff+21 + (tempy * 18) + 1, 24 - 2, 18 - 2, 245 - (help.glow * 2), 16, 16);
+            dwgfx.drawrect(map.custommmxoff+40 + (tempx * 24) + 3, map.custommmyoff+21 + (tempy * 18) + 3, 24 - 6, 18 - 6, 245 - (help.glow * 2), 16, 16);
+        } else if (map.custommode) {
+            dwgfx.drawrect(map.custommmxoff+40 + (tempx * 12) + 1, map.custommmyoff+21 + (tempy * 9) + 1, 12 - 2, 9 - 2, 245 - (help.glow * 2), 16, 16);
+            dwgfx.drawrect(map.custommmxoff+40 + (tempx * 12) + 3, map.custommmyoff+21 + (tempy * 9) + 3, 12 - 6, 9 - 6, 245 - (help.glow * 2), 16, 16);
+        } else {
+            dwgfx.drawrect(40 + (tempx * 12) + 1, 21 + (tempy * 9) + 1, 12 - 2, 9 - 2, 245 - (help.glow * 2), 16, 16);
+            dwgfx.drawrect(40 + (tempx * 12) + 3, 21 + (tempy * 9) + 3, 12 - 6, 9 - 6, 245 - (help.glow * 2), 16, 16);
+        }
     }
 
     //draw legend details
@@ -3458,13 +3476,27 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         {
             temp = 1126 + map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)];
             if (dwgfx.flipmode) temp += 3;
-            dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
+            if (map.custommode && map.customzoom == 4)
+                dwgfx.drawtile(map.custommmxoff+40 + (map.teleporters[i].x * 48) + 21, map.custommmyoff+20 + (map.teleporters[i].y * 36) + 15, temp);
+            else if (map.custommode && map.customzoom == 2)
+                dwgfx.drawtile(map.custommmxoff+40 + (map.teleporters[i].x * 24) + 9, map.custommmyoff+20 + (map.teleporters[i].y * 18) + 6, temp);
+            else if (map.custommode)
+                dwgfx.drawtile(map.custommmxoff+40 + 3 + (map.teleporters[i].x * 12), map.custommmyoff+22 + (map.teleporters[i].y * 9), temp);
+            else
+                dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
         }
         else if(map.showtargets && map.explored[map.teleporters[i].x+(ed.maxwidth*map.teleporters[i].y)]==0)
         {
             temp = 1126 + map.explored[map.teleporters[i].x + (ed.maxwidth * map.teleporters[i].y)];
             if (dwgfx.flipmode) temp += 3;
-            dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
+            if (map.custommode && map.customzoom == 4)
+                dwgfx.drawtile(map.custommmxoff+40 + (map.teleporters[i].x * 48) + 21, map.custommmyoff+20 + (map.teleporters[i].y * 36) + 15, temp);
+            else if (map.custommode && map.customzoom == 2)
+                dwgfx.drawtile(map.custommmxoff+40 + (map.teleporters[i].x * 24) + 9, map.custommmyoff+20 + (map.teleporters[i].y * 18) + 6, temp);
+            else if (map.custommode)
+                dwgfx.drawtile(map.custommmxoff+40 + 3 + (map.teleporters[i].x * 12), map.custommmyoff+22 + (map.teleporters[i].y * 9), temp);
+            else
+                dwgfx.drawtile(40 + 3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), temp);
         }
         //dwgfx.drawtile(40+3 + (map.teleporters[i].x * 12), 22 + (map.teleporters[i].y * 9), 1086); //for shiny trinkets, do later
     }
@@ -3489,7 +3521,14 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         //colour in the legend
         temp = 1128;
         if (dwgfx.flipmode) temp += 3;
-        dwgfx.drawtile(40 + 3 + (tempx * 12), 22 + (tempy * 9), temp);
+        if (map.custommode && map.customzoom == 4)
+            dwgfx.drawtile(map.custommmxoff+40 + (tempx * 48) + 21, map.custommmyoff+20 + (tempy * 36) + 15, temp);
+        else if (map.custommode && map.customzoom == 2)
+            dwgfx.drawtile(map.custommmxoff+40 + (tempx * 24) + 9, map.custommmyoff+20 + (tempy * 18) + 6, temp);
+        else if (map.custommode)
+            dwgfx.drawtile(map.custommmxoff+40 + 3 + (tempx * 12), map.custommmyoff+22 + (tempy * 9), temp);
+        else
+            dwgfx.drawtile(40 + 3 + (tempx * 12), 22 + (tempy * 9), temp);
     }
 
     dwgfx.cutscenebars();
