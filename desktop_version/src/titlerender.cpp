@@ -3197,11 +3197,11 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
     dwgfx.drawtowerspikes(map);
 
 
-    /*for(int i=0; i<obj.nblocks; i++){
-    if (obj.blocks[i].active) {
-    		dwgfx.backbuffer.fillRect(obj.blocks[i].rect, 0xDDDDDD);
+    if(map.custommode && !map.custommodeforreal && !game.advancetext){
+        //Return to level editor
+        dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
     }
-      }*/
+
     dwgfx.cutscenebars();
     BlitSurfaceStandard(dwgfx.backBuffer, NULL, dwgfx.tempBuffer, NULL);
 
