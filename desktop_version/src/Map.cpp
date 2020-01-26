@@ -1834,8 +1834,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                                  edentity[edi].p2);
                 break;
             case 14: // Round teleporter (whyy)
-                obj.createentity(game, ex, ey, 14, 0, ((rx+(ry*100))*20)+tempcheckpoints);
-                tempcheckpoints++;
+                obj.createentity(game, ex, ey, 14);
                 break;
             case 15: // Collectable crewmate
                 obj.createentity(game, ex, ey, 55, ed.findcrewmate(edi),
