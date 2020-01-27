@@ -34,6 +34,7 @@ edlevelclass::edlevelclass()
     platx2=320;
     platy2=240;
     platv=4;
+    enemyv=4;
     enemyx1=0;
     enemyy1=0;
     enemyx2=320;
@@ -274,6 +275,7 @@ void editorclass::reset()
             level[i+(j*maxwidth)].platx2=320;
             level[i+(j*maxwidth)].platy2=240;
             level[i+(j*maxwidth)].platv=4;
+            level[i+(j*maxwidth)].enemyv=4;
             level[i+(j*maxwidth)].enemyx1=0;
             level[i+(j*maxwidth)].enemyy1=0;
             level[i+(j*maxwidth)].enemyx2=320;
@@ -2502,6 +2504,11 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
                 edLevelClassElement->QueryIntAttribute("platx2", &level[i].platx2);
                 edLevelClassElement->QueryIntAttribute("platy2", &level[i].platy2);
                 edLevelClassElement->QueryIntAttribute("platv", &level[i].platv);
+                if (edLevelClassElement->Attribute("enemyv")) {
+                    edLevelClassElement->QueryIntAttribute("enemyv", &level[i].enemyv);
+                } else {
+                    level[i].enemyv = 4;
+                }
                 edLevelClassElement->QueryIntAttribute("enemyx1", &level[i].enemyx1);
                 edLevelClassElement->QueryIntAttribute("enemyy1", &level[i].enemyy1);
                 edLevelClassElement->QueryIntAttribute("enemyx2", &level[i].enemyx2);
@@ -2786,6 +2793,7 @@ void editorclass::save(std::string& _path, mapclass& map)
         edlevelclassElement->SetAttribute(  "platx2", level[i].platx2);
         edlevelclassElement->SetAttribute( "platy2", level[i].platy2);
         edlevelclassElement->SetAttribute( "platv", level[i].platv);
+        edlevelclassElement->SetAttribute( "enemyv", level[i].enemyv);
         edlevelclassElement->SetAttribute(  "enemyx1", level[i].enemyx1);
         edlevelclassElement->SetAttribute(  "enemyy1", level[i].enemyy1);
         edlevelclassElement->SetAttribute(  "enemyx2", level[i].enemyx2);

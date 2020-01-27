@@ -69,7 +69,12 @@ public:
     int tileset, tilecol = 0;
     std::string roomname;
     int warpdir = 0;
-    int platx1, platy1, platx2, platy2, platv = 0;
+    int platx1 = 0;
+    int platy1 = 0;
+    int platx2 = 0;
+    int platy2 = 0;
+    int platv = 0;
+    int enemyv = 0;
     int enemyx1, enemyy1, enemyx2, enemyy2, enemytype = 0;
     int directmode = 0;
     int tower = 0;

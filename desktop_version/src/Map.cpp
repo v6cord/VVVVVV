@@ -1791,7 +1791,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
             case 1: // Enemies
                 obj.customenemy=ed.level[curlevel].enemytype;
                 obj.createentity(game, ex, ey, 56, edentity[edi].p1,
-                                 4 + edentity[edi].p2, bx1, by1, bx2, by2);
+                                 ed.level[curlevel].enemyv + edentity[edi].p2, bx1, by1, bx2, by2);
                 break;
             case 2: // Platforms and Threadmills
                 /* Conveyors */
