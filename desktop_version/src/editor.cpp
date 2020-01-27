@@ -5151,13 +5151,85 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     }
                 }
             }
-        }
-        else
-        {
-            //Shortcut keys
-            //TO DO: make more user friendly
-            if (tower && ed.keydelay==0 &&
-                (key.keymap[SDLK_w] || key.keymap[SDLK_a])) {
+        } else if (ed.keydelay) {
+            ed.keydelay--;
+        } else if ((key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) &&
+                   (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL])) {
+            // Ctrl+Shift modifiers
+            // TODO: Better Direct Mode interface
+            ed.dmtileeditor=10;
+            if(key.keymap[SDLK_LEFT]) {
+                ed.dmtile--;
+                ed.keydelay=3;
+                if(ed.dmtile<0) ed.dmtile+=dmcap();
+            } else if(key.keymap[SDLK_RIGHT]) {
+                ed.dmtile++;
+                ed.keydelay=3;
+
+                if (ed.dmtile>=dmcap())
+                    ed.dmtile-=dmcap();
+            }
+            if(key.keymap[SDLK_UP]) {
+                ed.dmtile-=dmwidth();
+                ed.keydelay=3;
+                if(ed.dmtile<0) ed.dmtile+=dmcap();
+            } else if(key.keymap[SDLK_DOWN]) {
+                ed.dmtile+=dmwidth();
+                ed.keydelay=3;
+
+                if(ed.dmtile>=dmcap()) ed.dmtile-=dmcap();
+            }
+        } else if (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_LCTRL]) {
+            // Ctrl modifiers
+            if (key.keymap[SDLK_F1]) {
+                ed.shiftmenu = !ed.shiftmenu;
+                ed.keydelay = 6;
+            }
+        } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
+            // Shift modifiers
+            if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
+                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                ed.keydelay = 6;
+                if (key.keymap[SDLK_UP])
+                    ed.mapheight--;
+                else if (key.keymap[SDLK_DOWN])
+                    ed.mapheight++;
+                else if (key.keymap[SDLK_LEFT])
+                    ed.mapwidth--;
+                else if (key.keymap[SDLK_RIGHT])
+                    ed.mapwidth++;
+
+                if (ed.mapheight < 1)
+                    ed.mapheight = 1;
+                if (ed.mapheight > ed.maxheight)
+                    ed.mapheight = ed.maxheight;
+                if (ed.mapwidth < 1)
+                    ed.mapwidth = 1;
+                if (ed.mapwidth > ed.maxwidth)
+                    ed.mapwidth = ed.maxwidth;
+
+                ed.note = "Mapsize is now [" + help.String(ed.mapwidth) + "," +
+                    help.String(ed.mapheight) + "]";
+                ed.notedelay=45;
+            }
+        } else {
+            // No modifiers
+            if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD]) {
+                ed.keydelay = 6;
+                if (key.keymap[SDLK_PERIOD])
+                    ed.drawmode++;
+                else {
+                    ed.drawmode--;
+                    if (ed.drawmode < 0)
+                        ed.drawmode = 19;
+                }
+                ed.drawmode %= 20;
+
+                ed.spacemenu = 0;
+                if (ed.drawmode > 9)
+                    ed.spacemenu = 1;
+            }
+            if (tower && (key.keymap[SDLK_w] || key.keymap[SDLK_a])) {
                 ed.notedelay=45;
                 ed.note="Unavailable in Tower Mode";
                 ed.updatetiles=true;
@@ -5612,174 +5684,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.zmod=false;
             }
 
-            //Keyboard shortcuts
-            if(ed.keydelay>0)
-            {
-                ed.keydelay--;
+            if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
+                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                ed.keydelay = 6;
+                if (key.keymap[SDLK_UP])
+                    ed.levy--;
+                else if (key.keymap[SDLK_DOWN])
+                    ed.levy++;
+                else if (key.keymap[SDLK_LEFT])
+                    ed.levx--;
+                else if (key.keymap[SDLK_RIGHT])
+                    ed.levx++;
+                ed.updatetiles = true;
+                ed.changeroom = true;
+                ed.levaltstate = 0;
+                ed.levx = (ed.levx + ed.mapwidth) % ed.mapwidth;
+                ed.levy = (ed.levy + ed.mapheight) % ed.mapheight;
             }
-            else
-            {
-                if(key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT])
-                {
-                    if(key.keymap[SDLK_UP])
-                    {
-                        ed.keydelay=6;
-                        ed.mapheight--;
-                    }
-                    else if(key.keymap[SDLK_DOWN])
-                    {
-                        ed.keydelay=6;
-                        ed.mapheight++;
-                    }
 
-                    if(key.keymap[SDLK_LEFT])
-                    {
-                        ed.keydelay=6;
-                        ed.mapwidth--;
-                    }
-                    else if(key.keymap[SDLK_RIGHT])
-                    {
-                        ed.keydelay=6;
-                        ed.mapwidth++;
-                    }
-                    if(ed.keydelay==6)
-                    {
-                        if(ed.mapwidth<1) ed.mapwidth=1;
-                        if(ed.mapheight<1) ed.mapheight=1;
-                        if(ed.mapwidth>=ed.maxwidth) ed.mapwidth=ed.maxwidth;
-                        if(ed.mapheight>=ed.maxheight) ed.mapheight=ed.maxheight;
-                        ed.note = "Mapsize is now [" + help.String(ed.mapwidth) + "," + help.String(ed.mapheight) + "]";
-                        ed.notedelay=45;
-                    }
-                }
-                else
-                {
-                    if(key.keymap[SDLK_COMMA])
-                    {
-                        ed.drawmode--;
-                        ed.keydelay=6;
-                    }
-                    else if(key.keymap[SDLK_PERIOD])
-                    {
-                        ed.drawmode++;
-                        ed.keydelay=6;
-                    }
-
-                    if(ed.drawmode<0)
-                    {
-                        ed.drawmode=19;
-                        if(ed.spacemod) ed.spacemenu=0;
-                    }
-                    if(ed.drawmode>19) ed.drawmode=0;
-                    if(ed.drawmode>9)
-                    {
-                        if(ed.spacemod) ed.spacemenu=1;
-                    }
-                    else
-                    {
-                        if(ed.spacemod) ed.spacemenu=0;
-                    }
-
-                    if(key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL])
-                    {
-                        ed.dmtileeditor=10;
-                        if(key.keymap[SDLK_LEFT])
-                        {
-                            ed.dmtile--;
-                            ed.keydelay=3;
-                            if(ed.dmtile<0) ed.dmtile+=dmcap();
-                        }
-                        else if(key.keymap[SDLK_RIGHT])
-                        {
-                            ed.dmtile++;
-                            ed.keydelay=3;
-
-                            if(ed.dmtile>=dmcap()) ed.dmtile-=dmcap();
-                        }
-                        if(key.keymap[SDLK_UP])
-                        {
-                            ed.dmtile-=dmwidth();
-                            ed.keydelay=3;
-                            if(ed.dmtile<0) ed.dmtile+=dmcap();
-                        }
-                        else if(key.keymap[SDLK_DOWN])
-                        {
-                            ed.dmtile+=dmwidth();
-                            ed.keydelay=3;
-
-                            if(ed.dmtile>=dmcap()) ed.dmtile-=dmcap();
-                        }
-                    }
-                    else
-                    {
-                        if(key.keymap[SDLK_UP])
-                        {
-                            ed.keydelay=6;
-                            dwgfx.backgrounddrawn=false;
-                            ed.levy--;
-                            ed.updatetiles=true;
-                            ed.changeroom=true;
-                            ed.levaltstate = 0;
-                        }
-                        else if(key.keymap[SDLK_DOWN])
-                        {
-                            ed.keydelay=6;
-                            dwgfx.backgrounddrawn=false;
-                            ed.levy++;
-                            ed.updatetiles=true;
-                            ed.changeroom=true;
-                            ed.levaltstate = 0;
-                        }
-                        else if(key.keymap[SDLK_LEFT])
-                        {
-                            ed.keydelay=6;
-                            dwgfx.backgrounddrawn=false;
-                            ed.levx--;
-                            ed.updatetiles=true;
-                            ed.changeroom=true;
-                            ed.levaltstate = 0;
-                        }
-                        else if(key.keymap[SDLK_RIGHT])
-                        {
-                            ed.keydelay=6;
-                            dwgfx.backgrounddrawn=false;
-                            ed.levx++;
-                            ed.updatetiles=true;
-                            ed.changeroom=true;
-                            ed.levaltstate = 0;
-                        }
-                    }
-
-                    if(ed.levx<0) ed.levx+=ed.mapwidth;
-                    if(ed.levx>= ed.mapwidth) ed.levx-=ed.mapwidth;
-                    if(ed.levy<0) ed.levy+=ed.mapheight;
-                    if(ed.levy>=ed.mapheight) ed.levy-=ed.mapheight;
-                }
-                if(key.keymap[SDLK_SPACE])
-                {
-                    ed.spacemod = !ed.spacemod;
-                    ed.keydelay=6;
-                }
-
-                if(key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT])
-                {
-                    if(!ed.shiftkey)
-                    {
-                        if(ed.shiftmenu)
-                        {
-                            ed.shiftmenu=false;
-                        }
-                        else
-                        {
-                            ed.shiftmenu=true;
-                        }
-                    }
-                    ed.shiftkey=true;
-                }
-                else
-                {
-                    ed.shiftkey=false;
-                }
+            if(key.keymap[SDLK_SPACE]) {
+                ed.spacemod = !ed.spacemod;
+                ed.keydelay=6;
             }
         }
 
