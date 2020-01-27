@@ -425,8 +425,8 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     std::string name = "saves/" + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
                     TiXmlDocument doc;
 	                  if (!FILESYSTEM_loadTiXmlDocument(name.c_str(), &doc)){
-	                    game.mainmenu = 22;
-                      dwgfx.fademode = 2;
+                          game.mainmenu = 22;
+                          dwgfx.fademode = 2;
 	                  }else{
                       game.createmenu("quickloadlevel");
                       map.nexttowercolour();
@@ -442,11 +442,41 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 	                  game.mainmenu = 22;
                     dwgfx.fademode = 2;
                   }else if(game.currentmenuoption==2){
+	                  //game.mainmenu = 24;
+                      //dwgfx.fademode = 2;
+                      music.playef(11, 10);
+                      ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map, game);
+                      game.createmenu("loadcustomtrial");
+                        for (int i = 0; i < (int)game.customtrials.size(); i++) {
+                            std::string sl = game.customtrials[i].name;
+                            std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower); 
+                            game.menuoptions[i] = sl;
+                            game.menuoptionsactive[i] = true;
+                        }
+                        if (game.customtrials.size() > 0) {
+                            game.nummenuoptions = (int)game.customtrials.size() + 1;
+                            game.menuoptions.push_back("return to menu");
+                            game.menuoptionsactive.push_back(true);
+                        }
+                    //customtrial currenttrial = game.customtrials[i];
+                      map.nexttowercolour();
+                  }else if(game.currentmenuoption==3){
                     music.playef(11, 10);
                     game.levelpage=0;
                     game.createmenu("levellist");
                     map.nexttowercolour();
                   }
+                }
+                else if (game.currentmenuname=="loadcustomtrial") {
+                    if (game.customtrials.size() == 0 || (game.currentmenuoption + 1 == game.nummenuoptions)) {
+                        game.createmenu("quickloadlevel");
+                        music.playef(11, 10);
+                        map.nexttowercolour();
+                    } else {
+                        game.currenttrial = game.currentmenuoption;
+	                    game.mainmenu = 24;
+                        dwgfx.fademode = 2;
+                    }
                 }
                 else if(game.currentmenuname=="playerworlds")
                 {

@@ -373,6 +373,23 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 dwgfx.Print( 10, 230, "git.io/v6-ce", tr/2, tg/2, tb/2);
             }
         }
+        else if (game.currentmenuname == "loadcustomtrial")
+        {
+            if (game.customtrials.size() == 0) {
+                dwgfx.Print( -1, 120, "No time trials...", tr, tg, tb, true);
+            } else {
+                dwgfx.bigprint( -1, 30, game.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
+                dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
+                dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
+                dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
+                dwgfx.Print( 110, 65, "???", tr, tg, tb);
+                dwgfx.Print( 110, 75, "???", tr, tg, tb);
+                dwgfx.Print( 110, 85, "???", tr, tg, tb);
+                dwgfx.Print( 170, 65, "PAR TIME    ???", tr, tg, tb);
+                dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);
+                dwgfx.bigprint( 275, 82, "?", 225, 225, 225);
+            }
+        }
         else if (game.currentmenuname == "changelog")
         {
             dwgfx.bigprint( -1, 20, "Changelog:", tr, tg, tb, true, 2);

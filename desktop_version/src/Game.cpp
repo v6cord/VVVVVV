@@ -1404,7 +1404,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 								}
             }
 
-            savestats(map, dwgfx, music);
+            if (!incustomtrial) savestats(map, dwgfx, music);
 
             dwgfx.fademode = 2;
             music.fadeout();
@@ -7089,11 +7089,19 @@ void Game::createmenu( std::string t )
         menuoptionsactive[0] = true;
         menuoptions[1] = "start from beginning";
         menuoptionsactive[1] = true;
-        menuoptions[2] = "back to levels";
+        menuoptions[2] = "play time trials";
         menuoptionsactive[2] = true;
-        nummenuoptions = 3;
+        menuoptions[3] = "back to levels";
+        menuoptionsactive[3] = true;
+        nummenuoptions = 4;
         menuxoff = -40;
         menuyoff = -30;
+    }
+    else if (t == "loadcustomtrial")
+    {
+        nummenuoptions = 0;
+        menuxoff = -80;
+        menuyoff = 0;
     }
     else if (t == "youwannaquit")
     {

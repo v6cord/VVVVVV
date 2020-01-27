@@ -1,12 +1,13 @@
 #include "editor.h"
 
+#include "Game.h"
 #include "Graphics.h"
 #include "Entity.h"
 #include "Music.h"
 #include "KeyPoll.h"
 #include "Map.h"
 #include "Script.h"
-//#include "UtilityClass.h"
+#include "UtilityClass.h"
 #include "time.h"
 
 #include "tinyxml.h"
@@ -341,12 +342,12 @@ void editorclass::reset()
     edentity.resize(3000);
 }
 
-void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map)
+void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game)
 {
     //Stupid pointless function because I hate C++ and everything to do with it
     //It's even stupider now that I don't need to append .vvvvvv anymore! bah, whatever
     //t=t+".vvvvvv";
-    load(t, dwgfx, map);
+    load(t, dwgfx, map, game);
 }
 
 void editorclass::gethooks()
@@ -2266,10 +2267,11 @@ int editorclass::tower_row(int rx, int ry) {
     return level[room].tower_row;
 }
 
-void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
+void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game& game)
 {
     reset();
     map.teleporters.clear();
+    game.customtrials.clear();
 
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
@@ -2391,6 +2393,30 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
         if (pKey == "levmusic")
         {
             levmusic = atoi(pText);
+        }
+
+        if (pKey == "timetrials")
+        {
+            for( TiXmlElement* trialEl = pElem->FirstChildElement(); trialEl; trialEl=trialEl->NextSiblingElement())
+            {
+                customtrial temp;
+                trialEl->QueryIntAttribute("roomx",    &temp.roomx    );
+                trialEl->QueryIntAttribute("roomy",    &temp.roomy    );
+                trialEl->QueryIntAttribute("startx",   &temp.startx   );
+                trialEl->QueryIntAttribute("starty",   &temp.starty   );
+                trialEl->QueryIntAttribute("startf",   &temp.startf   );
+                trialEl->QueryIntAttribute("par",      &temp.par      );
+                trialEl->QueryIntAttribute("trinkets", &temp.trinkets );
+                if(trialEl->GetText() != NULL)
+                {
+                    temp.name = std::string(trialEl->GetText()) ;
+                } else {
+                    temp.name = "???";
+                }
+                game.customtrials.push_back(temp);
+
+            }
+
         }
 
 
@@ -4605,20 +4631,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         dwgfx.reloadresources();
     }
 
-    /*int speedcap = 16;
-
-    if (key.keymap[SDLK_LEFTBRACKET] && (ed.keydelay==0)) {
-        ed.keydelay = 6;
-        ed.entspeed--;
-        if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
-    }
-
-    if (key.keymap[SDLK_RIGHTBRACKET] && (ed.keydelay==0)) {
-        ed.keydelay = 6;
-        ed.entspeed++;
-        if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
-    }*/
-
     int tower = ed.get_tower(ed.levx, ed.levy);
 
     if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
@@ -4891,7 +4903,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
                 break;
             case TEXT_LOAD:
-                ed.load(filename, dwgfx, map);
+                ed.load(filename, dwgfx, map, game);
                 // don't use filename, it has the full path
                 ed.note = "[ Loaded map: "+ed.filename+".vvvvvv ]";
                 ed.notedelay = 45;
@@ -5332,6 +5344,20 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.keydelay = 12;
                 }
             }
+            int speedcap = 16;
+
+            if (key.keymap[SDLK_COMMA] && (ed.keydelay==0)) {
+                ed.keydelay = 6;
+                ed.entspeed--;
+                if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
+            }
+
+            if (key.keymap[SDLK_PERIOD] && (ed.keydelay==0)) {
+                ed.keydelay = 6;
+                ed.entspeed++;
+                if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
+            }
+
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
             // Shift modifiers
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
