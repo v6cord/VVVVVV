@@ -4529,7 +4529,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         dwgfx.reloadresources();
     }
 
-    int speedcap = 16;
+    /*int speedcap = 16;
 
     if (key.keymap[SDLK_LEFTBRACKET] && (ed.keydelay==0)) {
         ed.keydelay = 6;
@@ -4541,7 +4541,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         ed.keydelay = 6;
         ed.enemyspeed++;
         if (ed.enemyspeed > (speedcap - 4)) ed.enemyspeed = -(speedcap + 4);
-    }
+    }*/
 
     int tower = ed.get_tower(ed.levx, ed.levy);
 
