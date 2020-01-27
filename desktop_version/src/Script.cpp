@@ -4424,7 +4424,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
     }
     map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 	//music.play(-1);
-    music.currentsong = game.customtrials[game.currenttrial].music;
+    music.currentsong = -1;
     ed.generatecustomminimap(dwgfx, map);
 	dwgfx.fademode = 4;
     //call("intro");
