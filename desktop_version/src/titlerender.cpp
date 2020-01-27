@@ -1964,6 +1964,8 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                 dwgfx.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
             else if (current.bord == 1)
                 dwgfx.bprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+            else if (current.bord == 2)
+                dwgfx.bigprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center, current.sc);
         } else if (current.type == 1) {
             auto pixels = (uint8_t*) dwgfx.backBuffer->pixels;
             auto row = pixels + dwgfx.backBuffer->pitch * current.y;
