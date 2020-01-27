@@ -4269,20 +4269,21 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     FillRect(dwgfx.backBuffer, 0,230+ed.roomnamehide,320,10, dwgfx.getRGB(0,0,0));
                 }
                 dwgfx.bprint(5,231+ed.roomnamehide,ed.level[ed.levx+(ed.maxwidth*ed.levy)].roomname, 196, 196, 255 - help.glow, true);
-                dwgfx.bprint(4, 222, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
+                dwgfx.bprint(4, 222, "Ctrl+F1: Help", 196, 196, 255 - help.glow, false);
                 dwgfx.bprint(rmstrx, 222, rmstr,196, 196, 255 - help.glow, false);
             }
             else
             {
-                dwgfx.bprint(4, 232, "SPACE ^  SHIFT ^", 196, 196, 255 - help.glow, false);
+                dwgfx.bprint(4, 232, "Ctrl+F1: Help", 196, 196, 255 - help.glow, false);
                 dwgfx.bprint(rmstrx,232, rmstr,196, 196, 255 - help.glow, false);
             }
         }
 
         if(ed.shiftmenu)
         {
-            fillboxabs(dwgfx, 0, 67,161+8,200,dwgfx.getRGB(64,64,64));
-            FillRect(dwgfx.backBuffer, 0,68,160+8,200, dwgfx.getRGB(0,0,0));
+            fillboxabs(dwgfx, 0, 57,161+8,200,dwgfx.getRGB(64,64,64));
+            FillRect(dwgfx.backBuffer, 0,58,160+8,200, dwgfx.getRGB(0,0,0));
+            dwgfx.Print(4, 60, "Space: Mode Select", 164, 164, 164, false);
             if (tower) {
                 dwgfx.Print(4, 70, "F1: Tower Direction",164,164,164,false);
                 dwgfx.Print(4, 80, "F2: Tower Entry",164,164,164,false);
