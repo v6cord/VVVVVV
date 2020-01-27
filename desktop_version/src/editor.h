@@ -212,7 +212,10 @@ public:
 
     int backmatch(int x, int y);
 
-    void switch_tileset(int from, int to);
+    void switch_tileset(bool reversed);
+    void switch_tileset_tiles(int from, int to);
+    void switch_tilecol(bool reversed);
+    void clamp_tilecol(int levx, int levy, bool wrap);
 
     void enable_tower(void);
     void snap_tower_entry(int rx, int ry);
@@ -291,6 +294,9 @@ public:
         int desc; // Which description row we're changing
         int textent; // Entity ID for text prompt
     };
+
+    int lastentcycle;
+    int entcycle;
 
     bool xmod, zmod, spacemod, warpmod, textentry = false;
     bool titlemod, creatormod, desc1mod, desc2mod, desc3mod, websitemod = false;
