@@ -1,12 +1,13 @@
 #include "editor.h"
 
+#include "Game.h"
 #include "Graphics.h"
 #include "Entity.h"
 #include "Music.h"
 #include "KeyPoll.h"
 #include "Map.h"
 #include "Script.h"
-//#include "UtilityClass.h"
+#include "UtilityClass.h"
 #include "time.h"
 
 #include "tinyxml.h"
@@ -211,6 +212,9 @@ void editorclass::reset()
     deletekeyheld=false;
     textmod = TEXT_NONE;
 
+    entcycle = 0;
+    lastentcycle = 0;
+
     titlemod=false;
     creatormod=false;
     desc1mod=false;
@@ -338,12 +342,12 @@ void editorclass::reset()
     edentity.resize(3000);
 }
 
-void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map)
+void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game)
 {
     //Stupid pointless function because I hate C++ and everything to do with it
     //It's even stupider now that I don't need to append .vvvvvv anymore! bah, whatever
     //t=t+".vvvvvv";
-    load(t, dwgfx, map);
+    load(t, dwgfx, map, game);
 }
 
 void editorclass::gethooks()
@@ -1942,8 +1946,31 @@ void editorclass::countstuff()
     }
 }
 
+// Switches tileset
+void editorclass::switch_tileset(bool reversed) {
+    std::string tilesets[6] =
+        {"Space Station", "Outside", "Lab", "Warp Zone", "Ship", "Tower"};
+    int tiles = level[levx + levy*maxwidth].tileset;
+    int oldtiles = tiles;
+    if (reversed)
+        tiles--;
+    else
+        tiles++;
+
+    tiles = mod(tiles, 6);
+    level[levx + levy*maxwidth].tileset = tiles;
+    int newtiles = tiles;
+
+    clamp_tilecol(levx, levy, false);
+
+    switch_tileset_tiles(oldtiles, newtiles);
+    notedelay = 45;
+    ed.note = "Now using "+tilesets[tiles]+" Tileset";
+    updatetiles = true;
+}
+
 // Gracefully switches to and from Tower Tileset if autotilig is on
-void editorclass::switch_tileset(int from, int to) {
+void editorclass::switch_tileset_tiles(int from, int to) {
     // Do nothing in Direct Mode
     if (level[levx + levy*maxwidth].directmode)
         return;
@@ -1973,6 +2000,48 @@ void editorclass::switch_tileset(int from, int to) {
                 settilelocal(x, y, newspike);
         }
     }
+}
+
+// Switches tileset color
+void editorclass::switch_tilecol(bool reversed) {
+    if (reversed)
+        level[levx + levy*maxwidth].tilecol--;
+    else
+        level[levx + levy*maxwidth].tilecol++;
+
+    clamp_tilecol(levx, levy, true);
+
+    notedelay = 45;
+    ed.note = "Tileset Colour Changed";
+    updatetiles = true;
+}
+
+void editorclass::clamp_tilecol(int levx, int levy, bool wrap) {
+    int tileset = level[levx + levy*maxwidth].tileset;
+    int tilecol = level[levx + levy*maxwidth].tilecol;
+
+    int mincol = -1;
+    int maxcol = 5;
+
+    // Only Space Station allows tileset -1
+    if (tileset != 0)
+        mincol = 0;
+
+    if (tileset == 0)
+        maxcol = 31;
+    else if (tileset == 1)
+        maxcol = 7;
+    else if (tileset == 3)
+        maxcol = 6;
+    else if (tileset == 5)
+        maxcol = 29;
+
+    // If wrap is true, wrap-around, otherwise just cap
+    if (tilecol > maxcol)
+        tilecol = (wrap ? mincol : maxcol);
+    if (tilecol < mincol)
+        tilecol = (wrap ? maxcol : mincol);
+    level[levx + levy*maxwidth].tilecol = tilecol;
 }
 
 // Performs tasks needed when enabling Tower Mode
@@ -2198,10 +2267,11 @@ int editorclass::tower_row(int rx, int ry) {
     return level[room].tower_row;
 }
 
-void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
+void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game& game)
 {
     reset();
     map.teleporters.clear();
+    game.customtrials.clear();
 
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
@@ -2323,6 +2393,31 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
         if (pKey == "levmusic")
         {
             levmusic = atoi(pText);
+        }
+
+        if (pKey == "timetrials")
+        {
+            for( TiXmlElement* trialEl = pElem->FirstChildElement(); trialEl; trialEl=trialEl->NextSiblingElement())
+            {
+                customtrial temp;
+                trialEl->QueryIntAttribute("roomx",    &temp.roomx    );
+                trialEl->QueryIntAttribute("roomy",    &temp.roomy    );
+                trialEl->QueryIntAttribute("startx",   &temp.startx   );
+                trialEl->QueryIntAttribute("starty",   &temp.starty   );
+                trialEl->QueryIntAttribute("startf",   &temp.startf   );
+                trialEl->QueryIntAttribute("par",      &temp.par      );
+                trialEl->QueryIntAttribute("trinkets", &temp.trinkets );
+                trialEl->QueryIntAttribute("music",    &temp.music );
+                if(trialEl->GetText() != NULL)
+                {
+                    temp.name = std::string(trialEl->GetText()) ;
+                } else {
+                    temp.name = "???";
+                }
+                game.customtrials.push_back(temp);
+
+            }
+
         }
 
 
@@ -4537,20 +4632,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         dwgfx.reloadresources();
     }
 
-    /*int speedcap = 16;
-
-    if (key.keymap[SDLK_LEFTBRACKET] && (ed.keydelay==0)) {
-        ed.keydelay = 6;
-        ed.entspeed--;
-        if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
-    }
-
-    if (key.keymap[SDLK_RIGHTBRACKET] && (ed.keydelay==0)) {
-        ed.keydelay = 6;
-        ed.entspeed++;
-        if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
-    }*/
-
     int tower = ed.get_tower(ed.levx, ed.levy);
 
     if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
@@ -4823,7 +4904,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
                 break;
             case TEXT_LOAD:
-                ed.load(filename, dwgfx, map);
+                ed.load(filename, dwgfx, map, game);
                 // don't use filename, it has the full path
                 ed.note = "[ Loaded map: "+ed.filename+".vvvvvv ]";
                 ed.notedelay = 45;
@@ -5203,12 +5284,79 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.drawmode=-6;
                 ed.keydelay = 6;
             }
-            
         } else if (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL]) {
             // Ctrl modifiers
             if (key.keymap[SDLK_F1]) {
+                // Help screen
                 ed.shiftmenu = !ed.shiftmenu;
                 ed.keydelay = 6;
+            }
+
+            if (key.keymap[SDLK_p] || key.keymap[SDLK_o] ||
+                key.keymap[SDLK_t]) {
+                // Jump to player location, next crewmate or trinket
+                int ent = 16; // player
+                if (key.keymap[SDLK_o])
+                    ent = 15;
+                else if (key.keymap[SDLK_t])
+                    ent = 9;
+
+                if (ed.lastentcycle != ent) {
+                    ed.entcycle = 0;
+                    ed.lastentcycle = ent;
+                }
+
+                // Find next entity of this kind
+                ed.entcycle++;
+                int num_ents = 0;
+                int i;
+                for (i = 0; i < EditorData::GetInstance().numedentities;
+                     i++)
+                    if (edentity[i].t == ent)
+                        num_ents++;
+
+                if (ed.entcycle > num_ents)
+                    ed.entcycle = 1;
+
+                num_ents = 0;
+                for (i = 0; i < EditorData::GetInstance().numedentities;
+                     i++) {
+                    if (edentity[i].t == ent) {
+                        num_ents++;
+                        if (ed.entcycle == num_ents)
+                            break;
+                    }
+                }
+
+                int roomx = ed.levx;
+                int roomy = ed.levy;
+                if (num_ents && !edentity[i].intower) {
+                    roomx = edentity[i].x / 40;
+                    roomy = edentity[i].y / 30;
+                }
+
+                if (roomx != ed.levx || roomy != ed.levy) {
+                    ed.levx = mod(roomx, ed.mapwidth);
+                    ed.levy = mod(roomy, ed.mapheight);
+                    ed.updatetiles = true;
+                    ed.changeroom = true;
+                    dwgfx.backgrounddrawn=false;
+                    ed.levaltstate = 0;
+                    ed.keydelay = 12;
+                }
+            }
+            int speedcap = 16;
+
+            if (key.keymap[SDLK_COMMA] && (ed.keydelay==0)) {
+                ed.keydelay = 6;
+                ed.entspeed--;
+                if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
+            }
+
+            if (key.keymap[SDLK_PERIOD] && (ed.keydelay==0)) {
+                ed.keydelay = 6;
+                ed.entspeed++;
+                if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
             }
 
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
@@ -5237,6 +5385,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.note = "Mapsize is now [" + help.String(ed.mapwidth) + "," +
                     help.String(ed.mapheight) + "]";
                 ed.notedelay=45;
+            }
+
+            if (key.keymap[SDLK_F1] && ed.keydelay==0) {
+                ed.switch_tileset(true);
+                dwgfx.backgrounddrawn=false;
+                ed.keydelay = 6;
+            }
+            if (key.keymap[SDLK_F2] && ed.keydelay==0) {
+                ed.switch_tilecol(true);
+                dwgfx.backgrounddrawn=false;
+                ed.keydelay = 6;
             }
 
             if (key.keymap[SDLK_1]) ed.drawmode=17;
@@ -5321,82 +5480,15 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             if(key.keymap[SDLK_F1] && ed.keydelay==0)
             {
-                int oldtiles = ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset;
-                ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset++;
+                ed.switch_tileset(false);
                 dwgfx.backgrounddrawn=false;
-                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset>=6) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset=0;
-                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=32) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==1)
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=8) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                else
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=6) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                int newtiles = ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset;
-
-                // Graceful tileset switching to/from tower if autotiling is on
-                ed.switch_tileset(oldtiles, newtiles);
-                ed.notedelay=45;
-                switch(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset)
-                {
-                case 0:
-                    ed.note="Now using Space Station Tileset";
-                    break;
-                case 1:
-                    ed.note="Now using Outside Tileset";
-                    break;
-                case 2:
-                    ed.note="Now using Lab Tileset";
-                    break;
-                case 3:
-                    ed.note="Now using Warp Zone Tileset";
-                    break;
-                case 4:
-                    ed.note="Now using Ship Tileset";
-                    break;
-                case 5:
-                    ed.note="Now using Tower Tileset";
-                    break;
-                default:
-                    ed.note="Tileset Changed";
-                    break;
-                }
-                ed.updatetiles=true;
-                ed.keydelay=6;
+                ed.keydelay = 6;
             }
             if(key.keymap[SDLK_F2] && ed.keydelay==0)
             {
-                ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol++;
+                ed.switch_tilecol(false);
                 dwgfx.backgrounddrawn=false;
-                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=32) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=-1;
-                }
-                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==1)
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=8) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=30) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==3)
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=7) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                else
-                {
-                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol>=6) ed.level[ed.levx+(ed.levy*ed.maxwidth)].tilecol=0;
-                }
-                ed.updatetiles=true;
-                ed.keydelay=6;
-                ed.notedelay=45;
-                ed.note="Tileset Colour Changed";
+                ed.keydelay = 6;
             }
             if(key.keymap[SDLK_F3] && ed.keydelay==0)
             {
@@ -5727,6 +5819,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.levx++;
                 ed.updatetiles = true;
                 ed.changeroom = true;
+                dwgfx.backgrounddrawn=false;
                 ed.levaltstate = 0;
                 ed.levx = (ed.levx + ed.mapwidth) % ed.mapwidth;
                 ed.levy = (ed.levy + ed.mapheight) % ed.mapheight;

@@ -47,6 +47,12 @@ class growing_vector : public std::vector<T> {
     }
 };
 
+// always return positive modulo result if modulus is positive
+template<typename N>
+N mod(const N &num, const N &mod) {
+    return (num % mod + mod) % mod;
+}
+
 int ss_toi(std::string _s);
 
 bool is_number(const std::string& s);

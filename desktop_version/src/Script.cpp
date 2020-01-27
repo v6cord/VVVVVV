@@ -688,6 +688,25 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					}
 				}
 			}
+			else if (words[0] == "endtrial")
+			{
+				game.state = 82;
+				game.statedelay = 0;
+			}
+			else if (words[0] == "iftrial")
+			{
+				if (game.intimetrial) {
+					if (words[2] != "") {
+						if (game.currenttrial == ss_toi(words[1])) {
+							call("custom_"+words[2]);
+							position--;
+						}
+					} else {
+						call("custom_"+words[1]);
+						position--;
+					}
+				}
+			}
 			if (words[0] == "setroomname")
 			{
 				// setroomname()
@@ -3033,7 +3052,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "customquicksave")
 			{
 				if (!map.custommode || map.custommodeforreal)
-					game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
+					if (!game.intimetrial && !game.nodeathmode) game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
 			}
 			else if (words[0] == "createlastrescued")
 			{
@@ -4264,7 +4283,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
   case 22:  //play custom level (in game)
     //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map, game);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -4307,7 +4326,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
   case 23: //Continue in custom level
       //Initilise the level
     //First up, find the start point
-    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx, map);
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx, map, game);
     ed.findstartpoint(game);
 
     game.gamestate = GAMEMODE;
@@ -4350,6 +4369,70 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		dwgfx.fademode = 4;
     //call("intro");
   break;
+
+  case 24: // Custom level time trial!
+    // Load the level first
+    game.incustomtrial = true;
+    ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename, dwgfx, map, game);
+	// ...then find the start point
+    ed.findstartpoint(game);
+
+    game.gamestate = GAMEMODE; // Set the gamemode
+    music.fadeout(); // Fade out the music
+    hardreset(key, dwgfx, game, map, obj, help, music); // Reset everything!!
+	map.custommodeforreal = true; // Yep, it's technically
+    map.custommode = true; // a custom level
+
+    map.customx = 100;
+    map.customy = 100;
+
+    game.customstart(obj, music); // I honestly have no idea what this does
+	// Actually, the level is already loaded! This is just to be safe...
+	game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
+    game.jumpheld = true;
+    game.gravitycontrol = game.savegc;
+
+
+	game.intimetrial = true;
+	game.timetrialcountdown = 150;
+	game.timetrialparlost = false;
+	game.timetriallevel = 21;
+	game.timetrialpar = game.customtrials[game.currenttrial].par;
+	game.timetrialshinytarget = game.customtrials[game.currenttrial].trinkets;
+
+    game.savex =  game.customtrials[game.currenttrial].startx;
+    game.savey =  game.customtrials[game.currenttrial].starty;
+    game.saverx = game.customtrials[game.currenttrial].roomx;
+    game.savery = game.customtrials[game.currenttrial].roomy;
+    game.savegc = game.customtrials[game.currenttrial].startf;
+    game.savedir = 1;
+    game.savepoint = 0;
+    game.gravitycontrol = game.customtrials[game.currenttrial].startf;
+    game.coins = 0;
+    game.trinkets = 0;
+    game.crewmates = 0;
+    game.state = 0;
+    game.deathseq = -1;
+    game.lifeseq = 0;
+
+    //set flipmode
+    if (dwgfx.setflipmode) dwgfx.flipmode = true;
+
+    if(obj.nentity==0)
+    {
+      obj.createentity(game, game.savex, game.savey, 0, 0); //In this game, constant, never destroyed
+    }
+    else
+    {
+      map.resetplayer(dwgfx, game, obj, music);
+    }
+    map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+	//music.play(-1);
+    music.currentsong = -1;
+    ed.generatecustomminimap(dwgfx, map);
+	dwgfx.fademode = 4;
+    //call("intro");
+	break;
 	case 100:
 		game.savestats(map, dwgfx, music);
 

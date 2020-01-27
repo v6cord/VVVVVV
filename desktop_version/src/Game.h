@@ -19,6 +19,18 @@ struct scriptmarker {
     int tile = 0;
 };
 
+struct customtrial {
+    int roomx;
+    int roomy;
+    int startx;
+    int starty;
+    int startf;
+    int par;
+    int trinkets;
+    int music;
+    std::string name;
+};
+
 class Game
 {
 public:
@@ -392,6 +404,10 @@ public:
 
     growing_vector<SDL_Surface*> script_images;
     growing_vector<std::string> script_image_names;
+
+    growing_vector<customtrial> customtrials;
+    bool incustomtrial = false;
+    int currenttrial = 0;
 
 };
 
