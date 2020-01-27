@@ -1808,7 +1808,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                     break;
 
                 obj.createentity(game, ex, ey, 2, edentity[edi].p1,
-                                 ed.level[curlevel].platv, bx1, by1, bx2, by2);
+                                 ed.level[curlevel].platv + edentity[edi].p2, bx1, by1, bx2, by2);
                 break;
             case 3: // Disappearing platforms
                 obj.createentity(game, ex, ey, 3);

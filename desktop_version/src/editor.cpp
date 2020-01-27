@@ -100,7 +100,7 @@ editorclass::editorclass()
     towers.resize(400);
     level.resize(maxwidth * maxheight);
 
-    enemyspeed = 0;
+    entspeed = 0;
 
     reset();
 }
@@ -4365,10 +4365,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bprint(2,2, "7: Conveyors",196, 196, 255 - help.glow);
             break;
         case 7:
-            dwgfx.bprint(2,2, "8: Moving",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "8: Moving, Speed: " + std::to_string(ed.entspeed + ed.level[ed.levx+(ed.maxwidth*ed.levy)].platv),196, 196, 255 - help.glow);
             break;
         case 8:
-            dwgfx.bprint(2,2, "9: Enemies, Speed: " + std::to_string(ed.enemyspeed + 4),196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "9: Enemies, Speed: " + std::to_string(ed.entspeed + ed.level[ed.levx+(ed.maxwidth*ed.levy)].enemyv),196, 196, 255 - help.glow);
             break;
         case 9:
             dwgfx.bprint(2,2, "0: Grav Line",196, 196, 255 - help.glow);
@@ -4541,14 +4541,14 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
     if (key.keymap[SDLK_LEFTBRACKET] && (ed.keydelay==0)) {
         ed.keydelay = 6;
-        ed.enemyspeed--;
-        if (ed.enemyspeed < -(speedcap + 4)) ed.enemyspeed = (speedcap - 4);
+        ed.entspeed--;
+        if (ed.entspeed < -(speedcap + 4)) ed.entspeed = (speedcap - 4);
     }
 
     if (key.keymap[SDLK_RIGHTBRACKET] && (ed.keydelay==0)) {
         ed.keydelay = 6;
-        ed.enemyspeed++;
-        if (ed.enemyspeed > (speedcap - 4)) ed.enemyspeed = -(speedcap + 4);
+        ed.entspeed++;
+        if (ed.entspeed > (speedcap - 4)) ed.entspeed = -(speedcap + 4);
     }*/
 
     int tower = ed.get_tower(ed.levx, ed.levy);
@@ -6028,12 +6028,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==7)
                             {
-                                addedentity(tx, ty, 2, 0);
+                                addedentity(tx, ty, 2, 0, ed.entspeed);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==8) // Enemies
                             {
-                                addedentity(tx, ty, 1, 0, ed.enemyspeed);
+                                addedentity(tx, ty, 1, 0, ed.entspeed);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==9)
