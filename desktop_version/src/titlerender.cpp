@@ -376,8 +376,11 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         else if (game.currentmenuname == "loadcustomtrial")
         {
             if (game.customtrials.size() == 0) {
-                dwgfx.Print( -1, 120, "No time trials...", tr, tg, tb, true);
+                dwgfx.Print( -1, 65, "No time trials...", tr, tg, tb, true);
+            } else if (game.currentmenuoption == (int)game.customtrials.size()) {
+                dwgfx.Print( -1, 65, "Select a time trial to play!", tr, tg, tb, true);
             } else {
+                game.timetrialpar = game.customtrials[game.currentmenuoption].par;
                 dwgfx.bigprint( -1, 30, game.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
                 dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                 dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
@@ -385,7 +388,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 dwgfx.Print( 110, 65, "???", tr, tg, tb);
                 dwgfx.Print( 110, 75, "???", tr, tg, tb);
                 dwgfx.Print( 110, 85, "???", tr, tg, tb);
-                dwgfx.Print( 170, 65, "PAR TIME    ???", tr, tg, tb);
+                dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(help), tr, tg, tb);
                 dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);
                 dwgfx.bigprint( 275, 82, "?", 225, 225, 225);
             }
