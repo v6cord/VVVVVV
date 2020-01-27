@@ -4041,14 +4041,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             //Draw little icons for each thingy
             int tx=6, ty=211, tg=32;
 
-            for(int i=0; i<10; i++)
-                FillRect(dwgfx.backBuffer, 4+(i*tg), 209,20,20,
-                         dwgfx.getRGB(32,32,32));
-            FillRect(dwgfx.backBuffer, 4+(ed.drawmode*tg), 209,20,20,
-                     dwgfx.getRGB(64,64,64));
-
-            if(ed.drawmode < 10)
+            if(ed.spacemenu==0)
             {
+                for(int i=0; i<10; i++)
+                {
+                    FillRect(dwgfx.backBuffer, 4+(i*tg), 209,20,20,dwgfx.getRGB(32,32,32));
+                }
+                FillRect(dwgfx.backBuffer, 4+(ed.drawmode*tg), 209,20,20,dwgfx.getRGB(64,64,64));
                 //0:
                 dwgfx.drawtile(tx,ty,83,0,0,0);
                 dwgfx.drawtile(tx+8,ty,83,0,0,0);
@@ -4088,8 +4087,28 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 tx+=tg;
                 FillRect(dwgfx.backBuffer, tx+2,ty+8,12,1,dwgfx.getRGB(255,255,255));
 
+                for(int i=0; i<9; i++)
+                {
+                    fillboxabs(dwgfx, 4+(i*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                    dwgfx.Print(22+(i*tg)-4, 225-4,help.String(i+1),164,164,164,false);
+                }
+
+                if(ed.drawmode==9)dwgfx.Print(22+(ed.drawmode*tg)-4, 225-4,"0",255,255,255,false);
+
+                fillboxabs(dwgfx, 4+(9*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(9*tg)-4, 225-4, "0",164,164,164,false);
+
+                fillboxabs(dwgfx, 4+(ed.drawmode*tg), 209,20,20,dwgfx.getRGB(200,200,200));
+                if(ed.drawmode<9)
+                {
+                    dwgfx.Print(22+(ed.drawmode*tg)-4, 225-4,help.String(ed.drawmode+1),255,255,255,false);
+                }
+
                 dwgfx.Print(4, 232, "1/2", 196, 196, 255 - help.glow, false);
             } else {
+                for(int i=0; i<10; i++) 
+                    FillRect(dwgfx.backBuffer, 4+(i*tg), 209,20,20,dwgfx.getRGB(32,32,32));
+                FillRect(dwgfx.backBuffer, 4+((ed.drawmode-10)*tg), 209,20,20,dwgfx.getRGB(64,64,64));
                 //10:
                 dwgfx.Print(tx,ty,"A",196, 196, 255 - help.glow, false);
                 dwgfx.Print(tx+8,ty,"B",196, 196, 255 - help.glow, false);
@@ -4126,23 +4145,40 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 tx+=tg;
                 dwgfx.drawtelepart(tx, ty, 1, 100, help);
 
+
+                if(ed.drawmode==10)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"R",255,255,255,false);
+                if(ed.drawmode==11)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"T",255,255,255,false);
+                if(ed.drawmode==12)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"Y",255,255,255,false);
+                if(ed.drawmode==13)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"U",255,255,255,false);
+                if(ed.drawmode==14)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"I",255,255,255,false);
+                if(ed.drawmode==15)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"O",255,255,255,false);
+                if(ed.drawmode==16)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"P",255,255,255,false);
+                if(ed.drawmode==17)dwgfx.Print(22+((ed.drawmode-10)*tg)-12, 225-4,"^1",255,255,255,false);
+                if(ed.drawmode==18)dwgfx.Print(22+((ed.drawmode-10)*tg)-12, 225-4,"^2",255,255,255,false);
+                if(ed.drawmode==19)dwgfx.Print(22+((ed.drawmode-10)*tg)-12, 225-4,"^3",255,255,255,false);
+
+                fillboxabs(dwgfx, 4+(0*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(0*tg)-4, 225-4, "R",164,164,164,false);
+                fillboxabs(dwgfx, 4+(1*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(1*tg)-4, 225-4, "T",164,164,164,false);
+                fillboxabs(dwgfx, 4+(2*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(2*tg)-4, 225-4, "Y",164,164,164,false);
+                fillboxabs(dwgfx, 4+(3*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(3*tg)-4, 225-4, "U",164,164,164,false);
+                fillboxabs(dwgfx, 4+(4*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(4*tg)-4, 225-4, "I",164,164,164,false);
+                fillboxabs(dwgfx, 4+(5*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(5*tg)-4, 225-4, "O",164,164,164,false);
+                fillboxabs(dwgfx, 4+(6*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(6*tg)-4, 225-4, "P",164,164,164,false);
+                fillboxabs(dwgfx, 4+(7*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(7*tg)-12, 225-4, "^1",164,164,164,false);
+                fillboxabs(dwgfx, 4+(8*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(8*tg)-12, 225-4, "^2",164,164,164,false);
+                fillboxabs(dwgfx, 4+(9*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(9*tg)-12, 225-4, "^3",164,164,164,false);
+
                 dwgfx.Print(4, 232, "2/2", 196, 196, 255 - help.glow, false);
-            }
-
-            for(int i=0; i<10; i++) {
-                int dcol = 96;
-                int col = 164;
-                if ((ed.drawmode % 10) == i) {
-                    dcol = 200;
-                    col = 255;
-                }
-
-                fillboxabs(dwgfx, 4+(i*tg), 209, 20, 20,
-                           dwgfx.getRGB(dcol, dcol, dcol));
-                if (ed.drawmode >= 10)
-                    dwgfx.Print(10 + (i * tg), 221, "^", col, col, col, false);
-                dwgfx.Print(18 + (i * tg), 221, help.String((i+1) % 10),
-                            col, col, col, false);
             }
 
             dwgfx.Print(128, 232, "< and > keys change tool", 196, 196, 255 - help.glow, false);
@@ -4182,34 +4218,34 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.bprint(2,199, "0: Grav Line",196, 196, 255 - help.glow);
                 break;
             case 10:
-                dwgfx.bprint(2,199, "^1: Roomtext",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "R: Roomtext",196, 196, 255 - help.glow);
                 break;
             case 11:
-                dwgfx.bprint(2,199, "^2: Terminal",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "T: Terminal",196, 196, 255 - help.glow);
                 break;
             case 12:
-                dwgfx.bprint(2,199, "^3: Script Box",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "Y: Script Box",196, 196, 255 - help.glow);
                 break;
             case 13:
-                dwgfx.bprint(2,199, "^4: Warp Token",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "U: Warp Token",196, 196, 255 - help.glow);
                 break;
             case 14:
-                dwgfx.bprint(2,199, "^5: Warp Lines",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "I: Warp Lines",196, 196, 255 - help.glow);
                 break;
             case 15:
-                dwgfx.bprint(2,199, "^6: Crewmate",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "O: Crewmate",196, 196, 255 - help.glow);
                 break;
             case 16:
-                dwgfx.bprint(2,199, "^7: Start Point",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "P: Start Point",196, 196, 255 - help.glow);
                 break;
             case 17:
-                dwgfx.bprint(2,199, "^8: Flip Token",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "^1: Flip Token",196, 196, 255 - help.glow);
                 break;
             case 18:
-                dwgfx.bprint(2,199, "^9: Coin",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "^2: Coin",196, 196, 255 - help.glow);
                 break;
             case 19:
-                dwgfx.bprint(2,199, "^0: Teleporter",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,199, "^3: Teleporter",196, 196, 255 - help.glow);
                 break;
             }
 
@@ -4330,38 +4366,38 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bprint(2,2, "0: Grav Line",196, 196, 255 - help.glow);
             break;
         case 10:
-            dwgfx.bprint(2,2, "^1: Roomtext",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "R: Roomtext",196, 196, 255 - help.glow);
             break;
         case 11:
-            dwgfx.bprint(2,2, "^2: Terminal",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "T: Terminal",196, 196, 255 - help.glow);
             break;
         case 12:
             if (ed.zmod) {
-                dwgfx.bprint(2,2, "^3+Z: Activity Zone",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,2, "Y+Z: Activity Zone",196, 196, 255 - help.glow);
             } else {
-                dwgfx.bprint(2,2, "^3: Script Box",196, 196, 255 - help.glow);
+                dwgfx.bprint(2,2, "Y: Script Box",196, 196, 255 - help.glow);
             }
             break;
         case 13:
-            dwgfx.bprint(2,2, "^4: Warp Token",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "U: Warp Token",196, 196, 255 - help.glow);
             break;
         case 14:
-            dwgfx.bprint(2,2, "^5: Warp Lines",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "I: Warp Lines",196, 196, 255 - help.glow);
             break;
         case 15:
-            dwgfx.bprint(2,2, "^6: Crewmate",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "O: Crewmate",196, 196, 255 - help.glow);
             break;
         case 16:
-            dwgfx.bprint(2,2, "^7: Start Point",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "P: Start Point",196, 196, 255 - help.glow);
             break;
         case 17:
-            dwgfx.bprint(2,2, "^8: Flip Token",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "^1: Flip Token",196, 196, 255 - help.glow);
             break;
         case 18:
-            dwgfx.bprint(2,2, "^9: Coin",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "^2: Coin",196, 196, 255 - help.glow);
             break;
         case 19:
-            dwgfx.bprint(2,2, "^0: Teleporter",196, 196, 255 - help.glow);
+            dwgfx.bprint(2,2, "^3: Teleporter",196, 196, 255 - help.glow);
             break;
         }
 
@@ -5184,16 +5220,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.notedelay=45;
             }
 
-            if (key.keymap[SDLK_1]) ed.drawmode=10;
-            if (key.keymap[SDLK_2]) ed.drawmode=11;
-            if (key.keymap[SDLK_3]) ed.drawmode=12;
-            if (key.keymap[SDLK_4]) ed.drawmode=13;
-            if (key.keymap[SDLK_5]) ed.drawmode=14;
-            if (key.keymap[SDLK_6]) ed.drawmode=15;
-            if (key.keymap[SDLK_7]) ed.drawmode=16;
-            if (key.keymap[SDLK_8]) ed.drawmode=17;
-            if (key.keymap[SDLK_9]) ed.drawmode=18;
-            if (key.keymap[SDLK_0]) ed.drawmode=19;
+            if (key.keymap[SDLK_1]) ed.drawmode=17;
+            if (key.keymap[SDLK_2]) ed.drawmode=18;
+            if (key.keymap[SDLK_3]) ed.drawmode=19;
         } else {
             // No modifiers
             if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD]) {
@@ -5433,8 +5462,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_8]) ed.drawmode=7;
             if(key.keymap[SDLK_9]) ed.drawmode=8;
             if(key.keymap[SDLK_0]) ed.drawmode=9;
-
-            // Kept for muscle memory purposes
             if(key.keymap[SDLK_r]) ed.drawmode=10;
             if(key.keymap[SDLK_t]) ed.drawmode=11;
             if(key.keymap[SDLK_y]) ed.drawmode=12;
