@@ -4220,6 +4220,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 			map.resetplayer(dwgfx, game, obj, music);
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+		ed.generatecustomminimap(dwgfx, map);
 		dwgfx.fademode = 4;
 		break;
 	case 21:  //play custom level (in editor)
