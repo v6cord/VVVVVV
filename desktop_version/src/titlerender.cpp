@@ -3366,10 +3366,11 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
     FillRect(dwgfx.backBuffer, 0, 12, 320, 240, 10, 24, 26);
 
     //draw the map image
-    dwgfx.drawpixeltextbox(35, 16, 250, 190, 32,24, 65, 185, 207,4,0);
     if (map.custommode) {
+        dwgfx.drawcustompixeltextbox(35+map.custommmxoff, 16+map.custommmyoff, map.custommmxsize+10, map.custommmysize+10, (map.custommmxsize+10)/8, (map.custommmysize+10)/8, 65, 185, 207,4,0);
         dwgfx.drawpartimage(12, 40+map.custommmxoff, 21+map.custommmyoff, map.custommmxsize, map.custommmysize);
     } else {
+        dwgfx.drawpixeltextbox(35, 16, 250, 190, 32,24, 65, 185, 207,4,0);
         dwgfx.drawimage(1, 40, 21, false);
     }
     //black out areas we can't see yet
