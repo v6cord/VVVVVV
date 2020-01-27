@@ -5498,7 +5498,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                           &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
                 game.mapheld=true;
             }
-            if (key.keymap[SDLK_q] && ed.keydelay==0) {
+            if (key.keymap[SDLK_g] && ed.keydelay==0) {
                 ed.keydelay = 6;
                 ed.getlin(key, TEXT_GOTOROOM, "Enter room coordinates (x,y):",
                           NULL);
