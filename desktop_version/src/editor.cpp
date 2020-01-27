@@ -3445,6 +3445,13 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 edentity[i].p3=(ty2-ty)*8;
             }
             break;
+        case 999: // ?
+            //dwgfx.drawspritesetcol(ex, ey, 3, 102, help);
+            dwgfx.setcol(102, help);
+            dwgfx.drawimage(3, ex, ey);
+            //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+            fillboxabs(dwgfx, ex, ey, 464, 320, dwgfx.getRGB(164,164,255));
+            break;
         }
 
         //Need to also check warp point destinations
@@ -3556,6 +3563,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         break;
     case 19: //12x12 :))))))
         fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8*12,8*12, dwgfx.getRGB(200,32,32));
+        break;
+    case -6: // ...?
+        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),464,320, dwgfx.getRGB(200,32,32));
         break;
     }
 
@@ -4089,21 +4099,17 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 tx+=tg;
                 FillRect(dwgfx.backBuffer, tx+2,ty+8,12,1,dwgfx.getRGB(255,255,255));
 
-                for(int i=0; i<9; i++)
-                {
-                    fillboxabs(dwgfx, 4+(i*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                    dwgfx.Print(22+(i*tg)-4, 225-4,help.String(i+1),164,164,164,false);
-                }
 
-                if(ed.drawmode==9)dwgfx.Print(22+(ed.drawmode*tg)-4, 225-4,"0",255,255,255,false);
-
-                fillboxabs(dwgfx, 4+(9*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(9*tg)-4, 225-4, "0",164,164,164,false);
-
-                fillboxabs(dwgfx, 4+(ed.drawmode*tg), 209,20,20,dwgfx.getRGB(200,200,200));
-                if(ed.drawmode<9)
-                {
-                    dwgfx.Print(22+(ed.drawmode*tg)-4, 225-4,help.String(ed.drawmode+1),255,255,255,false);
+                std::string toolkeys [10] = {"1","2","3","4","5","6","7","8","9","0"};
+                for (int i = 0; i < 10; i++) {
+                    int col = 96;
+                    int col2 = 164;
+                    if ((ed.drawmode) == i) {
+                        col = 200;
+                        col2 = 255;
+                    }
+                    fillboxabs(dwgfx, 4+(i*tg), 209,20,20,dwgfx.getRGB(col,col,col));
+                    dwgfx.Print((22+(i*tg)+4) - (toolkeys[i].length() * 8), 225-4, toolkeys[i],col2,col2,col2,false);
                 }
 
                 dwgfx.Print(4, 232, "1/2", 196, 196, 255 - help.glow, false);
@@ -4147,38 +4153,17 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 tx+=tg;
                 dwgfx.drawtelepart(tx, ty, 1, 100, help);
 
-
-                if(ed.drawmode==10)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"R",255,255,255,false);
-                if(ed.drawmode==11)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"T",255,255,255,false);
-                if(ed.drawmode==12)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"Y",255,255,255,false);
-                if(ed.drawmode==13)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"U",255,255,255,false);
-                if(ed.drawmode==14)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"I",255,255,255,false);
-                if(ed.drawmode==15)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"O",255,255,255,false);
-                if(ed.drawmode==16)dwgfx.Print(22+((ed.drawmode-10)*tg)-4, 225-4,"P",255,255,255,false);
-                if(ed.drawmode==17)dwgfx.Print(22+((ed.drawmode-10)*tg)-12, 225-4,"^1",255,255,255,false);
-                if(ed.drawmode==18)dwgfx.Print(22+((ed.drawmode-10)*tg)-12, 225-4,"^2",255,255,255,false);
-                if(ed.drawmode==19)dwgfx.Print(22+((ed.drawmode-10)*tg)-12, 225-4,"^3",255,255,255,false);
-
-                fillboxabs(dwgfx, 4+(0*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(0*tg)-4, 225-4, "R",164,164,164,false);
-                fillboxabs(dwgfx, 4+(1*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(1*tg)-4, 225-4, "T",164,164,164,false);
-                fillboxabs(dwgfx, 4+(2*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(2*tg)-4, 225-4, "Y",164,164,164,false);
-                fillboxabs(dwgfx, 4+(3*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(3*tg)-4, 225-4, "U",164,164,164,false);
-                fillboxabs(dwgfx, 4+(4*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(4*tg)-4, 225-4, "I",164,164,164,false);
-                fillboxabs(dwgfx, 4+(5*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(5*tg)-4, 225-4, "O",164,164,164,false);
-                fillboxabs(dwgfx, 4+(6*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(6*tg)-4, 225-4, "P",164,164,164,false);
-                fillboxabs(dwgfx, 4+(7*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(7*tg)-12, 225-4, "^1",164,164,164,false);
-                fillboxabs(dwgfx, 4+(8*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(8*tg)-12, 225-4, "^2",164,164,164,false);
-                fillboxabs(dwgfx, 4+(9*tg), 209,20,20,dwgfx.getRGB(96,96,96));
-                dwgfx.Print(22+(9*tg)-12, 225-4, "^3",164,164,164,false);
+                std::string toolkeys [10] = {"R","T","Y","U","I","O","P","^1","^2","^3"};
+                for (int i = 0; i < 10; i++) {
+                    int col = 96;
+                    int col2 = 164;
+                    if ((ed.drawmode - 10) == i) {
+                        col = 200;
+                        col2 = 255;
+                    }
+                    fillboxabs(dwgfx, 4+(i*tg), 209,20,20,dwgfx.getRGB(col,col,col));
+                    dwgfx.Print((22+(i*tg)+4) - (toolkeys[i].length() * 8), 225-4, toolkeys[i],col2,col2,col2,false);
+                }
 
                 dwgfx.Print(4, 232, "2/2", 196, 196, 255 - help.glow, false);
             }
@@ -4248,6 +4233,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 break;
             case 19:
                 dwgfx.bprint(2,199, "^3: Teleporter",196, 196, 255 - help.glow);
+                break;
+            default:
+                dwgfx.bprint(2,199, "?: ???",196, 196, 255 - help.glow);
                 break;
             }
 
@@ -4400,6 +4388,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             break;
         case 19:
             dwgfx.bprint(2,2, "^3: Teleporter",196, 196, 255 - help.glow);
+            break;
+        default:
+            dwgfx.bprint(2,2, "?: ???",196, 196, 255 - help.glow);
             break;
         }
 
@@ -5188,12 +5179,20 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
                 if(ed.dmtile>=dmcap()) ed.dmtile-=dmcap();
             }
-        } else if (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_LCTRL]) {
+
+            // CONTRIBUTORS: keep this a secret :)
+            if (key.keymap[SDLK_6]) {
+                ed.drawmode=-6;
+                ed.keydelay = 6;
+            }
+            
+        } else if (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL]) {
             // Ctrl modifiers
             if (key.keymap[SDLK_F1]) {
                 ed.shiftmenu = !ed.shiftmenu;
                 ed.keydelay = 6;
             }
+
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
             // Shift modifiers
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
@@ -5230,13 +5229,16 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD]) {
                 ed.keydelay = 6;
                 if (key.keymap[SDLK_PERIOD])
-                    ed.drawmode++;
+                    if (ed.drawmode != -6)
+                        ed.drawmode++;
+                    else
+                        ed.drawmode = 0;
                 else {
                     ed.drawmode--;
-                    if (ed.drawmode < 0)
+                    if (ed.drawmode < 0 && ed.drawmode != -6)
                         ed.drawmode = 19;
                 }
-                ed.drawmode %= 20;
+                if (ed.drawmode != -6) ed.drawmode %= 20;
 
                 ed.spacemenu = 0;
                 if (ed.drawmode > 9)
@@ -6113,6 +6115,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.lclickdelay=1;
                                 map.remteleporter(ed.levx, ed.levy);
                                 map.setteleporter(ed.levx, ed.levy);
+                            }
+                            else if(ed.drawmode==-6)  // ??????
+                            {
+                                addedentity(tx, ty, 999);
+                                ed.lclickdelay=1;
                             }
                         }
                         else if(edentity[tmp].t==1)

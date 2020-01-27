@@ -1891,6 +1891,18 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
                     obj.createentity(game, (edentity[edi].p2*8), ey, 54,
                                      edentity[edi].p3);
                 break;
+            case 999: // ?
+                obj.customenemy=ed.level[curlevel].enemytype;
+                int temp;
+                temp = obj.createentity(game, ex, ey, 1, 0, 0, -10000, -10000, 10000, 10000);
+                obj.entities[temp].tile = 0;
+                obj.entities[temp].colour = 102;
+                obj.entities[temp].animate = 0;
+                obj.entities[temp].w = 464;
+                obj.entities[temp].h = 320;
+                obj.entities[temp].size = 11;
+                obj.entities[temp].harmful = false;
+                break;
             }
             }
         }
