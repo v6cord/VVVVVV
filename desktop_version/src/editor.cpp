@@ -2442,7 +2442,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map)
                 } else {
                     edentity[i].activityname = "";
                 }
-                
+
                 if (edEntityEl->Attribute("activitycolor")) {
                     edentity[i].activitycolor = edEntityEl->Attribute("activitycolor");
                 } else {
@@ -3218,7 +3218,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         ty += ed.ypos;
 
     ed.temp=edentat(tx, ty, ed.levaltstate, tower);
-    for(int i=0; i< EditorData::GetInstance().numedentities; i++) {
+
+    // Iterate backwards to make the editor draw in the same order as ingame
+    for(int i=EditorData::GetInstance().numedentities - 1; i >= 0; i--) {
         // Entity locations
         int ex = edentity[i].x;
         int ey = edentity[i].y;
