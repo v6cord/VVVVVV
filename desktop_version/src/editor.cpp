@@ -602,7 +602,7 @@ void editorclass::loadlevel( int rxi, int ryi, int altstate )
 
 int editorclass::getlevelcol(int t)
 {
-    if(level[t].tileset==0 || level[t].tileset==5)  //Station or Tower
+    if(level[t].tileset==0)  //Station
     {
         if (level[t].tilecol == -1)
             // Fix gray enemies
@@ -628,6 +628,10 @@ int editorclass::getlevelcol(int t)
     {
         return 52+level[t].tilecol;
     }
+    else if (level[t].tileset==5)   //Tower
+    {
+        return 58 + level[t].tilecol/5;
+    }
     return 0;
 }
 
@@ -645,6 +649,7 @@ int editorclass::getenemycol(int t)
     case 42:
     case 48:
     case 58:
+    case 59:
         return 6;
         break;
         //GREEN
@@ -658,6 +663,7 @@ int editorclass::getenemycol(int t)
     case 46:
     case 52:
     case 53:
+    case 61:
         return 7;
         break;
         //BLUE
@@ -680,6 +686,7 @@ int editorclass::getenemycol(int t)
     case 45:
     case 51:
     case 55:
+    case 60:
         return 9;
         break;
         //PURPLE
@@ -690,6 +697,7 @@ int editorclass::getenemycol(int t)
     case 32:
     case 36:
     case 49:
+    case 63:
         return 20;
         break;
         //CYAN
@@ -702,6 +710,7 @@ int editorclass::getenemycol(int t)
     case 41:
     case 47:
     case 54:
+    case 62:
         return 11;
         break;
         //PINK
@@ -710,6 +719,7 @@ int editorclass::getenemycol(int t)
     case 39:
     case 43:
     case 56:
+    case 64:
         return 8;
         break;
         //ORANGE

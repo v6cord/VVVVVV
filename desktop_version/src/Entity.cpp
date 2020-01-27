@@ -2790,11 +2790,11 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
           switch(entcol){
             //RED
             case 3: case 7: case 12: case 23: case 28:
-            case 34: case 42: case 48: case 58:
+            case 34: case 42: case 48: case 58: case 59:
               entities[k].colour = 6; break;
             //GREEN
             case 5: case 9: case 22: case 25: case 29:
-            case 31: case 38: case 46: case 52: case 53:
+            case 31: case 38: case 46: case 52: case 53: case 61:
               entities[k].colour = 7; break;
             //BLUE
             case 1: case 6: case 14: case 27: case 33:
@@ -2802,18 +2802,18 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
               entities[k].colour = 12; break;
             //YELLOW
             case 4: case 17: case 24: case 30: case 37:
-            case 45: case 51: case 55:
+            case 45: case 51: case 55: case 60:
               entities[k].colour = 9; break;
             //PURPLE
             case 2: case 11: case 15: case 19: case 32:
-            case 36: case 49:
+            case 36: case 49: case 63:
               entities[k].colour = 20; break;
             //CYAN
             case 8: case 10: case 13: case 18: case 26:
-            case 35: case 41: case 47: case 54:
+            case 35: case 41: case 47: case 54: case 62:
               entities[k].colour = 11; break;
             //PINK
-            case 16: case 20: case 39: case 43: case 56:
+            case 16: case 20: case 39: case 43: case 56: case 64:
               entities[k].colour = 8; break;
             //ORANGE
             case 21: case 40:
