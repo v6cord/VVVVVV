@@ -2407,6 +2407,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
                 trialEl->QueryIntAttribute("startf",   &temp.startf   );
                 trialEl->QueryIntAttribute("par",      &temp.par      );
                 trialEl->QueryIntAttribute("trinkets", &temp.trinkets );
+                trialEl->QueryIntAttribute("music",    &temp.music );
                 if(trialEl->GetText() != NULL)
                 {
                     temp.name = std::string(trialEl->GetText()) ;

@@ -27,6 +27,7 @@ struct customtrial {
     int startf;
     int par;
     int trinkets;
+    int music;
     std::string name;
 };
 
