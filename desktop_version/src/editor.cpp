@@ -4106,7 +4106,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
                 dwgfx.Print(4, 232, "1/2", 196, 196, 255 - help.glow, false);
             } else {
-                for(int i=0; i<9; i++) 
+                for(int i=0; i<10; i++) 
                     FillRect(dwgfx.backBuffer, 4+(i*tg), 209,20,20,dwgfx.getRGB(32,32,32));
                 FillRect(dwgfx.backBuffer, 4+((ed.drawmode-10)*tg), 209,20,20,dwgfx.getRGB(64,64,64));
                 //10:
@@ -4171,6 +4171,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.Print(22+(7*tg)-4, 225-4, "F",164,164,164,false);
                 fillboxabs(dwgfx, 4+(8*tg), 209,20,20,dwgfx.getRGB(96,96,96));
                 dwgfx.Print(22+(8*tg)-4, 225-4, "G",164,164,164,false);
+                fillboxabs(dwgfx, 4+(9*tg), 209,20,20,dwgfx.getRGB(96,96,96));
+                dwgfx.Print(22+(9*tg)-4, 225-4, "H",164,164,164,false);
 
                 dwgfx.Print(4, 232, "2/2", 196, 196, 255 - help.glow, false);
             }
