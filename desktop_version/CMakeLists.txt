@@ -32,6 +32,25 @@ ENDIF()
 
 PROJECT(VVVVVV-CE)
 
+find_package(Git)
+
+SET(GITREV_BARE_FILE git-rev.h)
+SET(GITREV_BARE_TMP git-rev-tmp.h)
+SET(GITREV_FILE ${CMAKE_BINARY_DIR}/${GITREV_BARE_FILE})
+SET(GITREV_TMP ${CMAKE_BINARY_DIR}/${GITREV_BARE_TMP})
+
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${GITREV_TMP}
+    COMMAND ${CMAKE_COMMAND} -E echo_append "#define GIT_BRANCH_RAW " > ${GITREV_TMP}
+    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD >> ${GITREV_TMP}
+    COMMAND ${CMAKE_COMMAND} -E echo_append "#define GIT_HASH_RAW " >> ${GITREV_TMP}
+    COMMAND ${GIT_EXECUTABLE} describe --always --dirty --abbrev=40 --match="NoTagWithThisName" >> ${GITREV_TMP}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${GITREV_TMP} ${GITREV_FILE}
+    COMMAND ${CMAKE_COMMAND} -E remove ${GITREV_TMP}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    VERBATIM
+)
+
 IF(APPLE)
 	MESSAGE(STATUS "Using macOS SDK at ${CMAKE_OSX_SYSROOT}")
 ENDIF()
@@ -88,6 +107,7 @@ INCLUDE_DIRECTORIES(
 	../third_party/physfs
 	../third_party/lodepng
 	../third_party/utfcpp/source
+        ${CMAKE_BINARY_DIR}
 )
 include(sdl2-config OPTIONAL)
 
@@ -129,6 +149,7 @@ SET(VVV_SRC
 	src/GOGNetwork.c
         ${CMAKE_BINARY_DIR}/vce.zip.c
 	src/Utilities.cpp
+        ${GITREV_TMP}
 )
 SET(XML_SRC
 	../third_party/tinyxml/tinystr.cpp

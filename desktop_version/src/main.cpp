@@ -26,8 +26,13 @@
 #include "FileSystemUtils.h"
 #include "Network.h"
 
+#include "git-rev.h"
+
 #include <stdio.h>
 #include <string.h>
+
+#define STRINGIFY_UNEXPANDED(s) #s
+#define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
 
 scriptclass script;
 growing_vector<edentities> edentity;
@@ -58,6 +63,12 @@ int main(int argc, char *argv[])
     );
 
     for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "--version") == 0) {
+            puts("VVVVVV-CE");
+            puts("Version c1.0");
+            puts("Built from commit " STRINGIFY(GIT_HASH_RAW));
+            return 0;
+        }
         if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
             if (i + 1 < argc) {
                 startinplaytest = true;
