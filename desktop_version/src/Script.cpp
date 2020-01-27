@@ -696,9 +696,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "iftrial")
 			{
 				if (game.intimetrial) {
-					if (words[2] != "")
-					{
-						if (game.currenttrial == ss_toi(words[1]))
+					if (words[2] != "") {
+						if (game.currenttrial == ss_toi(words[1])) {
 							call("custom_"+words[2]);
 							position--;
 						}
