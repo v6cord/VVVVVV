@@ -3261,6 +3261,23 @@ void Graphics::drawtele(int x, int y, int t, int c, UtilityClass& help)
 	BlitSurfaceColoured(tele[t], NULL, backBuffer, &telerect, ct);
 }
 
+void Graphics::drawtelepart(int x, int y, int t, int c, UtilityClass& help)
+{
+	setcolreal(getRGB(16,16,16));
+
+	SDL_Rect telerect;
+	setRect(telerect, x , y, 16, 16 );
+	SDL_Rect telerect2;
+	setRect(telerect2, 40, 40, 16, 16 );
+	BlitSurfaceColoured(tele[0], &telerect2, backBuffer, &telerect, ct);
+
+	setcol(c, help);
+	if (t > 9) t = 8;
+	if (t < 0) t = 0;
+
+	BlitSurfaceColoured(tele[t], &telerect2, backBuffer, &telerect, ct);
+}
+
 Uint32 Graphics::getRGB(Uint8 r, Uint8 g, Uint8 b)
 {
 	return SDL_MapRGB(backBuffer->format, b, g, r);

@@ -4122,6 +4122,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.drawhuetile(tx+8, ty,   48, 8);
                 dwgfx.drawhuetile(tx,   ty+8, 48, 8);
                 dwgfx.drawhuetile(tx+8, ty+8, 48, 8);
+                //19:
+                tx+=tg;
+                dwgfx.drawtelepart(tx, ty, 1, 100, help);
 
                 dwgfx.Print(4, 232, "2/2", 196, 196, 255 - help.glow, false);
             }

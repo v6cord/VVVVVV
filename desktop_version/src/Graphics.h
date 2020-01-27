@@ -144,6 +144,8 @@ public:
 
 	void drawtele(int x, int y, int t, int c, UtilityClass& help);
 
+	void drawtelepart(int x, int y, int t, int c, UtilityClass& help);
+
 	Uint32 getRGB(Uint8 r, Uint8 g, Uint8 b);
 
 	Uint32 getBGR(Uint8 r, Uint8 g, Uint8 b);
