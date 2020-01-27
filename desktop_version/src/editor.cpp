@@ -4542,13 +4542,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     if (key.keymap[SDLK_LEFTBRACKET] && (ed.keydelay==0)) {
         ed.keydelay = 6;
         ed.entspeed--;
-        if (ed.entspeed < -(speedcap + 4)) ed.entspeed = (speedcap - 4);
+        if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
     }
 
     if (key.keymap[SDLK_RIGHTBRACKET] && (ed.keydelay==0)) {
         ed.keydelay = 6;
         ed.entspeed++;
-        if (ed.entspeed > (speedcap - 4)) ed.entspeed = -(speedcap + 4);
+        if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
     }*/
 
     int tower = ed.get_tower(ed.levx, ed.levy);
