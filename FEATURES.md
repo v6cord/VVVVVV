@@ -29,7 +29,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 
 - `ifnotflag()` - an inverted version of `ifflag()`
 
-- `drawtext(x,y,r,g,b,center,border)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` and `border` should be either 0 or 1, or "true" or "false"
+- `drawtext(x,y,r,g,b,center,type)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` is `0`/`1`/`true`/`false`, `type` can be 0 for normal text, 1 for bordered text and 2 for big text; use an optional eighth argument for text scale (default is 2)
 
 - `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame - r,g,b is 0-255
 
