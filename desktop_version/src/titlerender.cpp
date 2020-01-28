@@ -306,6 +306,8 @@ growing_vector<std::string> changelog = {
     "  edentities",
     "- hidecoincounter()",
     "- showcoincounter()",
+    "- Raised the number of flags to 1000,",
+    "  now they go from 0-999",
 
 };
 
