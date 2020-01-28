@@ -409,6 +409,7 @@ public:
     bool incustomtrial = false;
     int currenttrial = 0;
 
+    bool nocoincounter = false;
 };
 
 #endif /* GAME_H */
