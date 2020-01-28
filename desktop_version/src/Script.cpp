@@ -2520,6 +2520,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				if (!map.invincibility && game.deathseq <= 0)
 					game.deathseq = 30;
 			}
+			else if (words[0] == "hidecoincounter")
+			{
+				game.nocoincounter = true;
+			}
+			else if (words[0] == "showcoincounter")
+			{
+				game.nocoincounter = true;
+			}
 			else if (words[0] == "teleportscript")
 			{
 				game.teleportscript = words[1];
@@ -4732,6 +4740,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	obj.coincollect.clear();
 	obj.coincollect.resize(100);
+	game.nocoincounter = false;
 
 	if (obj.getplayer() > -1){
 		obj.entities[obj.getplayer()].tile = 0;

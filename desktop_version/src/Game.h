@@ -420,6 +420,7 @@ public:
     int currenttrial = 0;
 
     growing_vector<customtrialrecord> customtrialstats;
+    bool nocoincounter = false;
 };
 
 #endif /* GAME_H */

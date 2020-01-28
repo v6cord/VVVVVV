@@ -234,3 +234,7 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - Enemies in the unpatterned Space Station color are now gray
 
 - Added sub-tile positioning of edentities
+
+- `hidecoincounter()`
+
+- `showcoincounter()`

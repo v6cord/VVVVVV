@@ -304,6 +304,8 @@ growing_vector<std::string> changelog = {
     "  Station color are now gray",
     "- Added sub-tile positioning of",
     "  edentities",
+    "- hidecoincounter()",
+    "- showcoincounter()",
 
 };
 
@@ -1987,7 +1989,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         }
     }
 
-    if (map.customcoins > 0) {
+    if (map.customcoins > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
         if (game.coins == map.customcoins) {
             dwgfx.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
@@ -3288,7 +3290,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         }
     }
 
-    if (map.customcoins > 0) {
+    if (map.customcoins > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
         if (game.coins == map.customcoins) {
             dwgfx.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
