@@ -218,6 +218,8 @@ void scriptclass::load(std::string t)
               squeakmode=0;
             }else if(words[1]=="off"){
               squeakmode=1;
+            }else{
+              add(script.customscript[i]);
             }
           }else if(words[0] == "delay"){
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
