@@ -2647,7 +2647,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
     //saveconvertor();
 }
 
-void editorclass::save(std::string& _path, mapclass& map)
+void editorclass::save(std::string& _path, mapclass& map, Game& game)
 {
     TiXmlDocument doc;
     TiXmlElement* msg;
@@ -2840,6 +2840,23 @@ void editorclass::save(std::string& _path, mapclass& map)
         teleporterElement->SetAttribute( "x", map.teleporters[i].x);
         teleporterElement->SetAttribute( "y", map.teleporters[i].y);
         msg->LinkEndChild( teleporterElement );
+    }
+
+    data->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "timetrials" );
+    for(int i = 0; i < (int)game.customtrials.size(); i++) {
+        TiXmlElement *trialElement = new TiXmlElement( "trial" );
+        trialElement->SetAttribute( "roomx",    game.customtrials[i].roomx   );
+        trialElement->SetAttribute( "roomy",    game.customtrials[i].roomy   );
+        trialElement->SetAttribute( "startx",   game.customtrials[i].startx  );
+        trialElement->SetAttribute( "starty",   game.customtrials[i].starty  );
+        trialElement->SetAttribute( "startf",   game.customtrials[i].startf  );
+        trialElement->SetAttribute( "par",      game.customtrials[i].par     );
+        trialElement->SetAttribute( "trinkets", game.customtrials[i].trinkets);
+        trialElement->SetAttribute( "music",    game.customtrials[i].music   );
+        trialElement->LinkEndChild( new TiXmlText( game.customtrials[i].name.c_str() )) ;
+        msg->LinkEndChild( trialElement );
     }
 
     data->LinkEndChild( msg );
@@ -4910,7 +4927,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.notedelay = 45;
                 break;
             case TEXT_SAVE:
-                ed.save(filename, map);
+                ed.save(filename, map, game);
                 ed.note="[ Saved map: " + ed.filename+".vvvvvv ]";
                 ed.notedelay=45;
 

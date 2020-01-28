@@ -230,7 +230,7 @@ public:
     int tower_row(int rx, int ry);
 
     void load(std::string& _path, Graphics& dwgfx, mapclass& map, Game& game);
-    void save(std::string& _path, mapclass& map);
+    void save(std::string& _path, mapclass& map, Game& game);
     void generatecustomminimap(Graphics& dwgfx, mapclass& map);
     int toweredgetile(int x, int y);
     int edgetile(int x, int y);
