@@ -4725,7 +4725,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	obj.trophytype = 0;
 	obj.altstates = 0;
 
-	for (i = 0; i < 100; i++)
+	for (size_t i = 0; i < obj.flags.size(); i++)
 	{
 		obj.flags[i] = false;
 	}
