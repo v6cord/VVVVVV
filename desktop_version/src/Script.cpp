@@ -931,7 +931,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             }
       if (words[0] == "flag")
 			{
-				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){
+				if(ss_toi(words[1])>=0 && ss_toi(words[1])<1000){
 					if(words[2]=="on"){
 						obj.changeflag(ss_toi(words[1]),1);
 					}else if(words[2]=="off"){

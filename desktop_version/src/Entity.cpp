@@ -74,7 +74,7 @@ void entityclass::init()
       customcrewmoods[i]=1;
     }
 
-    flags.resize(100);
+    flags.resize(1000);
     blocks.resize(500);
     entities.resize(200);
     linecrosskludge.resize(100);
