@@ -931,7 +931,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             }
       if (words[0] == "flag")
 			{
-				if(ss_toi(words[1])>=0 && ss_toi(words[1])<100){
+				if(ss_toi(words[1])>=0 && ss_toi(words[1])<1000){
 					if(words[2]=="on"){
 						obj.changeflag(ss_toi(words[1]),1);
 					}else if(words[2]=="off"){
@@ -4583,6 +4583,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	game.roomchange = false;
 	game.roomx = 0;
 	game.roomy = 0;
+	game.prevroomx = 0;
+	game.prevroomy = 0;
 	game.teleport_to_new_area = false;
 	game.teleport_to_x = 0;
 	game.teleport_to_y = 0;
@@ -4723,7 +4725,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	obj.trophytype = 0;
 	obj.altstates = 0;
 
-	for (i = 0; i < 100; i++)
+	for (size_t i = 0; i < obj.flags.size(); i++)
 	{
 		obj.flags[i] = false;
 	}
