@@ -1379,33 +1379,63 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             if (trinkets >= timetrialshinytarget) timetrialrank++;
             if (deathcounts == 0) timetrialrank++;
 
-            if (timetrialresulttime < besttimes[timetriallevel] || besttimes[timetriallevel]==-1)
-            {
-                besttimes[timetriallevel] = timetrialresulttime;
-            }
-            if (trinkets > besttrinkets[timetriallevel] || besttrinkets[timetriallevel]==-1)
-            {
-                besttrinkets[timetriallevel] = trinkets;
-            }
-            if (deathcounts < bestlives[timetriallevel] || bestlives[timetriallevel]==-1)
-            {
-                bestlives[timetriallevel] = deathcounts;
-            }
-            if (timetrialrank > bestrank[timetriallevel] || bestrank[timetriallevel]==-1)
-            {
-                bestrank[timetriallevel] = timetrialrank;
-								if(timetrialrank>=3){
-									if(timetriallevel==0) NETWORK_unlockAchievement("vvvvvvtimetrial_station1_fixed");
-									if(timetriallevel==1) NETWORK_unlockAchievement("vvvvvvtimetrial_lab_fixed");
-									if(timetriallevel==2) NETWORK_unlockAchievement("vvvvvvtimetrial_tower_fixed");
-									if(timetriallevel==3) NETWORK_unlockAchievement("vvvvvvtimetrial_station2_fixed");
-									if(timetriallevel==4) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
-									if(timetriallevel==5) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
-								}
-            }
+            
 
-            if (!incustomtrial) savestats(map, dwgfx, music);
-
+            if (incustomtrial) {
+                if ((currenttrial + 1) > (int)customtrialstats.size()) {
+                    customtrialrecord temp;
+                    temp.attempted = false;
+                    temp.lives = 0;
+                    temp.rank = 0;
+                    temp.time = 0;
+                    temp.trinkets = 0;
+                    customtrialstats[currenttrial] = temp;
+                }
+                if (timetrialresulttime < customtrialstats[currenttrial].time || !customtrialstats[currenttrial].attempted)
+                {
+                    customtrialstats[currenttrial].time = timetrialresulttime;
+                }
+                if (trinkets > customtrialstats[currenttrial].trinkets || !customtrialstats[currenttrial].attempted)
+                {
+                    customtrialstats[currenttrial].trinkets = trinkets;
+                }
+                if (deathcounts < customtrialstats[currenttrial].lives || !customtrialstats[currenttrial].attempted)
+                {
+                    customtrialstats[currenttrial].lives = deathcounts;
+                }
+                if (timetrialrank > customtrialstats[currenttrial].rank || !customtrialstats[currenttrial].attempted)
+                {
+                    customtrialstats[currenttrial].rank = timetrialrank;
+                }
+                customtrialstats[currenttrial].attempted = true;
+                customsavetrialsave(ed.ListOfMetaData[playcustomlevel].filename);
+            } else {
+                if (timetrialresulttime < besttimes[timetriallevel] || besttimes[timetriallevel]==-1)
+                {
+                    besttimes[timetriallevel] = timetrialresulttime;
+                }
+                if (trinkets > besttrinkets[timetriallevel] || besttrinkets[timetriallevel]==-1)
+                {
+                    besttrinkets[timetriallevel] = trinkets;
+                }
+                if (deathcounts < bestlives[timetriallevel] || bestlives[timetriallevel]==-1)
+                {
+                    bestlives[timetriallevel] = deathcounts;
+                }
+                if (timetrialrank > bestrank[timetriallevel] || bestrank[timetriallevel]==-1)
+                {
+                    bestrank[timetriallevel] = timetrialrank;
+    				if(timetrialrank>=3){
+    					if(timetriallevel==0) NETWORK_unlockAchievement("vvvvvvtimetrial_station1_fixed");
+    					if(timetriallevel==1) NETWORK_unlockAchievement("vvvvvvtimetrial_lab_fixed");
+    					if(timetriallevel==2) NETWORK_unlockAchievement("vvvvvvtimetrial_tower_fixed");
+    					if(timetriallevel==3) NETWORK_unlockAchievement("vvvvvvtimetrial_station2_fixed");
+    					if(timetriallevel==4) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
+    					if(timetriallevel==5) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
+    				}
+                }
+                savestats(map, dwgfx, music);
+            }
             dwgfx.fademode = 2;
             music.fadeout();
             state++;
@@ -5186,7 +5216,96 @@ void Game::loadquick( mapclass& map, entityclass& obj, musicclass& music )
 
 }
 
-void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx )
+void Game::customsavetrialsave(std::string savfile)
+{
+    TiXmlDocument doc;
+    TiXmlElement* msg;
+    TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+    doc.LinkEndChild( decl );
+
+    TiXmlElement * root = new TiXmlElement( "Save" );
+    doc.LinkEndChild( root );
+
+    TiXmlComment * comment = new TiXmlComment();
+    comment->SetValue(" Save file " );
+    root->LinkEndChild( comment );
+
+    TiXmlElement * msgs = new TiXmlElement( "Data" );
+    root->LinkEndChild( msgs );
+
+    msg = new TiXmlElement( "timetrials" );
+    for (std::size_t i = 0; i <  customtrialstats.size(); i++) {
+
+        TiXmlElement *trialEl = new TiXmlElement( "trial" );
+        trialEl->SetAttribute( "time",      customtrialstats[i].time     );
+        trialEl->SetAttribute( "lives",     customtrialstats[i].lives    );
+        trialEl->SetAttribute( "trinkets",  customtrialstats[i].trinkets );
+        trialEl->SetAttribute( "rank",      customtrialstats[i].rank     );
+        trialEl->SetAttribute( "attempted", customtrialstats[i].attempted);
+        msg->LinkEndChild( trialEl );
+    }
+    msgs->LinkEndChild(msg);
+
+
+    std::string levelfile = savfile.substr(7);
+    if(FILESYSTEM_saveTiXmlDocument(("saves/"+levelfile+".trial").c_str(), &doc))
+    {
+        printf("Trials saved\n");
+    }
+    else
+    {
+        printf("Couldn't save trial stats!\n");
+        printf("Failed: %s%s%s", saveFilePath.c_str(), levelfile.c_str(), ".trial");
+    }
+}
+
+void Game::customloadtrialsave(std::string savfile)
+{
+    std::string levelfile = savfile.substr(7);
+    TiXmlDocument doc;
+    if (!FILESYSTEM_loadTiXmlDocument(("saves/"+levelfile+".trial").c_str(), &doc)) return;
+
+    TiXmlHandle hDoc(&doc);
+    TiXmlElement* pElem;
+    TiXmlHandle hRoot(0);
+
+
+    {
+        pElem=hDoc.FirstChildElement().Element();
+        if (!pElem)
+        {
+            printf("Time trial save not found\n");
+        }
+
+        hRoot=TiXmlHandle(pElem);
+    }
+
+    customtrialstats.clear();
+
+    for( pElem = hRoot.FirstChild( "Data" ).FirstChild().Element(); pElem; pElem=pElem->NextSiblingElement())
+    {
+        std::string pKey(pElem->Value());
+        if (pKey == "timetrials") {
+            for (TiXmlElement* trialEl = pElem->FirstChildElement(); trialEl; trialEl = trialEl->NextSiblingElement()) {
+                customtrialrecord temp;
+                trialEl->QueryIntAttribute("time",      &temp.time     );
+                trialEl->QueryIntAttribute("lives",     &temp.lives    );
+                trialEl->QueryIntAttribute("trinkets",  &temp.trinkets );
+                trialEl->QueryIntAttribute("rank",      &temp.rank     );
+                trialEl->QueryIntAttribute("attempted", &temp.attempted);
+                if (temp.attempted == 0) {
+                    temp.attempted = false;
+                } else {
+                    temp.attempted = true;
+                }
+                customtrialstats.push_back(temp);
+            }
+        }
+    }
+}
+
+
+void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx, Game& game)
 {
     if (cliplaytest) {
         savex = playx;

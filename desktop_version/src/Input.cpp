@@ -445,7 +445,9 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 	                  //game.mainmenu = 24;
                       //dwgfx.fademode = 2;
                       music.playef(11, 10);
+                      game.customtrialstats.clear();
                       ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map, game);
+                      game.customloadtrialsave(ed.ListOfMetaData[game.playcustomlevel].filename);
                       game.createmenu("loadcustomtrial");
                         for (int i = 0; i < (int)game.customtrials.size(); i++) {
                             std::string sl = game.customtrials[i].name;
@@ -1788,7 +1790,12 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         //back
                         music.playef(11, 10);
                         music.play(6);
-                        game.createmenu("play");
+                        if (game.incustomtrial) {
+                            game.incustomtrial = false;
+                            game.createmenu("levellist");
+                        } else {
+                            game.createmenu("play");
+                        }
                         map.nexttowercolour();
                     }
                     else if (game.currentmenuoption == 1)
@@ -1822,6 +1829,11 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         else if (game.timetriallevel == 5)    //final
                         {
                             game.mainmenu = 8;
+                            dwgfx.fademode = 2;
+                        }
+                        else
+                        {
+                            game.mainmenu = 24;
                             dwgfx.fademode = 2;
                         }
                     }

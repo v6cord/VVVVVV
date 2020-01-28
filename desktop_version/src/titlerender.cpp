@@ -384,15 +384,35 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             } else {
                 game.timetrialpar = game.customtrials[game.currentmenuoption].par;
                 dwgfx.bigprint( -1, 30, game.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
-                dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
-                dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
-                dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                dwgfx.Print( 110, 65, "???", tr, tg, tb);
-                dwgfx.Print( 110, 75, "???", tr, tg, tb);
-                dwgfx.Print( 110, 85, "???", tr, tg, tb);
-                dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(help), tr, tg, tb);
-                dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);
-                dwgfx.bigprint( 275, 82, "?", 225, 225, 225);
+                if ((game.currentmenuoption + 1) > (int)game.customtrialstats.size()) {
+                    dwgfx.Print( -1, 75, "Not yet attempted", tr, tg, tb, true);
+                } else if (!game.customtrialstats[game.currentmenuoption].attempted) {
+                    dwgfx.Print( -1, 75, "Not yet attempted", tr, tg, tb, true);
+                } else {
+                    dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
+                    dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
+                    dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
+                    dwgfx.Print( 110, 65, game.timetstring(game.customtrialstats[game.currentmenuoption].time, help), tr, tg, tb);
+                    dwgfx.Print( 110, 75, help.String(game.customtrialstats[game.currentmenuoption].trinkets)+"/" + help.String(game.customtrials[game.currentmenuoption].trinkets), tr, tg, tb);
+                    dwgfx.Print( 110, 85, help.String(game.customtrialstats[game.currentmenuoption].lives), tr, tg, tb);
+                    dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(help), tr, tg, tb);
+                    dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);
+                    switch(game.customtrialstats[game.currentmenuoption].rank)
+                    {
+                    case 0:
+                        dwgfx.bigprint( 275, 82, "B", 225, 225, 225);
+                        break;
+                    case 1:
+                        dwgfx.bigprint( 275, 82, "A", 225, 225, 225);
+                        break;
+                    case 2:
+                        dwgfx.bigprint( 275, 82, "S", 225, 225, 225);
+                        break;
+                    case 3:
+                        dwgfx.bigprint( 275, 82, "V", 225, 225, 225);
+                        break;
+                    }
+                }
             }
         }
         else if (game.currentmenuname == "changelog")

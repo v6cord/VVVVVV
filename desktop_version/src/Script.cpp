@@ -4338,7 +4338,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
     map.customy = 100;
 
     game.customstart(obj, music);
-		game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
+		game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx, game);
     game.jumpheld = true;
     game.gravitycontrol = game.savegc;
 
@@ -4388,7 +4388,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 
     game.customstart(obj, music); // I honestly have no idea what this does
 	// Actually, the level is already loaded! This is just to be safe...
-	game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
+	game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx, game);
     game.jumpheld = true;
     game.gravitycontrol = game.savegc;
 

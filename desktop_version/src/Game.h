@@ -31,6 +31,14 @@ struct customtrial {
     std::string name;
 };
 
+struct customtrialrecord {
+    int time = 0;
+    int trinkets = 0;
+    int lives = 0;
+    int rank = 0;
+    int attempted = false;
+};
+
 class Game
 {
 public:
@@ -123,7 +131,9 @@ public:
 
     void deathsequence(mapclass& map, entityclass& obj, musicclass& music);
 
-    void customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx);
+    void customloadtrialsave(std::string savfile);
+    void customsavetrialsave(std::string savfile);
+    void customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx, Game& game);
     void loadquick(mapclass& map, entityclass& obj, musicclass& music);
 
     void loadsummary(mapclass& map, UtilityClass& help);
@@ -409,6 +419,7 @@ public:
     bool incustomtrial = false;
     int currenttrial = 0;
 
+    growing_vector<customtrialrecord> customtrialstats;
 };
 
 #endif /* GAME_H */
