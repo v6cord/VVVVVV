@@ -304,6 +304,8 @@ growing_vector<std::string> changelog = {
     "  Station color are now gray",
     "- Added sub-tile positioning of",
     "  edentities",
+    "- hidecoincounter()",
+    "- showcoincounter()",
 
 };
 
