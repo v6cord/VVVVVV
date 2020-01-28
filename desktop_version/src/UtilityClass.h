@@ -83,6 +83,8 @@ public:
 
     void updateglow();
 
+    std::string getmusicname(int num);
+
     int glow = 0;
     int slowsine = 0;
     int glowdir = 0;

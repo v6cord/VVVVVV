@@ -299,13 +299,22 @@ public:
     int entcycle;
 
     bool xmod, zmod, spacemod, warpmod, textentry = false;
-    bool titlemod, creatormod, desc1mod, desc2mod, desc3mod, websitemod = false;
+    bool titlemod = false;
+    bool trialnamemod = false;
+    bool creatormod = false;
+    bool desc1mod = false;
+    bool desc2mod = false;
+    bool desc3mod = false;
+    bool websitemod = false;
+
+    int edtrial = 0;
 
     int roomnamehide = 0;
     bool saveandquit = false;
     bool shiftmenu, shiftkey = false;
     int spacemenu = 0;
     bool settingsmod, settingskey = false;
+    bool trialmod = false;
     int warpent = 0;
     bool updatetiles, changeroom = false;
     int deletekeyheld = 0;

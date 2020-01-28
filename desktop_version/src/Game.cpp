@@ -7396,18 +7396,43 @@ void Game::createmenu( std::string t )
         menuoptionsactive[0] = true;
         menuoptions[1] = "edit scripts";
         menuoptionsactive[1] = true;
-        menuoptions[2] = "change music";
+        menuoptions[2] = "time trials";
         menuoptionsactive[2] = true;
-        menuoptions[3] = "load level";
+        menuoptions[3] = "change music";
         menuoptionsactive[3] = true;
-        menuoptions[4] = "save level";
+        menuoptions[4] = "load level";
         menuoptionsactive[4] = true;
-        menuoptions[5] = "quit to main menu";
+        menuoptions[5] = "save level";
         menuoptionsactive[5] = true;
+        menuoptions[6] = "quit to main menu";
+        menuoptionsactive[6] = true;
 
-        nummenuoptions = 6;
+        nummenuoptions = 7;
         menuxoff = -50;
         menuyoff = -20;
+    }
+    else if (t == "ed_trials")
+    {
+        nummenuoptions = 0;
+    }
+    else if (t == "ed_edit_trial")
+    {
+        menuoptions[0] = "trial name";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "starting position";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "trial music";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "trinket count";
+        menuoptionsactive[3] = true;
+        menuoptions[4] = "par time";
+        menuoptionsactive[4] = true;
+        menuoptions[5] = "return to menu";
+        menuoptionsactive[5] = true;
+        
+        menuxoff = -50;
+        menuyoff = -20;
+        nummenuoptions = 6;
     }
     else if (t == "ed_desc")
     {

@@ -20,15 +20,15 @@ struct scriptmarker {
 };
 
 struct customtrial {
-    int roomx;
-    int roomy;
-    int startx;
-    int starty;
-    int startf;
-    int par;
-    int trinkets;
-    int music;
-    std::string name;
+    int roomx = 0;
+    int roomy = 0;
+    int startx = 0;
+    int starty = 0;
+    int startf = 0;
+    int par = 0;
+    int trinkets = 0;
+    int music = 0;
+    std::string name = "";
 };
 
 struct customtrialrecord {

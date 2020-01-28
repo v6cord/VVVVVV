@@ -215,6 +215,7 @@ void editorclass::reset()
     entcycle = 0;
     lastentcycle = 0;
 
+    trialnamemod=false;
     titlemod=false;
     creatormod=false;
     desc1mod=false;
@@ -222,6 +223,7 @@ void editorclass::reset()
     desc3mod=false;
     websitemod=false;
     settingsmod=false;
+    trialmod=false;
     warpmod=false; //Two step process
     warpent=-1;
 
@@ -3943,6 +3945,58 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         {
             dwgfx.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
         }
+        else if (game.currentmenuname == "ed_edit_trial") {
+            customtrial ctrial = game.customtrials[ed.edtrial];
+
+            if(ed.trialnamemod)
+            {
+                if(ed.entframe<2)
+                {
+                    dwgfx.bigprint( -1, 35, key.keybuffer+"_", tr, tg, tb, true);
+                }
+                else
+                {
+                    dwgfx.bigprint( -1, 35, key.keybuffer+" ", tr, tg, tb, true);
+                }
+            } else {
+                dwgfx.bigprint( -1, 35, ctrial.name, tr, tg, tb, true);
+            }
+            game.timetrialpar = ctrial.par;
+            dwgfx.Print( 16, 65,  "MUSIC      " + help.getmusicname(ctrial.music), tr, tg, tb);
+            if (ed.trialmod && (game.currentmenuoption == 3))
+                dwgfx.Print( 16, 75,  "TRINKETS   < " + help.number(ctrial.trinkets) + " >", tr, tg, tb);
+            else
+                dwgfx.Print( 16, 75,  "TRINKETS   " + help.number(ctrial.trinkets), tr, tg, tb);
+            if (ed.trialmod && (game.currentmenuoption == 4))
+                dwgfx.Print( 16, 85,  "TIME       < " + game.partimestring(help) + " >", tr, tg, tb);
+            else
+                dwgfx.Print( 16, 85,  "TIME       " + game.partimestring(help), tr, tg, tb);
+        }
+        else if (game.currentmenuname == "ed_trials")
+        {
+            dwgfx.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
+            for (int i = 0; i < (int)game.customtrials.size(); i++) {
+                std::string sl = game.customtrials[i].name;
+                if (game.currentmenuoption == i) {
+                    std::transform(sl.begin(), sl.end(), sl.begin(), ::toupper);
+                    sl = "[ " + sl + " ]";
+                } else {
+                    std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);
+                    sl = "  " + sl + "  ";
+                }
+                dwgfx.Print(-1, 75 + (i * 16), sl, tr,tg,tb,true);
+            }
+            if (game.currentmenuoption == (int)game.customtrials.size()) {
+                dwgfx.Print(-1, 75 + ((int)game.customtrials.size() * 16), "[ ADD NEW TRIAL ]", tr,tg,tb,true);
+            } else {
+                dwgfx.Print(-1, 75 + ((int)game.customtrials.size() * 16), "  add new trial  ", tr,tg,tb,true);
+            }
+            if (game.currentmenuoption == (int)game.customtrials.size() + 1) {
+                dwgfx.Print(-1, 75 + (((int)game.customtrials.size() + 1) * 16), "[ BACK TO MENU ]", tr,tg,tb,true);
+            } else {
+                dwgfx.Print(-1, 75 + (((int)game.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
+            }
+        }
         else if (game.currentmenuname=="ed_desc")
         {
             if(ed.titlemod)
@@ -4602,6 +4656,7 @@ void editorlogic( KeyPoll& key, Graphics& dwgfx, Game& game, entityclass& obj, m
         music.play(6);
         map.nexttowercolour();
         ed.settingsmod=false;
+        ed.trialmod=false;
         dwgfx.backgrounddrawn=false;
         game.createmenu("mainmenu");
     }
@@ -4668,15 +4723,22 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             key.disabletextentry();
             ed.textentry=false;
             ed.titlemod=false;
+            ed.trialnamemod=false;
             ed.desc1mod=false;
             ed.desc2mod=false;
             ed.desc3mod=false;
             ed.websitemod=false;
             ed.creatormod=false;
+            if (ed.activitytextmod || ed.activitycolormod || ed.activitynamemod) {
+                ed.activitytextmod=false;
+                ed.activitycolormod=false;
+                ed.activitynamemod=false;
+                removeedentity(ed.scripttextent);
+            }
             if(ed.scripttextmod)
             {
                 ed.scripttextmod=false;
-                removeedentity(ed.scripttextmod);
+                removeedentity(ed.scripttextent);
             }
 
             ed.shiftmenu=false;
@@ -4690,6 +4752,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         {
 
             ed.settingsmod=!ed.settingsmod;
+            ed.trialmod = false;
             dwgfx.backgrounddrawn=false;
 
             game.createmenu("ed_settings");
@@ -4783,6 +4846,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 {
                     ed.scripteditmod=false;
                     ed.settingsmod=false;
+                    ed.trialmod=false;
                 }
             }
         }
@@ -4959,6 +5023,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         {
             EditorData::GetInstance().title=key.keybuffer;
         }
+        else if (ed.trialnamemod) {
+            game.customtrials[ed.edtrial].name=key.keybuffer;
+        }
         else if(ed.creatormod)
         {
             EditorData::GetInstance().creator=key.keybuffer;
@@ -5027,6 +5094,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     EditorData::GetInstance().title=key.keybuffer;
                     ed.titlemod=false;
                 }
+                else if (ed.trialnamemod) {
+                    game.customtrials[ed.edtrial].name = key.keybuffer;
+                    ed.trialnamemod=false;
+                }
                 else if(ed.creatormod)
                 {
                     EditorData::GetInstance().creator=key.keybuffer;
@@ -5082,11 +5153,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         if(ed.settingsmod)
         {
             if (!game.press_action && !game.press_left && !game.press_right
-                    && !key.keymap[SDLK_UP] && !key.keymap[SDLK_DOWN]) game.jumpheld = false;
+                    && !key.keymap[SDLK_UP] && !key.keymap[SDLK_DOWN] && !key.keymap[SDLK_PAGEUP] && !key.keymap[SDLK_PAGEDOWN]) game.jumpheld = false;
             if (!game.jumpheld)
             {
                 if (game.press_action || game.press_left || game.press_right || game.press_map
-                        || key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN])
+                        || key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] || key.keymap[SDLK_PAGEUP] || key.keymap[SDLK_PAGEDOWN])
                 {
                     game.jumpheld = true;
                 }
@@ -5095,20 +5166,98 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 {
                     if (game.press_left || key.keymap[SDLK_UP])
                     {
-                        game.currentmenuoption--;
+                        if (!ed.trialmod) game.currentmenuoption--;
                     }
                     else if (game.press_right || key.keymap[SDLK_DOWN])
                     {
-                        game.currentmenuoption++;
+                        if (!ed.trialmod) game.currentmenuoption++;
                     }
                 }
 
-                if (game.currentmenuoption < 0) game.currentmenuoption = game.nummenuoptions-1;
-                if (game.currentmenuoption >= game.nummenuoptions ) game.currentmenuoption = 0;
+                if (game.currentmenuname != "ed_trials") {
+                    if (game.currentmenuoption < 0) game.currentmenuoption = game.nummenuoptions-1;
+                    if (game.currentmenuoption >= game.nummenuoptions ) game.currentmenuoption = 0;
+                } else {
+                    if (game.currentmenuoption < 0) game.currentmenuoption = (int)game.customtrials.size()+1;
+                    if (game.currentmenuoption > (int)game.customtrials.size()+1) game.currentmenuoption = 0;
+                }
 
-                if (game.press_action)
+                if (ed.trialmod) {
+                    if (game.press_action) {
+                        ed.trialmod = false;
+                        game.jumpheld = true;
+                        music.playef(11, 10);
+                    }
+                    if (game.currentmenuoption == 3) {
+                        if (game.press_left || key.keymap[SDLK_UP]) game.customtrials[ed.edtrial].trinkets--;
+                        if (game.press_right || key.keymap[SDLK_DOWN]) game.customtrials[ed.edtrial].trinkets++;
+                        if (game.customtrials[ed.edtrial].trinkets > 99) game.customtrials[ed.edtrial].trinkets = 0;
+                        if (game.customtrials[ed.edtrial].trinkets < 0) game.customtrials[ed.edtrial].trinkets = 99;
+                    }
+                    if (game.currentmenuoption == 4) {
+                        if (game.press_left || key.keymap[SDLK_UP]) game.customtrials[ed.edtrial].par--;
+                        if (game.press_right || key.keymap[SDLK_DOWN]) game.customtrials[ed.edtrial].par++;
+                        if (key.keymap[SDLK_PAGEDOWN]) game.customtrials[ed.edtrial].par += 60;
+                        if (key.keymap[SDLK_PAGEUP]) game.customtrials[ed.edtrial].par -= 60;
+                        if (game.customtrials[ed.edtrial].par > 600) game.customtrials[ed.edtrial].par = 0;
+                        if (game.customtrials[ed.edtrial].par < 0) game.customtrials[ed.edtrial].par = 600;
+                    }
+                }
+                else if (game.press_action)
                 {
-                    if (game.currentmenuname == "ed_desc")
+                    if (game.currentmenuname == "ed_trials")
+                    {
+                        if (game.currentmenuoption == (int)game.customtrials.size())
+                        {
+                            customtrial temp;
+                            temp.name = "Trial " + std::to_string(game.customtrials.size() + 1);
+                            game.customtrials.push_back(temp);
+                            ed.edtrial = (int)game.customtrials.size() - 1;
+                            music.playef(11, 10);
+                            game.createmenu("ed_edit_trial");
+                        }
+                        else if (game.currentmenuoption == (int)game.customtrials.size()+1)
+                        {
+                            music.playef(11, 10);
+                            game.createmenu("ed_settings");
+                            map.nexttowercolour();
+                        }
+                        else
+                        {
+                            ed.edtrial = game.currentmenuoption;
+                            music.playef(11, 10);
+                            game.createmenu("ed_edit_trial");
+                        }
+                    }
+                    else if (game.currentmenuname == "ed_edit_trial")
+                    {
+                        if (game.currentmenuoption == 0)
+                        {
+                            ed.textentry=true;
+                            ed.trialnamemod=true;
+                            key.enabletextentry();
+                            key.keybuffer=game.customtrials[ed.edtrial].name;
+                        }
+                        if (game.currentmenuoption == 2) {
+                            music.playef(11, 10);
+                            game.customtrials[ed.edtrial].music++;
+                            if (game.customtrials[ed.edtrial].music > 15) game.customtrials[ed.edtrial].music = 0;
+                        }
+                        if (game.currentmenuoption == 3) {
+                            music.playef(11, 10);
+                            ed.trialmod = true;
+                        }
+                        if (game.currentmenuoption == 4) {
+                            music.playef(11, 10);
+                            ed.trialmod = true;
+                        }
+                        if (game.currentmenuoption == 5) {
+                            music.playef(11, 10);
+                            game.createmenu("ed_trials");
+                            map.nexttowercolour();
+                        }
+                    }
+                    else if (game.currentmenuname == "ed_desc")
                     {
                         if (game.currentmenuoption == 0)
                         {
@@ -5172,11 +5321,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         else if (game.currentmenuoption == 2)
                         {
                             music.playef(11, 10);
+                            game.createmenu("ed_trials");
+                            map.nexttowercolour();
+                        }
+                        else if (game.currentmenuoption == 3)
+                        {
+                            music.playef(11, 10);
                             game.createmenu("ed_music");
                             map.nexttowercolour();
                             if(ed.levmusic>0) music.play(ed.levmusic);
                         }
-                        else if (game.currentmenuoption == 3)
+                        else if (game.currentmenuoption == 4)
                         {
                             //Load level
                             ed.settingsmod=false;
@@ -5188,7 +5343,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             game.mapheld=true;
                             dwgfx.backgrounddrawn=false;
                         }
-                        else if (game.currentmenuoption == 4)
+                        else if (game.currentmenuoption == 5)
                         {
                             //Save level
                             ed.settingsmod=false;
@@ -5200,7 +5355,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             game.mapheld=true;
                             dwgfx.backgrounddrawn=false;
                         }
-                        else if (game.currentmenuoption == 5)
+                        else if (game.currentmenuoption == 6)
                         {
                             music.playef(11, 10);
                             game.createmenu("ed_quit");

@@ -219,3 +219,25 @@ void UtilityClass::updateglow()
 		if (glow < 2) glowdir = 0;
 	}
 }
+
+std::string UtilityClass::getmusicname(int num) {
+	std::string names[16] = {
+		"Nothing",
+		"Pushing Onwards",
+		"Positive Force",
+		"Potential for Anything",
+		"Passion For Exploring",
+		"Pause",
+		"Presenting VVVVVV",
+		"Plenary",
+		"Predestined Fate",
+        "Positive Force Reversed",
+        "Popular Potpourri",
+        "Pipe Dream",
+        "Pressure Cooker",
+        "Paced Energy",
+        "Piercing the Sky",
+        "Predestined Fate Remix"
+	};
+	return names[num];
+}
