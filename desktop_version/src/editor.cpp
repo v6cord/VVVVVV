@@ -259,6 +259,8 @@ void editorclass::reset()
     changeroom=true;
     levmusic=0;
 
+    trialstartpoint = false;
+
     entframe=0;
     entframedelay=0;
 
@@ -3655,62 +3657,67 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     //TODO
 
     //Draw Cursor
-    switch(ed.drawmode)
-    {
-    case 0:
-    case 1:
-    case 2:
-    case 9:
-    case 10:
-    case 12:
-    case 18: //Single point
-        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8,8, dwgfx.getRGB(200,32,32));
-        break;
-    case 3:
-    case 4:
-    case 8:
-    case 13:
-    case 17: //2x2
-        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,16, dwgfx.getRGB(200,32,32));
-        break;
-    case 5:
-    case 6:
-    case 7://Platform
-        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),32,8, dwgfx.getRGB(200,32,32));
-        break;
-    case 14: //X if not on edge
-        if(ed.tilex==0 || ed.tilex==39 || ed.tiley==0 || ed.tiley==29)
+    if (!ed.trialstartpoint) {
+        switch(ed.drawmode)
         {
+        case 0:
+        case 1:
+        case 2:
+        case 9:
+        case 10:
+        case 12:
+        case 18: //Single point
             fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8,8, dwgfx.getRGB(200,32,32));
+            break;
+        case 3:
+        case 4:
+        case 8:
+        case 13:
+        case 17: //2x2
+            fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,16, dwgfx.getRGB(200,32,32));
+            break;
+        case 5:
+        case 6:
+        case 7://Platform
+            fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),32,8, dwgfx.getRGB(200,32,32));
+            break;
+        case 14: //X if not on edge
+            if(ed.tilex==0 || ed.tilex==39 || ed.tiley==0 || ed.tiley==29)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8,8, dwgfx.getRGB(200,32,32));
+            }
+            else
+            {
+                dwgfx.Print((ed.tilex*8),(ed.tiley*8),"X",255,0,0);
+            }
+            break;
+        case 11:
+        case 15:
+        case 16: //2x3
+            fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,24, dwgfx.getRGB(200,32,32));
+            break;
+        case 19: //12x12 :))))))
+            fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8*12,8*12, dwgfx.getRGB(200,32,32));
+            break;
+        case -6: // ...?
+            fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),464,320, dwgfx.getRGB(200,32,32));
+            break;
         }
-        else
-        {
-            dwgfx.Print((ed.tilex*8),(ed.tiley*8),"X",255,0,0);
-        }
-        break;
-    case 11:
-    case 15:
-    case 16: //2x3
-        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,24, dwgfx.getRGB(200,32,32));
-        break;
-    case 19: //12x12 :))))))
-        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),8*12,8*12, dwgfx.getRGB(200,32,32));
-        break;
-    case -6: // ...?
-        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),464,320, dwgfx.getRGB(200,32,32));
-        break;
-    }
 
-    if(ed.drawmode<3)
-    {
-        if(ed.zmod && ed.drawmode<2)
+        if(ed.drawmode<3)
         {
-            fillboxabs(dwgfx, (ed.tilex*8)-8,(ed.tiley*8)-8,24,24, dwgfx.getRGB(200,32,32));
+            if(ed.zmod && ed.drawmode<2)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8)-8,(ed.tiley*8)-8,24,24, dwgfx.getRGB(200,32,32));
+            }
+            else if(ed.xmod && ed.drawmode<2)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8)-16,(ed.tiley*8)-16,24+16,24+16, dwgfx.getRGB(200,32,32));
+            }
         }
-        else if(ed.xmod && ed.drawmode<2)
-        {
-            fillboxabs(dwgfx, (ed.tilex*8)-16,(ed.tiley*8)-16,24+16,24+16, dwgfx.getRGB(200,32,32));
-        }
+    } else {
+        dwgfx.drawspritesetcol((ed.tilex*8) - 4, (ed.tiley*8), 0, obj.crewcolour(0), help);
+        fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,24, dwgfx.getRGB(200,32,32));
     }
 
     //If in directmode, show current directmode tile
@@ -3927,6 +3934,11 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             }
             break;
         }
+    }
+    else if (ed.trialstartpoint) {
+        FillRect(dwgfx.backBuffer, 0,230,320,240, dwgfx.getRGB(32,32,32));
+        FillRect(dwgfx.backBuffer, 0,231,320,240, dwgfx.getRGB(0,0,0));
+        dwgfx.Print(4, 232, "TIME TRIALS: Place start point", 255,255,255, false);
     }
     else if(ed.settingsmod)
     {
@@ -4748,9 +4760,12 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         {
             ed.boundarymod=0;
         }
+        else if (ed.trialstartpoint) {
+            ed.trialstartpoint = false;
+            ed.settingsmod = true;
+        }
         else
         {
-
             ed.settingsmod=!ed.settingsmod;
             ed.trialmod = false;
             dwgfx.backgrounddrawn=false;
@@ -5238,6 +5253,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             key.enabletextentry();
                             key.keybuffer=game.customtrials[ed.edtrial].name;
                         }
+                        if (game.currentmenuoption == 1) {
+                            ed.trialstartpoint = true;
+                            ed.settingsmod = false;
+                            music.playef(11, 10);
+                        }
                         if (game.currentmenuoption == 2) {
                             music.playef(11, 10);
                             game.customtrials[ed.edtrial].music++;
@@ -5424,6 +5444,35 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
         } else if (ed.keydelay) {
             ed.keydelay--;
+        } else if (ed.trialstartpoint) {
+            // Allow the player to switch rooms
+            if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
+                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                ed.keydelay = 6;
+                if (key.keymap[SDLK_UP])
+                    ed.levy--;
+                else if (key.keymap[SDLK_DOWN])
+                    ed.levy++;
+                else if (key.keymap[SDLK_LEFT])
+                    ed.levx--;
+                else if (key.keymap[SDLK_RIGHT])
+                    ed.levx++;
+                ed.updatetiles = true;
+                ed.changeroom = true;
+                dwgfx.backgrounddrawn=false;
+                ed.levaltstate = 0;
+                ed.levx = (ed.levx + ed.mapwidth) % ed.mapwidth;
+                ed.levy = (ed.levy + ed.mapheight) % ed.mapheight;
+            }
+            if(key.leftbutton) {
+                ed.trialstartpoint = false;
+                game.customtrials[ed.edtrial].startx = (ed.tilex*8) - 4;
+                game.customtrials[ed.edtrial].starty = (ed.tiley*8);
+                game.customtrials[ed.edtrial].startf = 0;
+                game.customtrials[ed.edtrial].roomx = ed.levx;
+                game.customtrials[ed.edtrial].roomy = ed.levy;
+                ed.settingsmod = true;
+            }
         } else if ((key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) &&
                    (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL])) {
             // Ctrl+Shift modifiers
@@ -6003,7 +6052,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
         }
 
-        if(!ed.settingsmod)
+        if(!ed.settingsmod && !ed.trialstartpoint)
         {
             if(ed.boundarymod>0)
             {

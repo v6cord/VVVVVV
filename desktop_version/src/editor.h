@@ -307,6 +307,8 @@ public:
     bool desc3mod = false;
     bool websitemod = false;
 
+    bool trialstartpoint = false;
+
     int edtrial = 0;
 
     int roomnamehide = 0;

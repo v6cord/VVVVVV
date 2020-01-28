@@ -457,8 +457,8 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         }
                         if (game.customtrials.size() > 0) {
                             game.nummenuoptions = (int)game.customtrials.size() + 1;
-                            game.menuoptions.push_back("return to menu");
-                            game.menuoptionsactive.push_back(true);
+                            game.menuoptions[game.nummenuoptions-1] = "return to menu";
+                            game.menuoptionsactive[game.nummenuoptions-1] = true;
                         }
                     //customtrial currenttrial = game.customtrials[i];
                       map.nexttowercolour();

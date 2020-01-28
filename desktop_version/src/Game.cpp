@@ -7227,7 +7227,7 @@ void Game::createmenu( std::string t )
     else if (t == "loadcustomtrial")
     {
         nummenuoptions = 0;
-        menuxoff = -80;
+        menuxoff = -40;
         menuyoff = 0;
     }
     else if (t == "youwannaquit")
