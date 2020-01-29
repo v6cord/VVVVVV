@@ -11,4 +11,8 @@ void strcpy_safe(char (&output)[charCount], const char* pSrc) {
     strlcpy(output, pSrc, charCount);
 }
 
+struct free_delete {
+    void operator()(void* x);
+};
+
 #endif

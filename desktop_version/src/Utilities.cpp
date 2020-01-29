@@ -24,3 +24,8 @@ size_t strlcpy(char *dst, const char *src, size_t dsize) {
 
     return src - osrc - 1;	/* count does not include NUL */
 }
+
+struct free_delete {
+    void operator()(void* x) { free(x); }
+};
+
