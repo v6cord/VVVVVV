@@ -1894,16 +1894,16 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				break;
 			case 19: // Script Box
 				game.customscript[tempscriptbox]=edentity[edi].scriptname;
-				obj.createblock(1, ex, ey, edentity[edi].p1*8,
-								edentity[edi].p2*8, 300+tempscriptbox);
+				obj.createblock(1, ex, ey, edentity[edi].p1*8 + edentity[edi].p3,
+								edentity[edi].p2*8 + edentity[edi].p4, 300+tempscriptbox);
 				tempscriptbox++;
 				break;
 			case 20: // Activity Zone
 				obj.customprompt = edentity[edi].activityname;
 				obj.customcolour = edentity[edi].activitycolor;
 				obj.customscript = edentity[edi].scriptname;
-				obj.createblock(ACTIVITY, ex, ey, edentity[edi].p1*8,
-								edentity[edi].p2*8, 100);
+				obj.createblock(ACTIVITY, ex, ey, edentity[edi].p1*8 + edentity[edi].p3,
+								edentity[edi].p2*8 + edentity[edi].p4, 100);
 				//tempscriptbox++;
 				break;
 			case 50: // Warp Lines
