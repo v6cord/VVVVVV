@@ -246,3 +246,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `iftrial([id, ]script)` - Run a custom script if you're currently in a trial and the trial's id matches up with the `id` argument. If the `id` argument isn't passed, the script is ran if you're in any trial.
 
 - `endtrial()` - Ends a time trial! This is functionally identical as `gamestate(82)`.
+
+- Added sub-tile dimensions of script boxes and activity zones

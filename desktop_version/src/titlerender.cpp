@@ -317,6 +317,8 @@ growing_vector<std::string> changelog = {
     "- endtrial() - Ends a time trial! This",
     "  is functionally identical to",
     "  gamestate(82).",
+    "- Added sub-tile dimensions of script",
+    "  boxes and activity zones",
 
 };
 
