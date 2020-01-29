@@ -9,6 +9,7 @@
 #include "Script.h"
 #include "UtilityClass.h"
 #include "time.h"
+#include "Utilities.h"
 
 #include "tinyxml.h"
 
@@ -165,7 +166,7 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
         return false;
     }
 
-    std::unique_ptr<char[]> mem((char*) uMem);
+    std::unique_ptr<char[], free_delete> mem((char*) uMem);
 
     try {
         _data.timeCreated = find_created(mem.get());
