@@ -2862,13 +2862,37 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "createactivityzone")
 			{
-				if (words[1] == "green")
+				// WARNING: No one, and I mean NO ONE get any bright ideas to simplify this `if words[1] == "red" else if words[1] == "green"` etc. stuff
+				// ESPECIALLY if that bright idea involves using the version of obj.getcrewman that takes in a string instead of an int
+				// YOU RISK BREAKING BACKWARDS COMPATIBILITY WITH ALREADY-EXISTING VANILLA LEVELS IF YOU DO SO!
+				if (words[1] == "red")
 				{
-					obj.createblock(5, obj.entities[obj.getcrewman(4)].xp - 32, obj.entities[obj.getcrewman(4)].yp-20, 96, 60, i);
+					i=3;
+				}
+				else if (words[1] == "green")
+				{
+					i=4;
+				}
+				else if (words[1] == "yellow")
+				{
+					i=2;
+				}
+				else if (words[1] == "blue")
+				{
+					i=5;
+				}
+				else if (words[1] == "purple")
+				{
+					i=1;
+				}
+
+				if (i == 4)
+				{
+					obj.createblock(5, obj.entities[obj.getcrewman(i)].xp - 32, obj.entities[obj.getcrewman(i)].yp-20, 96, 60, i);
 				}
 				else
 				{
-					obj.createblock(5, obj.entities[obj.getcrewman(words[1])].xp - 32, 0, 96, 240, i);
+					obj.createblock(5, obj.entities[obj.getcrewman(i)].xp - 32, 0, 96, 240, i);
 				}
 			}
 			else if (words[0] == "createrescuedcrew")
