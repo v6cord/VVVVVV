@@ -3382,210 +3382,211 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         int len;
         SDL_Rect drawRect;
 
-        if (edentity[i].state != ed.levaltstate ||
-            edentity[i].intower != tower ||
-            (!tower && (ex < 0 || ex >= 320 || ey < 0 || ey >= 240)))
-            continue;
+        // WARNING: Don't get any bright ideas about reducing indentation by negating this conditional and using a `continue`
+        if (edentity[i].state == ed.levaltstate &&
+            edentity[i].intower == tower &&
+            (tower || (ex >= 0 && ex < 320 && ey >= 0 && ey < 240))) {
 
-        switch(edentity[i].t) {
-        case 1: // Enemies
-            dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype),ed.entcol,help);
-            if(edentity[i].p1==0)
-                dwgfx.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
-            if(edentity[i].p1==1)
-                dwgfx.Print(ex+4,ey+4, "^", 255, 255, 255 - help.glow, false);
-            if(edentity[i].p1==2)
-                dwgfx.Print(ex+4,ey+4, "<", 255, 255, 255 - help.glow, false);
-            if(edentity[i].p1==3)
-                dwgfx.Print(ex+4,ey+4, ">", 255, 255, 255 - help.glow, false);
-            break;
-        case 2: // Moving platforms, conveyors
-        case 3: // Disappearing platforms
-            drawRect = dwgfx.tiles_rect;
-            drawRect.x += ex;
-            drawRect.y += ey;
+            switch(edentity[i].t) {
+            case 1: // Enemies
+                dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype),ed.entcol,help);
+                if(edentity[i].p1==0)
+                    dwgfx.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
+                if(edentity[i].p1==1)
+                    dwgfx.Print(ex+4,ey+4, "^", 255, 255, 255 - help.glow, false);
+                if(edentity[i].p1==2)
+                    dwgfx.Print(ex+4,ey+4, "<", 255, 255, 255 - help.glow, false);
+                if(edentity[i].p1==3)
+                    dwgfx.Print(ex+4,ey+4, ">", 255, 255, 255 - help.glow, false);
+                break;
+            case 2: // Moving platforms, conveyors
+            case 3: // Disappearing platforms
+                drawRect = dwgfx.tiles_rect;
+                drawRect.x += ex;
+                drawRect.y += ey;
 
-            len = 32;
-            if (edentity[i].t == 2 && edentity[i].p1 >= 7)
-                len *= 2;
-            while (drawRect.x < (ex + len)) {
-                BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],
-                                    NULL, dwgfx.backBuffer, &drawRect);
-                drawRect.x += 8;
-            }
+                len = 32;
+                if (edentity[i].t == 2 && edentity[i].p1 >= 7)
+                    len *= 2;
+                while (drawRect.x < (ex + len)) {
+                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],
+                                        NULL, dwgfx.backBuffer, &drawRect);
+                    drawRect.x += 8;
+                }
 
-            fillboxabs(dwgfx, ex, ey, len, 8, dwgfx.getBGR(255, 255, 255));
-            if (edentity[i].t == 3) {
-                dwgfx.Print(ex, ey, "////", 255, 255, 255 - help.glow, false);
+                fillboxabs(dwgfx, ex, ey, len, 8, dwgfx.getBGR(255, 255, 255));
+                if (edentity[i].t == 3) {
+                    dwgfx.Print(ex, ey, "////", 255, 255, 255 - help.glow, false);
+                    break;
+                }
+
+                if (edentity[i].p1 == 5) {
+                    dwgfx.Print(ex, ey, ">>>>", 255, 255, 255 - help.glow, false);
+                    break;
+                }
+
+                if (edentity[i].p1 == 6) {
+                    dwgfx.Print(ex, ey, "<<<<", 255, 255, 255 - help.glow, false);
+                    break;
+                }
+
+                if (edentity[i].p1 == 7) {
+                    dwgfx.Print(ex, ey, "> > > >", 255, 255, 255 - help.glow,
+                                false);
+                    break;
+                }
+
+                if (edentity[i].p1 == 8) {
+                    dwgfx.Print(ex, ey, "< < < <", 255, 255, 255 - help.glow,
+                                false);
+                    break;
+                }
+
+                if(edentity[i].p1==0)
+                    dwgfx.Print(ex+12,ey, "V", 255, 255, 255 - help.glow, false);
+                if(edentity[i].p1==1)
+                    dwgfx.Print(ex+12,ey, "^", 255, 255, 255 - help.glow, false);
+                if(edentity[i].p1==2)
+                    dwgfx.Print(ex+12,ey, "<", 255, 255, 255 - help.glow, false);
+                if(edentity[i].p1==3)
+                    dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
+                break;
+            case 5: // Flip Tokens
+                dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
+                //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+                fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
+                break;
+            case 8: // Coin
+                dwgfx.drawhuetile(ex, ey, 48, 8);
+                //dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
+                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,164,164));
+                break;
+            case 9: // Shiny Trinket
+                dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
+                fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
+                break;
+            case 10: // Checkpoints
+                if (edentity[i].p1 == 0 || edentity[i].p1 == 1)
+                    dwgfx.drawsprite(ex, ey, 20 + edentity[i].p1, 196, 196, 196);
+                else
+                    dwgfx.drawsprite(ex, ey, 188 + edentity[i].p1, 196, 196, 196);
+                fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
+                break;
+            case 11: // Gravity lines
+                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
+                if(edentity[i].p1 == 0) { //Horizontal
+                    while (!ed.spikefree(tx, ey / 8)) tx--;
+                    while (!ed.spikefree(tx2, ey / 8)) tx2++;
+                    tx++;
+                    FillRect(dwgfx.backBuffer, (tx*8), ey+4, (tx2-tx)*8, 1,
+                             dwgfx.getRGB(194,194,194));
+                    edentity[i].p2 = tx;
+                    edentity[i].p3 = (tx2-tx)*8;
+                } else { // Vertical
+                    while (!ed.towerspikefree(tx, ty)) ty--;
+                    while (!ed.towerspikefree(tx, ty2)) ty2++;
+                    ty++;
+                    FillRect(dwgfx.backBuffer, (tx*8)+3, (ty*8) - (ed.ypos*8), 1,
+                             (ty2-ty)*8, dwgfx.getRGB(194,194,194));
+                    edentity[i].p2 = ty;
+                    edentity[i].p3 = (ty2-ty) * 8;
+                }
+                break;
+            case 13: // Warp tokens
+                dwgfx.drawsprite(ex, ey, 18+(ed.entframe%2),196,196,196);
+                fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
+                if(ed.temp==i)
+                    dwgfx.Print(ex, ey - 8,
+                                "("+help.String(((edentity[i].p1-int(edentity[i].p1%40))/40)+1)+","+help.String(((edentity[i].p2-int(edentity[i].p2%30))/30)+1)+")",210,210,255);
+                else
+                    dwgfx.Print(ex, ey - 8,
+                                help.String(ed.findwarptoken(i)),210,210,255);
+                break;
+            case 14: // Teleporter
+                dwgfx.drawtele(ex, ey, 1, 100, help);
+                fillboxabs(dwgfx, ex, ey, 8*12, 8*12, dwgfx.getRGB(164,164,255));
+                break;
+            case 15: // Crewmates
+                dwgfx.drawspritesetcol(ex - 4, ey, 144,
+                                       obj.crewcolour(edentity[i].p1), help);
+                fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
+                break;
+            case 16: // Start
+                if (edentity[i].p1==0) // Left
+                    dwgfx.drawspritesetcol(ex - 4, ey, 0,
+                                           obj.crewcolour(0), help);
+                else if (edentity[i].p1==1)
+                    dwgfx.drawspritesetcol(ex - 4, ey, 3,
+                                           obj.crewcolour(0), help);
+                fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
+                if(ed.entframe<2)
+                    dwgfx.Print(ex - 12, ey - 8, "START", 255, 255, 255);
+                else
+                    dwgfx.Print(ex - 12, ey - 8, "START", 196, 196, 196);
+                break;
+            case 17: // Roomtext
+                if(edentity[i].scriptname.length()<1) {
+                    fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(96, 96, 96));
+                } else {
+                    auto length = utf8::distance(edentity[i].scriptname.begin(),
+                                                 edentity[i].scriptname.end());
+                    fillboxabs(dwgfx, ex, ey, length*8, 8, dwgfx.getRGB(96,96,96));
+                }
+                dwgfx.Print(ex, ey, edentity[i].scriptname,
+                            196, 196, 255 - help.glow);
+                break;
+            case 18: // Terminals
+                ty = ey;
+                if (!edentity[i].p1) // Unflipped
+                    ty += 8;
+
+                dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+                fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
+                if(ed.temp==i)
+                    dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
+                break;
+            case 19: // Script Triggers
+                fillboxabs(dwgfx, ex, ey, edentity[i].p1*8, edentity[i].p2*8,
+                           dwgfx.getRGB(255,164,255));
+                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
+                if(ed.temp==i)
+                    dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
+                break;
+            case 20: // Activity Zones
+                fillboxabs(dwgfx, ex, ey, edentity[i].p1*8, edentity[i].p2*8,
+                           dwgfx.getRGB(164,255,164));
+                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
+                if(ed.temp==i)
+                    dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
+                break;
+            case 50: // Warp lines
+                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
+                if (edentity[i].p1>=2) { //Horizontal
+                    while (!ed.free(tx, ey / 8)) tx--;
+                    while (!ed.free(tx2, ey / 8)) tx2++;
+                    tx++;
+                    fillboxabs(dwgfx, (tx*8), ey+1, (tx2-tx)*8, 6,
+                               dwgfx.getRGB(255,255,194));
+                    edentity[i].p2=tx;
+                    edentity[i].p3=(tx2-tx)*8;
+                } else { // Vertical
+                    while (!ed.towerfree(tx, ty)) ty--;
+                    while (!ed.towerfree(tx, ty2)) ty2++;
+                    ty++;
+                    fillboxabs(dwgfx, (tx*8)+1, (ty*8) - (ed.ypos*8), 6,
+                               (ty2-ty)*8, dwgfx.getRGB(255,255,194));
+                    edentity[i].p2=ty;
+                    edentity[i].p3=(ty2-ty)*8;
+                }
+                break;
+            case 999: // ?
+                //dwgfx.drawspritesetcol(ex, ey, 3, 102, help);
+                dwgfx.setcol(102, help);
+                dwgfx.drawimage(3, ex, ey);
+                //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+                fillboxabs(dwgfx, ex, ey, 464, 320, dwgfx.getRGB(164,164,255));
                 break;
             }
-
-            if (edentity[i].p1 == 5) {
-                dwgfx.Print(ex, ey, ">>>>", 255, 255, 255 - help.glow, false);
-                break;
-            }
-
-            if (edentity[i].p1 == 6) {
-                dwgfx.Print(ex, ey, "<<<<", 255, 255, 255 - help.glow, false);
-                break;
-            }
-
-            if (edentity[i].p1 == 7) {
-                dwgfx.Print(ex, ey, "> > > >", 255, 255, 255 - help.glow,
-                            false);
-                break;
-            }
-
-            if (edentity[i].p1 == 8) {
-                dwgfx.Print(ex, ey, "< < < <", 255, 255, 255 - help.glow,
-                            false);
-                break;
-            }
-
-            if(edentity[i].p1==0)
-                dwgfx.Print(ex+12,ey, "V", 255, 255, 255 - help.glow, false);
-            if(edentity[i].p1==1)
-                dwgfx.Print(ex+12,ey, "^", 255, 255, 255 - help.glow, false);
-            if(edentity[i].p1==2)
-                dwgfx.Print(ex+12,ey, "<", 255, 255, 255 - help.glow, false);
-            if(edentity[i].p1==3)
-                dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
-            break;
-        case 5: // Flip Tokens
-            dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
-            //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
-            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
-            break;
-        case 8: // Coin
-            dwgfx.drawhuetile(ex, ey, 48, 8);
-            //dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
-            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,164,164));
-            break;
-        case 9: // Shiny Trinket
-            dwgfx.drawsprite(ex, ey, 22, 196, 196, 196);
-            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
-            break;
-        case 10: // Checkpoints
-            if (edentity[i].p1 == 0 || edentity[i].p1 == 1)
-                dwgfx.drawsprite(ex, ey, 20 + edentity[i].p1, 196, 196, 196);
-            else
-                dwgfx.drawsprite(ex, ey, 188 + edentity[i].p1, 196, 196, 196);
-            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164, 164, 255));
-            break;
-        case 11: // Gravity lines
-            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
-            if(edentity[i].p1 == 0) { //Horizontal
-                while (!ed.spikefree(tx, ey / 8)) tx--;
-                while (!ed.spikefree(tx2, ey / 8)) tx2++;
-                tx++;
-                FillRect(dwgfx.backBuffer, (tx*8), ey+4, (tx2-tx)*8, 1,
-                         dwgfx.getRGB(194,194,194));
-                edentity[i].p2 = tx;
-                edentity[i].p3 = (tx2-tx)*8;
-            } else { // Vertical
-                while (!ed.towerspikefree(tx, ty)) ty--;
-                while (!ed.towerspikefree(tx, ty2)) ty2++;
-                ty++;
-                FillRect(dwgfx.backBuffer, (tx*8)+3, (ty*8) - (ed.ypos*8), 1,
-                         (ty2-ty)*8, dwgfx.getRGB(194,194,194));
-                edentity[i].p2 = ty;
-                edentity[i].p3 = (ty2-ty) * 8;
-            }
-            break;
-        case 13: // Warp tokens
-            dwgfx.drawsprite(ex, ey, 18+(ed.entframe%2),196,196,196);
-            fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
-            if(ed.temp==i)
-                dwgfx.Print(ex, ey - 8,
-                            "("+help.String(((edentity[i].p1-int(edentity[i].p1%40))/40)+1)+","+help.String(((edentity[i].p2-int(edentity[i].p2%30))/30)+1)+")",210,210,255);
-            else
-                dwgfx.Print(ex, ey - 8,
-                            help.String(ed.findwarptoken(i)),210,210,255);
-            break;
-        case 14: // Teleporter
-            dwgfx.drawtele(ex, ey, 1, 100, help);
-            fillboxabs(dwgfx, ex, ey, 8*12, 8*12, dwgfx.getRGB(164,164,255));
-            break;
-        case 15: // Crewmates
-            dwgfx.drawspritesetcol(ex - 4, ey, 144,
-                                   obj.crewcolour(edentity[i].p1), help);
-            fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
-            break;
-        case 16: // Start
-            if (edentity[i].p1==0) // Left
-                dwgfx.drawspritesetcol(ex - 4, ey, 0,
-                                       obj.crewcolour(0), help);
-            else if (edentity[i].p1==1)
-                dwgfx.drawspritesetcol(ex - 4, ey, 3,
-                                       obj.crewcolour(0), help);
-            fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
-            if(ed.entframe<2)
-                dwgfx.Print(ex - 12, ey - 8, "START", 255, 255, 255);
-            else
-                dwgfx.Print(ex - 12, ey - 8, "START", 196, 196, 196);
-            break;
-        case 17: // Roomtext
-            if(edentity[i].scriptname.length()<1) {
-                fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(96, 96, 96));
-            } else {
-                auto length = utf8::distance(edentity[i].scriptname.begin(),
-                                             edentity[i].scriptname.end());
-                fillboxabs(dwgfx, ex, ey, length*8, 8, dwgfx.getRGB(96,96,96));
-            }
-            dwgfx.Print(ex, ey, edentity[i].scriptname,
-                        196, 196, 255 - help.glow);
-            break;
-        case 18: // Terminals
-            ty = ey;
-            if (!edentity[i].p1) // Unflipped
-                ty += 8;
-
-            dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
-            fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
-            if(ed.temp==i)
-                dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
-            break;
-        case 19: // Script Triggers
-            fillboxabs(dwgfx, ex, ey, edentity[i].p1*8, edentity[i].p2*8,
-                       dwgfx.getRGB(255,164,255));
-            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
-            if(ed.temp==i)
-                dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
-            break;
-        case 20: // Activity Zones
-            fillboxabs(dwgfx, ex, ey, edentity[i].p1*8, edentity[i].p2*8,
-                       dwgfx.getRGB(164,255,164));
-            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
-            if(ed.temp==i)
-                dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
-            break;
-        case 50: // Warp lines
-            fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
-            if (edentity[i].p1>=2) { //Horizontal
-                while (!ed.free(tx, ey / 8)) tx--;
-                while (!ed.free(tx2, ey / 8)) tx2++;
-                tx++;
-                fillboxabs(dwgfx, (tx*8), ey+1, (tx2-tx)*8, 6,
-                           dwgfx.getRGB(255,255,194));
-                edentity[i].p2=tx;
-                edentity[i].p3=(tx2-tx)*8;
-            } else { // Vertical
-                while (!ed.towerfree(tx, ty)) ty--;
-                while (!ed.towerfree(tx, ty2)) ty2++;
-                ty++;
-                fillboxabs(dwgfx, (tx*8)+1, (ty*8) - (ed.ypos*8), 6,
-                           (ty2-ty)*8, dwgfx.getRGB(255,255,194));
-                edentity[i].p2=ty;
-                edentity[i].p3=(ty2-ty)*8;
-            }
-            break;
-        case 999: // ?
-            //dwgfx.drawspritesetcol(ex, ey, 3, 102, help);
-            dwgfx.setcol(102, help);
-            dwgfx.drawimage(3, ex, ey);
-            //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
-            fillboxabs(dwgfx, ex, ey, 464, 320, dwgfx.getRGB(164,164,255));
-            break;
         }
 
         //Need to also check warp point destinations
