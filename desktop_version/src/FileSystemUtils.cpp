@@ -40,6 +40,7 @@ int mkdir(char* path, int mode)
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <spawn.h>
 #define MAX_PATH PATH_MAX
 #endif
 
@@ -520,12 +521,20 @@ const char* open_cmd = "xdg-open";
 const char* open_cmd = "open";
 #endif
 
+extern "C" char** environ;
+
 bool FILESYSTEM_openDirectory(const char *dname) {
-    pid_t child = fork();
-    if (child == 0) {
-        execlp(open_cmd, open_cmd, dname, nullptr);
-        exit(1); // should be unreachable
-    }
+    pid_t child;
+    // This const_cast is legal (ctrl-f "The statement" at https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html)
+    char* argv[3] = {const_cast<char*>(open_cmd), const_cast<char*>(dname), nullptr};
+    posix_spawnp(
+            &child, // pid
+            open_cmd, // file
+            nullptr, // file_actions
+            nullptr, // attrp
+            argv, // argv
+            environ // envp
+    );
     int status = 0;
     waitpid(child, &status, 0);
     return WIFEXITED(status) && WEXITSTATUS(status) == 0;
