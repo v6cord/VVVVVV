@@ -8,7 +8,7 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha =
 class GraphicsResources
 {
 public:
-    GraphicsResources(void);
+    void init(void);
     ~GraphicsResources(void);
 
     SDL_Surface* im_tiles;

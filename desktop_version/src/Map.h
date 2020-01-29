@@ -192,4 +192,6 @@ public:
     bool nofog = false;
 };
 
+extern mapclass map;
+
 #endif /* MAPGAME_H */

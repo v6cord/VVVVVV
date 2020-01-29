@@ -9,8 +9,10 @@
 #include <iterator>
 #include <fribidi/fribidi.h>
 
-Graphics::Graphics()
+void Graphics::init()
 {
+    grphx.init();
+
     flipmode = false;
     setRect(tiles_rect, 0,0,8,8);
     setRect(sprites_rect, 0,0,32,32);
@@ -129,6 +131,7 @@ Graphics::Graphics()
     warprect = SDL_Rect();
 
     translucentroomname = false;
+    showmousecursor = true;
 }
 
 int Graphics::font_idx(char32_t ch) {

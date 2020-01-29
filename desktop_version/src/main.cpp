@@ -49,6 +49,14 @@ int savemusic = 0;
 
 std::string playtestname;
 
+UtilityClass help;
+Graphics graphics;
+musicclass music;
+Game game;
+KeyPoll key;
+mapclass map;
+entityclass obj;
+
 int main(int argc, char *argv[])
 {
     if(!FILESYSTEM_init(argv[0]))
@@ -150,16 +158,19 @@ int main(int argc, char *argv[])
 
 
 
-    UtilityClass help;
+    //UtilityClass help;
     // Load Ini
 
 
-    Graphics graphics;
+    //Graphics graphics;
+    graphics.init();
 
 
 
-    musicclass music;
-    Game game;
+    //musicclass music;
+    music.init();
+    //Game game;
+    game.init();
     game.infocus = true;
 
     graphics.MakeTileArray();
@@ -220,8 +231,8 @@ int main(int argc, char *argv[])
     game.menustart = false;
     game.mainmenu = 0;
 
-    KeyPoll key;
-    mapclass map;
+    //KeyPoll key;
+    //mapclass map;
 
     map.ypos = (700-29) * 8;
     map.bypos = map.ypos / 2;
@@ -278,7 +289,7 @@ int main(int argc, char *argv[])
 		if(game.bestrank[4]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
 		if(game.bestrank[5]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
 
-    entityclass obj;
+    //entityclass obj;
     obj.init();
 
     if (startinplaytest) {

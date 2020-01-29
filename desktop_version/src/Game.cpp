@@ -114,9 +114,9 @@ bool GetButtonFromString(const char *pText, SDL_GameControllerButton *button)
 }
 
 
-Game::Game(void):
-    mutebutton(0)
+void Game::init(void)
 {
+    mutebutton = 0;
     infocus = true;
     paused = false;
     muted = false;
@@ -4501,6 +4501,11 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
             dwgfx.translucentroomname = atoi(pText);
         }
 
+        if (pKey == "showmousecursor")
+        {
+            dwgfx.showmousecursor = atoi(pText);
+        }
+
 		if (pKey == "flipButton")
 		{
 			SDL_GameControllerButton newButton;
@@ -4548,6 +4553,14 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
         dwgfx.screenbuffer->toggleLinearFilter();
     }
     dwgfx.screenbuffer->ResizeScreen(width, height);
+
+    if (dwgfx.showmousecursor == true)
+    {
+        SDL_ShowCursor(SDL_ENABLE);
+    }
+    else {
+        SDL_ShowCursor(SDL_DISABLE);
+    }
 
     if (controllerButton_flip.size() < 1)
     {
@@ -4720,6 +4733,10 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
 
     msg = new TiXmlElement("translucentroomname");
     msg->LinkEndChild(new TiXmlText(tu.String((int) _dwgfx.translucentroomname).c_str()));
+    dataNode->LinkEndChild(msg);
+
+    msg = new TiXmlElement("showmousecursor");
+    msg->LinkEndChild(new TiXmlText(tu.String((int)_dwgfx.showmousecursor).c_str()));
     dataNode->LinkEndChild(msg);
 
     for (size_t i = 0; i < controllerButton_flip.size(); i += 1)
@@ -7330,9 +7347,11 @@ void Game::createmenu( std::string t )
         menuoptionsactive[2] = true;
         menuoptions[3] = "toggle analogue";
         menuoptionsactive[3] = true;
-        menuoptions[4] = "return";
+        menuoptions[4] = "toggle mouse";
         menuoptionsactive[4] = true;
-        nummenuoptions = 5;
+        menuoptions[5] = "return";
+        menuoptionsactive[5] = true;
+        nummenuoptions = 6;
         menuxoff = -50;
         menuyoff = 8;
         /* Old stuff, not used anymore

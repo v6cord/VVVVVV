@@ -12,7 +12,7 @@
 class musicclass
 {
 public:
-	musicclass();
+	void init();
 
 	void play(int t, int fadeintime = 3000);
 	void loopmusic();
@@ -75,5 +75,6 @@ public:
         std::unordered_map<std::string, std::string> custom_file_paths;
 };
 
+extern musicclass music;
 
 #endif /* MUSIC_H */

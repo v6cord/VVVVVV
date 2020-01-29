@@ -42,7 +42,7 @@ struct customtrialrecord {
 class Game
 {
 public:
-    Game(void);
+    void init(void);
     ~Game(void);
 
 
@@ -423,5 +423,7 @@ public:
     growing_vector<customtrialrecord> customtrialstats;
     bool nocoincounter = false;
 };
+
+extern Game game;
 
 #endif /* GAME_H */
