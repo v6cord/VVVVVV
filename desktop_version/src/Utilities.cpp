@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "Utilities.h"
 
 // source: https://gitlab.freedesktop.org/libbsd/libbsd/blob/7aede6a999ef7b6bd2b82aed55896611331a8eea/src/strlcpy.c
 size_t strlcpy(char *dst, const char *src, size_t dsize) {
@@ -25,7 +26,4 @@ size_t strlcpy(char *dst, const char *src, size_t dsize) {
     return src - osrc - 1;	/* count does not include NUL */
 }
 
-struct free_delete {
-    void operator()(void* x) { free(x); }
-};
-
+void free_delete::operator()(void* x) { free(x); }
