@@ -240,3 +240,9 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `showcoincounter()`
 
 - Raised the number of flags to 1000, now they go from 0-999
+
+- Time trials now exist in custom levels! Your time trials stats are saved as `saves/<levelname>.vvvvvv.trial`, and you can add time trials to your level through the editor.
+
+- `iftrial([id, ]script)` - Run a custom script if you're currently in a trial and the trial's id matches up with the `id` argument. If the `id` argument isn't passed, the script is ran if you're in any trial.
+
+- `endtrial()` - Ends a time trial! This is functionally identical as `gamestate(82)`.

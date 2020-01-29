@@ -308,6 +308,15 @@ growing_vector<std::string> changelog = {
     "- showcoincounter()",
     "- Raised the number of flags to 1000,",
     "  now they go from 0-999",
+    "- iftrial([id, ]script) - Run a custom",
+    "  script if you're currently in a trial",
+    "  and the trial's id matches up with the",
+    "  id argument. If the id argument isn't",
+    "  passed, the script is ran if you're in",
+    "  any trial.",
+    "- endtrial() - Ends a time trial! This",
+    "  is functionally identical to",
+    "  gamestate(82).",
 
 };
 
