@@ -73,7 +73,7 @@ int FILESYSTEM_init(char *argvZero)
 	/* Mount our base user directory */
 	PHYSFS_mount(output, NULL, 1);
 	PHYSFS_setWriteDir(output);
-	printf("Base directory: %s\n", output);
+	if (!game.quiet) printf("Base directory: %s\n", output);
 
         PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
 
@@ -82,14 +82,14 @@ int FILESYSTEM_init(char *argvZero)
 	strcat(saveDir, "saves");
 	strcat(saveDir, PHYSFS_getDirSeparator());
 	mkdir(saveDir, 0777);
-	printf("Save directory: %s\n", saveDir);
+	if (!game.quiet) printf("Save directory: %s\n", saveDir);
 
 	/* Create level directory */
 	strcpy_safe(levelDir, output);
 	strcat(levelDir, "levels");
 	strcat(levelDir, PHYSFS_getDirSeparator());
 	mkdirResult |= mkdir(levelDir, 0777);
-	printf("Level directory: %s\n", levelDir);
+	if (!game.quiet) printf("Level directory: %s\n", levelDir);
 
 	/* We didn't exist until now, migrate files! */
 	if (VNEEDS_MIGRATION)
@@ -153,7 +153,7 @@ int FILESYSTEM_init(char *argvZero)
 
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcpy_safe(output, "gamecontrollerdb.txt");
-	if (SDL_GameControllerAddMappingsFromFile(output) < 0)
+	if (SDL_GameControllerAddMappingsFromFile(output) < 0 && !game.quiet)
 	{
 		printf("gamecontrollerdb.txt not found!\n");
 	}
@@ -202,11 +202,11 @@ void FILESYSTEM_unmountassets(Graphics& dwgfx)
 {
     if (dwgfx.assetdir != "")
     {
-        printf("Unmounting %s\n", dwgfx.assetdir.c_str());
+        if (!game.quiet) printf("Unmounting %s\n", dwgfx.assetdir.c_str());
         PHYSFS_unmount(dwgfx.assetdir.c_str());
         dwgfx.assetdir = "";
         dwgfx.reloadresources();
-    } else printf("Cannot unmount when no asset directory is mounted\n");
+    } else if (!game.quiet) printf("Cannot unmount when no asset directory is mounted\n");
 }
 
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,

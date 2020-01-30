@@ -12,7 +12,7 @@ failed=0
 for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.vvvvvv; do
     testcase="$(basename "$testcase" .vvvvvv)"
     echo -n "$testcase -- "
-    if output="$(./VVVVVV-CE -p "$testcase" --headless 2>&1 | tail -n1)"; then
+    if output="$(./VVVVVV-CE -p "$testcase" --headless --quiet 2>&1)"; then
         echo "PASS"
     else
         echo "$output"

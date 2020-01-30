@@ -422,6 +422,9 @@ public:
 
     growing_vector<customtrialrecord> customtrialstats;
     bool nocoincounter = false;
+
+
+    bool quiet = false;
 };
 
 extern Game game;

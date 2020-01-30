@@ -1,4 +1,5 @@
 #include "BinaryBlob.h"
+#include "Game.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,7 +93,7 @@ bool binaryBlob::unPackBinary(const char* name)
 	PHYSFS_File *handle = PHYSFS_openRead(name);
 	if (handle == NULL)
 	{
-		printf("Unable to open file %s\n", name);
+		if (!game.quiet) printf("Unable to open file %s\n", name);
 		return false;
 	}
 
@@ -114,7 +115,7 @@ bool binaryBlob::unPackBinary(const char* name)
 	}
 	PHYSFS_close(handle);
 
-	printf("The complete reloaded file size: " PRINTF_LL "\n", size);
+	if (!game.quiet) printf("The complete reloaded file size: " PRINTF_LL "\n", size);
 
 	for (int i = 0; i < 128; i += 1)
 	{
@@ -123,7 +124,7 @@ bool binaryBlob::unPackBinary(const char* name)
 			break;
 		}
 
-		printf("%s unpacked\n", m_headers[i].name);
+		if (!game.quiet) printf("%s unpacked\n", m_headers[i].name);
 	}
 
 	return true;

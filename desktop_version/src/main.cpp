@@ -59,20 +59,12 @@ entityclass obj;
 
 int main(int argc, char *argv[])
 {
-    if(!FILESYSTEM_init(argv[0]))
-    {
-        return 1;
-    }
-    SDL_Init(
-        SDL_INIT_VIDEO |
-        SDL_INIT_AUDIO |
-        SDL_INIT_JOYSTICK |
-        SDL_INIT_GAMECONTROLLER
-    );
-
     bool headless = false;
 
     for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "--quiet") == 0) {
+            game.quiet = true;
+        }
         if (strcmp(argv[i], "--version") == 0) {
             puts("VVVVVV-CE");
             puts("Version c1.0");
@@ -120,44 +112,57 @@ int main(int argc, char *argv[])
         }
     }
 
+    if(!FILESYSTEM_init(argv[0]))
+    {
+        return 1;
+    }
+    SDL_Init(
+        SDL_INIT_VIDEO |
+        SDL_INIT_AUDIO |
+        SDL_INIT_JOYSTICK |
+        SDL_INIT_GAMECONTROLLER
+    );
+
     /*if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
     {
         SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
     }*/
 
-    NETWORK_init();
+    if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 
     Screen gameScreen;
     gameScreen.headless = headless;
 
-	printf("\t\t\n");
-	printf("\t\t\n");
-	printf("\t\t       VVVVVV\n");
-	printf("\t\t\n");
-	printf("\t\t\n");
-	printf("\t\t  8888888888888888  \n");
-	printf("\t\t88888888888888888888\n");
-	printf("\t\t888888    8888    88\n");
-	printf("\t\t888888    8888    88\n");
-	printf("\t\t88888888888888888888\n");
-	printf("\t\t88888888888888888888\n");
-	printf("\t\t888888            88\n");
-	printf("\t\t88888888        8888\n");
-	printf("\t\t  8888888888888888  \n");
-	printf("\t\t      88888888      \n");
-	printf("\t\t  8888888888888888  \n");
-	printf("\t\t88888888888888888888\n");
-	printf("\t\t88888888888888888888\n");
-	printf("\t\t88888888888888888888\n");
-	printf("\t\t8888  88888888  8888\n");
-	printf("\t\t8888  88888888  8888\n");
-	printf("\t\t    888888888888    \n");
-	printf("\t\t    8888    8888    \n");
-	printf("\t\t  888888    888888  \n");
-	printf("\t\t  888888    888888  \n");
-	printf("\t\t  888888    888888  \n");
-	printf("\t\t\n");
-	printf("\t\t\n");
+    if (!game.quiet) {
+        printf("\t\t\n");
+        printf("\t\t\n");
+        printf("\t\t       VVVVVV\n");
+        printf("\t\t\n");
+        printf("\t\t\n");
+        printf("\t\t  8888888888888888  \n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t888888    8888    88\n");
+        printf("\t\t888888    8888    88\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t888888            88\n");
+        printf("\t\t88888888        8888\n");
+        printf("\t\t  8888888888888888  \n");
+        printf("\t\t      88888888      \n");
+        printf("\t\t  8888888888888888  \n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t8888  88888888  8888\n");
+        printf("\t\t8888  88888888  8888\n");
+        printf("\t\t    888888888888    \n");
+        printf("\t\t    8888    8888    \n");
+        printf("\t\t  888888    888888  \n");
+        printf("\t\t  888888    888888  \n");
+        printf("\t\t  888888    888888  \n");
+        printf("\t\t\n");
+        printf("\t\t\n");
+    }
 
     //Set up screen
 
