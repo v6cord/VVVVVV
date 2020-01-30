@@ -6315,8 +6315,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 if (ed.zmod) {
                                     ed.boundarytype=4;
-				} else if (ed.xmod) {
-				    ed.boundarytype=5;
+                                } else if (ed.xmod) {
+                                    ed.boundarytype=5;
                                 } else {
                                     ed.boundarytype=0;
                                 }
