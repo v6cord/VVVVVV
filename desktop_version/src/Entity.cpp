@@ -1274,7 +1274,6 @@ void entityclass::removetrigger( int t )
         {
             if (blocks[i].trigger == t)
             {
-                blocks[i].active = false;
                 if (blocks[i].onetime && t >= 300)
                     game.onetimescripts.push_back(game.customscript[t - 300]);
                 actuallyonetime = blocks[i].onetime;
