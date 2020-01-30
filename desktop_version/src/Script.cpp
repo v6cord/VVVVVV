@@ -11,6 +11,7 @@
 #include "KeyPoll.h"
 #include "Map.h"
 #include "FileSystemUtils.h"
+#include "Utilities.h"
 
 scriptclass::scriptclass()
 {
@@ -864,6 +865,13 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 auto glow = ss_toi(words[1]);
                 help.freezeglow = true;
                 help.glow = glow;
+            }
+            if (words[0] == "debugseedrng") {
+                auto s1 = ss_toi(words[1]);
+                auto s2 = ss_toi(words[2]);
+                auto s3 = ss_toi(words[3]);
+                auto s4 = ss_toi(words[4]);
+                seed_xoshiro(s1, s2, s3, s4);
             }
 			if (words[0] == "drawtext")
 			{
