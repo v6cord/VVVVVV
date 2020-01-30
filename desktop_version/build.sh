@@ -28,6 +28,7 @@ fi
 
 cmake -G Ninja \
     ${debug:+-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=-Og} \
+    ${debug:--DCMAKE_BUILD_TYPE=RelWithDebInfo} \
     ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
     ..
 

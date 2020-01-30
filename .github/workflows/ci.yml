@@ -69,7 +69,7 @@ jobs:
     - name: CMake configure
       run: |
         mkdir ${SRC_DIR_PATH}/build && cd ${SRC_DIR_PATH}/build
-        cmake -GNinja ..
+        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja ..
     - name: Build
       run: ninja -C ${SRC_DIR_PATH}/build
 
@@ -130,7 +130,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH
         mkdir -p build
-        nix-shell --arg cross true --run 'cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH=$CMAKE_MODULE_PATH .. && make -j$(nproc)'
+        nix-shell --arg cross true --run './build.sh'
 
     - name: Copy artifacts
       run: |
