@@ -3387,6 +3387,7 @@ bool Graphics::onscreen(int t)
 
 void Graphics::reloadresources() {
     grphx = GraphicsResources();
+    grphx.init();
 
     images.clear();
     tiles.clear();
