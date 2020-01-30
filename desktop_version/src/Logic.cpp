@@ -484,6 +484,25 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
         obj.cleanup();
 
         //Looping around, room change conditions!
+
+        //Warp tokens
+        if (map.custommode && game.teleport) {
+            int edi=obj.entities[game.edteleportent].behave;
+            int edj=obj.entities[game.edteleportent].para;
+            int edi2, edj2;
+            edi2 = (edi-(edi%40))/40;
+            edj2 = (edj-(edj%30))/30;
+
+            // Copy-pasted from gamelogic
+            map.warpto(100+edi2, 100+edj2, obj.getplayer(), edi%40, (edj%30)+2, dwgfx, game, obj, music);
+            game.teleport = false;
+
+            if (game.teleport == false)
+            {
+                game.flashlight = 6;
+                game.screenshake = 25;
+            }
+        }
     }
 
     if (game.teleport_to_new_area) script.teleport(dwgfx, game, map,    obj, help, music);
@@ -1214,6 +1233,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
               edi2 = (edi-(edi%40))/40;
               edj2 = (edj-(edj%30))/30;
 
+              // NOTE: If fixing misalignment when teleporting the player, make sure to update the copy-pasted code in towerlogic, too
               map.warpto(100+edi2, 100+edj2, obj.getplayer(), edi%40, (edj%30)+2, dwgfx, game, obj, music);
               game.teleport = false;
 
