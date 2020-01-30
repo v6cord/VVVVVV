@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 cd "$(dirname "$0")"
 unset DISPLAY
 export XDG_DATA_HOME="$(pwd)/tests"
