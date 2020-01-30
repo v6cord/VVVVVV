@@ -755,62 +755,86 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if ((words[0] == "ifvar") || (words[0] == "if"))
             {
                 int varid = getvar(words[1]);
-				if (varid != -1)
+                if (varid != -1)
                 {
                     if (words[4] == "") //fourth argument doesn't exist: this is a string
                     {
-						position++;
+                        position++;
                         if ((words[2] == "equal") ||
-						   (words[2] == "equals") ||
-						   (words[2] == "eq") ||
-						   (words[2] == "=") ||
-						   (words[2] == "==")) {
-                            if (variablecontents[varid] == processvars(commands[position])) call("custom_" + words[3]);
+                                (words[2] == "equals") ||
+                                (words[2] == "eq") ||
+                                (words[2] == "=") ||
+                                (words[2] == "==")) {
+                            if (variablecontents[varid] == processvars(commands[position])) {
+                                call("custom_" + words[3]);
+                                position--;
+                            }
                         }
                         if ((words[2] == "notequal") ||
-						   (words[2] == "noteq") ||
-						   (words[2] == "neq") ||
-						   (words[2] == "not") ||
-						   (words[2] == "notequal") ||
-						   (words[2] == "!=")) {
-                            if (variablecontents[varid] != processvars(commands[position])) call("custom_" + words[3]);
+                                (words[2] == "noteq") ||
+                                (words[2] == "neq") ||
+                                (words[2] == "not") ||
+                                (words[2] == "notequal") ||
+                                (words[2] == "!=")) {
+                            if (variablecontents[varid] != processvars(commands[position])) {
+                                call("custom_" + words[3]);
+                                position--;
+                            }
                         }
 
                     } else { // fourth argument does exist, this is an integer
                         if ((words[2] == "equal") ||
-						   (words[2] == "equals") ||
-						   (words[2] == "eq") ||
-						   (words[2] == "=") ||
-						   (words[2] == "==")) {
-                            if (variablecontents[varid] == words[3]) call("custom_" + words[4]);
+                                (words[2] == "equals") ||
+                                (words[2] == "eq") ||
+                                (words[2] == "=") ||
+                                (words[2] == "==")) {
+                            if (variablecontents[varid] == words[3]) {
+                                call("custom_" + words[4]);
+                                position--;
+                            }
                         }
                         if ((words[2] == "notequal") ||
-						   (words[2] == "noteq") ||
-						   (words[2] == "neq") ||
-						   (words[2] == "not") ||
-						   (words[2] == "notequal") ||
-						   (words[2] == "!=")) {
-                            if (variablecontents[varid] != words[3]) call("custom_" + words[4]);
+                                (words[2] == "noteq") ||
+                                (words[2] == "neq") ||
+                                (words[2] == "not") ||
+                                (words[2] == "notequal") ||
+                                (words[2] == "!=")) {
+                            if (variablecontents[varid] != words[3]) {
+                                call("custom_" + words[4]);
+                                position--;
+                            }
                         }
                         if ((words[2] == "less") ||
-						   (words[2] == "lt") ||
-						   (words[2] == "<")) {
-                            if (variablecontents[varid] < words[3]) call("custom_" + words[4]);
+                                (words[2] == "lt") ||
+                                (words[2] == "<")) {
+                            if (variablecontents[varid] < words[3]) {
+                                call("custom_" + words[4]);
+                                position--;
+                            }
                         }
                         if ((words[2] == "lesseq") ||
-						   (words[2] == "leq") ||
-						   (words[2] == "<=")) {
-                            if (variablecontents[varid] <= words[3]) call("custom_" + words[4]);
+                                (words[2] == "leq") ||
+                                (words[2] == "<=")) {
+                            if (variablecontents[varid] <= words[3]) {
+                                call("custom_" + words[4]);
+                                position--;
+                            }
                         }
                         if ((words[2] == "greater") ||
-						   (words[2] == "gt") ||
-						   (words[2] == ">")) {
-                            if (variablecontents[varid] > words[3]) call("custom_" + words[4]);
+                                (words[2] == "gt") ||
+                                (words[2] == ">")) {
+                            if (variablecontents[varid] > words[3]) {
+                                call("custom_" + words[4]);
+                                position--;
+                            }
                         }
                         if ((words[2] == "greatereq") ||
-						   (words[2] == "geq") ||
-						   (words[2] == ">=")) {
-                            if (variablecontents[varid] >= words[3]) call("custom_" + words[4]);
+                                (words[2] == "geq") ||
+                                (words[2] == ">=")) {
+                            if (variablecontents[varid] >= words[3]) {
+                                call("custom_" + words[4]);
+                                position--;
+                            }
                         }
                     }
                 }
