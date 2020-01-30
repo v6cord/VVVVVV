@@ -860,6 +860,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 auto code = ss_toi(words[1]);
                 std::exit(code);
             }
+            if (words[0] == "debugsetglow") {
+                auto glow = ss_toi(words[1]);
+                help.freezeglow = true;
+                help.glow = glow;
+            }
 			if (words[0] == "drawtext")
 			{
 				// drawtext(x,y,r,g,b,centered)

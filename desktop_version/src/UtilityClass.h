@@ -86,6 +86,7 @@ public:
     std::string getmusicname(int num);
 
     int glow = 0;
+    bool freezeglow = false;
     int slowsine = 0;
     int glowdir = 0;
     int globaltemp = 0;

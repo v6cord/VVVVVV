@@ -208,6 +208,7 @@ bool UtilityClass::intersects( SDL_Rect A, SDL_Rect B )
 
 void UtilityClass::updateglow()
 {
+        if (freezeglow) return;
 	slowsine++;
 	if (slowsine >= 64) slowsine = 0;
 
