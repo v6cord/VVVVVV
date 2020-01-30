@@ -248,3 +248,5 @@ VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally,
 - `endtrial()` - Ends a time trial! This is functionally identical as `gamestate(82)`.
 
 - Added sub-tile dimensions of script boxes and activity zones
+
+- Added one-time script boxes - hold X when placing down a script box to make it run only once

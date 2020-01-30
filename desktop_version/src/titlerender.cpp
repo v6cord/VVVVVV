@@ -321,6 +321,9 @@ growing_vector<std::string> changelog = {
     "  gamestate(82).",
     "- Added sub-tile dimensions of script",
     "  boxes and activity zones",
+    "- Added one-time script boxes - hold X",
+    "  when placing down a script box to make",
+    "  it run only once",
 
 };
 
