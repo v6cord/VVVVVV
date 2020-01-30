@@ -1890,7 +1890,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 					ey += 8;
 
 				obj.createentity(game, ex, ey, 20, !edentity[edi].p1);
-				obj.createblock(5, ex, ey, 20, 16, 35);
+				obj.createblock(5, ex-8, ey, 20, 16, 35);
 				break;
 			case 19: // Script Box
 				game.customscript[tempscriptbox]=edentity[edi].scriptname;
