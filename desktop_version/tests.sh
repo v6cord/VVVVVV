@@ -3,6 +3,7 @@ cd "$(dirname "$0")"
 unset DISPLAY
 export XDG_DATA_HOME="$(pwd)/tests"
 export USERPROFILE="$(pwd)/tests"
+export SDL_AUDIODRIVER=dummy
 source ./build.sh
 if [ ! -f data.zip ]; then
     wget https://thelettervsixtim.es/makeandplay/data.zip
