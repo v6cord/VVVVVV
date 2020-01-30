@@ -1303,6 +1303,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	if (!game.gotoroomfromscript && obj.checktrigger() > -1) {
 		game.startscript = true;
 		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
+		obj.kludgeonetimescript = true;
 		obj.removetrigger(obj.activetrigger);
 		game.state = 0;
 		game.kludgeroominitscript = true;
@@ -1894,6 +1895,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				break;
 			case 19: // Script Box
 				game.customscript[tempscriptbox]=edentity[edi].scriptname;
+				if (edentity[edi].onetime)
+					obj.kludgeonetimescript = true;
 				obj.createblock(1, ex, ey, edentity[edi].p1*8 + edentity[edi].p3,
 								edentity[edi].p2*8 + edentity[edi].p4, 300+tempscriptbox);
 				tempscriptbox++;

@@ -4748,6 +4748,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	game.nosuicide = false;
 
+	game.onetimescripts.clear();
+
 	//dwgraphicsclass
 	dwgfx.backgrounddrawn = false;
 	dwgfx.textboxremovefast();
@@ -4821,6 +4823,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	if (obj.getplayer() > -1){
 		obj.entities[obj.getplayer()].tile = 0;
 	}
+
+	obj.kludgeonetimescript = false;
 
 	//Script Stuff
 	position = 0;

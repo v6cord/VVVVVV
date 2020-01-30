@@ -60,6 +60,7 @@ public:
     std::string scriptname;
     std::string activityname;
     std::string activitycolor;
+    bool onetime = false;
 };
 
 

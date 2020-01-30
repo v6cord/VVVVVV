@@ -2578,6 +2578,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
                 edEntityEl->QueryIntAttribute("state", &edentity[i].state);
                 edEntityEl->QueryIntAttribute("intower", &edentity[i].intower);
 
+                edEntityEl->QueryIntAttribute("onetime", (int*) &edentity[i].onetime);
+
                 i++;
 
             }
@@ -2891,6 +2893,8 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
         if (edentity[i].activitycolor != "") {
             edentityElement->SetAttribute(  "activitycolor", edentity[i].activitycolor.c_str());
         }
+        if (edentity[i].onetime)
+            edentityElement->SetAttribute("onetime", help.String((int) edentity[i].onetime).c_str());
         edentityElement->LinkEndChild( new TiXmlText( edentity[i].scriptname.c_str() )) ;
         msg->LinkEndChild( edentityElement );
     }
@@ -2968,6 +2972,7 @@ void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0
     edentity[EditorData::GetInstance().numedentities].scriptname="";
     edentity[EditorData::GetInstance().numedentities].activityname="";
     edentity[EditorData::GetInstance().numedentities].activitycolor="";
+    edentity[EditorData::GetInstance().numedentities].onetime = false;
 
     EditorData::GetInstance().numedentities++;
 }
@@ -2991,6 +2996,7 @@ void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=
     edentity[EditorData::GetInstance().numedentities].scriptname="";
     edentity[EditorData::GetInstance().numedentities].activityname="";
     edentity[EditorData::GetInstance().numedentities].activitycolor="";
+    edentity[EditorData::GetInstance().numedentities].onetime = false;
 }
 
 void copyedentity( int a, int b )
@@ -3011,6 +3017,7 @@ void copyedentity( int a, int b )
     edentity[a].scriptname=edentity[b].scriptname;
     edentity[a].activityname=edentity[b].activityname;
     edentity[a].activitycolor=edentity[b].activitycolor;
+    edentity[a].onetime = edentity[b].onetime;
 }
 
 void removeedentity( int t )

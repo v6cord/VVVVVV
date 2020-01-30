@@ -909,6 +909,17 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
         nblocks++;
         break;
     case TRIGGER: //Trigger
+        // Are we creating a script box with a one-time script?
+        // Only abort creation if the script is in the list of already-run one-time scripts
+        // AND the script box is a one-time script box
+        if (kludgeonetimescript && trig >= 300)
+            for (size_t i = 0; i < game.onetimescripts.size(); i++)
+                if (game.onetimescripts[i] == game.customscript[trig - 300]) {
+                    blocks[k].active = false;
+                    kludgeonetimescript = false;
+                    return;
+                }
+
         blocks[k].type = TRIGGER;
         blocks[k].x = xp;
         blocks[k].y = yp;
@@ -916,6 +927,11 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
         blocks[k].hp = h;
         blocks[k].rectset(xp, yp, w, h);
         blocks[k].trigger = trig;
+
+        if (kludgeonetimescript) {
+            blocks[k].onetime = true;
+            kludgeonetimescript = false;
+        }
 
         nblocks++;
         break;
@@ -1196,6 +1212,8 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
         nblocks++;
         break;
     }
+
+    kludgeonetimescript = false;
 }
 
 void entityclass::removeallblocks()
@@ -1249,6 +1267,7 @@ void entityclass::removeblockat( int x, int y )
 
 void entityclass::removetrigger( int t )
 {
+    bool actuallyonetime = false;
     for(int i=0; i<nblocks; i++)
     {
         if(blocks[i].type == TRIGGER)
@@ -1256,10 +1275,25 @@ void entityclass::removetrigger( int t )
             if (blocks[i].trigger == t)
             {
                 blocks[i].active = false;
+                if (blocks[i].onetime && t >= 300)
+                    game.onetimescripts.push_back(game.customscript[t - 300]);
+                actuallyonetime = blocks[i].onetime;
                 removeblock(i);
             }
         }
     }
+
+    // If it is a one-time script box,
+    // remove all other script boxes in the room with the same script
+    // that are also one-time
+    if (kludgeonetimescript && actuallyonetime && t >= 300)
+        for (int i = 0; i < nblocks; i++)
+            if (blocks[i].type == TRIGGER && blocks[i].onetime
+            && blocks[i].trigger >= 300
+            && game.customscript[blocks[i].trigger - 300] == game.customscript[t - 300])
+                removeblock(i);
+
+    kludgeonetimescript = false;
 }
 
 void entityclass::copylinecross( int t )

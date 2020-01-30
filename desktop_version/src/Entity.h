@@ -257,6 +257,10 @@ public:
 
     growing_vector<blockclass> resurrectblocks;
     int nresurrectblocks = 0;
+
+    // Very kludgey! Used for signaling when a script box is one-time-only in createblock(),
+    // and used for signaling when a script box was removed by a player in removetrigger()
+    bool kludgeonetimescript = false;
 };
 
 #endif /* ENTITY_H */

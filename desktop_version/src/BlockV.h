@@ -26,6 +26,7 @@ public:
     float x = 0.0;
     float y = 0.0;
 
+    bool onetime = false;
 };
 
 #endif /* BLOCKV_H */

@@ -425,6 +425,8 @@ public:
 
 
     bool quiet = false;
+
+    growing_vector<std::string> onetimescripts;
 };
 
 extern Game game;
