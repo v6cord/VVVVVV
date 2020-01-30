@@ -70,12 +70,17 @@ int main(int argc, char *argv[])
         SDL_INIT_GAMECONTROLLER
     );
 
+    bool headless = false;
+
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--version") == 0) {
             puts("VVVVVV-CE");
             puts("Version c1.0");
             puts("Built from commit " STRINGIFY(GIT_HASH_RAW));
             return 0;
+        }
+        if (strcmp(argv[i], "--headless") == 0) {
+            headless = true;
         }
         if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
             if (i + 1 < argc) {
@@ -123,6 +128,7 @@ int main(int argc, char *argv[])
     NETWORK_init();
 
     Screen gameScreen;
+    gameScreen.headless = headless;
 
 	printf("\t\t\n");
 	printf("\t\t\n");

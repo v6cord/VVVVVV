@@ -25,6 +25,7 @@ public:
 	bool isFiltered = false;
 	bool badSignalEffect = false;
 	bool glScreen = false;
+        bool headless = false;
 	int stretchMode = 0;
 
 	SDL_Window *m_window;

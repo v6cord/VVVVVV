@@ -92,6 +92,7 @@ Screen::Screen()
 
 void Screen::ResizeScreen(int x , int y)
 {
+    if (headless) return;
 	static int resX = 320;
 	static int resY = 240;
 	if (x != -1 && y != -1)
