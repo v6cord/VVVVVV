@@ -863,7 +863,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             }
             if (words[0] == "debugprint") {
                 position++;
-                std::cout << processvars(commands[position]) << std::endl;
+                std::cerr << processvars(commands[position]) << std::endl;
             }
             if (words[0] == "debugexit") {
                 auto code = ss_toi(words[1]);
