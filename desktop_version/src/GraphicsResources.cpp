@@ -56,7 +56,7 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
 		noAlpha ? 0x00000000 : 0xFF000000
 	);
 
-	if (loadedImage != NULL)
+	if (loadedImage != NULL && data != NULL)
 	{
 		optimizedImage = SDL_ConvertSurfaceFormat(
 			loadedImage,
