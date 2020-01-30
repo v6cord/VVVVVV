@@ -4570,6 +4570,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         case 12:
             if (ed.zmod) {
                 dwgfx.bprint(2,2, "Y+Z: Activity Zone",196, 196, 255 - help.glow);
+            } else if (ed.xmod) {
+                dwgfx.bprint(2,2, "Y+X: One-Time Script Box",196, 196, 255 - help.glow);
             } else {
                 dwgfx.bprint(2,2, "Y: Script Box",196, 196, 255 - help.glow);
             }
@@ -6094,13 +6096,16 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.boundx2=ed.boundx1+8;
                                 ed.boundy2=ed.boundy1+8;
                             }
-                            if(ed.boundarytype==0)
+                            if(ed.boundarytype==0 || ed.boundarytype==5)
                             {
                                 //Script trigger
                                 ed.scripttextmod=true;
                                 ed.scripttextent=EditorData::GetInstance().numedentities;
                                 addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
+                                if (ed.boundarytype==5)
+                                    // Don't forget to subtract 1 from index because addedentity incremented it
+                                    edentity[EditorData::GetInstance().numedentities-1].onetime = true;
                                 ed.lclickdelay=1;
 
                                 ed.textentry=true;
@@ -6310,6 +6315,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 if (ed.zmod) {
                                     ed.boundarytype=4;
+				} else if (ed.xmod) {
+				    ed.boundarytype=5;
                                 } else {
                                     ed.boundarytype=0;
                                 }
