@@ -3694,6 +3694,8 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 {
     dwgfx.noclear = false;
     dwgfx.mapimage = std::nullopt;
+
+	game.gotoroomfromscript = true;
 	switch(t)
 	{
 	case 0:  //Normal new game
