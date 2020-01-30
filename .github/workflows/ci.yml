@@ -8,7 +8,7 @@ env:
 
 jobs:
   build-lin:
-    name: Build (Ubuntu 18.04)
+    name: Build and test (Ubuntu 18.04)
 
     runs-on: ubuntu-18.04
 
@@ -47,6 +47,9 @@ jobs:
       with:
         name: VVVVVV-CE-LinuxDeb
         path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
+
+    - name: Run tests
+      run: cd ${SRC_DIR_PATH} && ./tests.sh
 
   build-mac:
     name: Build (macOS)
