@@ -427,6 +427,6 @@
             <edLevelClass tileset="0" tilecol="5" platx1="0" platy1="0" platx2="320" platy2="240" platv="4" enemyv="4" enemyx1="0" enemyy1="0" enemyx2="320" enemyy2="240" enemytype="0" directmode="0" tower="0" tower_row="0" warpdir="0"></edLevelClass>
             <edLevelClass tileset="0" tilecol="6" platx1="0" platy1="0" platx2="320" platy2="240" platv="4" enemyv="4" enemyx1="0" enemyy1="0" enemyx2="320" enemyy2="240" enemytype="0" directmode="0" tower="0" tower_row="0" warpdir="0"></edLevelClass>
         </levelMetaData>
-        <script>test:|debuggetpixel(4,49)|debugprint|%r% %g% %b%|debugexit(0)||</script>
+        <script>test:|debuggetpixel(4,49)|delay(1)|debugprint|%r% %g% %b%|debugexit(0)||</script>
     </Data>
 </MapData>
