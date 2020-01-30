@@ -3556,7 +3556,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 break;
             case 19: // Script Triggers
                 fillboxabs(dwgfx, ex, ey, edentity[i].p1*8 + edentity[i].p3, edentity[i].p2*8 + edentity[i].p4,
-                           dwgfx.getRGB(255,164,255));
+                           edentity[i].onetime ? dwgfx.getRGB(255,255,164) : dwgfx.getRGB(255,164,255));
                 fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(255,255,255));
                 if(ed.temp==i)
                     dwgfx.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
