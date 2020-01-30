@@ -5481,7 +5481,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         }
         else if (pKey == "variables")
         {
-            for (TiXmlElement* varEl = pElem->FirstChildElement(); varEl; varEl = pElem->NextSiblingElement()) {
+            for (TiXmlElement* varEl = pElem->FirstChildElement(); varEl; varEl = varEl->NextSiblingElement()) {
                 std::string pKey(varEl->Value());
                 const char* pText = varEl->GetText();
 
