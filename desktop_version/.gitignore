@@ -10,6 +10,7 @@ VVVVVV.exe
 VVVVVV
 *.a
 *.gch
+!tests/**/*
 
 # Game data
 data.zip
