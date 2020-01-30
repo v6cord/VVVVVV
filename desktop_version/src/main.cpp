@@ -1,7 +1,9 @@
 #include <SDL.h>
+#include <ctime>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
+#include "Utilities.h"
 #include "Game.h"
 #include "Graphics.h"
 #include "KeyPoll.h"
@@ -31,6 +33,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Maths.h"
+
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
 
@@ -59,6 +63,8 @@ entityclass obj;
 
 int main(int argc, char *argv[])
 {
+    seed_xoshiro_64(std::time(nullptr));
+
     bool headless = false;
 
     for (int i = 1; i < argc; ++i) {

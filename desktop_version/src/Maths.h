@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <stdlib.h>
+#include "Utilities.h"
 
 //// This header holds Maths functions that emulate the functionality of flash's
 
@@ -11,7 +12,7 @@
 //Returns 0..1
 float inline fRandom()
 {
-    return ( float(rand()) / float(RAND_MAX)) ;
+    return std::ldexp(float(xoshiro_next()), -64);
 }
 
 inline int clamp(int x, int a, int b)
