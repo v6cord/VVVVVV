@@ -5512,6 +5512,22 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 }
             }
         }
+        else if (pKey == "onetimescripts")
+        {
+            for (TiXmlElement* onetimeEl = pElem->FirstChildElement(); onetimeEl; onetimeEl = onetimeEl->NextSiblingElement()) {
+                std::string pKey(onetimeEl->Value());
+                const char* pText = onetimeEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                // Do we NEED the parentheses around `pText`? Whatever
+                std::string TextString = (pText);
+
+                // No TextString.length() check because empty script names are valid
+                game.onetimescripts.push_back(TextString);
+            }
+        }
 
     }
 
@@ -6598,6 +6614,14 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
         msgs->LinkEndChild( msg );
     }
 
+    msg = new TiXmlElement("onetimescripts");
+    for (size_t i = 0; i < game.onetimescripts.size(); i++) {
+        // Not doing comma-concatenated names because scripts can contain commas
+        TiXmlElement *onetimeEl = new TiXmlElement("script");
+        onetimeEl->LinkEndChild(new TiXmlText(game.onetimescripts[i].c_str()));
+        msg->LinkEndChild(onetimeEl);
+    }
+    msgs->LinkEndChild(msg);
 
     customquicksummary = summary;
     //telecookie.flush();
