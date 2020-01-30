@@ -105,6 +105,9 @@ public:
     growing_vector<std::string> variablecontents;
 
     std::vector<stackframe> callstack;
+
+    int getpixelx = -1;
+    int getpixely = -1;
 };
 
 #endif /* SCRIPT_H */

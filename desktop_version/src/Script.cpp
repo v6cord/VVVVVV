@@ -849,17 +849,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 dwgfx.drawentities(map, obj, help);
             }
             if (words[0] == "debuggetpixel") {
-                auto x = ss_toi(words[1]);
-                auto y = ss_toi(words[2]);
-                auto pixels = (uint32_t*) dwgfx.backBuffer->pixels;
-                auto pixel = pixels[x + y * dwgfx.backBuffer->pitch];
-                uint8_t r;
-                uint8_t g;
-                uint8_t b;
-                SDL_GetRGB(pixel, dwgfx.backBuffer->format, &r, &g, &b);
-                setvar("r", std::to_string(r));
-                setvar("g", std::to_string(g));
-                setvar("b", std::to_string(b));
+                getpixelx = ss_toi(words[1]);
+                getpixely = ss_toi(words[2]);
             }
             if (words[0] == "debugprint") {
                 position++;

@@ -9,6 +9,8 @@
 #include "FileSystemUtils.h"
 
 #include "MakeAndPlay.h"
+#include <cstring>
+#include <stdio.h>
 
 extern scriptclass script;
 
@@ -2357,6 +2359,24 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     else
     {
         dwgfx.render();
+    }
+
+    if (script.getpixelx != -1) {
+        auto x = script.getpixelx;
+        auto y = script.getpixely;
+        auto pixels = (char*) dwgfx.backBuffer->pixels;
+        auto pixel_ptr = pixels + (x * dwgfx.backBuffer->format->BytesPerPixel) + (y * dwgfx.backBuffer->pitch);
+        uint32_t pixel;
+        std::memcpy(&pixel, pixel_ptr, sizeof(uint32_t));
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+        SDL_GetRGB(pixel, dwgfx.backBuffer->format, &r, &g, &b);
+        script.setvar("r", std::to_string(r));
+        script.setvar("g", std::to_string(g));
+        script.setvar("b", std::to_string(b));
+        script.getpixelx = -1;
+        script.getpixely = -1;
     }
 
     //dwgfx.backbuffer.unlock();
