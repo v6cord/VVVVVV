@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
 #include "Script.h"
 #include "Graphics.h"
 
@@ -846,6 +847,27 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             }
             if (words[0] == "drawentities") {
                 dwgfx.drawentities(map, obj, help);
+            }
+            if (words[0] == "debuggetpixel") {
+                auto x = ss_toi(words[1]);
+                auto y = ss_toi(words[2]);
+                auto pixels = (uint32_t*) dwgfx.backBuffer->pixels;
+                auto pixel = pixels[x + y * dwgfx.backBuffer->pitch];
+                uint8_t r;
+                uint8_t g;
+                uint8_t b;
+                SDL_GetRGB(pixel, dwgfx.backBuffer->format, &r, &g, &b);
+                setvar("r", std::to_string(r));
+                setvar("g", std::to_string(g));
+                setvar("b", std::to_string(b));
+            }
+            if (words[0] == "debugprint") {
+                position++;
+                std::cout << processvars(commands[position]) << std::endl;
+            }
+            if (words[0] == "debugexit") {
+                auto code = ss_toi(words[1]);
+                std::exit(code);
             }
 			if (words[0] == "drawtext")
 			{
