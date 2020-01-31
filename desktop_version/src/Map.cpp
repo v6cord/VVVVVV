@@ -1059,8 +1059,8 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
 void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
 	gotoroom(rx, ry, dwgfx, game, obj, music);
-    if (towermode)
-        realign_tower(obj);
+	if (towermode)
+		realign_tower(obj);
 	game.teleport = false;
 	obj.entities[t].xp = tx * 8;
 	obj.entities[t].yp = (ty * 8) - obj.entities[t].h;
