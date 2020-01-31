@@ -269,6 +269,7 @@ public:
     int numcoins = 0;
     int numcrewmates = 0;
     growing_vector<edlevelclass> level;
+    growing_vector<int> kludgewarpdir;
 
     int temp = 0;
     int notedelay = 0;

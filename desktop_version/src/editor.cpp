@@ -101,6 +101,7 @@ editorclass::editorclass()
     altstates.resize(500);
     towers.resize(400);
     level.resize(maxwidth * maxheight);
+    kludgewarpdir.resize(maxwidth * maxheight);
 
     entspeed = 0;
 
@@ -286,6 +287,7 @@ void editorclass::reset()
             level[i+(j*maxwidth)].directmode=0;
             level[i+(j*maxwidth)].tower=0;
             level[i+(j*maxwidth)].tower_row=0;
+            kludgewarpdir[i+(j*maxwidth)]=0;
         }
     }
 
