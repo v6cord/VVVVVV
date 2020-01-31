@@ -235,13 +235,6 @@ void editorclass::reset()
     boundy1=0;
     boundy2=0;
 
-    scripttextmod=false;
-    activitynamemod=false;
-    activitycolormod=false;
-    activitytextmod=false;
-    scripttextent=0;
-    scripttexttype=0;
-
     drawmode=0;
     dmtile=0;
     dmtileeditor=0;
@@ -573,6 +566,8 @@ void editorclass::getlin(KeyPoll& key, enum textmode mode, std::string prompt,
         key.keybuffer = "";
         ed.textptr = &(key.keybuffer);
     }
+
+    ed.oldenttext = key.keybuffer;
 }
 
 void editorclass::loadlevel( int rxi, int ryi, int altstate )
@@ -4200,48 +4195,6 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             input += " ";
         dwgfx.Print(4, 232, input, 196, 196, 255 - help.glow, true);
     }
-    else if((ed.scripttextmod) || (ed.activitytextmod))
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter script id name:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, edentity[ed.scripttextent].scriptname+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, edentity[ed.scripttextent].scriptname+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
-    else if(ed.activitynamemod)
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter activity zone text:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, edentity[ed.scripttextent].activityname+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, edentity[ed.scripttextent].activityname+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
-    else if(ed.activitycolormod)
-    {
-        FillRect(dwgfx.backBuffer, 0,221,320,240, dwgfx.getRGB(32,32,32));
-        FillRect(dwgfx.backBuffer, 0,222,320,240, dwgfx.getRGB(0,0,0));
-        dwgfx.Print(4, 224, "Enter activity zone color:", 255,255,255, false);
-        if(ed.entframe<2)
-        {
-            dwgfx.Print(4, 232, edentity[ed.scripttextent].activitycolor+"_", 196, 196, 255 - help.glow, true);
-        }
-        else
-        {
-            dwgfx.Print(4, 232, edentity[ed.scripttextent].activitycolor+" ", 196, 196, 255 - help.glow, true);
-        }
-    }
     else if(ed.warpmod)
     {
         //placing warp token
@@ -4737,8 +4690,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         ed.settingskey=true;
         if (ed.textmod) {
             key.disabletextentry();
-            if (ed.textmod == TEXT_ROOMTEXT)
-                removeedentity(ed.textent);
+            if (ed.textmod >= FIRST_ENTTEXT && ed.textmod <= LAST_ENTTEXT) {
+                *ed.textptr = ed.oldenttext;
+                if (ed.oldenttext == "")
+                    removeedentity(ed.textent);
+            }
 
             ed.textmod = TEXT_NONE;
 
@@ -4754,17 +4710,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             ed.desc3mod=false;
             ed.websitemod=false;
             ed.creatormod=false;
-            if (ed.activitytextmod || ed.activitycolormod || ed.activitynamemod) {
-                ed.activitytextmod=false;
-                ed.activitycolormod=false;
-                ed.activitynamemod=false;
-                removeedentity(ed.scripttextent);
-            }
-            if(ed.scripttextmod)
-            {
-                ed.scripttextmod=false;
-                removeedentity(ed.scripttextent);
-            }
 
             ed.shiftmenu=false;
             ed.shiftkey=false;
@@ -4997,7 +4942,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             game.mapheld = false;
         if (!game.mapheld && game.press_map) {
             game.mapheld = true;
-            key.disabletextentry();
+            if (!ed.textcount)
+                key.disabletextentry();
+
             growing_vector<std::string> coords;
             std::string filename = ed.filename+".vvvvvv";
             switch (ed.textmod) {
@@ -5026,28 +4973,40 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 if(ed.saveandquit)
                     dwgfx.fademode = 2; // quit editor
                 break;
+            case TEXT_ACTIVITYZONE:
+                if (ed.textcount == 2) {
+                    ed.textptr = &(edentity[ed.textent].activitycolor);
+                    ed.textdesc = "Enter activity zone color:";
+                } else if (ed.textcount == 1) {
+                    ed.textptr = &(edentity[ed.textent].scriptname);
+                    ed.textdesc = "Enter script name:";
+                }
+
+                if (ed.textcount) {
+                    key.keybuffer = *ed.textptr;
+                    ed.oldenttext = key.keybuffer;
+                    break;
+                }
+
+                // fallthrough
+            case TEXT_SCRIPT:
+                ed.clearscriptbuffer();
+                if (!ed.checkhook(key.keybuffer))
+                    ed.addhook(key.keybuffer);
+                break;
             default:
                 break;
             }
 
-            ed.shiftmenu = false;
-            ed.shiftkey = false;
-            ed.textmod = TEXT_NONE;
+            if (!ed.textcount) {
+                ed.shiftmenu = false;
+                ed.shiftkey = false;
+                ed.textmod = TEXT_NONE;
+            } else
+                ed.textcount--;
         }
     } else if (ed.textentry) {
-        if((ed.scripttextmod) || (ed.activitytextmod))
-        {
-            edentity[ed.scripttextent].scriptname=key.keybuffer;
-        }
-        else if(ed.activitynamemod)
-        {
-            edentity[ed.scripttextent].activityname=key.keybuffer;
-        }
-        else if(ed.activitycolormod)
-        {
-            edentity[ed.scripttextent].activitycolor=key.keybuffer;
-        }
-        else if(ed.titlemod)
+        if(ed.titlemod)
         {
             EditorData::GetInstance().title=key.keybuffer;
         }
@@ -5081,43 +5040,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(game.press_map)
             {
                 game.mapheld=true;
-                if(ed.scripttextmod)
-                {
-                    edentity[ed.scripttextent].scriptname=key.keybuffer;
-                    ed.scripttextmod=false;
-                    ed.clearscriptbuffer();
-                    if(!ed.checkhook(edentity[ed.scripttextent].scriptname))
-                    {
-                        ed.addhook(edentity[ed.scripttextent].scriptname);
-                    }
-                }
-                else if(ed.activitynamemod)
-                {
-                    edentity[ed.scripttextent].activityname=key.keybuffer;
-                    ed.activitynamemod=false;
-                    ed.activitycolormod=true;
-                    key.keybuffer = "";
-                        //ed.clearscriptbuffer();
-                }
-                else if(ed.activitycolormod)
-                {
-                    edentity[ed.scripttextent].activitycolor=key.keybuffer;
-                    ed.activitycolormod=false;
-                    ed.activitytextmod=true;
-                    key.keybuffer = "";
-                    //ed.clearscriptbuffer();
-                }
-                else if(ed.activitytextmod)
-                {
-                    edentity[ed.scripttextent].scriptname=key.keybuffer;
-                    ed.activitytextmod=false;
-                    ed.clearscriptbuffer();
-                    if(!ed.checkhook(edentity[ed.scripttextent].scriptname))
-                    {
-                        ed.addhook(edentity[ed.scripttextent].scriptname);
-                    }
-                }
-                else if(ed.titlemod)
+                if(ed.titlemod)
                 {
                     EditorData::GetInstance().title=key.keybuffer;
                     ed.titlemod=false;
@@ -5148,11 +5071,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 {
                     ed.Desc3=key.keybuffer;
                     ed.desc3mod=false;
-                }
-
-                if (!ed.activitycolormod && !ed.activitytextmod) {
-                    key.disabletextentry();
-                    ed.textentry=false;
                 }
 
                 if(ed.desc1mod)
@@ -6100,33 +6018,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             if(ed.boundarytype==0 || ed.boundarytype==5)
                             {
                                 //Script trigger
-                                ed.scripttextmod=true;
-                                ed.scripttextent=EditorData::GetInstance().numedentities;
+                                ed.lclickdelay=1;
+                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
+                                          &(edentity[ed.textent].scriptname));
                                 addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                                 if (ed.boundarytype==5)
                                     // Don't forget to subtract 1 from index because addedentity incremented it
                                     edentity[EditorData::GetInstance().numedentities-1].onetime = true;
-                                ed.lclickdelay=1;
-
-                                ed.textentry=true;
-                                key.enabletextentry();
-                                key.keybuffer="";
-                                ed.lclickdelay=1;
                             }
                             else if(ed.boundarytype==4)
                             {
                                 //Activity zone
-                                ed.activitynamemod=true;
-                                ed.scripttextent=EditorData::GetInstance().numedentities;
+                                ed.lclickdelay=1;
+                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.textcount = 2;
+                                ed.getlin(key, TEXT_ACTIVITYZONE,
+                                          "Enter activity zone text:",
+                                          &(edentity[ed.textent].activityname));
                                 addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
-                                ed.lclickdelay=1;
-
-                                ed.textentry=true;
-                                key.enabletextentry();
-                                key.keybuffer="";
-                                ed.lclickdelay=1;
                             }
                             else if(ed.boundarytype==1)
                             {
@@ -6375,13 +6287,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==11)
                             {
-                                ed.scripttextmod=true;
-                                ed.scripttextent=EditorData::GetInstance().numedentities;
-                                ed.textentry=true;
-                                key.enabletextentry();
-
-                                addedentity(tx, ty, 18, 0);
                                 ed.lclickdelay=1;
+                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.getlin(key, TEXT_SCRIPT, "Enter script name",
+                                          &(edentity[ed.textent].scriptname));
+                                addedentity(tx, ty, 18, 0);
                             }
                             else if(ed.drawmode==13)
                             {
@@ -6527,12 +6437,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         else if(edentity[tmp].t==18)
                         {
-                            ed.scripttextmod=true;
-                            ed.scripttextent=tmp;
-                            ed.textentry=true;
-                            key.enabletextentry();
-                            key.keybuffer=edentity[tmp].scriptname;
                             ed.lclickdelay=1;
+                            ed.getlin(key, TEXT_ROOMTEXT, "Enter script name:",
+                                      &(edentity[ed.textent].scriptname));
+                            ed.textent=tmp;
+
                             // A bit meh that the easiest way is doing this at the same time you start changing the script name, but oh well
                             if (edentity[tmp].p1 == 0) // Currently not flipped
                                 edentity[tmp].p1 = 1; // Flip it, then
