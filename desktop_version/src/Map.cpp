@@ -855,10 +855,21 @@ void mapclass::showship()
 	explored[4 + (11 * ed.maxwidth)] = 1;
 }
 
+// Centers the tower camera on the player position
+void mapclass::realign_tower(entityclass& obj) {
+    int i = obj.getplayer();
+    ypos = obj.entities[i].yp - 120;
+
+    if (ypos < 0)
+        ypos = 0;
+    bypos = ypos / 2;
+}
+
 void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
 						   musicclass& music) {
 	// Possibly warp if we died in a different room than our checkpoint is
 	bool room_different = true;
+    bool was_in_tower = towermode;
 
 	// No maingame towers are within the same column
 	if (towermode && !custommode && game.roomx == game.saverx)
@@ -895,6 +906,9 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
 		obj.entities[i].colour = 0;
 		game.lifeseq = 10;
 		obj.entities[i].invis = true;
+
+        if (!was_in_tower && towermode)
+            realign_tower(obj);
 	}
 
 	game.scmhurt = false; //Just in case the supercrewmate is fucking this up!
@@ -1045,6 +1059,8 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
 void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
 	gotoroom(rx, ry, dwgfx, game, obj, music);
+    if (towermode)
+        realign_tower(obj);
 	game.teleport = false;
 	obj.entities[t].xp = tx * 8;
 	obj.entities[t].yp = (ty * 8) - obj.entities[t].h;

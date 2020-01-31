@@ -1174,6 +1174,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				music.play(4);
 			}
+			if (words[0] == "realign_tower")
+			{
+				map.realign_tower(obj);
+			}
 			if (words[0] == "gotoposition")
 			{
 				//USAGE: gotoposition(x position, y position, gravity position)
