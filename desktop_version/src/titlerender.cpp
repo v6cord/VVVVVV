@@ -652,7 +652,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         }
         else if (game.currentmenuname == "credits_ce")
         {
-            auto base = 57; // x = 240 - 126 - x
+            auto base = 30; // x = 240 - 126 - x
             dwgfx.Print( -1, base, "VVVVVV: Community Edition has", tr, tg, tb, true);
             dwgfx.Print( -1, base + 15, "accepted contributions from:", tr, tg, tb, true);
             dwgfx.Print( -1, base + 40,  "Info Teddy", tr, tg, tb, true);
@@ -662,6 +662,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( -1, base + 100, "Stelpjo",    tr, tg, tb, true);
             dwgfx.Print( -1, base + 115, "mothbeanie", tr, tg, tb, true);
             dwgfx.Print( -1, base + 130, "Allison Fleischer", tr, tg, tb, true);
+            dwgfx.Print( -1, base + 145, "Dav999", tr, tg, tb, true);
         }
         else if (game.currentmenuname == "credits2")
         {

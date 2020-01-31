@@ -1,6 +1,6 @@
 A list of all the new features added to VVVVVV: Community Edition. This list is updated with each major release.
 
-VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, and Allison Fleischer.
+VVVVVV: Community Edition has accepted contributions from Info Teddy, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, Allison Fleischer, and Dav999.
 
 ## Version c1.0
 - Added UTF-8 support
