@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<MapData version="2">
+<MapData version="2" vceversion="1">
     <!-- Save file -->
     <Data>
         <MetaData>
@@ -24,6 +24,7 @@
         <edEntities>
             <edentity x="13" y="11" subx="0" suby="0" t="19" p1="13" p2="14" p3="0" p4="0" p5="320" p6="240" intower="0">test</edentity>
             <edentity x="19" y="17" subx="0" suby="0" t="16" p1="0" p2="0" p3="0" p4="0" p5="320" p6="240" intower="0"></edentity>
+            <edentity x="18" y="46" subx="0" suby="0" t="19" p1="1" p2="1" p3="0" p4="0" p5="320" p6="240" intower="0">fail</edentity>
         </edEntities>
         <levelMetaData>
             <edLevelClass tileset="0" tilecol="0" platx1="0" platy1="0" platx2="320" platy2="240" platv="4" enemyv="4" enemyx1="0" enemyy1="0" enemyx2="320" enemyy2="240" enemytype="0" directmode="0" tower="0" tower_row="0" warpdir="0"></edLevelClass>
@@ -427,6 +428,6 @@
             <edLevelClass tileset="0" tilecol="5" platx1="0" platy1="0" platx2="320" platy2="240" platv="4" enemyv="4" enemyx1="0" enemyy1="0" enemyx2="320" enemyy2="240" enemytype="0" directmode="0" tower="0" tower_row="0" warpdir="0"></edLevelClass>
             <edLevelClass tileset="0" tilecol="6" platx1="0" platy1="0" platx2="320" platy2="240" platv="4" enemyv="4" enemyx1="0" enemyy1="0" enemyx2="320" enemyy2="240" enemytype="0" directmode="0" tower="0" tower_row="0" warpdir="0"></edLevelClass>
         </levelMetaData>
-        <script>test:|debuggetpixel(4,49)|delay(1)|debugprint|%r% %g% %b%|debugexit(0)||</script>
+        <script>fail:|debugexit(1)||test:|debuggetpixel(4,49)|delay(1)|debugprint|%r% %g% %b%|if(r,!=,87,fail)|if(g,!=,95,fail)|if(b,!=,171,fail)|debugexit(0)|</script>
     </Data>
 </MapData>
