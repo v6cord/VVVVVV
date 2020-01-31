@@ -3599,19 +3599,23 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         //Need to also check warp point destinations
         if(edentity[i].t==13 && ed.warpent!=i)
         {
-            tx=(edentity[i].p1-(edentity[i].p1%40))/40;
-            ty=(edentity[i].p2-(edentity[i].p2%30))/30;
-            if(tx==ed.levx && ty==ed.levy)
+            int ep1 = edentity[i].p1 - ed.levx*40;
+            int ep2 = edentity[i].p2 - ed.levy*30;
+            if (tower)
+                ep2 -= ed.ypos;
+            ep1 *= 8;
+            ep2 *= 8;
+            if (tower || (ep1 >= 0 && ep1 < 320 && ep2 >= 0 && ep2 < 240))
             {
-                dwgfx.drawsprite((edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8),18+(ed.entframe%2),64,64,64);
-                fillboxabs(dwgfx, (edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8),16,16,dwgfx.getRGB(64,64,96));
-                if(ed.tilex+(ed.levx*40)==edentity[i].p1 && ed.tiley+(ed.levy*30)==edentity[i].p2)
+                dwgfx.drawsprite(ep1, ep2, 18 + ed.entframe%2, 64, 64, 64);
+                fillboxabs(dwgfx, ep1, ep2, 16, 16, dwgfx.getRGB(64, 64, 96));
+                if (ed.tilex == ep1/8 && ed.tiley == ep2/8)
                 {
-                    dwgfx.bprint(ex, ey - 8, rmstr, 190, 190, 225);
+                    dwgfx.bprint(ep1, ep2 - 8, rmstr, 190, 190, 225);
                 }
                 else
                 {
-                    dwgfx.bprint((edentity[i].p1*8)- (ed.levx*40*8),(edentity[i].p2*8)- (ed.levy*30*8)-8,help.String(ed.findwarptoken(i)),190,190,225);
+                    dwgfx.bprint(ep1, ep2 - 8, help.String(ed.findwarptoken(i)), 190, 190, 225);
                 }
             }
         }
