@@ -263,4 +263,6 @@ public:
     bool kludgeonetimescript = false;
 };
 
+extern entityclass obj;
+
 #endif /* ENTITY_H */

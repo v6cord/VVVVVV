@@ -74,7 +74,7 @@ public:
 
     void showship();
 
-    void realign_tower(entityclass& obj);
+    void realign_tower();
 
     void resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 

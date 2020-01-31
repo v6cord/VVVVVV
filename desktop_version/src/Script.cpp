@@ -1176,7 +1176,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "realign_tower")
 			{
-				map.realign_tower(obj);
+				map.realign_tower();
 			}
 			if (words[0] == "gotoposition")
 			{

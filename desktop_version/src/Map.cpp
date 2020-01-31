@@ -856,7 +856,7 @@ void mapclass::showship()
 }
 
 // Centers the tower camera on the player position
-void mapclass::realign_tower(entityclass& obj) {
+void mapclass::realign_tower() {
     int i = obj.getplayer();
     ypos = obj.entities[i].yp - 120;
 
@@ -908,7 +908,7 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
 		obj.entities[i].invis = true;
 
         if (!was_in_tower && towermode)
-            realign_tower(obj);
+            realign_tower();
 	}
 
 	game.scmhurt = false; //Just in case the supercrewmate is fucking this up!
@@ -1060,7 +1060,7 @@ void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, G
 {
 	gotoroom(rx, ry, dwgfx, game, obj, music);
 	if (towermode)
-		realign_tower(obj);
+		realign_tower();
 	game.teleport = false;
 	obj.entities[t].xp = tx * 8;
 	obj.entities[t].yp = (ty * 8) - obj.entities[t].h;
