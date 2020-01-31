@@ -32,6 +32,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+#include <unistd.h>
+#endif
 
 #include "Maths.h"
 
@@ -66,6 +69,11 @@ int main(int argc, char *argv[])
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
+#ifdef __APPLE__
+    bool syslog = true;
+#else
+    bool syslog = false;
+#endif
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
@@ -79,6 +87,12 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "--headless") == 0) {
             headless = true;
+        }
+        if (strcmp(argv[i], "--syslog") == 0) {
+            syslog = true;
+        }
+        if (strcmp(argv[i], "--no-syslog") == 0) {
+            syslog = false;
         }
         if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
             if (i + 1 < argc) {
@@ -116,6 +130,23 @@ int main(int argc, char *argv[])
         if (std::string(argv[i]) == "-renderer") {
             SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
         }
+    }
+
+    if (syslog) {
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+        puts("Switching to syslog...");
+        auto logger = popen("logger", "w");
+        if (logger) {
+            auto logger_fd = fileno(logger);
+            auto stdout_fd = fileno(stdout);
+            auto stderr_fd = fileno(stderr);
+            dup2(logger_fd, stdout_fd);
+            dup2(logger_fd, stderr_fd);
+            setbuf(stdout, nullptr);
+        } else {
+            puts("Couldn't create logger!");
+        }
+#endif
     }
 
     if(!FILESYSTEM_init(argv[0]))
