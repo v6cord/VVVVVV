@@ -2664,6 +2664,7 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
 
     TiXmlElement * root = new TiXmlElement( "MapData" );
     root->SetAttribute("version",version);
+    root->SetAttribute("vceversion",1);
     doc.LinkEndChild( root );
 
     TiXmlComment * comment = new TiXmlComment();
