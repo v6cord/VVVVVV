@@ -6709,7 +6709,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     else if(ed.gettilelocal(i, j)==2 || ed.gettilelocal(i, j)>=680)
                     {
                         //Fix background
-                        ed.settilelocal(i, j, ed.backbase(ed.levx,ed.levy));
+                        ed.settilelocal(i, j, ed.backedgetile(i,j)+ed.backbase(ed.levx,ed.levy));
                     }
                     else if(ed.gettilelocal(i, j)>0)
                     {
