@@ -1812,7 +1812,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				bx2 += 100;
 			}
 
-			if (warpx && by1 == 0 && by2 == 240) {
+			if (warpy && by1 == 0 && by2 == 240) {
 				by1 -= 100;
 				by2 += 100;
 			}
