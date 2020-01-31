@@ -299,7 +299,7 @@ void Game::init(void)
     {
         quickcookieexists = false;
         quicksummary = "";
-        printf("Quick Save Not Found\n");
+        if (!quiet) printf("Quick Save Not Found\n");
     }
     else
     {
@@ -337,7 +337,7 @@ void Game::init(void)
     {
         telecookieexists = false;
         telesummary = "";
-        printf("Teleporter Save Not Found\n");
+        if (!quiet) printf("Teleporter Save Not Found\n");
     }
     else
     {

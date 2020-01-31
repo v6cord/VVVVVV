@@ -2301,11 +2301,11 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
 
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
     if (FILESYSTEM_directoryExists(dirpath.c_str())) {
-        printf("Custom asset directory exists at %s\n",dirpath.c_str());
+        if (!game.quiet) printf("Custom asset directory exists at %s\n",dirpath.c_str());
         FILESYSTEM_mount(dirpath.c_str(), dwgfx);
         dwgfx.reloadresources();
         music.init();
-    } else {
+    } else if (!game.quiet) {
         printf("Custom asset directory does not exist\n");
     }
 
