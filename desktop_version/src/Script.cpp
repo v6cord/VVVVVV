@@ -1646,7 +1646,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500) {
+				if (textx == -500 || textx == -1) {
 					if (textcenterline != 0)
 						dwgfx.textboxcenterx(textcenterline);
 					else
@@ -1702,7 +1702,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500) {
+				if (textx == -500 || textx == -1) {
 					if (textcenterline != 0)
 						dwgfx.textboxcenterx(textcenterline);
 					else
@@ -1759,7 +1759,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500) {
+				if (textx == -500 || textx == -1) {
 					if (textcenterline != 0)
 						dwgfx.textboxcenterx(textcenterline);
 					else
@@ -1817,7 +1817,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					dwgfx.textboxmoveto(textx);
 				}
 
-				if (textx == -500) {
+				if (textx == -500 || textx == -1) {
 					if (textcenterline != 0)
 						dwgfx.textboxcenterx(textcenterline);
 					else
