@@ -902,7 +902,7 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 		obj.entities[i].invis = true;
 
 		if (towermode && old_tower != new_tower)
-			realign_tower(obj);
+			realign_tower();
 	}
 
 	game.scmhurt = false; //Just in case the supercrewmate is fucking this up!
