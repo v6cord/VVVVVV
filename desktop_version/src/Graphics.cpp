@@ -314,7 +314,7 @@ void Graphics::MakeSpriteArray()
 }
 
 
-void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
+bool Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
 {
     r = clamp(r,0,255);
     g = clamp(g,0,255);
@@ -358,6 +358,7 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
         }
         bfontpos+=bfontlen(curr) ;
     }
+    return tallline;
 }
 
 

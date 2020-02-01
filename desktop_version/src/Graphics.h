@@ -116,7 +116,7 @@ public:
 
 	void printcrewnamedark(int x, int y, int t);
 
-	void Print(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
+	bool Print(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
 	void RPrint(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
