@@ -34,7 +34,7 @@ public:
         int font_idx(char32_t ch);
 
 	void Makebfont();
-	bool load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos);
+	void load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos);
 
     std::string assetdir;
 

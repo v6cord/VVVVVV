@@ -179,13 +179,25 @@ void Graphics::Makebfont()
         }
     } else {
         int pos = 0;
+        if (grphx.im_unifont) load_font("graphics/unifont.txt", grphx.im_unifont, 8, 16, pos);
+        if (grphx.im_wideunifont) load_font("graphics/wideunifont.txt", grphx.im_wideunifont, 16, 16, pos);
         load_font("graphics/font.txt", grphx.im_bfont, 8, 8, pos);
     }
 }
 
-bool Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos) {
+void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos) {
+    size_t length;
+    unsigned char* charmap = nullptr;
+    FILESYSTEM_loadFileToMemory(path, &charmap, &length);
+
+    unsigned char* current = charmap;
+    unsigned char* end = charmap + length;
+
     for (int j =  0; j < (img->h / char_h); j++) {
         for (int i = 0; i < 16; i++) {
+            if (current >= end) break;
+            font_positions[utf8::next(current, end)] = bfont.size();
+
             SDL_Surface* temp = GetSubSurface(img,i*char_w,j*char_h,char_w,char_h);
             bfont.push_back(temp);
 
@@ -194,30 +206,11 @@ bool Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
         }
     }
 
-    unsigned char* charmap = NULL;
-    size_t length;
-    FILESYSTEM_loadFileToMemory(path, &charmap, &length);
-    if (charmap != NULL) {
-        unsigned char* current = charmap;
-        unsigned char* end = charmap + length;
-        while (current != end) {
-            int codepoint = utf8::next(current, end);
-            if (codepoint != 0x0a) font_positions[codepoint] = pos;
-            ++pos;
-        }
-        FILESYSTEM_freeMemory(&charmap);
-        return true;
-    } else {
-        return false;
-    }
+    FILESYSTEM_freeMemory(&charmap);
 }
 
 int Graphics::bfontlen(char32_t ch) {
-    if (ch < 32) {
-        return 6;
-    } else {
-        return 8;
-    }
+    return bfont[font_idx(ch)]->w;
 }
 
 std::vector<uint32_t> utf8to32(const std::string& src) {

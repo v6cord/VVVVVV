@@ -88,6 +88,8 @@ void GraphicsResources::init(void)
 	im_sprites =		LoadImage("graphics/sprites.png");
 	im_flipsprites =	LoadImage("graphics/flipsprites.png");
 	im_bfont =		LoadImage("graphics/font.png");
+	im_unifont =		LoadImage("graphics/unifont.png");
+	im_wideunifont =	LoadImage("graphics/wideunifont.png");
 	im_bfontmask =		LoadImage("graphics/fontmask.png");
 	im_teleporter =		LoadImage("graphics/teleporter.png");
 
@@ -116,6 +118,8 @@ GraphicsResources::~GraphicsResources(void)
 	SDL_FreeSurface(im_sprites);
 	SDL_FreeSurface(im_flipsprites);
 	SDL_FreeSurface(im_bfont);
+	SDL_FreeSurface(im_unifont);
+	SDL_FreeSurface(im_wideunifont);
 	SDL_FreeSurface(im_bfontmask);
 	SDL_FreeSurface(im_teleporter);
 

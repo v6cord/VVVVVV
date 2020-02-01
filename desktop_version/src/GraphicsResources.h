@@ -18,6 +18,8 @@ public:
     SDL_Surface* im_sprites;
     SDL_Surface* im_flipsprites;
     SDL_Surface* im_bfont;
+    SDL_Surface* im_unifont;
+    SDL_Surface* im_wideunifont;
     SDL_Surface* im_bfontmask;
     SDL_Surface* im_teleporter;
     SDL_Surface* im_image0;
