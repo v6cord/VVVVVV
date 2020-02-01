@@ -857,28 +857,22 @@ void mapclass::showship()
 
 // Centers the tower camera on the player position
 void mapclass::realign_tower() {
-    int i = obj.getplayer();
-    ypos = obj.entities[i].yp - 120;
+	int i = obj.getplayer();
+	ypos = obj.entities[i].yp - 120;
 
-    if (ypos < 0)
-        ypos = 0;
-    bypos = ypos / 2;
+	if (ypos < 0)
+		ypos = 0;
+	bypos = ypos / 2;
 }
 
-void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
-						   musicclass& music) {
+void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music) {
 	// Possibly warp if we died in a different room than our checkpoint is
 	bool room_different = true;
-    bool was_in_tower = towermode;
+	int old_tower = get_tower(game.roomx, game.roomy);
+	int new_tower = get_tower(game.saverx, game.savery);
 
-	// No maingame towers are within the same column
-	if (towermode && !custommode && game.roomx == game.saverx)
-		room_different = false;
-
-	// For custom towers, they might be, so verify tower ID
-	if (towermode && minitowermode && custommode &&
-		ed.get_tower(game.roomx - 100, game.roomy - 100) ==
-		ed.get_tower(game.saverx - 100, game.savery - 100))
+	// Towers use more than one screen, so compare tower ID
+	if (towermode && old_tower == new_tower)
 		room_different = false;
 
 	// Obviously, identical death room and checkpoint room isn't different
@@ -907,8 +901,8 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj,
 		game.lifeseq = 10;
 		obj.entities[i].invis = true;
 
-        if (!was_in_tower && towermode)
-            realign_tower();
+		if (towermode && old_tower != new_tower)
+			realign_tower(obj);
 	}
 
 	game.scmhurt = false; //Just in case the supercrewmate is fucking this up!
