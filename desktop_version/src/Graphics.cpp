@@ -164,12 +164,29 @@ void Graphics::drawspritesetcol(int x, int y, int t, int c, UtilityClass& help)
 
 void Graphics::Makebfont()
 {
-    for (int j =  0; j < (grphx.im_bfont->h / 8); j++)
-    {
-        for (int i = 0; i < 16; i++)
+    if (PHYSFS_getRealDir("graphics/font.txt") != PHYSFS_getRealDir("graphics/font.png")) {
+        for (int j =  0; j < (grphx.im_bfont->h / 8); j++)
         {
+            for (int i = 0; i < 16; i++)
+            {
 
-            SDL_Surface* temp = GetSubSurface(grphx.im_bfont,i*8,j*8,8,8);
+                SDL_Surface* temp = GetSubSurface(grphx.im_bfont,i*8,j*8,8,8);
+                bfont.push_back(temp);
+
+                SDL_Surface* TempFlipped = FlipSurfaceVerticle(temp);
+                flipbfont.push_back(TempFlipped);
+            }
+        }
+    } else {
+        int pos = 0;
+        load_font("graphics/font.txt", grphx.im_bfont, 8, 8, pos);
+    }
+}
+
+bool Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos) {
+    for (int j =  0; j < (img->h / char_h); j++) {
+        for (int i = 0; i < 16; i++) {
+            SDL_Surface* temp = GetSubSurface(img,i*char_w,j*char_h,char_w,char_h);
             bfont.push_back(temp);
 
             SDL_Surface* TempFlipped = FlipSurfaceVerticle(temp);
@@ -177,22 +194,22 @@ void Graphics::Makebfont()
         }
     }
 
-    if (PHYSFS_getRealDir("graphics/font.txt") != PHYSFS_getRealDir("graphics/font.png")) return;
-
     unsigned char* charmap = NULL;
     size_t length;
-    FILESYSTEM_loadFileToMemory("graphics/font.txt", &charmap, &length);
+    FILESYSTEM_loadFileToMemory(path, &charmap, &length);
     if (charmap != NULL) {
         unsigned char* current = charmap;
         unsigned char* end = charmap + length;
-        int pos = 0;
         while (current != end) {
             int codepoint = utf8::next(current, end);
             if (codepoint != 0x0a) font_positions[codepoint] = pos;
             ++pos;
         }
+        FILESYSTEM_freeMemory(&charmap);
+        return true;
+    } else {
+        return false;
     }
-    FILESYSTEM_freeMemory(&charmap);
 }
 
 int Graphics::bfontlen(char32_t ch) {
