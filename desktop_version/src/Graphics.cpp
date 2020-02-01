@@ -325,6 +325,7 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
     if (cen)
         _x = ((160 ) - ((len(_s)) / 2));
     int bfontpos = 0;
+    bool tallline = false;
     auto utf32 = utf8to32(_s);
     std::vector<uint32_t> bidi(utf32.size());
     FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
@@ -340,6 +341,12 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
         SDL_Rect fontRect = bfont_rect;
         fontRect.x = tpoint.x ;
         fontRect.y = tpoint.y ;
+
+        if (bfont[font_idx(curr)]->h > 8) {
+            tallline = true;
+        } else if (tallline) {
+            fontRect.y += 4;
+        }
 
         if (flipmode)
         {
