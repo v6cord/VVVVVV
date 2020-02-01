@@ -192,6 +192,7 @@ void Graphics::Makebfont()
             ++pos;
         }
     }
+    FILESYSTEM_freeMemory(&charmap);
 }
 
 int Graphics::bfontlen(char32_t ch) {
