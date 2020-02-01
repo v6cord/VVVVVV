@@ -389,10 +389,17 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
 
             dwgfx.Print( 310 - (4*8), 230, "c1.0", tr/2, tg/2, tb/2);
+            int modoffset = 230;
+            dwgfx.Print( 10, modoffset, "git.io/v6-ce", tr/2, tg/2, tb/2);
+            modoffset -= 10;
             if (music.mmmmmm) {
-                dwgfx.Print( 10, 220, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
+                dwgfx.Print( 10, modoffset, "[MMMMMM Mod Installed]", tr/2, tg/2, tb/2);
+                modoffset -= 10;
             }
-            dwgfx.Print( 10, 230, "git.io/v6-ce", tr/2, tg/2, tb/2);
+            if (dwgfx.grphx.im_unifont && dwgfx.grphx.im_wideunifont) {
+                dwgfx.Print( 10, modoffset, "[UniFont Installed]", tr/2, tg/2, tb/2);
+                modoffset -= 10;
+            }
         }
         else if (game.currentmenuname == "loadcustomtrial")
         {
