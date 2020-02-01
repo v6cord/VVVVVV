@@ -21,7 +21,7 @@ extern "C" {
     );
 }
 
-SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlpha /*= false*/)
+SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlpha /*= false*/, bool optional /*= false*/)
 {
 	//Temporary storage for the image that's loaded
 	SDL_Surface* loadedImage = NULL;
@@ -71,12 +71,12 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
 		}
 		return optimizedImage;
 	}
-	else
+	else if (!optional)
 	{
 		fprintf(stderr,"Image not found: %s\n", filename);
 		SDL_assert(0 && "Image not found! See stderr.");
-		return NULL;
 	}
+        return NULL;
 }
 
 void GraphicsResources::init(void)
@@ -88,8 +88,8 @@ void GraphicsResources::init(void)
 	im_sprites =		LoadImage("graphics/sprites.png");
 	im_flipsprites =	LoadImage("graphics/flipsprites.png");
 	im_bfont =		LoadImage("graphics/font.png");
-	im_unifont =		LoadImage("graphics/unifont.png");
-	im_wideunifont =	LoadImage("graphics/wideunifont.png");
+	im_unifont =		LoadImage("graphics/unifont.png", true, false, true);
+	im_wideunifont =	LoadImage("graphics/wideunifont.png", true, false, true);
 	im_bfontmask =		LoadImage("graphics/fontmask.png");
 	im_teleporter =		LoadImage("graphics/teleporter.png");
 
