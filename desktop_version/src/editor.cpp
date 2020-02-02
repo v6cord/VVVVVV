@@ -24,6 +24,7 @@
 #include <utf8/checked.h>
 #include <physfs.h>
 #include <iterator>
+#include <iostream>
 
 edlevelclass::edlevelclass()
 {
@@ -182,6 +183,7 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
         _data.filename = _path;
         return true;
     } catch (const std::out_of_range& ex) {
+        std::cout << "Couldn't load metadata for " << _path << "!" << std::endl;
         return false;
     }
 }
