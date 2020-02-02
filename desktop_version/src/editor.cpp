@@ -4818,7 +4818,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ed.sby--;
                     }
                     key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                    ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
+                    ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
                 }
 
                 if (key.isDown(27))
@@ -4904,7 +4904,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             ed.sb[ed.pagey+ed.sby]=key.keybuffer;
-            ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
+            ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
 
             if(!game.press_map && !key.isDown(27)) game.mapheld=false;
             if (!game.mapheld)
@@ -4923,7 +4923,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         if(ed.sby+ed.pagey>=ed.sblength) ed.sblength=ed.sby+ed.pagey;
                         key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                        ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
+                        ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
                     }
                     else
                     {
