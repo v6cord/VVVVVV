@@ -632,6 +632,8 @@ void mapclass::updatetowerglow()
 			break;
 		}
 
+		updatetowerentcol(cmode);
+
 		if (check == 0)
 		{
 			colstatedelay = 45;
@@ -2241,4 +2243,41 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			}
 		}
 	}
+}
+
+void mapclass::updatetowerentcol(int col)
+{
+    // Update all sprite-based entities in the tower on "stable" colors
+    // TODO: Interpolate between each stable color during transitions between them
+
+    // WARNING: `59 + col` is duplicated from editorclass::getlevelcol()!
+    int entcol = ed.getenemycol(59 + col);
+    int plattile = ed.gettowerplattile(col * 5);
+
+    // I don't want to deal with main game stuff
+    if (!custommode)
+        return;
+
+    // Basically copied from mapclass::changefinalcol()
+    for (int i = 0; i < obj.nentity; i++) {
+        if (obj.entities[i].type == 1) { // Something with a movement behavior
+            if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) // Conveyor
+                obj.entities[i].tile = 4 + plattile*12;
+            else if (obj.entities[i].isplatform) // Moving platform
+                obj.entities[i].tile = plattile*12;
+            else // Just an enemy
+                obj.entities[i].colour = entcol;
+        } else if (obj.entities[i].type == 2) { // Disappearing platform
+            if (obj.entities[i].state == 3)
+                // It's disappeared, so its tile is offset, so we have to correct for that offset
+                obj.entities[i].tile = 4 + plattile*12;
+            else
+                // Normal
+                obj.entities[i].tile = plattile * 12;
+
+            if (obj.entities[i].state == 5)
+                // Extra kludge for when it respawns
+                obj.entities[i].tile += 3 - obj.entities[i].life/3;
+        }
+    }
 }

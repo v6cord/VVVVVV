@@ -193,6 +193,8 @@ public:
     int cursorstate, cursordelay = 0;
 
     bool nofog = false;
+
+    void updatetowerentcol(int col);
 };
 
 extern mapclass map;

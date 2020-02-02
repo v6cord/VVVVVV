@@ -640,6 +640,7 @@ int editorclass::getlevelcol(int t)
     }
     else if (level[t].tileset==5)   //Tower
     {
+        // WARNING: This is duplicated in mapclass::updatetowerentcol()!
         return 58 + level[t].tilecol/5;
     }
     return 0;
