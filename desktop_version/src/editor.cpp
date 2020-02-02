@@ -3936,13 +3936,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             {
                 if(i+ed.pagey<500)
                 {
-                    dwgfx.Print(16,20+(i*8),ed.sb[i+ed.pagey], 123, 111, 218, false);
+                    auto text = ed.sb[i+ed.pagey];
+                    if (i == ed.sby && ed.entframe < 2) text += "_";
+                    dwgfx.Print(16,20+(i*8),text, 123, 111, 218, false);
                 }
-            }
-            //Draw cursor
-            if(ed.entframe<2)
-            {
-                dwgfx.Print(16+(ed.sbx*8),20+(ed.sby*8),"_",123, 111, 218, false);
             }
             break;
         }
