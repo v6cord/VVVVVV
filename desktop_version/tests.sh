@@ -23,6 +23,8 @@ for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.vvvvvv; do
         echo "PASS"
     else
         echo "$output"
+        echo -n "BACKTRACE: "
+        gdb -batch -ex "run" -ex "bt" --args ./VVVVVV-CE -p "$testcase" --headless --quiet
         failed=1
     fi
 done
