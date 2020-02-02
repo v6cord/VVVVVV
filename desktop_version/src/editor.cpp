@@ -2838,10 +2838,19 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
                     towers[u - 1].tiles[i] = towers[u].tiles[i];
             }
 
+            // Shift tower ID in rooms
             for (twx = 0; twx < maxwidth; twx++)
                 for (twy = 0; twy < maxheight; twy++)
                     if (level[twx + twy * maxwidth].tower > t)
                         level[twx + twy * maxwidth].tower--;
+
+            // Shift tower ID in entities
+            for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
+                if (edentity[i].intower > t)
+                    edentity[i].intower--;
+                if (edentity[i].t == 13 && edentity[i].p3 > t)
+                    edentity[i].p3--;
+            }
 
             t--;
             max_tower--;
