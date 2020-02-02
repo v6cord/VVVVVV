@@ -91,7 +91,7 @@ void entityclass::init()
 
 void entityclass::resetallflags()
 {
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1000; i++)
     {
         flags[i] = 0;
     }
