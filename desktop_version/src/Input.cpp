@@ -2315,7 +2315,8 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         music.playef(0, 10);
                         game.jumppressed = 0;
                         game.totalflips++;
-                        infiniflipkludge = true;
+                        if (game.infiniflip)
+                            infiniflipkludge = true;
                     }
                     if ((obj.entities[ie].onroof>0 || game.infiniflip) && game.gravitycontrol == 1 && !game.noflip && !infiniflipkludge)
                     {
