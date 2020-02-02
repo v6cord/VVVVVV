@@ -3456,7 +3456,16 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.Print(ex+4,ey+4, ">", 255, 255, 255 - help.glow, false);
                 break;
             case 2: // Moving platforms, conveyors
-            case 3: // Disappearing platforms
+            case 3: { // Disappearing platforms
+                int thetile = obj.customplatformtile;
+                int theroomnum = ed.levx + ed.maxwidth*ed.levy;
+                // Kludge for platforms/conveyors/quicksand in towers and tower hallways...
+                if (ed.level[theroomnum].tileset == 5) {
+                    thetile = ed.gettowerplattile(ed.level[theroomnum].tilecol);
+
+                    thetile *= 12;
+                }
+
                 drawRect = dwgfx.tiles_rect;
                 drawRect.x += ex;
                 drawRect.y += ey;
@@ -3465,7 +3474,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if (edentity[i].t == 2 && edentity[i].p1 >= 7)
                     len *= 2;
                 while (drawRect.x < (ex + len)) {
-                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],
+                    BlitSurfaceStandard(dwgfx.entcolours[thetile],
                                         NULL, dwgfx.backBuffer, &drawRect);
                     drawRect.x += 8;
                 }
@@ -3507,6 +3516,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if(edentity[i].p1==3)
                     dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
                 break;
+            }
             case 5: // Flip Tokens
                 dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
                 //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
@@ -6875,6 +6885,35 @@ int editorclass::getnumaltstates(int rxi, int ryi)
         if (altstates[i].x == rxi && altstates[i].y == ryi)
             num++;
     return num;
+}
+
+// Pass in the `tilecol` of a room to this function
+int editorclass::gettowerplattile(int col)
+{
+    // Re-use the Warp Zone textures from entcolours.png
+    switch (col / 5) {
+    case 0:
+        // Red
+        return 47+1;
+    case 1:
+        // Yellow
+        return 47+4;
+    case 2:
+        // Green
+        return 47+5;
+    case 3:
+        // Cyan
+        return 47;
+    case 4:
+        // Purple
+        return 47+3;
+    case 5:
+        // Pink
+        return 47+2;
+    }
+
+    // Default to red
+    return 47+1;
 }
 
 #define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
