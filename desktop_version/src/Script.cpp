@@ -171,13 +171,17 @@ int scriptclass::getimage(Game& game, std::string n) {
 	return -1;
 }
 
+#define SPECIALVARS \
+    X("deaths", game.deathcounts) \
+    X("player_x", obj.entities[obj.getplayer()].xp) \
+    X("player_y", obj.entities[obj.getplayer()].yp) \
+    X("trinkets", game.trinkets) \
+    X("coins", game.coins)
+
 int* scriptclass::specialvar(std::string n) {
-    int player = obj.getplayer();
-    if(n == "deaths") return &game.deathcounts;
-    if(n == "player_x") return &obj.entities[player].xp;
-    if(n == "player_y") return &obj.entities[player].yp;
-    if(n == "trinkets") return &game.trinkets;
-    if(n == "coins") return &game.coins;
+#define X(k, v) if (n == k) return &v;
+    SPECIALVARS
+#undef X
     return nullptr;
 }
 
@@ -198,12 +202,8 @@ void scriptclass::setvar(std::string n, std::string c) {
 }
 
 void scriptclass::updatevars(Game& game, entityclass& obj) {
-#define X(n) setvar(n, std::to_string(*specialvar(n)));
-	X("deaths");
-	X("player_x");
-	X("player_y");
-	X("trinkets");
-	X("coins");
+#define X(k, v) setvar(k, std::to_string(v));
+    SPECIALVARS
 #undef X
 }
 
