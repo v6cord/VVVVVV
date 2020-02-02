@@ -2845,6 +2845,13 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
 
             // Shift tower ID in entities
             for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
+                if (edentity[i].intower == t ||
+                    (edentity[i].t == 13 && edentity[i].p3 == t)) {
+                    removeedentity(i);
+                    i--;
+                    continue;
+                }
+
                 if (edentity[i].intower > t)
                     edentity[i].intower--;
                 if (edentity[i].t == 13 && edentity[i].p3 > t)
