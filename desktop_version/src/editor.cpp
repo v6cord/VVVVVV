@@ -2337,7 +2337,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
         if (!game.quiet) printf("Custom asset directory exists at %s\n",dirpath.c_str());
         FILESYSTEM_mount(dirpath.c_str(), dwgfx);
         dwgfx.reloadresources();
-        music.init();
     } else if (!game.quiet) {
         printf("Custom asset directory does not exist\n");
     }
