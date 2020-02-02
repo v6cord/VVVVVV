@@ -164,6 +164,9 @@ void Graphics::drawspritesetcol(int x, int y, int t, int c, UtilityClass& help)
 
 void Graphics::Makebfont()
 {
+    bfont.clear();
+    flipbfont.clear();
+    font_positions.clear();
     if (PHYSFS_getRealDir("graphics/font.txt") != PHYSFS_getRealDir("graphics/font.png")) {
         for (int j =  0; j < (grphx.im_bfont->h / 8); j++)
         {
@@ -3444,6 +3447,7 @@ void Graphics::reloadresources() {
     MakeTileArray();
     MakeSpriteArray();
     maketelearray();
+    Makebfont();
 
     images.push_back(grphx.im_image0);
     images.push_back(grphx.im_image1);
