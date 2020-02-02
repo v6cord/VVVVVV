@@ -228,6 +228,7 @@ public:
     void resize_tower_tiles(int tower);
     void shift_tower(int tower, int y);
     int get_tower(int rx, int ry);
+    bool find_tower(int tower, int &rx, int &ry);
     int tower_size(int tower);
     int tower_scroll(int tower);
     bool intower(void);
@@ -251,6 +252,7 @@ public:
     int findcoin(int t);
     int findcrewmate(int t);
     int findwarptoken(int t);
+    std::string warptokendest(int t);
     void countstuff();
     void findstartpoint(Game& game);
     void weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game);

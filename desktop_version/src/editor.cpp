@@ -1937,6 +1937,29 @@ int editorclass::findwarptoken(int t)
     return 0;
 }
 
+// Returns a warp token destination room string
+std::string editorclass::warptokendest(int t) {
+    int ex = edentity[t].p1;
+    int ey = edentity[t].p2;
+    int tower = edentity[t].p3;
+    std::string towerstr = "";
+    int rx, ry;
+    if (!tower || !find_tower(tower, rx, ry)) {
+        rx = ex / 40;
+        ry = ey / 30;
+    } else {
+        if (ey < 20)
+            ey = 20;
+        towerstr = "T"+help.String(tower)+":"+help.String(ey - 20);
+    }
+
+    // Rooms are 1-indexed in the editor
+    rx++;
+    ry++;
+
+    return "("+help.String(rx)+","+help.String(ry)+")"+towerstr;
+}
+
 void editorclass::countstuff()
 {
     numtrinkets=0;
@@ -2238,14 +2261,22 @@ void editorclass::shift_tower(int tower, int y) {
                 towers[tower-1].tiles[x + (ny - y)*40];
 }
 
+// Returns the tower of the given room
 int editorclass::get_tower(int rx, int ry) {
-    /* Returns the tower of this room */
-
     int room = rx + ry * maxwidth;
     if (ry < 0 || rx < 0 || rx >= maxwidth || ry >= maxheight)
         return 0;
 
     return level[room].tower;
+}
+
+// Finds the tower in the level and sets rx/ry to it
+bool editorclass::find_tower(int tower, int &rx, int &ry) {
+    for (rx = 0; rx < maxwidth; rx++)
+        for (ry = 0; ry < maxheight; ry++)
+            if (tower == get_tower(rx, ry))
+                return true;
+    return false;
 }
 
 int editorclass::tower_size(int tower) {
@@ -3503,8 +3534,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.drawsprite(ex, ey, 18+(ed.entframe%2),196,196,196);
                 fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
                 if(ed.temp==i)
-                    dwgfx.Print(ex, ey - 8,
-                                "("+help.String(((edentity[i].p1-int(edentity[i].p1%40))/40)+1)+","+help.String(((edentity[i].p2-int(edentity[i].p2%30))/30)+1)+")",210,210,255);
+                    dwgfx.Print(ex, ey - 8, ed.warptokendest(i),210,210,255);
                 else
                     dwgfx.Print(ex, ey - 8,
                                 help.String(ed.findwarptoken(i)),210,210,255);
@@ -3599,19 +3629,24 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         //Need to also check warp point destinations
         if(edentity[i].t==13 && ed.warpent!=i)
         {
-            int ep1 = edentity[i].p1 - ed.levx*40;
-            int ep2 = edentity[i].p2 - ed.levy*30;
-            if (tower)
+            int ep1 = edentity[i].p1;
+            int ep2 = edentity[i].p2;
+            int etower = edentity[i].p3;
+            if (!etower) {
+                ep1 -= ed.levx * 40;
+                ep2 -= ed.levy * 30;
+            } else
                 ep2 -= ed.ypos;
             ep1 *= 8;
             ep2 *= 8;
-            if (tower || (ep1 >= 0 && ep1 < 320 && ep2 >= 0 && ep2 < 240))
+            if (tower == etower &&
+                (tower || (ep1 >= 0 && ep1 < 320 && ep2 >= 0 && ep2 < 240)))
             {
                 dwgfx.drawsprite(ep1, ep2, 18 + ed.entframe%2, 64, 64, 64);
                 fillboxabs(dwgfx, ep1, ep2, 16, 16, dwgfx.getRGB(64, 64, 96));
                 if (ed.tilex == ep1/8 && ed.tiley == ep2/8)
                 {
-                    dwgfx.bprint(ep1, ep2 - 8, rmstr, 190, 190, 225);
+                    dwgfx.bprint(ep1, ep2 - 8, ed.warptokendest(i), 190, 190, 225);
                 }
                 else
                 {
@@ -6094,8 +6129,16 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     {
                         if(ed.free(ed.tilex, ed.tiley)==0)
                         {
-                            edentity[ed.warpent].p1=ed.tilex+(ed.levx*40);
-                            edentity[ed.warpent].p2=ed.tiley+(ed.levy*30);
+                            int tower = ed.get_tower(ed.levx, ed.levy);
+                            int ex = ed.tilex+(ed.levx*40);
+                            int ey = ed.tiley+(ed.levy*30);
+                            if (tower) {
+                                ex = ed.tilex;
+                                ey = ed.tiley + ed.ypos;
+                            }
+                            edentity[ed.warpent].p1=ex;
+                            edentity[ed.warpent].p2=ey;
+                            edentity[ed.warpent].p3=tower;
                             ed.warpmod=false;
                             ed.warpent=-1;
                             ed.lclickdelay=1;

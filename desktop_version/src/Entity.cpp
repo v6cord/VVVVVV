@@ -2242,6 +2242,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         //Added in port, hope it doesn't break anything
         entities[k].behave = vx;
         entities[k].para = vy;
+        entities[k].life = p1;
         break;
     case 14: // Teleporter
         entities[k].rule = 3;

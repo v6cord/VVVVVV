@@ -84,6 +84,7 @@ public:
     int get_tower(int rx, int ry);
     int entering_tower(int rx, int ry, int *entry);
     bool leaving_tower(int *rx, int *ry, entityclass &obj);
+    void custom_warpto(int ent);
     void warpto(int rx, int ry , int t, int tx, int ty,  Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
     void gotoroom(int rx, int ry, Graphics& dwgfx,  Game& game, entityclass& obj, musicclass& music);

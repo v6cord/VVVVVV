@@ -1051,6 +1051,30 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
 	return true;
 }
 
+void mapclass::custom_warpto(int ent)
+{
+	int ex = obj.entities[ent].behave;
+	int ey = obj.entities[ent].para;
+	int tower = obj.entities[ent].life;
+	int rx, ry;
+	if (!tower || !ed.find_tower(tower, rx, ry)) {
+		rx = ex / 40;
+		ry = ey / 30;
+		ex -= (rx * 40);
+		ey -= (ry * 30);
+	}
+
+	// Warp token destination offset
+	ey += 2;
+	rx += 100;
+	ry += 100;
+
+	warpto(rx, ry, obj.getplayer(), ex, ey, graphics, game, obj, music);
+	game.teleport = false;
+	game.flashlight = 6;
+	game.screenshake = 25;
+}
+
 void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
 	gotoroom(rx, ry, dwgfx, game, obj, music);
@@ -1879,7 +1903,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				break;
 			case 13: // Warp Tokens
 				obj.createentity(game, ex, ey, 13, edentity[edi].p1,
-								 edentity[edi].p2);
+								 edentity[edi].p2, edentity[edi].p3);
 				break;
 			case 14: // Round teleporter (whyy)
 				obj.createentity(game, ex, ey, 14);
