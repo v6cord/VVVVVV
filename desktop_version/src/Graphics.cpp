@@ -2623,6 +2623,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
     }
     point tpoint;
     SDL_Rect trect;
+    SDL_Rect drawRect;
 
     for (int i = 0; i < obj.nentity; i++)
     {
@@ -2669,18 +2670,26 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
                 // Special: Moving platform, 4 tiles
                 tpoint.x = obj.entities[i].xp;
                 tpoint.y = obj.entities[i].yp-map.ypos;
-                setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-                tpoint.x += 8;
-                setRect(trect,sprites_rect.w, sprites_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-                tpoint.x += 8;
-                setRect(trect,sprites_rect.w, sprites_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-                tpoint.x += 8;
-                setRect(trect,sprites_rect.w, sprites_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-
+                drawRect = tiles_rect;
+                drawRect.x += tpoint.x;
+                drawRect.y += tpoint.y;
+                if(map.custommode){
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                }else{
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                }
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
