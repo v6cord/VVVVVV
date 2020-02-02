@@ -880,6 +880,7 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 		room_different = false;
 
 	if (room_different) {
+		game.gotoroomfromscript = true;
 		gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 		// If in finalstretch, update the colors of entities immediately
 		if (custommode && finalstretch)
