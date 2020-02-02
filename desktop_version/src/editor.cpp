@@ -3932,13 +3932,18 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             FillRect(dwgfx.backBuffer, 14,226,292,12, dwgfx.getRGB(162,48,61));
             dwgfx.Print(16,228,"CURRENT SCRIPT: " + ed.sbscript, 123, 111, 218, true);
             //Draw text
+            int y = 20;
             for(int i=0; i<25; i++)
             {
                 if(i+ed.pagey<500)
                 {
                     auto text = ed.sb[i+ed.pagey];
                     if (i == ed.sby && ed.entframe < 2) text += "_";
-                    dwgfx.Print(16,20+(i*8),text, 123, 111, 218, false);
+                    if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
+                        y += 16;
+                    } else {
+                        y += 8;
+                    }
                 }
             }
             break;
