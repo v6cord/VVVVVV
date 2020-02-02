@@ -738,7 +738,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int varid = getvar(words[1]);
 				if (varid != -1) {
 					if (words[2] == "") {
-    		            position++;
+						position++;
 						variablecontents[varid] += processvars(commands[position]);
 					} else {
 						if (is_number(variablecontents[varid]) && is_number(words[2])) {
