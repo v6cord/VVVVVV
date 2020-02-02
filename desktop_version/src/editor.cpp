@@ -5080,6 +5080,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.Desc3=key.keybuffer;
                     ed.desc3mod=false;
                 }
+                ed.textentry=false;
 
                 if(ed.desc1mod)
                 {
