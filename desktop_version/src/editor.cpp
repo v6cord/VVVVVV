@@ -2232,9 +2232,12 @@ void editorclass::shift_tower(int tower, int y) {
     }
 
     // Shift entities
-    for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
+    for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
         if (tower == edentity[i].intower)
             edentity[i].y += y;
+        if (edentity[i].t == 13 && tower == edentity[i].p3)
+            edentity[i].p2 += y;
+    }
 
     // Shift editor scroll position
     ypos += y;
