@@ -2773,8 +2773,6 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
         alt->SetAttribute("state", altstates[a].state);
         alt->LinkEndChild(new TiXmlText(tiles.c_str()));
         msg->LinkEndChild(alt);
-
-        a++;
     }
     data->LinkEndChild(msg);
 
