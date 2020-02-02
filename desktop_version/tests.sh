@@ -11,8 +11,12 @@ function finish {
 trap finish EXIT
 
 source ./build.sh
+if [[ ! -f data-zip/data.zip && ! -f data.zip ]]; then
+    mkdir -p data-zip
+    wget -O data-zip/data.zip https://thelettervsixtim.es/makeandplay/data.zip
+fi
 if [ ! -f data.zip ]; then
-    wget https://thelettervsixtim.es/makeandplay/data.zip
+    ln -s data-zip/data.zip data.zip
 fi
 set +e -o pipefail
 failed=0
