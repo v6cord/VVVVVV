@@ -210,7 +210,9 @@ void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
 }
 
 int Graphics::bfontlen(char32_t ch) {
-    return bfont[font_idx(ch)]->w;
+    auto real = bfont[font_idx(ch)]->w;
+    if (ch < 32 && real == 8) return 6;
+    return real;
 }
 
 int Graphics::strwidth(std::string_view s) {
