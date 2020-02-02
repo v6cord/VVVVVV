@@ -1901,7 +1901,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
     int thetile = customplatformtile;
     int theroomnum = game.roomx-100 + ed.maxwidth*(game.roomy-100);
     // Kludge for platforms/conveyors/quicksand in towers and tower hallways...
-    if (map.custommode && ed.level[theroomnum].tileset == 5) {
+    if (theroomnum >= 0 && map.custommode && ed.level[theroomnum].tileset == 5) {
         thetile = ed.gettowerplattile(ed.level[theroomnum].tilecol);
 
         thetile *= 12;
