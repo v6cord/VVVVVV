@@ -213,6 +213,28 @@ int Graphics::bfontlen(char32_t ch) {
     return bfont[font_idx(ch)]->w;
 }
 
+int Graphics::strwidth(std::string_view s) {
+    auto width = 0;
+    auto utf = s.begin();
+    while (utf != s.end()) {
+        auto ch = utf8::next(utf, s.end());
+        auto len = bfontlen(ch);
+        width += len;
+    }
+    return width;
+}
+
+int Graphics::strheight(std::string_view s) {
+    int max = 8;
+    auto utf = s.begin();
+    while (utf != s.end()) {
+        auto ch = utf8::next(utf, s.end());
+        auto len = graphics.bfont[graphics.font_idx(ch)]->h;
+        if (len > max) max = len;
+    }
+    return max;
+}
+
 std::vector<uint32_t> utf8to32(const std::string& src) {
     std::vector<uint32_t> res;
     utf8::utf8to32(src.begin(), src.end(), std::back_inserter(res));
