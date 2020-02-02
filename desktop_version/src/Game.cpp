@@ -5479,6 +5479,10 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
         {
             nocoincounter = atoi(pText);
         }
+        else if (pKey == "altstates")
+        {
+            obj.altstates = atoi(pText);
+        }
         else if (pKey == "variables")
         {
             for (TiXmlElement* varEl = pElem->FirstChildElement(); varEl; varEl = varEl->NextSiblingElement()) {
@@ -6589,6 +6593,9 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msg->LinkEndChild( new TiXmlText( UtilityClass::String(nocoincounter).c_str() ));
     msgs->LinkEndChild( msg );
 
+    msg = new TiXmlElement( "altstates" );
+    msg->LinkEndChild( new TiXmlText( UtilityClass::String(obj.altstates).c_str() ));
+    msgs->LinkEndChild( msg );
 
     msg = new TiXmlElement( "variables" );
     for (std::size_t i = 0; i < script.variablenames.size(); i++) {
