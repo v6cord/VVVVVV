@@ -6686,10 +6686,10 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 
 std::string find_tag(std::string_view buf, std::string_view start, std::string_view end) {
     auto title_tag = buf.find(start);
-    if (title_tag == std::string_view::npos) return "";
+    if (title_tag == std::string_view::npos) throw std::out_of_range("No start tag!");
     auto title_start = title_tag + start.size();
     auto title_close = buf.find(end, title_start);
-    if (title_close == std::string_view::npos) return "";
+    if (title_close == std::string_view::npos) throw std::out_of_range("No close tag!");
     auto title_len = title_close - title_start;
     std::string value(buf.substr(title_start, title_len));
     replaceAll(value, "&quot;", "\"");
