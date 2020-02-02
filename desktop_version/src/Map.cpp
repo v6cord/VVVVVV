@@ -1311,7 +1311,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	}
 
 	// Kludge to remove 2-frame-delay when loading init scripts for a room
-	if (!game.gotoroomfromscript && obj.checktrigger() > -1) {
+	if (!game.gotoroomfromscript && game.deathseq == -1 && obj.checktrigger() > -1) {
 		game.startscript = true;
 		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
 		obj.kludgeonetimescript = true;
