@@ -2011,7 +2011,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
           dwgfx.bprint(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }else{
             
-            dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
+            dwgfx.bprint(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
             //dwgfx.Print(304 - (map.customcoins / 10) * 8, 231, std::to_string(map.customcoins), 255, 255, 255);
             //dwgfx.drawhuetile(312, 231, 48, 8);
         }

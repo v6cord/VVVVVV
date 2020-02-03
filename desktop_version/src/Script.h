@@ -40,7 +40,9 @@ public:
     int getimage(Game& game, std::string n);
 
     int getvar(std::string n);
-    
+
+    int* specialvar(std::string n);
+
     void setvar(std::string n, std::string c);
 
     void updatevars(Game& game, entityclass& obj);

@@ -155,8 +155,16 @@ void textboxclass::resize()
 
 void textboxclass::addline(std::string t)
 {
+    auto max = 8;
+    auto utf = t.begin();
+    while (utf != t.end()) {
+        auto ch = utf8::next(utf, t.end());
+        auto len = graphics.bfont[graphics.font_idx(ch)]->h;
+        if (len > max) max = len;
+    }
+
     line[numlines] = t;
-    numlines++;
+    numlines += max / 8;
     resize();
     if (numlines >= 12) numlines = 0;
 }

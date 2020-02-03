@@ -75,6 +75,8 @@ int main(int argc, char *argv[])
     bool syslog = false;
 #endif
 
+    char* assets = NULL;
+
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
             game.quiet = true;
@@ -128,7 +130,12 @@ int main(int argc, char *argv[])
             }
         }
         if (std::string(argv[i]) == "-renderer") {
-            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
+            i++;
+            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
+        }
+        if (strcmp(argv[i], "-assets") == 0) {
+            ++i;
+            assets = argv[i];
         }
     }
 
@@ -149,10 +156,6 @@ int main(int argc, char *argv[])
 #endif
     }
 
-    if(!FILESYSTEM_init(argv[0]))
-    {
-        return 1;
-    }
     SDL_Init(
         SDL_INIT_VIDEO |
         SDL_INIT_AUDIO |
@@ -160,10 +163,10 @@ int main(int argc, char *argv[])
         SDL_INIT_GAMECONTROLLER
     );
 
-    /*if (argc > 2 && strcmp(argv[1], "-renderer") == 0)
+    if(!FILESYSTEM_init(argv[0], assets))
     {
-        SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
-    }*/
+        return 1;
+    }
 
     if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 

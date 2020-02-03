@@ -164,6 +164,9 @@ void Graphics::drawspritesetcol(int x, int y, int t, int c, UtilityClass& help)
 
 void Graphics::Makebfont()
 {
+    bfont.clear();
+    flipbfont.clear();
+    font_positions.clear();
     if (PHYSFS_getRealDir("graphics/font.txt") != PHYSFS_getRealDir("graphics/font.png")) {
         for (int j =  0; j < (grphx.im_bfont->h / 8); j++)
         {
@@ -210,7 +213,31 @@ void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
 }
 
 int Graphics::bfontlen(char32_t ch) {
-    return bfont[font_idx(ch)]->w;
+    auto real = bfont[font_idx(ch)]->w;
+    if (ch < 32 && real == 8) return 6;
+    return real;
+}
+
+int Graphics::strwidth(std::string_view s) {
+    auto width = 0;
+    auto utf = s.begin();
+    while (utf != s.end()) {
+        auto ch = utf8::next(utf, s.end());
+        auto len = bfontlen(ch);
+        width += len;
+    }
+    return width;
+}
+
+int Graphics::strheight(std::string_view s) {
+    int max = 8;
+    auto utf = s.begin();
+    while (utf != s.end()) {
+        auto ch = utf8::next(utf, s.end());
+        auto len = graphics.bfont[graphics.font_idx(ch)]->h;
+        if (len > max) max = len;
+    }
+    return max;
 }
 
 std::vector<uint32_t> utf8to32(const std::string& src) {
@@ -314,7 +341,7 @@ void Graphics::MakeSpriteArray()
 }
 
 
-void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
+bool Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
 {
     r = clamp(r,0,255);
     g = clamp(g,0,255);
@@ -358,6 +385,7 @@ void Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool 
         }
         bfontpos+=bfontlen(curr) ;
     }
+    return tallline;
 }
 
 
@@ -1571,7 +1599,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                         if (tpoint.x > 300)
                         {
@@ -1579,7 +1607,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                     }
                     else if (map.warpy)
@@ -1590,7 +1618,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                         if (tpoint.y > 210)
                         {
@@ -1598,7 +1626,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                     }
                 }
@@ -2595,6 +2623,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
     }
     point tpoint;
     SDL_Rect trect;
+    SDL_Rect drawRect;
 
     for (int i = 0; i < obj.nentity; i++)
     {
@@ -2641,18 +2670,26 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
                 // Special: Moving platform, 4 tiles
                 tpoint.x = obj.entities[i].xp;
                 tpoint.y = obj.entities[i].yp-map.ypos;
-                setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-                tpoint.x += 8;
-                setRect(trect,sprites_rect.w, sprites_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-                tpoint.x += 8;
-                setRect(trect,sprites_rect.w, sprites_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-                tpoint.x += 8;
-                setRect(trect,sprites_rect.w, sprites_rect.h, tpoint.x, tpoint.y);
-                BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
-
+                drawRect = tiles_rect;
+                drawRect.x += tpoint.x;
+                drawRect.y += tpoint.y;
+                if(map.custommode){
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                }else{
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                }
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
@@ -3419,6 +3456,7 @@ void Graphics::reloadresources() {
     MakeTileArray();
     MakeSpriteArray();
     maketelearray();
+    Makebfont();
 
     images.push_back(grphx.im_image0);
     images.push_back(grphx.im_image1);
@@ -3434,6 +3472,8 @@ void Graphics::reloadresources() {
     images.push_back(grphx.im_image10);
     images.push_back(grphx.im_image11);
     images.push_back(grphx.im_image12);
+
+    music.init();
 }
 
 void Graphics::textboxcreatefast()

@@ -48,6 +48,12 @@ jobs:
         name: VVVVVV-CE-LinuxDeb
         path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
 
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip
+
     - name: Run tests
       run: cd ${SRC_DIR_PATH} && ./tests.sh
 

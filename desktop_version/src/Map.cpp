@@ -632,6 +632,8 @@ void mapclass::updatetowerglow()
 			break;
 		}
 
+		updatetowerentcol(cmode);
+
 		if (check == 0)
 		{
 			colstatedelay = 45;
@@ -880,6 +882,7 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 		room_different = false;
 
 	if (room_different) {
+		game.gotoroomfromscript = true;
 		gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 		// If in finalstretch, update the colors of entities immediately
 		if (custommode && finalstretch)
@@ -1050,15 +1053,39 @@ bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
 	return true;
 }
 
+void mapclass::custom_warpto(int ent)
+{
+	int ex = obj.entities[ent].behave;
+	int ey = obj.entities[ent].para;
+	int tower = obj.entities[ent].life;
+	int rx, ry;
+	if (!tower || !ed.find_tower(tower, rx, ry)) {
+		rx = ex / 40;
+		ry = ey / 30;
+		ex -= (rx * 40);
+		ey -= (ry * 30);
+	}
+
+	// Warp token destination offset
+	ey += 2;
+	rx += 100;
+	ry += 100;
+
+	warpto(rx, ry, obj.getplayer(), ex, ey, graphics, game, obj, music);
+	game.teleport = false;
+	game.flashlight = 6;
+	game.screenshake = 25;
+}
+
 void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
 	gotoroom(rx, ry, dwgfx, game, obj, music);
-	if (towermode)
-		realign_tower();
 	game.teleport = false;
 	obj.entities[t].xp = tx * 8;
 	obj.entities[t].yp = (ty * 8) - obj.entities[t].h;
 	game.gravitycontrol = 0;
+	if (towermode)
+		realign_tower();
 }
 
 void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
@@ -1310,7 +1337,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	}
 
 	// Kludge to remove 2-frame-delay when loading init scripts for a room
-	if (!game.gotoroomfromscript && obj.checktrigger() > -1) {
+	if (!game.gotoroomfromscript && game.deathseq == -1 && obj.checktrigger() > -1) {
 		game.startscript = true;
 		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
 		obj.kludgeonetimescript = true;
@@ -1492,7 +1519,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		}
 	}
 
-	if (rx == 119 && ry == 108)
+	if (rx == 119 && ry == 108 && !custommode)
 	{
 		background = 5;
 		dwgfx.rcol = 3;
@@ -1878,7 +1905,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				break;
 			case 13: // Warp Tokens
 				obj.createentity(game, ex, ey, 13, edentity[edi].p1,
-								 edentity[edi].p2);
+								 edentity[edi].p2, edentity[edi].p3);
 				break;
 			case 14: // Round teleporter (whyy)
 				obj.createentity(game, ex, ey, 14);
@@ -2216,4 +2243,41 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			}
 		}
 	}
+}
+
+void mapclass::updatetowerentcol(int col)
+{
+    // Update all sprite-based entities in the tower on "stable" colors
+    // TODO: Interpolate between each stable color during transitions between them
+
+    // WARNING: `59 + col` is duplicated from editorclass::getlevelcol()!
+    int entcol = ed.getenemycol(59 + col);
+    int plattile = ed.gettowerplattile(col * 5);
+
+    // I don't want to deal with main game stuff
+    if (!custommode)
+        return;
+
+    // Basically copied from mapclass::changefinalcol()
+    for (int i = 0; i < obj.nentity; i++) {
+        if (obj.entities[i].type == 1) { // Something with a movement behavior
+            if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) // Conveyor
+                obj.entities[i].tile = 4 + plattile*12;
+            else if (obj.entities[i].isplatform) // Moving platform
+                obj.entities[i].tile = plattile*12;
+            else // Just an enemy
+                obj.entities[i].colour = entcol;
+        } else if (obj.entities[i].type == 2) { // Disappearing platform
+            if (obj.entities[i].state == 3)
+                // It's disappeared, so its tile is offset, so we have to correct for that offset
+                obj.entities[i].tile = 4 + plattile*12;
+            else
+                // Normal
+                obj.entities[i].tile = plattile * 12;
+
+            if (obj.entities[i].state == 5)
+                // Extra kludge for when it respawns
+                obj.entities[i].tile += 3 - obj.entities[i].life/3;
+        }
+    }
 }

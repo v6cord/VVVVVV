@@ -56,7 +56,7 @@ extern "C" {
     extern const unsigned vce_zip_size;
 }
 
-int FILESYSTEM_init(char *argvZero)
+int FILESYSTEM_init(char *argvZero, char *assetsPath)
 {
 	char output[MAX_PATH + 9];
 	int mkdirResult;
@@ -98,6 +98,7 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
+
 #ifdef __APPLE__
         CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
         if (!appUrlRef) {
@@ -123,6 +124,14 @@ int FILESYSTEM_init(char *argvZero)
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcat(output, "data.zip");
 #endif
+
+	if (assetsPath) {
+		strcpy(output, assetsPath);
+	} else {
+		strcpy(output, PHYSFS_getBaseDir());
+		strcat(output, "data.zip");
+	}
+
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
                 if (!getcwd(output, MAX_PATH)) ;
@@ -231,7 +240,9 @@ void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
 	{
 		*mem = (unsigned char*) malloc(length);
 	}
-	PHYSFS_readBytes(handle, *mem, length);
+	if (PHYSFS_readBytes(handle, *mem, length) == -1) {
+            FILESYSTEM_freeMemory(mem);
+        }
 	PHYSFS_close(handle);
 }
 

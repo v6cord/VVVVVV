@@ -16,6 +16,7 @@
 #include <string>
 #include <algorithm>
 #include <optional>
+#include <string_view>
 
 #include "GraphicsUtil.h"
 #include "Screen.h"
@@ -32,6 +33,8 @@ public:
 
         int bfontlen(char32_t ch);
         int font_idx(char32_t ch);
+        int strwidth(std::string_view s);
+        int strheight(std::string_view s);
 
 	void Makebfont();
 	void load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos);
@@ -116,7 +119,7 @@ public:
 
 	void printcrewnamedark(int x, int y, int t);
 
-	void Print(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
+	bool Print(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
 	void RPrint(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 

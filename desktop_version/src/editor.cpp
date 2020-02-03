@@ -24,6 +24,7 @@
 #include <utf8/checked.h>
 #include <physfs.h>
 #include <iterator>
+#include <iostream>
 
 edlevelclass::edlevelclass()
 {
@@ -182,6 +183,7 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
         _data.filename = _path;
         return true;
     } catch (const std::out_of_range& ex) {
+        std::cout << "Couldn't load metadata for " << _path << "!" << std::endl;
         return false;
     }
 }
@@ -255,6 +257,7 @@ void editorclass::reset()
     levmusic=0;
 
     trialstartpoint = false;
+    edtrial = 0;
 
     entframe=0;
     entframedelay=0;
@@ -638,6 +641,7 @@ int editorclass::getlevelcol(int t)
     }
     else if (level[t].tileset==5)   //Tower
     {
+        // WARNING: This is duplicated in mapclass::updatetowerentcol()!
         return 58 + level[t].tilecol/5;
     }
     return 0;
@@ -1935,6 +1939,29 @@ int editorclass::findwarptoken(int t)
     return 0;
 }
 
+// Returns a warp token destination room string
+std::string editorclass::warptokendest(int t) {
+    int ex = edentity[t].p1;
+    int ey = edentity[t].p2;
+    int tower = edentity[t].p3;
+    std::string towerstr = "";
+    int rx, ry;
+    if (!tower || !find_tower(tower, rx, ry)) {
+        rx = ex / 40;
+        ry = ey / 30;
+    } else {
+        if (ey < 20)
+            ey = 20;
+        towerstr = "T"+help.String(tower)+":"+help.String(ey - 20);
+    }
+
+    // Rooms are 1-indexed in the editor
+    rx++;
+    ry++;
+
+    return "("+help.String(rx)+","+help.String(ry)+")"+towerstr;
+}
+
 void editorclass::countstuff()
 {
     numtrinkets=0;
@@ -2207,9 +2234,12 @@ void editorclass::shift_tower(int tower, int y) {
     }
 
     // Shift entities
-    for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
+    for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
         if (tower == edentity[i].intower)
             edentity[i].y += y;
+        if (edentity[i].t == 13 && tower == edentity[i].p3)
+            edentity[i].p2 += y;
+    }
 
     // Shift editor scroll position
     ypos += y;
@@ -2236,14 +2266,22 @@ void editorclass::shift_tower(int tower, int y) {
                 towers[tower-1].tiles[x + (ny - y)*40];
 }
 
+// Returns the tower of the given room
 int editorclass::get_tower(int rx, int ry) {
-    /* Returns the tower of this room */
-
     int room = rx + ry * maxwidth;
     if (ry < 0 || rx < 0 || rx >= maxwidth || ry >= maxheight)
         return 0;
 
     return level[room].tower;
+}
+
+// Finds the tower in the level and sets rx/ry to it
+bool editorclass::find_tower(int tower, int &rx, int &ry) {
+    for (rx = 0; rx < maxwidth; rx++)
+        for (ry = 0; ry < maxheight; ry++)
+            if (tower == get_tower(rx, ry))
+                return true;
+    return false;
 }
 
 int editorclass::tower_size(int tower) {
@@ -2307,7 +2345,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
         if (!game.quiet) printf("Custom asset directory exists at %s\n",dirpath.c_str());
         FILESYSTEM_mount(dirpath.c_str(), dwgfx);
         dwgfx.reloadresources();
-        music.init();
     } else if (!game.quiet) {
         printf("Custom asset directory does not exist\n");
     }
@@ -2777,8 +2814,6 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
         alt->SetAttribute("state", altstates[a].state);
         alt->LinkEndChild(new TiXmlText(tiles.c_str()));
         msg->LinkEndChild(alt);
-
-        a++;
     }
     data->LinkEndChild(msg);
 
@@ -2810,10 +2845,26 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
                     towers[u - 1].tiles[i] = towers[u].tiles[i];
             }
 
+            // Shift tower ID in rooms
             for (twx = 0; twx < maxwidth; twx++)
                 for (twy = 0; twy < maxheight; twy++)
                     if (level[twx + twy * maxwidth].tower > t)
                         level[twx + twy * maxwidth].tower--;
+
+            // Shift tower ID in entities
+            for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
+                if (edentity[i].intower == t ||
+                    (edentity[i].t == 13 && edentity[i].p3 == t)) {
+                    removeedentity(i);
+                    i--;
+                    continue;
+                }
+
+                if (edentity[i].intower > t)
+                    edentity[i].intower--;
+                if (edentity[i].t == 13 && edentity[i].p3 > t)
+                    edentity[i].p3--;
+            }
 
             t--;
             max_tower--;
@@ -3413,7 +3464,16 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                     dwgfx.Print(ex+4,ey+4, ">", 255, 255, 255 - help.glow, false);
                 break;
             case 2: // Moving platforms, conveyors
-            case 3: // Disappearing platforms
+            case 3: { // Disappearing platforms
+                int thetile = obj.customplatformtile;
+                int theroomnum = ed.levx + ed.maxwidth*ed.levy;
+                // Kludge for platforms/conveyors/quicksand in towers and tower hallways...
+                if (ed.level[theroomnum].tileset == 5) {
+                    thetile = ed.gettowerplattile(ed.level[theroomnum].tilecol);
+
+                    thetile *= 12;
+                }
+
                 drawRect = dwgfx.tiles_rect;
                 drawRect.x += ex;
                 drawRect.y += ey;
@@ -3422,7 +3482,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if (edentity[i].t == 2 && edentity[i].p1 >= 7)
                     len *= 2;
                 while (drawRect.x < (ex + len)) {
-                    BlitSurfaceStandard(dwgfx.entcolours[obj.customplatformtile],
+                    BlitSurfaceStandard(dwgfx.entcolours[thetile],
                                         NULL, dwgfx.backBuffer, &drawRect);
                     drawRect.x += 8;
                 }
@@ -3464,6 +3524,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 if(edentity[i].p1==3)
                     dwgfx.Print(ex+12,ey, ">", 255, 255, 255 - help.glow, false);
                 break;
+            }
             case 5: // Flip Tokens
                 dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
                 //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
@@ -3509,8 +3570,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.drawsprite(ex, ey, 18+(ed.entframe%2),196,196,196);
                 fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
                 if(ed.temp==i)
-                    dwgfx.Print(ex, ey - 8,
-                                "("+help.String(((edentity[i].p1-int(edentity[i].p1%40))/40)+1)+","+help.String(((edentity[i].p2-int(edentity[i].p2%30))/30)+1)+")",210,210,255);
+                    dwgfx.Print(ex, ey - 8, ed.warptokendest(i),210,210,255);
                 else
                     dwgfx.Print(ex, ey - 8,
                                 help.String(ed.findwarptoken(i)),210,210,255);
@@ -3605,19 +3665,24 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         //Need to also check warp point destinations
         if(edentity[i].t==13 && ed.warpent!=i)
         {
-            int ep1 = edentity[i].p1 - ed.levx*40;
-            int ep2 = edentity[i].p2 - ed.levy*30;
-            if (tower)
+            int ep1 = edentity[i].p1;
+            int ep2 = edentity[i].p2;
+            int etower = edentity[i].p3;
+            if (!etower) {
+                ep1 -= ed.levx * 40;
+                ep2 -= ed.levy * 30;
+            } else
                 ep2 -= ed.ypos;
             ep1 *= 8;
             ep2 *= 8;
-            if (tower || (ep1 >= 0 && ep1 < 320 && ep2 >= 0 && ep2 < 240))
+            if (tower == etower &&
+                (tower || (ep1 >= 0 && ep1 < 320 && ep2 >= 0 && ep2 < 240)))
             {
                 dwgfx.drawsprite(ep1, ep2, 18 + ed.entframe%2, 64, 64, 64);
                 fillboxabs(dwgfx, ep1, ep2, 16, 16, dwgfx.getRGB(64, 64, 96));
                 if (ed.tilex == ep1/8 && ed.tiley == ep2/8)
                 {
-                    dwgfx.bprint(ep1, ep2 - 8, rmstr, 190, 190, 225);
+                    dwgfx.bprint(ep1, ep2 - 8, ed.warptokendest(i), 190, 190, 225);
                 }
                 else
                 {
@@ -3938,17 +4003,19 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             FillRect(dwgfx.backBuffer, 14,226,292,12, dwgfx.getRGB(162,48,61));
             dwgfx.Print(16,228,"CURRENT SCRIPT: " + ed.sbscript, 123, 111, 218, true);
             //Draw text
+            int y = 20;
             for(int i=0; i<25; i++)
             {
                 if(i+ed.pagey<500)
                 {
-                    dwgfx.Print(16,20+(i*8),ed.sb[i+ed.pagey], 123, 111, 218, false);
+                    auto text = ed.sb[i+ed.pagey];
+                    if (i == ed.sby && ed.entframe < 2) text += "_";
+                    if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
+                        y += 16;
+                    } else {
+                        y += 8;
+                    }
                 }
-            }
-            //Draw cursor
-            if(ed.entframe<2)
-            {
-                dwgfx.Print(16+(ed.sbx*8),20+(ed.sby*8),"_",123, 111, 218, false);
             }
             break;
         }
@@ -4824,7 +4891,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ed.sby--;
                     }
                     key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                    ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
+                    ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
                 }
 
                 if (key.isDown(27))
@@ -4910,7 +4977,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             ed.sb[ed.pagey+ed.sby]=key.keybuffer;
-            ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
+            ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
 
             if(!game.press_map && !key.isDown(27)) game.mapheld=false;
             if (!game.mapheld)
@@ -4929,7 +4996,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         if(ed.sby+ed.pagey>=ed.sblength) ed.sblength=ed.sby+ed.pagey;
                         key.keybuffer=ed.sb[ed.pagey+ed.sby];
-                        ed.sbx = utf8::distance(ed.sb[ed.pagey+ed.sby].begin(), ed.sb[ed.pagey+ed.sby].end());
+                        ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
                     }
                     else
                     {
@@ -5084,6 +5151,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.Desc3=key.keybuffer;
                     ed.desc3mod=false;
                 }
+                ed.textentry=false;
 
                 if(ed.desc1mod)
                 {
@@ -6097,8 +6165,16 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     {
                         if(ed.free(ed.tilex, ed.tiley)==0)
                         {
-                            edentity[ed.warpent].p1=ed.tilex+(ed.levx*40);
-                            edentity[ed.warpent].p2=ed.tiley+(ed.levy*30);
+                            int tower = ed.get_tower(ed.levx, ed.levy);
+                            int ex = ed.tilex+(ed.levx*40);
+                            int ey = ed.tiley+(ed.levy*30);
+                            if (tower) {
+                                ex = ed.tilex;
+                                ey = ed.tiley + ed.ypos;
+                            }
+                            edentity[ed.warpent].p1=ex;
+                            edentity[ed.warpent].p2=ey;
+                            edentity[ed.warpent].p3=tower;
                             ed.warpmod=false;
                             ed.warpent=-1;
                             ed.lclickdelay=1;
@@ -6692,8 +6768,10 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 
 std::string find_tag(std::string_view buf, std::string_view start, std::string_view end) {
     auto title_tag = buf.find(start);
+    if (title_tag == std::string_view::npos) throw std::out_of_range("No start tag!");
     auto title_start = title_tag + start.size();
     auto title_close = buf.find(end, title_start);
+    if (title_close == std::string_view::npos) throw std::out_of_range("No close tag!");
     auto title_len = title_close - title_start;
     std::string value(buf.substr(title_start, title_len));
     replaceAll(value, "&quot;", "\"");
@@ -6815,6 +6893,35 @@ int editorclass::getnumaltstates(int rxi, int ryi)
         if (altstates[i].x == rxi && altstates[i].y == ryi)
             num++;
     return num;
+}
+
+// Pass in the `tilecol` of a room to this function
+int editorclass::gettowerplattile(int col)
+{
+    // Re-use the Warp Zone textures from entcolours.png
+    switch (col / 5) {
+    case 0:
+        // Red
+        return 47+1;
+    case 1:
+        // Yellow
+        return 47+4;
+    case 2:
+        // Green
+        return 47+5;
+    case 3:
+        // Cyan
+        return 47;
+    case 4:
+        // Purple
+        return 47+3;
+    case 5:
+        // Pink
+        return 47+2;
+    }
+
+    // Default to red
+    return 47+1;
 }
 
 #define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }

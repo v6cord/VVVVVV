@@ -91,7 +91,7 @@ void entityclass::init()
 
 void entityclass::resetallflags()
 {
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1000; i++)
     {
         flags[i] = 0;
     }
@@ -1898,6 +1898,15 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
     entities[k].clear();
     entities[k].active = true;
     entities[k].type = t;
+    int thetile = customplatformtile;
+    int theroomnum = game.roomx-100 + ed.maxwidth*(game.roomy-100);
+    // Kludge for platforms/conveyors/quicksand in towers and tower hallways...
+    if (theroomnum >= 0 && map.custommode && ed.level[theroomnum].tileset == 5) {
+        thetile = ed.gettowerplattile(ed.level[theroomnum].tilecol);
+
+        thetile *= 12;
+    }
+
     switch(t)
     {
     case 0: //Player
@@ -1996,7 +2005,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         entities[k].tile = 1;
 
         if (customplatformtile > 0){
-            entities[k].tile = customplatformtile;
+            entities[k].tile = thetile;
         }else if (platformtile > 0) {
 						entities[k].tile = platformtile;
         }else{
@@ -2036,7 +2045,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
             horplatforms = true; //threadmill!
             entities[k].animate = 10;
             if(customplatformtile>0){
-              entities[k].tile = customplatformtile+4;
+              entities[k].tile = thetile+4;
               if (int(vx) == 8) entities[k].tile += 4;
               if (int(vx) == 9) entities[k].animate = 11;
             }else{
@@ -2067,7 +2076,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         //appearance again depends on location
         if(customplatformtile>0)
         {
-          entities[k].tile=customplatformtile;
+          entities[k].tile=thetile;
         }
         else if (vx > 0)
         {
@@ -2242,6 +2251,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         //Added in port, hope it doesn't break anything
         entities[k].behave = vx;
         entities[k].para = vy;
+        entities[k].life = p1;
         break;
     case 14: // Teleporter
         entities[k].rule = 3;

@@ -37,7 +37,7 @@ void scriptclass::load(std::string t)
 
         cscriptname = actualname;
         t = "custom_" + cscriptname;
-      } else if (cscriptname.substr(cscriptname.length()-1, 1) == "$" && cscriptname.substr(0, cscriptname.length()-1).find("$") != std::string::npos) {
+      } else if (cscriptname.length() && cscriptname.substr(cscriptname.length()-1, 1) == "$" && cscriptname.substr(0, cscriptname.length()-1).find("$") != std::string::npos) {
         // It's a script name concatenated with a label
         int dollar = cscriptname.find("$");
         thelabel = cscriptname.substr(0, cscriptname.length()-1).substr(dollar+1, std::string::npos);

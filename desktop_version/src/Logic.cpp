@@ -487,21 +487,7 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
         //Warp tokens
         if (map.custommode && game.teleport) {
-            int edi=obj.entities[game.edteleportent].behave;
-            int edj=obj.entities[game.edteleportent].para;
-            int edi2, edj2;
-            edi2 = (edi-(edi%40))/40;
-            edj2 = (edj-(edj%30))/30;
-
-            // Copy-pasted from gamelogic
-            map.warpto(100+edi2, 100+edj2, obj.getplayer(), edi%40, (edj%30)+2, dwgfx, game, obj, music);
-            game.teleport = false;
-
-            if (game.teleport == false)
-            {
-                game.flashlight = 6;
-                game.screenshake = 25;
-            }
+            map.custom_warpto(game.edteleportent);
         }
     }
 
@@ -575,7 +561,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             {
                 //Ok! super magical exception for the room with the intention death for the shiny trinket
                 //fix this when the maps are finalised
-                if (game.roomx != 111 && game.roomy != 107)
+                if (game.roomx != 111 || game.roomy != 107 || map.custommode)
                 {
                     obj.entities[i].state = 4;
                 }
@@ -1227,21 +1213,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         if (map.custommode){
           if (game.teleport)
           {
-              int edi=obj.entities[game.edteleportent].behave;
-              int edj=obj.entities[game.edteleportent].para;
-              int edi2, edj2;
-              edi2 = (edi-(edi%40))/40;
-              edj2 = (edj-(edj%30))/30;
-
-              // NOTE: If fixing misalignment when teleporting the player, make sure to update the copy-pasted code in towerlogic, too
-              map.warpto(100+edi2, 100+edj2, obj.getplayer(), edi%40, (edj%30)+2, dwgfx, game, obj, music);
-              game.teleport = false;
-
-              if (game.teleport == false)
-              {
-                  game.flashlight = 6;
-                  game.screenshake = 25;
-              }
+              map.custom_warpto(game.edteleportent);
           }
         }else{
           if (game.teleport)

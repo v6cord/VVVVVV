@@ -171,7 +171,27 @@ int scriptclass::getimage(Game& game, std::string n) {
 	return -1;
 }
 
+#define SPECIALVARS \
+    X("deaths", game.deathcounts) \
+    X("player_x", obj.entities[obj.getplayer()].xp) \
+    X("player_y", obj.entities[obj.getplayer()].yp) \
+    X("trinkets", game.trinkets) \
+    X("coins", game.coins)
+
+int* scriptclass::specialvar(std::string n) {
+#define X(k, v) if (n == k) return &v;
+    SPECIALVARS
+#undef X
+    return nullptr;
+}
+
 void scriptclass::setvar(std::string n, std::string c) {
+        auto special = specialvar(n);
+        if (special) {
+            *special = ss_toi(c);
+            return;
+        }
+
 	int tempvar = getvar(n);
 	if (tempvar == -1) {
 		variablenames.push_back(n);
@@ -182,12 +202,9 @@ void scriptclass::setvar(std::string n, std::string c) {
 }
 
 void scriptclass::updatevars(Game& game, entityclass& obj) {
-	int player = obj.getplayer();
-	setvar("deaths",   std::to_string(game.deathcounts));
-	setvar("player_x", std::to_string(obj.entities[player].xp));
-	setvar("player_y", std::to_string(obj.entities[player].yp));
-	setvar("trinkets", std::to_string(game.trinkets));
-	setvar("coins", std::to_string(game.coins));
+#define X(k, v) setvar(k, std::to_string(v));
+    SPECIALVARS
+#undef X
 }
 
 std::string scriptclass::processvars(std::string t) {
@@ -738,7 +755,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				int varid = getvar(words[1]);
 				if (varid != -1) {
 					if (words[2] == "") {
-    		            position++;
+						position++;
 						variablecontents[varid] += processvars(commands[position]);
 					} else {
 						if (is_number(variablecontents[varid]) && is_number(words[2])) {
@@ -4314,6 +4331,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 	case 20:
 		//Level editor
 		hardreset(key, dwgfx, game, map, obj, help, music);
+		game.customtrials.clear();
 		ed.reset();
 		music.fadeout();
 
