@@ -2054,6 +2054,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         } else {
           game.gamestate = EDITORMODE;
 
+          dwgfx.fademode = 0;
           dwgfx.textboxremove();
           game.hascontrol = true;
           game.advancetext = false;
