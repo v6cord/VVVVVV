@@ -4781,6 +4781,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	game.onetimescripts.clear();
 
+	game.customtrials.clear();
+
 	//dwgraphicsclass
 	dwgfx.backgrounddrawn = false;
 	dwgfx.textboxremovefast();

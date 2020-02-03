@@ -257,6 +257,7 @@ void editorclass::reset()
     levmusic=0;
 
     trialstartpoint = false;
+    edtrial = 0;
 
     entframe=0;
     entframedelay=0;
