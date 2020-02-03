@@ -52,7 +52,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: desktop_version/build/data-zip
-        key: data-zip
+        key: data-zip-folder
 
     - name: Run tests
       run: cd ${SRC_DIR_PATH} && ./tests.sh
