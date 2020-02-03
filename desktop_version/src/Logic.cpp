@@ -578,6 +578,20 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                 while (obj.entities[i].state == 2) obj.updateentities(i, help, game, music);
                 obj.entities[i].state = 4;
             }
+            else if (obj.entities[i].type == 3 && obj.entities[i].state == 3)
+            {
+                // Restart the 1x1 quicksand
+                obj.entities[i].state = 4;
+            }
+            else if (obj.entities[i].type == 3 && obj.entities[i].state == 2)
+            {
+                // Ok, unfortunate case where the 1x1 quicksand hasn't fully disappeared.
+                // Accept a little graphical ugliness to avoid breaking the room!
+                while (obj.entities[i].state == 2)
+                    obj.updateentities(i, help, game, music);
+
+                obj.entities[i].state = 4;
+            }
             else if (map.finalstretch && obj.entities[i].type == 2)
             {
                 //TODO: }else if (map.finallevel && map.finalstretch && obj.entities[i].type == 2) {

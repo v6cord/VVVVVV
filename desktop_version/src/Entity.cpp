@@ -3293,7 +3293,32 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     if (entities[i].life <= 0)
                     {
                         removeblockat(entities[i].xp, entities[i].yp);
-                        entities[i].active = false;
+                        entities[i].state = 3;
+                        entities[i].invis = true;
+                    }
+                }
+                else if (entities[i].state == 3)
+                {
+                    // Wait until recharged!
+                }
+                else if (entities[i].state == 4)
+                {
+                    // Restart!
+                    createblock(BLOCK, entities[i].xp, entities[i].yp, 8, 8);
+                    entities[i].state = 4;
+                    entities[i].invis = false;
+                    entities[i].tile--;
+                    entities[i].state = 5;
+                    entities[i].onentity = 1;
+                }
+                else if (entities[i].state == 5)
+                {
+                    entities[i].life++;
+                    entities[i].tile--;
+                    if (entities[i].life >= 4) {
+                        entities[i].life = 4;
+                        entities[i].state = 0;
+                        entities[i].tile++;
                     }
                 }
                 break;
