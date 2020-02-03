@@ -4331,6 +4331,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 	case 20:
 		//Level editor
 		hardreset(key, dwgfx, game, map, obj, help, music);
+		game.customtrials.clear();
 		ed.reset();
 		music.fadeout();
 
@@ -4780,8 +4781,6 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	game.nosuicide = false;
 
 	game.onetimescripts.clear();
-
-	game.customtrials.clear();
 
 	//dwgraphicsclass
 	dwgfx.backgrounddrawn = false;
