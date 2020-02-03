@@ -127,6 +127,14 @@ bool compare_nocase (std::string first, std::string second)
         return false;
 }
 
+static bool endsWith(const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
+void void_free(void* ptr) {
+    free(ptr);
+}
+
 void editorclass::getDirectoryData()
 {
 
@@ -134,13 +142,32 @@ void editorclass::getDirectoryData()
     directoryList.clear();
 
     directoryList = FILESYSTEM_getLevelDirFileNames();
+    bool needsReload = false;
 
     for(size_t i = 0; i < directoryList.size(); i++)
     {
-        LevelMetaData temp;
-        if (getLevelMetaData( directoryList[i], temp))
-        {
-            ListOfMetaData.push_back(temp);
+        if (endsWith(directoryList[i], ".zip")) {
+            unsigned char* zip;
+            size_t len;
+            FILESYSTEM_loadFileToMemory(directoryList[i].c_str(), &zip, &len, false);
+            if (!PHYSFS_mountMemory(zip, (uint64_t) len, void_free, directoryList[i].c_str(), "levels", 1)) {
+                printf("%s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+            } else {
+                needsReload = true;
+            }
+        }
+    }
+
+    if (needsReload) directoryList = FILESYSTEM_getLevelDirFileNames();
+
+    for(size_t i = 0; i < directoryList.size(); i++)
+    {
+        if (!endsWith(directoryList[i], ".zip")) {
+            LevelMetaData temp;
+            if (getLevelMetaData( directoryList[i], temp))
+            {
+                ListOfMetaData.push_back(temp);
+            }
         }
     }
 

@@ -20,8 +20,9 @@ if [ ! -f data.zip ]; then
 fi
 set +e -o pipefail
 failed=0
-for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.vvvvvv; do
+for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.{vvvvvv,zip}; do
     testcase="$(basename "$testcase" .vvvvvv)"
+    testcase="${testcase%.zip}"
     echo -n "$testcase -- "
     if output="$(./VVVVVV-CE -p "$testcase" --headless --quiet 2>&1)"; then
         echo "PASS"
