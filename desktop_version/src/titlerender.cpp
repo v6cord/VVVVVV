@@ -325,6 +325,7 @@ growing_vector<std::string> changelog = {
     "  when placing down a script box to make",
     "  it run only once",
     "- Flip tokens now respawn upon death",
+    "- 1x1 quicksand now respawn upon death",
 
 };
 
