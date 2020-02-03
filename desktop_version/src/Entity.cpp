@@ -3301,7 +3301,6 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 //wait for collision
                 if (entities[i].state == 1)
                 {
-                    entities[i].active = false;
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
                     if (entities[getplayer()].onground > 0) {
                         music.playef(0, 10);
@@ -3310,6 +3309,21 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     } else {
                         music.playef(8, 10);
                     }
+                    entities[i].invis = true;
+                    entities[i].state = 2;
+                    // Removes collision
+                    entities[i].onentity = 0;
+                }
+                else if (entities[i].state == 2)
+                {
+                    // Wait until recharged!
+                }
+                else if (entities[i].state == 3)
+                {
+                    // Respawn
+                    entities[i].state = 0;
+                    entities[i].invis = false;
+                    entities[i].onentity = 1;
                 }
                 break;
             case 5:  //Particle sprays
