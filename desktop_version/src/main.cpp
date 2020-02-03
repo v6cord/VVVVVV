@@ -75,6 +75,8 @@ int main(int argc, char *argv[])
     bool syslog = false;
 #endif
 
+    char* assets = NULL;
+
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
             game.quiet = true;
@@ -128,7 +130,12 @@ int main(int argc, char *argv[])
             }
         }
         if (std::string(argv[i]) == "-renderer") {
-            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[2], SDL_HINT_OVERRIDE);
+            i++;
+            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
+        }
+        if (strcmp(argv[i], "-assets") == 0) {
+            ++i;
+            assets = argv[i];
         }
     }
 
@@ -155,18 +162,6 @@ int main(int argc, char *argv[])
         SDL_INIT_JOYSTICK |
         SDL_INIT_GAMECONTROLLER
     );
-
-    char* assets = NULL;
-
-    for (int i = 1; i < argc; ++i) {
-        if (strcmp(argv[i], "-renderer") == 0) {
-            ++i;
-            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
-        } else if (strcmp(argv[i], "-assets") == 0) {
-            ++i;
-            assets = argv[i];
-        }
-    }
 
     if(!FILESYSTEM_init(argv[0], assets))
     {
