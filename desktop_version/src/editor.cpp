@@ -132,10 +132,6 @@ static bool endsWith(const std::string& str, const std::string& suffix) {
     return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
 }
 
-void void_free(void* ptr) {
-    free(ptr);
-}
-
 void editorclass::getDirectoryData()
 {
 
@@ -148,10 +144,8 @@ void editorclass::getDirectoryData()
     for(size_t i = 0; i < directoryList.size(); i++)
     {
         if (endsWith(directoryList[i], ".zip")) {
-            unsigned char* zip;
-            size_t len;
-            FILESYSTEM_loadFileToMemory(directoryList[i].c_str(), &zip, &len, false);
-            if (!PHYSFS_mountMemory(zip, (uint64_t) len, void_free, directoryList[i].c_str(), "levels", 1)) {
+            PHYSFS_File* zip = PHYSFS_openRead(directoryList[i].c_str());
+            if (!PHYSFS_mountHandle(zip, directoryList[i].c_str(), "levels", 1)) {
                 printf("%s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
             } else {
                 needsReload = true;
@@ -2372,13 +2366,11 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
         music.init();
     } else if (zip_path != "data.zip" && !endsWith(zip_path, "/data.zip") && endsWith(zip_path, ".zip")) {
         printf("Custom asset directory is .zip at %s\n", zip_path.c_str());
-        unsigned char* zip = nullptr;
-        size_t len;
-        FILESYSTEM_loadFileToMemory(zip_path.c_str(), &zip, &len, false);
+        PHYSFS_File* zip = PHYSFS_openRead(zip_path.c_str());
         zip_path += ".data.zip";
         if (zip == nullptr) {
             printf("error loading .zip: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
-        } else if (PHYSFS_mountMemory(zip, (uint64_t) len, void_free, zip_path.c_str(), "/", 0) == 0) {
+        } else if (PHYSFS_mountHandle(zip, zip_path.c_str(), "/", 0) == 0) {
             printf("error mounting .zip: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
         } else {
             dwgfx.assetdir = zip_path;
