@@ -19,6 +19,7 @@
 
 #include <string>
 #include <string_view>
+#include <cstring>
 #include <memory>
 #include <stdexcept>
 #include <utf8/checked.h>
@@ -2363,11 +2364,26 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
 
     std::string zippath = "levels/" + _path.substr(7,_path.size()-14) + ".data.zip";
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
+    std::string zip_path = PHYSFS_getRealDir(_path.c_str());
     if (FILESYSTEM_directoryExists(zippath.c_str())) {
         if (!game.quiet) printf("Custom asset directory exists at %s\n",zippath.c_str());
         FILESYSTEM_mount(zippath.c_str(), dwgfx);
         dwgfx.reloadresources();
         music.init();
+    } else if (zip_path != "data.zip" && !endsWith(zip_path, "/data.zip") && endsWith(zip_path, ".zip")) {
+        printf("Custom asset directory is .zip at %s\n", zip_path.c_str());
+        unsigned char* zip = nullptr;
+        size_t len;
+        FILESYSTEM_loadFileToMemory(zip_path.c_str(), &zip, &len, false);
+        zip_path += ".data.zip";
+        if (zip == nullptr) {
+            printf("error loading .zip: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+        } else if (PHYSFS_mountMemory(zip, (uint64_t) len, void_free, zip_path.c_str(), "/", 0) == 0) {
+            printf("error mounting .zip: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+        } else {
+            dwgfx.assetdir = zip_path;
+        }
+        dwgfx.reloadresources();
     } else if (FILESYSTEM_directoryExists(dirpath.c_str())) {
         if (!game.quiet) printf("Custom asset directory exists at %s\n",dirpath.c_str());
         FILESYSTEM_mount(dirpath.c_str(), dwgfx);
