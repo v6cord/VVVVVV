@@ -2358,8 +2358,10 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
 
     std::string zippath = "levels/" + _path.substr(7,_path.size()-14) + ".data.zip";
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
-    std::string zip_path = PHYSFS_getRealDir(_path.c_str());
-    if (FILESYSTEM_directoryExists(zippath.c_str())) {
+    std::string zip_path;
+    const char* cstr = PHYSFS_getRealDir(_path.c_str());
+    if (cstr) zip_path = cstr;
+    if (cstr && FILESYSTEM_directoryExists(zippath.c_str())) {
         if (!game.quiet) printf("Custom asset directory exists at %s\n",zippath.c_str());
         FILESYSTEM_mount(zippath.c_str(), dwgfx);
         dwgfx.reloadresources();
