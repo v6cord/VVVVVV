@@ -1599,7 +1599,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                         if (tpoint.x > 300)
                         {
@@ -1607,7 +1607,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                     }
                     else if (map.warpy)
@@ -1618,7 +1618,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                         if (tpoint.y > 210)
                         {
@@ -1626,7 +1626,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                             drawRect = sprites_rect;
                             drawRect.x += tpoint.x;
                             drawRect.y += tpoint.y;
-                            BlitSurfaceStandard(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                            BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
                         }
                     }
                 }
