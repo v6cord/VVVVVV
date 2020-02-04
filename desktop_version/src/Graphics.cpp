@@ -2729,6 +2729,32 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             {
                 drawtele(obj.entities[i].xp, obj.entities[i].yp, obj.entities[i].drawframe, obj.entities[i].colour, help);
             }
+            else if (obj.entities[i].size == 8)    // Special: Moving platform, 8 tiles
+            {
+                tpoint.x = obj.entities[i].xp;
+                tpoint.y = obj.entities[i].yp;
+                drawRect = sprites_rect;
+                drawRect.x += tpoint.x;
+                drawRect.y += tpoint.y;
+
+                 if(map.custommode){
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                  drawRect.x += 8;
+                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                }
+            }
         }
     }
 }
