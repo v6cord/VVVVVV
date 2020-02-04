@@ -367,16 +367,86 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
         }
         //Update entities
 
+        //Ok, moving platform fuckers
         if(!game.completestop)
         {
+            if(obj.vertplatforms)
+            {
+                for (int i = obj.nentity - 1; i >= 0;  i--)
+                {
+                    if (obj.entities[i].isplatform)
+                    {
+                        if(abs(obj.entities[i].vx) < 0.000001f)
+                        {
+                            obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
+
+                            obj.updateentities(i, help, game, music);                // Behavioral logic
+                            obj.updateentitylogic(i, game);                          // Basic Physics
+                            obj.entitymapcollision(i, map);                          // Collisions with walls
+
+                            obj.createblock(0, obj.entities[i].xp, obj.entities[i].yp, obj.entities[i].w, obj.entities[i].h);
+                            if (game.supercrewmate)
+                            {
+                                obj.movingplatformfix(i, map);
+                                obj.scmmovingplatformfix(i, map);
+                            }
+                            else
+                            {
+                                obj.movingplatformfix(i, map);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(obj.horplatforms)
+            {
+                for (int ie = obj.nentity - 1; ie >= 0;  ie--)
+                {
+                    if (obj.entities[ie].isplatform)
+                    {
+                        if(abs(obj.entities[ie].vy) < 0.000001f)
+                        {
+                            obj.removeblockat(obj.entities[ie].xp, obj.entities[ie].yp);
+
+                            obj.updateentities(ie, help, game, music);                // Behavioral logic
+                            obj.updateentitylogic(ie, game);                          // Basic Physics
+                            obj.entitymapcollision(ie, map);                          // Collisions with walls
+
+                            obj.hormovingplatformfix(ie, map);
+                        }
+                    }
+                }
+                //is the player standing on a moving platform?
+                int i = obj.getplayer();
+                float j = obj.entitycollideplatformfloor(map, i);
+                if (j > -1000)
+                {
+                    obj.entities[i].newxp = obj.entities[i].xp + j;
+                    obj.entitymapcollision(i, map);
+                }
+                else
+                {
+                    j = obj.entitycollideplatformroof(map, i);
+                    if (j > -1000)
+                    {
+                        obj.entities[i].newxp = obj.entities[i].xp + j;
+                        obj.entitymapcollision(i, map);
+                    }
+                }
+            }
+
             for (int i = obj.nentity - 1; i >= 0;  i--)
             {
                 //Remove old platform
                 //if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
 
-                obj.updateentities(i, help, game, music);                // Behavioral logic
-                obj.updateentitylogic(i, game);                          // Basic Physics
-                obj.entitymapcollision(i, map);                          // Collisions with walls
+                if (!obj.entities[i].isplatform)
+                {
+                    obj.updateentities(i, help, game, music);                // Behavioral logic
+                    obj.updateentitylogic(i, game);                          // Basic Physics
+                    obj.entitymapcollision(i, map);                          // Collisions with walls
+                }
 
                 //Create new platform
                 //if (obj.entities[i].isplatform) obj.movingplatformfix(i, map);
