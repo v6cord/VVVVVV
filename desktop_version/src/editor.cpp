@@ -227,6 +227,8 @@ void editorclass::reset()
     roomnamehide=0;
     zmod=false;
     xmod=false;
+    cmod=false;
+    vmod=false;
     spacemod=false;
     spacemenu=0;
     shiftmenu=false;
@@ -3834,6 +3836,14 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             {
                 fillboxabs(dwgfx, (ed.tilex*8)-16,(ed.tiley*8)-16,24+16,24+16, dwgfx.getRGB(200,32,32));
             }
+            else if(ed.cmod && ed.drawmode<2)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8)-24,(ed.tiley*8)-24,24+32,24+32, dwgfx.getRGB(200,32,32));
+            }
+            else if(ed.vmod && ed.drawmode<2)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8)-32,(ed.tiley*8)-32,24+48,24+48, dwgfx.getRGB(200,32,32));
+            }
         }
     } else {
         dwgfx.drawspritesetcol((ed.tilex*8) - 4, (ed.tiley*8), 0, obj.crewcolour(0), help);
@@ -6033,6 +6043,24 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
             }
 
+            if(key.keymap[SDLK_v])
+            {
+                ed.vmod=true;
+            }
+            else
+            {
+                ed.vmod=false;
+            }
+
+            if(key.keymap[SDLK_c])
+            {
+                ed.cmod=true;
+            }
+            else
+            {
+                ed.cmod=false;
+            }
+
             if(key.keymap[SDLK_x])
             {
                 ed.xmod=true;
@@ -6226,7 +6254,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             //Are we in direct mode?
                             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode>=1)
                             {
-                                if(ed.xmod)
+                                if(ed.vmod)
+                                {
+                                    for(int j=-4; j<5; j++)
+                                    {
+                                        for(int i=-4; i<5; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, ed.dmtile);
+                                        }
+                                    }
+                                }
+                                else if(ed.cmod)
+                                {
+                                    for(int j=-3; j<4; j++)
+                                    {
+                                        for(int i=-3; i<4; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, ed.dmtile);
+                                        }
+                                    }
+                                }
+                                else if(ed.xmod)
                                 {
                                     for(int j=-2; j<3; j++)
                                     {
@@ -6253,7 +6301,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else
                             {
-                                if(ed.xmod)
+                                if(ed.vmod)
+                                {
+                                    for(int j=-4; j<5; j++)
+                                    {
+                                        for(int i=-4; i<5; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, 80);
+                                        }
+                                    }
+                                }
+                                else if(ed.cmod)
+                                {
+                                    for(int j=-3; j<4; j++)
+                                    {
+                                        for(int i=-3; i<4; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, 80);
+                                        }
+                                    }
+                                }
+                                else if(ed.xmod)
                                 {
                                     for(int j=-2; j<3; j++)
                                     {
@@ -6282,7 +6350,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         else if(ed.drawmode==1)
                         {
                             //place background tiles
-                            if(ed.xmod)
+                            if(ed.vmod)
+                            {
+                                for(int j=-4; j<5; j++)
+                                {
+                                    for(int i=-4; i<5; i++)
+                                    {
+                                        ed.placetilelocal(ed.tilex+i, ed.tiley+j, 2);
+                                    }
+                                }
+                            }
+                            else if(ed.cmod)
+                            {
+                                for(int j=-3; j<4; j++)
+                                {
+                                    for(int i=-3; i<4; i++)
+                                    {
+                                        ed.placetilelocal(ed.tilex+i, ed.tiley+j, 2);
+                                    }
+                                }
+                            }
+                            else if(ed.xmod)
                             {
                                 for(int j=-2; j<3; j++)
                                 {
@@ -6560,7 +6648,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 if(key.rightbutton)
                 {
                     //place tiles
-                    if(ed.xmod)
+                    if(ed.vmod)
+                    {
+                        for(int j=-4; j<5; j++)
+                        {
+                            for(int i=-4; i<5; i++)
+                            {
+                                ed.placetilelocal(ed.tilex+i, ed.tiley+j, 0);
+                            }
+                        }
+                    }
+                    else if(ed.cmod)
+                    {
+                        for(int j=-3; j<4; j++)
+                        {
+                            for(int i=-3; i<4; i++)
+                            {
+                                ed.placetilelocal(ed.tilex+i, ed.tiley+j, 0);
+                            }
+                        }
+                    }
+                    else if(ed.xmod)
                     {
                         for(int j=-2; j<3; j++)
                         {
