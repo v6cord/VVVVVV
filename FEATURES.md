@@ -254,3 +254,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - Flip tokens now respawn upon death
 
 - 1x1 quicksand now respawn upon death
+
+- `nointerrupt()` - prevent interrupting a script when player moves into a script box
+
+- `yesinterrupt()` - undoes the above
