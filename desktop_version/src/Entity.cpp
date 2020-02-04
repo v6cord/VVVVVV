@@ -4618,7 +4618,11 @@ int entityclass::getcrewman(std::string t) {
     {
         return getcrewman(1);
     } else {
-        return named_crewmen.at(t);
+        auto iter = named_crewmen.find(t);
+        if (iter != named_crewmen.end())
+            return named_crewmen.at(t);
+        else
+            return 0;
     }
 }
 
