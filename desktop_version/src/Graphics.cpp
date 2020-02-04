@@ -2725,6 +2725,10 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
                 line_rect.h = obj.entities[i].h;
                 drawgravityline(i, obj);
             }
+            else if (obj.entities[i].size == 7)    //Teleporter
+            {
+                drawtele(obj.entities[i].xp, obj.entities[i].yp, obj.entities[i].drawframe, obj.entities[i].colour, help);
+            }
         }
     }
 }
