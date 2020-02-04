@@ -5958,94 +5958,71 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     game.mapheld=true;
 
                     //Ok! Scan the room for the closest checkpoint
-                    int testeditor=-1;
-                    int startpoint=0;
-                    //First up; is there a start point on this screen?
-                    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-                    {
-                        //if() on screen
-                        if(edentity[i].t==16 && testeditor==-1)
-                        {
-                            int tx=(edentity[i].x-(edentity[i].x%40))/40;
-                            int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                            if(tx==ed.levx && ty==ed.levy &&
-                               edentity[i].state==ed.levaltstate &&
-                               edentity[i].intower==tower)
-                            {
-                                testeditor=i;
-                                startpoint=1;
-                            }
-                        }
-                    }
-                    if(testeditor==-1)
-                    {
-                        //Ok, settle for a check point
-                        for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-                        {
-                            //if() on screen
-                            if(edentity[i].t==10 && testeditor==-1)
-                            {
-                                int tx=(edentity[i].x-(edentity[i].x%40))/40;
-                                int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                                if(tx==ed.levx && ty==ed.levy &&
-                                   edentity[i].state==ed.levaltstate &&
-                                   edentity[i].intower==tower)
-                                {
-                                    testeditor=i;
-                                }
-                            }
-                        }
-                    }
+                    int testeditor = -1;
+                    int startpoint = 0;
+                    int ex = 0;
+                    int ey = 0;
+                    int enttyp = 16;
+                    do {
+                        for (int i=0; i<EditorData::GetInstance().numedentities;
+                             i++) {
+                            if (edentity[i].t != enttyp ||
+                                edentity[i].intower != tower ||
+                                edentity[i].state != ed.levaltstate)
+                                continue;
 
-                    if(testeditor==-1)
-                    {
+                            ex = edentity[i].x;
+                            ey = edentity[i].y;
+                            if (!tower) {
+                                ex -= ed.levx * 40;
+                                ey -= ed.levy * 30;
+                            } else
+                                ey -= ed.ypos;
+
+                            ex *= 8;
+                            ey *= 8;
+                            ex += edentity[i].subx;
+                            ey += edentity[i].suby;
+
+                            // Even in towers, only allow spawn within screen
+                            if (ex >= 0 && ex < 320 && ey >= 0 && ey < 240) {
+                                testeditor = i;
+                                startpoint = enttyp;
+                                break;
+                            }
+                        }
+
+                        enttyp -= 6;
+                    } while (enttyp >= 10 && !startpoint);
+
+                    if (testeditor==-1) {
                         ed.note="ERROR: No checkpoint to spawn at";
                         ed.notedelay=45;
-                    }
-                    else
-                    {
-                        if(startpoint==0)
-                        {
-                            //Checkpoint spawn
-                            int tx=(edentity[testeditor].x-(edentity[testeditor].x%40))/40;
-                            int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
-                            game.edsavex = (edentity[testeditor].x%40)*8;
-                            game.edsavey = (edentity[testeditor].y%30)*8;
-                            game.edsavex += edentity[testeditor].subx;
-                            game.edsavey += edentity[testeditor].suby;
-                            game.edsaverx = 100+tx;
-                            game.edsavery = 100+ty;
+                    } else {
+                        game.edsavex = ex;
+                        game.edsavey = ey;
+                        game.edsaverx = 100 + ed.levx;
+                        game.edsavery = 100 + ed.levy;
+                        game.edsavey--;
+                        if (startpoint == 10) {
                             game.edsavegc = edentity[testeditor].p1;
-                            if(game.edsavegc==0)
-                            {
-                                game.edsavey--;
-                            }
-                            else
-                            {
-                                game.edsavey-=8;
-                            }
                             game.edsavedir = 0;
-                        }
-                        else
-                        {
-                            //Start point spawn
-                            int tx=(edentity[testeditor].x-(edentity[testeditor].x%40))/40;
-                            int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
-                            game.edsavex = ((edentity[testeditor].x%40)*8)-4;
-                            game.edsavey = (edentity[testeditor].y%30)*8;
-                            game.edsavex += edentity[testeditor].subx;
-                            game.edsavey += edentity[testeditor].suby;
-                            game.edsaverx = 100+tx;
-                            game.edsavery = 100+ty;
+                            if (game.edsavegc != 0)
+                                game.edsavey -= 7;
+                        } else {
+                            game.edsavex -= 4;
                             game.edsavegc = 0;
-                            game.edsavey--;
-                            game.edsavedir=1-edentity[testeditor].p1;
+                            game.edsavedir = 1 - edentity[testeditor].p1;
                         }
+
+                        if (tower)
+                            game.edsavey += ed.ypos * 8;
 
                         music.stopmusic();
                         dwgfx.backgrounddrawn=false;
                         script.startgamemode(21, key, dwgfx, game, map, obj, help, music);
                     }
+
                     //Return to game
                     //game.gamestate=GAMEMODE;
                     /*if(dwgfx.fademode==0)

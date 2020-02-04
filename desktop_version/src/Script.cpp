@@ -4303,6 +4303,13 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 			map.resetplayer(dwgfx, game, obj, music);
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+		if (map.towermode) {
+			// Undo player x/y adjustments and realign camera on checkpoint
+			int i = obj.getplayer();
+			obj.entities[i].xp = game.savex;
+			obj.entities[i].yp = game.savey;
+			map.realign_tower();
+		}
 		if(ed.levmusic>0){
 		  music.play(ed.levmusic);
 		}else{
