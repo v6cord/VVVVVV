@@ -2261,12 +2261,15 @@ void mapclass::updatetowerentcol(int col)
     // Basically copied from mapclass::changefinalcol()
     for (int i = 0; i < obj.nentity; i++) {
         if (obj.entities[i].type == 1) { // Something with a movement behavior
-            if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) // Conveyor
+            if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) { // Conveyor
                 obj.entities[i].tile = 4 + plattile*12;
-            else if (obj.entities[i].isplatform) // Moving platform
+                if (obj.entities[i].animate == 10)
+                    obj.entities[i].tile += 4;
+            } else if (obj.entities[i].isplatform) { // Moving platform
                 obj.entities[i].tile = plattile*12;
-            else // Just an enemy
+            } else { // Just an enemy
                 obj.entities[i].colour = entcol;
+            }
         } else if (obj.entities[i].type == 2) { // Disappearing platform
             if (obj.entities[i].state == 3)
                 // It's disappeared, so its tile is offset, so we have to correct for that offset
