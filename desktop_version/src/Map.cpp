@@ -794,6 +794,99 @@ void mapclass::settile(int xp, int yp, int t)
 	}
 }
 
+void mapclass::settile_special(int x, int y, int tile) {
+	if (tile != 10) // There's nothing behind 1x1 quicksand
+		map.settile(x, y, tile);
+	else
+		// Don't change the `tile` var, we createentity by checking `tile` later
+		map.settile(x, y, 0);
+	graphics.foregrounddrawn = false;
+	// Kludge to fix spikes, one-ways, and 1x1 quicksand
+	// Remove them first, if there is one where we placed the tile
+	// The 1x1 quicksand is part entity, part block
+	// Remove its entity
+	for (int eqi = 0; eqi < obj.nentity; eqi++)
+		if (obj.entities[eqi].type == 3 && obj.entities[eqi].xp/8 == x && obj.entities[eqi].yp/8 == y)
+			obj.entities[eqi].active = false;
+	// The rest of these removals are blocks, which I'll just put in one for-loop
+	for (int bi = 0; bi < obj.nblocks; bi++) {
+		// Remove the block part of a 1x1 quicksand
+		// We check that it's 8x8 in order to not remove 4-wide quicksand / platforms / conveyors
+		if (obj.blocks[bi].type == BLOCK && obj.blocks[bi].xp/8 == x && obj.blocks[bi].yp/8 == y && obj.blocks[bi].wp == 8 && obj.blocks[bi].hp == 8)
+			obj.blocks[bi].clear();
+
+		// The spiky part of a spike is a block, remove it
+		if (obj.blocks[bi].type == DAMAGE &&
+			// Important - do the integer division by 8 on the left side of the equality, not multiply by 8 on the right side
+			// (Same applies to the one-way conditional below)
+			// Also important - for some godawful reason, the real position of spikes' blocks
+			// is stored in their 'x'/'y' attributes instead of 'xp'/'yp' like the rest,
+			// and also, the 'x'/'y' attributes are floats instead of ints
+			(int) obj.blocks[bi].x/8 == x && (int) obj.blocks[bi].y/8 == y)
+				obj.blocks[bi].clear();
+
+		// The collision of a one-way tile is a block, also remove it
+		if (obj.blocks[bi].type == DIRECTIONAL &&
+		// Read comment about integer division from above conditional
+		obj.blocks[bi].x/8 == x && obj.blocks[bi].y/8 == y)
+			obj.blocks[bi].clear();
+	}
+
+	// Clean up before adding any entities/blocks
+	obj.cleanup();
+	int n = obj.nblocks - 1;
+	while (n >= 0 && !obj.blocks[n].active) {
+		obj.nblocks--;
+		n--;
+	}
+
+	// Ok, now if we've added a tile that's an entity and/or block, actually add it now...
+	// TODO: This will need to be updated when the Tower tileset rolls around
+
+	// This is all copy-pasted from Map.cpp
+
+	// Spikes
+	if (map.tileset == 0) {
+		if (tile == 6 || tile == 8)
+			// Sticking up
+			obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
+		if (tile == 7 || tile == 9)
+			// Sticking down
+			obj.createblock(DAMAGE, 8*x, 8*y, 8, 4);
+		if (tile == 49 || tile == 50)
+			// Left or right
+			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
+	} else if (map.tileset == 1) {
+		if ((tile >= 63 && tile <= 74) || (tile >= 6 && tile <= 9)) {
+			// Correct the {odd, even}-type of the tile, this will be un-corrected later
+			if (tile < 10)
+				tile++;
+
+			if(tile % 2 == 0)
+				// Sticking up
+				obj.createblock(DAMAGE, 8*x, 8*y, 8, 4);
+			else
+				// Sticking down
+				obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
+
+			// Un-correct it now
+			if (tile < 11)
+				tile--;
+		}
+		if (tile >= 49 && tile <= 62)
+			// Left or right
+			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
+	}
+
+	// 1x1 quicksand
+	if (tile == 10)
+		obj.createentity(game, 8*x, 8*y, 4);
+
+	// One-way tiles
+	if (tile >= 14 && tile <= 17)
+		obj.createblock(DIRECTIONAL, 8*x, 8*y, 8, 8, tile-14);
+}
+
 void mapclass::fillcontent(growing_vector<std::string>& tmap)
 {
 
