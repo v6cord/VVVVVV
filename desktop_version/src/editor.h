@@ -344,7 +344,7 @@ public:
 
     bool scripteditmod = false;
     int scripthelppage, scripthelppagedelay = 0;
-    std::string sb[500];
+    growing_vector<std::string> sb;
     std::string sbscript;
     int sblength = 0;
     int sbx, sby = 0;
