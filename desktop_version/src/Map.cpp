@@ -795,12 +795,18 @@ void mapclass::settile(int xp, int yp, int t)
 }
 
 void mapclass::settile_special(int x, int y, int tile) {
-	if (tile != 10) // There's nothing behind 1x1 quicksand
+	if (towermode || tileset == 2 || tile != 10) // There's nothing behind 1x1 quicksand
 		map.settile(x, y, tile);
 	else
 		// Don't change the `tile` var, we createentity by checking `tile` later
 		map.settile(x, y, 0);
 	graphics.foregrounddrawn = false;
+
+	// Towers don't use blocks for spikes, and you can't place one-ways / 1x1 quicksand with tiles
+	// TODO: Update this if you CAN place one-ways / 1x1 quicksand in towers with tiles
+	if (towermode)
+		return;
+
 	// Kludge to fix spikes, one-ways, and 1x1 quicksand
 	// Remove them first, if there is one where we placed the tile
 	// The 1x1 quicksand is part entity, part block
@@ -841,7 +847,6 @@ void mapclass::settile_special(int x, int y, int tile) {
 	}
 
 	// Ok, now if we've added a tile that's an entity and/or block, actually add it now...
-	// TODO: This will need to be updated when the Tower tileset rolls around
 
 	// This is all copy-pasted from Map.cpp
 
@@ -876,14 +881,25 @@ void mapclass::settile_special(int x, int y, int tile) {
 		if (tile >= 49 && tile <= 62)
 			// Left or right
 			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
+	} else if (tileset == 2) {
+		int thetile = tile % 30;
+		if (thetile == 6 || thetile == 8)
+			// Sticking up
+			obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
+		if (thetile == 7 || thetile == 9)
+			// Sticking down
+			obj.createblock(DAMAGE, 8*x, 8*y, 8, 4);
+		if (thetile == 10 || thetile == 11)
+			// Left or right
+			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
 	}
 
 	// 1x1 quicksand
-	if (tile == 10)
+	if (tileset != 2 && tile == 10)
 		obj.createentity(game, 8*x, 8*y, 4);
 
 	// One-way tiles
-	if (tile >= 14 && tile <= 17)
+	if (tileset != 2 && tile >= 14 && tile <= 17)
 		obj.createblock(DIRECTIONAL, 8*x, 8*y, 8, 8, tile-14);
 }
 
