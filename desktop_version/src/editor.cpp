@@ -332,10 +332,8 @@ void editorclass::reset()
         }
     }
 
-    for (int i = 0; i < 500; i++)
-    {
-        sb[i]="";
-    }
+    sb.clear();
+    sb.resize(500);
     for (int i = 0; i < 500; i++)
     {
         hooklist[i]="";
@@ -4043,15 +4041,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             int y = 20;
             for(int i=0; i<25; i++)
             {
-                if(i+ed.pagey<500)
-                {
-                    auto text = ed.sb[i+ed.pagey];
-                    if (i == ed.sby && ed.entframe < 2) text += "_";
-                    if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
-                        y += 16;
-                    } else {
-                        y += 8;
-                    }
+                auto text = ed.sb[i+ed.pagey];
+                if (i == ed.sby && ed.entframe < 2) text += "_";
+                if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
+                    y += 16;
+                } else {
+                    y += 8;
                 }
             }
             break;
