@@ -785,9 +785,12 @@ void mapclass::fillareamap(growing_vector<std::string>& tmap)
 
 void mapclass::settile(int xp, int yp, int t)
 {
-	if (xp >= 0 && xp < 40 && yp >= 0 && yp < 29+extrarow)
-	{
-		contents[xp + vmult[yp]] = t;
+	if (towermode && minitowermode) {
+		if (xp >= 0 && xp < 40 && yp >= 0 && yp < minitowersize)
+			tower.minitower[xp + yp*40] = t;
+	} else {
+		if (xp >= 0 && xp < 40 && yp >= 0 && yp < 29+extrarow)
+			contents[xp + vmult[yp]] = t;
 	}
 }
 
@@ -2081,27 +2084,28 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				}
 			}
 		}
+	}
 
-		for (int i = 0; i < obj.nentity; i++)
+	for (int i = 0; i < obj.nentity; i++)
+	{
+		if (obj.entities[i].active)
 		{
-			if (obj.entities[i].active)
+			if (obj.entities[i].type == 1 && obj.entities[i].behave >= 8 && obj.entities[i].behave < 10)
 			{
-				if (obj.entities[i].type == 1 && obj.entities[i].behave >= 8 && obj.entities[i].behave < 10)
+				int thetile = towermode && minitowermode ? 12 : 1;
+				//put a block underneath
+				temp = obj.entities[i].xp / 8.0f;
+				temp2 = obj.entities[i].yp / 8.0f;
+				settile(temp, temp2, thetile);
+				settile(temp+1, temp2, thetile);
+				settile(temp+2, temp2, thetile);
+				settile(temp+3, temp2, thetile);
+				if (obj.entities[i].w == 64)
 				{
-					//put a block underneath
-					temp = obj.entities[i].xp / 8.0f;
-					temp2 = obj.entities[i].yp / 8.0f;
-					settile(temp, temp2, 1);
-					settile(temp+1, temp2, 1);
-					settile(temp+2, temp2, 1);
-					settile(temp+3, temp2, 1);
-					if (obj.entities[i].w == 64)
-					{
-						settile(temp+4, temp2, 1);
-						settile(temp+5, temp2, 1);
-						settile(temp+6, temp2, 1);
-						settile(temp+7, temp2, 1);
-					}
+					settile(temp+4, temp2, thetile);
+					settile(temp+5, temp2, thetile);
+					settile(temp+6, temp2, thetile);
+					settile(temp+7, temp2, thetile);
 				}
 			}
 		}
