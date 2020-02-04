@@ -5,5 +5,5 @@ Type=Application
 Terminal=false
 Exec=VVVVVV-CE
 Name=VVVVVV-CE
-Icon=v6cord
+Icon=v6ce
 Categories=Game
