@@ -272,6 +272,39 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
     if (game.deathseq != -1)
     {
+        for (int i = 0; i < obj.nentity; i++)
+        {
+            if (obj.entities[i].type == 2 && obj.entities[i].state == 3)
+            {
+                obj.entities[i].state = 4;
+            }
+            else if (obj.entities[i].type == 2 && obj.entities[i].state == 2)
+            {
+                //ok, unfortunate case where the disappearing platform hasn't fully disappeared. Accept a little
+                //graphical uglyness to avoid breaking the room!
+                while (obj.entities[i].state == 2) obj.updateentities(i, help, game, music);
+                obj.entities[i].state = 4;
+            }
+            else if (obj.entities[i].type == 3 && obj.entities[i].state == 3)
+            {
+                // Restart the 1x1 quicksand
+                obj.entities[i].state = 4;
+            }
+            else if (obj.entities[i].type == 3 && obj.entities[i].state == 2)
+            {
+                // Ok, unfortunate case where the 1x1 quicksand hasn't fully disappeared.
+                // Accept a little graphical ugliness to avoid breaking the room!
+                while (obj.entities[i].state == 2)
+                    obj.updateentities(i, help, game, music);
+
+                obj.entities[i].state = 4;
+            }
+            else if (obj.entities[i].type == 4 && obj.entities[i].state == 2)
+            {
+                // Flip token: Give a signal to respawn
+                obj.entities[i].state = 3;
+            }
+        }
         map.colsuperstate = 1;
         map.cameramode = 2;
         game.deathsequence(map, obj, music);
