@@ -78,6 +78,7 @@ public:
 
     int scriptdelay = 0;
     bool running = false;
+    bool nointerrupt = false;
     bool passive = false;
     std::string tempword;
     std::string currentletter;

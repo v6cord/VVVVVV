@@ -686,6 +686,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				scriptdelay = ss_toi(words[1]);
                                 loopdelay = true;
 			}
+			if (words[0] == "nointerrupt")
+			{
+				nointerrupt = true;
+			}
+			if (words[0] == "yesinterrupt")
+			{
+				nointerrupt = false;
+			}
 			if (words[0] == "settile")
 			{
 				// settile(x,y,tile)
@@ -3692,6 +3700,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		{
                         if (!callstack.empty()) callstack.pop_back();
 			running = false;
+			nointerrupt = false;
 		}
 	}
 
@@ -4864,6 +4873,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	scriptdelay = 0;
 	scriptname = "";
 	running = false;
+	nointerrupt = false;
 	passive = false;
 	variablenames.clear();
 	variablecontents.clear();

@@ -5743,7 +5743,7 @@ void entityclass::entitycollisioncheck( Graphics& dwgfx, Game& game, mapclass& m
     }
 
     activetrigger = -1;
-    if (checktrigger() > -1)
+    if (checktrigger() > -1 && !script.nointerrupt)
     {
         game.state = activetrigger;
         game.statedelay = 0;
