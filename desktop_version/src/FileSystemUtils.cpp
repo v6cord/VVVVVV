@@ -125,6 +125,7 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                         );
                 return 0;
             }
+            CFRelease(appUrlRef);
 #else
             strcpy_safe(output, PHYSFS_getBaseDir());
             strcat(output, "data.zip");
@@ -155,9 +156,6 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                         return 0;
                 }
         }
-#ifdef __APPLE__
-        CFRelease(appUrlRef);
-#endif
 
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcpy_safe(output, "gamecontrollerdb.txt");
