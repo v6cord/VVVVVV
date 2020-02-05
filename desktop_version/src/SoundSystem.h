@@ -1,7 +1,11 @@
 #ifndef SOUNDSYSTEM_H
 #define SOUNDSYSTEM_H
 
-#include <SDL_mixer.h>
+#if defined(__SWITCH__)
+	#include <SDL2/SDL_mixer.h>
+#else
+	#include <SDL_mixer.h>
+#endif
 
 class MusicTrack
 {

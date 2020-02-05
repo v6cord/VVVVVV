@@ -1,7 +1,11 @@
 #ifndef TEXTBOX_H
 #define TEXTBOX_H
 
-#include "SDL.h"
+#if defined(__SWITCH__)
+    #include <SDL2/SDL.h>
+#else
+    #include <SDL.h>
+#endif
 #include <string>
 #include <vector>
 #include "Game.h"

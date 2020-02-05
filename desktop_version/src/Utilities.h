@@ -15,12 +15,12 @@ inline void seed_xoshiro_64(uint64_t s) {
 }
 uint64_t xoshiro_next(void);
 
-size_t strlcpy(char *dst, const char *src, size_t dsize);
+size_t bsd_strlcpy(char *dst, const char *src, size_t dsize);
 
 // source: https://randomascii.wordpress.com/2013/04/03/stop-using-strncpy-already/
 template <size_t charCount>
 void strcpy_safe(char (&output)[charCount], const char* pSrc) {
-    strlcpy(output, pSrc, charCount);
+    bsd_strlcpy(output, pSrc, charCount);
 }
 
 struct free_delete {

@@ -1,5 +1,6 @@
 #include "Network.h"
 
+#ifndef __SWITCH__
 #define NUM_BACKENDS 2
 #define DECLARE_BACKEND(name) \
 	extern int32_t name##_init(); \
@@ -101,3 +102,16 @@ void NETWORK_setAchievementProgress(const char *name, int32_t stat)
 		backends[i].SetAchievementProgress(name, stat);
 	}
 }
+#else
+int32_t NETWORK_init() { return 0; }
+
+void NETWORK_shutdown() {}
+
+void NETWORK_update() {}
+
+void NETWORK_unlockAchievement(const char *name) {}
+
+int32_t NETWORK_getAchievementProgress(const char *name) { return 0; }
+
+void NETWORK_setAchievementProgress(const char *name, int32_t stat) {}
+#endif
