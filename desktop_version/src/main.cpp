@@ -535,6 +535,10 @@ int main(int argc, char *argv[])
             case GAMEMODE:
                 if (map.towermode)
                 {
+                    if (script.running)
+                    {
+                        script.run(key, graphics, game, map, obj, help, music);
+                    }
 					gameinput(key, graphics, game, map, obj, help, music);
 
                     //if(game.recording==1)
