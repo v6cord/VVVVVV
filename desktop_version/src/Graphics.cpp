@@ -2759,7 +2759,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             {
 				//TODO elephant bug
                 setcol(obj.entities[i].colour, help);
-                drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp);
+                drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp-map.ypos);
             }
         }
     }
