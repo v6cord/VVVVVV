@@ -121,16 +121,13 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
             return 0;
         }
 #else
-	strcpy_safe(output, PHYSFS_getBaseDir());
-	strcat(output, "data.zip");
-#endif
-
 	if (assetsPath) {
-		strcpy(output, assetsPath);
+            strcpy_safe(output, assetsPath);
 	} else {
-		strcpy(output, PHYSFS_getBaseDir());
-		strcat(output, "data.zip");
-	}
+            strcpy_safe(output, PHYSFS_getBaseDir());
+            strcat(output, "data.zip");
+        }
+#endif
 
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
