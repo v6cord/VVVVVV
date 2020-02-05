@@ -37,7 +37,7 @@ if cmp -s "$timestamp_ref" vce.zip.c; then
     touch -r "$timestamp_ref" vce.zip.c
 fi
 
-ninja
+ninja ${verbose:+-v}
 
 if [ ! -z "$windows" ]; then
     cp -uv ../../.github/libs/* .
