@@ -224,6 +224,18 @@ find_library(FRIBIDI_LIBRARY NAMES fribidi)
 # Static Dependencies
 TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
 
+# data.zip path
+function(convert_to_cstring_literal var value)
+    string(REGEX REPLACE "([\\\$\"])" "\\\\\\1" escaped "${value}")
+    set("${var}" "\"${escaped}\"" PARENT_SCOPE)
+endfunction()
+
+set(DATA_ZIP_PATH "" CACHE STRING "Path to data.zip (optional)")
+if (DATA_ZIP_PATH)
+    convert_to_cstring_literal(DATA_ZIP_STR "${DATA_ZIP_PATH}")
+    target_compile_definitions(VVVVVV-CE PRIVATE "DATA_ZIP_PATH=${DATA_ZIP_STR}")
+endif()
+
 # SDL2 Dependency (Detection pulled from FAudio)
 if (SWITCH)
         message(STATUS "Using SDL2 from pkg-config")
