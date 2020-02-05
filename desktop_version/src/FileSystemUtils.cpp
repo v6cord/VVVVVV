@@ -99,37 +99,37 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 
 	/* Mount the stock content last */
 
-#if defined(DATA_ZIP_PATH)
-        strcpy_safe(output, DATA_ZIP_PATH);
-#elif defined(__APPLE__)
-        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
-        if (!appUrlRef) {
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Couldn't find data.zip in .app!",
-                    "Please place data.zip in Contents/Resources\n"
-                    "inside VVVVVV-CE.app.",
-                    NULL
-                    );
-            return 0;
-        }
-        if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Couldn't get data.zip path!",
-                    "Please report this error.",
-                    NULL
-                    );
-            return 0;
-        }
-#else
 	if (assetsPath) {
             strcpy_safe(output, assetsPath);
-	} else {
+        } else {
+#if defined(DATA_ZIP_PATH)
+            strcpy_safe(output, DATA_ZIP_PATH);
+#elif defined(__APPLE__)
+            CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
+            if (!appUrlRef) {
+                SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Couldn't find data.zip in .app!",
+                        "Please place data.zip in Contents/Resources\n"
+                        "inside VVVVVV-CE.app.",
+                        NULL
+                        );
+                return 0;
+            }
+            if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
+                SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Couldn't get data.zip path!",
+                        "Please report this error.",
+                        NULL
+                        );
+                return 0;
+            }
+#else
             strcpy_safe(output, PHYSFS_getBaseDir());
             strcat(output, "data.zip");
-        }
 #endif
+        }
 
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
