@@ -6137,10 +6137,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 //Script trigger
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
-                                ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
-                                          &(edentity[ed.textent].scriptname));
                                 addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
+                                ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
+                                          &(edentity[ed.textent].scriptname));
                                 if (ed.boundarytype==5)
                                     // Don't forget to subtract 1 from index because addedentity incremented it
                                     edentity[EditorData::GetInstance().numedentities-1].onetime = true;
@@ -6151,11 +6151,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
                                 ed.textcount = 2;
+                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
+                                            (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                                 ed.getlin(key, TEXT_ACTIVITYZONE,
                                           "Enter activity zone text:",
                                           &(edentity[ed.textent].activityname));
-                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
-                                            (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                             }
                             else if(ed.boundarytype==1)
                             {
@@ -6404,10 +6404,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
+                                addedentity(tx, ty, 17);
                                 ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
                                           &(edentity[ed.textent].scriptname));
                                 dwgfx.backgrounddrawn=false;
-                                addedentity(tx, ty, 17);
                             }
                             else if(ed.drawmode==12)   //Script Trigger
                             {
@@ -6474,9 +6474,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
+                                addedentity(tx, ty, 18, 0);
                                 ed.getlin(key, TEXT_SCRIPT, "Enter script name",
                                           &(edentity[ed.textent].scriptname));
-                                addedentity(tx, ty, 18, 0);
                             }
                             else if(ed.drawmode==13)
                             {
