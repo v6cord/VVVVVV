@@ -168,6 +168,7 @@ SET(PFS_SRC
 	../third_party/physfs/physfs_platform_unix.c
 	../third_party/physfs/physfs_platform_windows.c
 	../third_party/physfs/physfs_platform_haiku.cpp
+	../third_party/physfs/physfs_platform_switch.c
 )
 IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
@@ -220,7 +221,14 @@ find_library(FRIBIDI_LIBRARY NAMES fribidi)
 TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
 
 # SDL2 Dependency (Detection pulled from FAudio)
-if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
+if (SWITCH)
+        message(STATUS "Using SDL2 from pkg-config")
+        pkg_check_modules(SDL2 sdl2)
+        pkg_check_modules(SDL2_MIXER SDL2_mixer)
+        pkg_check_modules(EGL egl)
+        target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_STATIC_INCLUDE_DIRS}>" "$<BUILD_INTERFACE:${SDL2_MIXER_STATIC_INCLUDE_DIRS}>")
+        target_link_libraries(VVVVVV-CE ${SDL2_STATIC_LIBRARIES} ${SDL2_MIXER_STATIC_LIBRARIES})
+elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
         message(STATUS "Building using MinGW SDL libraries")
 	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
 	target_link_libraries(VVVVVV-CE SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
@@ -256,6 +264,10 @@ IF(HAIKU)
 	FIND_LIBRARY(ROOT_LIBRARY root)
 	TARGET_LINK_LIBRARIES(VVVVVV-CE ${BE_LIBRARY} ${ROOT_LIBRARY})
 ENDIF()
+if (SWITCH)
+    find_package(Libnx REQUIRED)
+    target_link_libraries(VVVVVV-CE switch::libnx)
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS VVVVVV-CE

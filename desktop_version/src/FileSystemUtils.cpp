@@ -532,6 +532,10 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
+#elif defined(__SWITCH__)
+bool FILESYSTEM_openDirectory(const char *dname) {
+    return false;
+}
 #else
 #ifdef __linux__
 const char* open_cmd = "xdg-open";
