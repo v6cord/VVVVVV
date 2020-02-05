@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdlib>
 #include "Script.h"
+#include "ScriptX.h"
 #include "Graphics.h"
 
 #include "Entity.h"
@@ -15,8 +16,6 @@
 
 scriptclass::scriptclass()
 {
-    	//Start SDL
-
 	//Init
 	commands.resize(500);
 	words.resize(40);
@@ -49,6 +48,8 @@ scriptclass::scriptclass()
 	variablecontents.resize(100);
 
 	scriptname = "";
+
+	// I really hate this file, by the way
 }
 
 void scriptclass::clearcustom(){
@@ -4794,6 +4795,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	game.script_images.clear();
 	game.script_image_names.clear();
+
+	active_scripts.clear();
 
 	// WARNING: Don't reset teleporter locations, at this point we've already loaded the level!
 }

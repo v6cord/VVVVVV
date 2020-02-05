@@ -558,6 +558,10 @@ int main(int argc, char *argv[])
                             script.run(key, graphics, game, map, obj, help, music);
                         }
 
+                        for (int i = 0; i < (int)script.active_scripts.size(); i++) {
+                            script.active_scripts[i].update();
+                        }
+
                         gameinput(key, graphics, game, map, obj, help, music);
                         //}
                         gamerender(graphics,map, game,  obj, help);

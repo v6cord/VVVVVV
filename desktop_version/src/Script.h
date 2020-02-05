@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Game.h"
-
+#include "ScriptX.h"
 #include "Enums.h"
 
 
@@ -109,6 +109,8 @@ public:
 
     int getpixelx = -1;
     int getpixely = -1;
+
+    growing_vector<scriptx> active_scripts;
 };
 
 #endif /* SCRIPT_H */
