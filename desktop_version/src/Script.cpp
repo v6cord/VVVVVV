@@ -86,20 +86,7 @@ int scriptclass::getimage(Game& game, std::string n) {
     X("trinkets", game.trinkets) \
     X("coins", game.coins)
 
-int* scriptclass::specialvar(std::string n) {
-#define X(k, v) if (n == k) return &(v);
-    SPECIALVARS
-#undef X
-    return nullptr;
-}
-
 void scriptclass::setvar(std::string n, std::string c) {
-	auto special = specialvar(n);
-	if (special) {
-		*special = ss_toi(c);
-		return;
-	}
-
 	int tempvar = getvar(n);
 	if (tempvar == -1) {
 		variablenames.push_back(n);
@@ -107,6 +94,10 @@ void scriptclass::setvar(std::string n, std::string c) {
 	} else {
 		variablecontents[tempvar] = c;
 	}
+
+#define X(k, v) if (n == k) v = ss_toi(c);
+    SPECIALVARS
+#undef X
 }
 
 std::string scriptclass::processvars(std::string t) {
@@ -122,11 +113,6 @@ std::string scriptclass::processvars(std::string t) {
 				int varid = getvar(tempvar);
 				if (varid != -1)
 					tempstring += variablecontents[varid];
-#define X(k, v) \
-				else if (tempvar == k) \
-					tempstring += help.String(v);
-				SPECIALVARS
-#undef X
 				else
 					tempstring += "%" + tempvar + "%";
 				tempvar = "";
@@ -148,6 +134,12 @@ std::string scriptclass::processvars(std::string t) {
 		tempstring += "%" + tempvar;
 	}
 	return tempstring;
+}
+
+void scriptclass::updatevars() {
+#define X(k, v) setvar(k, std::to_string(v));
+    SPECIALVARS
+#undef X
 }
 
 void scriptclass::tokenize( std::string t )
@@ -197,7 +189,7 @@ void scriptclass::tokenize( std::string t )
 	tempword = "";
 
 	t = processvars(t);
-    
+
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
@@ -231,6 +223,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		if (position < scriptlength)
 		{
 			//Let's split or command in an array of words
+
+			updatevars();
 
 			tokenize(commands[position]);
 
@@ -660,22 +654,24 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				// OR
 				// addvar(name)
 				// <add>
-				
+
 				int varid = getvar(words[1]);
+				std::string tempcontents;
 				if (varid != -1) {
 					if (words[2] == "") {
 						position++;
-						variablecontents[varid] += processvars(commands[position]);
+						tempcontents = variablecontents[varid];
+						tempcontents += processvars(commands[position]);
 					} else {
 						if (is_number(variablecontents[varid]) && is_number(words[2])) {
-							std::string tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
+							tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
 							tempcontents.erase ( tempcontents.find_last_not_of('0') + 1, std::string::npos );
 							tempcontents.erase ( tempcontents.find_last_not_of('.') + 1, std::string::npos );
-							variablecontents[varid] = tempcontents;
 						} else {
-							variablecontents[varid] += words[2];
+							tempcontents = variablecontents[varid] + words[2];
 						}
 					}
+					setvar(words[1], tempcontents);
 				}
 			}
             if ((words[0] == "ifvar") || (words[0] == "if"))
