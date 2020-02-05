@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__SWITCH__)
     bool syslog = true;
 #else
     bool syslog = false;
@@ -146,7 +146,11 @@ int main(int argc, char *argv[])
     if (syslog) {
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
         puts("Switching to syslog...");
+#ifdef __SWITCH__
+        auto logger = fopen("sdmc:/switch/vvvvvv-ce.log", "a");
+#else
         auto logger = popen("logger", "w");
+#endif
         if (logger) {
             auto logger_fd = fileno(logger);
             auto stdout_fd = fileno(stdout);
