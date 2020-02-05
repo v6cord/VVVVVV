@@ -30,6 +30,12 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
     - name: CPack build
       run: cd ${SRC_DIR_PATH} && ./cpack.sh
 
@@ -47,12 +53,6 @@ jobs:
       with:
         name: VVVVVV-CE-LinuxDeb
         path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
-
-    - name: Cache data.zip
-      uses: actions/cache@v1
-      with:
-        path: desktop_version/build/data-zip
-        key: data-zip-folder
 
     - name: Run tests
       run: cd ${SRC_DIR_PATH} && ./tests.sh
