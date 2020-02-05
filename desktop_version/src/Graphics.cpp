@@ -2732,7 +2732,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             else if (obj.entities[i].size == 8)    // Special: Moving platform, 8 tiles
             {
                 tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp;
+                tpoint.y = obj.entities[i].yp - map.ypos;
                 drawRect = sprites_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
