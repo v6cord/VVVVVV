@@ -310,7 +310,7 @@ void PLATFORM_getOSDirectory(char* output)
 	WideCharToMultiByte(CP_UTF8, 0, utf16_path, -1, output, MAX_PATH, NULL, NULL);
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
-	strcat(output, "sdmc:/switch/VVVVVV/");
+	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
 #else
 	bsd_strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif
