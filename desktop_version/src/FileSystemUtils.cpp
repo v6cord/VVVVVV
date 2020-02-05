@@ -99,7 +99,9 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 
 	/* Mount the stock content last */
 
-#ifdef __APPLE__
+#if defined(DATA_ZIP_PATH)
+        strcpy_safe(output, DATA_ZIP_PATH);
+#elif defined(__APPLE__)
         CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
         if (!appUrlRef) {
             SDL_ShowSimpleMessageBox(
