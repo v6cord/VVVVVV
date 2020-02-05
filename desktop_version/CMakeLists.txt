@@ -230,7 +230,7 @@ function(convert_to_cstring_literal var value)
     set("${var}" "\"${escaped}\"" PARENT_SCOPE)
 endfunction()
 
-set(DATA_ZIP_PATH "" CACHE STRING "Path to data.zip (optional)")
+set(DATA_ZIP_PATH "/usr/share/vvvvvv/data.zip" CACHE STRING "Path to data.zip (optional)")
 if (DATA_ZIP_PATH)
     convert_to_cstring_literal(DATA_ZIP_STR "${DATA_ZIP_PATH}")
     target_compile_definitions(VVVVVV-CE PRIVATE "DATA_ZIP_PATH=${DATA_ZIP_STR}")
@@ -295,6 +295,7 @@ install(TARGETS VVVVVV-CE
 )
 INSTALL(FILES data/VVVVVV-CE.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 INSTALL(FILES data/VVVVVV.png DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps RENAME v6ce.png)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/data-zip/data.zip DESTINATION ${CMAKE_INSTALL_DATADIR}/vvvvvv COMPONENT data-zip)
 
 set(CPACK_PACKAGE_VENDOR "v6cord")
 set(CPACK_PACKAGE_VERSION "1.0.0")
