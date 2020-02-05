@@ -37,7 +37,7 @@ Screen::Screen()
 	// Uncomment this next line when you need to debug -flibit
 	// SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "software", SDL_HINT_OVERRIDE);
 	SDL_CreateWindowAndRenderer(
-#ifdef __SWITCH
+#ifdef __SWITCH__
                 1280,
                 720,
 #else
