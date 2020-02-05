@@ -296,3 +296,14 @@ set(HOMEBREW_APP "VVVVVV-CE")
 set(APP_TITLE ${HOMEBREW_APP})
 set(APP_AUTHOR "v6cord")
 set(APP_VERSION "${CPACK_PACKAGE_VERSION}")
+
+set_target_properties(VVVVVV-CE PROPERTIES
+    APP_TITLE "VVVVVV-CE"
+    APP_AUTHOR "${CPACK_PACKAGE_VENDOR}"
+    APP_VERSION "${CPACK_PACKAGE_VERSION}"
+    ICON "data/VVVVVV.png")
+
+if (SWITCH)
+    include(SwitchTools)
+    add_nro_target(VVVVVV-CE)
+endif()
