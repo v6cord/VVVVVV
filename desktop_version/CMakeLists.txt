@@ -186,6 +186,10 @@ ELSE()
 	ADD_EXECUTABLE(VVVVVV-CE ${VVV_SRC})
 ENDIF()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    SET_SOURCE_FILES_PROPERTIES(src/Scripts.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+endif()
+
 # Build options
 IF(ENABLE_WARNINGS)
 	# The weird syntax is due to CMake generator expressions.
