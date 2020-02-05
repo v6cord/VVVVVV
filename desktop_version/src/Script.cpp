@@ -87,18 +87,18 @@ int scriptclass::getimage(Game& game, std::string n) {
     X("coins", game.coins)
 
 int* scriptclass::specialvar(std::string n) {
-#define X(k, v) if (n == k) return &v;
+#define X(k, v) if (n == k) return &(v);
     SPECIALVARS
 #undef X
     return nullptr;
 }
 
 void scriptclass::setvar(std::string n, std::string c) {
-        auto special = specialvar(n);
-        if (special) {
-            *special = ss_toi(c);
-            return;
-        }
+	auto special = specialvar(n);
+	if (special) {
+		*special = ss_toi(c);
+		return;
+	}
 
 	int tempvar = getvar(n);
 	if (tempvar == -1) {
@@ -109,36 +109,27 @@ void scriptclass::setvar(std::string n, std::string c) {
 	}
 }
 
-void scriptclass::updatevars(Game& game, entityclass& obj) {
-#define X(k, v) setvar(k, std::to_string(v));
-    SPECIALVARS
-#undef X
-}
-
 std::string scriptclass::processvars(std::string t) {
 	std::string tempstring = "";
 	std::string tempvar = "";
 	bool readingvar = false;
-	bool foundvar = false;
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
 		if (readingvar) {
 			if (currentletter == "%") {
 				readingvar = false;
-				for(std::size_t i_ = 0; i_ < variablenames.size(); i_++) {
-					if (variablenames[i_] == tempvar) {
-						foundvar = true;
-						tempstring += variablecontents[i_];
-						tempvar = "";
-						break;
-					}
-					//printf("var: %s", tempvar.c_str());
-				}
-				if (foundvar == false) {
+				int varid = getvar(tempvar);
+				if (varid != -1)
+					tempstring += variablecontents[varid];
+#define X(k, v) \
+				else if (tempvar == k) \
+					tempstring += help.String(v);
+				SPECIALVARS
+#undef X
+				else
 					tempstring += "%" + tempvar + "%";
-					tempvar = "";
-				}
+				tempvar = "";
 			} else {
 				tempvar += currentletter;
 			}
@@ -240,8 +231,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		if (position < scriptlength)
 		{
 			//Let's split or command in an array of words
-
-			updatevars(game, obj);
 
 			tokenize(commands[position]);
 
