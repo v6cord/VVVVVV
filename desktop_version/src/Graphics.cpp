@@ -2755,6 +2755,12 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
                   BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
                 }
             }
+            else if (obj.entities[i].size == 11)    //The fucking elephant
+            {
+				//TODO elephant bug
+                setcol(obj.entities[i].colour, help);
+                drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp);
+            }
         }
     }
 }
