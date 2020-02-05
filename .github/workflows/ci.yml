@@ -99,6 +99,20 @@ jobs:
         mv -v ${SRC_DIR_PATH}/build/VVVVVV-CE ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
         cp -v .github/resources/vce.icns ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources/vce.icns
         cp -v .github/resources/Info.plist ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Info.plist
+
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
+    - name: Copy data.zip
+      run: |
+        cd $SRC_DIR_PATH/build/
+        ../download-data.sh
+        cp -v data-zip/data.zip VVVVVV-app/VVVVVV-CE.app/Contents/Resources/data.zip
+
+    - name: Bundle .app
         dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app
 
     - name: Tar .app
@@ -142,6 +156,18 @@ jobs:
       run: |
         mkdir -p $SRC_DIR_PATH/build/VVVVVV-CE-Windows
         cp -rv .github/libs/* $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
+
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
+    - name: Copy data.zip
+      run: |
+        cd $SRC_DIR_PATH/build/
+        ../download-data.sh
+        cp -v data-zip/data.zip VVVVVV-CE-Windows/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
