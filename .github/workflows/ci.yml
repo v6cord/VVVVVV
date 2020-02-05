@@ -113,7 +113,7 @@ jobs:
         cp -v data-zip/data.zip VVVVVV-app/VVVVVV-CE.app/Contents/Resources/data.zip
 
     - name: Bundle .app
-    - run: |
+      run: |
         dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app
 
     - name: Tar .app
