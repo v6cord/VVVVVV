@@ -152,6 +152,10 @@ std::string scriptclass::processvars(std::string t) {
 			tempstring += currentletter;
 		}
 	}
+	if (readingvar)
+	{
+		tempstring += "%" + tempvar;
+	}
 	return tempstring;
 }
 
