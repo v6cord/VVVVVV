@@ -315,7 +315,7 @@ void PLATFORM_getOSDirectory(char* output)
 #elif defined(__SWITCH__)
 	strcat(output, "sdmc:/switch/VVVVVV/");
 #else
-	strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
+	bsd_strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif
 }
 

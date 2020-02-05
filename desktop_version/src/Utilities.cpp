@@ -40,7 +40,7 @@ uint64_t xoshiro_next(void) {
 }
 
 // source: https://gitlab.freedesktop.org/libbsd/libbsd/blob/7aede6a999ef7b6bd2b82aed55896611331a8eea/src/strlcpy.c
-size_t strlcpy(char *dst, const char *src, size_t dsize) {
+size_t bsd_strlcpy(char *dst, const char *src, size_t dsize) {
     const char *osrc = src;
     size_t nleft = dsize;
 
