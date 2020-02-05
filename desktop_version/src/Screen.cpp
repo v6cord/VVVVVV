@@ -34,16 +34,20 @@ Screen::Screen()
     filterSubrect.h = 238;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
+#ifdef __SWITCH__
+	SDL_CreateWindowAndRenderer(
+		1920,
+		1080,
+		SDL_WINDOW_FULLSCREEN,
+		&m_window,
+		&m_renderer
+	);
+#else
 	// Uncomment this next line when you need to debug -flibit
 	// SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "software", SDL_HINT_OVERRIDE);
 	SDL_CreateWindowAndRenderer(
-#ifdef __SWITCH__
-                1280,
-                720,
-#else
 		640,
 		480,
-#endif
 		SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE,
 		&m_window,
 		&m_renderer
@@ -70,6 +74,7 @@ Screen::Screen()
 	SDL_SetWindowIcon(m_window, icon);
 	SDL_FreeSurface(icon);
 	free(data);
+#endif
 
 	// FIXME: This surface should be the actual backbuffer! -flibit
 	m_screen = SDL_CreateRGBSurface(
