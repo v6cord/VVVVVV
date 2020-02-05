@@ -30,6 +30,7 @@ cmake -G Ninja \
     ${debug:+-DCMAKE_BUILD_TYPE=Debug} \
     ${debug:--DCMAKE_BUILD_TYPE=RelWithDebInfo} \
     ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
+    "$@" \
     ..
 
 if cmp -s "$timestamp_ref" vce.zip.c; then
