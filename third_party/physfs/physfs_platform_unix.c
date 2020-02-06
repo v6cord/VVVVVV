@@ -216,6 +216,11 @@ static char *findBinaryInPath(const char *bin, char *envr)
 
 static char *readSymLink(const char *path)
 {
+    // Switch does not support symlinks.
+    #if defined(__SWITCH__)
+        return NULL;
+    #endif
+    
     ssize_t len = 64;
     ssize_t rc = -1;
     char *retval = NULL;

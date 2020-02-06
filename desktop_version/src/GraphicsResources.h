@@ -1,7 +1,11 @@
 #ifndef GRAPHICSRESOURCES_H
 #define GRAPHICSRESOURCES_H
 
-#include "SDL.h"
+#if defined(__SWITCH__)
+    #include <SDL2/SDL.h>
+#else
+    #include <SDL.h>
+#endif
 
 SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha = false, bool optional = false);
 

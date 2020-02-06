@@ -135,6 +135,7 @@ SET(VVV_SRC
 	src/Screen.cpp
 	src/Script.cpp
 	src/Scripts.cpp
+	src/ScriptX.cpp
 	src/SoundSystem.cpp
 	src/Spacestation2.cpp
 	src/TerminalScripts.cpp
@@ -184,6 +185,10 @@ ELSE()
 	ADD_EXECUTABLE(VVVVVV-CE ${VVV_SRC})
 ENDIF()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    SET_SOURCE_FILES_PROPERTIES(src/Scripts.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+endif()
+
 # Build options
 IF(ENABLE_WARNINGS)
 	# The weird syntax is due to CMake generator expressions.
@@ -219,8 +224,27 @@ find_library(FRIBIDI_LIBRARY NAMES fribidi)
 # Static Dependencies
 TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
 
+# data.zip path
+function(convert_to_cstring_literal var value)
+    string(REGEX REPLACE "([\\\$\"])" "\\\\\\1" escaped "${value}")
+    set("${var}" "\"${escaped}\"" PARENT_SCOPE)
+endfunction()
+
+set(DATA_ZIP_PATH "/usr/share/vvvvvv/data.zip" CACHE STRING "Path to data.zip (optional)")
+if (DATA_ZIP_PATH)
+    convert_to_cstring_literal(DATA_ZIP_STR "${DATA_ZIP_PATH}")
+    target_compile_definitions(VVVVVV-CE PRIVATE "DATA_ZIP_PATH=${DATA_ZIP_STR}")
+endif()
+
 # SDL2 Dependency (Detection pulled from FAudio)
-if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
+if (SWITCH)
+        message(STATUS "Using SDL2 from pkg-config")
+        pkg_check_modules(SDL2 sdl2)
+        pkg_check_modules(SDL2_MIXER SDL2_mixer)
+        pkg_check_modules(EGL egl)
+        target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_STATIC_INCLUDE_DIRS}>" "$<BUILD_INTERFACE:${SDL2_MIXER_STATIC_INCLUDE_DIRS}>")
+        target_link_libraries(VVVVVV-CE ${SDL2_STATIC_LIBRARIES} ${SDL2_MIXER_STATIC_LIBRARIES})
+elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS))
         message(STATUS "Building using MinGW SDL libraries")
 	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
 	target_link_libraries(VVVVVV-CE SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES})
@@ -256,6 +280,10 @@ IF(HAIKU)
 	FIND_LIBRARY(ROOT_LIBRARY root)
 	TARGET_LINK_LIBRARIES(VVVVVV-CE ${BE_LIBRARY} ${ROOT_LIBRARY})
 ENDIF()
+if (SWITCH)
+    find_package(Libnx REQUIRED)
+    target_link_libraries(VVVVVV-CE switch::libnx)
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS VVVVVV-CE
@@ -267,6 +295,7 @@ install(TARGETS VVVVVV-CE
 )
 INSTALL(FILES data/VVVVVV-CE.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 INSTALL(FILES data/VVVVVV.png DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps RENAME v6ce.png)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/data-zip/data.zip DESTINATION ${CMAKE_INSTALL_DATADIR}/vvvvvv COMPONENT data-zip)
 
 set(CPACK_PACKAGE_VENDOR "v6cord")
 set(CPACK_PACKAGE_VERSION "1.0.0")
@@ -279,3 +308,14 @@ set(CPACK_PACKAGE_EXECUTABLES "VVVVVV-CE;VVVVVV-CE")
 set(CPACK_MONOLITHIC_INSTALL ON)
 set(CPACK_GENERATOR "STGZ;DEB")
 include(CPack)
+
+set_target_properties(VVVVVV-CE PROPERTIES
+    APP_TITLE VVVVVV-CE
+    APP_AUTHOR ${CPACK_PACKAGE_VENDOR}
+    APP_VERSION ${CPACK_PACKAGE_VERSION}
+    ICON ${CMAKE_CURRENT_SOURCE_DIR}/data/VVVVVV.png)
+
+if (SWITCH)
+    include(SwitchTools)
+    add_nro_target(VVVVVV-CE)
+endif()

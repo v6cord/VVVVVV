@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdlib>
 #include "Script.h"
+#include "ScriptX.h"
 #include "Graphics.h"
 
 #include "Entity.h"
@@ -15,8 +16,6 @@
 
 scriptclass::scriptclass()
 {
-    	//Start SDL
-
 	//Init
 	commands.resize(500);
 	words.resize(40);
@@ -49,6 +48,8 @@ scriptclass::scriptclass()
 	variablecontents.resize(100);
 
 	scriptname = "";
+
+	// I really hate this file, by the way
 }
 
 void scriptclass::clearcustom(){
@@ -58,99 +59,6 @@ void scriptclass::clearcustom(){
 void scriptclass::call(std::string script) {
     callstack.push_back(stackframe { .script = scriptname, .line = position });
     load(script);
-}
-
-void scriptclass::settile_special(int x, int y, int tile, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj) {
-	if (tile != 10) // There's nothing behind 1x1 quicksand
-		map.settile(x, y, tile);
-	else
-		// Don't change the `tile` var, we createentity by checking `tile` later
-		map.settile(x, y, 0);
-	dwgfx.foregrounddrawn = false;
-	// Kludge to fix spikes, one-ways, and 1x1 quicksand
-	// Remove them first, if there is one where we placed the tile
-	// The 1x1 quicksand is part entity, part block
-	// Remove its entity
-	for (int eqi = 0; eqi < obj.nentity; eqi++)
-		if (obj.entities[eqi].type == 3 && obj.entities[eqi].xp/8 == x && obj.entities[eqi].yp/8 == y)
-			obj.entities[eqi].active = false;
-	// The rest of these removals are blocks, which I'll just put in one for-loop
-	for (int bi = 0; bi < obj.nblocks; bi++) {
-		// Remove the block part of a 1x1 quicksand
-		// We check that it's 8x8 in order to not remove 4-wide quicksand / platforms / conveyors
-		if (obj.blocks[bi].type == BLOCK && obj.blocks[bi].xp/8 == x && obj.blocks[bi].yp/8 == y && obj.blocks[bi].wp == 8 && obj.blocks[bi].hp == 8)
-			obj.blocks[bi].clear();
-
-		// The spiky part of a spike is a block, remove it
-		if (obj.blocks[bi].type == DAMAGE &&
-			// Important - do the integer division by 8 on the left side of the equality, not multiply by 8 on the right side
-			// (Same applies to the one-way conditional below)
-			// Also important - for some godawful reason, the real position of spikes' blocks
-			// is stored in their 'x'/'y' attributes instead of 'xp'/'yp' like the rest,
-			// and also, the 'x'/'y' attributes are floats instead of ints
-			(int) obj.blocks[bi].x/8 == x && (int) obj.blocks[bi].y/8 == y)
-				obj.blocks[bi].clear();
-
-		// The collision of a one-way tile is a block, also remove it
-		if (obj.blocks[bi].type == DIRECTIONAL &&
-		// Read comment about integer division from above conditional
-		obj.blocks[bi].x/8 == x && obj.blocks[bi].y/8 == y)
-			obj.blocks[bi].clear();
-	}
-
-	// Clean up before adding any entities/blocks
-	obj.cleanup();
-	int n = obj.nblocks - 1;
-	while (n >= 0 && !obj.blocks[n].active) {
-		obj.nblocks--;
-		n--;
-	}
-
-	// Ok, now if we've added a tile that's an entity and/or block, actually add it now...
-	// TODO: This will need to be updated when the Tower tileset rolls around
-
-	// This is all copy-pasted from Map.cpp
-
-	// Spikes
-	if (map.tileset == 0) {
-		if (tile == 6 || tile == 8)
-			// Sticking up
-			obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
-		if (tile == 7 || tile == 9)
-			// Sticking down
-			obj.createblock(DAMAGE, 8*x, 8*y, 8, 4);
-		if (tile == 49 || tile == 50)
-			// Left or right
-			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
-	} else if (map.tileset == 1) {
-		if ((tile >= 63 && tile <= 74) || (tile >= 6 && tile <= 9)) {
-			// Correct the {odd, even}-type of the tile, this will be un-corrected later
-			if (tile < 10)
-				tile++;
-
-			if(tile % 2 == 0)
-				// Sticking up
-				obj.createblock(DAMAGE, 8*x, 8*y, 8, 4);
-			else
-				// Sticking down
-				obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
-
-			// Un-correct it now
-			if (tile < 11)
-				tile--;
-		}
-		if (tile >= 49 && tile <= 62)
-			// Left or right
-			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
-	}
-
-	// 1x1 quicksand
-	if (tile == 10)
-		obj.createentity(game, 8*x, 8*y, 4);
-
-	// One-way tiles
-	if (tile >= 14 && tile <= 17)
-		obj.createblock(DIRECTIONAL, 8*x, 8*y, 8, 8, tile-14);
 }
 
 int scriptclass::getvar(std::string n) {
@@ -178,20 +86,7 @@ int scriptclass::getimage(Game& game, std::string n) {
     X("trinkets", game.trinkets) \
     X("coins", game.coins)
 
-int* scriptclass::specialvar(std::string n) {
-#define X(k, v) if (n == k) return &v;
-    SPECIALVARS
-#undef X
-    return nullptr;
-}
-
 void scriptclass::setvar(std::string n, std::string c) {
-        auto special = specialvar(n);
-        if (special) {
-            *special = ss_toi(c);
-            return;
-        }
-
 	int tempvar = getvar(n);
 	if (tempvar == -1) {
 		variablenames.push_back(n);
@@ -199,10 +94,8 @@ void scriptclass::setvar(std::string n, std::string c) {
 	} else {
 		variablecontents[tempvar] = c;
 	}
-}
 
-void scriptclass::updatevars(Game& game, entityclass& obj) {
-#define X(k, v) setvar(k, std::to_string(v));
+#define X(k, v) if (n == k) v = ss_toi(c);
     SPECIALVARS
 #undef X
 }
@@ -211,26 +104,18 @@ std::string scriptclass::processvars(std::string t) {
 	std::string tempstring = "";
 	std::string tempvar = "";
 	bool readingvar = false;
-	bool foundvar = false;
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
 		if (readingvar) {
 			if (currentletter == "%") {
 				readingvar = false;
-				for(std::size_t i_ = 0; i_ < variablenames.size(); i_++) {
-					if (variablenames[i_] == tempvar) {
-						foundvar = true;
-						tempstring += variablecontents[i_];
-						tempvar = "";
-						break;
-					}
-					//printf("var: %s", tempvar.c_str());
-				}
-				if (foundvar == false) {
+				int varid = getvar(tempvar);
+				if (varid != -1)
+					tempstring += variablecontents[varid];
+				else
 					tempstring += "%" + tempvar + "%";
-					tempvar = "";
-				}
+				tempvar = "";
 			} else {
 				tempvar += currentletter;
 			}
@@ -244,7 +129,17 @@ std::string scriptclass::processvars(std::string t) {
 			tempstring += currentletter;
 		}
 	}
+	if (readingvar)
+	{
+		tempstring += "%" + tempvar;
+	}
 	return tempstring;
+}
+
+void scriptclass::updatevars() {
+#define X(k, v) setvar(k, std::to_string(v));
+    SPECIALVARS
+#undef X
 }
 
 void scriptclass::tokenize( std::string t )
@@ -294,7 +189,7 @@ void scriptclass::tokenize( std::string t )
 	tempword = "";
 
 	t = processvars(t);
-    
+
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
@@ -329,7 +224,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		{
 			//Let's split or command in an array of words
 
-			updatevars(game, obj);
+			updatevars();
 
 			tokenize(commands[position]);
 
@@ -686,13 +581,21 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				scriptdelay = ss_toi(words[1]);
                                 loopdelay = true;
 			}
+			if (words[0] == "nointerrupt")
+			{
+				nointerrupt = true;
+			}
+			if (words[0] == "yesinterrupt")
+			{
+				nointerrupt = false;
+			}
 			if (words[0] == "settile")
 			{
 				// settile(x,y,tile)
 				int x = ss_toi(words[1]);
 				int y = ss_toi(words[2]);
 				int tile = ss_toi(words[3]);
-				settile_special(x,y,tile, dwgfx, game, map, obj);
+				map.settile_special(x,y,tile);
 			}
 			if (words[0] == "replacetiles")
 			{
@@ -703,7 +606,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					int x = i % 40;
 					int y = i / 40;
 					if (map.contents[i] == tile1) {
-						settile_special(x,y, tile2, dwgfx, game, map, obj);
+						map.settile_special(x,y, tile2);
 					}
 				}
 			}
@@ -751,22 +654,24 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				// OR
 				// addvar(name)
 				// <add>
-				
+
 				int varid = getvar(words[1]);
+				std::string tempcontents;
 				if (varid != -1) {
 					if (words[2] == "") {
 						position++;
-						variablecontents[varid] += processvars(commands[position]);
+						tempcontents = variablecontents[varid];
+						tempcontents += processvars(commands[position]);
 					} else {
 						if (is_number(variablecontents[varid]) && is_number(words[2])) {
-							std::string tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
+							tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
 							tempcontents.erase ( tempcontents.find_last_not_of('0') + 1, std::string::npos );
 							tempcontents.erase ( tempcontents.find_last_not_of('.') + 1, std::string::npos );
-							variablecontents[varid] = tempcontents;
 						} else {
-							variablecontents[varid] += words[2];
+							tempcontents = variablecontents[varid] + words[2];
 						}
 					}
+					setvar(words[1], tempcontents);
 				}
 			}
             if ((words[0] == "ifvar") || (words[0] == "if"))
@@ -1199,31 +1104,30 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: gotoposition(x position, y position, gravity position)
 				int player = obj.getplayer();
-				obj.entities[player].xp = ss_toi(words[1]);
-				obj.entities[player].yp = ss_toi(words[2]);
+				relativepos(&obj.entities[player].xp, words[1]);
+				relativepos(&obj.entities[player].yp, words[2]);
 				if (words[3] != "") {
-                                    game.gravitycontrol = ss_toi(words[3]);
-                                } else {
-                                    game.gravitycontrol = 0;
-                                }
-
+					if (words[3] == "~" || (words[3].substr(0, 1) == "~" && ss_toi(words[3].substr(1, std::string::npos)) == 0))
+						; // Keep the current gravity control
+					else if (words[3].substr(0, 1) == "~")
+						// Invert the gravity control
+						game.gravitycontrol = !game.gravitycontrol;
+					else
+						game.gravitycontrol = ss_toi(words[3]);
+				} else {
+					game.gravitycontrol = 0;
+				}
 			}
 			if (words[0] == "gotoroom")
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
-				map.gotoroom(ss_toi(words[1])+100, ss_toi(words[2])+100, dwgfx, game, obj, music);
+				map.gotoroom(relativepos(game.roomx-100, words[1])+100, relativepos(game.roomy-100, words[2])+100, dwgfx, game, obj, music);
 				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadroom")
 			{
 				//USAGE: reloadroom()
 				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
-				game.gotoroomfromscript = true;
-			}
-			if (words[0] == "movetoroom")
-			{
-				//USAGE: movetoroom(x,y)
-				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
 				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadscriptboxes")
@@ -2708,7 +2612,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.final_colorframe = 0;
 				map.finalstretch = false;
 			}
-			else if (words[0] == "returnscript")
+			else if (words[0] == "return")
                         {
                             auto frame = callstack.back();
                             load(frame.script);
@@ -2718,6 +2622,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "loadscript")
 			{
 				call(words[1]);
+				position--;
+			}
+			else if (words[0] == "load")
+			{
+				call("custom_"+words[1]);
 				position--;
 			}
 			else if (words[0] == "rollcredits")
@@ -3692,6 +3601,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		{
                         if (!callstack.empty()) callstack.pop_back();
 			running = false;
+			nointerrupt = false;
 		}
 	}
 
@@ -4387,6 +4297,11 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 			map.resetplayer(dwgfx, game, obj, music);
 		}
 		map.gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+		if (map.towermode) {
+			// Undo player x/y adjustments and realign camera on checkpoint
+			map.resetplayer(dwgfx, game, obj, music);
+			map.realign_tower(); // resetplayer only realigns if room differs
+		}
 		if(ed.levmusic>0){
 		  music.play(ed.levmusic);
 		}else{
@@ -4864,6 +4779,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	scriptdelay = 0;
 	scriptname = "";
 	running = false;
+	nointerrupt = false;
 	passive = false;
 	variablenames.clear();
 	variablecontents.clear();
@@ -4872,6 +4788,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	game.script_images.clear();
 	game.script_image_names.clear();
+
+	active_scripts.clear();
 
 	// WARNING: Don't reset teleporter locations, at this point we've already loaded the level!
 }

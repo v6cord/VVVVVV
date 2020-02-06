@@ -1,7 +1,11 @@
 #ifndef UTILITYCLASS_H
 #define UTILITYCLASS_H
 
-#include <SDL.h>
+#if defined(__SWITCH__)
+    #include <SDL2/SDL.h>
+#else
+    #include <SDL.h>
+#endif
 #include <vector>
 #include <string>
 
@@ -54,6 +58,8 @@ N mod(const N &num, const N &mod) {
 }
 
 int ss_toi(std::string _s);
+int relativepos(int original, std::string parsethis);
+void relativepos(int* original, std::string parsethis);
 
 bool is_number(const std::string& s);
 

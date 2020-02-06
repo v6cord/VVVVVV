@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Game.h"
-
+#include "ScriptX.h"
 #include "Enums.h"
 
 
@@ -35,17 +35,13 @@ public:
 
     void clearcustom();
 
-    void settile_special(int x, int y, int tile, Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj);
-
     int getimage(Game& game, std::string n);
 
     int getvar(std::string n);
 
-    int* specialvar(std::string n);
-
     void setvar(std::string n, std::string c);
 
-    void updatevars(Game& game, entityclass& obj);
+    void updatevars();
 
     std::string processvars(std::string t);
 
@@ -78,6 +74,7 @@ public:
 
     int scriptdelay = 0;
     bool running = false;
+    bool nointerrupt = false;
     bool passive = false;
     std::string tempword;
     std::string currentletter;
@@ -110,6 +107,8 @@ public:
 
     int getpixelx = -1;
     int getpixely = -1;
+
+    growing_vector<scriptx> active_scripts;
 };
 
 #endif /* SCRIPT_H */

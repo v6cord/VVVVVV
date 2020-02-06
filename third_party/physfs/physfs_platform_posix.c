@@ -60,6 +60,10 @@ static inline PHYSFS_ErrorCode errcodeFromErrno(void)
 
 static char *getUserDirByUID(void)
 {
+    #if defined(__SWITCH__)
+        return "sdmc:/";
+    #endif
+
     uid_t uid = getuid();
     struct passwd *pw;
     char *retval = NULL;
@@ -302,6 +306,22 @@ int __PHYSFS_platformStat(const char *fname, PHYSFS_Stat *st, const int follow)
     const int rc = follow ? stat(fname, &statbuf) : lstat(fname, &statbuf);
     BAIL_IF(rc == -1, errcodeFromErrno(), 0);
 
+    // Stat seems to be really messed up on the Switch, so we are relying on a
+    //  more out of the box solution.
+    #if defined(__SWITCH__)
+        DIR * ds = opendir(fname);
+        if (ds != NULL) {
+            st->filetype = PHYSFS_FILETYPE_DIRECTORY;
+        }
+        else if (errno == ENOTDIR) {
+            st->filetype = PHYSFS_FILETYPE_REGULAR;
+        }
+        else {
+            st->filetype = PHYSFS_FILETYPE_OTHER;
+        }
+        st->filesize = 0;
+        closedir(ds);
+    #else
     if (S_ISREG(statbuf.st_mode))
     {
         st->filetype = PHYSFS_FILETYPE_REGULAR;
@@ -325,6 +345,7 @@ int __PHYSFS_platformStat(const char *fname, PHYSFS_Stat *st, const int follow)
         st->filetype = PHYSFS_FILETYPE_OTHER;
         st->filesize = statbuf.st_size;
     } /* else */
+    #endif
 
     st->modtime = statbuf.st_mtime;
     st->createtime = statbuf.st_ctime;

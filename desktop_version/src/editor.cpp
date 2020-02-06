@@ -227,6 +227,8 @@ void editorclass::reset()
     roomnamehide=0;
     zmod=false;
     xmod=false;
+    cmod=false;
+    vmod=false;
     spacemod=false;
     spacemenu=0;
     shiftmenu=false;
@@ -332,10 +334,8 @@ void editorclass::reset()
         }
     }
 
-    for (int i = 0; i < 500; i++)
-    {
-        sb[i]="";
-    }
+    sb.clear();
+    sb.resize(500);
     for (int i = 0; i < 500; i++)
     {
         hooklist[i]="";
@@ -2100,6 +2100,7 @@ void editorclass::enable_tower(void) {
     int room = levx + levy*maxwidth;
 
     // Set Tower Tileset and color 0
+    switch_tileset_tiles(level[room].tileset, 5);
     level[room].tileset = 5;
     level[room].tilecol = 0;
 
@@ -3834,6 +3835,14 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             {
                 fillboxabs(dwgfx, (ed.tilex*8)-16,(ed.tiley*8)-16,24+16,24+16, dwgfx.getRGB(200,32,32));
             }
+            else if(ed.cmod && ed.drawmode<2)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8)-24,(ed.tiley*8)-24,24+32,24+32, dwgfx.getRGB(200,32,32));
+            }
+            else if(ed.vmod && ed.drawmode<2)
+            {
+                fillboxabs(dwgfx, (ed.tilex*8)-32,(ed.tiley*8)-32,24+48,24+48, dwgfx.getRGB(200,32,32));
+            }
         }
     } else {
         dwgfx.drawspritesetcol((ed.tilex*8) - 4, (ed.tiley*8), 0, obj.crewcolour(0), help);
@@ -4043,15 +4052,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             int y = 20;
             for(int i=0; i<25; i++)
             {
-                if(i+ed.pagey<500)
-                {
-                    auto text = ed.sb[i+ed.pagey];
-                    if (i == ed.sby && ed.entframe < 2) text += "_";
-                    if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
-                        y += 16;
-                    } else {
-                        y += 8;
-                    }
+                auto text = ed.sb[i+ed.pagey];
+                if (i == ed.sby && ed.entframe < 2) text += "_";
+                if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
+                    y += 16;
+                } else {
+                    y += 8;
                 }
             }
             break;
@@ -5958,94 +5964,71 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     game.mapheld=true;
 
                     //Ok! Scan the room for the closest checkpoint
-                    int testeditor=-1;
-                    int startpoint=0;
-                    //First up; is there a start point on this screen?
-                    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-                    {
-                        //if() on screen
-                        if(edentity[i].t==16 && testeditor==-1)
-                        {
-                            int tx=(edentity[i].x-(edentity[i].x%40))/40;
-                            int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                            if(tx==ed.levx && ty==ed.levy &&
-                               edentity[i].state==ed.levaltstate &&
-                               edentity[i].intower==tower)
-                            {
-                                testeditor=i;
-                                startpoint=1;
-                            }
-                        }
-                    }
-                    if(testeditor==-1)
-                    {
-                        //Ok, settle for a check point
-                        for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-                        {
-                            //if() on screen
-                            if(edentity[i].t==10 && testeditor==-1)
-                            {
-                                int tx=(edentity[i].x-(edentity[i].x%40))/40;
-                                int ty=(edentity[i].y-(edentity[i].y%30))/30;
-                                if(tx==ed.levx && ty==ed.levy &&
-                                   edentity[i].state==ed.levaltstate &&
-                                   edentity[i].intower==tower)
-                                {
-                                    testeditor=i;
-                                }
-                            }
-                        }
-                    }
+                    int testeditor = -1;
+                    int startpoint = 0;
+                    int ex = 0;
+                    int ey = 0;
+                    int enttyp = 16;
+                    do {
+                        for (int i=0; i<EditorData::GetInstance().numedentities;
+                             i++) {
+                            if (edentity[i].t != enttyp ||
+                                edentity[i].intower != tower ||
+                                edentity[i].state != ed.levaltstate)
+                                continue;
 
-                    if(testeditor==-1)
-                    {
+                            ex = edentity[i].x;
+                            ey = edentity[i].y;
+                            if (!tower) {
+                                ex -= ed.levx * 40;
+                                ey -= ed.levy * 30;
+                            } else
+                                ey -= ed.ypos;
+
+                            ex *= 8;
+                            ey *= 8;
+                            ex += edentity[i].subx;
+                            ey += edentity[i].suby;
+
+                            // Even in towers, only allow spawn within screen
+                            if (ex >= 0 && ex < 320 && ey >= 0 && ey < 240) {
+                                testeditor = i;
+                                startpoint = enttyp;
+                                break;
+                            }
+                        }
+
+                        enttyp -= 6;
+                    } while (enttyp >= 10 && !startpoint);
+
+                    if (testeditor==-1) {
                         ed.note="ERROR: No checkpoint to spawn at";
                         ed.notedelay=45;
-                    }
-                    else
-                    {
-                        if(startpoint==0)
-                        {
-                            //Checkpoint spawn
-                            int tx=(edentity[testeditor].x-(edentity[testeditor].x%40))/40;
-                            int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
-                            game.edsavex = (edentity[testeditor].x%40)*8;
-                            game.edsavey = (edentity[testeditor].y%30)*8;
-                            game.edsavex += edentity[testeditor].subx;
-                            game.edsavey += edentity[testeditor].suby;
-                            game.edsaverx = 100+tx;
-                            game.edsavery = 100+ty;
+                    } else {
+                        game.edsavex = ex;
+                        game.edsavey = ey;
+                        game.edsaverx = 100 + ed.levx;
+                        game.edsavery = 100 + ed.levy;
+                        game.edsavey--;
+                        if (startpoint == 10) {
                             game.edsavegc = edentity[testeditor].p1;
-                            if(game.edsavegc==0)
-                            {
-                                game.edsavey--;
-                            }
-                            else
-                            {
-                                game.edsavey-=8;
-                            }
                             game.edsavedir = 0;
-                        }
-                        else
-                        {
-                            //Start point spawn
-                            int tx=(edentity[testeditor].x-(edentity[testeditor].x%40))/40;
-                            int ty=(edentity[testeditor].y-(edentity[testeditor].y%30))/30;
-                            game.edsavex = ((edentity[testeditor].x%40)*8)-4;
-                            game.edsavey = (edentity[testeditor].y%30)*8;
-                            game.edsavex += edentity[testeditor].subx;
-                            game.edsavey += edentity[testeditor].suby;
-                            game.edsaverx = 100+tx;
-                            game.edsavery = 100+ty;
+                            if (game.edsavegc != 0)
+                                game.edsavey -= 7;
+                        } else {
+                            game.edsavex -= 4;
                             game.edsavegc = 0;
-                            game.edsavey--;
-                            game.edsavedir=1-edentity[testeditor].p1;
+                            game.edsavedir = 1 - edentity[testeditor].p1;
                         }
+
+                        if (tower)
+                            game.edsavey += ed.ypos * 8;
 
                         music.stopmusic();
                         dwgfx.backgrounddrawn=false;
                         script.startgamemode(21, key, dwgfx, game, map, obj, help, music);
                     }
+
                     //Return to game
                     //game.gamestate=GAMEMODE;
                     /*if(dwgfx.fademode==0)
@@ -6054,6 +6037,24 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     music.fadeout();
                     }*/
                 }
+            }
+
+            if(key.keymap[SDLK_v])
+            {
+                ed.vmod=true;
+            }
+            else
+            {
+                ed.vmod=false;
+            }
+
+            if(key.keymap[SDLK_c])
+            {
+                ed.cmod=true;
+            }
+            else
+            {
+                ed.cmod=false;
             }
 
             if(key.keymap[SDLK_x])
@@ -6137,10 +6138,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 //Script trigger
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
-                                ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
-                                          &(edentity[ed.textent].scriptname));
                                 addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
+                                ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
+                                          &(edentity[ed.textent].scriptname));
                                 if (ed.boundarytype==5)
                                     // Don't forget to subtract 1 from index because addedentity incremented it
                                     edentity[EditorData::GetInstance().numedentities-1].onetime = true;
@@ -6151,11 +6152,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
                                 ed.textcount = 2;
+                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
+                                            (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                                 ed.getlin(key, TEXT_ACTIVITYZONE,
                                           "Enter activity zone text:",
                                           &(edentity[ed.textent].activityname));
-                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
-                                            (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                             }
                             else if(ed.boundarytype==1)
                             {
@@ -6249,7 +6250,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             //Are we in direct mode?
                             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode>=1)
                             {
-                                if(ed.xmod)
+                                if(ed.vmod)
+                                {
+                                    for(int j=-4; j<5; j++)
+                                    {
+                                        for(int i=-4; i<5; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, ed.dmtile);
+                                        }
+                                    }
+                                }
+                                else if(ed.cmod)
+                                {
+                                    for(int j=-3; j<4; j++)
+                                    {
+                                        for(int i=-3; i<4; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, ed.dmtile);
+                                        }
+                                    }
+                                }
+                                else if(ed.xmod)
                                 {
                                     for(int j=-2; j<3; j++)
                                     {
@@ -6276,7 +6297,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else
                             {
-                                if(ed.xmod)
+                                if(ed.vmod)
+                                {
+                                    for(int j=-4; j<5; j++)
+                                    {
+                                        for(int i=-4; i<5; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, 80);
+                                        }
+                                    }
+                                }
+                                else if(ed.cmod)
+                                {
+                                    for(int j=-3; j<4; j++)
+                                    {
+                                        for(int i=-3; i<4; i++)
+                                        {
+                                            ed.placetilelocal(ed.tilex+i, ed.tiley+j, 80);
+                                        }
+                                    }
+                                }
+                                else if(ed.xmod)
                                 {
                                     for(int j=-2; j<3; j++)
                                     {
@@ -6305,7 +6346,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         else if(ed.drawmode==1)
                         {
                             //place background tiles
-                            if(ed.xmod)
+                            if(ed.vmod)
+                            {
+                                for(int j=-4; j<5; j++)
+                                {
+                                    for(int i=-4; i<5; i++)
+                                    {
+                                        ed.placetilelocal(ed.tilex+i, ed.tiley+j, 2);
+                                    }
+                                }
+                            }
+                            else if(ed.cmod)
+                            {
+                                for(int j=-3; j<4; j++)
+                                {
+                                    for(int i=-3; i<4; i++)
+                                    {
+                                        ed.placetilelocal(ed.tilex+i, ed.tiley+j, 2);
+                                    }
+                                }
+                            }
+                            else if(ed.xmod)
                             {
                                 for(int j=-2; j<3; j++)
                                 {
@@ -6344,10 +6405,10 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
+                                addedentity(tx, ty, 17);
                                 ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
                                           &(edentity[ed.textent].scriptname));
                                 dwgfx.backgrounddrawn=false;
-                                addedentity(tx, ty, 17);
                             }
                             else if(ed.drawmode==12)   //Script Trigger
                             {
@@ -6414,9 +6475,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
+                                addedentity(tx, ty, 18, 0);
                                 ed.getlin(key, TEXT_SCRIPT, "Enter script name",
                                           &(edentity[ed.textent].scriptname));
-                                addedentity(tx, ty, 18, 0);
                             }
                             else if(ed.drawmode==13)
                             {
@@ -6583,7 +6644,27 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 if(key.rightbutton)
                 {
                     //place tiles
-                    if(ed.xmod)
+                    if(ed.vmod)
+                    {
+                        for(int j=-4; j<5; j++)
+                        {
+                            for(int i=-4; i<5; i++)
+                            {
+                                ed.placetilelocal(ed.tilex+i, ed.tiley+j, 0);
+                            }
+                        }
+                    }
+                    else if(ed.cmod)
+                    {
+                        for(int j=-3; j<4; j++)
+                        {
+                            for(int i=-3; i<4; i++)
+                            {
+                                ed.placetilelocal(ed.tilex+i, ed.tiley+j, 0);
+                            }
+                        }
+                    }
+                    else if(ed.xmod)
                     {
                         for(int j=-2; j<3; j++)
                         {

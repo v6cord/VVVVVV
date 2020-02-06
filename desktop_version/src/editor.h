@@ -297,7 +297,13 @@ public:
     int lastentcycle;
     int entcycle;
 
-    bool xmod, zmod, spacemod, warpmod, textentry = false;
+    bool xmod = false;
+    bool zmod = false;
+    bool cmod = false;
+    bool vmod = false;
+    bool spacemod = false;
+    bool warpmod = false;
+    bool textentry = false;
     bool titlemod = false;
     bool trialnamemod = false;
     bool creatormod = false;
@@ -338,7 +344,7 @@ public:
 
     bool scripteditmod = false;
     int scripthelppage, scripthelppagedelay = 0;
-    std::string sb[500];
+    growing_vector<std::string> sb;
     std::string sbscript;
     int sblength = 0;
     int sbx, sby = 0;

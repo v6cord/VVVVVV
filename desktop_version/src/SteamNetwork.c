@@ -1,3 +1,5 @@
+#ifndef __SWITCH__
+
 #include "Network.h"
 
 #include <stdio.h>
@@ -220,3 +222,5 @@ void STEAM_setAchievementProgress(const char *name, int32_t stat)
 		SteamAPI_ISteamUserStats_StoreStats(steamUserStats);
 	}
 }
+
+#endif

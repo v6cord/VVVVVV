@@ -31,7 +31,7 @@ int mkdir(char* path, int mode)
 	return CreateDirectoryW(utf16_path, NULL);
 }
 #define VNEEDS_MIGRATION (mkdirResult != 0)
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
 #include <sys/stat.h>
 #include <limits.h>
 #define VNEEDS_MIGRATION (mkdirResult == 0)
@@ -99,38 +99,38 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 
 	/* Mount the stock content last */
 
-#ifdef __APPLE__
-        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
-        if (!appUrlRef) {
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Couldn't find data.zip in .app!",
-                    "Please place data.zip in Contents/Resources\n"
-                    "inside VVVVVV-CE.app.",
-                    NULL
-                    );
-            return 0;
-        }
-        if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Couldn't get data.zip path!",
-                    "Please report this error.",
-                    NULL
-                    );
-            return 0;
-        }
-#else
-	strcpy_safe(output, PHYSFS_getBaseDir());
-	strcat(output, "data.zip");
-#endif
-
 	if (assetsPath) {
-		strcpy(output, assetsPath);
-	} else {
-		strcpy(output, PHYSFS_getBaseDir());
-		strcat(output, "data.zip");
-	}
+            strcpy_safe(output, assetsPath);
+        } else {
+#if defined(DATA_ZIP_PATH)
+            strcpy_safe(output, DATA_ZIP_PATH);
+#elif defined(__APPLE__)
+            CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
+            if (!appUrlRef) {
+                SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Couldn't find data.zip in .app!",
+                        "Please place data.zip in Contents/Resources\n"
+                        "inside VVVVVV-CE.app.",
+                        NULL
+                        );
+                return 0;
+            }
+            if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
+                SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Couldn't get data.zip path!",
+                        "Please report this error.",
+                        NULL
+                        );
+                return 0;
+            }
+            CFRelease(appUrlRef);
+#else
+            strcpy_safe(output, PHYSFS_getBaseDir());
+            strcat(output, "data.zip");
+#endif
+        }
 
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
@@ -156,9 +156,6 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                         return 0;
                 }
         }
-#ifdef __APPLE__
-        CFRelease(appUrlRef);
-#endif
 
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcpy_safe(output, "gamecontrollerdb.txt");
@@ -312,16 +309,21 @@ void PLATFORM_getOSDirectory(char* output)
 	SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, utf16_path);
 	WideCharToMultiByte(CP_UTF8, 0, utf16_path, -1, output, MAX_PATH, NULL, NULL);
 	strcat(output, "\\VVVVVV\\");
+#elif defined(__SWITCH__)
+	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
 #else
-	strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
+	bsd_strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif
 }
 
 void PLATFORM_migrateSaveData(char* output)
 {
+#if !defined(__SWITCH__)
 	char oldLocation[MAX_PATH];
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
+#endif
+
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
 	DIR *dir = NULL;
 	struct dirent *de = NULL;
@@ -475,6 +477,8 @@ void PLATFORM_migrateSaveData(char* output)
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 	} while (FindNextFile(hFind, &findHandle));
+#elif defined(__SWITCH__)
+	/* No Migration needed. */
 #else
 #error See PLATFORM_migrateSaveData
 #endif
@@ -524,6 +528,10 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
+}
+#elif defined(__SWITCH__)
+bool FILESYSTEM_openDirectory(const char *dname) {
+    return false;
 }
 #else
 #ifdef __linux__
