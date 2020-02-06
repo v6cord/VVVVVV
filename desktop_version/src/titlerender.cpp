@@ -333,6 +333,8 @@ growing_vector<std::string> changelog = {
     "- return() - return to the previous",
     "  script and line number if you jumped",
     "  to a script",
+    "- load() - load a custom script without",
+    "  having to type iftrinkets()",
 
 };
 
