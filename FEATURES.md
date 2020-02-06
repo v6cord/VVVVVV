@@ -149,6 +149,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifvce()` - detect if game is VVVVVV: Community Edition or not
 
+- `ifmod(mod,script)` - Checks for a mod. `mod` can be `mmmmmm` (checks if MMMMMM is installed), `mmmmmm_on`/`mmmmmm_enabled`/`mmmmmm_off`/`mmmmmm_disabled` (checks if MMMMMM is installed AND enabled/disabled) or `unifont` (checks if Unifont is installed). Jump to `script` if so.
+
 - `disablesuicide` - disable pressing R
 
 - `enablesuicide` - enable pressing R

@@ -2420,6 +2420,38 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				call("custom_"+words[1]);
 				position--;
 			}
+			else if (words[0] == "ifmod")
+            {
+                if (words[1] == "mmmmmm")
+                {
+                    if (music.mmmmmm)
+                    {
+                        call("custom_"+words[2]);
+                        position--;
+                    }
+                } else if (words[1] == "mmmmmm_on" || words[1] == "mmmmmm_enabled")
+                {
+                    if (music.mmmmmm && music.usingmmmmmm)
+                    {
+                        call("custom_"+words[2]);
+                        position--;
+                    }
+                } else if (words[1] == "mmmmmm_off" || words[1] == "mmmmmm_disabled")
+                {
+                    if (music.mmmmmm && !music.usingmmmmmm)
+                    {
+                        call("custom_"+words[2]);
+                        position--;
+                    }
+                } else if (words[1] == "unifont")
+                {
+                    if (dwgfx.grphx.im_unifont && dwgfx.grphx.im_wideunifont)
+                    {
+                        call("custom_"+words[2]);
+                        position--;
+                    }
+                }
+            }
 			else if (words[0] == "hidecoordinates")
 			{
 				map.explored[ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]))] = 0;
