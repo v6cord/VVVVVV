@@ -2613,7 +2613,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.final_colorframe = 0;
 				map.finalstretch = false;
 			}
-			else if (words[0] == "returnscript")
+			else if (words[0] == "return")
                         {
                             auto frame = callstack.back();
                             load(frame.script);
