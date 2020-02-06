@@ -4805,7 +4805,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
     int tower = ed.get_tower(ed.levx, ed.levy);
 
-    if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
+    if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDL_CONTROLLER_BUTTON_BACK)) game.press_map = true;
     if ((key.isDown(27) || key.isDown(SDL_CONTROLLER_BUTTON_START)) && !ed.settingskey)
     {
         ed.settingskey=true;
