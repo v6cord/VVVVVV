@@ -174,6 +174,23 @@ void KeyPoll::Poll()
 				middlebutton=0;
 			}
 		}
+                else if(evt.type == SDL_FINGERDOWN)
+                {
+                    leftbutton = 1;
+                    mx = evt.tfinger.x * 320;
+                    my = evt.tfinger.y * 240;
+                }
+                else if(evt.type == SDL_FINGERMOTION)
+                {
+                    mx = evt.tfinger.x * 320;
+                    my = evt.tfinger.y * 240;
+                }
+                else if(evt.type == SDL_FINGERUP)
+                {
+                    leftbutton = 0;
+                    mx = evt.tfinger.x * 320;
+                    my = evt.tfinger.y * 240;
+                }
 
 		/* Controller Input */
 		else if (evt.type == SDL_CONTROLLERBUTTONDOWN)
