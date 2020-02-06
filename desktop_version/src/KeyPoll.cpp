@@ -69,7 +69,7 @@ void KeyPoll::disabletextentry()
 }
 
 static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
-    bool ctrl = key->keymap[SDLK_LCTRL] || key->keymap[SDLK_RCTRL];
+    bool ctrl = key->keymap[SDLK_LCTRL] || key->keymap[SDLK_RCTRL] || key->isDown(SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
     bool left = key->realleftbutton;
     if (evt) {
         auto type = evt->type;
