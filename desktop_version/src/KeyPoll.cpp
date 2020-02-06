@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <utf8/checked.h>
+#ifdef __SWITCH__
+#include <switch.h>
+#endif
 
 void KeyPoll::setSensitivity(int _value)
 {
@@ -33,7 +36,7 @@ KeyPoll::KeyPoll()
 	setSensitivity(2);
 
 	quitProgram = 0;
-	textentrymode=true;
+	textentrymode=false;
 	keybuffer="";
 	leftbutton=0; realleftbutton=0; rightbutton=0; middlebutton=0;
 	mx=0; my=0;
@@ -332,6 +335,20 @@ void KeyPoll::Poll()
 			quitProgram = true;
 		}
 	}
+#ifdef __SWITCH__
+        if (textentrymode)
+        {
+            char buf[512] = {0};
+            SwkbdConfig conf;
+            swkbdCreate(&conf, 0);
+            swkbdConfigMakePresetDefault(&conf);
+            swkbdConfigSetInitialText(&conf, keybuffer.c_str());
+            swkbdShow(&conf, buf, sizeof(buf));
+            swkbdClose(&conf);
+            keybuffer = buf;
+            textentrymode = false;
+        }
+#endif
 }
 
 bool KeyPoll::isDown(SDL_Keycode key)

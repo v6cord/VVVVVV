@@ -5056,7 +5056,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
         if (!game.press_map && !key.isDown(27))
             game.mapheld = false;
-        if (!game.mapheld && game.press_map) {
+        if ((!game.mapheld && game.press_map) || !key.textentrymode) {
             game.mapheld = true;
             if (!ed.textcount)
                 key.disabletextentry();
