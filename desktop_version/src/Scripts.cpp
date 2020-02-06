@@ -2,7 +2,7 @@
 #define SCRIPTS_H
 
 #ifdef __SWITCH__
-#pragma GCC optimize ("O1")
+#pragma GCC optimize ("O0")
 #endif
 
 #include "Script.h"
