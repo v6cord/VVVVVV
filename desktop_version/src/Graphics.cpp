@@ -2625,7 +2625,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
     SDL_Rect trect;
     SDL_Rect drawRect;
 
-    for (int i = 0; i < obj.nentity; i++)
+    for (int i = obj.nentity - 1; i >= 0; i--)
     {
         if (!obj.entities[i].invis && obj.entities[i].active)
         {
