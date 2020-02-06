@@ -2100,6 +2100,7 @@ void editorclass::enable_tower(void) {
     int room = levx + levy*maxwidth;
 
     // Set Tower Tileset and color 0
+    switch_tileset_tiles(level[room].tileset, 5);
     level[room].tileset = 5;
     level[room].tilecol = 0;
 
