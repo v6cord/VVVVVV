@@ -333,6 +333,9 @@ growing_vector<std::string> changelog = {
     "  to a script",
     "- load() - load a custom script without",
     "  having to type iftrinkets()",
+    "- You can now use Minecraft-like",
+    "  relative tilde syntax in gotoroom()",
+    "  and gotoposition()",
 
 };
 
