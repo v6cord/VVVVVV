@@ -176,6 +176,10 @@ IF(APPLE)
 ENDIF()
 SET(PNG_SRC ../third_party/lodepng/lodepng.c)
 
+if(SWITCH)
+    link_directories("${PORTLIBS}/lib/" "${LIBNX}/lib/")
+endif()
+
 # Executable information
 IF(WIN32)
         message(STATUS "Adding resources")
@@ -212,6 +216,11 @@ ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
 # FriBidi (Detection pulled from HHVM)
 find_package(PkgConfig)
+
+if (SWITCH)
+    set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
+endif()
+
 pkg_check_modules(FRIBIDI fribidi)
 
 find_path(FRIBIDI_INCLUDE_DIR
@@ -283,6 +292,7 @@ ENDIF()
 if (SWITCH)
     find_package(Libnx REQUIRED)
     target_link_libraries(VVVVVV-CE switch::libnx)
+    target_compile_options(VVVVVV-CE PUBLIC -fexceptions)
 endif()
 
 include(GNUInstallDirs)
