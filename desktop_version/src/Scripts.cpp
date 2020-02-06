@@ -391,6 +391,7 @@ void scriptclass::load(std::string t)
     running = true;
     scriptname = t;
 
+#ifndef __SWITCH__
     if (t == "intro")
     {
         add("ifskip(quickstart)");
@@ -6653,6 +6654,7 @@ void scriptclass::load(std::string t)
         add("untilbars()");
     }
     else
+#endif
     {
         loadother(t);
     }
