@@ -6071,15 +6071,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+                key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+                key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
                 ed.keydelay = 6;
-                if (key.keymap[SDLK_UP])
+                if (key.keymap[SDLK_UP] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
                     ed.levy--;
-                else if (key.keymap[SDLK_DOWN])
+                else if (key.keymap[SDLK_DOWN] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
                     ed.levy++;
-                else if (key.keymap[SDLK_LEFT])
+                else if (key.keymap[SDLK_LEFT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
                     ed.levx--;
-                else if (key.keymap[SDLK_RIGHT])
+                else if (key.keymap[SDLK_RIGHT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
                     ed.levx++;
                 ed.updatetiles = true;
                 ed.changeroom = true;
