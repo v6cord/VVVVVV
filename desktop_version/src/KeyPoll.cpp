@@ -68,11 +68,41 @@ void KeyPoll::disabletextentry()
 	SDL_StopTextInput();
 }
 
+static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
+    bool ctrl = key->keymap[SDLK_LCTRL] || key->keymap[SDLK_RCTRL];
+    bool mouse = key->leftbutton || key->rightbutton;
+    if (evt) {
+        auto type = evt->type;
+        if (type == SDL_KEYDOWN || type == SDL_KEYUP) {
+            auto sym = evt->key.keysym.sym;
+            if (sym == SDLK_LCTRL || sym == SDLK_RCTRL) {
+                ctrl = type == SDL_KEYDOWN;
+            }
+        } else if (type == SDL_MOUSEBUTTONDOWN || type == SDL_MOUSEBUTTONUP) {
+            mouse = type == SDL_MOUSEBUTTONDOWN;
+        } else if (type == SDL_FINGERDOWN) {
+            mouse = true;
+        } else if (type == SDL_FINGERUP) {
+            mouse = false;
+        }
+    }
+    if (ctrl && mouse) {
+        key->rightbutton = true;
+        *was = true;
+    } else if (ctrl || mouse) {
+        key->rightbutton = false;
+        if (mouse) key->leftbutton = true;
+        *was = false;
+    }
+}
+
 void KeyPoll::Poll()
 {
 	SDL_Event evt;
+        bool was_ctrl_click = false;
 	while (SDL_PollEvent(&evt))
 	{
+                ctrl_click(this, &evt, &was_ctrl_click);
 		/* Keyboard Input */
 		if (evt.type == SDL_KEYDOWN)
 		{
@@ -132,7 +162,7 @@ void KeyPoll::Poll()
 			mx = evt.motion.x;
 			my = evt.motion.y;
 		}
-		else if (evt.type == SDL_MOUSEBUTTONDOWN)
+		else if (!was_ctrl_click && evt.type == SDL_MOUSEBUTTONDOWN)
 		{
 			if (evt.button.button == SDL_BUTTON_LEFT)
 			{
@@ -153,13 +183,13 @@ void KeyPoll::Poll()
 				middlebutton = 1;
 			}
 		}
-		else if (evt.type == SDL_MOUSEBUTTONUP)
+		else if (!was_ctrl_click && evt.type == SDL_MOUSEBUTTONUP)
 		{
 			if (evt.button.button == SDL_BUTTON_LEFT)
 			{
 				mx = evt.button.x;
 				my = evt.button.y;
-				leftbutton=0;
+				leftbutton = 0;
 			}
 			else if (evt.button.button == SDL_BUTTON_RIGHT)
 			{

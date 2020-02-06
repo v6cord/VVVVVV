@@ -4860,11 +4860,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         ed.settingskey=false;
     }
 
-    if(key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL])
-    {
-        if(key.leftbutton) key.rightbutton=true;
-    }
-
     if(ed.scripteditmod)
     {
         if(ed.scripthelppage==0)
