@@ -2625,6 +2625,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				call(words[1]);
 				position--;
 			}
+			else if (words[0] == "load")
+			{
+				call("custom_"+words[1]);
+				position--;
+			}
 			else if (words[0] == "rollcredits")
 			{
 				game.gamestate = 6;
