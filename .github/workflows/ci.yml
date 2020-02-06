@@ -175,3 +175,35 @@ jobs:
       with:
         name: VVVVVV-CE-Windows
         path: desktop_version/build/VVVVVV-CE-Windows
+
+  build-switch:
+    name: Build (Switch)
+
+    runs-on: ubuntu-18.04
+    container: leo60228/vvvvvv-ce-switch:2020-02-06
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build
+      run: cd ${SRC_DIR_PATH} && ./build.sh
+
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
+    - name: Prepare artifacts
+      run: |
+        cd $SRC_DIR_PATH/build/
+        ../download-data.sh
+        mkdir -pv VVVVVV-CE-Switch/
+        cp -v data-zip/data.zip VVVVVV-CE-Switch/
+        mv -v VVVVVV-CE.nro VVVVVV-CE-Switch/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: VVVVVV-CE-Switch
+        path: desktop_version/build/VVVVVV-CE-Switch
