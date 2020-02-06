@@ -295,11 +295,11 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
 												//Add extra menu for mmmmmm mod
 												if(music.mmmmmm){
-													game.menuoptions[4] = "soundtrack";
+													game.menuoptions[3] = "soundtrack";
+													game.menuoptionsactive[3] = true;
+													game.menuoptions[4] = "return";
 													game.menuoptionsactive[4] = true;
-													game.menuoptions[5] = "return";
-													game.menuoptionsactive[5] = true;
-													game.nummenuoptions = 6;
+													game.nummenuoptions = 5;
 												}
                         map.nexttowercolour();
                     }
@@ -870,11 +870,19 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
 												//Add extra menu for mmmmmm mod
 												if(music.mmmmmm){
-                                                    game.menuoptions[4] = "soundtrack";
-                                                    game.menuoptionsactive[4] = true;
-                                                    game.menuoptions[5] = "return";
-                                                    game.menuoptionsactive[5] = true;
-                                                    game.nummenuoptions = 6;
+													#if defined(MAKEANDPLAY)
+														game.menuoptions[3] = "soundtrack";
+														game.menuoptionsactive[3] = true;
+														game.menuoptions[4] = "return";
+														game.menuoptionsactive[4] = true;
+														game.nummenuoptions = 5;
+													#elif !defined(MAKEANDPLAY)
+														game.menuoptions[4] = "soundtrack";
+														game.menuoptionsactive[4] = true;
+														game.menuoptions[5] = "return";
+														game.menuoptionsactive[5] = true;
+														game.nummenuoptions = 6;
+													#endif
 												}
 
                         map.nexttowercolour();
@@ -933,8 +941,8 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 													music.playef(11, 10);
 													music.play(6);
 													game.savestats(map, dwgfx, music);
-													//game.createmenu("mainmenu");
-													//map.nexttowercolour();
+													game.createmenu("mainmenu");
+													map.nexttowercolour();
 											}
 											if (game.currentmenuoption == 5)
 											{
@@ -1497,11 +1505,19 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
 						//Add extra menu for mmmmmm mod
 						if(music.mmmmmm){
-                            game.menuoptions[4] = "soundtrack";
-                            game.menuoptionsactive[4] = true;
-                            game.menuoptions[5] = "return";
-                            game.menuoptionsactive[5] = true;
-                            game.nummenuoptions = 6;
+							#if defined(MAKEANDPLAY)
+								game.menuoptions[3] = "soundtrack";
+								game.menuoptionsactive[3] = true;
+								game.menuoptions[4] = "return";
+								game.menuoptionsactive[4] = true;
+								game.nummenuoptions = 5;
+							#elif !defined(MAKEANDPLAY)
+								game.menuoptions[4] = "soundtrack";
+								game.menuoptionsactive[4] = true;
+								game.menuoptions[5] = "return";
+								game.menuoptionsactive[5] = true;
+								game.nummenuoptions = 6;
+							#endif
 						}
 					}
 				}
@@ -1515,11 +1531,19 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 
 												//Add extra menu for mmmmmm mod
 												if(music.mmmmmm){
-                                                    game.menuoptions[4] = "soundtrack";
-                                                    game.menuoptionsactive[4] = true;
-                                                    game.menuoptions[5] = "return";
-                                                    game.menuoptionsactive[5] = true;
-                                                    game.nummenuoptions = 6;
+													#if defined(MAKEANDPLAY)
+														game.menuoptions[3] = "soundtrack";
+														game.menuoptionsactive[3] = true;
+														game.menuoptions[4] = "return";
+														game.menuoptionsactive[4] = true;
+														game.nummenuoptions = 5;
+													#elif !defined(MAKEANDPLAY)
+														game.menuoptions[4] = "soundtrack";
+														game.menuoptionsactive[4] = true;
+														game.menuoptions[5] = "return";
+														game.menuoptionsactive[5] = true;
+														game.nummenuoptions = 6;
+													#endif
 												}
                         map.nexttowercolour();
                     }
