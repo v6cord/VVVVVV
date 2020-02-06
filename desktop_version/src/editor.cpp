@@ -5616,13 +5616,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             int speedcap = 16;
 
-            if (key.keymap[SDLK_COMMA] && (ed.keydelay==0)) {
+            if ((key.keymap[SDLK_COMMA] || key.isDown(SDL_CONTROLLER_BUTTON_X)) && (ed.keydelay==0)) {
                 ed.keydelay = 6;
                 ed.entspeed--;
                 if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
             }
 
-            if (key.keymap[SDLK_PERIOD] && (ed.keydelay==0)) {
+            if ((key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_Y)) && (ed.keydelay==0)) {
                 ed.keydelay = 6;
                 ed.entspeed++;
                 if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
@@ -5672,9 +5672,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if (key.keymap[SDLK_3]) ed.drawmode=19;
         } else {
             // No modifiers
-            if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD]) {
+            if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_X) || key.isDown(SDL_CONTROLLER_BUTTON_Y)) {
                 ed.keydelay = 6;
-                if (key.keymap[SDLK_PERIOD])
+                if (key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_Y))
                     if (ed.drawmode != -6)
                         ed.drawmode++;
                     else
