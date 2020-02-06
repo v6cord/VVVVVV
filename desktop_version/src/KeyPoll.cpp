@@ -265,6 +265,30 @@ void KeyPoll::Poll()
 					yVel = (evt.caxis.value > 0) ? 1 : -1;
 				}
 			}
+			if (evt.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
+			{
+				if (	evt.caxis.value > -sensitivity &&
+					evt.caxis.value < sensitivity	)
+				{
+					rxVel = 0;
+				}
+				else
+				{
+					rxVel = (evt.caxis.value > 0) ? 1 : -1;
+				}
+			}
+			if (evt.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+			{
+				if (	evt.caxis.value > -sensitivity &&
+					evt.caxis.value < sensitivity	)
+				{
+					ryVel = 0;
+				}
+				else
+				{
+					ryVel = (evt.caxis.value > 0) ? 1 : -1;
+				}
+			}
 		}
 		else if (evt.type == SDL_CONTROLLERDEVICEADDED)
 		{
@@ -409,4 +433,24 @@ bool KeyPoll::controllerWantsRight(bool includeVert)
 			(	includeVert &&
 				(	buttonmap[SDL_CONTROLLER_BUTTON_DPAD_DOWN] ||
 					yVel > 0	)	)	);
+}
+
+bool KeyPoll::controllerWantsRLeft(bool includeVert)
+{
+	return (rxVel < 0 || (includeVert && ryVel < 0));
+}
+
+bool KeyPoll::controllerWantsRRight(bool includeVert)
+{
+	return (rxVel > 0 || (includeVert && ryVel > 0));
+}
+
+bool KeyPoll::controllerWantsRUp()
+{
+	return ryVel < 0;
+}
+
+bool KeyPoll::controllerWantsRDown()
+{
+	return ryVel > 0;
 }

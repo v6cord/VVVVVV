@@ -67,6 +67,10 @@ public:
 	bool controllerButtonDown();
 	bool controllerWantsLeft(bool includeVert);
 	bool controllerWantsRight(bool includeVert);
+	bool controllerWantsRLeft(bool includeVert);
+	bool controllerWantsRRight(bool includeVert);
+	bool controllerWantsRUp();
+	bool controllerWantsRDown();
 
 	int leftbutton, realleftbutton, rightbutton, middlebutton = 0;
 	int mx, my = 0;
@@ -82,6 +86,7 @@ private:
 	std::map<SDL_JoystickID, SDL_GameController*> controllers;
 	std::map<SDL_GameControllerButton, bool> buttonmap;
 	int xVel, yVel = 0;
+	int rxVel, ryVel = 0;
 	bool useFullscreenSpaces = false;
 	Uint32 wasFullscreen = 0;
 };

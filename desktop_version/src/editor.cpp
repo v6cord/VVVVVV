@@ -6033,7 +6033,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
             }
 
-            if(key.keymap[SDLK_v])
+            if(key.keymap[SDLK_v] || key.controllerWantsRUp())
             {
                 ed.vmod=true;
             }
@@ -6042,7 +6042,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.vmod=false;
             }
 
-            if(key.keymap[SDLK_c])
+            if(key.keymap[SDLK_c] || key.controllerWantsRDown())
             {
                 ed.cmod=true;
             }
@@ -6051,7 +6051,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.cmod=false;
             }
 
-            if(key.keymap[SDLK_x])
+            if(key.keymap[SDLK_x] || key.controllerWantsRRight(false))
             {
                 ed.xmod=true;
             }
@@ -6061,7 +6061,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
 
-            if(key.keymap[SDLK_z])
+            if(key.keymap[SDLK_z] || key.controllerWantsRLeft(false))
             {
                 ed.zmod=true;
             }
