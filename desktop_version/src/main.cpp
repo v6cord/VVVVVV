@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__SWITCH__)
     bool syslog = true;
 #else
     bool syslog = false;
@@ -146,7 +146,11 @@ int main(int argc, char *argv[])
     if (syslog) {
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
         puts("Switching to syslog...");
+#ifdef __SWITCH__
+        auto logger = fopen("sdmc:/switch/vvvvvv-ce.log", "a");
+#else
         auto logger = popen("logger", "w");
+#endif
         if (logger) {
             auto logger_fd = fileno(logger);
             auto stdout_fd = fileno(stdout);
@@ -535,6 +539,10 @@ int main(int argc, char *argv[])
             case GAMEMODE:
                 if (map.towermode)
                 {
+                    if (script.running)
+                    {
+                        script.run(key, graphics, game, map, obj, help, music);
+                    }
 					gameinput(key, graphics, game, map, obj, help, music);
 
                     //if(game.recording==1)
@@ -560,6 +568,10 @@ int main(int argc, char *argv[])
                         if (script.running)
                         {
                             script.run(key, graphics, game, map, obj, help, music);
+                        }
+
+                        for (int i = 0; i < (int)script.active_scripts.size(); i++) {
+                            script.active_scripts[i].update();
                         }
 
                         gameinput(key, graphics, game, map, obj, help, music);

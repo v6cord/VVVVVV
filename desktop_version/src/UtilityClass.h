@@ -58,6 +58,8 @@ N mod(const N &num, const N &mod) {
 }
 
 int ss_toi(std::string _s);
+int relativepos(int original, std::string parsethis);
+void relativepos(int* original, std::string parsethis);
 
 bool is_number(const std::string& s);
 

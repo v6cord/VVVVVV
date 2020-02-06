@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdlib>
 #include "Script.h"
+#include "ScriptX.h"
 #include "Graphics.h"
 
 #include "Entity.h"
@@ -15,8 +16,6 @@
 
 scriptclass::scriptclass()
 {
-    	//Start SDL
-
 	//Init
 	commands.resize(500);
 	words.resize(40);
@@ -49,6 +48,8 @@ scriptclass::scriptclass()
 	variablecontents.resize(100);
 
 	scriptname = "";
+
+	// I really hate this file, by the way
 }
 
 void scriptclass::clearcustom(){
@@ -85,20 +86,7 @@ int scriptclass::getimage(Game& game, std::string n) {
     X("trinkets", game.trinkets) \
     X("coins", game.coins)
 
-int* scriptclass::specialvar(std::string n) {
-#define X(k, v) if (n == k) return &v;
-    SPECIALVARS
-#undef X
-    return nullptr;
-}
-
 void scriptclass::setvar(std::string n, std::string c) {
-        auto special = specialvar(n);
-        if (special) {
-            *special = ss_toi(c);
-            return;
-        }
-
 	int tempvar = getvar(n);
 	if (tempvar == -1) {
 		variablenames.push_back(n);
@@ -106,10 +94,8 @@ void scriptclass::setvar(std::string n, std::string c) {
 	} else {
 		variablecontents[tempvar] = c;
 	}
-}
 
-void scriptclass::updatevars(Game& game, entityclass& obj) {
-#define X(k, v) setvar(k, std::to_string(v));
+#define X(k, v) if (n == k) v = ss_toi(c);
     SPECIALVARS
 #undef X
 }
@@ -118,26 +104,18 @@ std::string scriptclass::processvars(std::string t) {
 	std::string tempstring = "";
 	std::string tempvar = "";
 	bool readingvar = false;
-	bool foundvar = false;
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
 		if (readingvar) {
 			if (currentletter == "%") {
 				readingvar = false;
-				for(std::size_t i_ = 0; i_ < variablenames.size(); i_++) {
-					if (variablenames[i_] == tempvar) {
-						foundvar = true;
-						tempstring += variablecontents[i_];
-						tempvar = "";
-						break;
-					}
-					//printf("var: %s", tempvar.c_str());
-				}
-				if (foundvar == false) {
+				int varid = getvar(tempvar);
+				if (varid != -1)
+					tempstring += variablecontents[varid];
+				else
 					tempstring += "%" + tempvar + "%";
-					tempvar = "";
-				}
+				tempvar = "";
 			} else {
 				tempvar += currentletter;
 			}
@@ -151,7 +129,17 @@ std::string scriptclass::processvars(std::string t) {
 			tempstring += currentletter;
 		}
 	}
+	if (readingvar)
+	{
+		tempstring += "%" + tempvar;
+	}
 	return tempstring;
+}
+
+void scriptclass::updatevars() {
+#define X(k, v) setvar(k, std::to_string(v));
+    SPECIALVARS
+#undef X
 }
 
 void scriptclass::tokenize( std::string t )
@@ -201,7 +189,7 @@ void scriptclass::tokenize( std::string t )
 	tempword = "";
 
 	t = processvars(t);
-    
+
 	for (size_t i = 0; i < t.length(); i++)
 	{
 		currentletter = t.substr(i, 1);
@@ -236,7 +224,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		{
 			//Let's split or command in an array of words
 
-			updatevars(game, obj);
+			updatevars();
 
 			tokenize(commands[position]);
 
@@ -666,22 +654,24 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				// OR
 				// addvar(name)
 				// <add>
-				
+
 				int varid = getvar(words[1]);
+				std::string tempcontents;
 				if (varid != -1) {
 					if (words[2] == "") {
 						position++;
-						variablecontents[varid] += processvars(commands[position]);
+						tempcontents = variablecontents[varid];
+						tempcontents += processvars(commands[position]);
 					} else {
 						if (is_number(variablecontents[varid]) && is_number(words[2])) {
-							std::string tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
+							tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
 							tempcontents.erase ( tempcontents.find_last_not_of('0') + 1, std::string::npos );
 							tempcontents.erase ( tempcontents.find_last_not_of('.') + 1, std::string::npos );
-							variablecontents[varid] = tempcontents;
 						} else {
-							variablecontents[varid] += words[2];
+							tempcontents = variablecontents[varid] + words[2];
 						}
 					}
+					setvar(words[1], tempcontents);
 				}
 			}
             if ((words[0] == "ifvar") || (words[0] == "if"))
@@ -1114,31 +1104,30 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: gotoposition(x position, y position, gravity position)
 				int player = obj.getplayer();
-				obj.entities[player].xp = ss_toi(words[1]);
-				obj.entities[player].yp = ss_toi(words[2]);
+				relativepos(&obj.entities[player].xp, words[1]);
+				relativepos(&obj.entities[player].yp, words[2]);
 				if (words[3] != "") {
-                                    game.gravitycontrol = ss_toi(words[3]);
-                                } else {
-                                    game.gravitycontrol = 0;
-                                }
-
+					if (words[3] == "~" || (words[3].substr(0, 1) == "~" && ss_toi(words[3].substr(1, std::string::npos)) == 0))
+						; // Keep the current gravity control
+					else if (words[3].substr(0, 1) == "~")
+						// Invert the gravity control
+						game.gravitycontrol = !game.gravitycontrol;
+					else
+						game.gravitycontrol = ss_toi(words[3]);
+				} else {
+					game.gravitycontrol = 0;
+				}
 			}
 			if (words[0] == "gotoroom")
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
-				map.gotoroom(ss_toi(words[1])+100, ss_toi(words[2])+100, dwgfx, game, obj, music);
+				map.gotoroom(relativepos(game.roomx-100, words[1])+100, relativepos(game.roomy-100, words[2])+100, dwgfx, game, obj, music);
 				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadroom")
 			{
 				//USAGE: reloadroom()
 				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
-				game.gotoroomfromscript = true;
-			}
-			if (words[0] == "movetoroom")
-			{
-				//USAGE: movetoroom(x,y)
-				map.gotoroom(game.roomx + ss_toi(words[1]), game.roomy + ss_toi(words[2]), dwgfx, game, obj, music);
 				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadscriptboxes")
@@ -2655,7 +2644,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				map.final_colorframe = 0;
 				map.finalstretch = false;
 			}
-			else if (words[0] == "returnscript")
+			else if (words[0] == "return")
                         {
                             auto frame = callstack.back();
                             load(frame.script);
@@ -2665,6 +2654,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			else if (words[0] == "loadscript")
 			{
 				call(words[1]);
+				position--;
+			}
+			else if (words[0] == "load")
+			{
+				call("custom_"+words[1]);
 				position--;
 			}
 			else if (words[0] == "rollcredits")
@@ -4826,6 +4820,8 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 
 	game.script_images.clear();
 	game.script_image_names.clear();
+
+	active_scripts.clear();
 
 	// WARNING: Don't reset teleporter locations, at this point we've already loaded the level!
 }

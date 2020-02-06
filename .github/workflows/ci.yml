@@ -30,6 +30,12 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
     - name: CPack build
       run: cd ${SRC_DIR_PATH} && ./cpack.sh
 
@@ -47,12 +53,6 @@ jobs:
       with:
         name: VVVVVV-CE-LinuxDeb
         path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
-
-    - name: Cache data.zip
-      uses: actions/cache@v1
-      with:
-        path: desktop_version/build/data-zip
-        key: data-zip-folder
 
     - name: Run tests
       run: cd ${SRC_DIR_PATH} && ./tests.sh
@@ -99,6 +99,21 @@ jobs:
         mv -v ${SRC_DIR_PATH}/build/VVVVVV-CE ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/MacOS/VVVVVV-CE
         cp -v .github/resources/vce.icns ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Resources/vce.icns
         cp -v .github/resources/Info.plist ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app/Contents/Info.plist
+
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
+    - name: Copy data.zip
+      run: |
+        cd $SRC_DIR_PATH/build/
+        ../download-data.sh
+        cp -v data-zip/data.zip VVVVVV-app/VVVVVV-CE.app/Contents/Resources/data.zip
+
+    - name: Bundle .app
+      run: |
         dylibbundler -cd -b -f -a ${SRC_DIR_PATH}/build/VVVVVV-app/VVVVVV-CE.app
 
     - name: Tar .app
@@ -143,8 +158,52 @@ jobs:
         mkdir -p $SRC_DIR_PATH/build/VVVVVV-CE-Windows
         cp -rv .github/libs/* $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
 
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
+    - name: Copy data.zip
+      run: |
+        cd $SRC_DIR_PATH/build/
+        ../download-data.sh
+        cp -v data-zip/data.zip VVVVVV-CE-Windows/
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
         name: VVVVVV-CE-Windows
         path: desktop_version/build/VVVVVV-CE-Windows
+
+  build-switch:
+    name: Build (Switch)
+
+    runs-on: ubuntu-18.04
+    container: leo60228/vvvvvv-ce-switch:2020-02-06
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build
+      run: cd ${SRC_DIR_PATH} && ./build.sh
+
+    - name: Cache data.zip
+      uses: actions/cache@v1
+      with:
+        path: desktop_version/build/data-zip
+        key: data-zip-folder
+
+    - name: Prepare artifacts
+      run: |
+        cd $SRC_DIR_PATH/build/
+        ../download-data.sh
+        mkdir -pv VVVVVV-CE-Switch/switch/
+        mv -v data-zip/data.zip VVVVVV-CE-Switch/switch/
+        mv -v VVVVVV-CE.nro VVVVVV-CE-Switch/switch/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: VVVVVV-CE-Switch
+        path: desktop_version/build/VVVVVV-CE-Switch

@@ -49,8 +49,6 @@ growing_vector<std::string> changelog = {
     "- reloadroom() - reloads the current",
     "  room",
     "- toceil() - inverted tofloor()",
-    "- movetoroom(x,y) - a relative",
-    "  gotoroom()",
     "- playfile(file[, id]) - play a file as",
     "  either music or a sound effect. if you",
     "  specify an id, the file loops",
@@ -330,6 +328,14 @@ growing_vector<std::string> changelog = {
     "  script when player moves into a script",
     "  box",
     "- yesinterrupt() - undoes the above",
+    "- return() - return to the previous",
+    "  script and line number if you jumped",
+    "  to a script",
+    "- load() - load a custom script without",
+    "  having to type iftrinkets()",
+    "- You can now use Minecraft-like",
+    "  relative tilde syntax in gotoroom()",
+    "  and gotoposition()",
 
 };
 

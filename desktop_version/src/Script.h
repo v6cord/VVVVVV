@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Game.h"
-
+#include "ScriptX.h"
 #include "Enums.h"
 
 
@@ -39,11 +39,9 @@ public:
 
     int getvar(std::string n);
 
-    int* specialvar(std::string n);
-
     void setvar(std::string n, std::string c);
 
-    void updatevars(Game& game, entityclass& obj);
+    void updatevars();
 
     std::string processvars(std::string t);
 
@@ -109,6 +107,8 @@ public:
 
     int getpixelx = -1;
     int getpixely = -1;
+
+    growing_vector<scriptx> active_scripts;
 };
 
 #endif /* SCRIPT_H */

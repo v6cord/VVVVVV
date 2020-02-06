@@ -99,38 +99,38 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 
 	/* Mount the stock content last */
 
-#ifdef __APPLE__
-        CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
-        if (!appUrlRef) {
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Couldn't find data.zip in .app!",
-                    "Please place data.zip in Contents/Resources\n"
-                    "inside VVVVVV-CE.app.",
-                    NULL
-                    );
-            return 0;
-        }
-        if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Couldn't get data.zip path!",
-                    "Please report this error.",
-                    NULL
-                    );
-            return 0;
-        }
-#else
-	strcpy_safe(output, PHYSFS_getBaseDir());
-	strcat(output, "data.zip");
-#endif
-
 	if (assetsPath) {
-		strcpy(output, assetsPath);
-	} else {
-		strcpy(output, PHYSFS_getBaseDir());
-		strcat(output, "data.zip");
-	}
+            strcpy_safe(output, assetsPath);
+        } else {
+#if defined(DATA_ZIP_PATH)
+            strcpy_safe(output, DATA_ZIP_PATH);
+#elif defined(__APPLE__)
+            CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
+            if (!appUrlRef) {
+                SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Couldn't find data.zip in .app!",
+                        "Please place data.zip in Contents/Resources\n"
+                        "inside VVVVVV-CE.app.",
+                        NULL
+                        );
+                return 0;
+            }
+            if (!CFURLGetFileSystemRepresentation(appUrlRef, true, (uint8_t*) output, MAX_PATH)) {
+                SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Couldn't get data.zip path!",
+                        "Please report this error.",
+                        NULL
+                        );
+                return 0;
+            }
+            CFRelease(appUrlRef);
+#else
+            strcpy_safe(output, PHYSFS_getBaseDir());
+            strcat(output, "data.zip");
+#endif
+        }
 
 	if (!PHYSFS_mount(output, NULL, 1))
 	{
@@ -156,9 +156,6 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                         return 0;
                 }
         }
-#ifdef __APPLE__
-        CFRelease(appUrlRef);
-#endif
 
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcpy_safe(output, "gamecontrollerdb.txt");
@@ -313,7 +310,7 @@ void PLATFORM_getOSDirectory(char* output)
 	WideCharToMultiByte(CP_UTF8, 0, utf16_path, -1, output, MAX_PATH, NULL, NULL);
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
-	strcat(output, "sdmc:/switch/VVVVVV/");
+	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
 #else
 	bsd_strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif
@@ -531,6 +528,10 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
+}
+#elif defined(__SWITCH__)
+bool FILESYSTEM_openDirectory(const char *dname) {
+    return false;
 }
 #else
 #ifdef __linux__

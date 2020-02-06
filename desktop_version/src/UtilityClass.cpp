@@ -246,3 +246,27 @@ std::string UtilityClass::getmusicname(int num) {
 	};
 	return names[num];
 }
+
+// Parses a tilde-syntax string number and returns the new absolute number
+int relativepos(int original, std::string parsethis)
+{
+    bool relative = parsethis.substr(0, 1) == "~";
+    if (relative)
+        parsethis = parsethis.substr(1, std::string::npos);
+
+    // Have to use this ternary, because passing in an empty string to
+    // ss_toi() seems to be undefined behavior, and I want a simple "~"
+    // to be equivalent to "~0"
+    int num = parsethis != "" ? ss_toi(parsethis) : 0;
+
+    if (!relative)
+        return num;
+
+    return original + num;
+}
+
+// Use this if you want to mutate a number instead
+void relativepos(int* original, std::string parsethis)
+{
+    *original = relativepos(*original, parsethis);
+}

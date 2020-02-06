@@ -21,8 +21,6 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `toceil()` - inverted `tofloor()`
 
-- `movetoroom(x,y)` - a relative `gotoroom()`
-
 - `playfile(file[, id])` - play a file as either music or a sound effect. if you specify an id, the file loops
 
 - `stopfile(id)` - stops playing a looping audio file
@@ -258,3 +256,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `nointerrupt()` - prevent interrupting a script when player moves into a script box
 
 - `yesinterrupt()` - undoes the above
+
+- `return()` - return to the previous script and line number if you jumped to a script
+
+- `load()` - load a custom script without having to type iftrinkets()
+
+- You can now use Minecraft-like relative tilde syntax in `gotoroom()` and `gotoposition()`
