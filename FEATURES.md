@@ -258,3 +258,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `nointerrupt()` - prevent interrupting a script when player moves into a script box
 
 - `yesinterrupt()` - undoes the above
+
+- `return()` - return to the previous script and line number if you jumped to a script

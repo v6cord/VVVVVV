@@ -330,6 +330,9 @@ growing_vector<std::string> changelog = {
     "  script when player moves into a script",
     "  box",
     "- yesinterrupt() - undoes the above",
+    "- return() - return to the previous",
+    "  script and line number if you jumped",
+    "  to a script",
 
 };
 
