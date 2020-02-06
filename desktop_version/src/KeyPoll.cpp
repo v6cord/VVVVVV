@@ -35,7 +35,7 @@ KeyPoll::KeyPoll()
 	quitProgram = 0;
 	textentrymode=true;
 	keybuffer="";
-	leftbutton=0; rightbutton=0; middlebutton=0;
+	leftbutton=0; realleftbutton=0; rightbutton=0; middlebutton=0;
 	mx=0; my=0;
 	resetWindow = 0;
 	toggleFullscreen = false;
@@ -70,7 +70,7 @@ void KeyPoll::disabletextentry()
 
 static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
     bool ctrl = key->keymap[SDLK_LCTRL] || key->keymap[SDLK_RCTRL];
-    bool mouse = key->leftbutton || key->rightbutton;
+    bool left = key->realleftbutton;
     if (evt) {
         auto type = evt->type;
         if (type == SDL_KEYDOWN || type == SDL_KEYUP) {
@@ -79,19 +79,20 @@ static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
                 ctrl = type == SDL_KEYDOWN;
             }
         } else if (type == SDL_MOUSEBUTTONDOWN || type == SDL_MOUSEBUTTONUP) {
-            mouse = type == SDL_MOUSEBUTTONDOWN;
+            if (evt->button.button == SDL_BUTTON_LEFT) left = type == SDL_MOUSEBUTTONDOWN;
         } else if (type == SDL_FINGERDOWN) {
-            mouse = true;
+            left = true;
         } else if (type == SDL_FINGERUP) {
-            mouse = false;
+            left = false;
         }
     }
-    if (ctrl && mouse) {
+    key->realleftbutton = left;
+    if (ctrl && left) {
         key->rightbutton = true;
         *was = true;
-    } else if (ctrl || mouse) {
+    } else if (ctrl || left) {
         key->rightbutton = false;
-        if (mouse) key->leftbutton = true;
+        if (left) key->leftbutton = true;
         *was = false;
     }
 }
@@ -169,6 +170,7 @@ void KeyPoll::Poll()
 				mx = evt.button.x;
 				my = evt.button.y;
 				leftbutton = 1;
+                                realleftbutton = 1;
 			}
 			else if (evt.button.button == SDL_BUTTON_RIGHT)
 			{
@@ -190,6 +192,7 @@ void KeyPoll::Poll()
 				mx = evt.button.x;
 				my = evt.button.y;
 				leftbutton = 0;
+                                realleftbutton = 0;
 			}
 			else if (evt.button.button == SDL_BUTTON_RIGHT)
 			{
@@ -204,9 +207,10 @@ void KeyPoll::Poll()
 				middlebutton=0;
 			}
 		}
-                else if(evt.type == SDL_FINGERDOWN)
+                else if(!was_ctrl_click && evt.type == SDL_FINGERDOWN)
                 {
                     leftbutton = 1;
+                    realleftbutton = 1;
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }
@@ -215,9 +219,10 @@ void KeyPoll::Poll()
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }
-                else if(evt.type == SDL_FINGERUP)
+                else if(!was_ctrl_click && evt.type == SDL_FINGERUP)
                 {
                     leftbutton = 0;
+                    realleftbutton = 0;
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }

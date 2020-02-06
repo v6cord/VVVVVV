@@ -68,7 +68,7 @@ public:
 	bool controllerWantsLeft(bool includeVert);
 	bool controllerWantsRight(bool includeVert);
 
-	int leftbutton, rightbutton, middlebutton = 0;
+	int leftbutton, realleftbutton, rightbutton, middlebutton = 0;
 	int mx, my = 0;
 
 	bool textentrymode = false;
