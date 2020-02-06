@@ -2,6 +2,7 @@
 # Written by Ethan "flibitijibibo" Lee
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_POLICY(SET CMP0058 OLD)
 
 if(CMAKE_TOOLCHAIN_FILE)
     mark_as_advanced(CMAKE_TOOLCHAIN_FILE)
