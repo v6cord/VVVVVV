@@ -1,6 +1,10 @@
 #ifndef SCRIPTS_H
 #define SCRIPTS_H
 
+#ifdef __SWITCH__
+#pragma GCC optimize ("O1")
+#endif
+
 #include "Script.h"
 
 #include <algorithm>
@@ -391,7 +395,6 @@ void scriptclass::load(std::string t)
     running = true;
     scriptname = t;
 
-#ifndef __SWITCH__
     if (t == "intro")
     {
         add("ifskip(quickstart)");
@@ -6654,7 +6657,6 @@ void scriptclass::load(std::string t)
         add("untilbars()");
     }
     else
-#endif
     {
         loadother(t);
     }
