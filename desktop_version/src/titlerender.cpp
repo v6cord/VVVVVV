@@ -49,8 +49,6 @@ growing_vector<std::string> changelog = {
     "- reloadroom() - reloads the current",
     "  room",
     "- toceil() - inverted tofloor()",
-    "- movetoroom(x,y) - a relative",
-    "  gotoroom()",
     "- playfile(file[, id]) - play a file as",
     "  either music or a sound effect. if you",
     "  specify an id, the file loops",
