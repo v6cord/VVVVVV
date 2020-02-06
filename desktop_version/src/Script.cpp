@@ -1104,14 +1104,19 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: gotoposition(x position, y position, gravity position)
 				int player = obj.getplayer();
-				obj.entities[player].xp = ss_toi(words[1]);
-				obj.entities[player].yp = ss_toi(words[2]);
+				relativepos(&obj.entities[player].xp, words[1]);
+				relativepos(&obj.entities[player].yp, words[2]);
 				if (words[3] != "") {
-                                    game.gravitycontrol = ss_toi(words[3]);
-                                } else {
-                                    game.gravitycontrol = 0;
-                                }
-
+					if (words[3] == "~" || (words[3].substr(0, 1) == "~" && ss_toi(words[3].substr(1, std::string::npos)) == 0))
+						; // Keep the current gravity control
+					else if (words[3].substr(0, 1) == "~")
+						// Invert the gravity control
+						game.gravitycontrol = !game.gravitycontrol;
+					else
+						game.gravitycontrol = ss_toi(words[3]);
+				} else {
+					game.gravitycontrol = 0;
+				}
 			}
 			if (words[0] == "gotoroom")
 			{
