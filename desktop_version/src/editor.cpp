@@ -5516,24 +5516,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             ed.keydelay--;
         } else if (ed.trialstartpoint) {
             // Allow the player to switch rooms
-            if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
-                ed.keydelay = 6;
-                if (key.keymap[SDLK_UP])
-                    ed.levy--;
-                else if (key.keymap[SDLK_DOWN])
-                    ed.levy++;
-                else if (key.keymap[SDLK_LEFT])
-                    ed.levx--;
-                else if (key.keymap[SDLK_RIGHT])
-                    ed.levx++;
-                ed.updatetiles = true;
-                ed.changeroom = true;
-                dwgfx.backgrounddrawn=false;
-                ed.levaltstate = 0;
-                ed.levx = (ed.levx + ed.mapwidth) % ed.mapwidth;
-                ed.levy = (ed.levy + ed.mapheight) % ed.mapheight;
-            }
+            ed.switchroomsinput();
             if(key.leftbutton) {
                 ed.trialstartpoint = false;
                 game.customtrials[ed.edtrial].startx = (ed.tilex*8) - 4;
@@ -6093,27 +6076,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.zmod=false;
             }
 
-            if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
-                key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-                key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
-                ed.ghosts.clear(); // Clear ghosts!
-                ed.keydelay = 6;
-                if (key.keymap[SDLK_UP] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
-                    ed.levy--;
-                else if (key.keymap[SDLK_DOWN] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
-                    ed.levy++;
-                else if (key.keymap[SDLK_LEFT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
-                    ed.levx--;
-                else if (key.keymap[SDLK_RIGHT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
-                    ed.levx++;
-                ed.updatetiles = true;
-                ed.changeroom = true;
-                dwgfx.backgrounddrawn=false;
-                ed.levaltstate = 0;
-                ed.levx = (ed.levx + ed.mapwidth) % ed.mapwidth;
-                ed.levy = (ed.levy + ed.mapheight) % ed.mapheight;
-            }
+            ed.switchroomsinput();
 
             if(key.keymap[SDLK_SPACE]) {
                 ed.spacemod = !ed.spacemod;
@@ -7060,6 +7023,31 @@ int editorclass::gettowerplattile(int col)
 
     // Default to red
     return 47+1;
+}
+
+void editorclass::switchroomsinput()
+{
+    if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
+        key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+        key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+        key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
+        ed.ghosts.clear(); // Clear ghosts!
+        ed.keydelay = 6;
+        if (key.keymap[SDLK_UP] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
+            ed.levy--;
+        else if (key.keymap[SDLK_DOWN] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+            ed.levy++;
+        else if (key.keymap[SDLK_LEFT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+            ed.levx--;
+        else if (key.keymap[SDLK_RIGHT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+            ed.levx++;
+        ed.updatetiles = true;
+        ed.changeroom = true;
+        graphics.backgrounddrawn=false;
+        ed.levaltstate = 0;
+        ed.levx = (ed.levx + ed.mapwidth) % ed.mapwidth;
+        ed.levy = (ed.levy + ed.mapheight) % ed.mapheight;
+    }
 }
 
 #define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
