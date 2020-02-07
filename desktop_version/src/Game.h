@@ -405,9 +405,6 @@ public:
 
     bool nosuicide = false;
 
-    bool kludgeroominitscript = false;
-    bool gotoroomfromscript = false;
-
     int gametimer = 0;
 
     bool cliplaytest = false;

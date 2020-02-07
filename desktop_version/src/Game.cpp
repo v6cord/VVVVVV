@@ -402,9 +402,6 @@ void Game::init(void)
 
     nosuicide = false;
 
-    kludgeroominitscript = false;
-    gotoroomfromscript = false;
-
     /* Terry's Patrons... */
     superpatrons.push_back("Anders Ekermo");
     superpatrons.push_back("Andreas K|mper");
@@ -1792,7 +1789,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
         case 334:
         case 335:
         case 336:
-            // WARNING: If updating this code, make sure to update the 2-frame-delay init fix in Map.cpp!
+            // WARNING: If updating this code, make sure to update the 2-frame-delay init fix in Logic.cpp!
             startscript = true;
             newscript="custom_"+customscript[state - 300];
             obj.kludgeonetimescript = true;

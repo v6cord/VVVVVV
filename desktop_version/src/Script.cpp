@@ -1122,13 +1122,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
 				map.gotoroom(relativepos(game.roomx-100, words[1])+100, relativepos(game.roomy-100, words[2])+100, dwgfx, game, obj, music);
-				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadroom")
 			{
 				//USAGE: reloadroom()
 				map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
-				game.gotoroomfromscript = true;
 			}
 			if (words[0] == "reloadscriptboxes")
 			{
@@ -3658,7 +3656,6 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
     dwgfx.noclear = false;
     dwgfx.mapimage = std::nullopt;
 
-	game.gotoroomfromscript = true;
 	switch(t)
 	{
 	case 0:  //Normal new game

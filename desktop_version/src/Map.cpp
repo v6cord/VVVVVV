@@ -998,7 +998,6 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 		room_different = false;
 
 	if (room_different) {
-		game.gotoroomfromscript = true;
 		gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
 		// If in finalstretch, update the colors of entities immediately
 		if (custommode && finalstretch)
@@ -1452,17 +1451,6 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 			}
 		}
 	}
-
-	// Kludge to remove 2-frame-delay when loading init scripts for a room
-	if (!game.gotoroomfromscript && game.deathseq == -1 && obj.checktrigger() > -1 && !script.nointerrupt) {
-		game.startscript = true;
-		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
-		obj.kludgeonetimescript = true;
-		obj.removetrigger(obj.activetrigger);
-		game.state = 0;
-		game.kludgeroominitscript = true;
-	}
-	game.gotoroomfromscript = false;
 }
 
 std::string mapclass::currentarea(int t)
@@ -2400,5 +2388,17 @@ void mapclass::updatetowerentcol(int col)
                 // Extra kludge for when it respawns
                 obj.entities[i].tile += 3 - obj.entities[i].life/3;
         }
+    }
+}
+
+void twoframedelayfix()
+{
+    // Kludge to remove 2-frame-delay when loading init scripts for a room
+    if (game.deathseq == -1 && obj.checktrigger() > -1 && !script.nointerrupt) {
+        game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
+        obj.kludgeonetimescript = true;
+        obj.removetrigger(obj.activetrigger);
+        game.state = 0;
+        script.load(game.newscript);
     }
 }

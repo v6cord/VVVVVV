@@ -16,6 +16,8 @@
 
 extern editorclass ed;
 
+void twoframedelayfix();
+
 class mapclass
 {
 public:

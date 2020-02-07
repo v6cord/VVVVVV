@@ -513,11 +513,13 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                       obj.entities[player].xp < -14) ||
                      (game.door_right > -2 &&
                       obj.entities[player].xp >= 308)) {
-                if (map.leaving_tower(&game.roomx, &game.roomy, obj))
+                if (map.leaving_tower(&game.roomx, &game.roomy, obj)) {
                     map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
                                  music);
-                else
+                    twoframedelayfix();
+                } else {
                     dowrap = true;
+                }
             }
 
             if (dowrap) {
@@ -1131,6 +1133,9 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         //now! let's clean up removed entities
         obj.cleanup();
 
+        // If we do a gotoroom because of a screen transition, set this to true
+        bool kludgeroominitscript = false;
+
         //Using warplines?
         if (obj.customwarpmode) {
             //Rewritten system for mobile update: basically, the new logic is to
@@ -1240,11 +1245,13 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             {
                 obj.entities[player].yp -= 240;
                 map.gotoroom(game.roomx, game.roomy + 1, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
             if (game.door_up > -2 && obj.entities[player].yp < -2)
             {
                 obj.entities[player].yp += 240;
                 map.gotoroom(game.roomx, game.roomy - 1, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
         }
         else if (map.warpy)
@@ -1292,11 +1299,13 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             {
                 obj.entities[player].xp += 320;
                 map.gotoroom(game.roomx - 1, game.roomy, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
             if (game.door_right > -2 && obj.entities[player].xp >= 308)
             {
                 obj.entities[player].xp -= 320;
                 map.gotoroom(game.roomx + 1, game.roomy, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
         }
         else
@@ -1307,28 +1316,26 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             {
                 obj.entities[player].yp -= 240;
                 map.gotoroom(game.roomx, game.roomy + 1, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
             if (game.door_up > -2 && obj.entities[player].yp < -2)
             {
                 obj.entities[player].yp += 240;
                 map.gotoroom(game.roomx, game.roomy - 1, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
             if (game.door_left > -2 && obj.entities[player].xp < -14)
             {
                 obj.entities[player].xp += 320;
                 map.gotoroom(game.roomx - 1, game.roomy, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
             if (game.door_right > -2 && obj.entities[player].xp >= 308)
             {
                 obj.entities[player].xp -= 320;
                 map.gotoroom(game.roomx + 1, game.roomy, dwgfx, game, obj, music);
+                kludgeroominitscript = true;
             }
-        }
-
-        if (game.kludgeroominitscript) {
-            script.load(game.newscript);
-            game.startscript = false;
-            game.kludgeroominitscript = false;
         }
 
         //Warp tokens
@@ -1434,7 +1441,11 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
               }
           }
         }
+
+        if (kludgeroominitscript)
+            twoframedelayfix();
     }
+
     int j;
     if (game.roomchange)
     {
