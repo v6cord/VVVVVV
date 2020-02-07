@@ -22,6 +22,7 @@
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
+#include <shlwapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
 int mkdir(char* path, int mode)
@@ -567,10 +568,14 @@ char* FILESYSTEM_realPath(const char* rel) {
 }
 
 char* FILESYSTEM_dirname(const char* file) {
-    size_t len = strlen(file);
-    char* dir = (char*) malloc(len + 1);
-    _splitpath_s(file, nullptr, 0, dir, len, nullptr, 0, nullptr, 0);
+    char* dir = (char*) malloc(MAX_PATH + 1);
+    bsd_strlcpy(dir, file, MAX_PATH + 1);
+    PathRemoveFileSpecA(dir);
     return dir;
+}
+
+const char* FILESYSTEM_basename(const char* file) {
+    return PathFindFileNameA(file);
 }
 #else
 char* FILESYSTEM_realPath(const char* rel) {
@@ -585,5 +590,15 @@ char* FILESYSTEM_dirname(const char* file) {
     char* dir_copy = (char*) malloc(dir_len);
     bsd_strlcpy(dir_copy, dir, dir_len);
     return dir_copy;
+}
+
+const char* FILESYSTEM_basename(const char* file) {
+    char copy[MAX_PATH];
+    strcpy_safe(copy, file);
+    char* base = basename(copy);
+    size_t base_len = strlen(base) + 1;
+    char* base_copy = (char*) malloc(base_len);
+    bsd_strlcpy(base_copy, base, base_len);
+    return base_copy;
 }
 #endif
