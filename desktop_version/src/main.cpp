@@ -41,6 +41,7 @@
 #endif
 
 #include "Maths.h"
+#include <physfs.h>
 
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
@@ -84,6 +85,7 @@ int main(int argc, char *argv[])
 #endif
 
     char* assets = NULL;
+    bool playtestmount = false;
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
@@ -108,9 +110,14 @@ int main(int argc, char *argv[])
             if (i + 1 < argc) {
                 startinplaytest = true;
                 i++;
-                playtestname = std::string("levels/");
-                playtestname.append(argv[i]);
-                playtestname.append(std::string(".vvvvvv"));
+                if (strchr(argv[i], '/')) {
+                    playtestname = FILESYSTEM_realPath(argv[i]);
+                    playtestmount = true;
+                } else {
+                    playtestname = std::string("levels/");
+                    playtestname.append(argv[i]);
+                    playtestname.append(std::string(".vvvvvv"));
+                }
             } else {
                 printf("--playing option requires one argument.\n");
                 return 1;
@@ -359,6 +366,16 @@ int main(int argc, char *argv[])
 
     //entityclass obj;
     obj.init();
+
+    if (playtestmount) {
+        char* dir = FILESYSTEM_dirname(playtestname.c_str());
+        PHYSFS_mount(dir, "levels", 0);
+        free(dir);
+        char* file = FILESYSTEM_basename(playtestname.c_str());
+        playtestname = "levels/";
+        playtestname += file;
+        free(file);
+    }
 
     if (startinplaytest) {
         game.levelpage=0;
