@@ -7029,17 +7029,19 @@ void editorclass::switchroomsinput()
 {
     if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
         key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+        key.keymap[SDLK_KP_8] || key.keymap[SDLK_KP_2] ||
+        key.keymap[SDLK_KP_4] || key.keymap[SDLK_KP_6] ||
         key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
         key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
         ed.ghosts.clear(); // Clear ghosts!
         ed.keydelay = 6;
-        if (key.keymap[SDLK_UP] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
+        if (key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
             ed.levy--;
-        else if (key.keymap[SDLK_DOWN] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+        else if (key.keymap[SDLK_DOWN] || key.keymap[SDLK_KP_2] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
             ed.levy++;
-        else if (key.keymap[SDLK_LEFT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+        else if (key.keymap[SDLK_LEFT] || key.keymap[SDLK_KP_4] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
             ed.levx--;
-        else if (key.keymap[SDLK_RIGHT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+        else if (key.keymap[SDLK_RIGHT] || key.keymap[SDLK_KP_6] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
             ed.levx++;
         ed.updatetiles = true;
         ed.changeroom = true;
