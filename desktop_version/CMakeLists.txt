@@ -240,38 +240,38 @@ target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE
 find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
 # libpng
-include(ExternalProject)
-ExternalProject_Add(
-    libpng
-    URL ${CMAKE_SOURCE_DIR}/../third_party/libpng-1.6.37.tar.xz
-    CMAKE_ARGS
-        -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-        -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-        -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
-        -DPNG_SHARED=OFF
-        -DBUILD_SHARED_LIBS=FALSE
-        -DSKIP_INSTALL_FILES=1
-        -DCMAKE_INSTALL_LIBDIR=lib
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
-)
-ExternalProject_Get_Property(libpng INSTALL_DIR)
-
-if(WIN32)
-  set(prefix "")
-  set(suffix ".lib")
-elseif(APPLE)
-  set(prefix "lib")
-  set(suffix ".a")
-else()
-  set(prefix "lib")
-  set(suffix ".a")
-endif()
-
 find_package(PNG)
 
 if(NOT PNG_FOUND)
+    include(ExternalProject)
+    ExternalProject_Add(
+        libpng
+        URL ${CMAKE_SOURCE_DIR}/../third_party/libpng-1.6.37.tar.xz
+        CMAKE_ARGS
+            -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+            -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+            -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+            -DPNG_SHARED=OFF
+            -DBUILD_SHARED_LIBS=FALSE
+            -DSKIP_INSTALL_FILES=1
+            -DCMAKE_INSTALL_LIBDIR=lib
+        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
+    )
+    ExternalProject_Get_Property(libpng INSTALL_DIR)
+
+    if(WIN32)
+        set(prefix "")
+        set(suffix ".lib")
+    elseif(APPLE)
+        set(prefix "lib")
+        set(suffix ".a")
+    else()
+        set(prefix "lib")
+        set(suffix ".a")
+    endif()
+
     add_library(PNG::PNG SHARED IMPORTED)
     set_target_properties(PNG::PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
     find_package(ZLIB)
