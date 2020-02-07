@@ -2,6 +2,7 @@
 #include <vector>
 #include "Game.h"
 #include "Utilities.h"
+#include "preloader.h"
 #include <string>
 
 #include "Graphics.h"
@@ -123,12 +124,16 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 	PHYSFS_setWriteDir(output);
 	if (!game.quiet) printf("Base directory: %s\n", output);
 
+        pre_fakepercent.store(5);
+
 	/* Create save directory */
 	strcpy_safe(saveDir, output);
 	strcat(saveDir, "saves");
 	strcat(saveDir, PHYSFS_getDirSeparator());
 	mkdir(saveDir, 0777);
 	if (!game.quiet) printf("Save directory: %s\n", saveDir);
+
+        pre_fakepercent.store(10);
 
 	/* Create level directory */
 	strcpy_safe(levelDir, output);
@@ -144,6 +149,8 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 	}
 
 	/* Mount the stock content last */
+
+        pre_fakepercent.store(15);
 
 	if (assetsPath) {
             strcpy_safe(output, assetsPath);
@@ -178,6 +185,8 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 #endif
         }
 
+        pre_fakepercent.store(20);
+
 	if (!cached_data_zip_load(output))
 	{
                 if (!getcwd(output, MAX_PATH)) ;
@@ -203,7 +212,7 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                 }
         }
 
-        //sleep(5);
+        pre_fakepercent.store(45);
 
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcpy_safe(output, "gamecontrollerdb.txt");
@@ -211,6 +220,7 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 	{
 		printf("gamecontrollerdb.txt not found!\n");
 	}
+
 	return 1;
 }
 

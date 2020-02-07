@@ -35,6 +35,7 @@
 #include "git-rev.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
 #include <unistd.h>
@@ -177,6 +178,37 @@ int main(int argc, char *argv[])
 #endif
     }
 
+    if (!game.quiet) {
+        printf("\t\t\n");
+        printf("\t\t\n");
+        printf("\t\t       VVVVVV\n");
+        printf("\t\t\n");
+        printf("\t\t\n");
+        printf("\t\t  8888888888888888  \n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t888888    8888    88\n");
+        printf("\t\t888888    8888    88\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t888888            88\n");
+        printf("\t\t88888888        8888\n");
+        printf("\t\t  8888888888888888  \n");
+        printf("\t\t      88888888      \n");
+        printf("\t\t  8888888888888888  \n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t88888888888888888888\n");
+        printf("\t\t8888  88888888  8888\n");
+        printf("\t\t8888  88888888  8888\n");
+        printf("\t\t    888888888888    \n");
+        printf("\t\t    8888    8888    \n");
+        printf("\t\t  888888    888888  \n");
+        printf("\t\t  888888    888888  \n");
+        printf("\t\t  888888    888888  \n");
+        printf("\t\t\n");
+        printf("\t\t\n");
+    }
+
     SDL_Init(
         SDL_INIT_VIDEO |
         SDL_INIT_AUDIO |
@@ -225,88 +257,26 @@ int main(int argc, char *argv[])
     game.gametimer = 0;
     obj.init();
     game.loadstats(map, graphics, music);
-    std::thread preloader(preloaderloop);
+    std::thread init([&]() {
+        if(!FILESYSTEM_init(argv[0], assets)) {
+            exit(1);
+        }
+        pre_fakepercent.store(50);
+        music.init();
+        pre_fakepercent.store(80);
+        graphics.reloadresources(true);
+        pre_fakepercent.store(100);
+    });
 
-    if(!FILESYSTEM_init(argv[0], assets))
-    {
-        return 1;
-    }
-
-    graphics.reloadresources(true);
-    pre_fakepercent.store(100);
-    preloader.join();
+    preloaderloop();
+    init.join();
 
     if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 
-    if (!game.quiet) {
-        printf("\t\t\n");
-        printf("\t\t\n");
-        printf("\t\t       VVVVVV\n");
-        printf("\t\t\n");
-        printf("\t\t\n");
-        printf("\t\t  8888888888888888  \n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t888888    8888    88\n");
-        printf("\t\t888888    8888    88\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t888888            88\n");
-        printf("\t\t88888888        8888\n");
-        printf("\t\t  8888888888888888  \n");
-        printf("\t\t      88888888      \n");
-        printf("\t\t  8888888888888888  \n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t8888  88888888  8888\n");
-        printf("\t\t8888  88888888  8888\n");
-        printf("\t\t    888888888888    \n");
-        printf("\t\t    8888    8888    \n");
-        printf("\t\t  888888    888888  \n");
-        printf("\t\t  888888    888888  \n");
-        printf("\t\t  888888    888888  \n");
-        printf("\t\t\n");
-        printf("\t\t\n");
-    }
-
-    //Set up screen
-
-
-
-
-    //UtilityClass help;
-    // Load Ini
-
-
-    //Graphics graphics;
-
-
-
     //musicclass music;
-    music.init();
     //Game game;
     game.infocus = true;
-
-    graphics.MakeTileArray();
-    graphics.MakeSpriteArray();
-    graphics.maketelearray();
-
-
-    graphics.images.push_back(graphics.grphx.im_image0);
-    graphics.images.push_back(graphics.grphx.im_image1);
-    graphics.images.push_back(graphics.grphx.im_image2);
-    graphics.images.push_back(graphics.grphx.im_image3);
-    graphics.images.push_back(graphics.grphx.im_image4);
-    graphics.images.push_back(graphics.grphx.im_image5);
-    graphics.images.push_back(graphics.grphx.im_image6);
-
-    graphics.images.push_back(graphics.grphx.im_image7);
-    graphics.images.push_back(graphics.grphx.im_image8);
-    graphics.images.push_back(graphics.grphx.im_image9);
-    graphics.images.push_back(graphics.grphx.im_image10);
-    graphics.images.push_back(graphics.grphx.im_image11);
-    graphics.images.push_back(graphics.grphx.im_image12);
-
+    //
     //Make a temporary rectangle to hold the offsets
     // SDL_Rect offset;
     //Give the offsets to the rectangle
