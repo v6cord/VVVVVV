@@ -8,7 +8,7 @@ let pkgsNative = import (builtins.fetchTarball {
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
   pkgs.callPackage (
-    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig, ninja}:
+    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig, ninja, zlib}:
     (mkShell.override { inherit stdenv; }) (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
         outputs = ["out"];
         outputBin = "out";
@@ -49,7 +49,8 @@ in
             platforms = stdenv.lib.platforms.all;
           };
         }))
-      ] else [ SDL2 SDL2_mixer fribidi ];
+        zlib
+      ] else [ SDL2 SDL2_mixer fribidi zlib ];
       CMAKE_MODULE_PATH = if stdenv.targetPlatform.isWindows then "${sdl}/lib/cmake/SDL2/" else "${SDL2.dev}/lib/cmake/SDL2/";
     })
   ) {}

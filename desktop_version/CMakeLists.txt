@@ -242,6 +242,27 @@ target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE
 
 find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
+# libpng
+include(ExternalProject)
+ExternalProject_Add(
+    libpng
+    URL ${CMAKE_SOURCE_DIR}/../third_party/libpng-1.6.37.tar.xz
+    CMAKE_ARGS
+        -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+        -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+        -DPNG_SHARED=OFF
+        -DBUILD_SHARED_LIBS=FALSE
+        -DSKIP_INSTALL_FILES=1
+        -DCMAKE_INSTALL_LIBDIR=lib
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
+)
+ExternalProject_Get_Property(libpng INSTALL_DIR)
+link_directories(${INSTALL_DIR}/lib)
+target_include_directories(VVVVVV-CE PUBLIC "${INSTALL_DIR}/include")
+
 # Static Dependencies
 TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
 
