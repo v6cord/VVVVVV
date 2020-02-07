@@ -201,7 +201,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     SET_SOURCE_FILES_PROPERTIES(src/Scripts.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
 endif()
 
-SET_SOURCE_FILES_PROPERTIES(src/trace.c PROPERTIES COMPILE_FLAGS -fno-instrument-functions)
+if(ENABLE_PROFILE)
+    SET_SOURCE_FILES_PROPERTIES(src/trace.c PROPERTIES COMPILE_FLAGS -fno-instrument-functions)
+endif()
 
 # Build options
 IF(ENABLE_WARNINGS)
