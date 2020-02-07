@@ -3791,7 +3791,12 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             BlitSurfaceColoured(graphics.sprites[ed.ghosts[i].frame],NULL, graphics.ghostbuffer, &drawRect, graphics.ct);
         }
     }
-    if (ed.currentghosts + 1 < (int)ed.ghosts.size()) ed.currentghosts++;
+    if (ed.currentghosts + 1 < (int)ed.ghosts.size()) {
+        ed.currentghosts++;
+        if (ed.zmod) ed.currentghosts++;
+    } else {
+        ed.currentghosts = (int)ed.ghosts.size() - 1;
+    }
     SDL_BlitSurface(graphics.ghostbuffer, NULL, graphics.backBuffer, &graphics.bg_rect);
 
     //Draw Cursor
