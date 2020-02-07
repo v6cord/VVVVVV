@@ -122,6 +122,12 @@ struct LevelMetaData
     int version = 0;
 };
 
+struct GhostInfo {
+    int x; // .xp
+    int y; // .yp
+    int col; // .colour
+    int frame; // .drawframe
+};
 
 extern growing_vector<edentities> edentity;
 extern scriptclass script;
@@ -387,6 +393,10 @@ public:
     int entspeed = 0;
 
     int gettowerplattile(int col);
+
+    growing_vector<GhostInfo> ghosts;
+
+    int currentghosts = 0;
 };
 
 void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);

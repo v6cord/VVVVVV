@@ -3777,6 +3777,23 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     //Draw connecting map guidelines
     //TODO
 
+    //Draw ghosts (spooky!)
+    SDL_FillRect(graphics.ghostbuffer, NULL, SDL_MapRGBA(graphics.ghostbuffer->format, 0, 0, 0, 0));
+    for (int i = 0; i < (int)ed.ghosts.size(); i++) {
+        if (i <= ed.currentghosts) { // We don't want all of them to show up at once :)
+            point tpoint;
+            tpoint.x = ed.ghosts[i].x;
+            tpoint.y = ed.ghosts[i].y;
+            graphics.setcol(ed.ghosts[i].col, help);
+            SDL_Rect drawRect = graphics.sprites_rect;
+            drawRect.x += tpoint.x;
+            drawRect.y += tpoint.y;
+            BlitSurfaceColoured(graphics.sprites[ed.ghosts[i].frame],NULL, graphics.ghostbuffer, &drawRect, graphics.ct);
+        }
+    }
+    if (ed.currentghosts + 1 < (int)ed.ghosts.size()) ed.currentghosts++;
+    SDL_BlitSurface(graphics.ghostbuffer, NULL, graphics.backBuffer, &graphics.bg_rect);
+
     //Draw Cursor
     if (!ed.trialstartpoint) {
         switch(ed.drawmode)
@@ -6005,6 +6022,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         ed.note="ERROR: No checkpoint to spawn at";
                         ed.notedelay=45;
                     } else {
+                        ed.currentghosts = 0;
                         game.edsavex = ex;
                         game.edsavey = ey;
                         game.edsaverx = 100 + ed.levx;
@@ -6078,6 +6096,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
                 key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                ed.ghosts.clear(); // Clear ghosts!
                 ed.keydelay = 6;
                 if (key.keymap[SDLK_UP])
                     ed.levy--;

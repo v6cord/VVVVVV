@@ -259,6 +259,8 @@ public:
 	SDL_Rect footerrect = {0};
 	SDL_Surface* footerbuffer;
 
+	SDL_Surface* ghostbuffer;
+
 	int linestate, linedelay = 0;
 	int backoffset = 0;
 	bool backgrounddrawn, foregrounddrawn = false;

@@ -259,6 +259,11 @@ int main(int argc, char *argv[])
     SDL_SetSurfaceBlendMode(graphics.footerbuffer, SDL_BLENDMODE_BLEND);
     SDL_SetSurfaceAlphaMod(graphics.footerbuffer, 127);
     FillRect(graphics.footerbuffer, SDL_MapRGB(fmt, 0, 0, 0));
+
+    graphics.ghostbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+    SDL_SetSurfaceBlendMode(graphics.ghostbuffer, SDL_BLENDMODE_BLEND);
+    SDL_SetSurfaceAlphaMod(graphics.ghostbuffer, 127);
+
     graphics.Makebfont();
 
 
