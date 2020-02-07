@@ -13,6 +13,7 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
 
 	unsigned char *data;
 	unsigned int width, height;
+        int err;
 
 	unsigned char *fileIn = NULL;
 	size_t length = 0;
@@ -22,7 +23,11 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
         image.version = PNG_IMAGE_VERSION;
         image.opaque = nullptr;
 
-        png_image_begin_read_from_memory(&image, fileIn, length);
+        err = png_image_begin_read_from_memory(&image, fileIn, length);
+        if (!err) {
+            FILESYSTEM_freeMemory(&fileIn);
+            return nullptr;
+        }
         width = image.width;
         height = image.height;
 
@@ -36,9 +41,12 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
 	}
 
         data = (unsigned char*) malloc(PNG_IMAGE_SIZE(image));
-        png_image_finish_read(&image, nullptr, data, 0, nullptr);
-
+        err = png_image_finish_read(&image, nullptr, data, 0, nullptr);
 	FILESYSTEM_freeMemory(&fileIn);
+        if (!err) {
+            free(data);
+            return nullptr;
+        }
 
 	loadedImage = SDL_CreateRGBSurfaceFrom(
 		data,
