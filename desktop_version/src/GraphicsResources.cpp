@@ -2,24 +2,7 @@
 #include "FileSystemUtils.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-// Used to load PNG data
-extern "C" {
-    extern unsigned lodepng_decode24(
-            unsigned char** out,
-            unsigned* w,
-            unsigned* h,
-            const unsigned char* in,
-            size_t insize
-    );
-    extern unsigned lodepng_decode32(
-            unsigned char** out,
-            unsigned* w,
-            unsigned* h,
-            const unsigned char* in,
-            size_t insize
-    );
-}
+#include <png.h>
 
 SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlpha /*= false*/, bool optional /*= false*/)
 {
@@ -34,14 +17,27 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
 	unsigned char *fileIn = NULL;
 	size_t length = 0;
 	FILESYSTEM_loadFileToMemory(filename, &fileIn, &length);
+
+        png_image image;
+        image.version = PNG_IMAGE_VERSION;
+        image.opaque = nullptr;
+
+        png_image_begin_read_from_memory(&image, fileIn, length);
+        width = image.width;
+        height = image.height;
+
 	if (noAlpha)
 	{
-		lodepng_decode24(&data, &width, &height, fileIn, length);
+		image.format = PNG_FORMAT_RGB;
 	}
 	else
 	{
-		lodepng_decode32(&data, &width, &height, fileIn, length);
+		image.format = PNG_FORMAT_RGBA;
 	}
+
+        data = (unsigned char*) malloc(PNG_IMAGE_SIZE(image));
+        png_image_finish_read(&image, nullptr, data, 0, nullptr);
+
 	FILESYSTEM_freeMemory(&fileIn);
 
 	loadedImage = SDL_CreateRGBSurfaceFrom(

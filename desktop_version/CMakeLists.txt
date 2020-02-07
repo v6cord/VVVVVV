@@ -114,7 +114,6 @@ INCLUDE_DIRECTORIES(
 	src
 	../third_party/tinyxml
 	../third_party/physfs
-	../third_party/lodepng
 	../third_party/utfcpp/source
         ${CMAKE_BINARY_DIR}
 )
@@ -184,7 +183,6 @@ IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
 	SET(PFS_SRC ${PFS_SRC} ../third_party/physfs/physfs_platform_apple.m)
 ENDIF()
-SET(PNG_SRC ../third_party/lodepng/lodepng.c)
 
 if(SWITCH)
     link_directories("${PORTLIBS}/lib/" "${LIBNX}/lib/")
@@ -224,7 +222,6 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 # Library information
 ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
-ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
 # FriBidi (Detection pulled from HHVM)
 find_package(PkgConfig)
@@ -260,11 +257,26 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
 )
 ExternalProject_Get_Property(libpng INSTALL_DIR)
-link_directories(${INSTALL_DIR}/lib)
-target_include_directories(VVVVVV-CE PUBLIC "${INSTALL_DIR}/include")
+
+if(WIN32)
+  set(prefix "")
+  set(suffix ".lib")
+elseif(APPLE)
+  set(prefix "lib")
+  set(suffix ".a")
+else()
+  set(prefix "lib")
+  set(suffix ".a")
+endif()
+
+add_library(PNG SHARED IMPORTED)
+set_target_properties(PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
+find_package(ZLIB)
+target_link_libraries(PNG INTERFACE ZLIB::ZLIB)
+target_include_directories(PNG INTERFACE "${INSTALL_DIR}/include")
 
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static lodepng-static fribidi)
+TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG)
 
 # data.zip path
 function(convert_to_cstring_literal var value)

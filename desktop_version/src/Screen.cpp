@@ -2,22 +2,11 @@
 
 #include "FileSystemUtils.h"
 #include "GraphicsUtil.h"
+#include "GraphicsResources.h"
 
 #include <stdlib.h>
 #include <cstring>
 #include <physfs.h>
-
-// Used to create the window icon
-extern "C"
-{
-	extern unsigned lodepng_decode32(
-		unsigned char** out,
-		unsigned* w,
-		unsigned* h,
-		const unsigned char* in,
-		size_t insize
-	);
-}
 
 Screen::Screen()
 {
@@ -54,26 +43,9 @@ Screen::Screen()
 	);
 	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
-	unsigned char *fileIn;
-	size_t length;
-	unsigned char *data;
-	unsigned int width, height;
-        FILESYSTEM_loadFileToMemory("VVVVVV.png", &fileIn, &length);
-	lodepng_decode32(&data, &width, &height, fileIn, length);
-	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(
-		data,
-		width,
-		height,
-		32,
-		width * 4,
-		0x000000FF,
-		0x0000FF00,
-		0x00FF0000,
-		0xFF000000
-	);
+        SDL_Surface *icon = LoadImage("VVVVVV.png");
 	SDL_SetWindowIcon(m_window, icon);
 	SDL_FreeSurface(icon);
-	free(data);
 #endif
 
 	// FIXME: This surface should be the actual backbuffer! -flibit
