@@ -583,7 +583,15 @@ char* FILESYSTEM_basename(const char* file) {
 }
 #else
 char* FILESYSTEM_realPath(const char* rel) {
-    return realpath(rel, nullptr);
+    char* buf = (char*) malloc(MAX_PATH + 1);
+    char* real = realpath(rel, buf);
+    if (real) {
+        return real;
+    } else {
+        free(buf);
+        perror("realPath");
+        return nullptr;
+    }
 }
 
 char* FILESYSTEM_dirname(const char* file) {
