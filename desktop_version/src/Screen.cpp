@@ -102,7 +102,8 @@ Screen::Screen()
 
 void Screen::ResizeScreen(int x , int y)
 {
-    if (headless) return;
+        if (headless) return;
+#ifndef __SWITCH__
 	static int resX = 320;
 	static int resY = 240;
 	if (x != -1 && y != -1)
@@ -125,6 +126,7 @@ void Screen::ResizeScreen(int x , int y)
 			SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
 	}
+#endif
 	if (stretchMode == 1)
 	{
 		int winX, winY;

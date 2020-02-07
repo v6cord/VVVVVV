@@ -68,6 +68,10 @@ KeyPoll key;
 mapclass map;
 entityclass obj;
 
+#ifdef __SWITCH__
+FILE* logger;
+#endif
+
 int main(int argc, char *argv[])
 {
     seed_xoshiro_64(std::time(nullptr));
@@ -144,10 +148,10 @@ int main(int argc, char *argv[])
     }
 
     if (syslog) {
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
         puts("Switching to syslog...");
 #ifdef __SWITCH__
-        auto logger = fopen("sdmc:/switch/vvvvvv-ce.log", "a");
+        logger = fopen("sdmc:/switch/VVVVVV/vvvvvv-ce.log", "a");
 #else
         auto logger = popen("logger", "w");
 #endif
@@ -735,6 +739,10 @@ int main(int argc, char *argv[])
     NETWORK_shutdown();
     SDL_Quit();
     FILESYSTEM_deinit();
+
+#ifdef __SWITCH__
+    fclose(logger);
+#endif
 
     return 0;
 }

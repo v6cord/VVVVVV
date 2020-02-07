@@ -4800,19 +4800,18 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
     game.press_action = false;
     game.press_map = false;
 
-    if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a))
+    if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(true))
     {
         game.press_left = true;
     }
-    if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d))
+    if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d) || key.controllerWantsRight(true))
     {
         game.press_right = true;
     }
-    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v))
+    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) || key.isDown(game.controllerButton_flip))
     {
-        // || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)
         game.press_action = true;
-    };
+    }
 
     if (key.keymap[SDLK_F11] && (ed.keydelay==0)) {
         ed.keydelay = 30;
@@ -4823,8 +4822,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
     int tower = ed.get_tower(ed.levx, ed.levy);
 
-    if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
-    if (key.isDown(27) && !ed.settingskey)
+    if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDL_CONTROLLER_BUTTON_BACK)) game.press_map = true;
+    if ((key.isDown(27) || key.isDown(SDL_CONTROLLER_BUTTON_START)) && !ed.settingskey)
     {
         ed.settingskey=true;
         if (ed.textmod) {
@@ -4872,14 +4871,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         }
     }
 
-    if (!key.isDown(27))
+    if (!key.isDown(27) && !key.isDown(SDL_CONTROLLER_BUTTON_START))
     {
         ed.settingskey=false;
-    }
-
-    if(key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL])
-    {
-        if(key.leftbutton) key.rightbutton=true;
     }
 
     if(ed.scripteditmod)
@@ -5079,7 +5073,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
         if (!game.press_map && !key.isDown(27))
             game.mapheld = false;
-        if (!game.mapheld && game.press_map) {
+        if ((!game.mapheld && game.press_map) || !key.textentrymode) {
             game.mapheld = true;
             if (!ed.textcount)
                 key.disabletextentry();
@@ -5639,13 +5633,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             int speedcap = 16;
 
-            if (key.keymap[SDLK_COMMA] && (ed.keydelay==0)) {
+            if ((key.keymap[SDLK_COMMA] || key.isDown(SDL_CONTROLLER_BUTTON_X)) && (ed.keydelay==0)) {
                 ed.keydelay = 6;
                 ed.entspeed--;
                 if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
             }
 
-            if (key.keymap[SDLK_PERIOD] && (ed.keydelay==0)) {
+            if ((key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_Y)) && (ed.keydelay==0)) {
                 ed.keydelay = 6;
                 ed.entspeed++;
                 if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
@@ -5695,9 +5689,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if (key.keymap[SDLK_3]) ed.drawmode=19;
         } else {
             // No modifiers
-            if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD]) {
+            if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_X) || key.isDown(SDL_CONTROLLER_BUTTON_Y)) {
                 ed.keydelay = 6;
-                if (key.keymap[SDLK_PERIOD])
+                if (key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_Y))
                     if (ed.drawmode != -6)
                         ed.drawmode++;
                     else
@@ -6057,7 +6051,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
             }
 
-            if(key.keymap[SDLK_v])
+            if(key.keymap[SDLK_v] || key.controllerWantsRUp())
             {
                 ed.vmod=true;
             }
@@ -6066,7 +6060,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.vmod=false;
             }
 
-            if(key.keymap[SDLK_c])
+            if(key.keymap[SDLK_c] || key.controllerWantsRDown())
             {
                 ed.cmod=true;
             }
@@ -6075,7 +6069,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.cmod=false;
             }
 
-            if(key.keymap[SDLK_x])
+            if(key.keymap[SDLK_x] || key.controllerWantsRRight(false))
             {
                 ed.xmod=true;
             }
@@ -6085,7 +6079,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
 
-            if(key.keymap[SDLK_z])
+            if(key.keymap[SDLK_z] || key.controllerWantsRLeft(false))
             {
                 ed.zmod=true;
             }
@@ -6095,16 +6089,18 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+                key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+                key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
                 ed.ghosts.clear(); // Clear ghosts!
                 ed.keydelay = 6;
-                if (key.keymap[SDLK_UP])
+                if (key.keymap[SDLK_UP] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
                     ed.levy--;
-                else if (key.keymap[SDLK_DOWN])
+                else if (key.keymap[SDLK_DOWN] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
                     ed.levy++;
-                else if (key.keymap[SDLK_LEFT])
+                else if (key.keymap[SDLK_LEFT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
                     ed.levx--;
-                else if (key.keymap[SDLK_RIGHT])
+                else if (key.keymap[SDLK_RIGHT] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
                     ed.levx++;
                 ed.updatetiles = true;
                 ed.changeroom = true;
