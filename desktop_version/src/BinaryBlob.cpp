@@ -1,5 +1,6 @@
 #include "BinaryBlob.h"
 #include "Game.h"
+#include "preloader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,6 +112,7 @@ bool binaryBlob::unPackBinary(const char* name)
 			m_memblocks[i] = (char*) malloc(m_headers[i].size);
 			PHYSFS_readBytes(handle, m_memblocks[i], m_headers[i].size);
 			offset += m_headers[i].size;
+                        pre_fakepercent.store(50 + (offset * 30) / size);
 		}
 	}
 	PHYSFS_close(handle);
