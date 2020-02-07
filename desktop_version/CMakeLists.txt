@@ -271,7 +271,9 @@ if(NOT PNG_FOUND)
             -DSKIP_INSTALL_FILES=1
             -DCMAKE_INSTALL_LIBDIR=lib
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
-        BUILD_BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/libpng/lib/${prefix}png${suffix}
+        BUILD_BYPRODUCTS
+            ${CMAKE_CURRENT_BINARY_DIR}/libpng/lib/${prefix}png${suffix}
+            ${CMAKE_CURRENT_BINARY_DIR}/libpng/include/png.h
     )
     ExternalProject_Get_Property(libpng INSTALL_DIR)
 
@@ -281,6 +283,7 @@ if(NOT PNG_FOUND)
     target_link_libraries(PNG::PNG INTERFACE ZLIB::ZLIB)
     file(MAKE_DIRECTORY "${INSTALL_DIR}/include")
     target_include_directories(PNG::PNG INTERFACE "${INSTALL_DIR}/include")
+    add_dependencies(PNG::PNG libpng)
 endif()
 
 # Static Dependencies
