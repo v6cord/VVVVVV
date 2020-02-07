@@ -5152,7 +5152,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
 {
     if (cliplaytest) {
         savex = playx;
-        savey = savey;
+        savey = playy;
         saverx = playrx;
         savery = playry;
         savegc = playgc;
