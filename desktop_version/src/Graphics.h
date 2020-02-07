@@ -204,7 +204,7 @@ public:
 	void setcol(int t, UtilityClass& help);
 	void drawfinalmap(mapclass & map);
     
-    void reloadresources();
+    void reloadresources(bool fast = false);
 
 	void textboxcreatefast();
 

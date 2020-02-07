@@ -91,13 +91,25 @@ static bool cached_data_zip_load(const char* path) {
     return true;
 }
 
+int FILESYSTEM_initCore(char *argvZero, char *assetsPath)
+{
+	char output[MAX_PATH + 9];
+
+	PHYSFS_init(argvZero);
+	PHYSFS_permitSymbolicLinks(1);
+
+        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
+
+	PLATFORM_getOSDirectory(output);
+	PHYSFS_mount(output, NULL, 1);
+
+        return 1;
+}
+
 int FILESYSTEM_init(char *argvZero, char *assetsPath)
 {
 	char output[MAX_PATH + 9];
 	int mkdirResult;
-
-	PHYSFS_init(argvZero);
-	PHYSFS_permitSymbolicLinks(1);
 
 	/* Determine the OS user directory */
 	PLATFORM_getOSDirectory(output);
@@ -106,11 +118,10 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 	mkdirResult = mkdir(output, 0777);
 
 	/* Mount our base user directory */
+        PHYSFS_unmount(output);
 	PHYSFS_mount(output, NULL, 1);
 	PHYSFS_setWriteDir(output);
 	if (!game.quiet) printf("Base directory: %s\n", output);
-
-        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
 
 	/* Create save directory */
 	strcpy_safe(saveDir, output);
@@ -191,6 +202,8 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                         return 0;
                 }
         }
+
+        //sleep(5);
 
 	strcpy_safe(output, PHYSFS_getBaseDir());
 	strcpy_safe(output, "gamecontrollerdb.txt");

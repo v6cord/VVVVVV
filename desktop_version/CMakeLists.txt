@@ -286,8 +286,10 @@ if(NOT PNG_FOUND)
     add_dependencies(PNG::PNG libpng)
 endif()
 
+find_package(Threads)
+
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG::PNG)
+TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG::PNG Threads::Threads)
 
 # data.zip path
 function(convert_to_cstring_literal var value)

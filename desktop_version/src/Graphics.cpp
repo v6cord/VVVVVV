@@ -3476,7 +3476,7 @@ bool Graphics::onscreen(int t)
 	return (t >= -40 && t <= 280);
 }
 
-void Graphics::reloadresources() {
+void Graphics::reloadresources(bool fast /*= false*/) {
     grphx = GraphicsResources();
     grphx.init();
 
@@ -3509,7 +3509,7 @@ void Graphics::reloadresources() {
     images.push_back(grphx.im_image11);
     images.push_back(grphx.im_image12);
 
-    music.init();
+    if (!fast) music.init();
 }
 
 void Graphics::textboxcreatefast()

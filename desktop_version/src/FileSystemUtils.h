@@ -10,6 +10,7 @@
 #include "tinyxml.h"
 
 int FILESYSTEM_init(char *argvZero, char* assetsPath);
+int FILESYSTEM_initCore(char *argvZero, char* assetsPath);
 void FILESYSTEM_deinit();
 
 char *FILESYSTEM_getUserSaveDirectory();

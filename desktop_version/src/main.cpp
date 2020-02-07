@@ -43,6 +43,8 @@
 #include "Maths.h"
 #include <physfs.h>
 
+#include <thread>
+
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
 
@@ -182,15 +184,59 @@ int main(int argc, char *argv[])
         SDL_INIT_GAMECONTROLLER
     );
 
+    if(!FILESYSTEM_initCore(argv[0], assets))
+    {
+        return 1;
+    }
+
+    game.init();
+    graphics.init();
+    Screen gameScreen;
+    graphics.screenbuffer = &gameScreen;
+    gameScreen.headless = headless;
+    const SDL_PixelFormat* fmt = gameScreen.GetFormat();
+    graphics.backBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,32,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask ) ;
+    SDL_SetSurfaceBlendMode(graphics.backBuffer, SDL_BLENDMODE_NONE);
+    graphics.footerbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 10, 32, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+    SDL_SetSurfaceBlendMode(graphics.footerbuffer, SDL_BLENDMODE_BLEND);
+    SDL_SetSurfaceAlphaMod(graphics.footerbuffer, 127);
+    FillRect(graphics.footerbuffer, SDL_MapRGB(fmt, 0, 0, 0));
+
+    graphics.ghostbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+    SDL_SetSurfaceBlendMode(graphics.ghostbuffer, SDL_BLENDMODE_BLEND);
+    SDL_SetSurfaceAlphaMod(graphics.ghostbuffer, 127);
+
+    graphics.Makebfont();
+
+    graphics.foregroundBuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
+    SDL_SetSurfaceBlendMode(graphics.foregroundBuffer, SDL_BLENDMODE_NONE);
+
+    graphics.menubuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask );
+    SDL_SetSurfaceBlendMode(graphics.menubuffer, SDL_BLENDMODE_NONE);
+
+    graphics.towerbuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
+    SDL_SetSurfaceBlendMode(graphics.towerbuffer, SDL_BLENDMODE_NONE);
+
+    graphics.tempBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
+    SDL_SetSurfaceBlendMode(graphics.tempBuffer, SDL_BLENDMODE_NONE);
+
+    game.infocus = true;
+    key.isActive = true;
+    game.gametimer = 0;
+    obj.init();
+    game.loadstats(map, graphics, music);
+    std::thread preloader(preloaderloop);
+
     if(!FILESYSTEM_init(argv[0], assets))
     {
         return 1;
     }
 
-    if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
+    graphics.reloadresources(true);
+    pre_fakepercent.store(100);
+    preloader.join();
 
-    Screen gameScreen;
-    gameScreen.headless = headless;
+    if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 
     if (!game.quiet) {
         printf("\t\t\n");
@@ -233,14 +279,12 @@ int main(int argc, char *argv[])
 
 
     //Graphics graphics;
-    graphics.init();
 
 
 
     //musicclass music;
     music.init();
     //Game game;
-    game.init();
     game.infocus = true;
 
     graphics.MakeTileArray();
@@ -263,35 +307,6 @@ int main(int argc, char *argv[])
     graphics.images.push_back(graphics.grphx.im_image11);
     graphics.images.push_back(graphics.grphx.im_image12);
 
-    const SDL_PixelFormat* fmt = gameScreen.GetFormat();
-    graphics.backBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,32,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask ) ;
-    SDL_SetSurfaceBlendMode(graphics.backBuffer, SDL_BLENDMODE_NONE);
-    graphics.footerbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 10, 32, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
-    SDL_SetSurfaceBlendMode(graphics.footerbuffer, SDL_BLENDMODE_BLEND);
-    SDL_SetSurfaceAlphaMod(graphics.footerbuffer, 127);
-    FillRect(graphics.footerbuffer, SDL_MapRGB(fmt, 0, 0, 0));
-
-    graphics.ghostbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
-    SDL_SetSurfaceBlendMode(graphics.ghostbuffer, SDL_BLENDMODE_BLEND);
-    SDL_SetSurfaceAlphaMod(graphics.ghostbuffer, 127);
-
-    graphics.Makebfont();
-
-
-    graphics.foregroundBuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.foregroundBuffer, SDL_BLENDMODE_NONE);
-
-    graphics.screenbuffer = &gameScreen;
-
-    graphics.menubuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask );
-    SDL_SetSurfaceBlendMode(graphics.menubuffer, SDL_BLENDMODE_NONE);
-
-    graphics.towerbuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.towerbuffer, SDL_BLENDMODE_NONE);
-
-	graphics.tempBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.tempBuffer, SDL_BLENDMODE_NONE);
-
     //Make a temporary rectangle to hold the offsets
     // SDL_Rect offset;
     //Give the offsets to the rectangle
@@ -313,7 +328,6 @@ int main(int argc, char *argv[])
     map.bypos = map.ypos / 2;
 
     //Moved screensetting init here from main menu V2.1
-    game.loadstats(map, graphics, music);
     if (game.skipfakeload)
         game.gamestate = TITLEMODE;
 		if(game.usingmmmmmm==0) music.usingmmmmmm=false;
@@ -365,7 +379,6 @@ int main(int argc, char *argv[])
 		if(game.bestrank[5]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
 
     //entityclass obj;
-    obj.init();
 
     if (playtestmount) {
         char* dir = FILESYSTEM_dirname(playtestname.c_str());
@@ -438,10 +451,6 @@ int main(int argc, char *argv[])
     //End hack here ----
 
     volatile Uint32 time, timePrev = 0;
-    game.infocus = true;
-    key.isActive = true;
-
-    game.gametimer = 0;
 
     while(!key.quitProgram)
     {

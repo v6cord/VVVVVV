@@ -1,8 +1,33 @@
 #include "preloader.h"
 
 #include "Enums.h"
+#include <ctime>
+#include "SoundSystem.h"
 
-int pre_fakepercent=0, pre_transition=30;
+#include "UtilityClass.h"
+#include "Utilities.h"
+#include "Game.h"
+#include "Graphics.h"
+#include "KeyPoll.h"
+#include "titlerender.h"
+
+#include "Tower.h"
+#include "WarpClass.h"
+#include "Labclass.h"
+#include "Finalclass.h"
+#include "Map.h"
+
+#include "Screen.h"
+
+#include "Script.h"
+
+#include "Logic.h"
+
+#include "Input.h"
+#include "editor.h"
+
+std::atomic_int pre_fakepercent;
+int pre_transition=30;
 bool pre_startgame=false;
 int pre_darkcol=0, pre_lightcol=0, pre_curcol=0, pre_coltimer=0, pre_offset=0;
 
@@ -20,9 +45,8 @@ void preloaderrender(Graphics& dwgfx, Game& game, UtilityClass& help)
 
   if (pre_transition < 30) pre_transition--;
   if(pre_transition>=30){
-    pre_fakepercent++;
-    if (pre_fakepercent >= 100) {
-      pre_fakepercent = 100;
+    if (pre_fakepercent.load() >= 100) {
+      pre_fakepercent.store(100);
       pre_startgame = true;
     }
 
@@ -77,10 +101,10 @@ void preloaderrender(Graphics& dwgfx, Game& game, UtilityClass& help)
 
     FillRect(dwgfx.backBuffer, pre_frontrectx, pre_frontrecty, pre_frontrectw,pre_frontrecth, dwgfx.getBGR(0x3E,0x31,0xA2));
 
-    if(pre_fakepercent==100){
-      dwgfx.Print(282-(15*8), 204, "LOADING... " + help.String(int(pre_fakepercent))+"%", 124, 112, 218, false);
+    if(pre_fakepercent.load() == 100){
+      dwgfx.Print(282-(15*8), 204, "LOADING... " + help.String(int(pre_fakepercent.load()))+"%", 124, 112, 218, false);
     }else{
-      dwgfx.Print(282-(14*8), 204, "LOADING... " + help.String(int(pre_fakepercent))+"%", 124, 112, 218, false);
+      dwgfx.Print(282-(14*8), 204, "LOADING... " + help.String(int(pre_fakepercent.load()))+"%", 124, 112, 218, false);
     }
 
     //Render
@@ -123,4 +147,167 @@ void preloaderrender(Graphics& dwgfx, Game& game, UtilityClass& help)
 		dwgfx.render();
 	}
 	//dwgfx.backbuffer.unlock();
+}
+
+void preloaderloop() {
+    volatile Uint32 time, timePrev = 0;
+    auto gameScreen = graphics.screenbuffer;
+    while(!key.quitProgram)
+    {
+		//gameScreen->ClearScreen(0x00);
+
+        time = SDL_GetTicks();
+
+        //framerate limit to 30
+        Uint32 timetaken = time - timePrev;
+        if(game.gamestate==EDITORMODE)
+		{
+          if (timetaken < 24)
+          {
+              volatile Uint32 delay = 24 - timetaken;
+              SDL_Delay( delay );
+              time = SDL_GetTicks();
+          }
+          timePrev = time;
+
+        }else{
+          if (timetaken < game.gameframerate)
+          {
+              volatile Uint32 delay = game.gameframerate - timetaken;
+              SDL_Delay( delay );
+              time = SDL_GetTicks();
+          }
+          timePrev = time;
+
+        }
+
+
+        key.Poll();
+		if(key.toggleFullscreen)
+		{
+			if(!gameScreen->isWindowed)
+			{
+				//SDL_WM_GrabInput(SDL_GRAB_ON);
+				SDL_ShowCursor(SDL_DISABLE);
+				SDL_ShowCursor(SDL_ENABLE);
+			}
+			else
+			{
+				SDL_ShowCursor(SDL_ENABLE);
+			}
+
+
+			if(game.gamestate == EDITORMODE)
+			{
+				SDL_ShowCursor(SDL_ENABLE);
+			}
+
+			gameScreen->toggleFullScreen();
+			game.fullscreen = !game.fullscreen;
+			key.toggleFullscreen = false;
+
+				key.keymap.clear(); //we lost the input due to a new window.
+				game.press_left = false;
+				game.press_right = false;
+				game.press_action = true;
+				game.press_map = false;
+			printf("Error: failed: %s\n", SDL_GetError());
+
+
+
+
+		}
+		/*if(key.quitProgram)
+		{
+			music.playef(2);
+		}*/
+
+        game.infocus = key.isActive;
+        if(!game.infocus)
+        {
+            Mix_Pause(-1);
+            Mix_PauseMusic();
+            if(game.getGlobalSoundVol()> 0)
+            {
+                game.setGlobalSoundVol(0);
+            }
+            FillRect(graphics.backBuffer, 0x00000000);
+            graphics.bprint(5, 110, "Game paused", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
+            graphics.bprint(5, 120, "[click to resume]", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
+            graphics.bprint(5, 230, "Press M to mute in game", 164 - help.glow, 196 - help.glow, 164 - help.glow, true);
+            graphics.render();
+            //We are minimised, so lets put a bit of a delay to save CPU
+            SDL_Delay(100);
+        }
+        else
+        {
+            Mix_Resume(-1);
+            Mix_ResumeMusic();
+            game.gametimer++;
+            //Render
+            preloaderrender(graphics, game, help);
+        }
+
+        //We did editorinput, now it's safe to turn this off
+        key.linealreadyemptykludge = false;
+
+        if (game.savemystats)
+        {
+            game.savemystats = false;
+            game.savestats(map, graphics, music);
+        }
+
+        //Mute button
+        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry &&
+            !ed.textmod && ed.scripthelppage != 1)
+        {
+            game.mutebutton = 8;
+            if (game.muted)
+            {
+                game.muted = false;
+            }
+            else
+            {
+                game.muted = true;
+            }
+        }
+        if(game.mutebutton>0)
+        {
+            game.mutebutton--;
+        }
+
+        if (game.muted)
+        {
+            //if (game.globalsound == 1)
+            //{
+                game.globalsound = 0;
+                Mix_VolumeMusic(0) ;
+                Mix_Volume(-1,0);
+            //}
+        }
+
+        if (!game.muted && game.globalsound == 0)
+        {
+            game.globalsound = 1;
+            Mix_VolumeMusic(MIX_MAX_VOLUME) ;
+            Mix_Volume(-1,MIX_MAX_VOLUME);
+        }
+
+		if(key.resetWindow)
+		{
+			key.resetWindow = false;
+			gameScreen->ResizeScreen(-1, -1);
+		}
+
+        music.processmusic();
+        graphics.processfade();
+        game.gameclock();
+        gameScreen->FlipScreen();
+
+        //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
+
+        if (pre_transition <= -10) {
+            break;
+        }
+    }
 }

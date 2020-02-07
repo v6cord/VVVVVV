@@ -4,7 +4,11 @@ set -e
 cd "$(dirname "$0")"
 
 export WINE_GDB="$(realpath wine-gdb.sh)" # we have to do this before build.sh or we'll be in the wrong directory
-export debug=1
+if [ -z "$debug" ]; then
+    export debug=1
+elif [ "$debug" == "0" ]; then
+    unset debug
+fi
 
 source build.sh # source build.sh so we get its argument parsing for free!
 
