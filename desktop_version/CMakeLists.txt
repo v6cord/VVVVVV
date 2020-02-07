@@ -243,6 +243,17 @@ find_library(FRIBIDI_LIBRARY NAMES fribidi)
 find_package(PNG)
 
 if(NOT PNG_FOUND)
+    if(WIN32)
+        set(prefix "")
+        set(suffix ".lib")
+    elseif(APPLE)
+        set(prefix "lib")
+        set(suffix ".a")
+    else()
+        set(prefix "lib")
+        set(suffix ".a")
+    endif()
+
     find_package(ZLIB)
 
     include(ExternalProject)
@@ -260,19 +271,9 @@ if(NOT PNG_FOUND)
             -DSKIP_INSTALL_FILES=1
             -DCMAKE_INSTALL_LIBDIR=lib
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
+        BUILD_BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/libpng/lib/${prefix}png${suffix}
     )
     ExternalProject_Get_Property(libpng INSTALL_DIR)
-
-    if(WIN32)
-        set(prefix "")
-        set(suffix ".lib")
-    elseif(APPLE)
-        set(prefix "lib")
-        set(suffix ".a")
-    else()
-        set(prefix "lib")
-        set(suffix ".a")
-    endif()
 
     add_library(PNG::PNG SHARED IMPORTED)
     set_target_properties(PNG::PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
