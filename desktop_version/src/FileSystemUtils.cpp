@@ -41,6 +41,7 @@ int mkdir(char* path, int mode)
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <spawn.h>
+#include <libgen.h>
 #define MAX_PATH PATH_MAX
 #endif
 
@@ -557,5 +558,32 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     int status = 0;
     waitpid(child, &status, 0);
     return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+}
+#endif
+
+#ifdef _WIN32
+char* FILESYSTEM_realPath(const char* rel) {
+    return _fullpath(nullptr, rel, MAX_PATH);
+}
+
+char* FILESYSTEM_dirname(const char* file) {
+    size_t len = strlen(file);
+    char* dir = (char*) malloc(len + 1);
+    _splitpath_s(file, nullptr, 0, dir, len, nullptr, 0, nullptr, 0);
+    return dir;
+}
+#else
+char* FILESYSTEM_realPath(const char* rel) {
+    return realpath(rel, nullptr);
+}
+
+char* FILESYSTEM_dirname(const char* file) {
+    char copy[MAX_PATH];
+    strcpy_safe(copy, file);
+    char* dir = dirname(copy);
+    size_t dir_len = strlen(dir) + 1;
+    char* dir_copy = (char*) malloc(dir_len);
+    bsd_strlcpy(dir_copy, dir, dir_len);
+    return dir_copy;
 }
 #endif
