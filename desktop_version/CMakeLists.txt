@@ -17,6 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # CMake Options
 OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
+OPTION(ENABLE_PROFILE "Enable profiler" OFF)
 
 # Architecture Flags
 IF(APPLE)
@@ -33,6 +34,10 @@ IF(APPLE)
 	LINK_DIRECTORIES(/usr/local/lib)
 	ADD_COMPILE_OPTIONS(-Werror=partial-availability)
 ENDIF()
+
+if(ENABLE_PROFILE)
+    ADD_COMPILE_OPTIONS(-finstrument-functions)
+endif()
 
 PROJECT(VVVVVV-CE)
 
@@ -155,6 +160,7 @@ SET(VVV_SRC
         ${CMAKE_BINARY_DIR}/vce.zip.c
 	src/Utilities.cpp
         ${GITREV_TMP}
+        src/trace.c
 )
 SET(XML_SRC
 	../third_party/tinyxml/tinystr.cpp
@@ -196,6 +202,8 @@ ENDIF()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     SET_SOURCE_FILES_PROPERTIES(src/Scripts.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
 endif()
+
+SET_SOURCE_FILES_PROPERTIES(src/trace.c PROPERTIES COMPILE_FLAGS -fno-instrument-functions)
 
 # Build options
 IF(ENABLE_WARNINGS)
