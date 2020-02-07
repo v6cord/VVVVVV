@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include <SDL.h>
 #include <physfs.h>
@@ -56,6 +57,38 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
 extern "C" {
     extern const unsigned char vce_zip[];
     extern const unsigned vce_zip_size;
+}
+
+static bool cached_data_zip_load(const char* path) {
+    FILE* file = fopen(path, "rb");
+    if (file == nullptr) return false;
+    if (fseek(file, 0L, SEEK_END)) {
+        fclose(file);
+        return false;
+    }
+    long size = ftell(file);
+    if (size == -1) {
+        fclose(file);
+        return false;
+    }
+    if (fseek(file, 0L, SEEK_SET)) {
+        fclose(file);
+        return false;
+    }
+    unsigned char* buf = (unsigned char*) malloc(size);
+    size_t read = fread(buf, 1, size, file);
+    if (read != (long unsigned int) size && ferror(file)) {
+        fclose(file);
+        free(buf);
+        return false;
+    }
+    fclose(file);
+
+    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 0)) {
+        free(buf);
+        return false;
+    }
+    return true;
 }
 
 int FILESYSTEM_init(char *argvZero, char *assetsPath)
@@ -134,11 +167,11 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 #endif
         }
 
-	if (!PHYSFS_mount(output, NULL, 1))
+	if (!cached_data_zip_load(output))
 	{
                 if (!getcwd(output, MAX_PATH)) ;
                 strcat(output, "/data.zip");
-                if (!PHYSFS_mount(output, NULL, 1))
+                if (!cached_data_zip_load(output))
                 {
                         puts("Error: data.zip missing!");
                         puts("You do not have data.zip!");
