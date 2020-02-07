@@ -243,6 +243,8 @@ find_library(FRIBIDI_LIBRARY NAMES fribidi)
 find_package(PNG)
 
 if(NOT PNG_FOUND)
+    find_package(ZLIB)
+
     include(ExternalProject)
     ExternalProject_Add(
         libpng
@@ -276,6 +278,7 @@ if(NOT PNG_FOUND)
     set_target_properties(PNG::PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
     find_package(ZLIB)
     target_link_libraries(PNG::PNG INTERFACE ZLIB::ZLIB)
+    file(MAKE_DIRECTORY "${INSTALL_DIR}/include")
     target_include_directories(PNG::PNG INTERFACE "${INSTALL_DIR}/include")
 endif()
 
