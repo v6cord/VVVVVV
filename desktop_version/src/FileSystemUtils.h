@@ -30,6 +30,6 @@ bool FILESYSTEM_openDirectory(const char *dname);
 
 char* FILESYSTEM_realPath(const char *rel);
 char* FILESYSTEM_dirname(const char *file);
-const char* FILESYSTEM_basename(const char *file);
+char* FILESYSTEM_basename(const char *file);
 
 #endif /* FILESYSTEMUTILS_H */

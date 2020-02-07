@@ -574,8 +574,12 @@ char* FILESYSTEM_dirname(const char* file) {
     return dir;
 }
 
-const char* FILESYSTEM_basename(const char* file) {
-    return PathFindFileNameA(file);
+char* FILESYSTEM_basename(const char* file) {
+    const char* base = PathFindFileNameA(file);
+    size_t base_len = strlen(base) + 1;
+    char* base_copy = (char*) malloc(base_len);
+    bsd_strlcpy(base_copy, base, base_len);
+    return base_copy;
 }
 #else
 char* FILESYSTEM_realPath(const char* rel) {
@@ -592,7 +596,7 @@ char* FILESYSTEM_dirname(const char* file) {
     return dir_copy;
 }
 
-const char* FILESYSTEM_basename(const char* file) {
+char* FILESYSTEM_basename(const char* file) {
     char copy[MAX_PATH];
     strcpy_safe(copy, file);
     char* base = basename(copy);
