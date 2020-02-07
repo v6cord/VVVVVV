@@ -581,6 +581,20 @@ char* FILESYSTEM_basename(const char* file) {
     bsd_strlcpy(base_copy, base, base_len);
     return base_copy;
 }
+#elif defined(__SWITCH__)
+char* FILESYSTEM_realPath(const char* rel) {
+    char* buf = (char*) malloc(MAX_PATH + 1);
+    strlcpy(buf, rel, MAX_PATH + 1);
+    return buf;
+}
+
+char* FILESYSTEM_dirname(const char* file) {
+    return nullptr;
+}
+
+char* FILESYSTEM_basename(const char* file) {
+    return nullptr;
+}
 #else
 char* FILESYSTEM_realPath(const char* rel) {
     char* buf = (char*) malloc(MAX_PATH + 1);
