@@ -269,14 +269,18 @@ else()
   set(suffix ".a")
 endif()
 
-add_library(PNG SHARED IMPORTED)
-set_target_properties(PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
-find_package(ZLIB)
-target_link_libraries(PNG INTERFACE ZLIB::ZLIB)
-target_include_directories(PNG INTERFACE "${INSTALL_DIR}/include")
+find_package(PNG)
+
+if(NOT PNG_FOUND)
+    add_library(PNG::PNG SHARED IMPORTED)
+    set_target_properties(PNG::PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
+    find_package(ZLIB)
+    target_link_libraries(PNG::PNG INTERFACE ZLIB::ZLIB)
+    target_include_directories(PNG::PNG INTERFACE "${INSTALL_DIR}/include")
+endif()
 
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG)
+TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG::PNG)
 
 # data.zip path
 function(convert_to_cstring_literal var value)
