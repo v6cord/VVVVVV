@@ -103,7 +103,7 @@ int FILESYSTEM_initCore(char *argvZero, char *assetsPath)
 	PHYSFS_init(argvZero);
 	PHYSFS_permitSymbolicLinks(1);
 
-        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
+        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 0);
 
 	PLATFORM_getOSDirectory(output);
 	PHYSFS_mount(output, NULL, 1);
