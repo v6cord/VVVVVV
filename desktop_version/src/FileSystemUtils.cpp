@@ -124,7 +124,7 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 
 	/* Mount our base user directory */
         PHYSFS_unmount(output);
-	PHYSFS_mount(output, NULL, 1);
+	PHYSFS_mount(output, NULL, 0);
 	PHYSFS_setWriteDir(output);
 	if (!game.quiet) printf("Base directory: %s\n", output);
 
