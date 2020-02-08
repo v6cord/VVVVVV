@@ -106,7 +106,7 @@ int FILESYSTEM_initCore(char *argvZero, char *assetsPath)
         PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 0);
 
 	PLATFORM_getOSDirectory(output);
-	PHYSFS_mount(output, NULL, 1);
+	PHYSFS_mount(output, NULL, 0);
 
         return 1;
 }
