@@ -570,7 +570,10 @@ void mapclass::changefinalcol(int t, entityclass& obj, Game& game)
 			}
 			else	//just an enemy
 			{
-				obj.entities[i].colour = maptiletoenemycol(temp);
+				if (obj.entities[i].colour == 102)
+					; // If flashy, do nothing!
+				else
+					obj.entities[i].colour = maptiletoenemycol(temp);
 			}
 		}
 		else if (obj.entities[i].type == 2)	//disappearing platforms
@@ -2374,7 +2377,10 @@ void mapclass::updatetowerentcol(int col)
             } else if (obj.entities[i].isplatform) { // Moving platform
                 obj.entities[i].tile = plattile*12;
             } else { // Just an enemy
-                obj.entities[i].colour = entcol;
+                if (obj.entities[i].colour == 102)
+                    ; // If flashy, do nothing!
+                else
+                    obj.entities[i].colour = entcol;
             }
         } else if (obj.entities[i].type == 2) { // Disappearing platform
             if (obj.entities[i].state == 3)
