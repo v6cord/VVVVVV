@@ -332,7 +332,7 @@ void Graphics::MakeSpriteArray()
         int rest = default_rows - (sprites_height / 32);
         for (int j = 0; j < rest; j++) {
             for(int i = 0; i < 12; i++) {
-                SDL_Surface* temp = GetSubSurface(grphx.im_sprites,0,0,32,32);
+                SDL_Surface* temp = GetSubSurface(grphx.im_sprites,0*32,4*32,32,32);
                 sprites.push_back(temp);
                 flipsprites.push_back(temp);
             }
