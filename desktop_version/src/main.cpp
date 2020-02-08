@@ -291,6 +291,7 @@ int main(int argc, char *argv[])
 
     std::unique_lock<std::mutex> uniq(mutex);
     timeout.wait_for(uniq, 400ms);
+    uniq.unlock();
     preloaderloop();
     init.join();
 
