@@ -44,7 +44,11 @@
 #include "Maths.h"
 #include <physfs.h>
 
+#ifdef __MINGW32__
+#include <mingw.thread.h>
+#else
 #include <thread>
+#endif
 
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
