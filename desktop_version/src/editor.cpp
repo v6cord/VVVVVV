@@ -5464,7 +5464,49 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                     }
                     else if (game.currentmenuname == "ed_settings2") {
-                        if (game.currentmenuoption == game.nummenuoptions - 1) {
+                        if (game.currentmenuoption == 0) {
+                            ed.switch_tileset(true);
+                            dwgfx.backgrounddrawn=false;
+                        } else if (game.currentmenuoption == 1) {
+                            key.fakekey = SDLK_F2;
+                            key.fakekeytimer = 6;
+                            ed.settingsmod = false;
+                        } else if (game.currentmenuoption == 2) {
+                            key.fakekey = SDLK_F3;
+                            key.fakekeytimer = 6;
+                            ed.settingsmod = false;
+                        } else if (game.currentmenuoption == 3) {
+                            key.fakekey = SDLK_F4;
+                            key.fakekeytimer = 6;
+                            ed.settingsmod = false;
+                        } else if (game.currentmenuoption == 4) {
+                            key.fakekey = SDLK_F5;
+                            key.fakekeytimer = 6;
+                            ed.settingsmod = false;
+                        } else if (game.currentmenuoption == 5) {
+                            int newaltstate = ed.getnumaltstates(ed.levx, ed.levy) + 1;
+                            ed.addaltstate(ed.levx, ed.levy, newaltstate);
+                            ed.keydelay = 6;
+                            ed.notedelay = 45;
+                            // But did we get a new alt state?
+                            if (ed.getedaltstatenum(ed.levx, ed.levy, newaltstate) == -1) {
+                                // Don't switch to the new alt state, or we'll segfault!
+                                ed.note = "ERROR: Couldn't add new alt state";
+                            } else {
+                                ed.note = "Added new alt state " + help.String(newaltstate);
+                                ed.levaltstate = newaltstate;
+                            }
+                        } else if (game.currentmenuoption == 6) {
+                            if (ed.levaltstate == 0) {
+                                ed.note = "Cannot remove main state";
+                            } else {
+                                ed.removealtstate(ed.levx, ed.levy, ed.levaltstate);
+                                ed.note = "Removed alt state " + help.String(ed.levaltstate);
+                                ed.levaltstate--;
+                            }
+                            ed.keydelay = 6;
+                            ed.notedelay = 45;
+                        } else if (game.currentmenuoption == game.nummenuoptions - 1) {
                             music.playef(11, 10);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();

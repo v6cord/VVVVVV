@@ -7288,10 +7288,24 @@ void Game::createmenu( std::string t )
     }
     else if (t == "ed_settings2")
     {
-        menuoptions[0] = "first page";
-        menuoptionsactive[0] = true;
+        nummenuoptions = 0;
+        menuoptions[nummenuoptions++] = "change tileset";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "change colour";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "change enemies";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "enemy bounds";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "platform bounds";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "add alt state";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "remove alt state";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "first page";
+        menuoptionsactive[nummenuoptions] = true;
 
-        nummenuoptions = 1;
         menuxoff = -50;
         menuyoff = -20;
     }
