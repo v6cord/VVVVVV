@@ -2410,10 +2410,10 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
         }
 
         pElem->QueryIntAttribute("version", &version);
-        if (map.custommodeforreal)
+        if (pElem->Attribute("vceversion"))
             pElem->QueryIntAttribute("vceversion", &vceversion);
         else
-            vceversion = VCEVERSION;
+            vceversion = 0;
         // save this for later
         hRoot=TiXmlHandle(pElem);
     }
