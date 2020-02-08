@@ -102,6 +102,14 @@ static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
 
 void KeyPoll::Poll()
 {
+        if (fakekeytimer == 0) {
+            keymap[fakekey] = 0;
+            fakekeytimer = -1;
+        } else if (fakekeytimer > 0) {
+            keymap[fakekey] = 1;
+            --fakekeytimer;
+        }
+
 	SDL_Event evt;
         bool was_ctrl_click = false;
 	while (SDL_PollEvent(&evt))
