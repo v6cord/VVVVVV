@@ -27,6 +27,7 @@
 #include "editor.h"
 
 std::atomic_int pre_fakepercent;
+std::atomic_bool pre_quickend;
 int pre_transition=30;
 bool pre_startgame=false;
 int pre_darkcol=0, pre_lightcol=0, pre_curcol=0, pre_coltimer=0, pre_offset=0;
@@ -306,7 +307,7 @@ void preloaderloop() {
 
         //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
 
-        if (pre_transition <= -10) {
+        if (pre_transition <= -10 || pre_quickend.load()) {
             break;
         }
     }

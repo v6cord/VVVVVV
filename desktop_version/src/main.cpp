@@ -4,6 +4,7 @@
 #include <SDL.h>
 #endif
 #include <ctime>
+#include <chrono>
 #include "SoundSystem.h"
 
 #include "UtilityClass.h"
@@ -46,12 +47,18 @@
 
 #ifdef __MINGW32__
 #include <mingw.thread.h>
+#include <mingw.condition_variable.h>
+#include <mingw.mutex.h>
 #else
 #include <thread>
+#include <condition_variable>
+#include <mutex>
 #endif
 
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
+
+using namespace std::literals::chrono_literals;
 
 scriptclass script;
 growing_vector<edentities> edentity;
@@ -261,7 +268,10 @@ int main(int argc, char *argv[])
     game.gametimer = 0;
     obj.init();
     game.loadstats(map, graphics, music);
+    std::condition_variable timeout;
+    std::mutex mutex;
     std::thread init([&]() {
+        auto start = std::chrono::steady_clock::now();
         if(!FILESYSTEM_init(argv[0], assets)) {
             exit(1);
         }
@@ -270,8 +280,17 @@ int main(int argc, char *argv[])
         pre_fakepercent.store(80);
         graphics.reloadresources(true);
         pre_fakepercent.store(100);
+        auto end = std::chrono::steady_clock::now();
+        if (end - start < 400ms) {
+            pre_quickend.store(true);
+        }
+        std::unique_lock<std::mutex> lock(mutex);
+        lock.unlock();
+        timeout.notify_all();
     });
 
+    std::unique_lock<std::mutex> uniq(mutex);
+    timeout.wait_for(uniq, 400ms);
     preloaderloop();
     init.join();
 
