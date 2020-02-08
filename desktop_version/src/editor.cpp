@@ -213,6 +213,7 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
 void editorclass::reset()
 {
     version=2; //New smaller format change is 2
+    vceversion=VCEVERSION;
 
     mapwidth=5;
     mapheight=5;
@@ -2409,6 +2410,10 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
         }
 
         pElem->QueryIntAttribute("version", &version);
+        if (map.custommodeforreal)
+            pElem->QueryIntAttribute("vceversion", &vceversion);
+        else
+            vceversion = VCEVERSION;
         // save this for later
         hRoot=TiXmlHandle(pElem);
     }
@@ -2742,7 +2747,7 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
 
     TiXmlElement * root = new TiXmlElement( "MapData" );
     root->SetAttribute("version",version);
-    root->SetAttribute("vceversion",1);
+    root->SetAttribute("vceversion",VCEVERSION);
     doc.LinkEndChild( root );
 
     TiXmlComment * comment = new TiXmlComment();

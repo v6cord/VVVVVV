@@ -7,6 +7,8 @@
 #include <string_view>
 #include "Script.h"
 
+#define VCEVERSION 1
+
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 
 enum tiletyp {
@@ -343,6 +345,7 @@ public:
     int maxheight = 100;
 
     int version = 0;
+    int vceversion = 0;
 
     //Script editor stuff
     void removeline(int t);
