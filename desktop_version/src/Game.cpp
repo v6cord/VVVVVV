@@ -7303,6 +7303,15 @@ void Game::createmenu( std::string t )
         menuoptionsactive[nummenuoptions] = true;
         menuoptions[nummenuoptions++] = "remove alt state";
         menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "next page";
+        menuoptionsactive[nummenuoptions] = true;
+
+        menuxoff = -50;
+        menuyoff = -20;
+    }
+    else if (t == "ed_settings3")
+    {
+        nummenuoptions = 0;
         menuoptions[nummenuoptions++] = "first page";
         menuoptionsactive[nummenuoptions] = true;
 
