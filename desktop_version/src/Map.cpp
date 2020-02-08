@@ -2394,7 +2394,7 @@ void mapclass::updatetowerentcol(int col)
 void twoframedelayfix()
 {
     // Kludge to remove 2-frame-delay when loading init scripts for a room
-    if (map.custommode && game.deathseq == -1 && obj.checktrigger() > -1 && !script.nointerrupt) {
+    if (map.custommode && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
         game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
         obj.kludgeonetimescript = true;
         obj.removetrigger(obj.activetrigger);
