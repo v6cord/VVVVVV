@@ -61,6 +61,7 @@ extern "C" {
 }
 
 static bool cached_data_zip_load(const char* path) {
+#ifdef __SWITCH__
     FILE* file = fopen(path, "rb");
     if (file == nullptr) return false;
     if (fseek(file, 0L, SEEK_END)) {
@@ -90,6 +91,9 @@ static bool cached_data_zip_load(const char* path) {
         return false;
     }
     return true;
+#else
+    return PHYSFS_mount(path, NULL, 0);
+#endif
 }
 
 int FILESYSTEM_initCore(char *argvZero, char *assetsPath)
