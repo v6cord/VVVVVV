@@ -3328,10 +3328,15 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     } else {
                         music.playef(8, 10);
                     }
-                    entities[i].invis = true;
-                    entities[i].state = 2;
-                    // Removes collision
-                    entities[i].onentity = 0;
+                    if (entities[i].para != 0) {
+                        // Remove it, but respawn it upon death
+                        entities[i].invis = true;
+                        entities[i].state = 2;
+                        // Removes collision
+                        entities[i].onentity = 0;
+                    } else {
+                        entities[i].active = false;
+                    }
                 }
                 else if (entities[i].state == 2)
                 {
