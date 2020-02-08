@@ -4108,7 +4108,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         if(tg>255) tg=255;
         if (tb < 0) tb = 0;
         if(tb>255) tb=255;
-        if (game.currentmenuname == "ed_settings")
+        if (game.currentmenuname == "ed_settings" || game.currentmenuname == "ed_settings2")
         {
             dwgfx.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
         }
@@ -5453,7 +5453,20 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         else if (game.currentmenuoption == 6)
                         {
                             music.playef(11, 10);
+                            game.createmenu("ed_settings2");
+                            map.nexttowercolour();
+                        }
+                        else if (game.currentmenuoption == 7)
+                        {
+                            music.playef(11, 10);
                             game.createmenu("ed_quit");
+                            map.nexttowercolour();
+                        }
+                    }
+                    else if (game.currentmenuname == "ed_settings2") {
+                        if (game.currentmenuoption == game.nummenuoptions - 1) {
+                            music.playef(11, 10);
+                            game.createmenu("ed_settings");
                             map.nexttowercolour();
                         }
                     }

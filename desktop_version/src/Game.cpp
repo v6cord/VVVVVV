@@ -7277,10 +7277,21 @@ void Game::createmenu( std::string t )
         menuoptionsactive[4] = true;
         menuoptions[5] = "save level";
         menuoptionsactive[5] = true;
-        menuoptions[6] = "quit to main menu";
+        menuoptions[6] = "next page";
         menuoptionsactive[6] = true;
+        menuoptions[7] = "quit to main menu";
+        menuoptionsactive[7] = true;
 
-        nummenuoptions = 7;
+        nummenuoptions = 8;
+        menuxoff = -50;
+        menuyoff = -20;
+    }
+    else if (t == "ed_settings2")
+    {
+        menuoptions[0] = "first page";
+        menuoptionsactive[0] = true;
+
+        nummenuoptions = 1;
         menuxoff = -50;
         menuyoff = -20;
     }
