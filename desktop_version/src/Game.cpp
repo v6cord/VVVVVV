@@ -7288,21 +7288,37 @@ void Game::createmenu( std::string t )
     }
     else if (t == "ed_settings2")
     {
+        int tower = ed.get_tower(ed.levx, ed.levy);
+
         nummenuoptions = 0;
-        menuoptions[nummenuoptions++] = "change tileset";
-        menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "change colour";
-        menuoptionsactive[nummenuoptions] = true;
+        if (tower) {
+            menuoptions[nummenuoptions++] = "tower direction";
+            menuoptionsactive[nummenuoptions] = true;
+            menuoptions[nummenuoptions++] = "tower entry";
+            menuoptionsactive[nummenuoptions] = true;
+        } else {
+            menuoptions[nummenuoptions++] = "change tileset";
+            menuoptionsactive[nummenuoptions] = true;
+            menuoptions[nummenuoptions++] = "change colour";
+            menuoptionsactive[nummenuoptions] = true;
+        }
         menuoptions[nummenuoptions++] = "change enemies";
         menuoptionsactive[nummenuoptions] = true;
         menuoptions[nummenuoptions++] = "enemy bounds";
         menuoptionsactive[nummenuoptions] = true;
         menuoptions[nummenuoptions++] = "platform bounds";
         menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "add alt state";
-        menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "remove alt state";
-        menuoptionsactive[nummenuoptions] = true;
+        if (tower) {
+            menuoptions[nummenuoptions++] = "next tower";
+            menuoptionsactive[nummenuoptions] = true;
+            menuoptions[nummenuoptions++] = "previous tower";
+            menuoptionsactive[nummenuoptions] = true;
+        } else {
+            menuoptions[nummenuoptions++] = "new alt state";
+            menuoptionsactive[nummenuoptions] = true;
+            menuoptions[nummenuoptions++] = "remove alt state";
+            menuoptionsactive[nummenuoptions] = true;
+        }
         menuoptions[nummenuoptions++] = "next page";
         menuoptionsactive[nummenuoptions] = true;
 
@@ -7311,7 +7327,21 @@ void Game::createmenu( std::string t )
     }
     else if (t == "ed_settings3")
     {
+        int tower = ed.get_tower(ed.levx, ed.levy);
+
         nummenuoptions = 0;
+        menuoptions[nummenuoptions++] = "toggle tower";
+        menuoptionsactive[nummenuoptions] = true;
+        menuoptions[nummenuoptions++] = "toggle direct mode";
+        menuoptionsactive[nummenuoptions] = true;
+        if (!tower) {
+            menuoptions[nummenuoptions++] = "change alt state";
+            menuoptionsactive[nummenuoptions] = true;
+            menuoptions[nummenuoptions++] = "change warp dir";
+            menuoptionsactive[nummenuoptions] = true;
+        }
+        menuoptions[nummenuoptions++] = "change roomname";
+        menuoptionsactive[nummenuoptions] = true;
         menuoptions[nummenuoptions++] = "first page";
         menuoptionsactive[nummenuoptions] = true;
 
