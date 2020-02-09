@@ -2314,6 +2314,12 @@ growing_vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, en
 		//game.test = true;
 		//game.teststring = "ERROR: Map not found in Final Area";
 		break;
+#else
+	default:
+		for (int j = 0; j < 30; j++)
+		{
+			tmap.push_back("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		}
 #endif
 	}
 

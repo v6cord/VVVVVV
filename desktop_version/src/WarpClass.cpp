@@ -22,7 +22,7 @@ growing_vector<std::string> warpclass::loadlevel(int rx, int ry , Game& game, en
 
 	switch(t)
 	{
-			#if !defined(MAKEANDPLAY)
+#if !defined(MAKEANDPLAY)
 	case rn(50,50):
 
 		tmap.push_back("120,120,120,120,120,120,120,120,120,120,120,120,120,200,80,202,0,0,0,0,0,0,0,0,200,80,202,120,120,120,120,120,120,120,120,120,120,120,120,120");
@@ -1026,7 +1026,13 @@ growing_vector<std::string> warpclass::loadlevel(int rx, int ry , Game& game, en
 		game.test = true;
 		game.teststring = "ERROR: Map not found in Warp Area";
 		break;
-					#endif
+#else
+	default:
+		for (int j = 0; j < 30; j++)
+		{
+			tmap.push_back("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		}
+#endif
 	}
 
 	return tmap;
