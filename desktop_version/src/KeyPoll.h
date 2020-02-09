@@ -5,6 +5,7 @@
 #include <vector>
 #include "Game.h"
 #include <map> // FIXME: I should feel very bad for using C++ -flibit
+#include <unordered_map>
 
 #if defined(__SWITCH__)
 	#include <SDL2/SDL.h>
@@ -84,6 +85,9 @@ public:
 
         SDL_Keycode fakekey;
         int fakekeytimer = -1;
+        std::unordered_map<SDL_FingerID, SDL_Keycode> finger_buttons;
+        int delayed_left_time = -1;
+        int delayed_right_time = -1;
 
 private:
 	std::map<SDL_JoystickID, SDL_GameController*> controllers;
