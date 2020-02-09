@@ -1,4 +1,4 @@
-{ cross ? false, clang ? false }:
+{ cross ? false, clang ? false, debug ? false }:
 let pkgsNative = import (builtins.fetchTarball {
   name = "cross-compile-nixpkgs";
   url = https://github.com/nixos/nixpkgs/archive/2436c27541b2f52deea3a4c1691216a02152e729.tar.gz;
@@ -22,8 +22,9 @@ in
         pkgconfig # find fribidi
         ninja # this isn't needed on CI, but it's annoying to disable
         pkgsNative.gdb # we don't want a cross gdb
+      ] ++ (if debug then [
         pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
-      ];
+      ] else []);
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl
         ((SDL2_mixer.override {
