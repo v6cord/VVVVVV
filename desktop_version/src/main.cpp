@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
         graphics.reloadresources(true);
         pre_fakepercent.store(100);
         auto end = std::chrono::steady_clock::now();
-        if (end - start < 400ms) {
+        if (end - start < 1s) {
             pre_quickend.store(true);
         }
         std::unique_lock<std::mutex> lock(mutex);
@@ -293,7 +293,7 @@ int main(int argc, char *argv[])
     });
 
     std::unique_lock<std::mutex> uniq(mutex);
-    timeout.wait_for(uniq, 400ms);
+    timeout.wait_for(uniq, 1s);
     uniq.unlock();
     preloaderloop();
     init.join();
