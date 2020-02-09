@@ -3348,6 +3348,8 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     entities[i].state = 0;
                     entities[i].invis = false;
                     entities[i].onentity = 1;
+                    // Spin really fast for half a second!
+                    entities[i].life = 4;
                 }
                 break;
             case 5:  //Particle sprays
@@ -4342,14 +4344,21 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
 
             case 4: // Gravity token anim
                 entities[_i].framedelay--;
-                if(entities[_i].framedelay<=0)
-                {
-                    entities[_i].framedelay = 8;
+                if (entities[_i].framedelay <= 0) {
+                    if (entities[_i].life > 0) {
+                        entities[_i].framedelay = 1;
+                        entities[_i].life--;
+                    } else {
+                        entities[_i].framedelay = 4;
+                    }
                     entities[_i].walkingframe++;
                     if (entities[_i].walkingframe == 4)
                     {
                         entities[_i].walkingframe = 0;
                     }
+                } else if (entities[_i].life > 0 && entities[_i].framedelay > 4) {
+                    // Clamp it down to 4 frames when respawning
+                    entities[_i].framedelay = 4;
                 }
 
                 entities[_i].drawframe = entities[_i].tile;
