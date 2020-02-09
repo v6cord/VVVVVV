@@ -96,28 +96,57 @@ static bool cached_data_zip_load(const char* path) {
 #endif
 }
 
-int FILESYSTEM_initCore(char *argvZero, char *assetsPath)
+int FILESYSTEM_initCore(char *argvZero, char *baseDir, char *assetsPath)
 {
 	char output[MAX_PATH + 9];
+	const char* pathSep = PHYSFS_getDirSeparator();
 
 	PHYSFS_init(argvZero);
 	PHYSFS_permitSymbolicLinks(1);
 
         PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 0);
 
-	PLATFORM_getOSDirectory(output);
+	/* Determine the OS user directory */
+	if (baseDir && strlen(baseDir) > 0)
+	{
+		strcpy(output, baseDir);
+
+		/* We later append to this path and assume it ends in a slash */
+		if (strcmp(std::string(1, output[strlen(output) - 1]).c_str(), pathSep) != 0)
+		{
+			strcat(output, pathSep);
+		}
+	}
+	else
+	{
+		PLATFORM_getOSDirectory(output);
+	}
 	PHYSFS_mount(output, NULL, 0);
 
         return 1;
 }
 
-int FILESYSTEM_init(char *argvZero, char *assetsPath)
+int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 {
 	char output[MAX_PATH + 9];
 	int mkdirResult;
+	const char* pathSep = PHYSFS_getDirSeparator();
 
 	/* Determine the OS user directory */
-	PLATFORM_getOSDirectory(output);
+	if (baseDir && strlen(baseDir) > 0)
+	{
+		strcpy(output, baseDir);
+
+		/* We later append to this path and assume it ends in a slash */
+		if (strcmp(std::string(1, output[strlen(output) - 1]).c_str(), pathSep) != 0)
+		{
+			strcat(output, pathSep);
+		}
+	}
+	else
+	{
+		PLATFORM_getOSDirectory(output);
+	}
 
 	/* Create base user directory, mount */
 	mkdirResult = mkdir(output, 0777);

@@ -98,8 +98,9 @@ int main(int argc, char *argv[])
     bool syslog = false;
 #endif
 
-    char* assets = NULL;
     bool playtestmount = false;
+    char* baseDir = NULL;
+    char* assetsPath = NULL;
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
@@ -161,10 +162,12 @@ int main(int argc, char *argv[])
         if (std::string(argv[i]) == "-renderer") {
             i++;
             SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
-        }
-        if (strcmp(argv[i], "-assets") == 0) {
+        } else if (strcmp(argv[i], "-basedir") == 0) {
             ++i;
-            assets = argv[i];
+            baseDir = argv[i];
+        } else if (strcmp(argv[i], "-assets") == 0) {
+            ++i;
+            assetsPath = argv[i];
         }
     }
 
@@ -227,7 +230,7 @@ int main(int argc, char *argv[])
         SDL_INIT_GAMECONTROLLER
     );
 
-    if(!FILESYSTEM_initCore(argv[0], assets))
+    if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
     {
         return 1;
     }
@@ -272,7 +275,7 @@ int main(int argc, char *argv[])
     std::mutex mutex;
     std::thread init([&]() {
         auto start = std::chrono::steady_clock::now();
-        if(!FILESYSTEM_init(argv[0], assets)) {
+        if(!FILESYSTEM_init(argv[0], baseDir, assetsPath)) {
             exit(1);
         }
         pre_fakepercent.store(50);
