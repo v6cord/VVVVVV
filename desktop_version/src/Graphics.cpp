@@ -3372,14 +3372,19 @@ void Graphics::drawtelepart(int x, int y, int t, int c, UtilityClass& help)
 	BlitSurfaceColoured(tele[t], &telerect2, backBuffer, &telerect, ct);
 }
 
+Uint32 Graphics::getRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	return SDL_MapRGBA(backBuffer->format, b, g, r, a);
+}
+
 Uint32 Graphics::getRGB(Uint8 r, Uint8 g, Uint8 b)
 {
-	return SDL_MapRGB(backBuffer->format, b, g, r);
+	return SDL_MapRGBA(backBuffer->format, b, g, r, 0);
 }
 
 Uint32 Graphics::getBGR(Uint8 r, Uint8 g, Uint8 b)
 {
-	return SDL_MapRGB(backBuffer->format, r, g, b);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 0);
 }
 
 Uint32 Graphics::getRGB(Uint32 _col)
@@ -3389,7 +3394,7 @@ Uint32 Graphics::getRGB(Uint32 _col)
 
 Uint32 Graphics::RGBflip(Uint8  r, Uint8  g, Uint8  b)
 {
-	return SDL_MapRGB(backBuffer->format, r, g, b);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 0);
 }
 
 Uint32 Graphics::RGBf(int r, int g, int b)
@@ -3397,7 +3402,7 @@ Uint32 Graphics::RGBf(int r, int g, int b)
 	r = (r+128) / 3;
 	g = (g+128) / 3;
 	b = (b+128) / 3;
-	return SDL_MapRGB(backBuffer->format, r, g, b);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 0);
 }
 
 void Graphics::setcolreal(Uint32 t)

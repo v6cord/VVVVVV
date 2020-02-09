@@ -327,7 +327,7 @@ void BlitSurfaceColoured(
         {
             Uint32 pixel = ReadPixel(_src, x, y);
             Uint32 Alpha = pixel & fmt.Amask;
-            Uint32 result = ct.colour & 0x00FFFFFF;
+            Uint32 result = ct.colour & 0xFFFFFFFF;
             DrawPixel(tempsurface, x, y, result | Alpha);
         }
     }
