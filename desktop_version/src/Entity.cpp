@@ -4346,10 +4346,10 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                 entities[_i].framedelay--;
                 if (entities[_i].framedelay <= 0) {
                     if (entities[_i].life > 0) {
-                        entities[_i].framedelay = 1;
+                        entities[_i].framedelay = 4;
                         entities[_i].life--;
                     } else {
-                        entities[_i].framedelay = 4;
+                        entities[_i].framedelay = 8;
                     }
                     entities[_i].walkingframe++;
                     if (entities[_i].walkingframe == 4)
