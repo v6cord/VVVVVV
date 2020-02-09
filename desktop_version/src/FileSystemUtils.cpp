@@ -86,13 +86,13 @@ static bool cached_data_zip_load(const char* path) {
     }
     fclose(file);
 
-    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 0)) {
+    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 1)) {
         free(buf);
         return false;
     }
     return true;
 #else
-    return PHYSFS_mount(path, NULL, 0);
+    return PHYSFS_mount(path, NULL, 1);
 #endif
 }
 
