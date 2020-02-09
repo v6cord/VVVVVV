@@ -265,7 +265,7 @@ void KeyPoll::Poll()
                             }
                             delayed_right_time = 0;
                         } else {
-                            delayed_left_time = 1;
+                            delayed_left_time = 0;
                             finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
                         }
                     } else {
@@ -277,7 +277,7 @@ void KeyPoll::Poll()
                             }
                             delayed_left_time = 0;
                         } else {
-                            delayed_right_time = 1;
+                            delayed_right_time = 0;
                             finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
                         }
                     }
