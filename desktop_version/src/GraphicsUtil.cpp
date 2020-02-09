@@ -329,7 +329,6 @@ void BlitSurfaceColoured(
             Uint32 Alpha = pixel & fmt.Amask;
             Uint32 result = ct.colour & 0x00FFFFFF;
             Uint32 CTAlpha = ct.colour & fmt.Amask;
-            if (CTAlpha == 0) CTAlpha = 4278190080; // quick hack before we fix the color palettes 
             float div1 = ((Alpha >> 24) / 255.0f);
             float div2 = ((CTAlpha >> 24) / 255.0f);
             Uint32 UseAlpha = (div1 * div2) * 255.0f;

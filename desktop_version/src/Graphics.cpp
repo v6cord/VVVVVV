@@ -3379,12 +3379,12 @@ Uint32 Graphics::getRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 
 Uint32 Graphics::getRGB(Uint8 r, Uint8 g, Uint8 b)
 {
-	return SDL_MapRGBA(backBuffer->format, b, g, r, 0);
+	return SDL_MapRGBA(backBuffer->format, b, g, r, 255);
 }
 
 Uint32 Graphics::getBGR(Uint8 r, Uint8 g, Uint8 b)
 {
-	return SDL_MapRGBA(backBuffer->format, r, g, b, 0);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
 Uint32 Graphics::getRGB(Uint32 _col)
@@ -3394,7 +3394,7 @@ Uint32 Graphics::getRGB(Uint32 _col)
 
 Uint32 Graphics::RGBflip(Uint8  r, Uint8  g, Uint8  b)
 {
-	return SDL_MapRGBA(backBuffer->format, r, g, b, 0);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
 Uint32 Graphics::RGBf(int r, int g, int b)
@@ -3402,7 +3402,7 @@ Uint32 Graphics::RGBf(int r, int g, int b)
 	r = (r+128) / 3;
 	g = (g+128) / 3;
 	b = (b+128) / 3;
-	return SDL_MapRGBA(backBuffer->format, r, g, b, 0);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
 void Graphics::setcolreal(Uint32 t)
