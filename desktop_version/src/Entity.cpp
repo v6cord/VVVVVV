@@ -2120,6 +2120,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
+        entities[k].colour = 0;
         entities[k].behave = vx;
         entities[k].para = vy;
         entities[k].onentity = 1;
@@ -4342,7 +4343,9 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                     if (entities[_i].life > 0) {
                         entities[_i].framedelay = 4;
                         entities[_i].life--;
+                        entities[k].colour = 10;
                     } else {
+                        entities[k].colour = 0;
                         entities[_i].framedelay = 8;
                     }
                     entities[_i].walkingframe++;
