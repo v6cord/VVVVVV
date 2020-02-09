@@ -84,6 +84,8 @@ int scriptclass::getimage(Game& game, std::string n) {
     X("deaths", game.deathcounts, 0) \
     X("player_x", obj.entities[obj.getplayer()].xp, 0) \
     X("player_y", obj.entities[obj.getplayer()].yp, 0) \
+    X("room_x", game.roomx, 100) \
+    X("room_y", game.roomy, 100) \
     X("trinkets", game.trinkets, 0) \
     X("coins", game.coins, 0)
 
