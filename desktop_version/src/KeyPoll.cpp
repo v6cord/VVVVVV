@@ -1,4 +1,5 @@
 #include "KeyPoll.h"
+#include "Enums.h"
 #include <stdio.h>
 #include <string.h>
 #include <utf8/checked.h>
@@ -108,6 +109,22 @@ void KeyPoll::Poll()
         } else if (fakekeytimer > 0) {
             keymap[fakekey] = 1;
             --fakekeytimer;
+        } else if (fakekeytimer == -2) {
+            keymap[fakekey] = 1;
+        }
+
+        if (delayed_left_time == 0) {
+            delayed_left_time = -1;
+            keymap[SDLK_LEFT] = 1;
+        } else if (delayed_left_time > -10) {
+            --delayed_left_time;
+        }
+
+        if (delayed_right_time == 0) {
+            delayed_right_time = -1;
+            keymap[SDLK_RIGHT] = 1;
+        } else if (delayed_right_time > -10) {
+            --delayed_right_time;
         }
 
 	SDL_Event evt;
@@ -218,24 +235,65 @@ void KeyPoll::Poll()
 				middlebutton=0;
 			}
 		}
-                else if(!was_ctrl_click && evt.type == SDL_FINGERDOWN)
+                else if(game.gamestate == EDITORMODE && !was_ctrl_click && evt.type == SDL_FINGERDOWN)
                 {
                     leftbutton = 1;
                     realleftbutton = 1;
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }
-                else if(evt.type == SDL_FINGERMOTION)
+                else if(game.gamestate == EDITORMODE && evt.type == SDL_FINGERMOTION)
                 {
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }
-                else if(!was_ctrl_click && evt.type == SDL_FINGERUP)
+                else if(game.gamestate == EDITORMODE && !was_ctrl_click && evt.type == SDL_FINGERUP)
                 {
                     leftbutton = 0;
                     realleftbutton = 0;
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
+                }
+                else if(evt.type == SDL_FINGERDOWN)
+                {
+                    if (evt.tfinger.x < 0.5) {
+                        if (keymap[SDLK_RIGHT] || delayed_right_time > -3) {
+                            keymap[SDLK_v] = 1;
+                            finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                            if (delayed_right_time > -3) {
+                                keymap[SDLK_RIGHT] = 0;
+                            }
+                            delayed_right_time = 0;
+                        } else {
+                            delayed_left_time = 0;
+                            finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
+                        }
+                    } else {
+                        if (keymap[SDLK_LEFT] || delayed_left_time > -3) {
+                            keymap[SDLK_v] = 1;
+                            finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                            if (delayed_left_time > -3) {
+                                keymap[SDLK_LEFT] = 0;
+                            }
+                            delayed_left_time = 0;
+                        } else {
+                            delayed_right_time = 0;
+                            finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
+                        }
+                    }
+                }
+                else if(evt.type == SDL_FINGERUP)
+                {
+                    auto iter = finger_buttons.find(evt.tfinger.fingerId);
+                    if (iter != finger_buttons.end()) {
+                        keymap[iter->second] = 0;
+                        if (iter->second == SDLK_LEFT) {
+                            delayed_left_time = -10;
+                        } else if (iter->second == SDLK_RIGHT) {
+                            delayed_right_time = -10;
+                        }
+                        finger_buttons.erase(iter);
+                    }
                 }
 
 		/* Controller Input */
