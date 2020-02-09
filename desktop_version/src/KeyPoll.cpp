@@ -378,7 +378,12 @@ void KeyPoll::Poll()
             swkbdShow(&conf, buf, sizeof(buf));
             swkbdClose(&conf);
             keybuffer = buf;
-            textentrymode = false;
+            if (fakekeytimer > 0) {
+                keymap[fakekey] = 0;
+            }
+            fakekey = SDLK_RETURN;
+            fakekeytimer = 6;
+            textentrymode = 0;
         }
 #endif
 }
