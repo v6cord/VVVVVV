@@ -108,6 +108,8 @@ void KeyPoll::Poll()
         } else if (fakekeytimer > 0) {
             keymap[fakekey] = 1;
             --fakekeytimer;
+        } else if (fakekeytimer == -2) {
+            keymap[fakekey] = 1;
         }
 
 	SDL_Event evt;
