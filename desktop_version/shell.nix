@@ -8,7 +8,7 @@ let pkgsNative = import (builtins.fetchTarball {
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
   pkgs.callPackage (
-    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig, ninja, zlib, libpng}:
+    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig, ninja, zlib, libpng, libicns, imagemagick}:
     (mkShell.override { inherit stdenv; }) (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
         outputs = ["out"];
         outputBin = "out";
@@ -24,6 +24,7 @@ in
         pkgsNative.gdb # we don't want a cross gdb
       ] ++ (if debug then [
         pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
+        libicns imagemagick # icon conversion
       ] else []);
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl
