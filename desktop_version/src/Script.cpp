@@ -79,12 +79,13 @@ int scriptclass::getimage(Game& game, std::string n) {
 	return -1;
 }
 
+// Syntax: X(<name>, <value> (has to be a valid lvalue and rvalue), <offset/indexing>)
 #define SPECIALVARS \
-    X("deaths", game.deathcounts) \
-    X("player_x", obj.entities[obj.getplayer()].xp) \
-    X("player_y", obj.entities[obj.getplayer()].yp) \
-    X("trinkets", game.trinkets) \
-    X("coins", game.coins)
+    X("deaths", game.deathcounts, 0) \
+    X("player_x", obj.entities[obj.getplayer()].xp, 0) \
+    X("player_y", obj.entities[obj.getplayer()].yp, 0) \
+    X("trinkets", game.trinkets, 0) \
+    X("coins", game.coins, 0)
 
 void scriptclass::setvar(std::string n, std::string c) {
 	int tempvar = getvar(n);
@@ -95,7 +96,7 @@ void scriptclass::setvar(std::string n, std::string c) {
 		variablecontents[tempvar] = c;
 	}
 
-#define X(k, v) if (n == k) v = ss_toi(c);
+#define X(k, v, i) if (n == k) v = ss_toi(c) + i;
     SPECIALVARS
 #undef X
 }
@@ -137,7 +138,7 @@ std::string scriptclass::processvars(std::string t) {
 }
 
 void scriptclass::updatevars() {
-#define X(k, v) setvar(k, std::to_string(v));
+#define X(k, v, i) setvar(k, std::to_string(v - i));
     SPECIALVARS
 #undef X
 }
