@@ -199,7 +199,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
 
-- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%trinkets%`, `%coins%`)
+- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%room_x%`, `%room_y%`, `%trinkets%`, `%coins%`)
 
 - `ifcoins(x)` - Run a script if the player has collected at least `x` coins
 
