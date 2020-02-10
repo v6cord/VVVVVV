@@ -17,6 +17,9 @@ uint64_t xoshiro_next(void);
 
 size_t bsd_strlcpy(char *dst, const char *src, size_t dsize);
 
+int battery_level();
+bool on_battery();
+
 // source: https://randomascii.wordpress.com/2013/04/03/stop-using-strncpy-already/
 template <size_t charCount>
 void strcpy_safe(char (&output)[charCount], const char* pSrc) {
