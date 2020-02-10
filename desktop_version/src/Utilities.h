@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <chrono>
 #include <string>
+#include <sstream>
 #include <stdint.h>
 
 uint64_t splitmix64(uint64_t& x);
@@ -34,5 +35,14 @@ struct free_delete {
 
 std::string hhmmss_time();
 std::chrono::system_clock::rep unix_time();
+
+template<class T = std::string, class U>
+T string_cast(U val) {
+    std::stringstream stream;
+    T ret;
+    stream << val;
+    stream >> ret;
+    return ret;
+}
 
 #endif
