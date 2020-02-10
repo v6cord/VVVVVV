@@ -5840,15 +5840,17 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
             // Shift modifiers
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT]) {
+                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+                key.keymap[SDLK_KP_8] || key.keymap[SDLK_KP_2] ||
+                key.keymap[SDLK_KP_4] || key.keymap[SDLK_KP_6]) {
                 ed.keydelay = 6;
-                if (key.keymap[SDLK_UP])
+                if (key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8])
                     ed.mapheight--;
-                else if (key.keymap[SDLK_DOWN])
+                else if (key.keymap[SDLK_DOWN] || key.keymap[SDLK_KP_2])
                     ed.mapheight++;
-                else if (key.keymap[SDLK_LEFT])
+                else if (key.keymap[SDLK_LEFT] || key.keymap[SDLK_KP_4])
                     ed.mapwidth--;
-                else if (key.keymap[SDLK_RIGHT])
+                else if (key.keymap[SDLK_RIGHT] || key.keymap[SDLK_KP_6])
                     ed.mapwidth++;
 
                 if (ed.mapheight < 1)
