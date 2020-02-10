@@ -2049,23 +2049,25 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "customactivityzone")
 			{
-				position++;
-				obj.customprompt = processvars(commands[position]);
-				obj.customscript = words[6];
-				obj.customcolour = words[5];
+				if (words[7] != "" && words[8] != "") {
+					// RGB color, 3 color arguments
+					position++;
+					obj.customprompt = processvars(commands[position]);
+					obj.customscript = words[8];
+					obj.customr = ss_toi(words[5]);
+					obj.customg = ss_toi(words[6]);
+					obj.customb = ss_toi(words[7]);
 
-				obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 100);
-			}
-			else if (words[0] == "customactivityzonergb")
-			{
-				position++;
-				obj.customprompt = processvars(commands[position]);
-				obj.customscript = words[8];
-				obj.customr = ss_toi(words[5]);
-				obj.customg = ss_toi(words[6]);
-				obj.customb = ss_toi(words[7]);
+					obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 101);
+				} else {
+					// predefined color, 1 color argument
+					position++;
+					obj.customprompt = processvars(commands[position]);
+					obj.customscript = words[6];
+					obj.customcolour = words[5];
 
-				obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 101);
+					obj.createblock(ACTIVITY, ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]), ss_toi(words[4]), 100);
+				}
 			}
 			else if (words[0] == "changemood")
 			{

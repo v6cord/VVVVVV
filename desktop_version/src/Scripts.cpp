@@ -352,8 +352,7 @@ void scriptclass::load(std::string t)
             || words[0] == "drawtext"
             || words[0] == "text"
             || words[0] == "createroomtext"
-            || words[0] == "customactivityzone"
-            || words[0] == "customactivityzonergb") {
+            || words[0] == "customactivityzone") {
               // Don't parse the next line if it is a textbox-like line
               add(script.customscript[i]);
               i++;
