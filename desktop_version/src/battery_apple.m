@@ -1,6 +1,7 @@
 /* vi: set ft=objc */
 
 #import <IOKit/ps/IOPowerSources.h>
+#import <IOKit/ps/IOPSKeys.h>
 #import <Foundation/Foundation.h>
 
 int battery_level() {
