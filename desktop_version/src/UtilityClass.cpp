@@ -276,12 +276,14 @@ bool parsebool(std::string parsethis)
     if (parsethis == "true"
     || parsethis == "yes"
     || parsethis == "y"
-    || parsethis == "on")
+    || parsethis == "on"
+    || parsethis == "enable")
         return true;
     else if (parsethis == "false"
     || parsethis == "no"
     || parsethis == "n"
-    || parsethis == "off")
+    || parsethis == "off"
+    || parsethis == "disable")
         return false;
 
     return ss_toi(parsethis);
