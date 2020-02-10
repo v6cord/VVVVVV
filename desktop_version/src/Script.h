@@ -43,6 +43,8 @@ public:
 
     void updatevars();
 
+    std::string evalvar(std::string t);
+
     std::string processvars(std::string t);
 
     void tokenize(std::string t);

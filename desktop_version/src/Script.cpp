@@ -3,6 +3,9 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <shunting-yard.h>
+#include <stdexcept>
+#include <builtin-features.inc>
 #include "Script.h"
 #include "ScriptX.h"
 #include "Graphics.h"
@@ -70,6 +73,28 @@ int scriptclass::getvar(std::string n) {
 	return -1;
 }
 
+std::string scriptclass::evalvar(std::string expr) {
+    cparse_startup();
+    TokenMap vars;
+    for(std::size_t i = 0; i < variablenames.size(); i++) {
+        auto name = variablenames[i];
+        if (name == "") continue;
+        try {
+            auto contents = std::stod(variablecontents[i]);
+            vars[name] = contents;
+        } catch(const std::invalid_argument& ex) {
+            auto contents = variablecontents[i];
+            vars[name] = contents;
+        }
+    }
+    auto token = calculator::calculate(expr.c_str(), vars);
+    try {
+        return token.asString();
+    } catch (const bad_cast& ex) {
+        return token.str();
+    }
+}
+
 int scriptclass::getimage(Game& game, std::string n) {
 	for(std::size_t i = 0; i < game.script_images.size(); i++) {
 		if (game.script_image_names[i] == n) {
@@ -113,11 +138,12 @@ std::string scriptclass::processvars(std::string t) {
 		if (readingvar) {
 			if (currentletter == "%") {
 				readingvar = false;
-				int varid = getvar(tempvar);
-				if (varid != -1)
-					tempstring += variablecontents[varid];
-				else
-					tempstring += "%" + tempvar + "%";
+                                std::string temp = "%" + tempvar + "%";
+                                try {
+                                    auto eval = evalvar(tempvar);
+                                    temp = eval;
+                                } catch(const std::exception& ex) {}
+                                tempstring += temp;
 				tempvar = "";
 			} else {
 				tempvar += currentletter;
