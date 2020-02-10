@@ -131,19 +131,21 @@ static std::string get_specialvar(const T&& ref, int offset) {
     }
 }
 
-// Syntax: X(<type>, <name>, <value> (has to be a valid lvalue and rvalue), <offset/indexing>)
+// Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)
+// Slow variables cannot be used in expressions, but are not automatically updated every frame
+>>>>>>> Add "slow" variables which are not updated every frame
 #define SPECIALVARS \
-    X(INT_SPECIALVAR, "deaths", game.deathcounts, 0) \
-    X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6) \
-    X(INT_SPECIALVAR, "player_y", obj.entities[obj.getplayer()].yp, -2) \
-    X(INT_SPECIALVAR, "room_x", game.roomx, 100) \
-    X(INT_SPECIALVAR, "room_y", game.roomy, 100) \
-    X(INT_SPECIALVAR, "trinkets", game.trinkets, 0) \
-    X(INT_SPECIALVAR, "coins", game.coins, 0) \
-    X(INT_SPECIALVAR, "battery_level", battery_level(), 0) \
-    X(INT_SPECIALVAR, "on_battery", ((int) on_battery()), 0) \
-    X(INT_SPECIALVAR, "unix_time", ((int) unix_time()), 0) \
-    X(STR_SPECIALVAR, "hhmmss_time", hhmmss_time(), 0)
+    X(INT_SPECIALVAR, "deaths", game.deathcounts, 0, 0) \
+    X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6, 0) \
+    X(INT_SPECIALVAR, "player_y", obj.entities[obj.getplayer()].yp, -2, 0) \
+    X(INT_SPECIALVAR, "room_x", game.roomx, 100, 0) \
+    X(INT_SPECIALVAR, "room_y", game.roomy, 100, 0) \
+    X(INT_SPECIALVAR, "trinkets", game.trinkets, 0, 0) \
+    X(INT_SPECIALVAR, "coins", game.coins, 0, 0) \
+    X(INT_SPECIALVAR, "battery_level", battery_level(), 0, 1) \
+    X(INT_SPECIALVAR, "on_battery", ((int) on_battery()), 0, 1) \
+    X(INT_SPECIALVAR, "unix_time", ((int) unix_time()), 0, 0) \
+    X(STR_SPECIALVAR, "hhmmss_time", hhmmss_time(), 0, 0)
 
 void scriptclass::setvar(std::string n, std::string c) {
 	int tempvar = getvar(n);
@@ -154,7 +156,7 @@ void scriptclass::setvar(std::string n, std::string c) {
 		variablecontents[tempvar] = c;
 	}
 
-#define X(t, k, v, i) if (n == k) { try_set_lvalue<(t)>((v), c, (i)); return; }
+#define X(t, k, v, i, s) if (n == k) { try_set_lvalue<(t)>((v), c, (i)); return; }
     SPECIALVARS
 #undef X
 }
@@ -174,10 +176,16 @@ std::string scriptclass::processvars(std::string t) {
                                 if (idx != -1) {
                                     temp = variablecontents[idx];
                                 } else {
-                                    try {
-                                        auto eval = evalvar(tempvar);
-                                        temp = eval;
-                                    } catch(const std::exception& ex) {}
+                                    bool special = false;
+#define X(t, k, v, i, s) if (s && (k) == tempvar) { temp = get_specialvar<(t)>(std::move((v)), (i)); special = true;}
+                                    SPECIALVARS
+#undef X
+                                    if (!special) {
+                                        try {
+                                            auto eval = evalvar(tempvar);
+                                            temp = eval;
+                                        } catch(const std::exception& ex) {}
+                                    }
                                 }
                                 tempstring += temp;
 				tempvar = "";
@@ -202,7 +210,7 @@ std::string scriptclass::processvars(std::string t) {
 }
 
 void scriptclass::updatevars() {
-#define X(t, k, v, i) setvar(k, get_specialvar<(t)>(std::move(v), (i)));
+#define X(t, k, v, i, s) if (!(s)) setvar(k, get_specialvar<(t)>(std::move(v), (i)));
     SPECIALVARS
 #undef X
 }
