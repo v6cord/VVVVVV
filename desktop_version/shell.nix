@@ -25,6 +25,7 @@ in
       ] ++ (if debug then [
         pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
         pkgsNative.libicns pkgsNative.imagemagick # icon conversion
+        pkgsNative.gitAndTools.git-subrepo # subrepo management
       ] else []);
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl
