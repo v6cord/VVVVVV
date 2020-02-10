@@ -142,7 +142,8 @@ static std::string get_specialvar(const T&& ref, int offset) {
     X(INT_SPECIALVAR, "coins", game.coins, 0) \
     X(INT_SPECIALVAR, "battery_level", battery_level(), 0) \
     X(INT_SPECIALVAR, "on_battery", ((int) on_battery()), 0) \
-    X(INT_SPECIALVAR, "unix_time", ((int) unix_time()), 0)
+    X(INT_SPECIALVAR, "unix_time", ((int) unix_time()), 0) \
+    X(STR_SPECIALVAR, "hhmmss_time", hhmmss_time(), 0)
 
 void scriptclass::setvar(std::string n, std::string c) {
 	int tempvar = getvar(n);
