@@ -2,6 +2,8 @@
 #define UTILITIES_H
 
 #include <algorithm>
+#include <chrono>
+#include <string>
 #include <stdint.h>
 
 uint64_t splitmix64(uint64_t& x);
@@ -29,5 +31,8 @@ void strcpy_safe(char (&output)[charCount], const char* pSrc) {
 struct free_delete {
     void operator()(void* x);
 };
+
+std::string hhmmss_time();
+std::chrono::system_clock::rep unix_time();
 
 #endif

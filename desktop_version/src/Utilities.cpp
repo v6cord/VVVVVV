@@ -1,5 +1,9 @@
 #include <algorithm>
+#include <chrono>
+#include <ctime>
 #include <stdint.h>
+#include <sstream>
+#include <iomanip>
 #include "Utilities.h"
 
 #ifdef __SWITCH__
@@ -98,3 +102,16 @@ bool on_battery() {
     return SDL_GetPowerInfo(nullptr, nullptr) == SDL_POWERSTATE_ON_BATTERY;
 }
 #endif
+
+std::string hhmmss_time() {
+    std::time_t timestamp = std::time(nullptr);
+    std::tm* time = std::localtime(&timestamp);
+    std::stringstream stream;
+    stream << std::setfill('0') << std::setw(2) << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
+    return stream.str();
+}
+
+// this is specified as being a unix timestamp, unlike std::time
+std::chrono::system_clock::rep unix_time() {
+    return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
