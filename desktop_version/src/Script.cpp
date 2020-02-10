@@ -91,7 +91,11 @@ std::string scriptclass::evalvar(std::string expr) {
     try {
         return token.asString();
     } catch (const bad_cast& ex) {
-        return token.str();
+        try {
+            return dtos(token.asDouble());
+        } catch (const bad_cast& ex) {
+            return token.str();
+        }
     }
 }
 
@@ -112,7 +116,7 @@ static void try_set_lvalue(T& ref, T value) {
 template<typename T>
 static void try_set_lvalue(const T&& ref, T value) {}
 
-// Syntax: X(<name>, <value> (has to be a valid lvalue and rvalue), <offset/indexing>)
+// Syntax: X(<name>, <value>, <offset/indexing>)
 #define SPECIALVARS \
     X("deaths", game.deathcounts, 0) \
     X("player_x", obj.entities[obj.getplayer()].xp, -6) \
