@@ -115,6 +115,7 @@ INCLUDE_DIRECTORIES(
 	../third_party/tinyxml
 	../third_party/physfs
 	../third_party/utfcpp/source
+        ../third_party/cparse
         ${CMAKE_BINARY_DIR}
 )
 include(sdl2-config OPTIONAL)
@@ -179,6 +180,12 @@ SET(PFS_SRC
 	../third_party/physfs/physfs_platform_windows.c
 	../third_party/physfs/physfs_platform_haiku.cpp
 )
+SET(PARSE_SRC
+        ../third_party/cparse/shunting-yard.cpp
+        ../third_party/cparse/packToken.cpp
+        ../third_party/cparse/functions.cpp
+        ../third_party/cparse/containers.cpp
+)
 IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
 	SET(PFS_SRC ${PFS_SRC} ../third_party/physfs/physfs_platform_apple.m)
@@ -224,6 +231,11 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 # Library information
 ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
+ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
+
+if (SWITCH)
+    target_compile_options(cparse-static PUBLIC -fexceptions)
+endif()
 
 # FriBidi (Detection pulled from HHVM)
 find_package(PkgConfig)
@@ -291,7 +303,7 @@ endif()
 find_package(Threads)
 
 # Static Dependencies
-TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG::PNG Threads::Threads)
+TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
 
 # data.zip path
 function(convert_to_cstring_literal var value)

@@ -3,6 +3,9 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <shunting-yard.h>
+#include <stdexcept>
+#include <builtin-features.inc>
 #include "Script.h"
 #include "ScriptX.h"
 #include "Graphics.h"
@@ -70,6 +73,28 @@ int scriptclass::getvar(std::string n) {
 	return -1;
 }
 
+std::string scriptclass::evalvar(std::string expr) {
+    cparse_startup();
+    TokenMap vars;
+    for(std::size_t i = 0; i < variablenames.size(); i++) {
+        auto name = variablenames[i];
+        if (name == "") continue;
+        try {
+            auto contents = std::stod(variablecontents[i]);
+            vars[name] = contents;
+        } catch(const std::invalid_argument& ex) {
+            auto contents = variablecontents[i];
+            vars[name] = contents;
+        }
+    }
+    auto token = calculator::calculate(expr.c_str(), vars);
+    try {
+        return token.asString();
+    } catch (const bad_cast& ex) {
+        return token.str();
+    }
+}
+
 int scriptclass::getimage(Game& game, std::string n) {
 	for(std::size_t i = 0; i < game.script_images.size(); i++) {
 		if (game.script_image_names[i] == n) {
@@ -113,11 +138,12 @@ std::string scriptclass::processvars(std::string t) {
 		if (readingvar) {
 			if (currentletter == "%") {
 				readingvar = false;
-				int varid = getvar(tempvar);
-				if (varid != -1)
-					tempstring += variablecontents[varid];
-				else
-					tempstring += "%" + tempvar + "%";
+                                std::string temp = "%" + tempvar + "%";
+                                try {
+                                    auto eval = evalvar(tempvar);
+                                    temp = eval;
+                                } catch(const std::exception& ex) {}
+                                tempstring += temp;
 				tempvar = "";
 			} else {
 				tempvar += currentletter;
@@ -832,10 +858,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.r      = ss_toi(words[3]);
 				temp.g      = ss_toi(words[4]);
 				temp.b      = ss_toi(words[5]);
-				if (words[6] == "true")
-					words[6] = "1";
-				else if (words[6] == "false")
-					words[6] = "0";
                 if (words[7] == "true")
 					words[7] = "1";
 				else if (words[7] == "false" || words[7] == "")
@@ -844,7 +866,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 {
                     if (words[8] != "") temp.sc = ss_toi(words[8]); else temp.sc = 2;
                 }
-				temp.center = ss_toi(words[6]);
+				temp.center = parsebool(words[6]);
                 temp.bord   = ss_toi(words[7]);
                 position++;
 				temp.text = processvars(commands[position]);
@@ -891,16 +913,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					tempindex = (int)game.script_images.size() - 1;
 				}
 				if ((tempindex <= (int)game.script_images.size()) && tempindex >= 0) {
-					if (words[4] == "true" || words[4] == "1")
-						words[4] = "1";
-					else
-						words[4] = "0";
 					scriptimage temp;
 					temp.type   = 3;
 					temp.x      = ss_toi(words[1]);
 					temp.y      = ss_toi(words[2]);
 					temp.index  = tempindex;
-					temp.center = ss_toi(words[4]);
+					temp.center = parsebool(words[4]);
 					scriptrender.push_back(temp);
 				}
             }
@@ -1011,20 +1029,20 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         {
                             map.nofog = false;
                         }
-                        if (words[0] == "finalstretchon")
+                        if (words[0] == "finalstretch")
                         {
-                            map.finalstretch = true;
-                            map.final_colormode = true;
-                            map.final_colorframe = 1;
-                            map.colsuperstate = 1;
-                        }
-                        if (words[0] == "finalstretchoff")
-                        {
-                            map.finalstretch = false;
-                            map.final_colormode = false;
-                            map.final_mapcol = 0;
-                            map.colsuperstate = 0;
-                            dwgfx.foregrounddrawn = false;
+                            if (parsebool(words[1])) {
+                                map.finalstretch = true;
+                                map.final_colormode = true;
+                                map.final_colorframe = 1;
+                                map.colsuperstate = 1;
+                            } else {
+                                map.finalstretch = false;
+                                map.final_colormode = false;
+                                map.final_mapcol = 0;
+                                map.colsuperstate = 0;
+                                dwgfx.foregrounddrawn = false;
+                            }
                         }
                         if (words[0] == "disableflip")
                         {

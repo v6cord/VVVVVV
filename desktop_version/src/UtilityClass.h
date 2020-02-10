@@ -63,6 +63,8 @@ void relativepos(int* original, std::string parsethis);
 
 bool is_number(const std::string& s);
 
+bool parsebool(std::string parsethis);
+
 growing_vector<std::string> split(const std::string &s, char delim, growing_vector<std::string> &elems);
 
 growing_vector<std::string> split(const std::string &s, char delim);

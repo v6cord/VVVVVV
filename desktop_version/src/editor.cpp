@@ -4897,13 +4897,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             //hook select menu
             if(ed.keydelay>0) ed.keydelay--;
 
-            if(key.keymap[SDLK_UP] && ed.keydelay<=0)
+            if((key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8]) && ed.keydelay<=0)
             {
                 ed.keydelay=6;
                 ed.hookmenu--;
             }
 
-            if(key.keymap[SDLK_DOWN] && ed.keydelay<=0)
+            if((key.keymap[SDLK_DOWN] || key.keymap[SDLK_KP_2]) && ed.keydelay<=0)
             {
                 ed.keydelay=6;
                 ed.hookmenu++;
@@ -4935,11 +4935,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             if (!game.press_action && !game.press_left && !game.press_right
-                    && !key.keymap[SDLK_UP] && !key.keymap[SDLK_DOWN] && !key.isDown(27)) game.jumpheld = false;
+                    && !key.keymap[SDLK_UP] && !key.keymap[SDLK_DOWN]
+                    && !key.keymap[SDLK_KP_8] && !key.keymap[SDLK_KP_2] && !key.isDown(27)) game.jumpheld = false;
             if (!game.jumpheld)
             {
                 if (game.press_action || game.press_left || game.press_right || game.press_map
-                        || key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] || key.isDown(27))
+                        || key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN]
+                        || key.keymap[SDLK_KP_8] || key.keymap[SDLK_KP_2] || key.isDown(27))
                 {
                     game.jumpheld = true;
                 }
