@@ -233,6 +233,10 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
 
+if (SWITCH)
+    target_compile_options(cparse-static PUBLIC -fexceptions)
+endif()
+
 # FriBidi (Detection pulled from HHVM)
 find_package(PkgConfig)
 
