@@ -131,7 +131,7 @@ static std::string get_specialvar(const T&& ref, int offset) {
     }
 }
 
-// Syntax: X(<type>, <name>, <value>, <offset/indexing>)
+// Syntax: X(<type>, <name>, <value> (has to be a valid lvalue and rvalue), <offset/indexing>)
 #define SPECIALVARS \
     X(INT_SPECIALVAR, "deaths", game.deathcounts, 0) \
     X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6) \
