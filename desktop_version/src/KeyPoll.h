@@ -7,7 +7,7 @@
 #include <map> // FIXME: I should feel very bad for using C++ -flibit
 #include <unordered_map>
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
 	#include <SDL2/SDL.h>
 #else
 	#include <SDL.h>

@@ -1,0 +1,2522 @@
+<?xml version="1.0" ?>
+<sys-img:sdk-sys-img xmlns:sys-img="http://schemas.android.com/sdk/android/repo/sys-img2/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!--Generated on 2020-01-17 08:42:45.128690 with ADRT.-->
+	<license id="android-sdk-license" type="text">Terms and Conditions
+
+This is the Android Software Development Kit License Agreement
+
+1. Introduction
+
+1.1 The Android Software Development Kit (referred to in the License Agreement as the &quot;SDK&quot; and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of the License Agreement. The License Agreement forms a legally binding contract between you and Google in relation to your use of the SDK.
+
+1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
+
+1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (http://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
+
+1.4 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+
+2. Accepting the License Agreement
+
+2.1 In order to use the SDK, you must first agree to the License Agreement. You may not use the SDK if you do not accept the License Agreement.
+
+2.2 By clicking to accept, you hereby agree to the terms of the License Agreement.
+
+2.3 You may not use the SDK and may not accept the License Agreement if you are a person barred from receiving the SDK under the laws of the United States or other countries, including the country in which you are resident or from which you use the SDK.
+
+2.4 If you are agreeing to be bound by the License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to the License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the SDK on behalf of your employer or other entity.
+
+
+3. SDK License from Google
+
+3.1 Subject to the terms of the License Agreement, Google grants you a limited, worldwide, royalty-free, non-assignable, non-exclusive, and non-sublicensable license to use the SDK solely to develop applications for compatible implementations of Android.
+
+3.2 You may not use this SDK to develop applications for other platforms (including non-compatible implementations of Android) or to develop another SDK. You are of course free to develop applications for other platforms, including non-compatible implementations of Android, provided that this SDK is not used for that purpose.
+
+3.3 You agree that Google or third parties own all legal right, title and interest in and to the SDK, including any Intellectual Property Rights that subsist in the SDK. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.4 You may not use the SDK for any purpose not expressly permitted by the License Agreement.  Except to the extent required by applicable third party licenses, you may not copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the SDK or any part of the SDK.
+
+3.5 Use, reproduction and distribution of components of the SDK licensed under an open source software license are governed solely by the terms of that open source software license and not the License Agreement.
+
+3.6 You agree that the form and nature of the SDK that Google provides may change without prior notice to you and that future versions of the SDK may be incompatible with applications developed on previous versions of the SDK. You agree that Google may stop (permanently or temporarily) providing the SDK (or any features within the SDK) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.7 Nothing in the License Agreement gives you a right to use any of Google's trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the SDK.
+
+
+4. Use of the SDK by You
+
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under the License Agreement in or to any software applications that you develop using the SDK, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the SDK and write applications only for purposes that are permitted by (a) the License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the SDK to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you permission to do so.
+
+4.4 You agree that you will not engage in any activity with the SDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google or any mobile communications carrier.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Android and/or applications for Android, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under the License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+5. Your Developer Credentials
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+6. Privacy and Information
+
+6.1 In order to continually innovate and improve the SDK, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the SDK are being used and how they are being used. Before any of this information is collected, the SDK will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the SDK and is maintained in accordance with Google's Privacy Policy.
+
+
+7. Third Party Applications
+
+7.1 If you use the SDK to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, the License Agreement does not affect your legal relationship with these third parties.
+
+
+8. Using Android APIs
+
+8.1 Google Data APIs
+
+8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
+
+8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so. If you use the Android Recognition Service API, documented at the following URL: https://developer.android.com/reference/android/speech/RecognitionService, as updated from time to time, you acknowledge that the use of the API is subject to the Data Processing Addendum for Products where Google is a Data Processor, which is located at the following URL: https://privacy.google.com/businesses/gdprprocessorterms/, as updated from time to time. By clicking to accept, you hereby agree to the terms of the Data Processing Addendum for Products where Google is a Data Processor.
+
+
+9. Terminating the License Agreement
+
+9.1 The License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate the License Agreement, you may do so by ceasing your use of the SDK and any relevant developer credentials.
+
+9.3 Google may at any time, terminate the License Agreement with you if:
+(A) you have breached any provision of the License Agreement; or
+(B) Google is required to do so by law; or
+(C) the partner with whom Google offered certain parts of SDK (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the SDK to you; or
+(D) Google decides to no longer provide the SDK or certain parts of the SDK to users in the country in which you are resident or from which you use the service, or the provision of the SDK or certain SDK services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When the License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst the License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+
+10. DISCLAIMER OF WARRANTIES
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE SDK IS AT YOUR SOLE RISK AND THAT THE SDK IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE SDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE SDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+
+11. LIMITATION OF LIABILITY
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+
+12. Indemnification
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the SDK, (b) any application you develop on the SDK that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with the License Agreement.
+
+
+13. Changes to the License Agreement
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the SDK. When these changes are made, Google will make a new version of the License Agreement available on the website where the SDK is made available.
+
+
+14. General Legal Terms
+
+14.1 The License Agreement constitutes the whole legal agreement between you and Google and governs your use of the SDK (excluding any services which Google may provide to you under a separate written agreement), and completely replaces any prior agreements between you and Google in relation to the SDK.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in the License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of the License Agreement is invalid, then that provision will be removed from the License Agreement without affecting the rest of the License Agreement. The remaining provisions of the License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that each member of the group of companies of which Google is the parent shall be third party beneficiaries to the License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of the License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to the License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE SDK IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE SDK. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in the License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under the License Agreement without the prior written approval of the other party.
+
+14.7 The License Agreement, and your relationship with Google under the License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from the License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+
+January 16, 2019</license>
+	<license id="android-sdk-preview-license" type="text">To get started with the Android SDK Preview, you must agree to the following terms and conditions.
+As described below, please note that this is a preview version of the Android SDK, subject to change, that you use at your own risk.  The Android SDK Preview is not a stable release, and may contain errors and defects that can result in serious damage to your computer systems, devices and data.
+
+This is the Android SDK Preview License Agreement (the &quot;License Agreement&quot;).
+
+1. Introduction
+
+1.1 The Android SDK Preview (referred to in the License Agreement as the “Preview” and specifically including the Android system files, packaged APIs, and Preview library files, if and when they are made available) is licensed to you subject to the terms of the License Agreement. The License Agreement forms a legally binding contract between you and Google in relation to your use of the Preview.
+
+1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
+
+1.3 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+2. Accepting the License Agreement
+
+2.1 In order to use the Preview, you must first agree to the License Agreement. You may not use the Preview if you do not accept the License Agreement.
+
+2.2 By clicking to accept and/or using the Preview, you hereby agree to the terms of the License Agreement.
+
+2.3 You may not use the Preview and may not accept the License Agreement if you are a person barred from receiving the Preview under the laws of the United States or other countries including the country in which you are resident or from which you use the Preview.
+
+2.4 If you will use the Preview internally within your company or organization you agree to be bound by the License Agreement on behalf of your employer or other entity, and you represent and warrant that you have full legal authority to bind your employer or such entity to the License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the Preview on behalf of your employer or other entity.
+
+3. Preview License from Google
+
+3.1 Subject to the terms of the License Agreement, Google grants you a royalty-free, non-assignable, non-exclusive, non-sublicensable, limited, revocable license to use the Preview, personally or internally within your company or organization, solely to develop applications to run on the Android platform.
+
+3.2 You agree that Google or third parties owns all legal right, title and interest in and to the Preview, including any Intellectual Property Rights that subsist in the Preview. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.3 You may not use the Preview for any purpose not expressly permitted by the License Agreement. Except to the extent required by applicable third party licenses, you may not: (a) copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the Preview or any part of the Preview; or (b) load any part of the Preview onto a mobile handset or any other hardware device except a personal computer, combine any part of the Preview with other software, or distribute any software or device incorporating a part of the Preview.
+
+3.4 You agree that you will not take any actions that may cause or result in the fragmentation of Android, including but not limited to distributing, participating in the creation of, or promoting in any way a software development kit derived from the Preview.
+
+3.5 Use, reproduction and distribution of components of the Preview licensed under an open source software license are governed solely by the terms of that open source software license and not the License Agreement. You agree to remain a licensee in good standing in regard to such open source software licenses under all the rights granted and to refrain from any actions that may terminate, suspend, or breach such rights.
+
+3.6 You agree that the form and nature of the Preview that Google provides may change without prior notice to you and that future versions of the Preview may be incompatible with applications developed on previous versions of the Preview. You agree that Google may stop (permanently or temporarily) providing the Preview (or any features within the Preview) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.7 Nothing in the License Agreement gives you a right to use any of Google's trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the Preview.
+
+4. Use of the Preview by You
+
+4.1 Google agrees that nothing in the License Agreement gives Google any right, title or interest from you (or your licensors) under the License Agreement in or to any software applications that you develop using the Preview, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the Preview and write applications only for purposes that are permitted by (a) the License Agreement, and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the Preview to develop applications, you will protect the privacy and legal rights of users. If users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If users provide you with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, each user has given you permission to do so.
+
+4.4 You agree that you will not engage in any activity with the Preview, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of Google or any third party.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Android and/or applications for Android, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under the License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+4.7 The Preview is in development, and your testing and feedback are an important part of the development process. By using the Preview, you acknowledge that implementation of some features are still under development and that you should not rely on the Preview having the full functionality of a stable release. You agree not to publicly distribute or ship any application using this Preview as this Preview will no longer be supported after the official Android SDK is released.
+
+5. Your Developer Credentials
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+6. Privacy and Information
+
+6.1 In order to continually innovate and improve the Preview, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the Preview are being used and how they are being used. Before any of this information is collected, the Preview will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the Preview and is maintained in accordance with Google's Privacy Policy located at http://www.google.com/policies/privacy/.
+
+7. Third Party Applications
+
+7.1 If you use the Preview to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party.
+
+8. Using Google APIs
+
+8.1 Google APIs
+
+8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
+
+8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
+9. Terminating the License Agreement
+
+9.1 the License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate the License Agreement, you may do so by ceasing your use of the Preview and any relevant developer credentials.
+
+9.3 Google may at any time, terminate the License Agreement, with or without cause, upon notice to you.
+
+9.4 The License Agreement will automatically terminate without notice or other action upon the earlier of:
+(A) when Google ceases to provide the Preview or certain parts of the Preview to users in the country in which you are resident or from which you use the service; and
+(B) Google issues a final release version of the Android SDK.
+
+9.5 When the License Agreement is terminated, the license granted to you in the License Agreement will terminate, you will immediately cease all use of the Preview, and the provisions of paragraphs 10, 11, 12 and 14 shall survive indefinitely.
+
+10. DISCLAIMERS
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE PREVIEW IS AT YOUR SOLE RISK AND THAT THE PREVIEW IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE PREVIEW AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE PREVIEW IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE. WITHOUT LIMITING THE FOREGOING, YOU UNDERSTAND THAT THE PREVIEW IS NOT A STABLE RELEASE AND MAY CONTAIN ERRORS, DEFECTS AND SECURITY VULNERABILITIES THAT CAN RESULT IN SIGNIFICANT DAMAGE, INCLUDING THE COMPLETE, IRRECOVERABLE LOSS OF USE OF YOUR COMPUTER SYSTEM OR OTHER DEVICE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+11. LIMITATION OF LIABILITY
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+12. Indemnification
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys’ fees) arising out of or accruing from (a) your use of the Preview, (b) any application you develop on the Preview that infringes any Intellectual Property Rights of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you of the License Agreement.
+
+13. Changes to the License Agreement
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the Preview. When these changes are made, Google will make a new version of the License Agreement available on the website where the Preview is made available.
+
+14. General Legal Terms
+
+14.1 the License Agreement constitutes the whole legal agreement between you and Google and governs your use of the Preview (excluding any services which Google may provide to you under a separate written agreement), and completely replaces any prior agreements between you and Google in relation to the Preview.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in the License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of the License Agreement is invalid, then that provision will be removed from the License Agreement without affecting the rest of the License Agreement. The remaining provisions of the License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that each member of the group of companies of which Google is the parent shall be third party beneficiaries to the License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of the License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to the License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE PREVIEW IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE PREVIEW. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The License Agreement may not be assigned or transferred by you without the prior written approval of Google, and any attempted assignment without such approval will be void. You shall not delegate your responsibilities or obligations under the License Agreement without the prior written approval of Google.
+
+14.7 The License Agreement, and your relationship with Google under the License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from the License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+June 2014.</license>
+	<license id="intel-android-sysimage-license" type="text">Intel Corporation Internal Evaluation License Agreement for x86 Android* System Images for Android Software Development Kit (SDK)
+This Internal Evaluation License Agreement (this &quot;Agreement&quot;) is entered into by and between Intel and you (as an individual developer or a legal entity -- identified below as Recipient). Intel shall provide the Evaluation Software to Recipient as described in accordance with the Internal Evaluation License Terms and Conditions.
+
+Definitions.
+These terms shall have the following meanings:
+
+&quot;Intel&quot; or &quot;INTEL&quot;
+Intel Corporation
+With an Address of:
+2200 Mission College Blvd.
+Santa Clara, CA 95052
+Office of the General Counsel
+Mail Stop: RNB-4-51
+Attn: Software and Services Group Legal
+
+&quot;Evaluation Software&quot;
+The x86 Android* emulator system images for Android  Software Development Kit (SDK), as provided by Intel.
+
+INTERNAL EVALUATION LICENSE TERMS AND CONDITIONS
+
+1. DEFINITIONS.
+
+1.1 Additional Defined Terms. &quot;Agreement&quot;, &quot;Evaluation Software&quot;,  &quot;Intel&quot;, &quot;Non-disclosure Agreement&quot;, &quot;Recipient&quot;, and &quot;Effective Date&quot; shall have the meanings ascribed to them on the signature page(s) of this Agreement.
+
+1.2 Evaluation Materials means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications and other related materials) related to the Evaluation Software.
+
+1.3 &quot;Open Source Software&quot; means any software that requires as a condition of use, modification and/or distribution of such software that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNUs General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).
+
+1.4 &quot;Pre-Release Materials&quot; means &quot;alpha&quot; or &quot;beta&quot; designated pre-release features, which may not be fully functional, which Intel may substantially modify in producing any production version of the Evaluation Materials and/or is still under development by Intel and/or Intels suppliers.
+
+2. PURPOSE. Intel desires to provide the Evaluation Materials to Recipient solely for Recipient's internal evaluation of the Evaluation Software and other Intel products, to evaluate the desirability of cooperating with Intel in developing products based on the Evaluation Software and/or to advise Intel as to possible modifications to the Evaluation Software. Recipient may not disclose, distribute or make commercial use of the Evaluation Materials or any modifications to the Evaluation Materials.
+THE EVALUATION MATERIALS ARE PROVIDED FOR EVALUATION PURPOSES ONLY AND MAY NOT BE DISTRIBUTED BY RECIPIENT OR INCORPORATED INTO RECIPIENTS PRODUCTS OR SOFTWARE. PLEASE CONTACT AN INTEL SALES REPRESENTATIVE TO LEARN ABOUT THE AVAILABILITY AND COST OF A COMMERICAL VERSION OF THE EVALUATION SOFTWARE.
+
+3. TITLE. Title to the Evaluation Materials remains with Intel or its suppliers. Recipient shall not mortgage, pledge or encumber the Evaluation Materials in any way. Recipient shall return all Evaluation Materials, keeping no copies, upon termination or expiration of this Agreement.
+
+4. LICENSE. Intel grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above. Unless otherwise communicated in writing by Intel to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a &quot;Release&quot;) the license grant in this Section 4 and the Evaluation Period shall apply to each Release. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software not provided to Recipient in source code form.
+EXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY OTHER INTELLECTUAL PROPERTY RIGHTS IS GRANTED TO THE RECIPIENT.
+
+5. NO OBLIGATION. Recipient shall have no duty to purchase or license any product from Intel. Intel and its suppliers shall have no obligation to provide support for, or develop a non-evaluation version of, the Evaluation Software or to license any version of it.
+
+6. MODIFICATIONS. This Agreement does NOT obligate Recipient to provide Intel with comments or suggestions regarding Evaluation Materials. However, should Recipient provide Intel with comments or suggestions for the modification, correction, improvement or enhancement of (a) the Evaluation Materials or (b) Intel products or processes which may embody the Evaluation Materials, Recipient grants to Intel a non-exclusive, irrevocable, worldwide, royalty-free license, with the right to sublicense Intels licensees and customers, under Recipient intellectual property rights, the rights to use and disclose such comments and suggestions in any manner Intel chooses and to display, perform, copy, make, have made, use, sell, offer to sell, import, and otherwise dispose of Intels and its sublicensees products embodying such comments and suggestions in any manner and via any media Intel chooses, without reference to the source.
+
+7. WARRANTY DISCLAIMER. INTEL AND ITS SUPPLIERS MAKE NO WARRANTIES WITH RESPECT TO EVALUATION MATERIALS, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ANY IMPLIED WARRANTY OF NONINFRINGEMENT. THE EVALUATION MATERIALS ARE PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND.
+
+8. LIMITATION OF LIABILITY. INTEL AND ITS SUPPLIERS SHALL NOT BE LIABLE FOR ANY PROPERTY DAMAGE, PERSONAL INJURY, LOSS OF PROFITS, INTERRUPTION OF BUSINESS OR ANY SPECIAL, CONSEQUENTIAL OR INCIDENTAL DAMAGES, HOWEVER CAUSED, WHETHER FOR BREACH OF WARRANTY, CONTRACT, STRICT LIABILITY OR OTHERWISE. INTEL AND ITS SUPPLIERS DISCLAIM ALL LIABILITY, INCLUDING LIABILITY FOR INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS RELATING TO THE EVALUATION MATERIALS.
+
+9. EXPIRATION. Intel may terminate this Agreement immediately after a breach by Recipient.
+
+10. GENERAL.
+
+10.1 Controlling Law. Any claims arising under or relating to this Agreement shall be governed by the internal substantive laws of the State of Delaware or federal courts located in Delaware, without regard to principles of conflict of laws. Each party hereby agrees to jurisdiction and venue in the courts of the State of Delaware for all disputes and litigation arising under or relating to this Agreement. The parties agree that the United Nations Convention on Contracts for the International Sale of Goods is specifically excluded from application to this Agreement. The parties consent to the personal jurisdiction of the above courts.
+
+10.2 Remedies. Recipient acknowledges that any disclosure, commercialization, or public use of the Evaluation Materials would cause irreparable injury to Intel and consents to the grant of an injunction by any court of competent jurisdiction in the event of a threatened breach.
+
+10.3 Assignment. Recipient may not delegate, assign or transfer this Agreement, the license granted or any of Recipients rights or duties hereunder, expressly, by implication, by operation of law, by way of merger (regardless of whether Recipient is the surviving entity) or acquisition, or otherwise and any attempt to do so, without Intels express prior written consent, shall be null and void. Intel may assign this Agreement, and its rights and obligations hereunder, in its sole discretion.
+
+10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and Intel and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and Intel with respect to the subject matter hereof. This Agreement supersedes any and all &quot;click-to-accept&quot; or shrink-wrapped licenses, in hard-copy or electronic form, embedded in or included with the Evaluation Materials. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed by duly authorized representatives of Recipient and Intel. Without limiting the foregoing, terms and conditions on any purchase orders or similar materials submitted by Recipient to Intel, and any terms contained in Intels standard acknowledgment form that are in conflict with these terms, shall be of no force or effect.
+
+10.5 Severability. In the event that any provision of this Agreement shall be unenforceable or invalid under any applicable law or be so held by applicable court decision, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such provision shall be changed and interpreted so as to best accomplish the objectives of such unenforceable or invalid provision within the limits of applicable law or applicable court decisions.
+
+10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other approval from the U.S. Department of Commerce or any other agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is &quot;deemed&quot; to take place when information is released to a foreign national wherever located.
+
+10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments and (iv) Intel can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . Intel is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.
+
+10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header provided with Evaluation Software. Additional detail may be provided (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement.
+ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED POSSIBLY WITH FAULTS</license>
+	<license id="mips-android-sysimage-license" type="text">MIPS Technologies, Inc. (“MIPS”) Internal Evaluation License Agreement for MIPS Android™ System Images for Android Software Development Kit (SDK):
+This Internal Evaluation License Agreement (this &quot;Agreement&quot;) is entered into by and between MIPS and you (as an individual developer or a legal entity -- identified below as “Recipient”). MIPS shall make the Evaluation Software available to Recipient as described in accordance with the terms and conditions set forth below.
+
+By clicking on the “Accept” button, downloading, installing, or otherwise using the Evaluation Materials (defined below), you agree to be bound by the terms of this Agreement effective as of the date you click “Accept” (the “Effective Date”), and if doing so on behalf of an entity, you represent that you are authorized to bind the entity to the terms and conditions of this Agreement. If you do not agree to be bound by the terms and conditions of this Agreement, do not download, install, or use the Evaluation Materials.
+
+1. DEFINITIONS. These terms shall have the following meanings:
+
+1.1 “MIPS” shall mean MIPS Technologies, Inc., a Delaware corporation having a principal place of business at: 955 East Arques Ave., Sunnyvale, CA 94085
+
+1.2 “Evaluation Software” shall mean MIPS Android™ emulator system images for Android Software Development Kit (SDK), as made available to Recipient.
+
+1.3 “Evaluation Materials&quot; means, collectively, the Evaluation Software (in source and/or object code form) and documentation (including, without limitation, any design documents, specifications, reference manuals, and other related materials) related to the Evaluation Software as made available to Recipient.
+
+1.4 “Open Source Software” means any software that requires (as a condition of use, modification and/or distribution of such software) that such software or other software incorporated into, derived from or distributed with such software (a) be disclosed or distributed in source code form; or (b) be licensed by the user to third parties for the purpose of making and/or distributing derivative works; or (c) be redistributable at no charge. Open Source Software includes, without limitation, software licensed or distributed under any of the following licenses or distribution models, or licenses or distribution models substantially similar to any of the following: (a) GNU’s General Public License (GPL) or Lesser/Library GPL (LGPL), (b) the Artistic License (e.g., PERL), (c) the Mozilla Public License, (d) the Netscape Public License, (e) the Sun Community Source License (SCSL), (f) the Sun Industry Source License (SISL), (g) the Apache Software license and (h) the Common Public License (CPL).
+
+1.5 “Pre-Release Materials” means “alpha” or “beta” designated pre-release features, which may not be fully functional, which MIPS may substantially modify in producing any production version of the Evaluation Materials, and/or which is still under development by MIPS and/or MIPS’ suppliers.
+
+2. PURPOSE. MIPS desires to make the Evaluation Materials available to Recipient solely for Recipient's internal evaluation of the Evaluation Software to evaluate the desirability of cooperating with MIPS in developing products that are compatible with the Evaluation Software and/or to advise MIPS as to possible modifications to the Evaluation Software. Recipient may not disclose, distribute, modify (except to facilitate the above-mentioned internal evaluation), or make commercial use of the Evaluation Materials or any modifications of the Evaluation Materials.
+
+THE EVALUATION MATERIALS ARE PROVIDED FOR EVALUATION PURPOSES ONLY AND MAY NOT BE MODIFIED (EXCEPT TO FACILITATE THE INTERNAL EVALUATION) OR DISTRIBUTED BY RECIPIENT OR INCORPORATED INTO RECIPIENT’S PRODUCTS OR SOFTWARE. PLEASE CONTACT A MIPS SALES REPRESENTATIVE TO LEARN ABOUT THE AVAILABILITY AND COST OF A COMMERCIAL VERSION OF THE EVALUATION SOFTWARE.
+
+3. TITLE. Title to the Evaluation Materials remains with MIPS or its suppliers. Recipient shall not mortgage, pledge or encumber the Evaluation Materials in any way. Recipient shall return all Evaluation Materials, keeping no copies, upon termination or expiration of this Agreement.
+
+4. LICENSE. MIPS grants Recipient a royalty-free, personal, nontransferable, nonexclusive license under its copyrights to use the Evaluation Software only for the purposes described in paragraph 2 above and only for a period beginning on the Effective Date and extending to the first anniversary of the Effective Date (the “Evaluation Period”). Unless otherwise communicated in writing by MIPS to Recipient, to the extent the Evaluation Software is provided in more than one delivery or release (each, a “Release”) the license grant in this Section 4 and the Evaluation Period shall apply to each Release, in which case the Evaluation Period shall begin on the date that the Release is made generally available and continue to the first anniversary of such date. Recipient may not make modifications to the Evaluation Software. Recipient shall not disassemble, reverse-engineer, or decompile any software that is not provided to Recipient in source code form.
+
+
+EXCEPT AS PROVIDED HEREIN, NO OTHER LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY OTHER MIPS INTELLECTUAL PROPERTY RIGHTS IS GRANTED TO THE RECIPIENT. OTHER THAN AS EXPLICITLY SET FORTH IN PARAGRAPH 2 ABOVE, NO RIGHT TO COPY, TO REPRODUCE, TO MODIFY, OR TO CREATE DERIVATIVE WORKS OF, THE EVALUATION MATERIALS IS GRANTED HEREIN.
+
+5. NO OBLIGATION. Recipient shall have no duty to purchase or license any product from MIPS. MIPS and its suppliers shall have no obligation to provide support for, or develop a non-evaluation version of, the Evaluation Software or to license any version of it.
+
+6. MODIFICATIONS. This Agreement does not obligate Recipient to provide MIPS with comments or suggestions regarding Evaluation Materials. However, should Recipient provide MIPS with comments or suggestions for the modification, correction, improvement or enhancement of (a) the Evaluation Materials or (b) MIPS products or processes which may embody the Evaluation Materials, then Recipient agrees to grant and hereby grants to MIPS a non-exclusive, irrevocable, worldwide, fully paid-up, royalty-free license, with the right to sublicense MIPS’ licensees and customers, under Recipient’s Intellectual property rights, to use and disclose such comments and suggestions in any manner MIPS chooses and to display, perform, copy, make, have made, use, sell, offer to sell, import, and otherwise dispose of MIPS’ and its sublicensee’s products embodying such comments and suggestions in any manner and via any media MIPS chooses, without reference to the source.
+
+7. WARRANTY DISCLAIMER. MIPS AND ITS SUPPLIERS MAKE NO WARRANTIES WITH RESPECT TO EVALUATION MATERIALS, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ANY IMPLIED WARRANTY OF NONINFRINGEMENT WITH RESPECT TO THIRD PARTY INTELLECTUAL PROPERTY. RECIPIENT ACKNOWLEDGES AND AGREES THAT THE EVALUATION MATERIALS ARE PROVIDED “AS IS,” WITHOUT WARRANTY OF ANY KIND.
+
+8. LIMITATION OF LIABILITY. MIPS AND ITS SUPPLIERS SHALL NOT BE LIABLE FOR ANY PROPERTY DAMAGE, PERSONAL INJURY, LOSS OF PROFITS, INTERRUPTION OF BUSINESS OR FOR ANY DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL OR INCIDENTAL DAMAGES, HOWEVER CAUSED OR ALLEGED, WHETHER FOR BREACH OF WARRANTY, CONTRACT, STRICT LIABILITY OR OTHERWISE, INCLUDING WITHOUT LIMITATION, UNDER TORT OR OTHER LEGAL THEORY. MIPS AND ITS SUPPLIERS DISCLAIM ANY AND ALL LIABILITY, INCLUDING LIABILITY FOR INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS OF ANY KIND RELATING TO THE EVALUATION MATERIALS.
+
+9. EXPIRATION. MIPS may terminate this Agreement immediately after a breach by Recipient or otherwise at MIPS’ reasonable discretion and upon five (5) business days’ notice to Recipient.
+
+10. GENERAL.
+
+10.1 Controlling Law. This Agreement shall be governed by California law excluding its choice of law rules. With the exception of MIPS’ rights to enforce its intellectual property rights and any confidentiality obligations under this Agreement or any licenses distributed with the Evaluation Materials, all disputes and any claims arising under or relating to this Agreement shall be subject to the exclusive jurisdiction and venue of the state and federal courts located in Santa Clara County, California. Each party hereby agrees to jurisdiction and venue in the courts set forth in the preceding sentence. The parties agree that the United Nations Convention on Contracts for the International Sale of Goods is specifically excluded from application to this Agreement. The parties consent to the personal jurisdiction of the above courts.
+
+10.2 Remedies. Recipient acknowledges and agrees that any breach of confidentiality obligations under this Agreement or any licenses distributed with the Evaluation Materials, as well as any disclosure, commercialization, or public use of the Evaluation Materials, would cause irreparable injury to MIPS, and therefore Recipient agrees to consent to, and hereby consents to, the grant of an injunction by any court of competent jurisdiction in the event of an actual or threatened breach.
+
+10.3 Assignment. Recipient may not delegate, assign or transfer this Agreement, the license granted or any of Recipient’s rights, obligations, or duties hereunder, expressly, by implication, by operation of law, by way of merger (regardless of whether Recipient is the surviving entity) or acquisition, or otherwise and any attempt to do so, without MIPS’ express prior written consent, shall be ineffective, null and void. MIPS may freely assign this Agreement, and its rights and obligations hereunder, in its sole discretion.
+
+10.4 Entire Agreement. This Agreement constitutes the entire agreement between Recipient and MIPS and supersedes in their entirety any and all oral or written agreements previously existing between Recipient and MIPS with respect to the subject matter hereof. This Agreement may only be amended or supplemented by a writing that refers explicitly to this Agreement and that is signed or otherwise accepted by duly authorized representatives of Recipient and MIPS.
+
+10.5 Severability. In the event that any provision of this Agreement is finally adjudicated to be unenforceable or invalid under any applicable law, such unenforceability or invalidity shall not render this Agreement unenforceable or invalid as a whole, and, in such event, such unenforceable or invalid provision shall be interpreted so as to best accomplish the objectives of such provision within the limits of applicable law or applicable court decisions.
+
+10.6 Export Regulations / Export Control. Recipient shall not export, either directly or indirectly, any product, service or technical data or system incorporating the Evaluation Materials without first obtaining any required license or other necessary approval from the U.S. Department of Commerce or any other governing agency or department of the United States Government. In the event any product is exported from the United States or re-exported from a foreign destination by Recipient, Recipient shall ensure that the distribution and export/re-export or import of the product is in compliance with all applicable laws, regulations, orders, or other restrictions of the U.S. Export Administration Regulations and the appropriate foreign government. Recipient agrees that neither it nor any of its subsidiaries will export/re-export any technical data, process, product, or service, directly or indirectly, to any country for which the United States government or any agency thereof or the foreign government from where it is shipping requires an export license, or other governmental approval, without first obtaining such license or approval. Recipient also agrees to implement measures to ensure that foreign national employees are authorized to receive any information controlled by U.S. export control laws. An export is &quot;deemed&quot; to take place when information is released to a foreign national wherever located.
+
+10.7 Special Terms for Pre-Release Materials. If so indicated in the description of the Evaluation Software, the Evaluation Software may contain Pre-Release Materials. Recipient hereby understands, acknowledges and agrees that: (i) Pre-Release Materials may not be fully tested and may contain bugs or errors; (ii) Pre-Release materials are not suitable for commercial release in their current state; (iii) regulatory approvals for Pre-Release Materials (such as UL or FCC) have not been obtained, and Pre-Release Materials may therefore not be certified for use in certain countries or environments or may not be suitable for certain applications and (iv) MIPS can provide no assurance that it will ever produce or make generally available a production version of the Pre-Release Materials . MIPS is not under any obligation to develop and/or release or offer for sale or license a final product based upon the Pre-Release Materials and may unilaterally elect to abandon the Pre-Release Materials or any such development platform at any time and without any obligation or liability whatsoever to Recipient or any other person.
+
+ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED “AS IS” AND “AS AVAILABLE”, POSSIBLY WITH FAULTS, AND WITHOUT REPRESENTATION OR WARRANTY OF ANY KIND.
+
+10.8 Open Source Software. In the event Open Source software is included with Evaluation Software, such Open Source software is licensed pursuant to the applicable Open Source software license agreement identified in the Open Source software comments in the applicable source code file(s) and/or file header as indicated in the Evaluation Software. Additional detail may be available (where applicable) in the accompanying on-line documentation. With respect to the Open Source software, nothing in this Agreement limits any rights under, or grants rights that supersede, the terms of any applicable Open Source software license agreement.
+</license>
+	<license id="android-googletv-license" type="text">Terms and Conditions
+
+This is the Google TV Add-on for the Android Software Development Kit License Agreement.
+
+1. Introduction
+
+1.1 The Google TV Add-on for the Android Software Development Kit (referred to in this License Agreement as the &quot;Google TV Add-on&quot; and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of this License Agreement. This License Agreement forms a legally binding contract between you and Google in relation to your use of the Google TV Add-on.
+
+1.2 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+2. Accepting this License Agreement
+
+2.1 In order to use the Google TV Add-on, you must first agree to this License Agreement. You may not use the Google TV Add-on if you do not accept this License Agreement.
+
+2.2 You can accept this License Agreement by:
+
+(A) clicking to accept or agree to this License Agreement, where this option is made available to you; or
+
+(B) by actually using the Google TV Add-on.  In this case, you agree that use of the Google TV Add-on constitutes acceptance of the License Agreement from that point onwards.
+
+2.3 You may not use the Google TV Add-on and may not accept the Licensing Agreement if you are a person barred from receiving the Google TV Add-on under the laws of the United States or other countries including the country in which you are resident or from which you use the Google TV Add-on.
+
+2.4 If you are agreeing to be bound by this License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to this License Agreement. If you do not have the requisite authority, you may not accept the Licensing Agreement or use the Google TV Add-on on behalf of your employer or other entity.
+
+3. Google TV Add-on License from Google
+
+3.1 Subject to the terms of this License Agreement, Google grants you a limited, worldwide, royalty-free, non- assignable and non-exclusive license to use the Google TV Add-on solely to develop applications to run on the Google TV platform.
+
+3.2 You agree that Google or third parties own all legal right, title and interest in and to the Google TV Add-on, including any Intellectual Property Rights that subsist in the Google TV Add-on. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.3 Except to the extent required by applicable third party licenses, you may not copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the Google TV Add-on or any part of the Google TV Add-on. Except to the extent required by applicable third party licenses, you may not load any part of the Google TV Add-on onto a mobile handset, television, or any other hardware device except a personal computer, combine any part of the Google TV Add-on with other software, or distribute any software or device incorporating a part of the Google TV Add-on.
+
+3.4 Use, reproduction and distribution of components of the Google TV Add-on licensed under an open source software license are governed solely by the terms of that open source software license and not this License Agreement.
+
+3.5 You agree that the form and nature of the Google TV Add-on that Google provides may change without prior notice to you and that future versions of the Google TV Add-on may be incompatible with applications developed on previous versions of the Google TV Add-on. You agree that Google may stop (permanently or temporarily) providing the Google TV Add-on (or any features within the Google TV Add-on) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.6 Nothing in this License Agreement gives you a right to use any of Google's or it’s licensors’ trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.7 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the Google TV Add-on.
+
+4. Use of the Google TV Add-on by You
+
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under this License Agreement in or to any software applications that you develop using the Google TV Add-on, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the Google TV Add-on and write applications only for purposes that are permitted by (a) this License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the Google TV Add-on to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, your must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you explicit permission to do so.
+
+4.4 You agree that you will not engage in any activity with the Google TV Add-on, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google, Multichannel Video Program Distributors or any mobile communications carrier.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through the Google TV platform and/or applications for the Google TV platform, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under this License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+5. Your Developer Credentials
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+6. Privacy and Information
+
+6.1 In order to continually innovate and improve the Google TV Add-on, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the Google TV Add-on are being used and how they are being used. Before any of this information is collected, the Google TV Add-on will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the Google TV Add-on and is maintained in accordance with Google's Privacy Policy.
+
+7. Third Party Applications for the Google TV Platform
+
+7.1 If you use the Google TV Add-on to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, this License Agreement does not affect your legal relationship with these third parties.
+
+8. Using Google TV APIs
+
+8.1 If you use any Google TV API to retrieve data from Google, you acknowledge that the data (“Google TV API Content”) may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.  Some portions of the Google TV API Content are licensed to Google by third parties, including but not limited to Tribune Media Services
+
+8.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
+8.3 Except as explicitly permitted in Section 3 (Google TV Add-on License from Google), you must:
+
+(a) not modify nor format the Google TV API Content except to the extent reasonably and technically necessary to optimize the display such Google TV API Content in your application;
+
+(b) not edit the Google TV API Content in a manner that renders the Google TV API Content inaccurate of alters its inherent meaning (provided that displaying excerpts will not violate the foregoing); or
+
+(c)  not create any commercial audience measurement tool or service using the Google TV API Content
+
+9. Terminating this License Agreement
+
+9.1 This License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate this License Agreement, you may do so by ceasing your use of the Google TV Add-on and any relevant developer credentials.
+
+9.3 Google may at any time, terminate this License Agreement with you if:
+
+(A) you have breached any provision of this License Agreement; or
+
+(B) Google is required to do so by law; or
+
+(C) the partner with whom Google offered certain parts of Google TV Add-on (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the Google TV Add-on to you; or
+
+(D) Google decides to no longer providing the Google TV Add-on or certain parts of the Google TV Add-on to users in the country in which you are resident or from which you use the service, or the provision of the Google TV Add-on or certain Google TV Add-on services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When this License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst this License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+10. DISCLAIMER OF WARRANTIES
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE GOOGLE TV ADD-ON IS AT YOUR SOLE RISK AND THAT THE GOOGLE TV ADD-ON IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE GOOGLE TV ADD-ON AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE GOOGLE TV ADD-ON IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+11. LIMITATION OF LIABILITY
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+12. Indemnification
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the Google TV Add-on, (b) any application you develop on the Google TV Add-on that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with this License Agreement.
+
+13. Changes to the License Agreement
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the Google TV Add-on.
+
+14. General Legal Terms
+
+14.1 This License Agreement constitute the whole legal agreement between you and Google and govern your use of the Google TV Add-on (excluding any services which Google may provide to you under a separate written agreement), and completely replace any prior agreements between you and Google in relation to the Google TV Add-on.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in this License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of this License Agreement is invalid, then that provision will be removed from this License Agreement without affecting the rest of this License Agreement. The remaining provisions of this License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that Google’s API data licensors and each member of the group of companies of which Google is the parent shall be third party beneficiaries to this License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of this License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to this License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE GOOGLE TV ADD-ON IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE GOOGLE TV ADD-ON. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in this License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under this License Agreement without the prior written approval of the other party.
+
+14.7 This License Agreement, and your relationship with Google under this License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from this License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+
+August 15, 2011</license>
+	<license id="android-sdk-arm-dbt-license" type="text">Terms and Conditions
+
+This is the Android Software Development Kit License Agreement
+
+1. Introduction
+
+1.1 The Android Software Development Kit (referred to in the License Agreement as the &quot;SDK&quot; and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of the License Agreement. The License Agreement forms a legally binding contract between you and Google in relation to your use of the SDK.
+
+1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
+
+1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (http://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
+
+1.4 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+
+2. Accepting the License Agreement
+
+2.1 In order to use the SDK, you must first agree to the License Agreement. You may not use the SDK if you do not accept the License Agreement.
+
+2.2 By clicking to accept, you hereby agree to the terms of the License Agreement.
+
+2.3 You may not use the SDK and may not accept the License Agreement if you are a person barred from receiving the SDK under the laws of the United States or other countries, including the country in which you are resident or from which you use the SDK.
+
+2.4 If you are agreeing to be bound by the License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to the License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the SDK on behalf of your employer or other entity.
+
+
+3. SDK License from Google
+
+3.1 Subject to the terms of the License Agreement, Google grants you a limited, worldwide, royalty-free, non-assignable, non-exclusive, and non-sublicensable license to use the SDK solely to develop applications for compatible implementations of Android.
+
+3.2 You may not use this SDK to develop applications for other platforms (including non-compatible implementations of Android) or to develop another SDK. You are of course free to develop applications for other platforms, including non-compatible implementations of Android, provided that this SDK is not used for that purpose.
+
+3.3 You agree that Google or third parties own all legal right, title and interest in and to the SDK, including any Intellectual Property Rights that subsist in the SDK. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.4 You may not use the SDK for any purpose not expressly permitted by the License Agreement.  Except to the extent required by applicable third party licenses, you may not copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the SDK or any part of the SDK.
+
+3.5 Use, reproduction and distribution of components of the SDK licensed under an open source software license are governed solely by the terms of that open source software license and not the License Agreement.
+
+3.6 You agree that the form and nature of the SDK that Google provides may change without prior notice to you and that future versions of the SDK may be incompatible with applications developed on previous versions of the SDK. You agree that Google may stop (permanently or temporarily) providing the SDK (or any features within the SDK) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.7 Nothing in the License Agreement gives you a right to use any of Google's trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the SDK.
+
+
+4. Use of the SDK by You
+
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under the License Agreement in or to any software applications that you develop using the SDK, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the SDK and write applications only for purposes that are permitted by (a) the License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the SDK to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you permission to do so.
+
+4.4 You agree that you will not engage in any activity with the SDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google or any mobile communications carrier.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Android and/or applications for Android, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under the License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+4.7 This software enables the execution of intellectual property owned by Arm Limited. You agree that your use of the software, that allows execution of ARM Instruction Set Architecture (“ISA”) compliant executables for application development and debug only on x86 desktop, laptop, customer on-premise servers, and customer-procured cloud-based environments.
+
+5. Your Developer Credentials
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+6. Privacy and Information
+
+6.1 In order to continually innovate and improve the SDK, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the SDK are being used and how they are being used. Before any of this information is collected, the SDK will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the SDK and is maintained in accordance with Google's Privacy Policy.
+
+
+7. Third Party Applications
+
+7.1 If you use the SDK to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, the License Agreement does not affect your legal relationship with these third parties.
+
+
+8. Using Android APIs
+
+8.1 Google Data APIs
+
+8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
+
+8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so. If you use the Android Recognition Service API, documented at the following URL: https://developer.android.com/reference/android/speech/RecognitionService, as updated from time to time, you acknowledge that the use of the API is subject to the Data Processing Addendum for Products where Google is a Data Processor, which is located at the following URL: https://privacy.google.com/businesses/gdprprocessorterms/, as updated from time to time. By clicking to accept, you hereby agree to the terms of the Data Processing Addendum for Products where Google is a Data Processor.
+
+
+9. Terminating the License Agreement
+
+9.1 The License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate the License Agreement, you may do so by ceasing your use of the SDK and any relevant developer credentials.
+
+9.3 Google may at any time, terminate the License Agreement with you if:
+(A) you have breached any provision of the License Agreement; or
+(B) Google is required to do so by law; or
+(C) the partner with whom Google offered certain parts of SDK (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the SDK to you; or
+(D) Google decides to no longer provide the SDK or certain parts of the SDK to users in the country in which you are resident or from which you use the service, or the provision of the SDK or certain SDK services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When the License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst the License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+
+10. DISCLAIMER OF WARRANTIES
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE SDK IS AT YOUR SOLE RISK AND THAT THE SDK IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE SDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE SDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+
+11. LIMITATION OF LIABILITY
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+
+12. Indemnification
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the SDK, (b) any application you develop on the SDK that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with the License Agreement.
+
+
+13. Changes to the License Agreement
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the SDK. When these changes are made, Google will make a new version of the License Agreement available on the website where the SDK is made available.
+
+
+14. General Legal Terms
+
+14.1 The License Agreement constitutes the whole legal agreement between you and Google and governs your use of the SDK (excluding any services which Google may provide to you under a separate written agreement), and completely replaces any prior agreements between you and Google in relation to the SDK.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in the License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of the License Agreement is invalid, then that provision will be removed from the License Agreement without affecting the rest of the License Agreement. The remaining provisions of the License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that each member of the group of companies of which Google is the parent shall be third party beneficiaries to the License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of the License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to the License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE SDK IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE SDK. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in the License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under the License Agreement without the prior written approval of the other party.
+
+14.7 The License Agreement, and your relationship with Google under the License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from the License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+
+January 16, 2019</license>
+	<channel id="channel-0">stable</channel>
+	<channel id="channel-1">beta</channel>
+	<channel id="channel-2">dev</channel>
+	<channel id="channel-3">canary</channel>
+	<remotePackage path="system-images;android-10;google_apis;armeabi-v7a">
+		<!--Generated from bid:3644351, branch:gb-emu-release-google-apis-arm-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>10</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:40:01 2019.-->
+				<complete>
+					<size>110706432</size>
+					<checksum>970abf3a2a9937a43576afd9bb56e4a8191947f8</checksum>
+					<url>armeabi-v7a-10_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>243744</size>
+						<checksum>e52e55c56f86e4fa38b62684df84cacde95705a8</checksum>
+						<url>sys-img-3093079-google_sdk-sdk_addon-3644351-google_sdk-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-10;google_apis;x86">
+		<!--Generated from bid:3644351, branch:gb-emu-release-google-apis-x86-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>10</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:40:44 2019.-->
+				<complete>
+					<size>118634346</size>
+					<checksum>070a9552e3d358d8e72e8b2042e539e2b7a1b035</checksum>
+					<url>x86-10_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>349073</size>
+						<checksum>08d6475ab661944feefa3a4f0b22b6da01ad9c9c</checksum>
+						<url>sys-img-3093079-google_sdk_x86-sdk_addon-3644351-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-15;google_apis;x86">
+		<!--Generated from bid:3876239, branch:ics-mr1-emu-release-google-apis-x86-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>15</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:41:34 2019.-->
+				<complete>
+					<size>163317978</size>
+					<checksum>a7deb32c12396b6c4fd60ad14a62e19f8bdcae20</checksum>
+					<url>x86-15_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>5379933</size>
+						<checksum>42273023b505d5c616af0a12bc275464448954bf</checksum>
+						<url>sys-img-3644290-google_sdk_x86-sdk_addon-3876239-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-15;google_apis;armeabi-v7a">
+		<!--Generated from bid:3876239, branch:ics-mr1-emu-release-google-apis-arm-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>15</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:42:19 2019.-->
+				<complete>
+					<size>148773442</size>
+					<checksum>6deb76cf34760a6037cb18d89772c9e986d07497</checksum>
+					<url>armeabi-v7a-15_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>6108303</size>
+						<checksum>31b8f4330de6d0d9862c966500d692aa24d4511a</checksum>
+						<url>sys-img-3093080-google_sdk-sdk_addon-3876239-google_sdk-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-16;google_apis;armeabi-v7a">
+		<!--Generated from bid:4875369, branch:jb-emu-release-google-apis-arm-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>16</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:43:20 2019.-->
+				<complete>
+					<size>168845378</size>
+					<checksum>5a5ff097680c6dae473c8719296ce6d7b70edb2d</checksum>
+					<url>armeabi-v7a-16_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>6336089</size>
+						<checksum>d7423551c3ec3a20868ff71f2c957181b3a51203</checksum>
+						<url>sys-img-3093084-google_sdk-sdk_addon-4875369-google_sdk-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-16;google_apis;x86">
+		<!--Generated from bid:4875369, branch:jb-emu-release-google-apis-x86-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>16</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:44:21 2019.-->
+				<complete>
+					<size>186388811</size>
+					<checksum>b57adef2f43dd176b8c02c980c16a796021b2071</checksum>
+					<url>x86-16_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>1550272</size>
+						<checksum>2c8875974bfa9c367590014279907a6f626f2c84</checksum>
+						<url>sys-img-3876218-google_sdk_x86-sdk_addon-4875369-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-17;google_apis;armeabi-v7a">
+		<!--Generated from bid:4875371, branch:git_jb-mr1.1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>17</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:45:26 2019.-->
+				<complete>
+					<size>174631794</size>
+					<checksum>a59f26cb5707da97e869a27d87b83477204ac594</checksum>
+					<url>armeabi-v7a-17_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>7235438</size>
+						<checksum>f3b18dccf02e2d9379f2cfc7ee71c54758c64d68</checksum>
+						<url>sys-img-3093082-google_sdk-sdk_addon-4875371-google_sdk-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-17;google_apis;x86">
+		<!--Generated from bid:4875371, branch:git_jb-mr1.1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>17</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Tue Jul 17 16:41:15 2018.-->
+				<complete>
+					<size>194816808</size>
+					<checksum>7864c34faf0402b8923d8c6e609a5339f74cc8d6</checksum>
+					<url>x86-17_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>12485418</size>
+						<checksum>1feba0035c89ded9ed8bf5cd6bea0b076734f7b1</checksum>
+						<url>sys-img-3093082-google_sdk_x86-sdk_addon-4875371-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-18;google_apis;armeabi-v7a">
+		<!--Generated from bid:3876170, branch:jb-mr2-emu-release-google-apis-arm-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>18</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:46:21 2019.-->
+				<complete>
+					<size>179015960</size>
+					<checksum>7faaccabbcc5f08e410436d3f63eea42521ea974</checksum>
+					<url>armeabi-v7a-18_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>7009709</size>
+						<checksum>b7859e62bd4cbb76d9012f60a221c396a0e56348</checksum>
+						<url>sys-img-3093083-google_sdk-sdk_addon-3876170-google_sdk-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-18;google_apis;x86">
+		<!--Generated from bid:3876170, branch:jb-mr2-emu-release-google-apis-x86-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>18</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>6</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Feb 21 12:47:40 2019.-->
+				<complete>
+					<size>199963568</size>
+					<checksum>dd674d719cad61602702be4b3d98edccfbfea53e</checksum>
+					<url>x86-18_r06.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>5</major>
+						</based-on>
+						<size>13062537</size>
+						<checksum>78a1d235bf0716a2db1c4f10f929b3aa885828e3</checksum>
+						<url>sys-img-3093083-google_sdk_x86-sdk_addon-3876170-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-19;google_apis;x86">
+		<!--Generated from bid:5460992, branch:git_klp-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>19</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>38</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 14:31:36 2019.-->
+				<complete>
+					<size>289460661</size>
+					<checksum>928e4ec82876c61ef53451425d10ccb840cdd0f2</checksum>
+					<url>x86-19_r38.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>35</major>
+						</based-on>
+						<size>47506311</size>
+						<checksum>c1dec223ac6ea082d55550c8f5126dedbd545de4</checksum>
+						<url>sys-img-4729339-google_sdk_x86-sdk_addon-5460992-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>37</major>
+						</based-on>
+						<size>37746226</size>
+						<checksum>cce2e11d0ccee9db2f55f18e3125b4f4da182718</checksum>
+						<url>sys-img-5056517-google_sdk_x86-sdk_addon-5460992-google_sdk_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-19;google_apis;armeabi-v7a">
+		<!--Generated from bid:5460992, branch:git_klp-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>19</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>38</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 14:33:12 2019.-->
+				<complete>
+					<size>244940987</size>
+					<checksum>434edd2ddc39d1ca083a5fa9721c0db8ab804737</checksum>
+					<url>armeabi-v7a-19_r38.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>37</major>
+						</based-on>
+						<size>35237343</size>
+						<checksum>756ef2de73704527ab4307df03a9f23ef6f3f444</checksum>
+						<url>sys-img-5056517-google_sdk-sdk_addon-5460992-google_sdk-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-21;google_apis;x86">
+		<!--Generated from bid:5523115, branch:git_lmp-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>21</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>30</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:07:47 2019.-->
+				<complete>
+					<size>313278660</size>
+					<checksum>37548caae9e2897fb1d2b15f7fcf624c714cb610</checksum>
+					<url>x86-21_r30.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>29</major>
+						</based-on>
+						<size>57003275</size>
+						<checksum>7ba3469793849a4ae24c3850051ae8adb46e7ce0</checksum>
+						<url>sys-img-5056518-sdk_google_phone_x86-sdk_addon-5523115-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>28</major>
+						</based-on>
+						<size>57389157</size>
+						<checksum>d35fafe77d4d2800c3f82ca15078bf525c1e0506</checksum>
+						<url>sys-img-4931967-sdk_google_phone_x86-sdk_addon-5523115-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>27</major>
+						</based-on>
+						<size>72900915</size>
+						<checksum>832eb5334cde2af3699f2d1efc31901ad82f8524</checksum>
+						<url>sys-img-4729340-sdk_google_phone_x86-sdk_addon-5523115-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-21;google_apis;x86_64">
+		<!--Generated from bid:5523115, branch:git_lmp-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>21</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>30</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:10:10 2019.-->
+				<complete>
+					<size>409212957</size>
+					<checksum>82d34fdaae2916bd4d48a4f144db51e4e5719aa4</checksum>
+					<url>x86_64-21_r30.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>29</major>
+						</based-on>
+						<size>71167100</size>
+						<checksum>9574f61dd7e09ae0a1bde679985b3181349ab1d0</checksum>
+						<url>sys-img-5056518-sdk_google_phone_x86_64-sdk_addon-5523115-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>27</major>
+						</based-on>
+						<size>88864480</size>
+						<checksum>d665753c9ba383f2242271cc0a89f538e63ca717</checksum>
+						<url>sys-img-4729340-sdk_google_phone_x86_64-sdk_addon-5523115-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>28</major>
+						</based-on>
+						<size>72338679</size>
+						<checksum>d43badfc71ccb996ef9e8b3e9066025375b6e8bd</checksum>
+						<url>sys-img-4931967-sdk_google_phone_x86_64-sdk_addon-5523115-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-21;google_apis;armeabi-v7a">
+		<!--Generated from bid:5523115, branch:git_lmp-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>21</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>30</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:12:53 2019.-->
+				<complete>
+					<size>284070024</size>
+					<checksum>bbdbbb3c4387752a8f28718a3190d901c0378058</checksum>
+					<url>armeabi-v7a-21_r30.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>29</major>
+						</based-on>
+						<size>36687813</size>
+						<checksum>57e686542cdb5c374c05ed272a1511ba61d1e754</checksum>
+						<url>sys-img-5056518-sdk_google_phone_armv7-sdk_addon-5523115-sdk_google_phone_armv7-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-22;google_apis;x86">
+		<!--Generated from bid:5525941, branch:git_lmp-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>22</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>24</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:14:16 2019.-->
+				<complete>
+					<size>409871328</size>
+					<checksum>e4cd95b1c0837fc12d6544742e82d8ef344c8758</checksum>
+					<url>x86-22_r24.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>21</major>
+						</based-on>
+						<size>91211210</size>
+						<checksum>02e60cd2fec15ac5a6463d9fb25da9d375ec2358</checksum>
+						<url>sys-img-4729341-sdk_google_phone_x86-sdk_addon-5525941-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>23</major>
+						</based-on>
+						<size>71490735</size>
+						<checksum>f565480c8cb8acf437b98addd90c50d8f3140788</checksum>
+						<url>sys-img-5056529-sdk_google_phone_x86-sdk_addon-5525941-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>22</major>
+						</based-on>
+						<size>72455750</size>
+						<checksum>48dabc76354d019fcecf9915e2249d458f69fa3c</checksum>
+						<url>sys-img-4959052-sdk_google_phone_x86-sdk_addon-5525941-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-22;google_apis;armeabi-v7a">
+		<!--Generated from bid:5525941, branch:git_lmp-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>22</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>24</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:16:51 2019.-->
+				<complete>
+					<size>383333535</size>
+					<checksum>d2b7ca5f8259c6e4b3cfa5a0d77e4a088899cfb0</checksum>
+					<url>armeabi-v7a-22_r24.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>23</major>
+						</based-on>
+						<size>71392877</size>
+						<checksum>012e43c16018c63dc41457d837a2b0bec7f591f8</checksum>
+						<url>sys-img-5056529-sdk_google_phone_armv7-sdk_addon-5525941-sdk_google_phone_armv7-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-22;google_apis;x86_64">
+		<!--Generated from bid:5525941, branch:git_lmp-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>22</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>24</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:18:19 2019.-->
+				<complete>
+					<size>561011822</size>
+					<checksum>cde738f9353606af69ad7b4e625c957a4d603f27</checksum>
+					<url>x86_64-22_r24.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>21</major>
+						</based-on>
+						<size>148856631</size>
+						<checksum>ff7bef8188c6e7f75795a5003484778330acdec8</checksum>
+						<url>sys-img-4729341-sdk_google_phone_x86_64-sdk_addon-5525941-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>23</major>
+						</based-on>
+						<size>124777633</size>
+						<checksum>54480f2f080e2e4b90ba0321afda8bcdde278a14</checksum>
+						<url>sys-img-5056529-sdk_google_phone_x86_64-sdk_addon-5525941-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>22</major>
+						</based-on>
+						<size>129613910</size>
+						<checksum>bd728d320c7bea6b65581ccf85435e75f7389941</checksum>
+						<url>sys-img-4959052-sdk_google_phone_x86_64-sdk_addon-5525941-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-23;google_apis;x86">
+		<!--Generated from bid:5525988, branch:git_mnc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>23</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>31</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:21:36 2019.-->
+				<complete>
+					<size>487105076</size>
+					<checksum>877cf79f5198fa53351eab08ba9ce162dc84f7ba</checksum>
+					<url>x86-23_r31.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>28</major>
+						</based-on>
+						<size>111451033</size>
+						<checksum>1ad9905f9e414368051fa0f62145e5c7a3518fb1</checksum>
+						<url>sys-img-4729342-sdk_google_phone_x86-sdk_addon-5525988-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>29</major>
+						</based-on>
+						<size>98172634</size>
+						<checksum>5c94811299d207a812a6cad6c6f21a84ef11bbe7</checksum>
+						<url>sys-img-4931947-sdk_google_phone_x86-sdk_addon-5525988-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>30</major>
+						</based-on>
+						<size>98842978</size>
+						<checksum>4165ed9322859be69ec55e1fbf5ae4801eda35d5</checksum>
+						<url>sys-img-5056751-sdk_google_phone_x86-sdk_addon-5525988-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-23;google_apis;x86_64">
+		<!--Generated from bid:5525988, branch:git_mnc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>23</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>31</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:25:40 2019.-->
+				<complete>
+					<size>646617985</size>
+					<checksum>342c39df061804ee0d5bc671147e90dead3d6665</checksum>
+					<url>x86_64-23_r31.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>30</major>
+						</based-on>
+						<size>153532388</size>
+						<checksum>af17aa1ca98d8f662860a3b0225ff6a914f084e0</checksum>
+						<url>sys-img-5056751-sdk_google_phone_x86_64-sdk_addon-5525988-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>29</major>
+						</based-on>
+						<size>154192691</size>
+						<checksum>1e939364d2d67fbcbfc6845ad33ecd8e745562dc</checksum>
+						<url>sys-img-4931947-sdk_google_phone_x86_64-sdk_addon-5525988-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>28</major>
+						</based-on>
+						<size>176882953</size>
+						<checksum>8974ffdff3faf05e0f8a4b754bcc2b258cf3cac8</checksum>
+						<url>sys-img-4729342-sdk_google_phone_x86_64-sdk_addon-5525988-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-23;google_apis;armeabi-v7a">
+		<!--Generated from bid:5525988, branch:git_mnc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>23</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>31</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May  2 12:30:43 2019.-->
+				<complete>
+					<size>456399547</size>
+					<checksum>da0a07800b4eec53fcdb2e5c3b69a9a5d7a6b8a6</checksum>
+					<url>armeabi-v7a-23_r31.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>30</major>
+						</based-on>
+						<size>91818199</size>
+						<checksum>bdfa67554f5272de27400f7c0de45ce5bbb3ce0c</checksum>
+						<url>sys-img-5056751-sdk_google_phone_armv7-sdk_addon-5525988-sdk_google_phone_armv7-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-24;google_apis;x86">
+		<!--Generated from bid:5464646, branch:git_nyc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>24</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>25</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 17:27:24 2019.-->
+				<complete>
+					<size>843757442</size>
+					<checksum>53dba25eed8359aba394a1be1c7ccb741a459ec0</checksum>
+					<url>x86-24_r25.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>23</major>
+						</based-on>
+						<size>140546425</size>
+						<checksum>6ef2aede3118c03a380d783d6620e256aba8b735</checksum>
+						<url>sys-img-4931964-sdk_google_phone_x86-sdk_addon-5464646-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>22</major>
+						</based-on>
+						<size>161554275</size>
+						<checksum>37209a305d930adf37001f960ca646f4e7dfede0</checksum>
+						<url>sys-img-4729343-sdk_google_phone_x86-sdk_addon-5464646-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>24</major>
+						</based-on>
+						<size>139126702</size>
+						<checksum>683065cf3a26bd65aad66f8a7de0dff2439798c0</checksum>
+						<url>sys-img-5071208-sdk_google_phone_x86-sdk_addon-5464646-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-24;google_apis;x86_64">
+		<!--Generated from bid:5464646, branch:git_nyc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>24</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>25</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 17:34:20 2019.-->
+				<complete>
+					<size>1054606534</size>
+					<checksum>d757dd13ad9b0ba4dd872660e31b6506f60dcf32</checksum>
+					<url>x86_64-24_r25.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>23</major>
+						</based-on>
+						<size>249948935</size>
+						<checksum>e8b5222b20f54082c9a9a141d5229826dbd305d3</checksum>
+						<url>sys-img-4931964-sdk_google_phone_x86_64-sdk_addon-5464646-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>24</major>
+						</based-on>
+						<size>245091240</size>
+						<checksum>c24060082ba071d359009c02cb60126606c7318f</checksum>
+						<url>sys-img-5071208-sdk_google_phone_x86_64-sdk_addon-5464646-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>22</major>
+						</based-on>
+						<size>256139143</size>
+						<checksum>f820773a51b346a5b1553ad1669bd1592c003b25</checksum>
+						<url>sys-img-4729343-sdk_google_phone_x86_64-sdk_addon-5464646-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-24;google_apis;armeabi-v7a">
+		<!--Generated from bid:5464646, branch:git_nyc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>24</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>25</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 17:41:03 2019.-->
+				<complete>
+					<size>754008735</size>
+					<checksum>9a0ec5e9a239a7a6889364e44e9fa4fcd0052c6b</checksum>
+					<url>armeabi-v7a-24_r25.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>24</major>
+						</based-on>
+						<size>81755752</size>
+						<checksum>d8bf3beaca7b2b09cbae656549abf321522ffc7b</checksum>
+						<url>sys-img-5071208-sdk_google_phone_armv7-sdk_addon-5464646-sdk_google_phone_armv7-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-24;google_apis;arm64-v8a">
+		<!--Generated from bid:5464646, branch:git_nyc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>24</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>arm64-v8a</abi>
+		</type-details>
+		<revision>
+			<major>25</major>
+		</revision>
+		<display-name>Google APIs ARM 64 v8a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 17:44:44 2019.-->
+				<complete>
+					<size>994915623</size>
+					<checksum>5ff407d439e3c595ce9221f445a31dcc35df5a86</checksum>
+					<url>arm64-v8a-24_r25.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>24</major>
+						</based-on>
+						<size>148575535</size>
+						<checksum>7a8d199b04525e9b2485da96205e205607ebf232</checksum>
+						<url>sys-img-5071208-sdk_google_phone_arm64-sdk_addon-5464646-sdk_google_phone_arm64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-25;google_apis;x86">
+		<!--Generated from bid:5464897, branch:git_nyc-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>25</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>16</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 17:48:34 2019.-->
+				<complete>
+					<size>981172079</size>
+					<checksum>562e3335c6334b8d1947bb9efb90f8d82f2d3e4d</checksum>
+					<url>x86-25_r16.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>14</major>
+						</based-on>
+						<size>161043622</size>
+						<checksum>1812f6269e70d461ef60ecd6b9b5bf678c7bedf9</checksum>
+						<url>sys-img-4931657-sdk_google_phone_x86-sdk_addon-5464897-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>15</major>
+						</based-on>
+						<size>152908617</size>
+						<checksum>5446e17cffe1a9b4b73e5c80e32da5e1c63c6133</checksum>
+						<url>sys-img-5071160-sdk_google_phone_x86-sdk_addon-5464897-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>13</major>
+						</based-on>
+						<size>161746682</size>
+						<checksum>4ccbfabd244e5ed9302f657234bbfd8bda28bc68</checksum>
+						<url>sys-img-4729347-sdk_google_phone_x86-sdk_addon-5464897-sdk_google_phone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-25;google_apis;x86_64">
+		<!--Generated from bid:5464897, branch:git_nyc-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>25</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>16</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 17:56:04 2019.-->
+				<complete>
+					<size>1247518495</size>
+					<checksum>e08b94903631d58964467b0b310c93642d85df6c</checksum>
+					<url>x86_64-25_r16.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>15</major>
+						</based-on>
+						<size>273302755</size>
+						<checksum>a1f13f8d502b176deeac9193a63b3c651ad77571</checksum>
+						<url>sys-img-5071160-sdk_google_phone_x86_64-sdk_addon-5464897-sdk_google_phone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-25;google_apis;armeabi-v7a">
+		<!--Generated from bid:5464897, branch:git_nyc-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>25</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>armeabi-v7a</abi>
+		</type-details>
+		<revision>
+			<major>16</major>
+		</revision>
+		<display-name>Google APIs ARM EABI v7a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 18:00:42 2019.-->
+				<complete>
+					<size>922538390</size>
+					<checksum>4c49e0edb845b0bf1f231cb0e8598b1a9f9aa9c8</checksum>
+					<url>armeabi-v7a-25_r16.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>15</major>
+						</based-on>
+						<size>95332785</size>
+						<checksum>7a0b5a3e0116f818fa57db30959f46aaa317c71b</checksum>
+						<url>sys-img-5071160-sdk_google_phone_armv7-sdk_addon-5464897-sdk_google_phone_armv7-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-25;google_apis;arm64-v8a">
+		<!--Generated from bid:5464897, branch:git_nyc-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>25</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>arm64-v8a</abi>
+		</type-details>
+		<revision>
+			<major>16</major>
+		</revision>
+		<display-name>Google APIs ARM 64 v8a System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 18:03:59 2019.-->
+				<complete>
+					<size>1064889570</size>
+					<checksum>33ffbd335d9a6dc8d9843469d0963091566b3167</checksum>
+					<url>arm64-v8a-25_r16.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>15</major>
+						</based-on>
+						<size>174581797</size>
+						<checksum>bfafdb214f4fb7139e5ae044ba11d40628ed5f44</checksum>
+						<url>sys-img-5071160-sdk_google_phone_arm64-sdk_addon-5464897-sdk_google_phone_arm64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-26;google_apis;x86">
+		<!--Generated from bid:5598391, branch:git_oc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>26</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>14</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>26</major>
+					<minor>1</minor>
+					<micro>3</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May 23 12:39:53 2019.-->
+				<complete>
+					<size>791034591</size>
+					<checksum>935da6794d5f64f7ae20a1f352929cb7e3b20cba</checksum>
+					<url>x86-26_r14.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>12</major>
+						</based-on>
+						<size>90494862</size>
+						<checksum>61be6545dda76b0c075fdd47b2fe6d6665df4cfc</checksum>
+						<url>sys-img-5071102-sdk_gphone_x86-sdk_addon-5598391-sdk_gphone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>11</major>
+						</based-on>
+						<size>91179157</size>
+						<checksum>c8821862e8e3697f753894685d2378677a505a78</checksum>
+						<url>sys-img-4931640-sdk_gphone_x86-sdk_addon-5598391-sdk_gphone_x86-sdk_addon-patch.jar</url>
+					</patch>
+					<patch>
+						<based-on>
+							<major>13</major>
+						</based-on>
+						<size>5654806</size>
+						<checksum>226f0f95c1db78e928dc5608c905281117e279cd</checksum>
+						<url>sys-img-5484929-sdk_gphone_x86-sdk_addon-5598391-sdk_gphone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-26;google_apis;x86_64">
+		<!--Generated from bid:5598391, branch:git_oc-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>26</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>14</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>26</major>
+					<minor>1</minor>
+					<micro>3</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu May 23 12:41:56 2019.-->
+				<complete>
+					<size>966014644</size>
+					<checksum>965631f0554ca9027ac465ba147baa6a6a22fcce</checksum>
+					<url>x86_64-26_r14.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>13</major>
+						</based-on>
+						<size>6329326</size>
+						<checksum>e28f1e00031e0bebd9d4f5f6dc38678b07d20268</checksum>
+						<url>sys-img-5484929-sdk_gphone_x86_64-sdk_addon-5598391-sdk_gphone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-27;google_apis;x86">
+		<!--Generated from bid:5455776, branch:oc-mr1-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>27</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>9</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>27</major>
+					<minor>1</minor>
+					<micro>7</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Wed Apr 17 18:18:31 2019.-->
+				<complete>
+					<size>782921311</size>
+					<checksum>ab009fc1308ded01539af4f8233b252d411145bc</checksum>
+					<url>x86-27_r09.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>8</major>
+						</based-on>
+						<size>86820080</size>
+						<checksum>fe82e35fdb476cc21ee4fa181e5eb30436300fa5</checksum>
+						<url>sys-img-5056746-sdk_gphone_x86-sdk_addon-5455776-sdk_gphone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-28;google_apis;x86">
+		<!--Generated from bid:5456446, branch:git_pi-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>28</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>9</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>27</major>
+					<minor>1</minor>
+					<micro>7</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Tue Apr 23 21:47:49 2019.-->
+				<complete>
+					<size>925710437</size>
+					<checksum>7c84ba5cbc009132ce38df52830c17b9bffc54bb</checksum>
+					<url>x86-28_r09.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>8</major>
+						</based-on>
+						<size>80665854</size>
+						<checksum>657605a568285eb6b7d178731337b5b9f052a88e</checksum>
+						<url>sys-img-5124027-sdk_gphone_x86-sdk_addon-5456446-sdk_gphone_x86-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-28;google_apis;x86">
+		<!--Generated from bid:5875966, branch:pi-emu-release-gapi-x86-arm-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>28</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>10</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-arm-dbt-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>29</major>
+					<minor>1</minor>
+					<micro>12</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Thu Sep 26 11:58:11 2019.-->
+				<complete>
+					<size>907309921</size>
+					<checksum>075e2253f1e93b49c134142a9717180dc7636685</checksum>
+					<url>x86-28_r10.zip</url>
+				</complete>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-28;google_apis;x86_64">
+		<!--Generated from bid:5456446, branch:git_pi-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>28</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>9</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>27</major>
+					<minor>1</minor>
+					<micro>7</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Tue Apr 23 21:50:35 2019.-->
+				<complete>
+					<size>1077510444</size>
+					<checksum>eeb066346d29194e5b9387a0c0dd0f9e2a570b70</checksum>
+					<url>x86_64-28_r09.zip</url>
+				</complete>
+				<patches>
+					<patch>
+						<based-on>
+							<major>8</major>
+						</based-on>
+						<size>87542653</size>
+						<checksum>483453fa163661dbecffcf366877b34d21ed95ab</checksum>
+						<url>sys-img-5124027-sdk_gphone_x86_64-sdk_addon-5456446-sdk_gphone_x86_64-sdk_addon-patch.jar</url>
+					</patch>
+				</patches>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-29;google_apis;x86">
+		<!--Generated from bid:5978551, branch:git_qt-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>29</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86</abi>
+		</type-details>
+		<revision>
+			<major>9</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>28</major>
+					<minor>1</minor>
+					<micro>9</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Fri Nov  1 16:26:28 2019.-->
+				<complete>
+					<size>1130423258</size>
+					<checksum>33d71d17138ea322dec2dea6d8198aebf4767ab3</checksum>
+					<url>x86-29_r09.zip</url>
+				</complete>
+			</archive>
+		</archives>
+	</remotePackage>
+	<remotePackage path="system-images;android-29;google_apis;x86_64">
+		<!--Generated from bid:5978551, branch:git_qt-emu-release-->
+		<type-details xsi:type="sys-img:sysImgDetailsType">
+			<api-level>29</api-level>
+			<tag>
+				<id>google_apis</id>
+				<display>Google APIs</display>
+			</tag>
+			<vendor>
+				<id>google</id>
+				<display>Google Inc.</display>
+			</vendor>
+			<abi>x86_64</abi>
+		</type-details>
+		<revision>
+			<major>9</major>
+		</revision>
+		<display-name>Google APIs Intel x86 Atom_64 System Image</display-name>
+		<uses-license ref="android-sdk-license"/>
+		<dependencies>
+			<dependency path="patcher;v4"/>
+			<dependency path="emulator">
+				<min-revision>
+					<major>28</major>
+					<minor>1</minor>
+					<micro>9</micro>
+				</min-revision>
+			</dependency>
+		</dependencies>
+		<channelRef ref="channel-0"/>
+		<archives>
+			<archive>
+				<!--Built on: Fri Nov  1 16:28:23 2019.-->
+				<complete>
+					<size>1309789472</size>
+					<checksum>0aa76b20a7ad30f2e41bc21b897b848d82533d26</checksum>
+					<url>x86_64-29_r09.zip</url>
+				</complete>
+			</archive>
+		</archives>
+	</remotePackage>
+</sys-img:sdk-sys-img>
