@@ -7139,6 +7139,12 @@ void Game::createmenu( std::string t )
     else if (t == "youwannaquit")
     {
         menuoptions[0] = "yes, quit";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "no, return";
+        menuoptionsactive[1] = true;
+        nummenuoptions = 2;
+        menuxoff = 0;
+        menuyoff = -20;
     }
     else if (t == "levellist")
     {
