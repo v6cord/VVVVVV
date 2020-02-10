@@ -104,6 +104,14 @@ int scriptclass::getimage(Game& game, std::string n) {
 	return -1;
 }
 
+template<typename T>
+static void try_set_lvalue(T& ref, T value) {
+    ref = value;
+}
+
+template<typename T>
+static void try_set_lvalue(const T&& ref, T value) {}
+
 // Syntax: X(<name>, <value> (has to be a valid lvalue and rvalue), <offset/indexing>)
 #define SPECIALVARS \
     X("deaths", game.deathcounts, 0) \
@@ -123,7 +131,7 @@ void scriptclass::setvar(std::string n, std::string c) {
 		variablecontents[tempvar] = c;
 	}
 
-#define X(k, v, i) if (n == k) v = ss_toi(c) + i;
+#define X(k, v, i) if (n == k) { try_set_lvalue((v), ss_toi(c) + i); return; }
     SPECIALVARS
 #undef X
 }
