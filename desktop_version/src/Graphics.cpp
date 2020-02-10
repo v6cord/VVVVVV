@@ -516,8 +516,8 @@ void Graphics::bprintalpha( int x, int y, std::string t, int r, int g, int b, in
         if (cen)
         {
             //TODO find different
-            PrintOff(-1, y, t, 0, 0, 0, cen);
-            PrintOff(1, y, t, 0, 0, 0, cen);
+            PrintOffAlpha(-1, y, t, 0, 0, 0, a, cen);
+            PrintOffAlpha(1, y, t, 0, 0, 0, a, cen);
         }
         else
         {
