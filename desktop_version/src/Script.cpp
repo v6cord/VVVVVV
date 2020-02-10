@@ -108,12 +108,14 @@ int scriptclass::getimage(Game& game, std::string n) {
 	return -1;
 }
 
-enum specialvar_type { INT_SPECIALVAR };
+enum specialvar_type { INT_SPECIALVAR, STR_SPECIALVAR };
 
 template<specialvar_type TYPE, typename T>
 static void try_set_lvalue(T& ref, std::string value, int offset) {
     if constexpr (TYPE == INT_SPECIALVAR) {
         ref = ss_toi(value) + offset;
+    } else if constexpr (TYPE == STR_SPECIALVAR) {
+        ref = value;
     }
 }
 
@@ -124,6 +126,8 @@ template<specialvar_type TYPE, typename T>
 static std::string get_specialvar(const T&& ref, int offset) {
     if constexpr (TYPE == INT_SPECIALVAR) {
         return std::to_string(ref - offset);
+    } else if constexpr (TYPE == STR_SPECIALVAR) {
+        return ref;
     }
 }
 
