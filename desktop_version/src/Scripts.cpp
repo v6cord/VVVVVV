@@ -350,7 +350,6 @@ void scriptclass::load(std::string t)
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if (words[0] == "setroomname"
             || words[0] == "drawtext"
-            || words[0] == "text"
             || words[0] == "createroomtext"
             || words[0] == "customactivityzone"
             || ((words[0] == "addvar" || words[0] == "setvar") && words[2] == "")
@@ -358,6 +357,19 @@ void scriptclass::load(std::string t)
               // Don't parse the next line if it is a textbox-like line
               add(script.customscript[i]);
               i++;
+            } else if (words[0] == "text") {
+              // Ok, it's actually a text box with potentially more than one line
+              int lines;
+              if (words[5] != "" && words[6] != "")
+                // RGB version, 3 color args, 6 args
+                lines = ss_toi(words[6]);
+              else
+                // Predefined color version, 1 color arg, 4 args
+                lines = ss_toi(words[4]);
+              for (int c = 0; c < lines; c++) {
+                add(script.customscript[i]);
+                i++;
+              }
             }
             add(script.customscript[i]);
 
