@@ -495,6 +495,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 }
             }
         }
+    #if !defined(NO_CUSTOM_LEVELS)
         else if (game.currentmenuname == "levellist")
         {
           if(ed.ListOfMetaData.size()==0){
@@ -515,6 +516,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
           }
         }
+    #endif
         else if (game.currentmenuname == "errornostart")
         {
           dwgfx.Print( -1, 65, "ERROR: This level has", tr, tg, tb, true);
@@ -2818,6 +2820,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
 
             dwgfx.Print(0, 105, "Press ACTION to warp to the ship.", 196, 196, 255 - help.glow, true);
         }
+    #if !defined(NO_CUSTOM_LEVELS)
         else if(map.custommode){
           dwgfx.Print(30, 220, "MAP", 64,64,64);
             dwgfx.Print(103-8, 220, "[CREW]", 196, 196, 255 - help.glow);
@@ -2855,6 +2858,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
               }
             }
         }
+    #endif
         else
         {
             dwgfx.Print(30, 220, "MAP", 64,64,64);

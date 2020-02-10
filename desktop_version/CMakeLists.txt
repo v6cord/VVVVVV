@@ -19,6 +19,9 @@ OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
 OPTION(ENABLE_PROFILE "Enable profiler" OFF)
 
+SET(CUSTOM_LEVEL_SUPPORT ENABLED CACHE STRING "Optionally disable playing and/or editing of custom levels")
+SET_PROPERTY(CACHE CUSTOM_LEVEL_SUPPORT PROPERTY STRINGS ENABLED NO_EDITOR DISABLED)
+
 # Architecture Flags
 IF(APPLE)
 	# Wow, Apple is a huge jerk these days huh?
@@ -124,7 +127,6 @@ include(sdl2-config OPTIONAL)
 SET(VVV_SRC
 	src/BinaryBlob.cpp
 	src/BlockV.cpp
-	src/editor.cpp
 	src/Ent.cpp
 	src/Entity.cpp
 	src/FileSystemUtils.cpp
@@ -162,6 +164,10 @@ SET(VVV_SRC
         ${GITREV_TMP}
         src/trace.c
 )
+IF(NOT CUSTOM_LEVEL_SUPPORT STREQUAL "DISABLED")
+	LIST(APPEND VVV_SRC src/editor.cpp)
+ENDIF()
+
 SET(XML_SRC
 	../third_party/tinyxml/tinystr.cpp
 	../third_party/tinyxml/tinyxml.cpp
@@ -227,6 +233,12 @@ IF(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -U_FORTIFY_SOURCE")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -U_FORTIFY_SOURCE")
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
+
+IF(CUSTOM_LEVEL_SUPPORT STREQUAL "NO_EDITOR")
+	ADD_DEFINITIONS(-DNO_EDITOR)
+ELSEIF(CUSTOM_LEVEL_SUPPORT STREQUAL "DISABLED")
+	ADD_DEFINITIONS(-DNO_CUSTOM_LEVELS -DNO_EDITOR)
+ENDIF()
 
 # Library information
 ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})

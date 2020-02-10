@@ -61,8 +61,10 @@
 using namespace std::literals::chrono_literals;
 
 scriptclass script;
-growing_vector<edentities> edentity;
-editorclass ed;
+#if !defined(NO_CUSTOM_LEVELS)
+	growing_vector<edentities> edentity;
+	editorclass ed;
+#endif
 
 bool startinplaytest = false;
 bool savefileplaytest = false;
@@ -550,6 +552,7 @@ int main(int argc, char *argv[])
                 //Render
                 preloaderrender(graphics, game, help);
                 break;
+        #if !defined(NO_CUSTOM_LEVELS)
             case EDITORMODE:
 				graphics.flipmode = false;
                 //Input
@@ -559,6 +562,7 @@ int main(int argc, char *argv[])
                 ////Logic
                 editorlogic(key, graphics, game, obj, music, map, help);
                 break;
+        #endif
             case TITLEMODE:
                 //Input
                 changeloginput(key, graphics, map, game, obj, help, music);
@@ -702,8 +706,12 @@ int main(int argc, char *argv[])
         }
 
         //Mute button
-        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry &&
-            !ed.textmod && ed.scripthelppage != 1)
+    #if !defined(NO_CUSTOM_LEVELS)
+        bool inEditor = ed.textentry || ed.textmod || ed.scripthelppage == 1;
+    #else
+        bool inEditor = false;
+    #endif
+        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !inEditor)
         {
             game.mutebutton = 8;
             if (game.muted)

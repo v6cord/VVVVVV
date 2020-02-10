@@ -14,7 +14,9 @@
 #include "Music.h"
 #include "editor.h"
 
-extern editorclass ed;
+#if !defined(NO_CUSTOM_LEVELS)
+	extern editorclass ed;
+#endif
 
 void twoframedelayfix();
 

@@ -1,3 +1,5 @@
+#if !defined(NO_CUSTOM_LEVELS)
+
 #include "editor.h"
 
 #include "Game.h"
@@ -7274,3 +7276,5 @@ TAG_FINDER(find_modified, "Modified");
 TAG_FINDER(find_modifiers, "Modifiers");
 
 #undef TAG_FINDER
+
+#endif /* NO_CUSTOM_LEVELS */

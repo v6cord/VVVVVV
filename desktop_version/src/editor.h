@@ -1,3 +1,5 @@
+#if !defined(NO_CUSTOM_LEVELS)
+
 #ifndef EDITOR_H
 #define EDITOR_H
 
@@ -434,3 +436,5 @@ void editorinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                  entityclass& obj, UtilityClass& help, musicclass& music);
 
 #endif /* EDITOR_H */
+
+#endif /* NO_CUSTOM_LEVELS */
