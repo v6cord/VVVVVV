@@ -123,6 +123,8 @@ public:
 
 	bool PrintAlpha(int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen = false);
 
+	void PrintAlpha(int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen = false);
+
 	void RPrint(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
 	void PrintOff(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
