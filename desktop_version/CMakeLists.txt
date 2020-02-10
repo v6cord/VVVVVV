@@ -195,7 +195,6 @@ SET(PARSE_SRC
 IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
 	SET(PFS_SRC ${PFS_SRC} ../third_party/physfs/physfs_platform_apple.m)
-        SET(VVV_SRC ${VVV_SRC} src/battery_apple.m)
 ENDIF()
 
 if(SWITCH)
