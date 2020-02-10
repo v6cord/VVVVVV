@@ -24,7 +24,7 @@ in
         pkgsNative.gdb # we don't want a cross gdb
       ] ++ (if debug then [
         pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
-        libicns imagemagick # icon conversion
+        pkgsNative.libicns pkgsNative.imagemagick # icon conversion
       ] else []);
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl
