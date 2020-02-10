@@ -351,8 +351,6 @@ void scriptclass::load(std::string t)
             if (words[0] == "setroomname"
             || words[0] == "drawtext"
             || words[0] == "text"
-            || words[0] == "textcolor"
-            || words[0] == "textcolour"
             || words[0] == "createroomtext"
             || words[0] == "customactivityzone"
             || words[0] == "customactivityzonergb") {
