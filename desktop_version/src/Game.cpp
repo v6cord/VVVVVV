@@ -4,6 +4,7 @@
 #include "Graphics.h"
 #include "Entity.h"
 #include "Map.h"
+#include "Script.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6608,6 +6609,10 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     for (std::size_t i = 0; i < script.variablenames.size(); i++) {
         if (script.variablenames[i].empty())
             continue;
+
+#define X(t, k, v, ii, s) if (script.variablenames[i] == k) continue;
+        SPECIALVARS
+#undef X
 
         TiXmlElement *varEl = new TiXmlElement( "var" );
         varEl->SetAttribute( "name", script.variablenames[i].c_str() );
