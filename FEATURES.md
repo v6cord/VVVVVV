@@ -153,9 +153,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `enablesuicide` - enable pressing R
 
-- `customactivityzone(x,y,w,h,color,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, prompt goes on the next line
-
-- `customactivityzonergb(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, r,g,b is 0-255, prompt goes on the next line
+- `customactivityzone(x,y,w,h,color,script)` OR `customactivityzone(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, r,g,b is 0-255, prompt goes on the next line
 
 - Fixed the 2-frame delay to execute a script when entering a room
 
