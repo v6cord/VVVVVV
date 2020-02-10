@@ -982,6 +982,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				game.allymode = true;
 				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
 			}
+			// im gay
+			if (words[0] == "misa")
+			{
+				game.misamode = true;
+			}
                         if (words[0] == "markmap")
                         {
                             game.scriptmarkers.push_back(scriptmarker {

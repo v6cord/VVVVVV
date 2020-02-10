@@ -15,7 +15,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `settile(x,y,tile)` - place a tile temporarily in the room
 
-- `textcolo(u)r(r,g,b,x,y,lines)` - `text()` but you can set the color directly - r,g,b is 0-255 - if r,g,b is 0,0,0 only the text will show up and not the text box
+- You can now use `text()` like `text(r,g,b,x,y,lines)` - r,g,b is 0-255 - if r,g,b is 0,0,0 only the text will show up and not the text box
 
 - `reloadroom()` - reloads the current room
 

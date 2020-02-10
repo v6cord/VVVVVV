@@ -430,6 +430,7 @@ public:
     growing_vector<std::string> onetimescripts;
 
     bool allymode = false;
+    bool misamode = false;
 };
 
 extern Game game;

@@ -135,6 +135,10 @@ void Screen::UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect )
     {
         buffer = ApplyAllyFilter(buffer);
     }
+    else if(game.misamode)
+    {
+        buffer = ApplyMisaFilter(buffer);
+    }
 
     FillRect(m_screen, 0x000);
     BlitSurfaceStandard(buffer,NULL,m_screen,rect);

@@ -53,6 +53,7 @@ SDL_Surface * FlipSurfaceVerticle(SDL_Surface* _src);
 SDL_Surface * ScaleSurfaceSlow( SDL_Surface *_surface, int Width, int Height );
 SDL_Surface* ApplyFilter( SDL_Surface* _src );
 SDL_Surface* ApplyAllyFilter( SDL_Surface* _src );
+SDL_Surface* ApplyMisaFilter( SDL_Surface* _src );
 
 struct RgbColor {
     unsigned char r;
