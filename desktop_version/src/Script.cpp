@@ -887,16 +887,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					tempindex = (int)game.script_images.size() - 1;
 				}
 				if ((tempindex <= (int)game.script_images.size()) && tempindex >= 0) {
-					if (words[4] == "true" || words[4] == "1")
-						words[4] = "1";
-					else
-						words[4] = "0";
 					scriptimage temp;
 					temp.type   = 3;
 					temp.x      = ss_toi(words[1]);
 					temp.y      = ss_toi(words[2]);
 					temp.index  = tempindex;
-					temp.center = ss_toi(words[4]);
+					temp.center = parsebool(words[4]);
 					scriptrender.push_back(temp);
 				}
             }
