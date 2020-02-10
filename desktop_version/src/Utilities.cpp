@@ -2,6 +2,12 @@
 #include <stdint.h>
 #include "Utilities.h"
 
+#ifdef __SWITCH__
+#include <switch.h>
+#else
+#include <SDL.h>
+#endif
+
 uint64_t splitmix64(uint64_t& x) {
     uint64_t z = (x += 0x9e3779b97f4a7c15);
     z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
@@ -65,3 +71,30 @@ size_t bsd_strlcpy(char *dst, const char *src, size_t dsize) {
 }
 
 void free_delete::operator()(void* x) { free(x); }
+
+#ifdef __SWITCH__
+int battery_level() {
+    psmInitialize();
+    uint32_t level = 100;
+    psmGetBatteryChargePercentage(&level);
+    return (int) level;
+}
+
+bool on_battery() {
+    psmInitialize();
+    ChargerType type;
+    psmGetChargerType(&type);
+    return type == ChargerType_None;
+}
+#else
+int battery_level() {
+    int percent = 100;
+    SDL_GetPowerInfo(nullptr, &percent);
+    if (percent == -1) percent = 100;
+    return percent;
+}
+
+bool on_battery() {
+    return SDL_GetPowerInfo(nullptr, nullptr) == SDL_POWERSTATE_ON_BATTERY;
+}
+#endif
