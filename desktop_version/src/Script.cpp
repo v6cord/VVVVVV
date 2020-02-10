@@ -832,10 +832,6 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				temp.r      = ss_toi(words[3]);
 				temp.g      = ss_toi(words[4]);
 				temp.b      = ss_toi(words[5]);
-				if (words[6] == "true")
-					words[6] = "1";
-				else if (words[6] == "false")
-					words[6] = "0";
                 if (words[7] == "true")
 					words[7] = "1";
 				else if (words[7] == "false" || words[7] == "")
@@ -844,7 +840,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 {
                     if (words[8] != "") temp.sc = ss_toi(words[8]); else temp.sc = 2;
                 }
-				temp.center = ss_toi(words[6]);
+				temp.center = parsebool(words[6]);
                 temp.bord   = ss_toi(words[7]);
                 position++;
 				temp.text = processvars(commands[position]);
