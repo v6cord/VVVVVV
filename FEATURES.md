@@ -121,9 +121,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `nobars()` - to disable automatic cutscene bars from a script
 
-- `finalstretchon` - turn on Final Level palette swap
-
-- `finalstretchoff` - turn off Final Level palette swap
+- `finalstretch(on/off)` - toggle Final Level palette swap
 
 - `reloadscriptboxes()` - reload script boxes without affecting entities
 
