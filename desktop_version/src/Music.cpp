@@ -497,7 +497,10 @@ void musicclass::playfile(const char* t, std::string track)
 
     auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
     if (inserted) {
-        pair->second = SoundTrack(t);
+        SoundTrack track(t);
+        pair->second.sound = track.sound;
+        pair->second.isValid = track.isValid;
+        track.isValid = false;
     }
 
     if (track != "") {
