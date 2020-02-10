@@ -2,6 +2,7 @@
 #include <chrono>
 #include <ctime>
 #include <stdint.h>
+#include <stdio.h>
 #include <sstream>
 #include <iomanip>
 #include "Utilities.h"
@@ -114,4 +115,18 @@ std::string hhmmss_time() {
 // this is specified as being a unix timestamp, unlike std::time
 std::chrono::system_clock::rep unix_time() {
     return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+std::string dtos(double val) {
+    if (val == (int) val) {
+        return string_cast((int) val);
+    } else {
+        int size = snprintf(nullptr, 0, "%f", val);
+        std::string str(size, '\0');
+        char* data = str.data();
+        int written = snprintf(data, size + 1, "%f", val);
+        str.resize(written);
+        str.erase(str.find_last_not_of(".0") + 1);
+        return str;
+    }
 }

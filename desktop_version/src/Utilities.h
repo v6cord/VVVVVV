@@ -45,4 +45,6 @@ T string_cast(U val) {
     return ret;
 }
 
+std::string dtos(double val);
+
 #endif
