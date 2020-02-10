@@ -111,7 +111,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - You can now place flipped terminals
 
-- Add showmarkers/hidemarkers to temporarily disable markmap markers
+- `hidemarkers()` - disable `markmap()` markers
+
+- `showmarkers()` - undo the above
 
 - `setspeed(x)` for player speed, 3 by default
 
