@@ -340,14 +340,18 @@ void Graphics::MakeSpriteArray()
     }
 }
 
+bool Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ ) {
+    return PrintAlpha(_x,_y,_s,r,g,b,255,cen);
+}
 
-bool Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
+bool Graphics::PrintAlpha( int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen /*= false*/ )
 {
     r = clamp(r,0,255);
     g = clamp(g,0,255);
     b = clamp(b,0,255);
+    a = clamp(a,0,255);
 
-    ct.colour = getRGB(r, g, b);
+    ct.colour = getRGBA(r, g, b, a);
 
     if (cen)
         _x = ((160 ) - ((len(_s)) / 2));
@@ -451,13 +455,18 @@ int Graphics::len(std::string t)
     return bfontpos;
 }
 
-void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
+void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ ) {
+    PrintOffAlpha(_x,_y,_s,r,g,b,255,cen);
+}
+
+void Graphics::PrintOffAlpha( int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen /*= false*/ )
 {
     r = clamp(r,0,255);
     g = clamp(g,0,255);
     b = clamp(b,0,255);
+    a = clamp(a,0,255);
 
-    ct.colour = getRGB(r, g, b);
+    ct.colour = getRGBA(r, g, b, a);
 
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
@@ -493,13 +502,17 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     }
 }
 
-void Graphics::bprint( int x, int y, std::string t, int r, int g, int b, bool cen /*= false*/ )
+void Graphics::bprint( int x, int y, std::string t, int r, int g, int b, bool cen /*= false*/ ) {
+    bprintalpha(x,y,t,r,g,b,255,cen);
+}
+
+void Graphics::bprintalpha( int x, int y, std::string t, int r, int g, int b, int a, bool cen /*= false*/ )
 {
 
     //printmask(x, y, t, cen);
     if (!notextoutline)
     {
-        Print(x, y - 1, t, 0, 0, 0, cen);
+        PrintAlpha(x, y - 1, t, 0, 0, 0, a, cen);
         if (cen)
         {
             //TODO find different
@@ -508,13 +521,13 @@ void Graphics::bprint( int x, int y, std::string t, int r, int g, int b, bool ce
         }
         else
         {
-            Print(x  -1, y, t, 0, 0, 0, cen);
-            Print(x  +1, y, t, 0, 0, 0, cen);
+            PrintAlpha(x  -1, y, t, 0, 0, 0, a, cen);
+            PrintAlpha(x  +1, y, t, 0, 0, 0, a, cen);
         }
-        Print(x, y+1, t, 0, 0, 0, cen);
+        PrintAlpha(x, y+1, t, 0, 0, 0, a, cen);
     }
 
-    Print(x, y, t, r, g, b, cen);
+    PrintAlpha(x, y, t, r, g, b, a, cen);
 }
 
 void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )

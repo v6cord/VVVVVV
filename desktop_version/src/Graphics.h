@@ -121,11 +121,17 @@ public:
 
 	bool Print(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
+	bool PrintAlpha(int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen = false);
+
 	void RPrint(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
 	void PrintOff(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
+	void PrintOffAlpha(int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen = false);
+
 	void bprint(int x, int y, std::string t, int r, int g, int b, bool cen = false);
+
+	void bprintalpha(int x, int y, std::string t, int r, int g, int b, int a, bool cen = false);
 
 	int len(std::string t);
 	void bigprint( int _x, int _y, std::string _s, int r, int g, int b, bool cen = false, int sc = 2 );
