@@ -428,6 +428,8 @@ public:
     bool quiet = false;
 
     growing_vector<std::string> onetimescripts;
+
+    bool allymode = false;
 };
 
 extern Game game;

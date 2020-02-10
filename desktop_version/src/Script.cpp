@@ -958,6 +958,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					scriptdelay = 1;
 				}
 			}
+			// secret
+			if (words[0] == "ally")
+			{
+				game.allymode = true;
+				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
+			}
                         if (words[0] == "markmap")
                         {
                             game.scriptmarkers.push_back(scriptmarker {
