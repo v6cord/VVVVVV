@@ -122,7 +122,8 @@ static void try_set_lvalue(const T&& ref, T value) {}
     X("trinkets", game.trinkets, 0) \
     X("coins", game.coins, 0) \
     X("battery_level", battery_level(), 0) \
-    X("on_battery", ((int) on_battery()), 0)
+    X("on_battery", ((int) on_battery()), 0) \
+    X("unix_time", ((int) unix_time()), 0)
 
 void scriptclass::setvar(std::string n, std::string c) {
 	int tempvar = getvar(n);
