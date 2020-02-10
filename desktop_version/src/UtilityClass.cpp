@@ -270,3 +270,19 @@ void relativepos(int* original, std::string parsethis)
 {
     *original = relativepos(*original, parsethis);
 }
+
+bool parsebool(std::string parsethis)
+{
+    if (parsethis == "true"
+    || parsethis == "yes"
+    || parsethis == "y"
+    || parsethis == "on")
+        return true;
+    else if (parsethis == "false"
+    || parsethis == "no"
+    || parsethis == "n"
+    || parsethis == "off")
+        return false;
+
+    return ss_toi(parsethis);
+}
