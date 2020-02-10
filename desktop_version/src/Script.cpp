@@ -154,10 +154,15 @@ std::string scriptclass::processvars(std::string t) {
 			if (currentletter == "%") {
 				readingvar = false;
                                 std::string temp = "%" + tempvar + "%";
-                                try {
-                                    auto eval = evalvar(tempvar);
-                                    temp = eval;
-                                } catch(const std::exception& ex) {}
+                                auto idx = getvar(tempvar);
+                                if (idx != -1) {
+                                    temp = variablecontents[idx];
+                                } else {
+                                    try {
+                                        auto eval = evalvar(tempvar);
+                                        temp = eval;
+                                    } catch(const std::exception& ex) {}
+                                }
                                 tempstring += temp;
 				tempvar = "";
 			} else {
