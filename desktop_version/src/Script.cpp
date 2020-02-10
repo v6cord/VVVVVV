@@ -1362,36 +1362,28 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					b = 174;
 				}
 
-				//next are the x,y coordinates
-				textx = ss_toi(words[2]);
-				texty = ss_toi(words[3]);
+				// Time to abuse the assignment-is-an-expression trick
+				int a = 1;
+				if (words[5] != "" && words[6] != "") {
+					a = 0; // Off-by-one
 
-				//Number of lines for the textbox!
-                                if (!words[4].empty()) {
-                                    txtnumlines = ss_toi(words[4]);
-                                } else {
-                                    txtnumlines = 1;
-                                }
-
-				for (int i = 0; i < txtnumlines; i++)
-				{
-					position++;
-					txt[i] = processvars(commands[position]);
+					// We have 2 extra args, so there must be 3 color args instead of 1!
+					// 3 color args for R, G, and B
+					r = ss_toi(words[++a]);
+					g = ss_toi(words[++a]);
+					b = ss_toi(words[++a]);
 				}
-			}
-			else if ((words[0] == "textcolor") || (words[0] == "textcolour"))
-			{
-				// set the colors
-				r = ss_toi(words[1]);
-				g = ss_toi(words[2]);
-				b = ss_toi(words[3]);
 
 				//next are the x,y coordinates
-				textx = ss_toi(words[4]);
-				texty = ss_toi(words[5]);
+				textx = ss_toi(words[++a]);
+				texty = ss_toi(words[++a]);
 
 				//Number of lines for the textbox!
-				txtnumlines = ss_toi(words[6]);
+				if (!words[++a].empty())
+					txtnumlines = ss_toi(words[a]);
+				else
+					txtnumlines = 1;
+
 				for (int i = 0; i < txtnumlines; i++)
 				{
 					position++;
