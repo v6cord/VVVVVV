@@ -108,26 +108,37 @@ int scriptclass::getimage(Game& game, std::string n) {
 	return -1;
 }
 
-template<typename T>
-static void try_set_lvalue(T& ref, T value) {
-    ref = value;
+enum specialvar_type { INT_SPECIALVAR };
+
+template<specialvar_type TYPE, typename T>
+static void try_set_lvalue(T& ref, std::string value, int offset) {
+    if constexpr (TYPE == INT_SPECIALVAR) {
+        ref = ss_toi(value) + offset;
+    }
 }
 
-template<typename T>
-static void try_set_lvalue(const T&& ref, T value) {}
+template<specialvar_type TYPE, typename T>
+static void try_set_lvalue(const T&& ref, std::string value, int offset) {}
 
-// Syntax: X(<name>, <value>, <offset/indexing>)
+template<specialvar_type TYPE, typename T>
+static std::string get_specialvar(const T&& ref, int offset) {
+    if constexpr (TYPE == INT_SPECIALVAR) {
+        return std::to_string(ref - offset);
+    }
+}
+
+// Syntax: X(<type>, <name>, <value>, <offset/indexing>)
 #define SPECIALVARS \
-    X("deaths", game.deathcounts, 0) \
-    X("player_x", obj.entities[obj.getplayer()].xp, -6) \
-    X("player_y", obj.entities[obj.getplayer()].yp, -2) \
-    X("room_x", game.roomx, 100) \
-    X("room_y", game.roomy, 100) \
-    X("trinkets", game.trinkets, 0) \
-    X("coins", game.coins, 0) \
-    X("battery_level", battery_level(), 0) \
-    X("on_battery", ((int) on_battery()), 0) \
-    X("unix_time", ((int) unix_time()), 0)
+    X(INT_SPECIALVAR, "deaths", game.deathcounts, 0) \
+    X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6) \
+    X(INT_SPECIALVAR, "player_y", obj.entities[obj.getplayer()].yp, -2) \
+    X(INT_SPECIALVAR, "room_x", game.roomx, 100) \
+    X(INT_SPECIALVAR, "room_y", game.roomy, 100) \
+    X(INT_SPECIALVAR, "trinkets", game.trinkets, 0) \
+    X(INT_SPECIALVAR, "coins", game.coins, 0) \
+    X(INT_SPECIALVAR, "battery_level", battery_level(), 0) \
+    X(INT_SPECIALVAR, "on_battery", ((int) on_battery()), 0) \
+    X(INT_SPECIALVAR, "unix_time", ((int) unix_time()), 0)
 
 void scriptclass::setvar(std::string n, std::string c) {
 	int tempvar = getvar(n);
@@ -138,7 +149,7 @@ void scriptclass::setvar(std::string n, std::string c) {
 		variablecontents[tempvar] = c;
 	}
 
-#define X(k, v, i) if (n == k) { try_set_lvalue((v), ss_toi(c) + i); return; }
+#define X(t, k, v, i) if (n == k) { try_set_lvalue<(t)>((v), c, (i)); return; }
     SPECIALVARS
 #undef X
 }
@@ -186,7 +197,7 @@ std::string scriptclass::processvars(std::string t) {
 }
 
 void scriptclass::updatevars() {
-#define X(k, v, i) setvar(k, std::to_string(v - i));
+#define X(t, k, v, i) setvar(k, get_specialvar<(t)>(std::move(v), (i)));
     SPECIALVARS
 #undef X
 }
