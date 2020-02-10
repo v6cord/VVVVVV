@@ -148,7 +148,7 @@ bool on_battery() {
     if (!GetSystemPowerStatus(&status)) return false;
     return status.ACLineStatus == 0;
 }
-#else
+#elif !defined(__APPLE__)
 int battery_level() {
     return 100;
 }

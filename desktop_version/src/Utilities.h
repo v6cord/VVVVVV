@@ -17,8 +17,13 @@ uint64_t xoshiro_next(void);
 
 size_t bsd_strlcpy(char *dst, const char *src, size_t dsize);
 
+#ifdef __APPLE__
+extern "C" int battery_level();
+extern "C" bool on_battery();
+#else
 int battery_level();
 bool on_battery();
+#endif
 
 // source: https://randomascii.wordpress.com/2013/04/03/stop-using-strncpy-already/
 template <size_t charCount>
