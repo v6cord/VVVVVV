@@ -119,7 +119,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `pinf` - variant of `inf` to automatically `pdelay(1)` if no delay occurred
 
-- `nobars()` - to disable automatic cutscene bars from a script
+- `noautobars()` - to disable automatic cutscene bars from a script
 
 - `finalstretch(on/off)` - toggle Final Level palette swap
 
