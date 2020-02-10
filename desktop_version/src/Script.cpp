@@ -133,7 +133,6 @@ static std::string get_specialvar(const T&& ref, int offset) {
 
 // Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)
 // Slow variables cannot be used in expressions, but are not automatically updated every frame
->>>>>>> Add "slow" variables which are not updated every frame
 #define SPECIALVARS \
     X(INT_SPECIALVAR, "deaths", game.deathcounts, 0, 0) \
     X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6, 0) \
