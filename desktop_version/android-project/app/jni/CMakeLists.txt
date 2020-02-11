@@ -53,14 +53,14 @@ externalproject_add(libogg_build
     CONFIGURE_COMMAND
         ${CMAKE_COMMAND} -E env
         TOOLCHAIN=${ANDROID_TOOLCHAIN_ROOT}
-        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ar
-        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-as
-        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang
-        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang++
-        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ld
-        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ranlib
-        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-strip
-        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static
+        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ar
+        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-as
+        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}${ANDROID_PLATFORM_LEVEL}-clang
+        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}${ANDROID_PLATFORM_LEVEL}-clang++
+        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ld
+        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ranlib
+        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-strip
+        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=${CMAKE_LIBRARY_ARCHITECTURE} --disable-shared --enable-static
     BUILD_BYPRODUCTS <INSTALL_DIR>/include/ogg/ogg.h <INSTALL_DIR>/lib/libogg.a
 )
 
@@ -74,14 +74,14 @@ externalproject_add(libvorbis_build
     CONFIGURE_COMMAND
         ${CMAKE_COMMAND} -E env
         TOOLCHAIN=${ANDROID_TOOLCHAIN_ROOT}
-        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ar
-        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-as
-        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang
-        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang++
-        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ld
-        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ranlib
-        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-strip
-        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static "LDFLAGS=-L${LIBOGG_LIB_DIR}" "CFLAGS=-I${LIBOGG_INCLUDE_DIR}"
+        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ar
+        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-as
+        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}${ANDROID_PLATFORM_LEVEL}-clang
+        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}${ANDROID_PLATFORM_LEVEL}-clang++
+        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ld
+        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ranlib
+        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-strip
+        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=${CMAKE_LIBRARY_ARCHITECTURE} --disable-shared --enable-static "LDFLAGS=-L${LIBOGG_LIB_DIR}" "CFLAGS=-I${LIBOGG_INCLUDE_DIR}"
         BUILD_BYPRODUCTS <INSTALL_DIR>/include/vorbis/vorbis.h <INSTALL_DIR>/lib/libvorbis.a <INSTALL_DIR>/lib/libvorbisfile.a
 )
 
@@ -96,15 +96,15 @@ externalproject_add(SDL_mixer_build
     CONFIGURE_COMMAND
         ${CMAKE_COMMAND} -E env
         TOOLCHAIN=${ANDROID_TOOLCHAIN_ROOT}
-        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ar
-        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-as
-        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang
-        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang++
-        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ld
-        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ranlib
-        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-strip
+        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ar
+        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-as
+        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}${ANDROID_PLATFORM_LEVEL}-clang
+        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}${ANDROID_PLATFORM_LEVEL}-clang++
+        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ld
+        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-ranlib
+        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/${CMAKE_LIBRARY_ARCHITECTURE}-strip
         SDL2_CONFIG=${SDL2_PREFIX}/bin/sdl2-config
-        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static --enable-music-ogg --disable-music-ogg-shared "LDFLAGS=-L${LIBOGG_LIB_DIR} -L${LIBVORBIS_LIB_DIR}" "CFLAGS=-I${LIBOGG_INCLUDE_DIR} -I${LIBVORBIS_INCLUDE_DIR}"
+        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=${CMAKE_LIBRARY_ARCHITECTURE} --disable-shared --enable-static --enable-music-ogg --disable-music-ogg-shared "LDFLAGS=-L${LIBOGG_LIB_DIR} -L${LIBVORBIS_LIB_DIR}" "CFLAGS=-I${LIBOGG_INCLUDE_DIR} -I${LIBVORBIS_INCLUDE_DIR}"
     BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL_mixer.h <INSTALL_DIR>/lib/libSDL2_mixer.a
 )
 
@@ -118,7 +118,7 @@ set(SDL2_LIBRARIES ${SDL2_LIBRARIES} ${INSTALL_DIR}/lib/libSDL2_mixer.a ${LIBVOR
 #    fribidi_build
 #    URL https://github.com/fribidi/fribidi/releases/download/v1.0.8/fribidi-1.0.8.tar.bz2
 #    URL_HASH SHA256=94c7b68d86ad2a9613b4dcffe7bbeb03523d63b5b37918bdf2e4ef34195c1e6c
-#    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static && ${CMAKE_COMMAND} -E copy <BINARY_DIR>/config.h <BINARY_DIR>/fribidi-config.h
+#    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=${CMAKE_LIBRARY_ARCHITECTURE} --disable-shared --enable-static && ${CMAKE_COMMAND} -E copy <BINARY_DIR>/config.h <BINARY_DIR>/fribidi-config.h
 #    BUILD_BYPRODUCTS <BINARY_DIR>/lib/.libs/libfribidi.a <SOURCE_DIR>/lib/fribidi.h
 #)
 #
