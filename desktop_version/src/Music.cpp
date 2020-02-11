@@ -67,16 +67,13 @@ void musicclass::init()
 #endif
 
 	binaryBlob musicReadBlob;
-#ifndef __ANDROID__
         if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
-#endif
 	{
 		mmmmmm = false;
 		if (!loaded) usingmmmmmm=false;
 		bool ohCrap = musicReadBlob.unPackBinary("vvvvvvmusic.vvv");
 		SDL_assert(ohCrap && "Music not found!");
 	}
-#ifndef __ANDROID__
 	else
 	{
 		mmmmmm = true;
@@ -148,7 +145,6 @@ void musicclass::init()
 		bool ohCrap = musicReadBlob.unPackBinary("vvvvvvmusic.vvv");
 		SDL_assert(ohCrap && "Music not found!");
 	}
-#endif
 
 	int index = musicReadBlob.getIndex("data/music/0levelcomplete.ogg");
 	SDL_RWops *rw = SDL_RWFromMem(musicReadBlob.getAddress(index), musicReadBlob.getSize(index));
