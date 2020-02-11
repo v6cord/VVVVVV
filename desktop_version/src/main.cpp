@@ -235,8 +235,6 @@ int main(int argc, char *argv[])
         fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
     }
 
-    printf("SDL_Init successful\n");
-
     if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
     {
         return 1;
