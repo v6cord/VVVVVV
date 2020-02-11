@@ -559,7 +559,7 @@ void editorclass::clearscriptbuffer()
 void editorclass::removeline(int t)
 {
     //Remove line t from the script
-    if(sblength>0)
+    if(sblength>1)
     {
         if(sblength==t)
         {
