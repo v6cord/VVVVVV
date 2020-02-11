@@ -47,6 +47,49 @@ add_custom_target(copy-hidapi ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${HIDAPI} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/
 )
 
+externalproject_add(libogg_build
+    URL https://ftp.osuosl.org/pub/xiph/releases/ogg/libogg-1.3.4.tar.xz
+    URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe
+    CONFIGURE_COMMAND
+        ${CMAKE_COMMAND} -E env
+        TOOLCHAIN=${ANDROID_TOOLCHAIN_ROOT}
+        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ar
+        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-as
+        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang
+        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang++
+        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ld
+        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ranlib
+        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-strip
+        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static
+    BUILD_BYPRODUCTS <INSTALL_DIR>/include/ogg/ogg.h <INSTALL_DIR>/lib/libogg.a
+)
+
+ExternalProject_Get_Property(libogg_build INSTALL_DIR)
+set(LIBOGG_LIB_DIR ${INSTALL_DIR}/lib)
+set(LIBOGG_INCLUDE_DIR ${INSTALL_DIR}/include)
+
+externalproject_add(libvorbis_build
+    URL https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-1.3.6.tar.xz
+    URL_HASH SHA256=af00bb5a784e7c9e69f56823de4637c350643deedaf333d0fa86ecdba6fcb415
+    CONFIGURE_COMMAND
+        ${CMAKE_COMMAND} -E env
+        TOOLCHAIN=${ANDROID_TOOLCHAIN_ROOT}
+        AR=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ar
+        AS=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-as
+        CC=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang
+        CXX=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android29-clang++
+        LD=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ld
+        RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ranlib
+        STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-strip
+        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static "LDFLAGS=-L${LIBOGG_LIB_DIR}" "CFLAGS=-I${LIBOGG_INCLUDE_DIR}"
+        BUILD_BYPRODUCTS <INSTALL_DIR>/include/vorbis/vorbis.h <INSTALL_DIR>/lib/libvorbis.a <INSTALL_DIR>/lib/libvorbisfile.a
+)
+
+ExternalProject_Get_Property(libvorbis_build INSTALL_DIR)
+set(LIBVORBIS_LIB_DIR ${INSTALL_DIR}/lib)
+set(LIBVORBIS_INCLUDE_DIR ${INSTALL_DIR}/include)
+add_dependencies(libvorbis_build libogg_build)
+
 externalproject_add(SDL_mixer_build
     URL https://github.com/leo60228/SDL_mixer/archive/b4a3541b8d6f015fb0103cbf94f50a8153974cc7.tar.gz
     URL_HASH SHA256=7c439032d7a24f12f54c0a1fe26f2fe0fea0bc4278e837930496d4387aa00446
@@ -61,15 +104,15 @@ externalproject_add(SDL_mixer_build
         RANLIB=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-ranlib
         STRIP=${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android-strip
         SDL2_CONFIG=${SDL2_PREFIX}/bin/sdl2-config
-        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static
+        <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --host=aarch64-android-linux --disable-shared --enable-static --enable-music-ogg --disable-music-ogg-shared "LDFLAGS=-L${LIBOGG_LIB_DIR} -L${LIBVORBIS_LIB_DIR}" "CFLAGS=-I${LIBOGG_INCLUDE_DIR} -I${LIBVORBIS_INCLUDE_DIR}"
     BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL_mixer.h <INSTALL_DIR>/lib/libSDL2_mixer.a
 )
 
-add_dependencies(SDL_mixer_build SDL_build)
+add_dependencies(SDL_mixer_build SDL_build libogg_build libvorbis_build)
 
 ExternalProject_Get_Property(SDL_mixer_build INSTALL_DIR)
 set(SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS} ${INSTALL_DIR}/include ${INSTALL_DIR}/include/SDL2)
-set(SDL2_LIBRARIES ${SDL2_LIBRARIES} ${INSTALL_DIR}/lib/libSDL2_mixer.a)
+set(SDL2_LIBRARIES ${SDL2_LIBRARIES} ${INSTALL_DIR}/lib/libSDL2_mixer.a ${LIBVORBIS_LIB_DIR}/libvorbisfile.a ${LIBVORBIS_LIB_DIR}/libvorbis.a ${LIBOGG_LIB_DIR}/libogg.a)
 
 #EXTERNALPROJECT_ADD(
 #    fribidi_build
