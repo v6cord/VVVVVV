@@ -52,6 +52,7 @@ std::string dtos(double val);
 
 #define fprintf(file, ...) ((#file == "stderr") ? __android_log_print(ANDROID_LOG_INFO, "VVVVVV-CE", __VA_ARGS__) : fprintf(file, __VA_ARGS__))
 #define printf(...) __android_log_print(ANDROID_LOG_VERBOSE, "VVVVVV-CE", __VA_ARGS__)
+#define puts(message) __android_log_print(ANDROID_LOG_VERBOSE, "VVVVVV-CE", message "\n")
 #endif
 
 #endif
