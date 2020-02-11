@@ -368,6 +368,8 @@ void editorclass::reset()
 
     edentity.clear();
     edentity.resize(3000);
+
+    returneditoralpha = 0;
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game)

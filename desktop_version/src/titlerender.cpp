@@ -2096,6 +2096,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     }
     script.scriptrender.clear();
 
+#if !defined(NO_CUSTOM_LEVELS)
     if(map.custommode && !map.custommodeforreal && !game.advancetext){
         //Return to level editor
         dwgfx.bprintalpha(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), ed.returneditoralpha, false);
@@ -2103,6 +2104,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             ed.returneditoralpha -= 15;
         }
     }
+#endif
 
 
     dwgfx.cutscenebars();

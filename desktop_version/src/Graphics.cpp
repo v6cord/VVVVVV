@@ -142,7 +142,7 @@ void Graphics::init()
     showmousecursor = true;
 }
 
-int Graphics::font_idx(char32_t ch) {
+int Graphics::font_idx(uint32_t ch) {
     if (font_positions.size() > 0) {
         auto iter = font_positions.find(ch);
         if (iter == font_positions.end()) {
@@ -220,7 +220,7 @@ void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
     FILESYSTEM_freeMemory(&charmap);
 }
 
-int Graphics::bfontlen(char32_t ch) {
+int Graphics::bfontlen(uint32_t ch) {
     auto real = bfont[font_idx(ch)]->w;
     if (ch < 32 && real == 8) return 6;
     return real;

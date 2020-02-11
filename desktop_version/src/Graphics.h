@@ -31,8 +31,8 @@ public:
 
 	GraphicsResources grphx;
 
-        int bfontlen(char32_t ch);
-        int font_idx(char32_t ch);
+	int bfontlen(uint32_t ch);
+	int font_idx(uint32_t ch);
         int strwidth(std::string_view s);
         int strheight(std::string_view s);
 
