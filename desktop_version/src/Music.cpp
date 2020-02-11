@@ -65,17 +65,17 @@ void musicclass::init()
 #endif
 
 	binaryBlob musicReadBlob;
-	if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
+        if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
 	{
 		mmmmmm = false;
-		usingmmmmmm=false;
+		if (!loaded) usingmmmmmm=false;
 		bool ohCrap = musicReadBlob.unPackBinary("vvvvvvmusic.vvv");
 		SDL_assert(ohCrap && "Music not found!");
 	}
 	else
 	{
 		mmmmmm = true;
-		usingmmmmmm = true;
+		if (!loaded) usingmmmmmm = true;
 		int index = musicReadBlob.getIndex("data/music/0levelcomplete.ogg");
 		SDL_RWops *rw = SDL_RWFromMem(musicReadBlob.getAddress(index), musicReadBlob.getSize(index));
 		musicTracks.push_back(std::move(MusicTrack( rw )));
@@ -224,6 +224,8 @@ void musicclass::init()
 	volume = 0.0f;
 	fadeoutqueuesong = -1;
 	dontquickfade = false;
+
+        loaded = true;
 }
 
 void musicclass::play(int t, int fadeintime /* = 3000*/)

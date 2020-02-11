@@ -67,6 +67,7 @@ public:
 	// MMMMMM mod settings
 	bool mmmmmm = false;
 	bool usingmmmmmm = false;
+        bool loaded = false;
 
         bool muted = false;
 
