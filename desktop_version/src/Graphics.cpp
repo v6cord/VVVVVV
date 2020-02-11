@@ -11,7 +11,7 @@
 #include <fribidi/fribidi.h>
 #else
 #include <string.h>
-#define fribidi_log2vis(src, size, dst, ...) memcpy((dst), (src), sizeof(uint32_t) * (size))
+#define fribidi_log2vis(src, size, typ, dst, ...) (memcpy((dst), (src), sizeof(uint32_t) * (size)), 1)
 #define FriBidiParType int
 #define FRIBIDI_TYPE_ON 0
 #endif
