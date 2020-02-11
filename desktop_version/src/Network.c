@@ -1,6 +1,6 @@
 #include "Network.h"
 
-#ifndef __SWITCH__
+#if !defined(__SWITCH__) && !defined(__ANDROID__)
 #define NUM_BACKENDS 2
 #define DECLARE_BACKEND(name) \
 	extern int32_t name##_init(); \

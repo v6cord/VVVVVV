@@ -10,6 +10,8 @@
 
 void musicclass::init()
 {
+        if (!loaded) soundSystem.init();
+
         soundTracks.clear();
         musicTracks.clear();
 

@@ -95,6 +95,28 @@ static bool cached_data_zip_load(const char* path) {
         return false;
     }
     return true;
+#elif defined(__ANDROID__)
+    SDL_RWops* file = SDL_RWFromFile("data.zip", "rb");
+    if (file == nullptr) return false;
+    long size = file->size(file);
+    if (size == -1) {
+        file->close(file);
+        return false;
+    }
+    unsigned char* buf = (unsigned char*) malloc(size);
+    size_t read = file->read(file, buf, 1, size);
+    if (read == 0) {
+        file->close(file);
+        free(buf);
+        return false;
+    }
+    file->close(file);
+
+    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 1)) {
+        free(buf);
+        return false;
+    }
+    return true;
 #else
     return PHYSFS_mount(path, NULL, 1);
 #endif
@@ -406,6 +428,9 @@ void PLATFORM_getOSDirectory(char* output)
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
 	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
+#elif defined(__ANDROID__)
+        bsd_strlcpy(output, SDL_AndroidGetExternalStoragePath(), MAX_PATH - 1);
+        strcat(output, "/");
 #else
 	bsd_strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif

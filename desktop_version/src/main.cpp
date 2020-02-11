@@ -225,12 +225,17 @@ int main(int argc, char *argv[])
         printf("\t\t\n");
     }
 
-    SDL_Init(
-        SDL_INIT_VIDEO |
-        SDL_INIT_AUDIO |
-        SDL_INIT_JOYSTICK |
-        SDL_INIT_GAMECONTROLLER
-    );
+    SDL_SetMainReady();
+    if (SDL_Init(
+            SDL_INIT_VIDEO |
+            SDL_INIT_AUDIO |
+            SDL_INIT_JOYSTICK |
+            SDL_INIT_GAMECONTROLLER
+        ) < 0) {
+        fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
+    }
+
+    printf("SDL_Init successful\n");
 
     if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
     {

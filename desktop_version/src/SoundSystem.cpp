@@ -5,6 +5,7 @@
 #endif
 #include "SoundSystem.h"
 #include "FileSystemUtils.h"
+#include "Utilities.h"
 
 MusicTrack::MusicTrack(const char* fileName)
 {
@@ -67,7 +68,7 @@ SoundTrack::~SoundTrack() {
     isValid = false;
 }
 
-SoundSystem::SoundSystem()
+void SoundSystem::init()
 {
 	int audio_rate = 44100;
 	Uint16 audio_format = AUDIO_S16SYS;
