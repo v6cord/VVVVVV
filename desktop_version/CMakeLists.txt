@@ -210,7 +210,7 @@ IF(WIN32)
         set(VVV_SRC ${VVV_SRC} "resources.rc")
 	ADD_EXECUTABLE(VVVVVV-CE WIN32 ${VVV_SRC})
 ELSEIF(ANDROID)
-        ADD_LIBRARY(main SHARED ${SDL2_SRC}/src/main/android/SDL_android_main.c ${VVV_SRC})
+        ADD_LIBRARY(main SHARED ${VVV_SRC})
 ELSE()
 	ADD_EXECUTABLE(VVVVVV-CE ${VVV_SRC})
 ENDIF()
@@ -274,22 +274,16 @@ find_package(PkgConfig)
 if (SWITCH)
     set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
 endif()
-if (ANDROID)
-    set(ENV{PKG_CONFIG_PATH} "${PKG_CONFIG_PATH}")
-endif()
+if (NOT ANDROID)
+    pkg_check_modules(FRIBIDI fribidi)
 
-pkg_check_modules(FRIBIDI fribidi)
+    find_path(FRIBIDI_INCLUDE_DIR
+            NAMES fribidi/fribidi.h)
 
-find_path(FRIBIDI_INCLUDE_DIR
-          NAMES fribidi/fribidi.h)
+    find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
-if(ANDROID)
-    target_include_directories(main PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
-else()
     target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
 endif()
-
-find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
 # libpng
 find_package(PNG)
@@ -309,32 +303,56 @@ if(NOT PNG_FOUND)
     find_package(ZLIB)
 
     include(ExternalProject)
-    ExternalProject_Add(
-        libpng
-        URL ${CMAKE_SOURCE_DIR}/../third_party/libpng-1.6.37.tar.xz
-        CMAKE_ARGS
-            -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-            -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-            -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
-            -DPNG_SHARED=OFF
-            -DBUILD_SHARED_LIBS=FALSE
-            -DSKIP_INSTALL_FILES=1
-            -DCMAKE_INSTALL_LIBDIR=lib
-        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
-        BUILD_BYPRODUCTS
-            ${CMAKE_CURRENT_BINARY_DIR}/libpng/lib/${prefix}png${suffix}
-            ${CMAKE_CURRENT_BINARY_DIR}/libpng/include/png.h
-    )
+    if (ANDROID)
+        ExternalProject_Add(
+            libpng
+            URL ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/libpng-1.6.37.tar.xz
+            CMAKE_ARGS
+                -DANDROID_ABI=${ANDROID_ABI}
+                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
+                -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+                -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+                -DPNG_SHARED=OFF
+                -DBUILD_SHARED_LIBS=FALSE
+                -DSKIP_INSTALL_FILES=1
+                -DCMAKE_INSTALL_LIBDIR=lib
+            PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
+            BUILD_BYPRODUCTS
+                ${CMAKE_CURRENT_BINARY_DIR}/libpng/lib/${prefix}png${suffix}
+                ${CMAKE_CURRENT_BINARY_DIR}/libpng/include/png.h
+        )
+    else()
+        ExternalProject_Add(
+            libpng
+            URL ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/libpng-1.6.37.tar.xz
+            CMAKE_ARGS
+                -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+                -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+                -DPNG_SHARED=OFF
+                -DBUILD_SHARED_LIBS=FALSE
+                -DSKIP_INSTALL_FILES=1
+                -DCMAKE_INSTALL_LIBDIR=lib
+            PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libpng
+            BUILD_BYPRODUCTS
+                ${CMAKE_CURRENT_BINARY_DIR}/libpng/lib/${prefix}png${suffix}
+                ${CMAKE_CURRENT_BINARY_DIR}/libpng/include/png.h
+        )
+    endif()
+
     ExternalProject_Get_Property(libpng INSTALL_DIR)
 
     add_library(PNG::PNG SHARED IMPORTED)
     set_target_properties(PNG::PNG PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}png${suffix})
     find_package(ZLIB)
-    target_link_libraries(PNG::PNG INTERFACE ZLIB::ZLIB)
+    set_target_properties(PNG::PNG PROPERTIES INTERFACE_LINK_LIBRARIES ZLIB::ZLIB)
     file(MAKE_DIRECTORY "${INSTALL_DIR}/include")
-    target_include_directories(PNG::PNG INTERFACE "${INSTALL_DIR}/include")
+    set_target_properties(PNG::PNG PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
     add_dependencies(PNG::PNG libpng)
 endif()
 
@@ -342,7 +360,8 @@ find_package(Threads)
 
 # Static Dependencies
 if(ANDROID)
-    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
+    add_dependencies(main SDL_build SDL_mixer_build)
 else()
     TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
 endif()
@@ -381,8 +400,13 @@ elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS)
 	target_link_libraries(VVVVVV-CE SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES} shlwapi mingw_stdthreads)
 elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
 	message(STATUS "Using pre-defined SDL2 variables SDL2_INCLUDE_DIRS and SDL2_LIBRARIES")
-	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-	target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES})
+        if(ANDROID)
+            target_include_directories(main PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
+            target_link_libraries(main ${SDL2_LIBRARIES})
+        else()
+            target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
+            target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES})
+        endif()
 else()
 	# Only try to autodetect if both SDL2 variables aren't explicitly set
 	find_package(SDL2 CONFIG)
@@ -430,7 +454,9 @@ if (SWITCH)
     target_compile_options(VVVVVV-CE PUBLIC -fexceptions)
 endif()
 if(ANDROID)
-    target_link_libraries(main SDL2main)
+    find_library(log-lib log)
+    target_link_libraries(main ${log-lib})
+    add_dependencies(main copy-hidapi)
 endif()
 
 if (NOT ANDROID)
@@ -477,5 +503,4 @@ else()
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
-    INSTALL(FILES ${CMAKE_BINARY_DIR}/data-zip/data.zip DESTINATION ${CMAKE_INSTALL_DATADIR}/vvvvvv COMPONENT data-zip)
 endif()

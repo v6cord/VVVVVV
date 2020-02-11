@@ -26,6 +26,9 @@ in
         pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
         pkgsNative.libicns pkgsNative.imagemagick # icon conversion
         pkgsNative.gitAndTools.git-subrepo # subrepo management
+      ] else []) ++ (if android then [
+        pkgsNative.gitAndTools.git-remote-hg
+        pkgsNative.mercurial
       ] else []);
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl

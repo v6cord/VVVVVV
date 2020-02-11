@@ -7,7 +7,14 @@
 #include <utf8/checked.h>
 #include <physfs.h>
 #include <iterator>
+#ifndef __ANDROID__
 #include <fribidi/fribidi.h>
+#else
+#include <string.h>
+#define fribidi_log2vis(src, size, dst, ...) memcpy((dst), (src), sizeof(uint32_t) * (size))
+#define FriBidiParType int
+#define FRIBIDI_TYPE_ON 0
+#endif
 
 void Graphics::init()
 {
