@@ -616,6 +616,19 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         }
     }
 
+    if (script.killedviridian) {
+        if (script.killtimer > 0) script.killtimer--;
+        if (script.killtimer == 0) {
+            script.killtimer = -1;
+            SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "",
+                    "You killed Viridian.",
+                    NULL
+            );
+        }
+    }
+
     if (obj.nearelephant)
     {
         obj.upset++;

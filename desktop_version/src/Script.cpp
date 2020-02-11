@@ -1017,6 +1017,21 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				game.misamode = true;
 			}
+			if (words[0] == "bruh")
+			{
+				int i = obj.getplayer();
+				obj.entities[i].active = false;
+				obj.entities[i].rule = -1;
+				game.hascontrol = false;
+				music.fadeout();
+				music.playfile("pop.wav", "");
+				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "");
+	            dwgfx.showcutscenebars = false;
+				running = false;
+				nointerrupt = false;
+				killedviridian = true;
+				killtimer = 120;
+			}
                         if (words[0] == "markmap")
                         {
                             game.scriptmarkers.push_back(scriptmarker {

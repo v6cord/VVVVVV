@@ -2102,7 +2102,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
     //Returning to editor mode must always be possible
 #if !defined(NO_CUSTOM_LEVELS)
-    if(map.custommode && !map.custommodeforreal){
+    if((map.custommode && !map.custommodeforreal) && !script.killedviridian){
       if ((game.press_map || key.isDown(27)) && !game.mapheld){
         game.mapheld = true;
         //Return to level editor
