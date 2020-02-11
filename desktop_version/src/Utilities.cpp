@@ -110,7 +110,13 @@ std::string hhmmss_time() {
     std::time_t timestamp = std::time(nullptr);
     std::tm* time = std::localtime(&timestamp);
     std::stringstream stream;
-    stream << std::setfill('0') << std::setw(2) << time->tm_hour << ":" << time->tm_min << ":" << time->tm_sec;
+    stream
+        << std::setfill('0') << std::setw(2)
+        << time->tm_hour << ":"
+        << std::setfill('0') << std::setw(2)
+        << time->tm_min << ":"
+        << std::setfill('0') << std::setw(2)
+        << time->tm_sec;
     return stream.str();
 }
 
