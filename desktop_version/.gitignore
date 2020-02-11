@@ -1,6 +1,7 @@
 # Build objects
 build*
 !build.sh
+!build.gradle
 flibitBuild/
 CMakeCache.txt
 CMakeFiles/

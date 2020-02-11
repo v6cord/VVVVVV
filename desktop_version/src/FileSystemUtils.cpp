@@ -649,7 +649,7 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__ANDROID__)
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
