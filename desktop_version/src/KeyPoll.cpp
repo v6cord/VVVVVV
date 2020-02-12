@@ -446,7 +446,8 @@ void KeyPoll::Poll()
             fakekeytimer = 6;
             textentrymode = 0;
 #else
-            if (wantsOSKClose && !SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window)) {
+            //if (wantsOSKClose && !SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window)) {
+            if (SDL_HasScreenKeyboardSupport() && !SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window)) {
                 if (fakekeytimer > 0) {
                     keymap[fakekey] = 0;
                 }
