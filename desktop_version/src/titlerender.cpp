@@ -422,13 +422,13 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         }
         else if (game.currentmenuname == "loadcustomtrial")
         {
-            if (game.customtrials.size() == 0) {
+            if (ed.customtrials.size() == 0) {
                 dwgfx.Print( -1, 65, "No time trials...", tr, tg, tb, true);
-            } else if (game.currentmenuoption == (int)game.customtrials.size()) {
+            } else if (game.currentmenuoption == (int)ed.customtrials.size()) {
                 dwgfx.Print( -1, 65, "Select a time trial to play!", tr, tg, tb, true);
             } else {
-                game.timetrialpar = game.customtrials[game.currentmenuoption].par;
-                dwgfx.bigprint( -1, 30, game.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
+                game.timetrialpar = ed.customtrials[game.currentmenuoption].par;
+                dwgfx.bigprint( -1, 30, ed.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
                 if ((game.currentmenuoption + 1) > (int)game.customtrialstats.size()) {
                     dwgfx.Print( -1, 75, "Not yet attempted", tr, tg, tb, true);
                 } else if (!game.customtrialstats[game.currentmenuoption].attempted) {
@@ -438,7 +438,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                     dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                     dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
                     dwgfx.Print( 110, 65, game.timetstring(game.customtrialstats[game.currentmenuoption].time, help), tr, tg, tb);
-                    dwgfx.Print( 110, 75, help.String(game.customtrialstats[game.currentmenuoption].trinkets)+"/" + help.String(game.customtrials[game.currentmenuoption].trinkets), tr, tg, tb);
+                    dwgfx.Print( 110, 75, help.String(game.customtrialstats[game.currentmenuoption].trinkets)+"/" + help.String(ed.customtrials[game.currentmenuoption].trinkets), tr, tg, tb);
                     dwgfx.Print( 110, 85, help.String(game.customtrialstats[game.currentmenuoption].lives), tr, tg, tb);
                     dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(help), tr, tg, tb);
                     dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);

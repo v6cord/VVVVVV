@@ -4342,7 +4342,6 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 	case 20:
 		//Level editor
 		hardreset(key, dwgfx, game, map, obj, help, music);
-		game.customtrials.clear();
 		ed.reset();
 		music.fadeout();
 
@@ -4528,17 +4527,17 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 	game.timetrialcountdown = 150;
 	game.timetrialparlost = false;
 	game.timetriallevel = 21;
-	game.timetrialpar = game.customtrials[game.currenttrial].par;
-	game.timetrialshinytarget = game.customtrials[game.currenttrial].trinkets;
+	game.timetrialpar = ed.customtrials[game.currenttrial].par;
+	game.timetrialshinytarget = ed.customtrials[game.currenttrial].trinkets;
 
-    game.savex =  game.customtrials[game.currenttrial].startx;
-    game.savey =  game.customtrials[game.currenttrial].starty;
-    game.saverx = game.customtrials[game.currenttrial].roomx;
-    game.savery = game.customtrials[game.currenttrial].roomy;
-    game.savegc = game.customtrials[game.currenttrial].startf;
+    game.savex =  ed.customtrials[game.currenttrial].startx;
+    game.savey =  ed.customtrials[game.currenttrial].starty;
+    game.saverx = ed.customtrials[game.currenttrial].roomx;
+    game.savery = ed.customtrials[game.currenttrial].roomy;
+    game.savegc = ed.customtrials[game.currenttrial].startf;
     game.savedir = 1;
     game.savepoint = 0;
-    game.gravitycontrol = game.customtrials[game.currenttrial].startf;
+    game.gravitycontrol = ed.customtrials[game.currenttrial].startf;
     game.coins = 0;
     game.trinkets = 0;
     game.crewmates = 0;

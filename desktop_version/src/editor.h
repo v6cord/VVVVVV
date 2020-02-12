@@ -387,6 +387,7 @@ public:
 
     growing_vector<edaltstate> altstates;
     growing_vector<edtower> towers;
+    growing_vector<customtrial> customtrials;
 
     int ypos; // tower mode y position
 

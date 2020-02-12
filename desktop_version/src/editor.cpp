@@ -370,6 +370,8 @@ void editorclass::reset()
     edentity.resize(3000);
 
     returneditoralpha = 0;
+
+    customtrials.clear();
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game)
@@ -2343,7 +2345,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
 {
     reset();
     map.teleporters.clear();
-    game.customtrials.clear();
+    ed.customtrials.clear();
 
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
@@ -2511,7 +2513,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
                 } else {
                     temp.name = "???";
                 }
-                game.customtrials.push_back(temp);
+                ed.customtrials.push_back(temp);
 
             }
 
@@ -2959,17 +2961,17 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "timetrials" );
-    for(int i = 0; i < (int)game.customtrials.size(); i++) {
+    for(int i = 0; i < (int)ed.customtrials.size(); i++) {
         TiXmlElement *trialElement = new TiXmlElement( "trial" );
-        trialElement->SetAttribute( "roomx",    game.customtrials[i].roomx   );
-        trialElement->SetAttribute( "roomy",    game.customtrials[i].roomy   );
-        trialElement->SetAttribute( "startx",   game.customtrials[i].startx  );
-        trialElement->SetAttribute( "starty",   game.customtrials[i].starty  );
-        trialElement->SetAttribute( "startf",   game.customtrials[i].startf  );
-        trialElement->SetAttribute( "par",      game.customtrials[i].par     );
-        trialElement->SetAttribute( "trinkets", game.customtrials[i].trinkets);
-        trialElement->SetAttribute( "music",    game.customtrials[i].music   );
-        trialElement->LinkEndChild( new TiXmlText( game.customtrials[i].name.c_str() )) ;
+        trialElement->SetAttribute( "roomx",    ed.customtrials[i].roomx   );
+        trialElement->SetAttribute( "roomy",    ed.customtrials[i].roomy   );
+        trialElement->SetAttribute( "startx",   ed.customtrials[i].startx  );
+        trialElement->SetAttribute( "starty",   ed.customtrials[i].starty  );
+        trialElement->SetAttribute( "startf",   ed.customtrials[i].startf  );
+        trialElement->SetAttribute( "par",      ed.customtrials[i].par     );
+        trialElement->SetAttribute( "trinkets", ed.customtrials[i].trinkets);
+        trialElement->SetAttribute( "music",    ed.customtrials[i].music   );
+        trialElement->LinkEndChild( new TiXmlText( ed.customtrials[i].name.c_str() )) ;
         msg->LinkEndChild( trialElement );
     }
 
@@ -4121,7 +4123,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
         }
         else if (game.currentmenuname == "ed_edit_trial") {
-            customtrial ctrial = game.customtrials[ed.edtrial];
+            customtrial ctrial = ed.customtrials[ed.edtrial];
 
             if(ed.trialnamemod)
             {
@@ -4150,8 +4152,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         else if (game.currentmenuname == "ed_trials")
         {
             dwgfx.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
-            for (int i = 0; i < (int)game.customtrials.size(); i++) {
-                std::string sl = game.customtrials[i].name;
+            for (int i = 0; i < (int)ed.customtrials.size(); i++) {
+                std::string sl = ed.customtrials[i].name;
                 if (game.currentmenuoption == i) {
                     std::transform(sl.begin(), sl.end(), sl.begin(), ::toupper);
                     sl = "[ " + sl + " ]";
@@ -4161,15 +4163,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 }
                 dwgfx.Print(-1, 75 + (i * 16), sl, tr,tg,tb,true);
             }
-            if (game.currentmenuoption == (int)game.customtrials.size()) {
-                dwgfx.Print(-1, 75 + ((int)game.customtrials.size() * 16), "[ ADD NEW TRIAL ]", tr,tg,tb,true);
+            if (game.currentmenuoption == (int)ed.customtrials.size()) {
+                dwgfx.Print(-1, 75 + ((int)ed.customtrials.size() * 16), "[ ADD NEW TRIAL ]", tr,tg,tb,true);
             } else {
-                dwgfx.Print(-1, 75 + ((int)game.customtrials.size() * 16), "  add new trial  ", tr,tg,tb,true);
+                dwgfx.Print(-1, 75 + ((int)ed.customtrials.size() * 16), "  add new trial  ", tr,tg,tb,true);
             }
-            if (game.currentmenuoption == (int)game.customtrials.size() + 1) {
-                dwgfx.Print(-1, 75 + (((int)game.customtrials.size() + 1) * 16), "[ BACK TO MENU ]", tr,tg,tb,true);
+            if (game.currentmenuoption == (int)ed.customtrials.size() + 1) {
+                dwgfx.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "[ BACK TO MENU ]", tr,tg,tb,true);
             } else {
-                dwgfx.Print(-1, 75 + (((int)game.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
+                dwgfx.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
             }
         }
         else if (game.currentmenuname=="ed_desc")
@@ -5164,7 +5166,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             EditorData::GetInstance().title=key.keybuffer;
         }
         else if (ed.trialnamemod) {
-            game.customtrials[ed.edtrial].name=key.keybuffer;
+            ed.customtrials[ed.edtrial].name=key.keybuffer;
         }
         else if(ed.creatormod)
         {
@@ -5199,7 +5201,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.titlemod=false;
                 }
                 else if (ed.trialnamemod) {
-                    game.customtrials[ed.edtrial].name = key.keybuffer;
+                    ed.customtrials[ed.edtrial].name = key.keybuffer;
                     ed.trialnamemod=false;
                 }
                 else if(ed.creatormod)
@@ -5278,8 +5280,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     if (game.currentmenuoption < 0) game.currentmenuoption = game.nummenuoptions-1;
                     if (game.currentmenuoption >= game.nummenuoptions ) game.currentmenuoption = 0;
                 } else {
-                    if (game.currentmenuoption < 0) game.currentmenuoption = (int)game.customtrials.size()+1;
-                    if (game.currentmenuoption > (int)game.customtrials.size()+1) game.currentmenuoption = 0;
+                    if (game.currentmenuoption < 0) game.currentmenuoption = (int)ed.customtrials.size()+1;
+                    if (game.currentmenuoption > (int)ed.customtrials.size()+1) game.currentmenuoption = 0;
                 }
 
                 if (ed.trialmod) {
@@ -5289,34 +5291,34 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         music.playef(11, 10);
                     }
                     if (game.currentmenuoption == 3) {
-                        if (game.press_left || key.keymap[SDLK_UP]) game.customtrials[ed.edtrial].trinkets--;
-                        if (game.press_right || key.keymap[SDLK_DOWN]) game.customtrials[ed.edtrial].trinkets++;
-                        if (game.customtrials[ed.edtrial].trinkets > 99) game.customtrials[ed.edtrial].trinkets = 0;
-                        if (game.customtrials[ed.edtrial].trinkets < 0) game.customtrials[ed.edtrial].trinkets = 99;
+                        if (game.press_left || key.keymap[SDLK_UP]) ed.customtrials[ed.edtrial].trinkets--;
+                        if (game.press_right || key.keymap[SDLK_DOWN]) ed.customtrials[ed.edtrial].trinkets++;
+                        if (ed.customtrials[ed.edtrial].trinkets > 99) ed.customtrials[ed.edtrial].trinkets = 0;
+                        if (ed.customtrials[ed.edtrial].trinkets < 0) ed.customtrials[ed.edtrial].trinkets = 99;
                     }
                     if (game.currentmenuoption == 4) {
-                        if (game.press_left || key.keymap[SDLK_UP]) game.customtrials[ed.edtrial].par--;
-                        if (game.press_right || key.keymap[SDLK_DOWN]) game.customtrials[ed.edtrial].par++;
-                        if (key.keymap[SDLK_PAGEDOWN]) game.customtrials[ed.edtrial].par += 60;
-                        if (key.keymap[SDLK_PAGEUP]) game.customtrials[ed.edtrial].par -= 60;
-                        if (game.customtrials[ed.edtrial].par > 600) game.customtrials[ed.edtrial].par = 0;
-                        if (game.customtrials[ed.edtrial].par < 0) game.customtrials[ed.edtrial].par = 600;
+                        if (game.press_left || key.keymap[SDLK_UP]) ed.customtrials[ed.edtrial].par--;
+                        if (game.press_right || key.keymap[SDLK_DOWN]) ed.customtrials[ed.edtrial].par++;
+                        if (key.keymap[SDLK_PAGEDOWN]) ed.customtrials[ed.edtrial].par += 60;
+                        if (key.keymap[SDLK_PAGEUP]) ed.customtrials[ed.edtrial].par -= 60;
+                        if (ed.customtrials[ed.edtrial].par > 600) ed.customtrials[ed.edtrial].par = 0;
+                        if (ed.customtrials[ed.edtrial].par < 0) ed.customtrials[ed.edtrial].par = 600;
                     }
                 }
                 else if (game.press_action)
                 {
                     if (game.currentmenuname == "ed_trials")
                     {
-                        if (game.currentmenuoption == (int)game.customtrials.size())
+                        if (game.currentmenuoption == (int)ed.customtrials.size())
                         {
                             customtrial temp;
-                            temp.name = "Trial " + std::to_string(game.customtrials.size() + 1);
-                            game.customtrials.push_back(temp);
-                            ed.edtrial = (int)game.customtrials.size() - 1;
+                            temp.name = "Trial " + std::to_string(ed.customtrials.size() + 1);
+                            ed.customtrials.push_back(temp);
+                            ed.edtrial = (int)ed.customtrials.size() - 1;
                             music.playef(11, 10);
                             game.createmenu("ed_edit_trial");
                         }
-                        else if (game.currentmenuoption == (int)game.customtrials.size()+1)
+                        else if (game.currentmenuoption == (int)ed.customtrials.size()+1)
                         {
                             music.playef(11, 10);
                             game.createmenu("ed_settings");
@@ -5336,7 +5338,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.textentry=true;
                             ed.trialnamemod=true;
                             key.enabletextentry();
-                            key.keybuffer=game.customtrials[ed.edtrial].name;
+                            key.keybuffer=ed.customtrials[ed.edtrial].name;
                         }
                         if (game.currentmenuoption == 1) {
                             ed.trialstartpoint = true;
@@ -5345,8 +5347,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         if (game.currentmenuoption == 2) {
                             music.playef(11, 10);
-                            game.customtrials[ed.edtrial].music++;
-                            if (game.customtrials[ed.edtrial].music > 15) game.customtrials[ed.edtrial].music = 0;
+                            ed.customtrials[ed.edtrial].music++;
+                            if (ed.customtrials[ed.edtrial].music > 15) ed.customtrials[ed.edtrial].music = 0;
                         }
                         if (game.currentmenuoption == 3) {
                             music.playef(11, 10);
@@ -5729,11 +5731,11 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             ed.switchroomsinput();
             if(key.leftbutton) {
                 ed.trialstartpoint = false;
-                game.customtrials[ed.edtrial].startx = (ed.tilex*8) - 4;
-                game.customtrials[ed.edtrial].starty = (ed.tiley*8);
-                game.customtrials[ed.edtrial].startf = 0;
-                game.customtrials[ed.edtrial].roomx = ed.levx;
-                game.customtrials[ed.edtrial].roomy = ed.levy;
+                ed.customtrials[ed.edtrial].startx = (ed.tilex*8) - 4;
+                ed.customtrials[ed.edtrial].starty = (ed.tiley*8);
+                ed.customtrials[ed.edtrial].startf = 0;
+                ed.customtrials[ed.edtrial].roomx = ed.levx;
+                ed.customtrials[ed.edtrial].roomy = ed.levy;
                 ed.settingsmod = true;
             }
         } else if ((key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) &&

@@ -417,7 +417,6 @@ public:
     growing_vector<SDL_Surface*> script_images;
     growing_vector<std::string> script_image_names;
 
-    growing_vector<customtrial> customtrials;
     bool incustomtrial = false;
     int currenttrial = 0;
 
