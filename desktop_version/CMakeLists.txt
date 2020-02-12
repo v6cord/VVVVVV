@@ -381,8 +381,10 @@ endif()
 
 if (3DS)
     include_directories(../third_party/ctr_pthread/)
+    set(THREADS_LIBRARY "")
 else()
     find_package(Threads)
+    set(THREADS_LIBRARY Threads::Threads)
 endif()
 
 # Static Dependencies
@@ -390,7 +392,7 @@ if(ANDROID)
     TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static "${LINK_FRIBIDI}" PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static "${LINK_FRIBIDI}" PNG::PNG ${THREADS_LIBRARY})
 endif()
 
 # data.zip path
