@@ -4970,7 +4970,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
                 }
 
-                if (key.isDown(27))
+                if (key.isDown(27) || key.controllerButtonDown())
                 {
                     ed.scripteditmod=false;
                     ed.settingsmod=false;
