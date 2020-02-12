@@ -38,7 +38,7 @@ int mkdir(char* path, int mode)
 	return CreateDirectoryW(utf16_path, NULL);
 }
 #define VNEEDS_MIGRATION (mkdirResult != 0)
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
 #include <sys/stat.h>
 #include <limits.h>
 #define VNEEDS_MIGRATION (mkdirResult == 0)
@@ -65,7 +65,7 @@ extern "C" {
 }
 
 static bool cached_data_zip_load(const char* path) {
-#ifdef __SWITCH__
+#if defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
     FILE* file = fopen(path, "rb");
     if (file == nullptr) return false;
     if (fseek(file, 0L, SEEK_END)) {
@@ -428,6 +428,8 @@ void PLATFORM_getOSDirectory(char* output)
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
 	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
+#elif defined(__3DS__) || defined(_3DS)
+	bsd_strlcpy(output, "sdmc:/3ds/VVVVVV/", MAX_PATH);
 #elif defined(__ANDROID__)
         bsd_strlcpy(output, SDL_AndroidGetExternalStoragePath(), MAX_PATH - 1);
         strcat(output, "/");
@@ -438,7 +440,7 @@ void PLATFORM_getOSDirectory(char* output)
 
 void PLATFORM_migrateSaveData(char* output)
 {
-#if !defined(__SWITCH__)
+#if !defined(__SWITCH__) && !defined(_3DS) && !defined(__3DS__)
 	char oldLocation[MAX_PATH];
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
@@ -597,7 +599,7 @@ void PLATFORM_migrateSaveData(char* output)
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 	} while (FindNextFile(hFind, &findHandle));
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
 	/* No Migration needed. */
 #else
 #error See PLATFORM_migrateSaveData
@@ -649,7 +651,7 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
-#elif defined(__SWITCH__) || defined(__ANDROID__)
+#elif defined(__SWITCH__) || defined(__ANDROID__) || defined(_3DS) || defined(__3DS__)
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
@@ -699,7 +701,7 @@ char* FILESYSTEM_basename(const char* file) {
     bsd_strlcpy(base_copy, base, base_len);
     return base_copy;
 }
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
 char* FILESYSTEM_realPath(const char* rel) {
     char* buf = (char*) malloc(MAX_PATH + 1);
     strlcpy(buf, rel, MAX_PATH + 1);
