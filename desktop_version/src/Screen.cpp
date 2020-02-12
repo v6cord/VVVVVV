@@ -99,11 +99,14 @@ void Screen::ResizeScreen(int x , int y)
 		}
 	}
 #endif
+#if !defined(_3DS) && !defined(__3DS__)
 	if (stretchMode == 1)
 	{
+#endif
 		int winX, winY;
 		SDL_GetWindowSize(m_window, &winX, &winY);
 		SDL_RenderSetLogicalSize(m_renderer, winX, winY);
+#if !defined(_3DS) && !defined(__3DS__)
 		SDL_RenderSetIntegerScale(m_renderer, SDL_FALSE);
 	}
 	else
@@ -111,6 +114,7 @@ void Screen::ResizeScreen(int x , int y)
 		SDL_RenderSetLogicalSize(m_renderer, 320, 240);
 		SDL_RenderSetIntegerScale(m_renderer, (SDL_bool) (stretchMode == 2));
 	}
+#endif
 	SDL_ShowWindow(m_window);
 }
 
