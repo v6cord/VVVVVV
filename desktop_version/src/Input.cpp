@@ -785,6 +785,13 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     {
                         music.playef(11, 10);
                         game.createmenu(game.previousmenuname);
+                        if(game.previousmenuname == "options" && music.mmmmmm){
+                            game.menuoptions[4] = "soundtrack";
+                            game.menuoptionsactive[4] = true;
+                            game.menuoptions[5] = "return";
+                            game.menuoptionsactive[5] = true;
+                            game.nummenuoptions = 6;
+                       }
                         map.nexttowercolour();
                     }
                 }
