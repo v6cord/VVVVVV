@@ -208,7 +208,7 @@ jobs:
         name: VVVVVV-CE-Switch
         path: desktop_version/build/VVVVVV-CE-Switch
 
-  build-switch:
+  build-android:
     name: Build (Android)
 
     runs-on: ubuntu-18.04
