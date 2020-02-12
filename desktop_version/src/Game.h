@@ -218,6 +218,7 @@ public:
     growing_vector<int> menuoptionsactive;
     int nummenuoptions, currentmenuoption = 0;
     std::string menuselection, currentmenuname, previousmenuname;
+    int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
 
     int menucountdown = 0;
