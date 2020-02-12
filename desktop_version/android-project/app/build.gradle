@@ -34,6 +34,14 @@ android {
             }
         }
     }
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     buildTypes {
         release {
             // minifyEnabled false
@@ -68,14 +76,6 @@ android {
                     output.outputFile = new File(outputFile.parent, fileName);
                 }
             }
-        }
-    }
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
         }
     }
 }
