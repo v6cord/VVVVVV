@@ -254,6 +254,9 @@ jobs:
 
     - name: Build
       run: cd ${SRC_DIR_PATH} && ./build.sh
+      env:
+        V6CORD_RELEASE: ${{ secrets.V6CORD_RELEASE }}
+        V6CORD_RELEASE_PASSWORD: ${{ secrets.V6CORD_RELEASE_PASSWORD }}
 
     - name: Show project after build
       run: tree ${SRC_DIR_PATH}/android-project
