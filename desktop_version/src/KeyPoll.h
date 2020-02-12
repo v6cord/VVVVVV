@@ -79,6 +79,7 @@ public:
 	bool textentrymode = false;
 	int keyentered, keybufferlen = 0;
 	bool pressedbackspace = false;
+        bool wantsOSKClose = false;
 	std::string keybuffer;
 
 	bool linealreadyemptykludge;

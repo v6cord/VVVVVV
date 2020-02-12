@@ -1,5 +1,6 @@
 #include "KeyPoll.h"
 #include "Enums.h"
+#include "Graphics.h"
 #include <stdio.h>
 #include <string.h>
 #include <utf8/checked.h>
@@ -64,12 +65,14 @@ void KeyPoll::enabletextentry()
 	keybuffer="";
 	textentrymode = true;
 	SDL_StartTextInput();
+        wantsOSKClose = SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window);
 }
 
 void KeyPoll::disabletextentry()
 {
 	textentrymode = false;
 	SDL_StopTextInput();
+        wantsOSKClose = false;
 }
 
 static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
@@ -425,9 +428,9 @@ void KeyPoll::Poll()
 			quitProgram = true;
 		}
 	}
-#ifdef __SWITCH__
         if (textentrymode)
         {
+#ifdef __SWITCH__
             char buf[512] = {0};
             SwkbdConfig conf;
             swkbdCreate(&conf, 0);
@@ -442,8 +445,17 @@ void KeyPoll::Poll()
             fakekey = SDLK_RETURN;
             fakekeytimer = 6;
             textentrymode = 0;
-        }
+#else
+            if (wantsOSKClose && !SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window)) {
+                if (fakekeytimer > 0) {
+                    keymap[fakekey] = 0;
+                }
+                fakekey = SDLK_RETURN;
+                fakekeytimer = 6;
+                textentrymode = 0;
+            }
 #endif
+        }
 }
 
 bool KeyPoll::isDown(SDL_Keycode key)
