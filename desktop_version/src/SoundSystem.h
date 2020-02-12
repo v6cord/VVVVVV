@@ -15,7 +15,7 @@
 #define Mix_FadingMusic(...) 0
 #define Mix_FreeChunk(...) 0
 #define Mix_FreeMusic(...) 0
-#define Mix_GetError(...) 0
+#define Mix_GetError(...) "stubbed on 3DS"
 #define Mix_HaltChannel(...) 0
 #define Mix_HaltMusic(...) 0
 #define Mix_LoadMUS(...) 0
@@ -32,6 +32,9 @@
 #define Mix_ResumeMusic(...) 0
 #define Mix_Volume(...) 0
 #define Mix_VolumeMusic(...) 0
+#define MIX_FADING_OUT 0
+#define MIX_MAX_VOLUME 0
+#define MIX_NO_FADING 0
 #endif
 
 class MusicTrack
