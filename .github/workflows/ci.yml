@@ -246,8 +246,8 @@ jobs:
       run: |
           cd .github/resources/
           ../../desktop_version/download-data.sh
-          mkdir -p ${SRC_DIR_PATH}/android-project/app/src/main/assets/
-          cp -v data-zip/data.zip ${SRC_DIR_PATH}/android-project/app/src/main/assets/data.zip
+          mkdir -p ../../${SRC_DIR_PATH}/android-project/app/src/main/assets/
+          cp -v data-zip/data.zip ../../${SRC_DIR_PATH}/android-project/app/src/main/assets/data.zip
 
     - name: Show project before build
       run: tree ${SRC_DIR_PATH}/android-project
