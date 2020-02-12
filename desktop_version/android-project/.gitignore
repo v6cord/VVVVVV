@@ -2,3 +2,4 @@
 .idea
 app/.externalNativeBuild/*
 app/src/main/assets/data.zip
+local.properties
