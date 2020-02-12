@@ -297,6 +297,10 @@ else()
     set(LINK_FRIBIDI "")
 endif()
 
+if(ANDROID OR 3DS OR SWITCH)
+    add_definitions(-DSTRICT_SDL_PATH=1)
+endif()
+
 # libpng
 find_package(PNG)
 
