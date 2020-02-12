@@ -14,7 +14,23 @@ RUN wget -qO- https://github.com/Lectem/3ds-cmake/archive/864098b357d820d9831cf1
     tar --transform 's/^3ds-cmake-864098b357d820d9831cf1fcc54c040e26987291/3ds-cmake/' \
         -xzv -C /usr/local/share/
 
-RUN apt-get update && apt-get install -y ninja-build && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y ninja-build python3 && rm -rf /var/lib/apt/lists/*
+
+RUN wget -qO- https://github.com/smealum/aemstro/archive/51bfeef9e1a0149726dca43b50919bd45917015a.tar.gz | \
+    tar --transform 's/^aemstro-51bfeef9e1a0149726dca43b50919bd45917015a/aemstro/' \
+        -xzv -C /usr/local/share/
+
+ENV AEMSTRO=/usr/local/share/aemstro
+
+RUN wget -qO- https://github.com/xerpi/SDL-3DS/archive/bf35f1675f23c670084ef70468569e8878e247c6.tar.gz | \
+    tar --transform 's/^SDL-3DS-bf35f1675f23c670084ef70468569e8878e247c6/SDL-3DS/' \
+        -xz -C /tmp && \
+    cd /tmp/SDL-3DS && \
+    sed -i 's/python/python3/g' Makefile.n3ds && \
+#    make -j$(nproc) -f Makefile.n3ds && make -f Makefile.n3ds install && \
+# SDL-3DS parallelization is broken :(
+    make -j1 -f Makefile.n3ds && make -f Makefile.n3ds install && \
+    rm -rf /tmp/SDL-3ds
 
 ENV VVVVVV_CE_3DS_BUILD=1
 

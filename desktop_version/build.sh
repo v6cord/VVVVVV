@@ -12,6 +12,7 @@ if [ ! -z "$VVVVVV_CE_SWITCH_BUILD" ]; then
 fi
 if [ ! -z "$VVVVVV_CE_3DS_BUILD" ]; then
     CC="arm-none-eabi-gcc"
+    export PKG_CONFIG_PATH=/opt/devkitpro/portlibs/3ds/lib/pkgconfig
 fi
 if echo $'#ifdef _WIN32\nyes\n#endif' | $CC -E - | tail -n1 | grep -q yes; then
     windows=1
