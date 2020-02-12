@@ -233,7 +233,7 @@ jobs:
     - name: Copy data.zip
       run: |
           cd .github/resources/
-          ${SRC_DIR_PATH}/download-data.sh
+          ../../desktop_version/download-data.sh
           mkdir -p ${SRC_DIR_PATH}/android-project/app/src/main/assets/
           cp -v data-zip/data.zip ${SRC_DIR_PATH}/android-project/app/src/main/assets/data.zip
 
