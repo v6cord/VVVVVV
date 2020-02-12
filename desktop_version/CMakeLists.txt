@@ -243,6 +243,10 @@ IF(ENABLE_WARNINGS)
         endif()
 ENDIF()
 
+if(3DS)
+    target_compile_options(VVVVVV-CE PRIVATE -Wno-unused-value -Wno-unused-variable)
+endif()
+
 IF(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -U_FORTIFY_SOURCE")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -U_FORTIFY_SOURCE")
