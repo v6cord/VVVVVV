@@ -64,7 +64,7 @@ SoundTrack::SoundTrack(SoundTrack&& moved) : sound(std::move(moved.sound)), isVa
 }
 
 SoundTrack::~SoundTrack() {
-    if (isValid) Mix_FreeChunk(sound);
+    //if (isValid) Mix_FreeChunk(sound);
     isValid = false;
 }
 
