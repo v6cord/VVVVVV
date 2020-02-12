@@ -340,6 +340,9 @@ growing_vector<std::string> changelog = {
     "- You can now use Minecraft-like",
     "  relative tilde syntax in gotoroom()",
     "  and gotoposition()",
+    "- sayquiet and replyquiet - same as",
+    "  normal say and reply, but without",
+    "  a squeak",
 
 };
 
