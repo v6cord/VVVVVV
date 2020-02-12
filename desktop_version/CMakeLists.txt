@@ -300,6 +300,9 @@ endif()
 if(ANDROID OR 3DS OR SWITCH)
     add_definitions(-DSTRICT_SDL_PATH=1)
 endif()
+if(3DS)
+    add_definitions(-DNO_SDL_MIXER)
+endif()
 
 # libpng
 find_package(PNG)
