@@ -230,6 +230,12 @@ jobs:
         path: .github/resources/data-zip
         key: data-zip-folder
 
+    - name: Cache CMake
+      uses: actions/cache@v1
+      with:
+        path: /usr/local/cmake
+        key: cmake-3-16-4
+
     - name: Install pinned CMake
       run: ${SRC_DIR_PATH}/pinned-cmake.sh
 
