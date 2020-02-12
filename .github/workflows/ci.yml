@@ -230,6 +230,9 @@ jobs:
         path: .github/resources/data-zip
         key: data-zip-folder
 
+    - name: Install pinned CMake
+      run: ${SRC_DIR_PATH}/pinned-cmake.sh
+
     - name: Copy data.zip
       run: |
           cd .github/resources/
