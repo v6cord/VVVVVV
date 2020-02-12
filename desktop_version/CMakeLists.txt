@@ -527,9 +527,18 @@ if (NOT ANDROID)
         APP_VERSION ${CPACK_PACKAGE_VERSION}
         ICON ${CMAKE_CURRENT_SOURCE_DIR}/data/VVVVVV.png)
 
+    set(APP_TITLE VVVVVV-CE)
+    set(APP_AUTHOR ${CPACK_PACKAGE_VENDOR})
+    set(APP_VERSION ${CPACK_PACKAGE_VERSION})
+    set(APP_ICON ${CMAKE_CURRENT_SOURCE_DIR}/data/VVVVVV.png)
+
     if (SWITCH)
         include(SwitchTools)
         add_nro_target(VVVVVV-CE)
+    endif()
+    if(3DS)
+        include(Tools3DS)
+        add_3dsx_target(VVVVVV-CE)
     endif()
 else()
     include(GNUInstallDirs)
