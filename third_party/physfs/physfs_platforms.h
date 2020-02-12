@@ -72,7 +72,8 @@
 #elif defined(unix) || defined(__unix__)
 #  define PHYSFS_PLATFORM_UNIX 1
 #  define PHYSFS_PLATFORM_POSIX 1
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(_3DS) || defined(__3DS__)
+#  define PHYSFS_PLATFORM_HORIZON 1
 #  define PHYSFS_PLATFORM_UNIX 1
 #  define PHYSFS_PLATFORM_POSIX 1
 #  define PHYSFS_NO_CDROM_SUPPORT 1

@@ -217,7 +217,7 @@ static char *findBinaryInPath(const char *bin, char *envr)
 static char *readSymLink(const char *path)
 {
     // Switch does not support symlinks.
-    #if defined(__SWITCH__)
+    #if defined(PHYSFS_PLATFORM_HORIZON)
         return NULL;
     #endif
     
