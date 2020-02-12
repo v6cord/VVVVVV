@@ -182,7 +182,7 @@ void log_init() {
     dup2(pfd[1], 1);
     dup2(pfd[1], 2);
 
-    pthread_create(&thr, 0, thread_func, 0);
+    pthread_create(&thr, 0, log_thread, 0);
     pthread_detach(thr);
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
 #ifdef __SWITCH__
