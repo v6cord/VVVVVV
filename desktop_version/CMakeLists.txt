@@ -403,7 +403,7 @@ if (DATA_ZIP_PATH)
 endif()
 
 # SDL2 Dependency (Detection pulled from FAudio)
-if (SWITCH)
+if (SWITCH OR 3DS)
         message(STATUS "Using SDL2 from pkg-config")
         pkg_check_modules(SDL2 sdl2)
         pkg_check_modules(SDL2_MIXER SDL2_mixer)
