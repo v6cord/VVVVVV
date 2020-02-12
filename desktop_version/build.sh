@@ -10,6 +10,9 @@ CC="${CC:-cc}"
 if [ ! -z "$VVVVVV_CE_SWITCH_BUILD" ]; then
     CC="aarch64-none-elf-gcc"
 fi
+if [ ! -z "$VVVVVV_CE_3DS_BUILD" ]; then
+    CC="arm-none-eabi-gcc"
+fi
 if echo $'#ifdef _WIN32\nyes\n#endif' | $CC -E - | tail -n1 | grep -q yes; then
     windows=1
 fi
@@ -38,6 +41,8 @@ cmake -G Ninja \
     ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
     ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_TOOLCHAIN_FILE=/usr/local/share/switch-cmake/DevkitA64Libnx.cmake} \
     ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_MODULE_PATH=/usr/local/share/switch-cmake/cmake} \
+    ${VVVVVV_CE_3DS_BUILD:+-DCMAKE_TOOLCHAIN_FILE=/usr/local/share/3ds-cmake/DevkitArm3DS.cmake} \
+    ${VVVVVV_CE_3DS_BUILD:+-DCMAKE_MODULE_PATH=/usr/local/share/3ds-cmake/cmake} \
     "$@" \
     ..
 

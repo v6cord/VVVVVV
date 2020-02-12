@@ -1,0 +1,20 @@
+# vi: set ft=dockerfile:
+FROM devkitpro/devkitarm:20190212
+
+RUN dkp-pacman -Syyu --noconfirm
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.16.4/cmake-3.16.4-Linux-x86_64.sh \
+      -q -O /tmp/cmake-install.sh \
+      && chmod u+x /tmp/cmake-install.sh \
+      && mkdir -p /usr/local/ \
+      && /tmp/cmake-install.sh --skip-license --prefix=/usr/local/ \
+      && rm /tmp/cmake-install.sh
+
+RUN wget -qO- https://github.com/Lectem/3ds-cmake/archive/864098b357d820d9831cf1fcc54c040e26987291.tar.gz | \
+    tar --transform 's/^3ds-cmake-864098b357d820d9831cf1fcc54c040e26987291/3ds-cmake/' \
+        -xzv -C /usr/local/share/
+
+RUN apt-get update && apt-get install -y ninja-build && rm -rf /var/lib/apt/lists/*
+
+ENV VVVVVV_CE_3DS_BUILD=1
+
