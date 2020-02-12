@@ -239,8 +239,8 @@ jobs:
     - name: Install pinned CMake
       run: ${SRC_DIR_PATH}/pinned-cmake.sh
 
-    - name: Install Ninja
-      run: sudo apt-get install -y ninja-build
+    - name: Install dependencies
+      run: sudo apt-get install -y ninja-build tree
 
     - name: Copy data.zip
       run: |
@@ -249,8 +249,14 @@ jobs:
           mkdir -p ${SRC_DIR_PATH}/android-project/app/src/main/assets/
           cp -v data-zip/data.zip ${SRC_DIR_PATH}/android-project/app/src/main/assets/data.zip
 
+    - name: Show project before build
+      run: tree ${SRC_DIR_PATH}/android-project
+
     - name: Build
       run: cd ${SRC_DIR_PATH} && ./build.sh
+
+    - name: Show project after build
+      run: tree ${SRC_DIR_PATH}/android-project
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
