@@ -1,7 +1,7 @@
 #ifndef TEXTBOX_H
 #define TEXTBOX_H
 
-#if defined(__SWITCH__) || defined(__ANDROID__)
+#ifdef STRICT_SDL_PATH
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>

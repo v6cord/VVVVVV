@@ -1,7 +1,7 @@
 #ifndef SOUNDSYSTEM_H
 #define SOUNDSYSTEM_H
 
-#if defined(__SWITCH__)
+#if defined(STRICT_SDL_PATH) && !defined(__ANDROID__)
 	#include <SDL2/SDL_mixer.h>
 #else
 	#include <SDL_mixer.h>

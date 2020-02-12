@@ -9,7 +9,7 @@
 
 #ifdef __SWITCH__
 #include <switch.h>
-#elif __ANDROID__
+#elif defined(STRICT_SDL_PATH)
 #include <SDL2/SDL.h>
 #else
 #include <SDL.h>
