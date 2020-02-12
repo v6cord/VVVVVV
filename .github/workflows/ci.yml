@@ -237,7 +237,7 @@ jobs:
         key: cmake-3-16-4
 
     - name: Install pinned CMake
-      run: ${SRC_DIR_PATH}/pinned-cmake.sh
+      run: sudo ${SRC_DIR_PATH}/pinned-cmake.sh
 
     - name: Copy data.zip
       run: |
