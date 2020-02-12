@@ -49,7 +49,7 @@
 #include <mingw.thread.h>
 #include <mingw.condition_variable.h>
 #include <mingw.mutex.h>
-#elif !defined(__APPLE__)
+#elif !defined(__APPLE__) && !defined(_3DS) && !defined(__3DS__)
 #include <thread>
 #include <condition_variable>
 #include <mutex>
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
     game.gametimer = 0;
     obj.init();
     game.loadstats(map, graphics, music);
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(_3DS) && !defined(__3DS__)
     std::condition_variable timeout;
     std::mutex mutex;
     std::thread init([&]() {
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
         pre_fakepercent.store(80);
         graphics.reloadresources(true);
         pre_fakepercent.store(100);
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(_3DS) && !defined(__3DS__)
         auto end = std::chrono::steady_clock::now();
         if (end - start < 1s) {
             pre_quickend.store(true);
