@@ -233,11 +233,11 @@ jobs:
     - name: Cache CMake
       uses: actions/cache@v1
       with:
-        path: /usr/local/cmake
-        key: cmake-3-16-4
+        path: .github/resources/cmake
+        key: cmake-3-16-4-resources
 
     - name: Install pinned CMake
-      run: sudo ${SRC_DIR_PATH}/pinned-cmake.sh
+      run: ${SRC_DIR_PATH}/pinned-cmake.sh
 
     - name: Install Ninja
       run: sudo apt-get install -y ninja-build
