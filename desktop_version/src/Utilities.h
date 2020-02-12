@@ -47,12 +47,8 @@ T string_cast(U val) {
 
 std::string dtos(double val);
 
-#ifdef __ANDROID__
-#include <android/log.h>
-
-#define fprintf(file, ...) ((#file == "stderr") ? __android_log_print(ANDROID_LOG_INFO, "VVVVVV-CE", __VA_ARGS__) : fprintf(file, __VA_ARGS__))
-#define printf(...) __android_log_print(ANDROID_LOG_VERBOSE, "VVVVVV-CE", __VA_ARGS__)
-#define puts(message) __android_log_print(ANDROID_LOG_VERBOSE, "VVVVVV-CE", message "\n")
-#endif
+void log_init();
+void log_close();
+bool log_default();
 
 #endif

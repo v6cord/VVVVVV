@@ -94,11 +94,7 @@ int main(int argc, char *argv[])
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
-#if defined(__APPLE__) || defined(__SWITCH__)
-    bool syslog = true;
-#else
-    bool syslog = false;
-#endif
+    bool syslog = log_default();
 
     bool playtestmount = false;
     char* baseDir = NULL;
@@ -174,24 +170,7 @@ int main(int argc, char *argv[])
     }
 
     if (syslog) {
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
-        puts("Switching to syslog...");
-#ifdef __SWITCH__
-        logger = fopen("sdmc:/switch/VVVVVV/vvvvvv-ce.log", "a");
-#else
-        auto logger = popen("logger", "w");
-#endif
-        if (logger) {
-            auto logger_fd = fileno(logger);
-            auto stdout_fd = fileno(stdout);
-            auto stderr_fd = fileno(stderr);
-            dup2(logger_fd, stdout_fd);
-            dup2(logger_fd, stderr_fd);
-            setbuf(stdout, nullptr);
-        } else {
-            puts("Couldn't create logger!");
-        }
-#endif
+        log_init();
     }
 
     if (!game.quiet) {
@@ -774,9 +753,7 @@ int main(int argc, char *argv[])
     SDL_Quit();
     FILESYSTEM_deinit();
 
-#ifdef __SWITCH__
-    fclose(logger);
-#endif
+    log_close();
 
     return 0;
 }
