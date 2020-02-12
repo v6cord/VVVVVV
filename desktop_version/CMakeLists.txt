@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
 OPTION(ENABLE_PROFILE "Enable profiler" OFF)
+OPTION(ENABLE_FRIBIDI "Enable Fribidi" ON)
 
 SET(CUSTOM_LEVEL_SUPPORT ENABLED CACHE STRING "Optionally disable playing and/or editing of custom levels")
 SET_PROPERTY(CACHE CUSTOM_LEVEL_SUPPORT PROPERTY STRINGS ENABLED NO_EDITOR DISABLED)
@@ -274,7 +275,7 @@ find_package(PkgConfig)
 if (SWITCH)
     set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
 endif()
-if (NOT ANDROID)
+if (ENABLE_FRIBIDI AND NOT ANDROID AND NOT 3DS)
     pkg_check_modules(FRIBIDI fribidi)
 
     find_path(FRIBIDI_INCLUDE_DIR
@@ -283,6 +284,11 @@ if (NOT ANDROID)
     find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
     target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
+
+    set(LINK_FRIBIDI fribidi)
+else()
+    add_definitions(-DNO_FRIBIDI=1)
+    set(LINK_FRIBIDI "")
 endif()
 
 # libpng
@@ -363,7 +369,7 @@ if(ANDROID)
     TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static "${LINK_FRIBIDI}" PNG::PNG Threads::Threads)
 endif()
 
 # data.zip path

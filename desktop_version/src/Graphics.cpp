@@ -8,7 +8,7 @@
 #include <utf8/checked.h>
 #include <physfs.h>
 #include <iterator>
-#ifndef __ANDROID__
+#ifndef NO_FRIBIDI
 #include <fribidi/fribidi.h>
 #else
 #include <string.h>
