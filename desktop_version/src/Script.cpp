@@ -1135,6 +1135,11 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			{
 				music.playfile(words[1].c_str(), words[2]);
 			}
+                        const char* word;
+                        if (strcmp((word = words[0].c_str()), "playfile"))
+                        {
+                                music.playfile(++word, word, true);
+                        }
 			if (words[0] == "stopfile")
 			{
 				music.stopfile(words[1]);
