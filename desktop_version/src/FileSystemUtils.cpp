@@ -774,6 +774,7 @@ char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
         utf8[i] = (char*) malloc(len * 2);
         PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) split[i], utf8[i], len * 2);
     }
+    LocalFree(split[0]);
     return utf8;
 }
 #else
