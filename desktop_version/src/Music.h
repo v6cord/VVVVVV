@@ -40,7 +40,7 @@ public:
 	// Play a sound effect! There are 16 channels, which iterate
 	void initefchannels();
 
-	void playfile(const char* t, std::string track);
+	void playfile(const char* t, std::string track, bool internal = false);
 	void stopfile(std::string track);
 
 	void playef(int t, int offset = 0);

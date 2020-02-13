@@ -4,10 +4,18 @@
 #include "Map.h"
 #include "Screen.h"
 #include "FileSystemUtils.h"
+#include "preloader.h"
 #include <utf8/checked.h>
 #include <physfs.h>
 #include <iterator>
+#ifndef __ANDROID__
 #include <fribidi/fribidi.h>
+#else
+#include <string.h>
+#define fribidi_log2vis(src, size, typ, dst, ...) (memcpy((dst), (src), sizeof(uint32_t) * (size)), 1)
+#define FriBidiParType int
+#define FRIBIDI_TYPE_ON 0
+#endif
 
 void Graphics::init()
 {
@@ -134,7 +142,7 @@ void Graphics::init()
     showmousecursor = true;
 }
 
-int Graphics::font_idx(char32_t ch) {
+int Graphics::font_idx(uint32_t ch) {
     if (font_positions.size() > 0) {
         auto iter = font_positions.find(ch);
         if (iter == font_positions.end()) {
@@ -212,7 +220,7 @@ void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
     FILESYSTEM_freeMemory(&charmap);
 }
 
-int Graphics::bfontlen(char32_t ch) {
+int Graphics::bfontlen(uint32_t ch) {
     auto real = bfont[font_idx(ch)]->w;
     if (ch < 32 && real == 8) return 6;
     return real;
@@ -3496,7 +3504,9 @@ bool Graphics::onscreen(int t)
 
 void Graphics::reloadresources(bool fast /*= false*/) {
     grphx = GraphicsResources();
+    pre_fakepercent.store(81);
     grphx.init();
+    pre_fakepercent.store(90);
 
     images.clear();
     tiles.clear();
@@ -3507,10 +3517,15 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     flipsprites.clear();
     tele.clear();
 
+    pre_fakepercent.store(91);
     MakeTileArray();
+    pre_fakepercent.store(92);
     MakeSpriteArray();
+    pre_fakepercent.store(93);
     maketelearray();
+    pre_fakepercent.store(94);
     Makebfont();
+    pre_fakepercent.store(95);
 
     images.push_back(grphx.im_image0);
     images.push_back(grphx.im_image1);
@@ -3520,12 +3535,15 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     images.push_back(grphx.im_image5);
     images.push_back(grphx.im_image6);
 
+    pre_fakepercent.store(97);
+
     images.push_back(grphx.im_image7);
     images.push_back(grphx.im_image8);
     images.push_back(grphx.im_image9);
     images.push_back(grphx.im_image10);
     images.push_back(grphx.im_image11);
     images.push_back(grphx.im_image12);
+    pre_fakepercent.store(99);
 
     if (!fast) music.init();
 }

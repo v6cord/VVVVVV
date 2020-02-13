@@ -91,14 +91,12 @@ FILE* logger;
 
 int main(int argc, char *argv[])
 {
+    argv = FILESYSTEM_argv(argc, &argc, argv);
+
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
-#if defined(__APPLE__) || defined(__SWITCH__)
-    bool syslog = true;
-#else
-    bool syslog = false;
-#endif
+    bool syslog = log_default();
 
     bool playtestmount = false;
     char* baseDir = NULL;
@@ -123,7 +121,7 @@ int main(int argc, char *argv[])
         if (strcmp(argv[i], "--no-syslog") == 0) {
             syslog = false;
         }
-        if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
+        if ((std::string(argv[i]) == "-playing") || (std::string(argv[i]) == "-p")) {
             if (i + 1 < argc) {
                 startinplaytest = true;
                 i++;
@@ -136,28 +134,28 @@ int main(int argc, char *argv[])
                     playtestname.append(std::string(".vvvvvv"));
                 }
             } else {
-                printf("--playing option requires one argument.\n");
+                printf("-playing option requires one argument.\n");
                 return 1;
             }
         }
-        if (strcmp(argv[i], "--playx") == 0 ||
-                strcmp(argv[i], "--playy") == 0 ||
-                strcmp(argv[i], "--playrx") == 0 ||
-                strcmp(argv[i], "--playry") == 0 ||
-                strcmp(argv[i], "--playgc") == 0 ||
-                strcmp(argv[i], "--playmusic") == 0) {
+        if (strcmp(argv[i], "-playx") == 0 ||
+                strcmp(argv[i], "-playy") == 0 ||
+                strcmp(argv[i], "-playrx") == 0 ||
+                strcmp(argv[i], "-playry") == 0 ||
+                strcmp(argv[i], "-playgc") == 0 ||
+                strcmp(argv[i], "-playmusic") == 0) {
             if (i + 1 < argc) {
                 savefileplaytest = true;
                 auto v = std::atoi(argv[i+1]);
-                if (strcmp(argv[i], "--playx") == 0) savex = v;
-                else if (strcmp(argv[i], "--playy") == 0) savey = v;
-                else if (strcmp(argv[i], "--playrx") == 0) saverx = v;
-                else if (strcmp(argv[i], "--playry") == 0) savery = v;
-                else if (strcmp(argv[i], "--playgc") == 0) savegc = v;
-                else if (strcmp(argv[i], "--playmusic") == 0) savemusic = v;
+                if (strcmp(argv[i], "-playx") == 0) savex = v;
+                else if (strcmp(argv[i], "-playy") == 0) savey = v;
+                else if (strcmp(argv[i], "-playrx") == 0) saverx = v;
+                else if (strcmp(argv[i], "-playry") == 0) savery = v;
+                else if (strcmp(argv[i], "-playgc") == 0) savegc = v;
+                else if (strcmp(argv[i], "-playmusic") == 0) savemusic = v;
                 i++;
             } else {
-                printf("--playing option requires one argument.\n");
+                printf("-playing option requires one argument.\n");
                 return 1;
             }
         }
@@ -174,24 +172,7 @@ int main(int argc, char *argv[])
     }
 
     if (syslog) {
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
-        puts("Switching to syslog...");
-#ifdef __SWITCH__
-        logger = fopen("sdmc:/switch/VVVVVV/vvvvvv-ce.log", "a");
-#else
-        auto logger = popen("logger", "w");
-#endif
-        if (logger) {
-            auto logger_fd = fileno(logger);
-            auto stdout_fd = fileno(stdout);
-            auto stderr_fd = fileno(stderr);
-            dup2(logger_fd, stdout_fd);
-            dup2(logger_fd, stderr_fd);
-            setbuf(stdout, nullptr);
-        } else {
-            puts("Couldn't create logger!");
-        }
-#endif
+        log_init();
     }
 
     if (!game.quiet) {
@@ -774,9 +755,7 @@ int main(int argc, char *argv[])
     SDL_Quit();
     FILESYSTEM_deinit();
 
-#ifdef __SWITCH__
-    fclose(logger);
-#endif
+    log_close();
 
     return 0;
 }

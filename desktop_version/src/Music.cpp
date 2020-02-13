@@ -5,6 +5,7 @@
 #endif
 #include <stdio.h>
 #include <utility>
+#include <physfs.h>
 #include "Music.h"
 #include "BinaryBlob.h"
 
@@ -495,8 +496,17 @@ void musicclass::initefchannels()
 	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
 }
 
-void musicclass::playfile(const char* t, std::string track)
+void musicclass::playfile(const char* t, std::string track, bool internal /*= false*/)
 {
+    std::string temp;
+    if (internal) {
+        --t; // weird pointer bug?
+        temp = t;
+        temp += ".ogg";
+        t = temp.c_str();
+        if (PHYSFS_getRealDir(t) != PHYSFS_getRealDir("VVVVVV.png")) return;
+    }
+
     int channel = 0;
 
     auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));

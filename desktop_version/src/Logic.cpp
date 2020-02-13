@@ -378,7 +378,7 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                         music.play(15);
                         break;
                     case 21:
-                        music.play(game.customtrials[game.currenttrial].music);
+                        music.play(ed.customtrials[game.currenttrial].music);
                         break;
                     }
                     music.playef(22, 10);
@@ -1039,7 +1039,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                         music.play(15);
                         break;
                     case 21:
-                        music.play(game.customtrials[game.currenttrial].music);
+                        music.play(ed.customtrials[game.currenttrial].music);
                         break;
                     }
                     music.playef(22, 10);

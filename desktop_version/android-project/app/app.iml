@@ -10,7 +10,7 @@
     </facet>
     <facet type="native-android-gradle" name="Native-Android-Gradle">
       <configuration>
-        <option name="SELECTED_BUILD_VARIANT" value="debug-arm64-v8a" />
+        <option name="SELECTED_BUILD_VARIANT" value="debug-armeabi-v7a" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -35,55 +35,11 @@
     <output-test url="file://$MODULE_DIR$/build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/hidapi/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/atomic" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/audio" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/cpuinfo" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/dynapi" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/events" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/file" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/libm" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/direct3d" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/direct3d11" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/opengl" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/opengles" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/opengles2" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/psp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/render/software" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/stdlib" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/thread" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/timer" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/video" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/video/yuv2rgb" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/joystick" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/haptic" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/sensor" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/power" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/audio/dummy" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/audio/disk" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/loadso/dlopen" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/video/dummy" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/core/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/audio/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/filesystem/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/haptic/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/joystick/hidapi" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/joystick/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/joystick/steam" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/power/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/timer/unix" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/sensor/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/video/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/thread/pthread" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/root/third_party/tinyxml" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/jni/root/third_party/cparse" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/SDL/src/main/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/root/third_party/physfs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/jni/root/desktop_version/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/root/desktop_version/home/leo60228/android-28-arm64-sysroot/usr/lib/cmake/SDL2/src/main/android" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jni/root/desktop_version/../../../.externalNativeBuild/cmake/debug/arm64-v8a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/jni/root/desktop_version/../../../.externalNativeBuild/cmake/debug/armeabi-v7a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/jni/root/third_party/physfs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/jni/root/third_party/tinyxml" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/debug" isTestSource="false" generated="true" />

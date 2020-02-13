@@ -29,6 +29,8 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <processenv.h>
+#include <shellapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
 int mkdir(char* path, int mode)
@@ -649,7 +651,7 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__ANDROID__)
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
@@ -682,22 +684,37 @@ bool FILESYSTEM_openDirectory(const char *dname) {
 
 #ifdef _WIN32
 char* FILESYSTEM_realPath(const char* rel) {
-    return _fullpath(nullptr, rel, MAX_PATH);
+    size_t src_len = strlen(rel) + 1;
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(rel, (PHYSFS_uint16*) srcw, src_len * 2);
+    wchar_t* dstw = _wfullpath(nullptr, srcw, MAX_PATH);
+    size_t dst_len = wcslen(dstw) + 1;
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 
 char* FILESYSTEM_dirname(const char* file) {
-    char* dir = (char*) malloc(MAX_PATH + 1);
-    bsd_strlcpy(dir, file, MAX_PATH + 1);
-    PathRemoveFileSpecA(dir);
-    return dir;
+    size_t src_len = strlen(file) + 1;
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
+    PathRemoveFileSpecW(srcw);
+    wchar_t* dstw = srcw;
+    size_t dst_len = wcslen(dstw) + 1;
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 
 char* FILESYSTEM_basename(const char* file) {
-    const char* base = PathFindFileNameA(file);
-    size_t base_len = strlen(base) + 1;
-    char* base_copy = (char*) malloc(base_len);
-    bsd_strlcpy(base_copy, base, base_len);
-    return base_copy;
+    size_t src_len = strlen(file) + 1;
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
+    LPCWSTR dstw = PathFindFileNameW(srcw);
+    size_t dst_len = wcslen(dstw) + 1;
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 #elif defined(__SWITCH__)
 char* FILESYSTEM_realPath(const char* rel) {
@@ -744,5 +761,25 @@ char* FILESYSTEM_basename(const char* file) {
     char* base_copy = (char*) malloc(base_len);
     bsd_strlcpy(base_copy, base, base_len);
     return base_copy;
+}
+#endif
+
+#ifdef _WIN32
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
+    LPWSTR unparsed = GetCommandLineW();
+    LPWSTR* split = CommandLineToArgvW(unparsed, argc);
+    char** utf8 = (char**) malloc(*argc * sizeof(char*));
+    for (int i = 0; i < *argc; ++i) {
+        size_t len = wcslen(split[i]) + 1;
+        utf8[i] = (char*) malloc(len * 2);
+        PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) split[i], utf8[i], len * 2);
+    }
+    LocalFree(split);
+    return utf8;
+}
+#else
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
+    *argc = real_argc;
+    return argv;
 }
 #endif
