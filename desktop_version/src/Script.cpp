@@ -1007,6 +1007,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				}
 			}
 			// secret
+			if (words[0] == "cute")
+			{
+				game.cutemode = true;
+				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
+			}
+			// im gay
 			if (words[0] == "ally")
 			{
 				game.allymode = true;

@@ -415,7 +415,7 @@ SDL_Surface* ApplyFilter( SDL_Surface* _src )
 return _ret;
 }
 
-SDL_Surface* ApplyAllyFilter( SDL_Surface* _src )
+SDL_Surface* ApplyCuteFilter( SDL_Surface* _src )
 {
 	SDL_Surface* _ret = SDL_CreateRGBSurface(_src->flags, _src->w, _src->h, 32,
 		_src->format->Rmask, _src->format->Gmask, _src->format->Bmask, _src->format->Amask);
@@ -459,6 +459,71 @@ SDL_Surface* ApplyAllyFilter( SDL_Surface* _src )
 		}
 	}
 return _ret;
+}
+
+SDL_Surface* ApplyAllyFilter( SDL_Surface* _src )
+{
+	SDL_Surface* _ret = SDL_CreateRGBSurface(_src->flags, _src->w, _src->h, 32,
+		_src->format->Rmask, _src->format->Gmask, _src->format->Bmask, _src->format->Amask);
+
+	int band = _src->h / 5;
+
+	for(int x = 0; x < _src->w; x++)
+	{
+		for(int y = 0; y < _src->h; y++)
+		{
+			Uint32 pixel = ReadPixel(_src,x,y);
+			Uint8 red   = (pixel & _src->format->Rmask) >> 16;
+			Uint8 green = (pixel & _src->format->Gmask) >> 8;
+			Uint8 blue  = (pixel & _src->format->Bmask) >> 0;
+
+			double temp_red   = red;
+			double temp_green = green;
+			double temp_blue  = blue;
+
+			// We have to grayscale it
+
+			temp_red   = temp_red   * 0.299;
+			temp_green = temp_green * 0.587;
+			temp_blue  = temp_blue  * 0.144;
+
+			double gray = floor((temp_red + temp_green + temp_blue + 0.5));
+
+			if (y >= 0 && y < band) { // Orange
+				temp_red   = gray * 1.4;
+				temp_green = gray / 1.3;
+				temp_blue  = gray / 1.5;
+			} else if (y >= band && y < band*2) { // Lighter orange
+				temp_red   = gray * 1.4;
+				temp_green = gray / 1.15;
+				temp_blue  = gray / 1.5;
+			} else if (y >= band*2 && y < band*3) { // White
+				temp_red   = gray * 1.1;
+				temp_green = gray / 1.1;
+				temp_blue  = gray * 1.1;
+			} else if (y >= band*3 && y < band*4) { // Pink
+                temp_red   = gray * 1.4;
+                temp_green = gray / 1.3;
+                temp_blue  = gray * 1.2;
+			} else if (y >= band*4 && y < band*5) { // Darker pink
+                temp_red   = gray * 1.2;
+                temp_green = gray / 1.3;
+                temp_blue  = gray * 1;
+			}
+
+			if (temp_red   > 255) temp_red = 255;
+			if (temp_green > 255) temp_green = 255;
+			if (temp_blue  > 255) temp_blue = 255;
+
+			red   = temp_red;
+			green = temp_green;
+			blue  = temp_blue;
+
+			Uint32 finalPixel = ((red<<16) + (green<<8) + (blue<<0)) | (pixel &_src->format->Amask);
+			DrawPixel(_ret,x,y,  finalPixel);
+		}
+	}
+	return _ret;
 }
 
 SDL_Surface* ApplyMisaFilter( SDL_Surface* _src )

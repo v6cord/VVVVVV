@@ -131,7 +131,11 @@ void Screen::UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect )
         buffer = ApplyFilter(buffer);
     }
 
-    if(game.allymode)
+    if(game.cutemode)
+    {
+        buffer = ApplyCuteFilter(buffer);
+    }
+	else if(game.allymode)
     {
         buffer = ApplyAllyFilter(buffer);
     }

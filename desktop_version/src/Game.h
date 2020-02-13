@@ -429,6 +429,7 @@ public:
 
     growing_vector<std::string> onetimescripts;
 
+    bool cutemode = false;
     bool allymode = false;
     bool misamode = false;
 };
