@@ -162,8 +162,10 @@ SET(VVV_SRC
         ${CMAKE_BINARY_DIR}/vce.zip.c
 	src/Utilities.cpp
         ${GITREV_TMP}
-        src/trace.c
 )
+IF(ENABLE_PROFILE)
+    LIST(APPEND VVV_SRC src/trace.c)
+ENDIF()
 IF(NOT CUSTOM_LEVEL_SUPPORT STREQUAL "DISABLED")
 	LIST(APPEND VVV_SRC src/editor.cpp)
 ENDIF()
