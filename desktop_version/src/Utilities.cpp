@@ -143,9 +143,11 @@ std::string dtos(double val) {
     }
 }
 
-#ifndef __ANDROID__
+#if !defined(__ANDROID__) && !defined(_WIN32)
 static FILE* logger = nullptr;
-#else
+#endif
+
+#ifdef __ANDROID__
 #include <pthread.h>
 #include <android/log.h>
 
@@ -204,13 +206,11 @@ void log_init() {
 }
 
 void log_close() {
-    if (!logger) return;
-
 #if defined(__SWITCH__)
-    fclose(logger);
+    if (logger) fclose(logger);
 #elif defined(__ANDROID__)
     // doesn't need closing
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
-    pclose(logger);
+    if (logger) pclose(logger);
 #endif
 }
