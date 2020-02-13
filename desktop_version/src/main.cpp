@@ -91,6 +91,8 @@ FILE* logger;
 
 int main(int argc, char *argv[])
 {
+    argv = FILESYSTEM_argv(argc, &argc, argv);
+
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
