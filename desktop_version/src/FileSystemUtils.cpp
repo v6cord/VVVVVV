@@ -684,22 +684,37 @@ bool FILESYSTEM_openDirectory(const char *dname) {
 
 #ifdef _WIN32
 char* FILESYSTEM_realPath(const char* rel) {
-    return _fullpath(nullptr, rel, MAX_PATH);
+    size_t src_len = strlen(rel);
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(rel, (PHYSFS_uint16*) srcw, src_len * 2);
+    wchar_t* dstw = _wfullpath(nullptr, srcw, MAX_PATH);
+    size_t dst_len = wcslen(dstw);
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 
 char* FILESYSTEM_dirname(const char* file) {
-    char* dir = (char*) malloc(MAX_PATH + 1);
-    bsd_strlcpy(dir, file, MAX_PATH + 1);
-    PathRemoveFileSpecA(dir);
-    return dir;
+    size_t src_len = strlen(file);
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
+    PathRemoveFileSpecW(srcw);
+    wchar_t* dstw = srcw;
+    size_t dst_len = wcslen(dstw);
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 
 char* FILESYSTEM_basename(const char* file) {
-    const char* base = PathFindFileNameA(file);
-    size_t base_len = strlen(base) + 1;
-    char* base_copy = (char*) malloc(base_len);
-    bsd_strlcpy(base_copy, base, base_len);
-    return base_copy;
+    size_t src_len = strlen(file);
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
+    LPCWSTR dstw = PathFindFileNameW(srcw);
+    size_t dst_len = wcslen(dstw);
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 #elif defined(__SWITCH__)
 char* FILESYSTEM_realPath(const char* rel) {
