@@ -29,6 +29,8 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <processenv.h>
+#include <shellapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
 int mkdir(char* path, int mode)
@@ -746,5 +748,24 @@ char* FILESYSTEM_basename(const char* file) {
     char* base_copy = (char*) malloc(base_len);
     bsd_strlcpy(base_copy, base, base_len);
     return base_copy;
+}
+#endif
+
+#ifdef _WIN32
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
+    LPWSTR unparsed = GetCommandLineW();
+    LPWSTR* split = CommandLineToArgvW(unparsed, argc);
+    char** utf8 = (char**) malloc(*argc * sizeof(char*));
+    for (int i = 0; i < *argc; ++i) {
+        size_t len = wcslen(split[i]);
+        utf8[i] = (char*) malloc(len * 2);
+        PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) split[i], utf8[i], len * 2);
+    }
+    return utf8;
+}
+#else
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
+    *argc = real_argc;
+    return argv;
 }
 #endif
