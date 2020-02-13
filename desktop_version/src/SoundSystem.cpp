@@ -68,7 +68,11 @@ SoundTrack::~SoundTrack() {
     isValid = false;
 }
 
+#ifdef __ANDROID__
 void SoundSystem::init()
+#else
+SoundSystem::SoundSystem()
+#endif
 {
 	int audio_rate = 44100;
 	Uint16 audio_format = AUDIO_S16SYS;
@@ -81,6 +85,13 @@ void SoundSystem::init()
 		SDL_assert(0 && "Unable to initialize audio!");
 	}
 }
+
+#ifdef __ANDROID__
+SoundSystem::SoundSystem()
+#else
+void SoundSystem::init()
+#endif
+{}
 
 void SoundSystem::playMusic(MusicTrack* music)
 {

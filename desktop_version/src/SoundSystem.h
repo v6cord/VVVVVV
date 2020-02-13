@@ -34,7 +34,7 @@ public:
 class SoundSystem
 {
 public:
-	SoundSystem() = default;
+	SoundSystem();
         void init();
 	void playMusic(MusicTrack* music);
 };
