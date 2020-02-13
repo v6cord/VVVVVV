@@ -204,6 +204,8 @@ void log_init() {
 }
 
 void log_close() {
+    if (!logger) return;
+
 #if defined(__SWITCH__)
     fclose(logger);
 #elif defined(__ANDROID__)
