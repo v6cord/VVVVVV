@@ -684,34 +684,34 @@ bool FILESYSTEM_openDirectory(const char *dname) {
 
 #ifdef _WIN32
 char* FILESYSTEM_realPath(const char* rel) {
-    size_t src_len = strlen(rel);
+    size_t src_len = strlen(rel) + 1;
     wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
     PHYSFS_utf8ToUtf16(rel, (PHYSFS_uint16*) srcw, src_len * 2);
     wchar_t* dstw = _wfullpath(nullptr, srcw, MAX_PATH);
-    size_t dst_len = wcslen(dstw);
+    size_t dst_len = wcslen(dstw) + 1;
     char* dst = (char*) malloc(dst_len * 2);
     PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
     return dst;
 }
 
 char* FILESYSTEM_dirname(const char* file) {
-    size_t src_len = strlen(file);
+    size_t src_len = strlen(file) + 1;
     wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
     PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
     PathRemoveFileSpecW(srcw);
     wchar_t* dstw = srcw;
-    size_t dst_len = wcslen(dstw);
+    size_t dst_len = wcslen(dstw) + 1;
     char* dst = (char*) malloc(dst_len * 2);
     PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
     return dst;
 }
 
 char* FILESYSTEM_basename(const char* file) {
-    size_t src_len = strlen(file);
+    size_t src_len = strlen(file) + 1;
     wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
     PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
     LPCWSTR dstw = PathFindFileNameW(srcw);
-    size_t dst_len = wcslen(dstw);
+    size_t dst_len = wcslen(dstw) + 1;
     char* dst = (char*) malloc(dst_len * 2);
     PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
     return dst;
@@ -770,7 +770,7 @@ char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
     LPWSTR* split = CommandLineToArgvW(unparsed, argc);
     char** utf8 = (char**) malloc(*argc * sizeof(char*));
     for (int i = 0; i < *argc; ++i) {
-        size_t len = wcslen(split[i]);
+        size_t len = wcslen(split[i]) + 1;
         utf8[i] = (char*) malloc(len * 2);
         PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) split[i], utf8[i], len * 2);
     }
