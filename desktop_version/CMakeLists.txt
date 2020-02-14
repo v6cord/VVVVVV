@@ -93,7 +93,7 @@ IF(NOT WIN32)
 ENDIF()
 
 # Creates C resources file from files in given directory
-function(create_resource bin output)
+function(create_c_resource bin output)
     # Create empty output file
     file(WRITE ${output} "")
     # Get short filename
@@ -108,9 +108,41 @@ function(create_resource bin output)
     file(APPEND ${output} "const unsigned char ${filename}[] = {${filedata}};\nconst unsigned ${filename}_size = sizeof(${filename});\n")
 endfunction()
 
+function(create_bin_resources out_var)
+    set(result)
+    foreach(in_f ${ARGN})
+        file(RELATIVE_PATH src_f ${CMAKE_BINARY_DIR} ${CMAKE_BINARY_DIR}/${in_f})
+        set(out_f "${PROJECT_BINARY_DIR}/${in_f}.o")
+        add_custom_command(OUTPUT ${out_f}
+            COMMAND ld -r -b binary -o ${out_f} ${src_f}
+            DEPENDS ${CMAKE_BINARY_DIR}/${in_f}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Embedding resource ${out_f}"
+            VERBATIM
+            )
+        list(APPEND result ${out_f})
+    endforeach()
+    set(${out_var} "${result}" PARENT_SCOPE)
+    add_definitions(-DLD_VCE_ZIP=1)
+endfunction()
+
 file(GLOB_RECURSE data RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/data" data/*)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/vce.zip" --format=zip ${data} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data")
-create_resource(${CMAKE_BINARY_DIR}/vce.zip ${CMAKE_BINARY_DIR}/vce.zip.c)
+file(GLOB_RECURSE data_abs ${CMAKE_CURRENT_SOURCE_DIR}/data/*)
+if(CMAKE_CROSSCOMPILING OR NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    message(STATUS "Generating vce.zip")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar "cf" "${CMAKE_BINARY_DIR}/vce.zip" --format=zip ${data} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data")
+    set(VCE_ZIP_OBJ ${CMAKE_BINARY_DIR}/vce.zip.c)
+    create_c_resource(${CMAKE_BINARY_DIR}/vce.zip ${VCE_ZIP_OBJ})
+else()
+    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/vce.zip
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" ${CMAKE_BINARY_DIR}/vce.zip --format=zip ${data}
+        DEPENDS ${data_abs}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/data
+        COMMENT "Generating vce.zip"
+        VERBATIM
+    )
+    create_bin_resources(VCE_ZIP_OBJ vce.zip)
+endif()
 
 # Include Directories
 INCLUDE_DIRECTORIES(
@@ -159,9 +191,9 @@ SET(VVV_SRC
 	src/Network.c
 	src/SteamNetwork.c
 	src/GOGNetwork.c
-        ${CMAKE_BINARY_DIR}/vce.zip.c
 	src/Utilities.cpp
         ${GITREV_TMP}
+        ${VCE_ZIP_OBJ}
 )
 IF(ENABLE_PROFILE)
     LIST(APPEND VVV_SRC src/trace.c)
@@ -232,13 +264,13 @@ IF(ENABLE_WARNINGS)
             # Saves quite a few lines and boilerplate at the price of readability.
             TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE
                     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-                            -Wall $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
+                            -Wall -Wno-sequence-point $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
                     $<$<CXX_COMPILER_ID:MSVC>:
                             /W4 $<$<BOOL:${ENABLE_WERROR}>:/WX>>)
         else()
             TARGET_COMPILE_OPTIONS(main PRIVATE
                     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-                            -Wall $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
+                            -Wall -Wno-sequence-point $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
                     $<$<CXX_COMPILER_ID:MSVC>:
                             /W4 $<$<BOOL:${ENABLE_WERROR}>:/WX>>)
         endif()

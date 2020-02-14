@@ -62,8 +62,13 @@ void PLATFORM_migrateSaveData(char* output);
 void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
 
 extern "C" {
+#ifdef LD_VCE_ZIP
+    extern const char _binary_vce_zip_start;
+    extern const char _binary_vce_zip_end;
+#else
     extern const unsigned char vce_zip[];
     extern const unsigned vce_zip_size;
+#endif
 }
 
 static bool cached_data_zip_load(const char* path) {
@@ -132,7 +137,11 @@ int FILESYSTEM_initCore(char *argvZero, char *baseDir, char *assetsPath)
 	PHYSFS_init(argvZero);
 	PHYSFS_permitSymbolicLinks(1);
 
+#ifdef LD_VCE_ZIP
+        PHYSFS_mountMemory(&_binary_vce_zip_start, &_binary_vce_zip_end - &_binary_vce_zip_start, nullptr, "vce.zip", nullptr, 0);
+#else
         PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 0);
+#endif
 
 	/* Determine the OS user directory */
 	if (baseDir && strlen(baseDir) > 0)
