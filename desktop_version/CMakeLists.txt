@@ -126,20 +126,18 @@ function(create_bin_resources out_var)
     add_definitions(-DLD_VCE_ZIP=1)
 endfunction()
 
-file(GLOB_RECURSE data RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/data" data/*)
-file(GLOB_RECURSE data_abs ${CMAKE_CURRENT_SOURCE_DIR}/data/*)
 if(CMAKE_CROSSCOMPILING OR NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     message(STATUS "Generating vce.zip")
+    file(GLOB_RECURSE data RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/data" data/*)
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar "cf" "${CMAKE_BINARY_DIR}/vce.zip" --format=zip ${data} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data")
     set(VCE_ZIP_OBJ ${CMAKE_BINARY_DIR}/vce.zip.c)
     create_c_resource(${CMAKE_BINARY_DIR}/vce.zip ${VCE_ZIP_OBJ})
 else()
     add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/vce.zip
-        COMMAND ${CMAKE_COMMAND} -E tar "cf" ${CMAKE_BINARY_DIR}/vce.zip --format=zip ${data}
-        DEPENDS ${data_abs}
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" ${CMAKE_BINARY_DIR}/vce.zip --format=zip *
+        DEPENDS data
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/data
         COMMENT "Generating vce.zip"
-        VERBATIM
     )
     create_bin_resources(VCE_ZIP_OBJ vce.zip)
 endif()
