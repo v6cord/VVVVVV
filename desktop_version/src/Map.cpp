@@ -1066,12 +1066,13 @@ int mapclass::tower_row(int rx, int ry) {
 	return 0;
 }
 
-int mapclass::get_tower_offset(int tower, int ix, int iy, int *ry, int ypos) {
+int mapclass::get_tower_offset(int tower, int ix, int iy, int *rx, int *ry, int ypos) {
 	if (tower != get_tower(ix, iy))
 		return -1;
 
 	int rpos = tower_row(ix, iy) * 8;
 	if (rpos >= 0 && ypos >= rpos && ypos < rpos + 240) {
+		*rx += (ix - (*rx));
 		*ry += (iy - (*ry));
 		return ypos - rpos;
 	}
@@ -1096,6 +1097,8 @@ int mapclass::tower_connection(int *rx, int *ry, int ypos) {
 	   position. */
 	int ymin = 100;
 	int ymax = 100 + ed.maxheight - 1;
+	int xmin = 100;
+	int xmax = 100 + ed.maxwidth - 1;
 	int tower = get_tower(ix, iy);
 	if (!custommode) {
 		ymax = 119;
@@ -1103,15 +1106,20 @@ int mapclass::tower_connection(int *rx, int *ry, int ypos) {
 			ymin = 52;
 			ymax = 54;
 		}
+		xmin = rix;
+		xmax = rix;
 	}
 
-	for (iy = riy; iy >= ymin; iy--)
-		if ((rpos = get_tower_offset(tower, ix, iy, ry, ypos)) >= 0)
-			return rpos;
+	// Scan x from 0..max, but scan y based on closeness to current y
+	for (ix = xmin; ix <= xmax; ix++) {
+		for (iy = riy; iy >= ymin; iy--)
+			if ((rpos = get_tower_offset(tower, ix, iy, rx, ry, ypos)) >= 0)
+				return rpos;
 
-	for (iy = riy + 1; iy <= ymax; iy++)
-		if ((rpos = get_tower_offset(tower, ix, iy, ry, ypos)) >= 0)
-			return rpos;
+		for (iy = riy + 1; iy <= ymax; iy++)
+			if ((rpos = get_tower_offset(tower, ix, iy, rx, ry, ypos)) >= 0)
+				return rpos;
+	}
 
 	// We failed to find an exit boundary!
 	return -1;

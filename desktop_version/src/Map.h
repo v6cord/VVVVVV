@@ -85,7 +85,7 @@ public:
     void resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
     int tower_row(int rx, int ry);
-    int get_tower_offset(int tower, int ix, int iy, int *ry, int ypos);
+    int get_tower_offset(int tower, int ix, int iy, int *rx, int *ry, int ypos);
     int tower_connection(int *rx, int *ry, int ypos);
     int get_tower(int rx, int ry);
     int entering_tower(int rx, int ry, int *entry);
