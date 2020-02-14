@@ -805,10 +805,10 @@ void mapclass::settile(int xp, int yp, int t)
 
 void mapclass::settile_special(int x, int y, int tile) {
 	if (towermode || tileset == 2 || tile != 10) // There's nothing behind 1x1 quicksand
-		map.settile(x, y, tile);
+		settile(x, y, tile);
 	else
 		// Don't change the `tile` var, we createentity by checking `tile` later
-		map.settile(x, y, 0);
+		settile(x, y, 0);
 	graphics.foregrounddrawn = false;
 
 	// Towers don't use blocks for spikes, and you can't place one-ways / 1x1 quicksand with tiles
@@ -860,7 +860,7 @@ void mapclass::settile_special(int x, int y, int tile) {
 	// This is all copy-pasted from Map.cpp
 
 	// Spikes
-	if (map.tileset == 0) {
+	if (tileset == 0) {
 		if (tile == 6 || tile == 8)
 			// Sticking up
 			obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
@@ -870,7 +870,7 @@ void mapclass::settile_special(int x, int y, int tile) {
 		if (tile == 49 || tile == 50)
 			// Left or right
 			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
-	} else if (map.tileset == 1) {
+	} else if (tileset == 1) {
 		if ((tile >= 63 && tile <= 74) || (tile >= 6 && tile <= 9)) {
 			// Correct the {odd, even}-type of the tile, this will be un-corrected later
 			if (tile < 10)
@@ -1214,7 +1214,7 @@ void mapclass::gotodimroom(int rx, int ry) {
 #ifdef NO_CUSTOM_LEVELS
     return; // do nothing
 #else
-    if (!custommode || map.dimension < 0)
+    if (!custommode || dimension < 0)
         return;
 
     // Dimensions doesn't use 100-indexing
@@ -1224,22 +1224,22 @@ void mapclass::gotodimroom(int rx, int ry) {
     // First, check if the dimension we were in last is still valid
     int ix = ox;
     int iy = oy;
-    map.dimensionwraparound(&ix, &iy);
+    dimensionwraparound(&ix, &iy);
     if (ix == ox && iy == oy)
         return;
 
     // Otherwise, find one that is
     Dimension *dim;
     for (int i = 0; (dim = getdimension(i)); i++) {
-        map.dimension = i;
+        dimension = i;
         ix = ox;
         iy = oy;
-        map.dimensionwraparound(&ix, &iy);
+        dimensionwraparound(&ix, &iy);
         if (ix == ox && iy == oy)
             return;
     }
 
-    map.dimension = -1;
+    dimension = -1;
 #endif
 }
 
@@ -1345,8 +1345,8 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 		int iy = ry - 100;
 		// Are we in a dimension?
 		// Do this before we convert it back to 100-indexing
-		if (map.dimension >= 0)
-			map.dimensionwraparound(&ix, &iy);
+		if (dimension >= 0)
+			dimensionwraparound(&ix, &iy);
 		int ih = ed.mapheight;
 		int iw = ed.mapwidth;
 		ix = mod(ix, iw);
