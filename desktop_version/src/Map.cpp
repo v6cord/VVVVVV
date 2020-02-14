@@ -2415,21 +2415,41 @@ void mapclass::updatetowerentcol(int col)
     }
 }
 
+Dimension* mapclass::getdimension(int index)
+{
+    // Return a pointer to the current dimension, based off of map.dimension
+    // Does important error checking to make sure both the index and the dimension are valid!
+    // Make sure to check for NULL
+    //
+    // See below for version that automatically uses map.dimension
+    if (index < 0 || index >= (int) ed.dimensions.size())
+        return NULL;
+
+    Dimension* dim = &ed.dimensions[index];
+
+    // Dimensions cannot overlap themselves
+    // and they have to have positive dimensions
+    if (dim->w > ed.mapwidth || dim->h > ed.mapheight
+    || dim->w <= 0 || dim->h <= 0)
+        return NULL;
+
+    return dim;
+}
+
+// This is the above, but it automatically uses map.dimension
+Dimension* mapclass::getdimension()
+{
+    return getdimension(dimension);
+}
+
 void mapclass::dimensionwraparound(int* rx, int* ry)
 {
     // If rx/ry is outside the current dimension, wrap it around!
     // rx/ry here is 0-indexed
     // NOTE: Depends on game.roomchangedir and game.roomchangevdir
 
-    if (map.dimension < 0 || map.dimension >= (int) ed.dimensions.size())
-        return;
-
-    Dimension *dim = &ed.dimensions[map.dimension];
-
-    // Dimensions cannot overlap themselves
-    // and they have to have positive dimensions
-    if (dim->w > ed.mapwidth || dim->h > ed.mapheight
-    || dim->w <= 0 || dim->h <= 0)
+    Dimension* dim = getdimension();
+    if (dim == NULL)
         return;
 
     // If we're negative from the dimension's point of view, correct for it
