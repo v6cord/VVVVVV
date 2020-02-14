@@ -1208,6 +1208,41 @@ void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, G
 		realign_tower();
 }
 
+// Set map dimension to one containing this room if current doesn't
+// Set to -1 if no dimension holds this room.
+void mapclass::gotodimroom(int rx, int ry) {
+#ifdef NO_CUSTOM_LEVELS
+    return; // do nothing
+#else
+    if (!custommode || map.dimension < 0)
+        return;
+
+    // Dimensions doesn't use 100-indexing
+    int ox = rx - 100;
+    int oy = ry - 100;
+
+    // First, check if the dimension we were in last is still valid
+    int ix = ox;
+    int iy = oy;
+    map.dimensionwraparound(&ix, &iy);
+    if (ix == ox && iy == oy)
+        return;
+
+    // Otherwise, find one that is
+    Dimension *dim;
+    for (int i = 0; (dim = getdimension(i)); i++) {
+        map.dimension = i;
+        ix = ox;
+        iy = oy;
+        map.dimensionwraparound(&ix, &iy);
+        if (ix == ox && iy == oy)
+            return;
+    }
+
+    map.dimension = -1;
+#endif
+}
+
 void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
 	ed.ghosts.clear(); // Let's make sure to clear the ghosts
@@ -1314,8 +1349,8 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 			map.dimensionwraparound(&ix, &iy);
 		int ih = ed.mapheight;
 		int iw = ed.mapwidth;
-		ix = (iw + (ix % iw)) % iw;
-		iy = (ih + (iy % ih)) % ih;
+		ix = mod(ix, iw);
+		iy = mod(iy, ih);
 		game.roomx = ix + 100;
 		game.roomy = iy + 100;
 		game.roomchange = true;

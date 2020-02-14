@@ -93,6 +93,7 @@ public:
     void custom_warpto(int ent);
     void warpto(int rx, int ry , int t, int tx, int ty,  Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
+    void gotodimroom(int rx, int ry);
     void gotoroom(int rx, int ry, Graphics& dwgfx,  Game& game, entityclass& obj, musicclass& music);
 
     std::string currentarea(int t);

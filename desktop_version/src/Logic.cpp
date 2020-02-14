@@ -516,6 +516,7 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                      (game.door_right > -2 &&
                       obj.entities[player].xp >= 308)) {
                 if (map.leaving_tower(&game.roomx, &game.roomy, obj)) {
+                    map.gotodimroom(game.roomx, game.roomy);
                     map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj,
                                  music);
                     twoframedelayfix();
