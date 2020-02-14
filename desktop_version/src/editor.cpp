@@ -6360,12 +6360,22 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.boundx2=ed.boundx1+8;
                                 ed.boundy2=ed.boundy1+8;
                             }
+
+                            if (!tower) {
+                                ed.boundx1 += (ed.levx * 320);
+                                ed.boundx2 += (ed.levx * 320);
+                                ed.boundy1 += (ed.levy * 240);
+                                ed.boundy2 += (ed.levy * 240);
+                            } else {
+                                ed.boundy1 += (ed.ypos * 8);
+                                ed.boundy2 += (ed.ypos * 8);
+                            }
                             if(ed.boundarytype==0 || ed.boundarytype==5)
                             {
                                 //Script trigger
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
-                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),19,
+                                addedentity((ed.boundx1/8),(ed.boundy1/8),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                                 ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
                                           &(edentity[ed.textent].scriptname));
@@ -6379,7 +6389,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 ed.lclickdelay=1;
                                 ed.textent=EditorData::GetInstance().numedentities;
                                 ed.textcount = 2;
-                                addedentity((ed.boundx1/8)+(ed.levx*40),(ed.boundy1/8)+ (ed.levy*30),20,
+                                addedentity((ed.boundx1/8),(ed.boundy1/8),20,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                                 ed.getlin(key, TEXT_ACTIVITYZONE,
                                           "Enter activity zone text:",
