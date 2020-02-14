@@ -1257,6 +1257,14 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	{
 		game.roomchangedir = 1;
 	}
+	if (ry < game.roomy)
+	{
+		game.roomchangevdir = 0;
+	}
+	else
+	{
+		game.roomchangevdir = 1;
+	}
 
 	if (finalmode)
 	{
@@ -1300,6 +1308,10 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 		// Get a positive modulo
 		int ix = rx - 100;
 		int iy = ry - 100;
+		// Are we in a dimension?
+		// Do this before we convert it back to 100-indexing
+		if (map.dimension >= 0)
+			map.dimensionwraparound(&ix, &iy);
 		int ih = ed.mapheight;
 		int iw = ed.mapwidth;
 		ix = (iw + (ix % iw)) % iw;
@@ -2401,6 +2413,48 @@ void mapclass::updatetowerentcol(int col)
                 obj.entities[i].tile += 3 - obj.entities[i].life/3;
         }
     }
+}
+
+void mapclass::dimensionwraparound(int* rx, int* ry)
+{
+    // If rx/ry is outside the current dimension, wrap it around!
+    // rx/ry here is 0-indexed
+    // NOTE: Depends on game.roomchangedir and game.roomchangevdir
+
+    if (map.dimension < 0 || map.dimension >= (int) ed.dimensions.size())
+        return;
+
+    Dimension *dim = &ed.dimensions[map.dimension];
+
+    // Dimensions cannot overlap themselves
+    // and they have to have positive dimensions
+    if (dim->w > ed.mapwidth || dim->h > ed.mapheight
+    || dim->w <= 0 || dim->h <= 0)
+        return;
+
+    // If we're negative from the dimension's point of view, correct for it
+    if (*rx < dim->x)
+        *rx += ed.mapwidth;
+    if (*ry < dim->y)
+        *ry += ed.mapheight;
+
+    // Correct for the space in between the ends of the dimension depending on which direction we're going
+    if (*rx > dim->w && game.roomchangedir == 0)
+        *rx -= ed.mapwidth - dim->w;
+    if (*ry > dim->h && game.roomchangevdir == 0)
+        *ry -= ed.mapheight - dim->h;
+
+    // Translate to dimension's coordinate space
+    *rx -= dim->x;
+    *ry -= dim->y;
+
+    // Wrap around
+    *rx = (*rx) % dim->w;
+    *ry = (*ry) % dim->h;
+
+    // Translate back to normal coordinate space
+    *rx += dim->x;
+    *ry += dim->y;
 }
 
 void twoframedelayfix()

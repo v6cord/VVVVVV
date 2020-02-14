@@ -372,6 +372,7 @@ void editorclass::reset()
     returneditoralpha = 0;
 
     customtrials.clear();
+    dimensions.clear();
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game)
@@ -2346,6 +2347,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
     reset();
     map.teleporters.clear();
     ed.customtrials.clear();
+    dimensions.clear();
 
     static const char *levelDir = "levels/";
     if (_path.compare(0, strlen(levelDir), levelDir) != 0)
@@ -2492,6 +2494,22 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
         if (pKey == "levmusic")
         {
             levmusic = atoi(pText);
+        }
+
+        if (pKey == "dimensions")
+        {
+            for (TiXmlElement* dimensionEl = pElem->FirstChildElement(); dimensionEl; dimensionEl = dimensionEl->NextSiblingElement()) {
+                Dimension dim;
+                dimensionEl->QueryIntAttribute("x", &dim.x);
+                dimensionEl->QueryIntAttribute("y", &dim.y);
+                dimensionEl->QueryIntAttribute("w", &dim.w);
+                dimensionEl->QueryIntAttribute("h", &dim.h);
+
+                if (dim.w <= 0 || dim.h <= 0)
+                    continue;
+
+                dimensions.push_back(dim);
+            }
         }
 
         if (pKey == "timetrials")
@@ -2976,6 +2994,17 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
     }
 
     data->LinkEndChild( msg );
+
+    msg = new TiXmlElement("dimensions");
+    for (size_t i = 0; i < dimensions.size(); i++) {
+        TiXmlElement* dimensionEl = new TiXmlElement("dimension");
+        dimensionEl->SetAttribute("x", dimensions[i].x);
+        dimensionEl->SetAttribute("y", dimensions[i].y);
+        dimensionEl->SetAttribute("w", dimensions[i].w);
+        dimensionEl->SetAttribute("h", dimensions[i].h);
+        msg->LinkEndChild(dimensionEl);
+    }
+    data->LinkEndChild(msg);
 
     msg = new TiXmlElement( "edEntities" );
     for(int i = 0; i < EditorData::GetInstance().numedentities; i++)

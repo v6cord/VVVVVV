@@ -98,6 +98,7 @@ public:
     std::string currentarea(int t);
 
     void loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
+    void dimensionwraparound(int* rx, int* ry);
 
 
     growing_vector <int> roomdeaths;
@@ -201,6 +202,8 @@ public:
     bool nofog = false;
 
     void updatetowerentcol(int col);
+
+    int dimension = -1;
 };
 
 extern mapclass map;

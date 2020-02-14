@@ -1206,6 +1206,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					game.gravitycontrol = 0;
 				}
 			}
+			if (words[0] == "gotodimension")
+			{
+				relativepos(&map.dimension, words[1]);
+			}
 			if (words[0] == "gotoroom")
 			{
 				//USAGE: gotoroom(x,y) (manually add 100)
@@ -4842,6 +4846,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	map.cameraseekframe = 0;
 	map.resumedelay = 0;
 	map.customshowmm=true;
+	map.dimension = -1;
 
 	for (j = 0; j < ed.maxheight; j++)
 		for (i = 0; i < ed.maxwidth; i++) {

@@ -133,6 +133,13 @@ struct GhostInfo {
     int frame; // .drawframe
 };
 
+struct Dimension {
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+};
+
 extern growing_vector<edentities> edentity;
 extern scriptclass script;
 
@@ -401,6 +408,7 @@ public:
     int gettowerplattile(int col);
 
     growing_vector<GhostInfo> ghosts;
+    std::vector<Dimension> dimensions; // no need to be a growing_vector
 
     int currentghosts = 0;
 
