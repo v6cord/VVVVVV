@@ -2417,7 +2417,7 @@ void mapclass::updatetowerentcol(int col)
 
 Dimension* mapclass::getdimension(int index)
 {
-    // Return a pointer to the current dimension, based off of map.dimension
+    // Return a pointer to the given dimension
     // Does important error checking to make sure both the index and the dimension are valid!
     // Make sure to check for NULL
     //
