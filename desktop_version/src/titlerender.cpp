@@ -346,6 +346,7 @@ growing_vector<std::string> changelog = {
     "- Added dimensions, so you can properly",
     "  have more than one dimension in a",
     "  custom level",
+    "- gotodimension(n) - go to dimension n",
 
 };
 
