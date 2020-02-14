@@ -264,3 +264,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - You can now use Minecraft-like relative tilde syntax in `gotoroom()` and `gotoposition()`
 
 - `sayquiet` and `replyquiet` - same as normal `say` and `reply`, but without a squeak
+
+- Added dimensions, so you can properly have more than one dimension in a custom level

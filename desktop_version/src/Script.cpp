@@ -1018,7 +1018,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				game.allymode = true;
 				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
 			}
-			// im gay
+			// im trans
 			if (words[0] == "misa")
 			{
 				game.misamode = true;

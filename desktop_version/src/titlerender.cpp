@@ -343,6 +343,9 @@ growing_vector<std::string> changelog = {
     "- sayquiet and replyquiet - same as",
     "  normal say and reply, but without",
     "  a squeak",
+    "- Added dimensions, so you can properly",
+    "  have more than one dimension in a",
+    "  custom level",
 
 };
 
