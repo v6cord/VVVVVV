@@ -5862,13 +5862,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
             int speedcap = 16;
 
-            if ((key.keymap[SDLK_COMMA] || key.isDown(SDL_CONTROLLER_BUTTON_X)) && (ed.keydelay==0)) {
+            if (key.keymap[SDLK_COMMA] || key.isDown(SDL_CONTROLLER_BUTTON_X)) {
                 ed.keydelay = 6;
                 ed.entspeed--;
                 if (ed.entspeed < -speedcap) ed.entspeed = speedcap;
             }
 
-            if ((key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_Y)) && (ed.keydelay==0)) {
+            if (key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_Y)) {
                 ed.keydelay = 6;
                 ed.entspeed++;
                 if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
@@ -5904,12 +5904,18 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.notedelay=45;
             }
 
-            if (key.keymap[SDLK_F1] && ed.keydelay==0) {
+            if (tower && (key.keymap[SDLK_F1] || key.keymap[SDLK_F2])) {
+                ed.notedelay=45;
+                ed.note="Unavailable in Tower Mode";
+                ed.updatetiles=true;
+                ed.keydelay=6;
+            }
+            if (key.keymap[SDLK_F1]) {
                 ed.switch_tileset(true);
                 dwgfx.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
-            if (key.keymap[SDLK_F2] && ed.keydelay==0) {
+            if (key.keymap[SDLK_F2]) {
                 ed.switch_tilecol(true);
                 dwgfx.backgrounddrawn=false;
                 ed.keydelay = 6;
@@ -5944,7 +5950,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
-            if (tower && ed.keydelay == 0 && key.keymap[SDLK_F1]) {
+            if (tower && key.keymap[SDLK_F1]) {
                 // Change Scroll Direction
                 ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
                 ed.notedelay=45;
@@ -5955,13 +5961,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
-            if (tower && ed.keydelay == 0 && key.keymap[SDLK_F2]) {
+            if (tower && key.keymap[SDLK_F2]) {
                 // Change Tower Entry
                 ed.keydelay=6;
                 ed.boundarytype=4;
                 ed.boundarymod=1;
             }
-            if (tower && ed.keydelay == 0 &&
+            if (tower &&
                 (key.keymap[SDLK_F6] || key.keymap[SDLK_F7])) {
                 // Change Used Tower
                 if (key.keymap[SDLK_F7]) {
@@ -5976,7 +5982,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.updatetiles = true;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
-            if (tower && ed.keydelay == 0 &&
+            if (tower &&
                 (key.keymap[SDLK_PLUS] || key.keymap[SDLK_KP_PLUS] ||
                  key.keymap[SDLK_EQUALS] || key.keymap[SDLK_KP_EQUALS] ||
                  key.keymap[SDLK_MINUS] || key.keymap[SDLK_KP_MINUS] ||
@@ -5995,38 +6001,38 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.ypos += modpos;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
-            if(key.keymap[SDLK_F1] && ed.keydelay==0)
+            if(key.keymap[SDLK_F1])
             {
                 ed.switch_tileset(false);
                 dwgfx.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
-            if(key.keymap[SDLK_F2] && ed.keydelay==0)
+            if(key.keymap[SDLK_F2])
             {
                 ed.switch_tilecol(false);
                 dwgfx.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
-            if(key.keymap[SDLK_F3] && ed.keydelay==0)
+            if(key.keymap[SDLK_F3])
             {
                 ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype+1)%25;
                 ed.keydelay=6;
                 ed.notedelay=45;
                 ed.note="Enemy Type Changed";
             }
-            if(key.keymap[SDLK_F4] && ed.keydelay==0)
+            if(key.keymap[SDLK_F4])
             {
                 ed.keydelay=6;
                 ed.boundarytype=1;
                 ed.boundarymod=1;
             }
-            if(key.keymap[SDLK_F5] && ed.keydelay==0)
+            if(key.keymap[SDLK_F5])
             {
                 ed.keydelay=6;
                 ed.boundarytype=2;
                 ed.boundarymod=1;
             }
-            if (key.keymap[SDLK_F6] && ed.keydelay == 0) {
+            if (key.keymap[SDLK_F6]) {
                 int newaltstate = ed.getnumaltstates(ed.levx, ed.levy) + 1;
                 ed.addaltstate(ed.levx, ed.levy, newaltstate);
                 ed.keydelay = 6;
@@ -6040,7 +6046,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.levaltstate = newaltstate;
                 }
             }
-            if (key.keymap[SDLK_F7] && ed.keydelay == 0) {
+            if (key.keymap[SDLK_F7]) {
                 if (ed.levaltstate == 0) {
                     ed.note = "Cannot remove main state";
                 } else {
@@ -6051,7 +6057,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.keydelay = 6;
                 ed.notedelay = 45;
             }
-            if(key.keymap[SDLK_F8] && ed.keydelay==0) {
+            if(key.keymap[SDLK_F8]) {
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower) {
                     ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=0;
                     ed.note="Tower Mode Disabled";
@@ -6065,7 +6071,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
-            if(key.keymap[SDLK_F10] && ed.keydelay==0)
+            if(key.keymap[SDLK_F10])
             {
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
                 {
@@ -6101,7 +6107,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_o]) ed.drawmode=15;
             if(key.keymap[SDLK_p]) ed.drawmode=16;
 
-            if(key.keymap[SDLK_w] && ed.keydelay==0)
+            if(key.keymap[SDLK_w])
             {
                 int j=0, tx=0, ty=0;
                 for(int i=0; i<EditorData::GetInstance().numedentities; i++)
@@ -6153,19 +6159,19 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 }
                 ed.keydelay=6;
             }
-            if (key.keymap[SDLK_e] && ed.keydelay==0) {
+            if (key.keymap[SDLK_e]) {
                 ed.keydelay = 6;
                 ed.getlin(key, TEXT_ROOMNAME, "Enter new room name:",
                           &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
                 game.mapheld=true;
             }
-            if (key.keymap[SDLK_g] && ed.keydelay==0) {
+            if (key.keymap[SDLK_g]) {
                 ed.keydelay = 6;
                 ed.getlin(key, TEXT_GOTOROOM, "Enter room coordinates (x,y):",
                           NULL);
                 game.mapheld=true;
             }
-            if (key.keymap[SDLK_a] && ed.keydelay == 0) {
+            if (key.keymap[SDLK_a]) {
                 if (ed.getedaltstatenum(ed.levx, ed.levy, ed.levaltstate + 1) != -1) {
                     ed.levaltstate++;
                     ed.note = "Switched to alt state " + help.String(ed.levaltstate);
@@ -6180,7 +6186,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             }
 
             //Save and load
-            if(key.keymap[SDLK_s] && ed.keydelay==0)
+            if(key.keymap[SDLK_s])
             {
                 ed.keydelay = 6;
                 ed.getlin(key, TEXT_SAVE, "Enter map filename to save map as:",
@@ -6189,7 +6195,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 dwgfx.backgrounddrawn=false;
             }
 
-            if(key.keymap[SDLK_l] && ed.keydelay==0)
+            if(key.keymap[SDLK_l])
             {
                 ed.keydelay = 6;
                 ed.getlin(key, TEXT_LOAD, "Enter map filename to load:",
