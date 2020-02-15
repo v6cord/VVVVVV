@@ -60,7 +60,7 @@ static inline PHYSFS_ErrorCode errcodeFromErrno(void)
 
 static char *getUserDirByUID(void)
 {
-    #if defined(__SWITCH__)
+    #if defined(PHYSFS_PLATFORM_HORIZON)
         return "sdmc:/";
     #endif
 
@@ -308,7 +308,7 @@ int __PHYSFS_platformStat(const char *fname, PHYSFS_Stat *st, const int follow)
 
     // Stat seems to be really messed up on the Switch, so we are relying on a
     //  more out of the box solution.
-    #if defined(__SWITCH__)
+    #if defined(PHYSFS_PLATFORM_HORIZON)
         DIR * ds = opendir(fname);
         if (ds != NULL) {
             st->filetype = PHYSFS_FILETYPE_DIRECTORY;

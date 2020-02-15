@@ -1,2 +1,4 @@
 *
 !Dockerfile
+!ctr-sdl2
+ctr-sdl2/.git

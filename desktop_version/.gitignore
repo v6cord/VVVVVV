@@ -12,6 +12,7 @@ VVVVVV
 *.a
 *.gch
 !tests/**/*
+ctr-sdl2
 
 # Game data
 data.zip

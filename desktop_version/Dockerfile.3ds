@@ -1,0 +1,44 @@
+# vi: set ft=dockerfile:
+FROM devkitpro/devkitarm:20190212
+
+RUN dkp-pacman -Syyu --noconfirm
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.16.4/cmake-3.16.4-Linux-x86_64.sh \
+      -q -O /tmp/cmake-install.sh \
+      && chmod u+x /tmp/cmake-install.sh \
+      && mkdir -p /usr/local/ \
+      && /tmp/cmake-install.sh --skip-license --prefix=/usr/local/ \
+      && rm /tmp/cmake-install.sh
+
+RUN wget -qO- https://github.com/Lectem/3ds-cmake/archive/864098b357d820d9831cf1fcc54c040e26987291.tar.gz | \
+    tar --transform 's/^3ds-cmake-864098b357d820d9831cf1fcc54c040e26987291/3ds-cmake/' \
+        -xzv -C /usr/local/share/
+
+RUN apt-get update && apt-get install -y ninja-build && rm -rf /var/lib/apt/lists/*
+
+SHELL ["/bin/bash", "-c"]
+
+RUN dkp-pacman --noconfirm -S devkitpro-pkgbuild-helpers
+
+COPY ctr-sdl2/ /tmp/ctr-sdl2
+
+RUN cd /tmp/ctr-sdl2 && \
+    source /opt/devkitpro/devkitarm.sh && \
+    source /opt/devkitpro/3dsvars.sh && \
+    ./configure --prefix="${PORTLIBS_PREFIX}" --host=arm-none-eabi --disable-shared --enable-static --enable-n3ds && \
+    make -j$(nproc) && make install && \
+    rm -rf /tmp/ctr-sdl2
+
+RUN wget -qO- https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz | \
+    tar --transform 's/^SDL2_mixer-2.0.4/SDL2_mixer/' \
+        -xz -C /tmp && \
+    cd /tmp/SDL2_mixer && \
+    source /opt/devkitpro/devkitarm.sh && \
+    source /opt/devkitpro/3dsvars.sh && \
+    sed -i 's,\$(objects)/playwave\$(EXE) \$(objects)/playmus\$(EXE),,g' Makefile.in && \
+    LIBS="-logg" ./configure --prefix="${PORTLIBS_PREFIX}" --host=arm-none-eabi --disable-shared --enable-static --enable-music-ogg-tremor --disable-music-cmd --enable-music-mp3-mad-gpl && \
+    make -j$(nproc) && make install && \
+    rm -rf /tmp/SDL2_mixer
+
+ENV VVVVVV_CE_3DS_BUILD=1
+
