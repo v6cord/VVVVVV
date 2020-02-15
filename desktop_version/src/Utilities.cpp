@@ -15,7 +15,11 @@
 #include <SDL.h>
 #endif
 
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
+#ifdef __3DS__
+#include <3ds.h>
+#endif
+
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__) || defined(__3DS__)
 #include <unistd.h>
 #endif
 
@@ -168,7 +172,7 @@ static void* log_thread(void* ctx) {
 #endif
 
 bool log_default() {
-#if defined(__SWITCH__) || defined(__APPLE__) || defined(__ANDROID__)
+#if defined(__SWITCH__) || defined(__APPLE__) || defined(__ANDROID__) || defined(__3DS__)
     return true;
 #else
     return false;
@@ -186,9 +190,14 @@ void log_init() {
 
     pthread_create(&thr, 0, log_thread, 0);
     pthread_detach(thr);
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__) || defined(__3DS__)
 #ifdef __SWITCH__
     logger = fopen("sdmc:/switch/VVVVVV/vvvvvv-ce.log", "a");
+#elif defined(__3DS__)
+    gfxInitDefault();
+    consoleInit(GFX_TOP, nullptr);
+    return;
+    logger = fopen("vvvvvv-ce.log", "a");
 #else
     logger = popen("logger", "w");
 #endif
@@ -206,7 +215,7 @@ void log_init() {
 }
 
 void log_close() {
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__3DS__)
     if (logger) fclose(logger);
 #elif defined(__ANDROID__)
     // doesn't need closing
