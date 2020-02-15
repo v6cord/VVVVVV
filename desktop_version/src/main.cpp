@@ -49,7 +49,7 @@
 #include <mingw.thread.h>
 #include <mingw.condition_variable.h>
 #include <mingw.mutex.h>
-#else
+#elif !defined(__APPLE__)
 #include <thread>
 #include <condition_variable>
 #include <mutex>
@@ -257,10 +257,12 @@ int main(int argc, char *argv[])
     game.gametimer = 0;
     obj.init();
     game.loadstats(map, graphics, music);
+#if !defined(__APPLE__)
     std::condition_variable timeout;
     std::mutex mutex;
     std::thread init([&]() {
         auto start = std::chrono::steady_clock::now();
+#endif
         if(!FILESYSTEM_init(argv[0], baseDir, assetsPath)) {
             exit(1);
         }
@@ -269,6 +271,7 @@ int main(int argc, char *argv[])
         pre_fakepercent.store(80);
         graphics.reloadresources(true);
         pre_fakepercent.store(100);
+#if !defined(__APPLE__)
         auto end = std::chrono::steady_clock::now();
         if (end - start < 1s) {
             pre_quickend.store(true);
@@ -283,6 +286,7 @@ int main(int argc, char *argv[])
     uniq.unlock();
     preloaderloop();
     init.join();
+#endif
 
     if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 
