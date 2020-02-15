@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
 OPTION(ENABLE_PROFILE "Enable profiler" OFF)
+OPTION(ENABLE_DEBUG "Enable debug messages" OFF)
 
 SET(CUSTOM_LEVEL_SUPPORT ENABLED CACHE STRING "Optionally disable playing and/or editing of custom levels")
 SET_PROPERTY(CACHE CUSTOM_LEVEL_SUPPORT PROPERTY STRINGS ENABLED NO_EDITOR DISABLED)
@@ -40,6 +41,10 @@ ENDIF()
 
 if(ENABLE_PROFILE)
     ADD_COMPILE_OPTIONS(-finstrument-functions)
+endif()
+
+if(ENABLE_DEBUG)
+    add_definitions(-DVCE_DEBUG)
 endif()
 
 PROJECT(VVVVVV-CE)
@@ -262,13 +267,13 @@ IF(ENABLE_WARNINGS)
             # Saves quite a few lines and boilerplate at the price of readability.
             TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE
                     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-                            -Wall -Wno-sequence-point $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
+                            -Wall -Wno-sequence-point -Wno-comment $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
                     $<$<CXX_COMPILER_ID:MSVC>:
                             /W4 $<$<BOOL:${ENABLE_WERROR}>:/WX>>)
         else()
             TARGET_COMPILE_OPTIONS(main PRIVATE
                     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-                            -Wall -Wno-sequence-point $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
+                            -Wall -Wno-sequence-point -Wno-comment $<$<BOOL:${ENABLE_WERROR}>:-Werror>>
                     $<$<CXX_COMPILER_ID:MSVC>:
                             /W4 $<$<BOOL:${ENABLE_WERROR}>:/WX>>)
         endif()

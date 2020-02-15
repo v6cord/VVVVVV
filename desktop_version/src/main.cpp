@@ -435,8 +435,18 @@ int main(int argc, char *argv[])
 
     volatile Uint32 time, timePrev = 0;
 
+#ifdef VCE_DEBUG
+    auto last_gamestate = game.gamestate;
+#endif
+
     while(!key.quitProgram)
     {
+#ifdef VCE_DEBUG
+        if (last_gamestate != game.gamestate) {
+            printf("gamestate %i -> %i\n", last_gamestate, game.gamestate);
+            last_gamestate = game.gamestate;
+        }
+#endif
 		//gameScreen.ClearScreen(0x00);
 
         time = SDL_GetTicks();
