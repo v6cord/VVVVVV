@@ -225,9 +225,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	if (assetsPath) {
             strcpy_safe(output, assetsPath);
         } else {
-#if defined(DATA_ZIP_PATH)
-            strcpy_safe(output, DATA_ZIP_PATH);
-#elif defined(__APPLE__)
+#if defined(__APPLE__)
             CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
             if (!appUrlRef) {
                 SDL_ShowSimpleMessageBox(
@@ -249,6 +247,8 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
                 return 0;
             }
             CFRelease(appUrlRef);
+#elif defined(DATA_ZIP_PATH)
+            strcpy_safe(output, DATA_ZIP_PATH);
 #else
             strcpy_safe(output, PHYSFS_getBaseDir());
             strcat(output, "data.zip");
