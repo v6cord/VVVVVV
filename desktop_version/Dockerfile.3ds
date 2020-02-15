@@ -29,6 +29,15 @@ RUN cd /tmp/ctr-sdl2 && \
     make -j$(nproc) && make install && \
     rm -rf /tmp/ctr-sdl2
 
+RUN wget -qO- http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.6.tar.gz | \
+    tar --transform 's/^libvorbis-1.3.6/libvorbis/' \
+        -xz -C /tmp && \
+    cd /tmp/libvorbis && \
+    source /opt/devkitpro/3dsvars.sh && \
+    ./configure --prefix="${PORTLIBS_PREFIX}" --host=arm-none-eabi --disable-shared --enable-static && \
+    make -j$(nproc) && make install && \
+    rm -rf /tmp/libvorbis
+
 RUN wget -qO- https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz | \
     tar --transform 's/^SDL2_mixer-2.0.4/SDL2_mixer/' \
         -xz -C /tmp && \
