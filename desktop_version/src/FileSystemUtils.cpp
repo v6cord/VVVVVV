@@ -259,10 +259,12 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 
 	if (!cached_data_zip_load(output))
 	{
+#ifndef __APPLE__
                 if (!getcwd(output, MAX_PATH)) ;
                 strcat(output, "/data.zip");
                 if (!cached_data_zip_load(output))
                 {
+#endif
                         puts("Error: data.zip missing!");
                         puts("You do not have data.zip!");
                         puts("Grab it from your purchased copy of the game,");
@@ -279,7 +281,9 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
                                 NULL
                         );
                         return 0;
+#ifndef __APPLE__
                 }
+#endif
         }
 
         pre_fakepercent.store(45);
