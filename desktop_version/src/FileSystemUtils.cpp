@@ -29,8 +29,6 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
-#include <processenv.h>
-#include <shellapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
 int mkdir(char* path, int mode)
@@ -40,7 +38,7 @@ int mkdir(char* path, int mode)
 	return CreateDirectoryW(utf16_path, NULL);
 }
 #define VNEEDS_MIGRATION (mkdirResult != 0)
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
 #include <sys/stat.h>
 #include <limits.h>
 #define VNEEDS_MIGRATION (mkdirResult == 0)
@@ -62,17 +60,12 @@ void PLATFORM_migrateSaveData(char* output);
 void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
 
 extern "C" {
-#ifdef LD_VCE_ZIP
-    extern const char _binary_vce_zip_start;
-    extern const char _binary_vce_zip_end;
-#else
     extern const unsigned char vce_zip[];
     extern const unsigned vce_zip_size;
-#endif
 }
 
 static bool cached_data_zip_load(const char* path) {
-#ifdef __SWITCH__
+#if defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
     FILE* file = fopen(path, "rb");
     if (file == nullptr) return false;
     if (fseek(file, 0L, SEEK_END)) {
@@ -137,11 +130,7 @@ int FILESYSTEM_initCore(char *argvZero, char *baseDir, char *assetsPath)
 	PHYSFS_init(argvZero);
 	PHYSFS_permitSymbolicLinks(1);
 
-#ifdef LD_VCE_ZIP
-        PHYSFS_mountMemory(&_binary_vce_zip_start, &_binary_vce_zip_end - &_binary_vce_zip_start, nullptr, "vce.zip", nullptr, 0);
-#else
         PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 0);
-#endif
 
 	/* Determine the OS user directory */
 	if (baseDir && strlen(baseDir) > 0)
@@ -439,6 +428,8 @@ void PLATFORM_getOSDirectory(char* output)
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
 	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
+#elif defined(__3DS__) || defined(_3DS)
+	bsd_strlcpy(output, "sdmc:/3ds/VVVVVV/", MAX_PATH);
 #elif defined(__ANDROID__)
         bsd_strlcpy(output, SDL_AndroidGetExternalStoragePath(), MAX_PATH - 1);
         strcat(output, "/");
@@ -449,7 +440,7 @@ void PLATFORM_getOSDirectory(char* output)
 
 void PLATFORM_migrateSaveData(char* output)
 {
-#if !defined(__SWITCH__)
+#if !defined(__SWITCH__) && !defined(_3DS) && !defined(__3DS__)
 	char oldLocation[MAX_PATH];
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
@@ -608,7 +599,7 @@ void PLATFORM_migrateSaveData(char* output)
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 	} while (FindNextFile(hFind, &findHandle));
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
 	/* No Migration needed. */
 #else
 #error See PLATFORM_migrateSaveData
@@ -660,7 +651,7 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
-#elif defined(__SWITCH__) || defined(__ANDROID__)
+#elif defined(__SWITCH__) || defined(__ANDROID__) || defined(_3DS) || defined(__3DS__)
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
@@ -693,39 +684,24 @@ bool FILESYSTEM_openDirectory(const char *dname) {
 
 #ifdef _WIN32
 char* FILESYSTEM_realPath(const char* rel) {
-    size_t src_len = strlen(rel) + 1;
-    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
-    PHYSFS_utf8ToUtf16(rel, (PHYSFS_uint16*) srcw, src_len * 2);
-    wchar_t* dstw = _wfullpath(nullptr, srcw, MAX_PATH);
-    size_t dst_len = wcslen(dstw) + 1;
-    char* dst = (char*) malloc(dst_len * 2);
-    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
-    return dst;
+    return _fullpath(nullptr, rel, MAX_PATH);
 }
 
 char* FILESYSTEM_dirname(const char* file) {
-    size_t src_len = strlen(file) + 1;
-    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
-    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
-    PathRemoveFileSpecW(srcw);
-    wchar_t* dstw = srcw;
-    size_t dst_len = wcslen(dstw) + 1;
-    char* dst = (char*) malloc(dst_len * 2);
-    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
-    return dst;
+    char* dir = (char*) malloc(MAX_PATH + 1);
+    bsd_strlcpy(dir, file, MAX_PATH + 1);
+    PathRemoveFileSpecA(dir);
+    return dir;
 }
 
 char* FILESYSTEM_basename(const char* file) {
-    size_t src_len = strlen(file) + 1;
-    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
-    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
-    LPCWSTR dstw = PathFindFileNameW(srcw);
-    size_t dst_len = wcslen(dstw) + 1;
-    char* dst = (char*) malloc(dst_len * 2);
-    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
-    return dst;
+    const char* base = PathFindFileNameA(file);
+    size_t base_len = strlen(base) + 1;
+    char* base_copy = (char*) malloc(base_len);
+    bsd_strlcpy(base_copy, base, base_len);
+    return base_copy;
 }
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__3DS__) || defined(_3DS)
 char* FILESYSTEM_realPath(const char* rel) {
     char* buf = (char*) malloc(MAX_PATH + 1);
     strlcpy(buf, rel, MAX_PATH + 1);
@@ -770,25 +746,5 @@ char* FILESYSTEM_basename(const char* file) {
     char* base_copy = (char*) malloc(base_len);
     bsd_strlcpy(base_copy, base, base_len);
     return base_copy;
-}
-#endif
-
-#ifdef _WIN32
-char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
-    LPWSTR unparsed = GetCommandLineW();
-    LPWSTR* split = CommandLineToArgvW(unparsed, argc);
-    char** utf8 = (char**) malloc(*argc * sizeof(char*));
-    for (int i = 0; i < *argc; ++i) {
-        size_t len = wcslen(split[i]) + 1;
-        utf8[i] = (char*) malloc(len * 2);
-        PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) split[i], utf8[i], len * 2);
-    }
-    LocalFree(split);
-    return utf8;
-}
-#else
-char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
-    *argc = real_argc;
-    return argv;
 }
 #endif
