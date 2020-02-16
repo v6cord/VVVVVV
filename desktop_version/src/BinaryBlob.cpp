@@ -109,8 +109,12 @@ bool binaryBlob::unPackBinary(const char* name)
 		if (m_headers[i].valid)
 		{
 			PHYSFS_seek(handle, offset);
+#ifdef __3DS__
+			m_memblocks[i] = (char*) malloc(0);
+#else
 			m_memblocks[i] = (char*) malloc(m_headers[i].size);
 			PHYSFS_readBytes(handle, m_memblocks[i], m_headers[i].size);
+#endif
 			offset += m_headers[i].size;
                         pre_fakepercent.store(50 + (offset * 30) / size);
 		}
