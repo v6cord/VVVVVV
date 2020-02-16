@@ -350,8 +350,13 @@ public:
     int mapwidth, mapheight = 0; //Actual width and height of stage
 
     //Special; the physical max the engine allows
+#ifdef __3DS__
+    int maxwidth = 20;
+    int maxheight = 20;
+#else
     int maxwidth = 100;
     int maxheight = 100;
+#endif
 
     int version = 0;
     int vceversion = 0;
