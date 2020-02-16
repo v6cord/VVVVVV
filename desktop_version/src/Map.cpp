@@ -1245,8 +1245,10 @@ void mapclass::gotodimroom(int rx, int ry) {
         ix = ox;
         iy = oy;
         dimensionwraparound(&ix, &iy);
-        if (ix == ox && iy == oy)
+        if (ix == ox && iy == oy) {
+            ed.generatecustomminimap(graphics, map);
             return;
+        }
     }
 
     dimension = -1;
