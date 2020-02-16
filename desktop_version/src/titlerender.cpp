@@ -511,7 +511,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
           int tmp=game.currentmenuoption+(game.levelpage*8);
           if(tmp>=0 && tmp < (int) ed.ListOfMetaData.size()){ // FIXME: size_t/int! -flibit
             //Don't show next page or return to menu options here!
-            if(game.nummenuoptions - game.currentmenuoption<=2){
+            if(game.nummenuoptions - game.currentmenuoption<=3){
 
             }else{
               dwgfx.bigprint( -1, 15, ed.ListOfMetaData[tmp].title, tr, tg, tb, true);

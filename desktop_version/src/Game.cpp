@@ -7268,6 +7268,17 @@ void Game::createmenu( std::string t )
                     tcount++;
                 }
             }
+            if((size_t) ((levelpage*8+8) >8)){
+                menuoptions[tcount] = "previous page";
+                menuoptionsactive[tcount] = true;
+                tcount++;
+            }
+            else
+            {
+                menuoptions[tcount] = "last page";
+                menuoptionsactive[tcount] = true;
+                tcount++;
+            }
             if((size_t) ((levelpage*8)+8) <ed.ListOfMetaData.size())
             {
                 menuoptions[tcount] = "next page";

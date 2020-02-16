@@ -475,6 +475,17 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     game.createmenu("levellist");
                     game.currentmenuoption=game.nummenuoptions-2;
                     map.nexttowercolour();
+                  }else if(game.currentmenuoption==game.nummenuoptions-3){
+                    //previous page
+                    music.playef(11,10);
+                    if((size_t) ((game.levelpage*8)+8) <= 8){
+                        game.levelpage=(ed.ListOfMetaData.size()-8)/8;
+                    }else{
+                        game.levelpage-=1;
+                    }
+                    game.createmenu("levellist");
+                    game.currentmenuoption=game.nummenuoptions-3;
+                    map.nexttowercolour();
                   }else{
                     //Ok, launch the level!
                     //PLAY CUSTOM LEVEL HOOK

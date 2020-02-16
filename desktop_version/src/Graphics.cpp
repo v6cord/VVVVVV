@@ -1319,7 +1319,7 @@ void Graphics::drawlevelmenu( Game& game, int cr, int cg, int cb, int division /
     {
         if (i == game.currentmenuoption)
         {
-          if(game.nummenuoptions-i<=2){
+          if(game.nummenuoptions-i<=3){
             //Draw it highlighted
             if (game.menuoptionsactive[i])
             {
@@ -1342,20 +1342,20 @@ void Graphics::drawlevelmenu( Game& game, int cr, int cg, int cb, int division /
                 tempstring = game.menuoptions[i];
                 std::transform(tempstring.begin(), tempstring.end(),tempstring.begin(), ::toupper);
                 tempstring = std::string("[ ") + tempstring + std::string(" ]");
-                Print(110 + (i * division) - 16 +game.menuxoff, 140 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
+                Print(110 + (i * division) - 16 +game.menuxoff, 144 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
             }
             else
             {
                 tempstring = game.menuoptions[i];
                 tempstring = "[ " + tempstring + " ]";
                 //Draw it in gray
-                Print(110 + (i * division) - 16 +game.menuxoff, 140 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
+                Print(110 + (i * division) - 16 +game.menuxoff, 144 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
             }
           }
         }
         else
         {
-          if(game.nummenuoptions-i<=2){
+          if(game.nummenuoptions-i<=3){
             //Draw it normally
             if (game.menuoptionsactive[i])
             {
@@ -1370,12 +1370,12 @@ void Graphics::drawlevelmenu( Game& game, int cr, int cg, int cb, int division /
             //Draw it normally
             if (game.menuoptionsactive[i])
             {
-                Print(110 + (i * division) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i], cr, cg, cb);
+                Print(110 + (i * division) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i], cr, cg, cb);
             }
             else
             {
                 //Draw it in gray
-                Print(110 + (i * division) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i], 128, 128, 128);
+                Print(110 + (i * division) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i], 128, 128, 128);
             }
           }
         }
