@@ -1294,72 +1294,6 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 #elif !defined(MAKEANDPLAY)
                         //next page
                         music.playef(11, 10);
-                        game.createmenu("credits25");
-                        map.nexttowercolour();
-#endif
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits25")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits3");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits3")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.current_credits_list_index += 9;
-
-                        if (game.current_credits_list_index >= (int)game.superpatrons.size())
-                        {
-                            // No more super patrons. Move to the next credits section
-                            game.current_credits_list_index = 0;
-                            game.createmenu("credits4");
-                        }
-                        else
-                        {
-                            // There are more super patrons. Refresh the menu with the next ones
-                            game.createmenu("credits3");
-                        }
-
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.current_credits_list_index = 0;
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits4")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
                         game.current_credits_list_index += 14;
 
                         if (game.current_credits_list_index >= (int)game.patrons.size())
@@ -1375,6 +1309,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         }
 
                         map.nexttowercolour();
+#endif
                     }
                     else
                     {
@@ -1385,7 +1320,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         map.nexttowercolour();
                     }
                 }
-                else if (game.currentmenuname == "credits5")
+                else if (game.currentmenuname == "credits25")
                 {
                     if (game.currentmenuoption == 0)
                     {
@@ -1416,7 +1351,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         map.nexttowercolour();
                     }
                 }
-                else if (game.currentmenuname == "credits6")
+                else if (game.currentmenuname == "credits3")
                 {
                     if (game.currentmenuoption == 0)
                     {
