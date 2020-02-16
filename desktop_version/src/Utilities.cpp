@@ -196,7 +196,6 @@ void log_init() {
 #elif defined(__3DS__)
     gfxInitDefault();
     consoleInit(GFX_TOP, nullptr);
-    return;
     logger = fopen("vvvvvv-ce.log", "a");
 #else
     logger = popen("logger", "w");

@@ -55,10 +55,6 @@
 #include <mutex>
 #endif
 
-#ifdef __3DS__
-#include <3ds.h>
-#endif
-
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
 
@@ -208,12 +204,6 @@ int main(int argc, char *argv[])
         printf("\t\t  888888    888888  \n");
         printf("\t\t\n");
         printf("\t\t\n");
-    }
-
-    while (aptMainLoop()) {
-        gfxFlushBuffers();
-        gfxSwapBuffers();
-        gspWaitForVBlank();
     }
 
     SDL_SetMainReady();
