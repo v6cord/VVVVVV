@@ -55,6 +55,10 @@
 #include <mutex>
 #endif
 
+#ifdef __3DS__
+#include <3ds.h>
+#endif
+
 #define STRINGIFY_UNEXPANDED(s) #s
 #define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
 
@@ -443,7 +447,11 @@ int main(int argc, char *argv[])
     auto last_gamestate = game.gamestate;
 #endif
 
+#ifdef __3DS__
+    while(!key.quitProgram && aptMainLoop())
+#else
     while(!key.quitProgram)
+#endif
     {
 #ifdef VCE_DEBUG
         if (last_gamestate != game.gamestate) {
