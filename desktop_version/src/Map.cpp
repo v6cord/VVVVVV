@@ -1250,6 +1250,8 @@ void mapclass::gotodimroom(int rx, int ry) {
     }
 
     dimension = -1;
+
+    ed.generatecustomminimap(graphics, map);
 #endif
 }
 
