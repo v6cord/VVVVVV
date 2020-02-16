@@ -17,6 +17,8 @@ mapclass::mapclass()
 	colsuperstate = 0;
 	spikeleveltop = 0;
 	spikelevelbottom = 0;
+	spikelevelleft = 0;
+	spikelevelright = 0;
 	warpx = false;
 	warpy = false;
 	extrarow = 0;
@@ -727,7 +729,7 @@ void mapclass::settowercolour(int t)
 bool mapclass::spikecollide(int x, int y)
 {
 	if (invincibility) return false;
-	if (tower.at(x,y,0)>= 6 && tower.at(x,y,0) <= 11) return true;
+	if (tower.at(x,y,0,0)>= 6 && tower.at(x,y,0,0) <= 11) return true;
 	return false;
 }
 
@@ -735,10 +737,10 @@ bool mapclass::collide(int x, int y)
 {
 	if (towermode)
 	{
-		if (tower.at(x, y, 0) >= 12 && tower.at(x, y, 0) <= 27) return true;
+		if (tower.at(x, y, 0, 0) >= 12 && tower.at(x, y, 0, 0) <= 27) return true;
 		if (invincibility)
 		{
-			if (tower.at(x, y, 0) >= 6 && tower.at(x, y, 0) <= 11) return true;
+			if (tower.at(x, y, 0, 0) >= 6 && tower.at(x, y, 0, 0) <= 11) return true;
 		}
 	}
 	else if (tileset == 2)
@@ -981,10 +983,10 @@ void mapclass::showship()
 // Centers the tower camera on the player position
 void mapclass::realign_tower() {
 	int i = obj.getplayer();
+	xpos = obj.entities[i].xp - 160;
 	ypos = obj.entities[i].yp - 120;
-
-	if (ypos < 0)
-		ypos = 0;
+	if (xpos < 0) xpos = 0;
+	if (ypos < 0) ypos = 0;
 	bypos = ypos / 2;
 }
 
@@ -1588,6 +1590,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
 	towermode = false;
 	ypos = 0;
+	xpos = 0;
 	extrarow = 0;
 
 	//Custom stuff for warplines
@@ -1869,6 +1872,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			tower.minitowermode = true;
 			minitowersize = ed.tower_size(newtower);
 			scrolldir = ed.tower_scroll(newtower);
+			tower.width  = ed.tower_width(newtower);
+			tower.height = ed.tower_height(newtower);
 
 			extrarow = 0;
 
