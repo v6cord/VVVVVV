@@ -2421,7 +2421,13 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
         map.glitchname = map.getglitchname(game.roomx, game.roomy);
         dwgfx.Print(5, 2, map.glitchname, 196, 196, 255 - help.glow, true);
       }else{
-        dwgfx.Print(5, 2, map.roomname, 196, 196, 255 - help.glow, true);
+        std::string usethisname;
+        Dimension* dim = map.getdimension();
+        if (!map.roomname.length() && dim != NULL)
+            usethisname = dim->name;
+        else
+            usethisname = map.roomname;
+        dwgfx.Print(5, 2, usethisname, 196, 196, 255 - help.glow, true);
       }
     }
 

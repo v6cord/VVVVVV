@@ -2516,6 +2516,13 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
                 if (dim.w <= 0 || dim.h <= 0)
                     continue;
 
+                const char* pText = dimensionEl->GetText();
+                if (pText == NULL)
+                    pText = "";
+                std::string TextString = pText;
+                if (TextString.length())
+                    dim.name = TextString;
+
                 dimensions.push_back(dim);
             }
         }
@@ -3011,11 +3018,15 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
 
     msg = new TiXmlElement("dimensions");
     for (size_t i = 0; i < dimensions.size(); i++) {
+        Dimension* dim = &dimensions[i];
+
         TiXmlElement* dimensionEl = new TiXmlElement("dimension");
-        dimensionEl->SetAttribute("x", dimensions[i].x);
-        dimensionEl->SetAttribute("y", dimensions[i].y);
-        dimensionEl->SetAttribute("w", dimensions[i].w);
-        dimensionEl->SetAttribute("h", dimensions[i].h);
+        dimensionEl->SetAttribute("x", dim->x);
+        dimensionEl->SetAttribute("y", dim->y);
+        dimensionEl->SetAttribute("w", dim->w);
+        dimensionEl->SetAttribute("h", dim->h);
+        if (dim->name.length()) // Have to put this check here, otherwise it does <dimension></dimension> instead of <dimension />
+            dimensionEl->LinkEndChild(new TiXmlText(dim->name.c_str()));
         msg->LinkEndChild(dimensionEl);
     }
     data->LinkEndChild(msg);
