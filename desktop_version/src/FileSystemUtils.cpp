@@ -216,7 +216,9 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	if (assetsPath) {
             strcpy_safe(output, assetsPath);
         } else {
-#if defined(DATA_ZIP_PATH)
+#if defined(__3DS__)
+            strcpy_safe(output, "sdmc:/3ds/data.zip");
+#elif defined(DATA_ZIP_PATH)
             strcpy_safe(output, DATA_ZIP_PATH);
 #elif defined(__APPLE__)
             CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
