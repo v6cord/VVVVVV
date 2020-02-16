@@ -3025,8 +3025,7 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
         dimensionEl->SetAttribute("y", dim->y);
         dimensionEl->SetAttribute("w", dim->w);
         dimensionEl->SetAttribute("h", dim->h);
-        if (dim->name.length()) // Have to put this check here, otherwise it does <dimension></dimension> instead of <dimension />
-            dimensionEl->LinkEndChild(new TiXmlText(dim->name.c_str()));
+        dimensionEl->LinkEndChild(new TiXmlText(dim->name.c_str()));
         msg->LinkEndChild(dimensionEl);
     }
     data->LinkEndChild(msg);
