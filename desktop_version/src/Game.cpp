@@ -7268,7 +7268,7 @@ void Game::createmenu( std::string t )
                     tcount++;
                 }
             }
-            if((size_t) ((levelpage*8+8) >8)){
+            if(((levelpage*8+8) >8)){
                 menuoptions[tcount] = "previous page";
                 menuoptionsactive[tcount] = true;
                 tcount++;

@@ -478,10 +478,15 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                   }else if(game.currentmenuoption==game.nummenuoptions-3){
                     //previous page
                     music.playef(11,10);
-                    if((size_t) ((game.levelpage*8)+8) <= 8){
-                        game.levelpage=(ed.ListOfMetaData.size()-8)/8;
+                    if(((game.levelpage*8)+8) <= 8){
+                        if (ed.ListOfMetaData.size() % 8 == 0)
+                        {
+                            game.levelpage = (ed.ListOfMetaData.size() / 8 ) - 1;
+                        }else{
+                            game.levelpage = floor(ed.ListOfMetaData.size() / 8);
+                        }
                     }else{
-                        game.levelpage-=1;
+                        game.levelpage--;
                     }
                     game.createmenu("levellist");
                     game.currentmenuoption=game.nummenuoptions-3;
