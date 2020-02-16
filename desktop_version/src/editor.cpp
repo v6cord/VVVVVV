@@ -3226,6 +3226,17 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
 {
     map.customwidth=mapwidth;
     map.customheight=mapheight;
+    map.custommmstartx = 0;
+    map.custommmstarty = 0;
+    if (map.custommode && map.dimension >= 0) {
+        Dimension* dim = map.getdimension();
+        if (dim != NULL) {
+            map.customwidth = dim->w;
+            map.customheight = dim->h;
+            map.custommmstartx = dim->x;
+            map.custommmstarty = dim->y;
+        }
+    }
 
     map.customzoom=1;
     if(map.customwidth<=10 && map.customheight<=10) map.customzoom=2;
@@ -3269,22 +3280,24 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     int tm=0;
     int temp=0;
     //Scan over the map size
-    if(mapheight<=5 && mapwidth<=5)
+    if(map.customheight<=5 && map.customwidth<=5)
     {
         //4x map
-        for(int j2=0; j2<mapheight; j2++)
+        for(int j2=0; j2<map.customheight; j2++)
         {
-            for(int i2=0; i2<mapwidth; i2++)
+            for(int i2=0; i2<map.customwidth; i2++)
             {
+                int i3 = i2 + map.custommmstartx;
+                int j3 = j2 + map.custommmstarty;
                 //Ok, now scan over each square
                 tm=196;
-                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
+                if(level[i3 + (j3*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<36; j++)
                 {
                     for(int i=0; i<48; i++)
                     {
-                        temp=absfree(int(i*0.83) + (i2*40),int(j*0.83)+(j2*30));
+                        temp=absfree(int(i*0.83) + (i3*40),int(j*0.83)+(j3*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -3295,22 +3308,24 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
             }
         }
     }
-    else if(mapheight<=10 && mapwidth<=10)
+    else if(map.customheight<=10 && map.customwidth<=10)
     {
         //2x map
-        for(int j2=0; j2<mapheight; j2++)
+        for(int j2=map.custommmstarty; j2<map.customheight+map.custommmstarty; j2++)
         {
-            for(int i2=0; i2<mapwidth; i2++)
+            for(int i2=map.custommmstartx; i2<map.customwidth+map.custommmstartx; i2++)
             {
+                int i3 = i2 + map.custommmstartx;
+                int j3 = j2 + map.custommmstarty;
                 //Ok, now scan over each square
                 tm=196;
-                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
+                if(level[i3 + (j3*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<18; j++)
                 {
                     for(int i=0; i<24; i++)
                     {
-                        temp=absfree(int(i*1.6) + (i2*40),int(j*1.6)+(j2*30));
+                        temp=absfree(int(i*1.6) + (i3*40),int(j*1.6)+(j3*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel
@@ -3323,19 +3338,21 @@ void editorclass::generatecustomminimap(Graphics& dwgfx, mapclass& map)
     }
     else
     {
-        for(int j2=0; j2<mapheight; j2++)
+        for(int j2=map.custommmstarty; j2<map.customheight+map.custommmstarty; j2++)
         {
-            for(int i2=0; i2<mapwidth; i2++)
+            for(int i2=map.custommmstartx; i2<map.customwidth+map.custommmstartx; i2++)
             {
+                int i3 = i2 + map.custommmstartx;
+                int j3 = j2 + map.custommmstarty;
                 //Ok, now scan over each square
                 tm=196;
-                if(level[i2 + (j2*maxwidth)].tileset==1) tm=96;
+                if(level[i3 + (j3*maxwidth)].tileset==1) tm=96;
 
                 for(int j=0; j<9; j++)
                 {
                     for(int i=0; i<12; i++)
                     {
-                        temp=absfree(3+(i*3) + (i2*40),(j*3)+(j2*30));
+                        temp=absfree(3+(i*3) + (i3*40),(j*3)+(j3*30));
                         if(temp>=1)
                         {
                             //Fill in this pixel

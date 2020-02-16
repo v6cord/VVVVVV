@@ -1210,6 +1210,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			if (words[0] == "gotodimension")
 			{
 				relativepos(&map.dimension, words[1]);
+				ed.generatecustomminimap(dwgfx, map);
 			}
 			if (words[0] == "gotoroom")
 			{

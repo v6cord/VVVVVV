@@ -2484,7 +2484,9 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             if(map.customzoom==4){
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*ed.maxwidth)]==0){
+                    int i2 = i + map.custommmstartx;
+                    int j2 = j + map.custommmstarty;
+                    if(map.explored[i2+(j2*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + (j * 36), false);
                     dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + (j * 36), false);
@@ -2511,7 +2513,9 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }else if(map.customzoom==2){
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*ed.maxwidth)]==0){
+                    int i2 = i + map.custommmstartx;
+                    int j2 = j + map.custommmstarty;
+                    if(map.explored[i2+(j2*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 24), map.custommmyoff+21 + (j * 18), false);
                     dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 24), map.custommmyoff+21 + (j * 18), false);
@@ -2523,7 +2527,9 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }else{
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*ed.maxwidth)]==0){
+                    int i2 = i + map.custommmstartx;
+                    int j2 = j + map.custommmstarty;
+                    if(map.explored[i2+(j2*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 12), map.custommmyoff+21 + (j * 9), false);
                     }
@@ -2549,34 +2555,34 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
           if(map.customzoom==4){
             if(map.cursorstate==1){
               if (int(map.cursordelay / 4) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 48) +map.custommmxoff, 21 + ((game.roomy - 100) * 36)+map.custommmyoff , 48 , 36 , 255,255,255);
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 48) +map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 36)+map.custommmyoff , 48 , 36 , 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 255,255,255);
               }
             }else if (map.cursorstate == 2){
               if (int(map.cursordelay / 15) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 16, 245 - (help.glow), 245 - (help.glow));
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 16, 245 - (help.glow), 245 - (help.glow));
               }
             }
           }else if(map.customzoom==2){
             if(map.cursorstate==1){
               if (int(map.cursordelay / 4) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 24)+map.custommmxoff , 21 + ((game.roomy - 100) * 18)+map.custommmyoff , 24 , 18 , 255,255,255);
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 24)+map.custommmxoff , 21 + ((game.roomy - 100 - map.custommmstarty) * 18)+map.custommmyoff , 24 , 18 , 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 255,255,255);
               }
             }else if (map.cursorstate == 2){
               if (int(map.cursordelay / 15) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 16, 245 - (help.glow), 245 - (help.glow));
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 16, 245 - (help.glow), 245 - (help.glow));
               }
             }
           }else{
             if(map.cursorstate==1){
               if (int(map.cursordelay / 4) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 12)+map.custommmxoff , 21 + ((game.roomy - 100) * 9)+map.custommmyoff , 12 , 9 , 255,255,255);
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 12)+map.custommmxoff , 21 + ((game.roomy - 100 - map.custommmstarty) * 9)+map.custommmyoff , 12 , 9 , 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 255,255,255);
               }
             }else if (map.cursorstate == 2){
               if (int(map.cursordelay / 15) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 16, 245 - (help.glow), 245 - (help.glow));
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 16, 245 - (help.glow), 245 - (help.glow));
               }
             }
           }
