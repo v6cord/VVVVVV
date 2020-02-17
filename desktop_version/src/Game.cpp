@@ -6,6 +6,8 @@
 #include "Map.h"
 #include "Script.h"
 
+#include "KeyPoll.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -4434,6 +4436,10 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
 			controllerSensitivity = atoi(pText);
 		}
 
+                if (pKey == "touchMode") {
+                        key.type = (input_type) atoi(pText);
+                }
+
     }
 
     if(fullscreen)
@@ -4656,6 +4662,10 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
 
 	msg = new TiXmlElement( "controllerSensitivity" );
 	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
+	dataNode->LinkEndChild( msg );
+
+	msg = new TiXmlElement( "touchMode" );
+	msg->LinkEndChild( new TiXmlText( tu.String(key.type).c_str()));
 	dataNode->LinkEndChild( msg );
 
     FILESYSTEM_saveTiXmlDocument("saves/unlock.vvv", &doc);
@@ -7557,7 +7567,7 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[0] = true;
 					menuoptions[1] = "game pad options";
 					menuoptionsactive[1] = true;
-                    menuoptions[2] = "flip mode";
+                                        menuoptions[2] = "flip mode";
 					menuoptionsactive[2] = true;
 					menuoptions[3] = "clear data";
 					menuoptionsactive[3] = true;
@@ -7615,10 +7625,16 @@ void Game::createmenu( std::string t )
 		menuoptionsactive[2] = true;
 		menuoptions[3] = "bind menu";
 		menuoptionsactive[3] = true;
-		menuoptions[4] = "return";
+                if (key.type == holdinput) {
+                    menuoptions[4] = "touch input (hold)";
+                } else if (key.type == swipeinput) {
+                    menuoptions[4] = "touch input (swipe)";
+                }
 		menuoptionsactive[4] = true;
-		nummenuoptions = 5;
-		menuxoff = -40;
+		menuoptions[5] = "return";
+		menuoptionsactive[5] = true;
+		nummenuoptions = 6;
+		menuxoff = -60;
 		menuyoff = 10;
 	}
     else if (t == "cleardatamenu")

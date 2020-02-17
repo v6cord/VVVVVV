@@ -259,29 +259,61 @@ void KeyPoll::Poll()
                 }
                 else if(evt.type == SDL_FINGERDOWN)
                 {
-                    if (evt.tfinger.x < 0.5) {
-                        if (keymap[SDLK_RIGHT] || delayed_right_time > -3) {
-                            keymap[SDLK_v] = 1;
-                            finger_buttons[evt.tfinger.fingerId] = SDLK_v;
-                            if (delayed_right_time > -3) {
-                                keymap[SDLK_RIGHT] = 0;
+                    if (type == holdinput) {
+                        if (evt.tfinger.x < 0.5) {
+                            if (keymap[SDLK_RIGHT] || delayed_right_time > -3) {
+                                keymap[SDLK_v] = 1;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                                if (delayed_right_time > -3) {
+                                    keymap[SDLK_RIGHT] = 0;
+                                }
+                                delayed_right_time = 0;
+                            } else {
+                                delayed_left_time = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
                             }
-                            delayed_right_time = 0;
                         } else {
-                            delayed_left_time = 0;
-                            finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
+                            if (keymap[SDLK_LEFT] || delayed_left_time > -3) {
+                                keymap[SDLK_v] = 1;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                                if (delayed_left_time > -3) {
+                                    keymap[SDLK_LEFT] = 0;
+                                }
+                                delayed_left_time = 0;
+                            } else {
+                                delayed_right_time = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
+                            }
                         }
-                    } else {
-                        if (keymap[SDLK_LEFT] || delayed_left_time > -3) {
-                            keymap[SDLK_v] = 1;
-                            finger_buttons[evt.tfinger.fingerId] = SDLK_v;
-                            if (delayed_left_time > -3) {
+                    } else if (type == swipeinput && evt.tfinger.x > 0.5) {
+                        keymap[SDLK_v] = 1;
+                        finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                    } else if (type == swipeinput) {
+                        orig_x = evt.tfinger.x;
+                    }
+                }
+                else if(evt.type == SDL_FINGERMOTION)
+                {
+                    if (type == swipeinput) {
+                        bool flip = false;
+                        auto iter = finger_buttons.find(evt.tfinger.fingerId);
+                        if (iter != finger_buttons.end()) {
+                            if (iter->second == SDLK_v) flip = true;
+                        }
+                        if (!flip) {
+                            float dist = evt.tfinger.x - orig_x;
+                            if (dist < -0.05) orig_x = evt.tfinger.x + 0.01;
+                            else if (dist > 0.05) orig_x = evt.tfinger.x - 0.01;
+
+                            if (dist > 0) {
+                                keymap[SDLK_RIGHT] = 1;
                                 keymap[SDLK_LEFT] = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
+                            } else if (dist < 0) {
+                                keymap[SDLK_LEFT] = 1;
+                                keymap[SDLK_RIGHT] = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
                             }
-                            delayed_left_time = 0;
-                        } else {
-                            delayed_right_time = 0;
-                            finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
                         }
                     }
                 }

@@ -1,3 +1,4 @@
+#include "Enums.h"
 #include "Input.h"
 #include "Script.h"
 
@@ -1525,7 +1526,24 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 						}
 					}
 
-					if (game.currentmenuoption == 4)
+                                        if (game.currentmenuoption == 4) {
+                                            music.playef(11, 10);
+                                            auto c = game.currentmenuoption;
+                                            if (key.type == holdinput) {
+                                                key.type = swipeinput;
+                                            } else if (key.type == swipeinput) {
+                                                key.type = holdinput;
+                                            }
+                                            game.createmenu("controller");
+                                            key.keymap[SDLK_RIGHT] = 0;
+                                            key.keymap[SDLK_LEFT] = 0;
+                                            key.keymap[SDLK_v] = 0;
+                                            key.delayed_left_time = -10;
+                                            key.delayed_right_time = -10;
+                                            game.currentmenuoption = c;
+                                        }
+
+					if (game.currentmenuoption == 5)
 					{
 						music.playef(11, 10);
 						game.createmenu("options");
