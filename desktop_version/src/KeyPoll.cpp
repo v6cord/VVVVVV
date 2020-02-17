@@ -259,7 +259,21 @@ void KeyPoll::Poll()
                 }
                 else if(evt.type == SDL_FINGERDOWN)
                 {
-                    if (type == holdinput) {
+                    auto absx = evt.tfinger.x * 320;
+                    auto absy = evt.tfinger.y * 240;
+                    if (absx < 30 && absy < 30) {
+                        if (fakekeytimer > 0) {
+                            keymap[fakekey] = 0;
+                        }
+                        fakekey = SDLK_RETURN;
+                        fakekeytimer = 6;
+                    } else if (absx > 290 && absy < 30) {
+                        if (fakekeytimer > 0) {
+                            keymap[fakekey] = 0;
+                        }
+                        fakekey = SDLK_ESCAPE;
+                        fakekeytimer = 6;
+                    } else if (type == holdinput) {
                         if (evt.tfinger.x < 0.5) {
                             if (keymap[SDLK_RIGHT] || delayed_right_time > -3) {
                                 keymap[SDLK_v] = 1;
