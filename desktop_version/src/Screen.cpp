@@ -70,6 +70,10 @@ Screen::Screen()
     badSignalEffect = false;
 
     glScreen = true;
+
+#ifdef __ANDROID__
+    ResizeScreen(-1, -1);
+#endif
 }
 
 void Screen::ResizeScreen(int x , int y)
