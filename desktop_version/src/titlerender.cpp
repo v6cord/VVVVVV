@@ -257,8 +257,6 @@ growing_vector<std::string> changelog = {
     "  variable, using either a given",
     "  argument or whatever is on the next",
     "  line",
-    "- Upped the trinkets/crewmates limit to",
-    "  100",
     "- Variable assignments (var = contents,",  
     "  var++, var += 1, var -= 1, var--)",
     "- Built-in variables (%deaths%,",
