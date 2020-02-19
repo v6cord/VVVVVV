@@ -67,6 +67,8 @@ public:
 	bool isDown(growing_vector<SDL_GameControllerButton> buttons);
 	bool isDown(SDL_GameControllerButton button);
 	bool controllerButtonDown();
+	bool controllerWantsUp();
+	bool controllerWantsDown();
 	bool controllerWantsLeft(bool includeVert);
 	bool controllerWantsRight(bool includeVert);
 	bool controllerWantsRLeft(bool includeVert);

@@ -265,3 +265,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - Added dimensions, so you can properly have more than one dimension in a custom level
 
 - `gotodimension(n)` - go to dimension n
+
+- `ifkey(key,script)` - If `key` is pressed, load the script `script`. `left`, `right`, `up` and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup` and `rdown`.

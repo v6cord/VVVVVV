@@ -565,6 +565,16 @@ bool KeyPoll::controllerWantsRight(bool includeVert)
 					yVel > 0	)	)	);
 }
 
+bool KeyPoll::controllerWantsUp()
+{
+	return (buttonmap[SDL_CONTROLLER_BUTTON_DPAD_UP] || yVel < 0);
+}
+
+bool KeyPoll::controllerWantsDown()
+{
+	return (buttonmap[SDL_CONTROLLER_BUTTON_DPAD_DOWN] || yVel > 0);
+}
+
 bool KeyPoll::controllerWantsRLeft(bool includeVert)
 {
 	return (rxVel < 0 || (includeVert && ryVel < 0));
