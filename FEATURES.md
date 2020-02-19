@@ -191,13 +191,11 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `addvar(name [, value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
 
-- Upped the trinkets/crewmates limit to 100
-
-- Upped the map size limit to 100 by 100
-
 - Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
 
-- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%room_x%`, `%room_y%`, `%trinkets%`, `%coins%`)
+- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%gravitycontrol%`, `%room_x%`, `%room_y%`, `%trinkets%`, `%coins%`, `%battery_level%`, `%on_battery%`, `%unix_time%`, `%hhmmss_time%`)
+
+- Upped the map size limit to 100 by 100
 
 - `ifcoins(x)` - Run a script if the player has collected at least `x` coins
 

@@ -122,6 +122,7 @@ public:
     X(INT_SPECIALVAR, "deaths", game.deathcounts, 0, 0) \
     X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6, 0) \
     X(INT_SPECIALVAR, "player_y", obj.entities[obj.getplayer()].yp, -2, 0) \
+    X(INT_SPECIALVAR, "gravitycontrol", game.gravitycontrol, 0, 0) \
     X(INT_SPECIALVAR, "room_x", game.roomx, 100, 0) \
     X(INT_SPECIALVAR, "room_y", game.roomy, 100, 0) \
     X(INT_SPECIALVAR, "trinkets", game.trinkets, 0, 0) \
