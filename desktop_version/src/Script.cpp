@@ -702,6 +702,26 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 position++;
 				map.roomname = processvars(commands[position]);
 			}
+			if (words[0] == "ifkey") {
+				if ((words[1] == "left"  && (key.isDown(KEYBOARD_LEFT)  || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false)))
+				|| (words[1] == "right" && (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d) || key.controllerWantsRight(false)))
+				|| (words[1] == "up"    && (key.isDown(KEYBOARD_UP)    || key.isDown(KEYBOARD_w) || key.controllerWantsUp())        )
+				|| (words[1] == "down"  && (key.isDown(KEYBOARD_DOWN)  || key.isDown(KEYBOARD_s) || key.controllerWantsDown())      )) {
+					call("custom_" + words[2]);
+					position--;
+				} else {
+					const Uint8 *state = SDL_GetKeyboardState(NULL);
+					if (words[1] == "rleft") words[1] = "left";
+					if (words[1] == "rright") words[1] = "right";
+					if (words[1] == "rup") words[1] = "up";
+					if (words[1] == "rdown") words[1] = "down";
+					SDL_Keycode key = SDL_GetKeyFromName(words[1].c_str());
+					if (state[SDL_GetScancodeFromKey(key)]) {
+						call("custom_" + words[2]);
+						position--;
+					}
+				}
+			}
 			if (words[0] == "setvar")
 			{
 				// setvar(name, contents)

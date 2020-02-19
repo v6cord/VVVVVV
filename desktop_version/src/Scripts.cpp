@@ -56,6 +56,8 @@ void scriptclass::load(std::string t)
       scriptlength=0;
       position = 0;
       running = true;
+      if (passive)
+        scriptdelay = 0;
 
       int scriptstart=-1;
       int scriptend=-1;
