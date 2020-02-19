@@ -3,13 +3,12 @@ A list of all the new features added to VVVVVV: Community Edition. This list is 
 VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, Allison Fleischer, and Dav999.
 
 ## Version c1.0
-- Added UTF-8 support
 
 - Removed having to use a load script to use internal scripting
 
 - Added automatic loading of custom assets - make a folder with the same name as your level file, and put the assets in there.
 
-- `pdelay(n)` - a `delay(n)` that doesn't lock the players movement
+- `pdelay(n)` - a `delay(n)` that doesn't lock the player's movement
 
 - `setroomname()` - sets the roomname to the next line
 

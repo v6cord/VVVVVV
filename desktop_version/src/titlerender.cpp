@@ -28,7 +28,6 @@ growing_vector<std::string> changelog = {
     // --------------------------------------
     "Version c1.0",
     "[line]",
-    "- Added UTF-8 support",
     "- Removed having to use a load script",
     "  to use internal scripting",
     "- Added automatic loading of custom",
@@ -36,7 +35,7 @@ growing_vector<std::string> changelog = {
     "  name as your level file, and put the",
     "  assets in there.",
     "- pdelay(n) - a delay(n) that doesn't",
-    "  lock the players movement",
+    "  lock the player's movement",
     "- setroomname() - sets the roomname to",
     "  the next line",
     "- settile(x,y,tile) - place a tile",
