@@ -206,6 +206,11 @@ int main(int argc, char *argv[])
         printf("\t\t\n");
     }
 
+    if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
+    {
+        return 1;
+    }
+
     SDL_SetMainReady();
     if (SDL_Init(
             SDL_INIT_VIDEO |
@@ -214,11 +219,6 @@ int main(int argc, char *argv[])
             SDL_INIT_GAMECONTROLLER
         ) < 0) {
         fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
-    }
-
-    if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
-    {
-        return 1;
     }
 
     game.init();
