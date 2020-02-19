@@ -1012,10 +1012,8 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				game.cutemode = true;
 				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
 			}
-			if (words[0] == "ally") { // im gay\
-#ifdef VCE_DEBUG
-                                puts("WHY DOES VORE SOUND GOOD"); // change palette\
-#endif
+			// im gay
+			if (words[0] == "ally") {
 				game.allymode = true;
 				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
 			}
@@ -1023,6 +1021,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			if (words[0] == "misa")
 			{
 				game.misamode = true;
+				SDL_SetWindowTitle(graphics.screenbuffer->m_window, "<3");
 			}
 			if (words[0] == "bruh")
 			{
