@@ -36,7 +36,7 @@ growing_vector<std::string> changelog = {
     "  name as your level file, and put the",
     "  assets in there.",
     "- pdelay(n) - a delay(n) that doesn't",
-    "  lock the players movement",
+    "  lock the player's movement",
     "- setroomname() - sets the roomname to",
     "  the next line",
     "- settile(x,y,tile) - place a tile",

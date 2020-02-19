@@ -9,7 +9,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added automatic loading of custom assets - make a folder with the same name as your level file, and put the assets in there.
 
-- `pdelay(n)` - a `delay(n)` that doesn't lock the players movement
+- `pdelay(n)` - a `delay(n)` that doesn't lock the player's movement
 
 - `setroomname()` - sets the roomname to the next line
 
