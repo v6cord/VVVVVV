@@ -619,6 +619,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			if (words[0] == "ifflipmode")
+            {
+                if (dwgfx.setflipmode)
+                {
+                    call("custom_"+words[1]);
+					position--;
+                }
+            }
 			if (words[0] == "custommap")
 			{
 				if(words[1]=="on"){
