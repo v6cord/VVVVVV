@@ -28,7 +28,6 @@ growing_vector<std::string> changelog = {
     // --------------------------------------
     "Version c1.0",
     "[line]",
-    "- Added UTF-8 support",
     "- Removed having to use a load script",
     "  to use internal scripting",
     "- Added automatic loading of custom",
