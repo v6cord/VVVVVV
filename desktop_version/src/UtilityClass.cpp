@@ -64,8 +64,9 @@ const char *GCChar(SDL_GameControllerButton button)
 bool is_number(const std::string& s)
 {
     try {
-        (void)std::stod(s);
-        return true;
+        std::size_t pos;
+        (void)std::stod(s, &pos);
+        return pos == s.size();
     } catch (std::invalid_argument &) {
         return false;
     }
