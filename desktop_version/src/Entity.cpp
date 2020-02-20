@@ -3325,8 +3325,8 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 if (entities[i].state == 1)
                 {
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
-                    music.playef(8, 10);
                     if (ed.vceversion > 0) {
+                        music.playef(8, 10);
                         // Remove it, but respawn it upon death
                         entities[i].invis = true;
                         entities[i].state = 2;
