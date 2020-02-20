@@ -2589,8 +2589,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
                 if (pText == NULL)
                     pText = "";
 
-                // Do we NEED the parentheses around `pText`? Whatever
-                std::string TextString = (pText);
+                std::string TextString = pText;
 
                 if (TextString.length()) {
                     edAltstateEl->QueryIntAttribute("x", &altstates[i].x);

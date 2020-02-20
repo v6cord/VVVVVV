@@ -5576,8 +5576,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 if (pText == NULL)
                     pText = "";
 
-                // Do we NEED the parentheses around `pText`? Whatever
-                std::string TextString = (pText);
+                std::string TextString = pText;
 
                 if (TextString.length()) {
                     const char* cStrName;
@@ -5609,8 +5608,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 if (pText == NULL)
                     pText = "";
 
-                // Do we NEED the parentheses around `pText`? Whatever
-                std::string TextString = (pText);
+                std::string TextString = pText;
 
                 // No TextString.length() check because empty script names are valid
                 game.onetimescripts.push_back(TextString);
