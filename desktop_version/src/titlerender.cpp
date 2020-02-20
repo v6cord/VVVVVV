@@ -330,6 +330,7 @@ growing_vector<std::string> changelog = {
     "- Flip tokens now respawn upon death in",
     "  VCE levels",
     "- 1x1 quicksand now respawn upon death",
+    "  in VCE levels",
     "- nointerrupt() - prevent interrupting a",
     "  script when player moves into a script",
     "  box",
