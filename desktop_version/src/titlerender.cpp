@@ -362,6 +362,9 @@ growing_vector<std::string> changelog = {
     "  the game is in flip mode",
     "- delchar(var,n) - remove n chars from",
     "  the end of the variable var",
+    "- getvar(var1[,var2]) - set var1 to",
+    "  contents of var2, if var2 is not given",
+    "  it uses the next line",
 
 };
 
