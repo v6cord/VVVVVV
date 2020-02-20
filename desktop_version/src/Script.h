@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include "Game.h"
 #include "ScriptX.h"
 #include "Enums.h"
@@ -64,8 +65,6 @@ public:
     void hardreset(KeyPoll& key, Graphics& dwgfx, Game& game,mapclass& map,
                    entityclass& obj, UtilityClass& help, musicclass& music);
 
-    int getlabelnum(std::string thelabel);
-
     //Script contents
     growing_vector<std::string> commands;
     growing_vector<std::string> words;
@@ -98,9 +97,7 @@ public:
 
     bool loopdelay = false;
 
-    growing_vector<std::string> labelnames;
-    growing_vector<int> labelpositions;
-    int nlabels;
+    std::unordered_map<std::string, int> labels; // key is name, value is position
 
     growing_vector<std::string> variablenames;
     growing_vector<std::string> variablecontents;

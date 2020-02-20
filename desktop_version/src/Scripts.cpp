@@ -51,7 +51,7 @@ void scriptclass::load(std::string t)
         cscriptname = cscriptname.substr(0, dollar);
       }
 
-      nlabels = 0;
+      labels.clear();
       scriptname = t;
       scriptlength=0;
       position = 0;
@@ -378,14 +378,11 @@ void scriptclass::load(std::string t)
             // Is this a label?
             if (words[0].length() > 2 && words[0].substr(0, 1) == "$" && words[0].substr(words[0].length()-1, 1) == "$") {
               std::string thislabel = words[0].substr(1, words[0].length()-2);
-              labelnames[nlabels] = thislabel;
 
               // Important - use `scriptlength` instead of `i`
               // The former is the internal script's position which is what we want,
               // and the latter is the simplified script's position
-              labelpositions[nlabels] = scriptlength;
-
-              nlabels++;
+              labels[thislabel] = scriptlength;
             }
           }
         }
@@ -396,18 +393,15 @@ void scriptclass::load(std::string t)
           add("untilbars()");
         }
 
-        if (!thelabel.empty()) {
-          int labelnum = getlabelnum(thelabel);
-          if (labelnum != -1)
-            position = labelpositions[labelnum];
-        }
+        if (!thelabel.empty() && labels.find(thelabel) != labels.end())
+          position = labels[thelabel];
       }
 
       return;
     }
 
     scriptlength=0;
-    nlabels = 0;
+    labels.clear();
     position = 0;
     running = true;
     scriptname = t;

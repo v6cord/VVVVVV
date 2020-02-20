@@ -43,9 +43,7 @@ scriptclass::scriptclass()
 	textcenterline = 0;
 	txtnumlines = 0;
 
-	labelnames.resize(100);
-	labelpositions.resize(100);
-	nlabels = 0;
+	labels.clear();
 
 	variablenames.resize(100);
 	variablecontents.resize(100);
@@ -4963,12 +4961,4 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	active_scripts.clear();
 
 	// WARNING: Don't reset teleporter locations, at this point we've already loaded the level!
-}
-
-int scriptclass::getlabelnum(std::string thelabel)
-{
-	for (int n = 0; n < nlabels; n++)
-		if (labelnames[n] == thelabel)
-			return n;
-	return -1;
 }
