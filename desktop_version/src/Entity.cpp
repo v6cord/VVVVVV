@@ -3287,8 +3287,12 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     if (entities[i].life <= 0)
                     {
                         removeblockat(entities[i].xp, entities[i].yp);
-                        entities[i].state = 3;
-                        entities[i].invis = true;
+                        if (ed.vceversion > 0) {
+                            entities[i].state = 3;
+                            entities[i].invis = true;
+                        } else {
+                            entities[i].active = false;
+                        }
                     }
                 }
                 else if (entities[i].state == 3)
