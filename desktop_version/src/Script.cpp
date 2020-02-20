@@ -729,10 +729,20 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				// setvar(name)
 				// <contents>
 				if (words[2] == "") {
-    	            position++;
+					position++;
 					setvar(words[1],processvars(commands[position]));
 				} else {
 					setvar(words[1],words[2]);
+				}
+			}
+			if (words[0] == "getvar")
+			{
+				// like setvar, but interprets content as a variable name
+				if (words[2] == "") {
+					position++;
+					setvar(words[1],processvars(processvars("%"+commands[position]+"%")));
+				} else {
+					setvar(words[1],processvars("%"+words[2]+"%"));
 				}
 			}
 			if (words[0] == "addvar")
