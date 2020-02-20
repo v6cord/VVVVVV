@@ -357,6 +357,8 @@ growing_vector<std::string> changelog = {
     "  use rleft, rright, rup and rdown.",
     "- ifflipmode(script) - go to script if",
     "  the game is in flip mode",
+    "- delchar(var,n) - remove n chars from",
+    "  the end of the variable var",
 
 };
 

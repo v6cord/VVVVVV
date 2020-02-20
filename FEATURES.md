@@ -269,3 +269,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `ifkey(key,script)` - If `key` is pressed, load the script `script`. `left`, `right`, `up` and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup` and `rdown`.
 
 - `ifflipmode(script)` - go to script if the game is in flip mode
+
+- `delchar(var,n)` - remove *n* chars from the end of the variable *var*
