@@ -75,7 +75,7 @@ bool is_number(const std::string& s)
 int ss_toi( std::string _s )
 {
 	std::istringstream i(_s);
-	int x;
+	int x = 0;
 	i >> x;
 	return x;
 }
