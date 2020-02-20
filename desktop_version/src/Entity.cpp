@@ -2122,7 +2122,6 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         entities[k].h = 16;
         entities[k].colour = 0;
         entities[k].behave = vx;
-        entities[k].para = vy;
         entities[k].onentity = 1;
         entities[k].animate = 100;
         break;
@@ -3323,7 +3322,7 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 {
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
                     music.playef(8, 10);
-                    if (entities[i].para != 0) {
+                    if (ed.vceversion > 0) {
                         // Remove it, but respawn it upon death
                         entities[i].invis = true;
                         entities[i].state = 2;
@@ -4359,7 +4358,7 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                 }
 
                 entities[_i].drawframe = entities[_i].tile;
-                if (entities[_i].para != 0) {
+                if (ed.vceversion > 0) {
                     entities[_i].drawframe += (entities[_i].walkingframe);
                 }
                 break;
