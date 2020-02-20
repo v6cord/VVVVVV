@@ -2098,15 +2098,22 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				roomtext[roomtextnumlines] = edentity[edi].scriptname;
 				roomtextnumlines++;
 				break;
-			case 18: // Terminals
+			case 18: { // Terminals
 				obj.customscript = edentity[edi].scriptname;
 
 				if (!edentity[edi].p1) // Unflipped
 					ey += 8;
 
 				obj.createentity(game, ex, ey, 20, !edentity[edi].p1);
-				obj.createblock(5, ex-8, ey, 20, 16, 35);
+				int ew = 16;
+				if (ed.vceversion <= 0) {
+					// Misalign the activity zone exactly like it's misaligned in vanilla
+					ex -= 8; // only modify ex here because it's also used in the createentity above
+					ew += 4;
+				}
+				obj.createblock(5, ex, ey, ew, 16, 35);
 				break;
+			}
 			case 19: // Script Box
 				game.customscript[tempscriptbox]=edentity[edi].scriptname;
 				if (edentity[edi].onetime)
