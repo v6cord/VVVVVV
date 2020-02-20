@@ -334,6 +334,8 @@ growing_vector<std::string> changelog = {
     "  VCE levels",
     "- 1x1 quicksand now respawn upon death",
     "  in VCE levels",
+    "- Terminals' activity zones are aligned",
+    "  properly in VCE levels",
     "- nointerrupt() - prevent interrupting a",
     "  script when player moves into a script",
     "  box",

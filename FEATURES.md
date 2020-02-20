@@ -252,6 +252,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - 1x1 quicksand now respawn upon death in VCE levels
 
+- Terminals' activity zones are aligned properly in VCE levels
+
 - `nointerrupt()` - prevent interrupting a script when player moves into a script box
 
 - `yesinterrupt()` - undoes the above
