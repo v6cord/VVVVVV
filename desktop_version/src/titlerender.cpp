@@ -354,7 +354,9 @@ growing_vector<std::string> changelog = {
     "  load the script script. left, right,",
     "  up and down count controllers and",
     "  WASD, so to get ONLY the arrow keys,",
-    "  use rleft, rright, rup and rdown."
+    "  use rleft, rright, rup and rdown.",
+    "- ifflipmode(script) - go to script if",
+    "  the game is in flip mode",
 
 };
 
