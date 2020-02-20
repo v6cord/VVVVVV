@@ -761,6 +761,18 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					setvar(words[1], tempcontents);
 				}
 			}
+			if (words[0] == "delchar")
+            {
+                int varid = getvar(words[1]);
+                if (is_number(words[2]) && !is_number(variablecontents[varid]))
+                {
+                    if (variablecontents[varid].length()+1 > stod(words[2]))
+                    {
+                        variablecontents[varid].erase (variablecontents[varid].end()-stod(words[2]),variablecontents[varid].end());
+                        setvar(words[1], variablecontents[varid]);
+                    }
+                }
+            }
             if ((words[0] == "ifvar") || (words[0] == "if"))
             {
                 int varid = getvar(words[1]);
