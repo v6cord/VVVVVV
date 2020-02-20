@@ -200,7 +200,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifcoinsless(x)` - Run a script if the player has less than `x` coins
 
-- Coins are now placeable in the editor using the G tool
+- Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
 - Coins display in the roomname if there's any coins in the map
 
