@@ -200,7 +200,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifcoinsless(x)` - Run a script if the player has less than `x` coins
 
-- Coins are now placeable in the editor using the G tool
+- Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
 - Coins display in the roomname if there's any coins in the map
 
@@ -212,7 +212,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
 
-- Flip tokens are now placeable in the editor using the F tool
+- Flip tokens are now placeable in the editor using the ^1 tool (press Shift+1)
 
 - `stop()` - A command for convenience: stops the script, also runs `endcutscene()`
 
@@ -246,9 +246,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added one-time script boxes - hold X when placing down a script box to make it run only once
 
-- Flip tokens now respawn upon death
+- Flip tokens now respawn upon death in VCE levels
 
-- 1x1 quicksand now respawn upon death
+- 1x1 quicksand now respawn upon death in VCE levels
 
 - `nointerrupt()` - prevent interrupting a script when player moves into a script box
 

@@ -6830,7 +6830,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             }
                             else if(ed.drawmode==17)  // Flip Tokens
                             {
-                                addedentity(tx, ty, 5, 181, 1);
+                                addedentity(tx, ty, 5, 181);
                                 ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==18)  // Coins
