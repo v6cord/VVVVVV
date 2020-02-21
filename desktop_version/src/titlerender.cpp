@@ -370,6 +370,8 @@ growing_vector<std::string> changelog = {
     "- analogueon() - enable Analogue Mode",
     "  screen filter",
     "- analogueoff() - undoes the above",
+    "- jump(script) - go to script without",
+    "  adding a stack frame",
 
 };
 

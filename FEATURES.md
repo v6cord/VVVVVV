@@ -281,3 +281,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `analogueon()` - enable Analogue Mode screen filter
 
 - `analogueoff()` - undoes the above
+
+- `jump(script)` - go to script without adding a stack frame
