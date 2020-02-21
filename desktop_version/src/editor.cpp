@@ -6904,7 +6904,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                       &(edentity[tmp].scriptname));
                             ed.textent=tmp;
                         }
-                        else if(edentity[tmp].t==18)
+                        else if(edentity[tmp].t==18 || edentity[tmp].t==19)
                         {
                             ed.lclickdelay=1;
                             ed.getlin(key, TEXT_ROOMTEXT, "Enter script name:",
