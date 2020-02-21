@@ -38,8 +38,6 @@ public:
 
     int getimage(Game& game, std::string n);
 
-    int getvar(std::string n);
-
     void setvar(std::string n, std::string c);
 
     void updatevars();
@@ -98,9 +96,7 @@ public:
     bool loopdelay = false;
 
     std::unordered_map<std::string, int> labels; // key is name, value is position
-
-    growing_vector<std::string> variablenames;
-    growing_vector<std::string> variablecontents;
+    std::unordered_map<std::string, std::string> variables; // key is name, value is contents
 
     std::vector<stackframe> callstack;
 

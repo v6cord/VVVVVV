@@ -5581,9 +5581,8 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 if (TextString.length()) {
                     const char* cStrName;
                     cStrName = varEl->Attribute("name");
-                    std::string name = (cStrName);
-                    script.variablenames.push_back(name);
-                    script.variablecontents.push_back(TextString);
+                    std::string name = cStrName;
+                    script.variables[name] = TextString;
                 }
             }
         }
@@ -6680,18 +6679,18 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msgs->LinkEndChild( msg );
 
     msg = new TiXmlElement( "variables" );
-    for (std::size_t i = 0; i < script.variablenames.size(); i++) {
-        if (script.variablenames[i].empty())
+    for (auto variable : script.variables) {
+        if (variable.first.empty())
             continue;
 
-#define X(t, k, v, ii, s) if (script.variablenames[i] == k) continue;
+#define X(t, k, v, ii, s) if (variable.first == k) continue;
         SPECIALVARS
 #undef X
 
         TiXmlElement *varEl = new TiXmlElement( "var" );
-        varEl->SetAttribute( "name", script.variablenames[i].c_str() );
-        varEl->LinkEndChild( new TiXmlText( script.variablecontents[i].c_str() )) ;
-        msg->LinkEndChild( varEl );
+        varEl->SetAttribute("name", variable.first.c_str());
+        varEl->LinkEndChild(new TiXmlText(variable.second.c_str()));
+        msg->LinkEndChild(varEl);
     }
     msgs->LinkEndChild(msg);
 

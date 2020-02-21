@@ -44,9 +44,7 @@ scriptclass::scriptclass()
 	txtnumlines = 0;
 
 	labels.clear();
-
-	variablenames.resize(100);
-	variablecontents.resize(100);
+	variables.clear();
 
 	scriptname = "";
 
@@ -62,27 +60,17 @@ void scriptclass::call(std::string script) {
     load(script);
 }
 
-int scriptclass::getvar(std::string n) {
-	for(std::size_t i = 0; i < variablenames.size(); i++) {
-		if (variablenames[i] == n) {
-			return i;
-		}
-	}
-	return -1;
-}
-
 std::string scriptclass::evalvar(std::string expr) {
     cparse_startup();
     TokenMap vars;
-    for(std::size_t i = 0; i < variablenames.size(); i++) {
-        auto name = variablenames[i];
-        if (name == "") continue;
+    for (auto variable : script.variables) {
+        if (variable.first == "") continue;
         try {
-            auto contents = std::stod(variablecontents[i]);
-            vars[name] = contents;
+            auto contents = std::stod(variable.second);
+            vars[variable.first] = contents;
         } catch(const std::invalid_argument& ex) {
-            auto contents = variablecontents[i];
-            vars[name] = contents;
+            auto contents = variable.second;
+            vars[variable.first] = contents;
         }
     }
     auto token = calculator::calculate(expr.c_str(), vars);
@@ -130,13 +118,7 @@ static std::string get_specialvar(const T&& ref, int offset) {
 }
 
 void scriptclass::setvar(std::string n, std::string c) {
-	int tempvar = getvar(n);
-	if (tempvar == -1) {
-		variablenames.push_back(n);
-		variablecontents.push_back(c);
-	} else {
-		variablecontents[tempvar] = c;
-	}
+    variables[n] = c;
 
 #define X(t, k, v, i, s) if (n == k) { try_set_lvalue<(t)>((v), c, (i)); return; }
     SPECIALVARS
@@ -154,9 +136,8 @@ std::string scriptclass::processvars(std::string t) {
 			if (currentletter == "%") {
 				readingvar = false;
                                 std::string temp = "%" + tempvar + "%";
-                                auto idx = getvar(tempvar);
-                                if (idx != -1) {
-                                    temp = variablecontents[idx];
+                                if (variables.find(tempvar) != variables.end()) {
+                                    temp = variables[tempvar];
                                 } else {
                                     bool special = false;
 #define X(t, k, v, i, s) if (s && (k) == tempvar) { temp = get_specialvar<(t)>(std::move((v)), (i)); special = true;}
@@ -750,20 +731,20 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				// addvar(name)
 				// <add>
 
-				int varid = getvar(words[1]);
+				std::string var = words[1];
 				std::string tempcontents;
-				if (varid != -1) {
+				if (variables.find(var) != variables.end()) {
 					if (words[2] == "") {
 						position++;
-						tempcontents = variablecontents[varid];
+						tempcontents = variables[var];
 						tempcontents += processvars(commands[position]);
 					} else {
-						if (is_number(variablecontents[varid]) && is_number(words[2])) {
-							tempcontents = std::to_string(stod(variablecontents[varid]) + stod(words[2]));
+						if (is_number(variables[var]) && is_number(words[2])) {
+							tempcontents = std::to_string(stod(variables[var]) + stod(words[2]));
 							tempcontents.erase ( tempcontents.find_last_not_of('0') + 1, std::string::npos );
 							tempcontents.erase ( tempcontents.find_last_not_of('.') + 1, std::string::npos );
 						} else {
-							tempcontents = variablecontents[varid] + words[2];
+							tempcontents = variables[var] + words[2];
 						}
 					}
 					setvar(words[1], tempcontents);
@@ -771,18 +752,18 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "delchar")
             {
-                int varid = getvar(words[1]);
-                if (varid != -1
-                && is_number(words[2]) && !is_number(variablecontents[varid])
-                && variablecontents[varid].length()+1 > stod(words[2])) {
-                    variablecontents[varid].erase (variablecontents[varid].end()-stod(words[2]),variablecontents[varid].end());
-                    setvar(words[1], variablecontents[varid]);
+                std::string var = words[1];
+                if (variables.find(var) != variables.end()
+                && is_number(words[2]) && !is_number(variables[var])
+                && variables[var].length()+1 > stod(words[2])) {
+                    variables[var].erase (variables[var].end()-stod(words[2]),variables[var].end());
+                    setvar(words[1], variables[var]);
                 }
             }
             if ((words[0] == "ifvar") || (words[0] == "if"))
             {
-                int varid = getvar(words[1]);
-                if (varid != -1)
+                std::string var = words[1];
+                if (variables.find(var) != variables.end())
                 {
                     if (words[4] == "") //fourth argument doesn't exist: this is a string
                     {
@@ -792,7 +773,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 (words[2] == "eq") ||
                                 (words[2] == "=") ||
                                 (words[2] == "==")) {
-                            if (variablecontents[varid] == processvars(commands[position])) {
+                            if (variables[var] == processvars(commands[position])) {
                                 call("custom_" + words[3]);
                                 position--;
                             }
@@ -803,7 +784,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 (words[2] == "not") ||
                                 (words[2] == "notequal") ||
                                 (words[2] == "!=")) {
-                            if (variablecontents[varid] != processvars(commands[position])) {
+                            if (variables[var] != processvars(commands[position])) {
                                 call("custom_" + words[3]);
                                 position--;
                             }
@@ -815,7 +796,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 (words[2] == "eq") ||
                                 (words[2] == "=") ||
                                 (words[2] == "==")) {
-                            if (variablecontents[varid] == words[3]) {
+                            if (variables[var] == words[3]) {
                                 call("custom_" + words[4]);
                                 position--;
                             }
@@ -826,7 +807,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                                 (words[2] == "not") ||
                                 (words[2] == "notequal") ||
                                 (words[2] == "!=")) {
-                            if (variablecontents[varid] != words[3]) {
+                            if (variables[var] != words[3]) {
                                 call("custom_" + words[4]);
                                 position--;
                             }
@@ -834,7 +815,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         if ((words[2] == "less") ||
                                 (words[2] == "lt") ||
                                 (words[2] == "<")) {
-                            if (variablecontents[varid] < words[3]) {
+                            if (variables[var] < words[3]) {
                                 call("custom_" + words[4]);
                                 position--;
                             }
@@ -842,7 +823,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         if ((words[2] == "lesseq") ||
                                 (words[2] == "leq") ||
                                 (words[2] == "<=")) {
-                            if (variablecontents[varid] <= words[3]) {
+                            if (variables[var] <= words[3]) {
                                 call("custom_" + words[4]);
                                 position--;
                             }
@@ -850,7 +831,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         if ((words[2] == "greater") ||
                                 (words[2] == "gt") ||
                                 (words[2] == ">")) {
-                            if (variablecontents[varid] > words[3]) {
+                            if (variables[var] > words[3]) {
                                 call("custom_" + words[4]);
                                 position--;
                             }
@@ -858,7 +839,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         if ((words[2] == "greatereq") ||
                                 (words[2] == "geq") ||
                                 (words[2] == ">=")) {
-                            if (variablecontents[varid] >= words[3]) {
+                            if (variables[var] >= words[3]) {
                                 call("custom_" + words[4]);
                                 position--;
                             }
@@ -4948,10 +4929,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	running = false;
 	nointerrupt = false;
 	passive = false;
-	variablenames.clear();
-	variablecontents.clear();
-	variablenames.resize(100);
-	variablecontents.resize(100);
+	variables.clear();
 
 	game.script_images.clear();
 	game.script_image_names.clear();
