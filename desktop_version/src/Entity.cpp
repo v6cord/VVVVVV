@@ -3287,7 +3287,7 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     if (entities[i].life <= 0)
                     {
                         removeblockat(entities[i].xp, entities[i].yp);
-                        if (ed.vceversion > 0) {
+                        if (IS_VCE_LEVEL) {
                             entities[i].state = 3;
                             entities[i].invis = true;
                         } else {
@@ -3325,7 +3325,7 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 if (entities[i].state == 1)
                 {
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
-                    if (ed.vceversion > 0) {
+                    if (IS_VCE_LEVEL) {
                         music.playef(8, 10);
                         // Remove it, but respawn it upon death
                         entities[i].invis = true;
@@ -4362,7 +4362,7 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                 }
 
                 entities[_i].drawframe = entities[_i].tile;
-                if (ed.vceversion > 0) {
+                if (IS_VCE_LEVEL) {
                     entities[_i].drawframe += (entities[_i].walkingframe);
                 }
                 break;

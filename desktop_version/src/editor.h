@@ -10,6 +10,7 @@
 #include "Script.h"
 
 #define VCEVERSION 1
+#define IS_VCE_LEVEL (map.custommode && ed.vceversion > 0)
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 

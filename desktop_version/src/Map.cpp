@@ -2106,7 +2106,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
 				obj.createentity(game, ex, ey, 20, !edentity[edi].p1);
 				int ew = 16;
-				if (ed.vceversion <= 0) {
+				if (!IS_VCE_LEVEL) {
 					// Misalign the activity zone exactly like it's misaligned in vanilla
 					ex -= 8; // only modify ex here because it's also used in the createentity above
 					ew += 4;
@@ -2539,7 +2539,7 @@ void mapclass::dimensionwraparound(int* rx, int* ry)
 void twoframedelayfix()
 {
     // Kludge to remove 2-frame-delay when loading init scripts for a room
-    if (map.custommode && ed.vceversion > 0 && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
+    if (IS_VCE_LEVEL && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
         game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
         obj.kludgeonetimescript = true;
         obj.removetrigger(obj.activetrigger);
