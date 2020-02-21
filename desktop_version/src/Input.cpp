@@ -2091,6 +2091,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
           game.completestop = false;
           game.state = 0;
 			    dwgfx.showcutscenebars = false;
+					dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
           dwgfx.backgrounddrawn=false;
           music.fadeout();

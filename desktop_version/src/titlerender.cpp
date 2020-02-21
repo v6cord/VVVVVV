@@ -403,6 +403,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
     else
     {
         if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo(map);
+        dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
         tr = map.r - (help.glow / 4) - int(fRandom() * 4);
         tg = map.g - (help.glow / 4) - int(fRandom() * 4);

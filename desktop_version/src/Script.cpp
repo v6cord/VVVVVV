@@ -999,6 +999,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//USAGE: shake(frames)
 				game.screenshake = ss_toi(words[1]);
 			}
+			if (words[0] == "analogueon")
+			{
+				dwgfx.screenbuffer->badSignalEffect = true;
+			}
+			if (words[0] == "analogueoff")
+			{
+				dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
+			}
 			if (words[0] == "walk")
 			{
 				//USAGE: walk(dir,frames)
@@ -4850,6 +4858,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	dwgfx.flipmode = false; //This will be reset if needs be elsewhere
 	dwgfx.showcutscenebars = false;
 	dwgfx.cutscenebarspos = 0;
+	dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
   //mapclass
 	map.warpx = false;
