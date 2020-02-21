@@ -6,6 +6,7 @@
 #endif
 
 #include "Script.h"
+#include "Map.h"
 
 #include <algorithm>
 
@@ -373,7 +374,8 @@ void scriptclass::load(std::string t)
                 i++;
               }
             }
-            add(script.customscript[i]);
+            if (IS_VCE_LEVEL) // Don't call one-command internal scripts twice in vanilla levels
+                add(script.customscript[i]);
 
             // Is this a label?
             if (words[0].length() > 2 && words[0].substr(0, 1) == "$" && words[0].substr(words[0].length()-1, 1) == "$") {
