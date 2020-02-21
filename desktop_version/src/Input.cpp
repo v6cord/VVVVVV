@@ -2076,6 +2076,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         if (game.activeactivity > -1 && game.press_map){
            if((int(std::abs(obj.entities[obj.getplayer()].vx))<=1) && (int(obj.entities[obj.getplayer()].vy) == 0) )
             {
+                script.callstack.clear();
                 script.load(obj.blocks[game.activeactivity].script);
                 obj.removeblock(game.activeactivity);
             }
@@ -2209,6 +2210,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     {
                         if((int(std::abs(obj.entities[ie].vx))<=1) && (int(obj.entities[ie].vy) == 0) )
                         {
+                            script.callstack.clear();
                             script.load(obj.blocks[game.activeactivity].script);
                             obj.removeblock(game.activeactivity);
                         }

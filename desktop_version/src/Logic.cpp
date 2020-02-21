@@ -869,6 +869,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         game.updatestate(dwgfx, map, obj, help, music);
         if (game.startscript)
         {
+            script.callstack.clear();
             script.load(game.newscript);
             game.startscript = false;
         }
