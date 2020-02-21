@@ -372,6 +372,10 @@ growing_vector<std::string> changelog = {
     "- analogueoff() - undoes the above",
     "- jump(script) - go to script without",
     "  adding a stack frame",
+    "- Added callbacks - on_death_start,",
+    "  on_death_end",
+    "- setcallback(callback,script) - run",
+    "  script when callback is triggered",
 
 };
 
