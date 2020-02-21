@@ -5587,6 +5587,25 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 }
             }
         }
+        else if (pKey == "callbacks")
+        {
+            for (TiXmlElement* callbackEl = pElem->FirstChildElement(); callbackEl; callbackEl = callbackEl->NextSiblingElement()) {
+                std::string pKey(callbackEl->Value());
+                const char* pText = callbackEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                std::string TextString = pText;
+
+                if (TextString.length()) {
+                    const char* cStrName;
+                    cStrName = callbackEl->Attribute("name");
+                    std::string name = cStrName;
+                    script.callbacks[name] = TextString;
+                }
+            }
+        }
         else if (pKey == "customtracks")
         {
             std::string TextString = (pText);
@@ -6692,6 +6711,18 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
         varEl->SetAttribute("name", variable.first.c_str());
         varEl->LinkEndChild(new TiXmlText(variable.second.c_str()));
         msg->LinkEndChild(varEl);
+    }
+    msgs->LinkEndChild(msg);
+
+    msg = new TiXmlElement("callbacks");
+    for (auto callback : script.callbacks) {
+        if (callback.second.empty())
+            continue;
+
+        TiXmlElement *callbackEl = new TiXmlElement("callback");
+        callbackEl->SetAttribute("name", callback.first.c_str());
+        callbackEl->LinkEndChild(new TiXmlText(callback.second.c_str()));
+        msg->LinkEndChild(callbackEl);
     }
     msgs->LinkEndChild(msg);
 
