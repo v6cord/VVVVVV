@@ -847,6 +847,10 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     }
                 }
             }
+            if (words[0] == "setcallback")
+            {
+                callbacks[words[1]] = words[2];
+            }
             if (words[0] == "stop")
             {
                 dwgfx.showcutscenebars = false;
@@ -4944,6 +4948,7 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	nointerrupt = false;
 	passive = false;
 	variables.clear();
+	callbacks.clear();
 
 	game.script_images.clear();
 	game.script_image_names.clear();
@@ -4951,4 +4956,14 @@ void scriptclass::hardreset( KeyPoll& key, Graphics& dwgfx, Game& game,mapclass&
 	active_scripts.clear();
 
 	// WARNING: Don't reset teleporter locations, at this point we've already loaded the level!
+}
+
+void scriptclass::callback(std::string name)
+{
+    if (callbacks.find(name) == callbacks.end()
+    || callbacks[name].empty())
+        return;
+
+    callstack.clear();
+    load("custom_" + callbacks[name]);
 }

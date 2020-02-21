@@ -4744,6 +4744,7 @@ void Game::deathsequence( mapclass& map, entityclass& obj, musicclass& music )
     obj.entities[i].invis = false;
     if (deathseq == 30)
     {
+        script.callback("on_death_start");
         if (nodeathmode)
         {
             music.fadeout();

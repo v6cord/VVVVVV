@@ -63,6 +63,8 @@ public:
     void hardreset(KeyPoll& key, Graphics& dwgfx, Game& game,mapclass& map,
                    entityclass& obj, UtilityClass& help, musicclass& music);
 
+    void callback(std::string name);
+
     //Script contents
     growing_vector<std::string> commands;
     growing_vector<std::string> words;
@@ -97,6 +99,7 @@ public:
 
     std::unordered_map<std::string, int> labels; // key is name, value is position
     std::unordered_map<std::string, std::string> variables; // key is name, value is contents
+    std::unordered_map<std::string, std::string> callbacks; // key is name, value is script
 
     std::vector<stackframe> callstack;
 

@@ -322,6 +322,7 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
         game.deathseq--;
         if (game.deathseq <= 0)
         {
+            script.callback("on_death_end");
             if (game.nodeathmode)
             {
                 game.deathseq = 1;
@@ -800,6 +801,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         game.deathseq--;
         if (game.deathseq <= 0)
         {
+            script.callback("on_death_end");
             if (game.nodeathmode)
             {
                 game.deathseq = 1;
