@@ -3756,7 +3756,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 		}
 		else
 		{
-                        if (!callstack.empty()) callstack.pop_back();
+			callstack.clear();
 			running = false;
 			nointerrupt = false;
 		}
