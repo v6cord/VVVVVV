@@ -1260,7 +1260,8 @@ void mapclass::gotodimroom(int rx, int ry) {
 void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
 	ed.ghosts.clear(); // Let's make sure to clear the ghosts
-	FillRect(dwgfx.backBuffer,0x00000);
+	if (dwgfx.noclear)
+		FillRect(dwgfx.backBuffer,0x00000);
 
 	//First, destroy the current room
 	obj.removeallblocks();
