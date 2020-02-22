@@ -200,9 +200,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifcrewmatesless(n,script)` - go to script if the player has rescued less than *n* crewmates
 
-- `ifcoins(x)` - Run a script if the player has collected at least `x` coins
+- `ifcoins(n,script)` - go to script if the player has collected at least *n* coins
 
-- `ifcoinsless(x)` - Run a script if the player has less than `x` coins
+- `ifcoinsless(n,script)` - go to script if the player has collected less than *n* coins
 
 - Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
