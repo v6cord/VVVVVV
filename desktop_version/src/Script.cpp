@@ -2505,6 +2505,14 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					position--;
 				}
 			}
+			else if (words[0] == "ifcrewmates")
+			{
+				if (game.crewmates >= ss_toi(words[1]))
+				{
+					call("custom_"+words[2]);
+					position--;
+				}
+			}
 			else if (words[0] == "ifcoins")
 			{
 				if (game.coins >= ss_toi(words[1]))
