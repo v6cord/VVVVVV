@@ -1005,7 +1005,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			if (words[0] == "analogue")
 			{
-				if (parsebool(words[1]))
+				if (parsebool(words[1]) && !game.noflashingmode)
 					dwgfx.screenbuffer->badSignalEffect = true;
 				else
 					dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
