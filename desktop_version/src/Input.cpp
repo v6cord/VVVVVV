@@ -2339,6 +2339,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (game.jumppressed > 0)
                 {
                     bool infiniflipkludge = false;
+                    script.callback("on_input_flip");
                     game.jumppressed--;
                     if ((obj.entities[ie].onground>0 || game.infiniflip) && game.gravitycontrol == 0 && !game.noflip)
                     {
@@ -2352,6 +2353,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         game.totalflips++;
                         if (game.infiniflip)
                             infiniflipkludge = true;
+                        script.callback("on_input_flip_up");
                     }
                     if ((obj.entities[ie].onroof>0 || game.infiniflip) && game.gravitycontrol == 1 && !game.noflip && !infiniflipkludge)
                     {
@@ -2363,6 +2365,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         music.playef(1, 10);
                         game.jumppressed = 0;
                         game.totalflips++;
+                        script.callback("on_input_flip_down");
                     }
                 }
             }
