@@ -192,7 +192,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
 
-- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%gravitycontrol%`, `%room_x%`, `%room_y%`, `%trinkets%`, `%coins%`, `%battery_level%`, `%on_battery%`, `%unix_time%`, `%hhmmss_time%`)
+- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%gravitycontrol%`, `%room_x%`, `%room_y%`, `%trinkets%`, `%crewmates%`, `%coins%`, `%battery_level%`, `%on_battery%`, `%unix_time%`, `%hhmmss_time%`)
 
 - Upped the map size limit to 100 by 100
 
