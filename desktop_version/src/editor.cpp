@@ -4199,9 +4199,33 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
         }
         else if (game.currentmenuname == "ed_dimensions") {
+            int colors[6][3] = {
+                {255, 0,   0  },
+                {0,   255, 0  },
+                {0,   0,   255},
+                {255, 255, 0  },
+                {255, 0,   255},
+                {0,   255, 255}
+            };
+
             ed.generatecustomminimap(dwgfx, map);
             dwgfx.drawcustompixeltextbox(35+map.custommmxoff, 16+map.custommmyoff, map.custommmxsize+10, map.custommmysize+10, (map.custommmxsize+10)/8, (map.custommmysize+10)/8, tr, tg, tb,4,0);
             dwgfx.drawpartimage(12, 40+map.custommmxoff, 21+map.custommmyoff, map.custommmxsize,map.custommmysize);
+            int xmult = 12;
+            int ymult = 9;
+            if (map.customzoom == 4) {
+                xmult = 48;
+                ymult = 36;
+            } else if (map.customzoom == 2) {
+                xmult = 24;
+                ymult = 18;
+            }
+            for (int i = 0; i < (int)ed.dimensions.size(); i++) {
+                Dimension dim = ed.dimensions[i];
+                int color = i % 6;
+                fillboxabs(dwgfx, 40 + (dim.x * xmult) + map.custommmxoff, 21+ (dim.y * ymult) + map.custommmyoff, (dim.w * xmult), (dim.h * ymult),
+                           dwgfx.getRGB(colors[color][2],colors[color][1],colors[color][0]));
+            }
         }
         else if (game.currentmenuname == "ed_edit_trial") {
             customtrial ctrial = ed.customtrials[ed.edtrial];
