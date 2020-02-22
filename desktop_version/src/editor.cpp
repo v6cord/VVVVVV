@@ -4198,6 +4198,11 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         {
             dwgfx.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
         }
+        else if (game.currentmenuname == "ed_dimensions") {
+            ed.generatecustomminimap(dwgfx, map);
+            dwgfx.drawcustompixeltextbox(35+map.custommmxoff, 16+map.custommmyoff, map.custommmxsize+10, map.custommmysize+10, (map.custommmxsize+10)/8, (map.custommmysize+10)/8, tr, tg, tb,4,0);
+            dwgfx.drawpartimage(12, 40+map.custommmxoff, 21+map.custommmyoff, map.custommmxsize,map.custommmysize);
+        }
         else if (game.currentmenuname == "ed_edit_trial") {
             customtrial ctrial = ed.customtrials[ed.edtrial];
 
@@ -5669,75 +5674,87 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
 
                             ed.notedelay=45;
                             ed.updatetiles=true;
-                        } else if (game.currentmenuoption == game.nummenuoptions - 2) {
-                            key.fakekey = SDLK_e;
-                            key.fakekeytimer = 6;
+                        } else if (game.currentmenuoption == 2) {
+                            int tower = ed.get_tower(ed.levx, ed.levy);
+                            if (tower) {
+                                music.playef(2, 10);
+                            } else {
+                                if (ed.getedaltstatenum(ed.levx, ed.levy, ed.levaltstate + 1) != -1) {
+                                    ed.levaltstate++;
+                                    ed.note = "Switched to alt state " + help.String(ed.levaltstate);
+                                } else if (ed.levaltstate == 0) {
+                                    ed.note = "No alt states in this room";
+                                } else {
+                                    ed.levaltstate = 0;
+                                    ed.note = "Switched to main state";
+                                }
+                                ed.notedelay = 45;
+                            }
+                        } else if (game.currentmenuoption == 3) {
+                            int tower = ed.get_tower(ed.levx, ed.levy);
+                            if (tower) {
+                                music.playef(2, 10);
+                            } else {
+                                int j=0, tx=0, ty=0;
+                                for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+                                {
+                                    if(edentity[i].t==50)
+                                    {
+                                        tx=(edentity[i].p1-(edentity[i].p1%40))/40;
+                                        ty=(edentity[i].p2-(edentity[i].p2%30))/30;
+                                        if(tx==ed.levx && ty==ed.levy &&
+                                        edentity[i].state==ed.levaltstate &&
+                                        edentity[i].intower==tower)
+                                        {
+                                            j++;
+                                        }
+                                    }
+                                }
+                                if(j>0)
+                                {
+                                    ed.note="ERROR: Cannot have both warp types";
+                                    ed.notedelay=45;
+                                }
+                                else
+                                {
+                                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir+1)%4;
+                                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==0)
+                                    {
+                                        ed.note="Room warping disabled";
+                                        ed.notedelay=45;
+                                        dwgfx.backgrounddrawn=false;
+                                    }
+                                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==1)
+                                    {
+                                        ed.note="Room warps horizontally";
+                                        ed.notedelay=45;
+                                        dwgfx.backgrounddrawn=false;
+                                    }
+                                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==2)
+                                    {
+                                        ed.note="Room warps vertically";
+                                        ed.notedelay=45;
+                                        dwgfx.backgrounddrawn=false;
+                                    }
+                                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==3)
+                                    {
+                                        ed.note="Room warps in all directions";
+                                        ed.notedelay=45;
+                                        dwgfx.backgrounddrawn=false;
+                                    }
+                                }
+                                ed.keydelay=6;
+                            }
+                        } else if (game.currentmenuoption == 4) {
+                            ed.getlin(key, TEXT_ROOMNAME, "Enter new room name:",
+                                &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
                             ed.settingsmod = 0;
+                        } else if (game.currentmenuoption == 5) {
+                            game.createmenu("ed_dimensions");
                         } else if (game.currentmenuoption == game.nummenuoptions - 1) {
                             music.playef(11, 10);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();
-                        } else if (game.currentmenuoption == 2) {
-                            if (ed.getedaltstatenum(ed.levx, ed.levy, ed.levaltstate + 1) != -1) {
-                                ed.levaltstate++;
-                                ed.note = "Switched to alt state " + help.String(ed.levaltstate);
-                            } else if (ed.levaltstate == 0) {
-                                ed.note = "No alt states in this room";
-                            } else {
-                                ed.levaltstate = 0;
-                                ed.note = "Switched to main state";
-                            }
-                            ed.notedelay = 45;
-                        } else if (game.currentmenuoption == 3) {
-                            int j=0, tx=0, ty=0;
-                            for(int i=0; i<EditorData::GetInstance().numedentities; i++)
-                            {
-                                if(edentity[i].t==50)
-                                {
-                                    tx=(edentity[i].p1-(edentity[i].p1%40))/40;
-                                    ty=(edentity[i].p2-(edentity[i].p2%30))/30;
-                                    if(tx==ed.levx && ty==ed.levy &&
-                                    edentity[i].state==ed.levaltstate &&
-                                    edentity[i].intower==tower)
-                                    {
-                                        j++;
-                                    }
-                                }
-                            }
-                            if(j>0)
-                            {
-                                ed.note="ERROR: Cannot have both warp types";
-                                ed.notedelay=45;
-                            }
-                            else
-                            {
-                                ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir+1)%4;
-                                if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==0)
-                                {
-                                    ed.note="Room warping disabled";
-                                    ed.notedelay=45;
-                                    dwgfx.backgrounddrawn=false;
-                                }
-                                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==1)
-                                {
-                                    ed.note="Room warps horizontally";
-                                    ed.notedelay=45;
-                                    dwgfx.backgrounddrawn=false;
-                                }
-                                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==2)
-                                {
-                                    ed.note="Room warps vertically";
-                                    ed.notedelay=45;
-                                    dwgfx.backgrounddrawn=false;
-                                }
-                                else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==3)
-                                {
-                                    ed.note="Room warps in all directions";
-                                    ed.notedelay=45;
-                                    dwgfx.backgrounddrawn=false;
-                                }
-                            }
-                            ed.keydelay=6;
                         }
                     }
                     else if (game.currentmenuname == "ed_music")

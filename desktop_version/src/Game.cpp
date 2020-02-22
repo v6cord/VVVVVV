@@ -7508,24 +7508,34 @@ void Game::createmenu( std::string t )
     {
         int tower = ed.get_tower(ed.levx, ed.levy);
 
-        nummenuoptions = 0;
-        menuoptions[nummenuoptions++] = "toggle tower";
+        nummenuoptions = -1;
+        menuoptions[++nummenuoptions] = "toggle tower";
         menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "toggle direct mode";
+        menuoptions[++nummenuoptions] = "toggle direct mode";
         menuoptionsactive[nummenuoptions] = true;
-        if (!tower) {
-            menuoptions[nummenuoptions++] = "change alt state";
-            menuoptionsactive[nummenuoptions] = true;
-            menuoptions[nummenuoptions++] = "change warp dir";
-            menuoptionsactive[nummenuoptions] = true;
-        }
-        menuoptions[nummenuoptions++] = "change roomname";
+        menuoptions[++nummenuoptions] = "change alt state";
+        menuoptionsactive[nummenuoptions] = !tower;
+        menuoptions[++nummenuoptions] = "change warp dir";
+        menuoptionsactive[nummenuoptions] = !tower;
+        menuoptions[++nummenuoptions] = "change roomname";
         menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "first page";
+        menuoptions[++nummenuoptions] = "create dimension";
         menuoptionsactive[nummenuoptions] = true;
+        menuoptions[++nummenuoptions] = "first page";
+        menuoptionsactive[nummenuoptions] = true;
+        nummenuoptions++;
 
         menuxoff = -50;
         menuyoff = -20;
+    }
+    else if (t == "ed_dimensions") {
+        nummenuoptions = 2;
+        menuoptions[0] = "add new dimension";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "return to settings";
+        menuoptionsactive[1] = true;
+        menuxoff = -20;
+        menuyoff = 74;
     }
     else if (t == "ed_trials")
     {
