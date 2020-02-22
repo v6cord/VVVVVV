@@ -3872,6 +3872,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             tpoint.x = ed.ghosts[i].x;
             tpoint.y = ed.ghosts[i].y;
             graphics.setcol(ed.ghosts[i].col, help);
+            Uint32 alpha = graphics.ct.colour & graphics.backBuffer->format->Amask;
+            Uint32 therest = graphics.ct.colour & 0x00FFFFFF;
+            alpha = (3 * (alpha >> 24) / 4) << 24;
+            graphics.ct.colour = therest | alpha;
             SDL_Rect drawRect = graphics.sprites_rect;
             drawRect.x += tpoint.x;
             drawRect.y += tpoint.y;
