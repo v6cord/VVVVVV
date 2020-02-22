@@ -668,14 +668,24 @@ void Graphics::drawsprite( int x, int y, int t, int r, int g,  int b )
 void Graphics::drawtile( int x, int y, int t, int r, int g,  int b )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles[t], NULL, backBuffer, &rect);
+    if (t >= 14 && t <= 19) {
+        colourTransform thect = {.colour = ed.getonewaycol()};
+        BlitSurfaceTint(tiles[t], NULL, backBuffer, &rect, thect);
+    } else {
+        BlitSurfaceStandard(tiles[t], NULL, backBuffer, &rect);
+    }
 }
 
 
 void Graphics::drawtile2( int x, int y, int t, int r, int g,  int b )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles2[t], NULL, backBuffer, &rect);
+    if (t >= 14 && t <= 19) {
+        colourTransform thect = {.colour = ed.getonewaycol()};
+        BlitSurfaceTint(tiles2[t], NULL, backBuffer, &rect, thect);
+    } else {
+        BlitSurfaceStandard(tiles2[t], NULL, backBuffer, &rect);
+    }
 }
 
 
@@ -3449,7 +3459,12 @@ void Graphics::drawforetile(int x, int y, int t)
             //frontbuffer.copyPixels(tiles[t], tiles_rect, tpoint);
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
+            if (tile >= 14 && tile <= 19) {
+                colourTransform thect = {.colour = ed.getonewaycol()};
+                BlitSurfaceTint(tiles[t], NULL, foregroundBuffer, &rect, thect);
+            } else {
+                BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
+            }
         }
 }
 
@@ -3460,7 +3475,12 @@ void Graphics::drawforetile2(int x, int y, int t)
             //frontbuffer.copyPixels(tiles2[t], tiles_rect, tpoint);
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
+            if (tile >= 14 && tile <= 19) {
+                colourTransform thect = {.colour = ed.getonewaycol()};
+                BlitSurfaceTint(tiles2[t], NULL, foregroundBuffer, &rect, thect);
+            } else {
+                BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
+            }
         }
 }
 

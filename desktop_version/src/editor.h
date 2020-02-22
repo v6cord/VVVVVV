@@ -422,6 +422,9 @@ public:
 
     void switchroomsinput();
 
+    Uint32 getonewaycol(int rx, int ry);
+    Uint32 getonewaycol();
+
     int returneditoralpha = 0;
 };
 
