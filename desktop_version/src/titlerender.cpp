@@ -384,6 +384,8 @@ growing_vector<std::string> changelog = {
     "  on_input_flip_up, on_input_flip_down",
     "- setcallback(callback,script) - run",
     "  script when callback is triggered",
+    "- One-way tiles are now automatically",
+    "  recolored to match the tileset",
 
 };
 
