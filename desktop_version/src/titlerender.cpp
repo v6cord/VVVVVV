@@ -2008,19 +2008,21 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
         dwgfx.drawentities(map, obj, help);
 
-        if (game.gametimer % 3 == 0) {
-            int i = obj.getplayer();
-            GhostInfo ghost;
-            ghost.rx = game.roomx-100;
-            ghost.ry = game.roomy-100;
-            ghost.x = obj.entities[i].xp;
-            ghost.y = obj.entities[i].yp;
-            ghost.col = obj.entities[i].colour;
-            ghost.frame = obj.entities[i].drawframe;
-            ed.ghosts.push_back(ghost);
-        }
-        if (ed.ghosts.size() > 100) {
-            ed.ghosts.erase(ed.ghosts.begin());
+        if (map.custommode && !map.custommodeforreal) {
+            if (game.gametimer % 3 == 0) {
+                int i = obj.getplayer();
+                GhostInfo ghost;
+                ghost.rx = game.roomx-100;
+                ghost.ry = game.roomy-100;
+                ghost.x = obj.entities[i].xp;
+                ghost.y = obj.entities[i].yp;
+                ghost.col = obj.entities[i].colour;
+                ghost.frame = obj.entities[i].drawframe;
+                ed.ghosts.push_back(ghost);
+            }
+            if (ed.ghosts.size() > 100) {
+                ed.ghosts.erase(ed.ghosts.begin());
+            }
         }
     }
 
