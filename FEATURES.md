@@ -278,9 +278,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `getvar(var1[,var2])` - set *var1* to contents of *var2*, if *var2* is not given it uses the next line
 
-- `analogueon()` - enable Analogue Mode screen filter
-
-- `analogueoff()` - undoes the above
+- `analogue(on/off)` - toggle Analogue Mode screen filter
 
 - `jump(script)` - go to script without adding a stack frame
 
