@@ -373,6 +373,7 @@ void editorclass::reset()
 
     customtrials.clear();
     dimensions.clear();
+    ghosts.clear();
 }
 
 void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game)
