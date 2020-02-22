@@ -1003,13 +1003,12 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				//USAGE: shake(frames)
 				game.screenshake = ss_toi(words[1]);
 			}
-			if (words[0] == "analogueon")
+			if (words[0] == "analogue")
 			{
-				dwgfx.screenbuffer->badSignalEffect = true;
-			}
-			if (words[0] == "analogueoff")
-			{
-				dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
+				if (parsebool(words[1]))
+					dwgfx.screenbuffer->badSignalEffect = true;
+				else
+					dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 			}
 			if (words[0] == "walk")
 			{
