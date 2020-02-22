@@ -284,6 +284,6 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `jump(script)` - go to script without adding a stack frame
 
-- Added callbacks - `on_death_start`, `on_death_end`
+- Added callbacks - `on_death_start`, `on_death_end`, `on_input_flip`, `on_input_flip_up`, `on_input_flip_down`
 
 - `setcallback(callback,script)` - run script when callback is triggered
