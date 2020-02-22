@@ -4454,6 +4454,7 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 		game.jumpheld = true;
 
 		ed.vceversion = VCEVERSION;
+		ed.ghosts.clear();
 
 		map.custommode = true;
 		map.customx = 100;

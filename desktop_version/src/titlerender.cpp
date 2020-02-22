@@ -2009,6 +2009,8 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         if (game.gametimer % 3 == 0) {
             int i = obj.getplayer();
             GhostInfo ghost;
+            ghost.rx = game.roomx-100;
+            ghost.ry = game.roomy-100;
             ghost.x = obj.entities[i].xp;
             ghost.y = obj.entities[i].yp;
             ghost.col = obj.entities[i].colour;

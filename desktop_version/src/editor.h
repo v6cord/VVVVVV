@@ -130,6 +130,8 @@ struct LevelMetaData
 };
 
 struct GhostInfo {
+    int rx; // game.roomx-100
+    int ry; // game.roomy-100
     int x; // .xp
     int y; // .yp
     int col; // .colour

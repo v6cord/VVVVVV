@@ -3865,6 +3865,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     SDL_FillRect(graphics.ghostbuffer, NULL, SDL_MapRGBA(graphics.ghostbuffer->format, 0, 0, 0, 0));
     for (int i = 0; i < (int)ed.ghosts.size(); i++) {
         if (i <= ed.currentghosts) { // We don't want all of them to show up at once :)
+            if (ed.ghosts[i].rx != ed.levx || ed.ghosts[i].ry != ed.levy)
+                continue;
+
             point tpoint;
             tpoint.x = ed.ghosts[i].x;
             tpoint.y = ed.ghosts[i].y;
@@ -7333,7 +7336,6 @@ void editorclass::switchroomsinput()
         key.keymap[SDLK_KP_4] || key.keymap[SDLK_KP_6] ||
         key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
         key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
-        ed.ghosts.clear(); // Clear ghosts!
         ed.keydelay = 6;
         if (key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
             ed.levy--;
