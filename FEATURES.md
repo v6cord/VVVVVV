@@ -198,6 +198,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifcrewmates(n,script)` - go to script if the player has rescued at least *n* crewmates
 
+- `ifcrewmatesless(n,script)` - go to script if the player has rescued less than *n* crewmates
+
 - `ifcoins(x)` - Run a script if the player has collected at least `x` coins
 
 - `ifcoinsless(x)` - Run a script if the player has less than `x` coins
