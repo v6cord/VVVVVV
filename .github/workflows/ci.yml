@@ -30,15 +30,15 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
+    - name: Build
+      run: cd ${SRC_DIR_PATH} && ./build.sh
+
     - name: Cache data.zip
       id: cache-data
       uses: actions/cache@v1
       with:
         path: desktop_version/build/data-zip
         key: data-zip-folder
-
-    - name: Build
-      run: cd ${SRC_DIR_PATH} && ./build.sh
 
     - name: Download data.zip
       run: cd ${SRC_DIR_PATH}/build && ../download-data.sh
