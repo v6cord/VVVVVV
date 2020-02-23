@@ -1,8 +1,8 @@
 { cross ? false, clang ? false, debug ? false, android ? false }:
 let pkgsNative = import (builtins.fetchTarball {
   name = "cross-compile-nixpkgs";
-  url = https://github.com/nixos/nixpkgs/archive/ea79a830dcf9c0059656da7f52835d2663d5c436.tar.gz;
-  sha256 = "0vqnfh99358v9ym5z9i3dsfy0l4xxgh9hr278pi1y11gdl092014";
+  url = https://github.com/nixos/nixpkgs/archive/2436c27541b2f52deea3a4c1691216a02152e729.tar.gz;
+  sha256 = "0p98dwy3rbvdp6np596sfqnwlra11pif3rbdh02pwdyjmdvkmbvd";
 }) {};
     pkgs = if cross then pkgsNative.pkgsCross.mingwW64 else pkgsNative;
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
