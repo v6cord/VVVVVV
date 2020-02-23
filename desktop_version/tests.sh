@@ -17,13 +17,13 @@ for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.{vvvvvv,zip}; do
     testcase="$(basename "$testcase" .vvvvvv)"
     testcase="${testcase%.zip}"
     echo -n "$testcase -- "
-    if output="$(./VVVVVV-CE -p "$testcase" --headless --quiet 2>&1)"; then
+    if output="$(timeout 5s ./VVVVVV-CE -p "$testcase" --headless --quiet 2>&1)"; then
         echo "PASS"
     else
         echo "$output"
         if command -v gdb >/dev/null 2>/dev/null; then
             echo -n "BACKTRACE: "
-            gdb -batch -ex "run" -ex "bt" --args ./VVVVVV-CE -p "$testcase" --headless --quiet
+            timeout 5s gdb -batch -ex "run" -ex "bt" --args ./VVVVVV-CE -p "$testcase" --headless --quiet
         fi
         failed=1
     fi
