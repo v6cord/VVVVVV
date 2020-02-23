@@ -11,7 +11,6 @@ function finish {
 trap finish EXIT
 
 source ./build.sh
-source ../download-data.sh
 set +e -o pipefail
 failed=0
 for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.{vvvvvv,zip}; do

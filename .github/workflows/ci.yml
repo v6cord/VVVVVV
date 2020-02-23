@@ -31,10 +31,18 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
     - name: Cache data.zip
+      id: cache-data
       uses: actions/cache@v1
       with:
         path: desktop_version/build/data-zip
         key: data-zip-folder
+
+    - name: Build
+      run: cd ${SRC_DIR_PATH} && ./build.sh
+
+    - name: Download data.zip
+      run: cd ${SRC_DIR_PATH}/build && ../download-data.sh
+      if: steps.cache-data.outputs.cache-hit != 'true'
 
     - name: CPack build
       run: cd ${SRC_DIR_PATH} && ./cpack.sh
