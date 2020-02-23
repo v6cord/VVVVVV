@@ -26,6 +26,7 @@ in
         pkgsNative.libicns pkgsNative.imagemagick # icon conversion
         pkgsNative.gitAndTools.git-subrepo # subrepo management
         pkgsNative.git # version control
+        pkgsNative.less # nix-shell --pure
       ] else []) ++ (if android then [
         pkgsNative.gitAndTools.git-remote-hg
         pkgsNative.mercurial
