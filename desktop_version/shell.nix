@@ -23,12 +23,14 @@ in
         ninja # this isn't needed on CI, but it's annoying to disable
         pkgsNative.gdb # we don't want a cross gdb
       ] ++ (if debug then [
-        pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
         pkgsNative.libicns pkgsNative.imagemagick # icon conversion
         pkgsNative.gitAndTools.git-subrepo # subrepo management
+        pkgsNative.git # version control
       ] else []) ++ (if android then [
         pkgsNative.gitAndTools.git-remote-hg
         pkgsNative.mercurial
+      ] else []) ++ (if debug && cross then [
+        pkgsNative.wineWowPackages.unstable # this is my system wine, which makes things a lot easier
       ] else []);
       buildInputs = if stdenv.targetPlatform.isWindows then [
         sdl
