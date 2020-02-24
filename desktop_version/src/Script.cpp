@@ -2560,26 +2560,18 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "ifmod")
 			{
-				if (words[1] == "mmmmmm") {
-					if (music.mmmmmm) {
-						call("custom_"+words[2]);
-						return;
-					}
-				} else if (words[1] == "mmmmmm_on" || words[1] == "mmmmmm_enabled") {
-					if (music.mmmmmm && music.usingmmmmmm) {
-						call("custom_"+words[2]);
-						return;
-					}
-				} else if (words[1] == "mmmmmm_off" || words[1] == "mmmmmm_disabled") {
-					if (music.mmmmmm && !music.usingmmmmmm) {
-						call("custom_"+words[2]);
-						return;
-					}
-				} else if (words[1] == "unifont") {
-					if (dwgfx.grphx.im_unifont && dwgfx.grphx.im_wideunifont) {
-						call("custom_"+words[2]);
-						return;
-					}
+				if (words[1] == "mmmmmm" && music.mmmmmm) {
+					call("custom_"+words[2]);
+					return;
+				} else if ((words[1] == "mmmmmm_on" || words[1] == "mmmmmm_enabled") && music.mmmmmm && music.usingmmmmmm) {
+					call("custom_"+words[2]);
+					return;
+				} else if ((words[1] == "mmmmmm_off" || words[1] == "mmmmmm_disabled") && music.mmmmmm && !music.usingmmmmmm) {
+					call("custom_"+words[2]);
+					return;
+				} else if (words[1] == "unifont" && dwgfx.grphx.im_unifont && dwgfx.grphx.im_wideunifont) {
+					call("custom_"+words[2]);
+					return;
 				}
 			}
 			else if (words[0] == "hidecoordinates")
