@@ -1,4 +1,6 @@
+#include "Enums.h"
 #include "Input.h"
+#include "Script.h"
 
 #include "MakeAndPlay.h"
 
@@ -6,6 +8,8 @@
 
 #include "FileSystemUtils.h"
 #include <cstdlib>
+
+extern scriptclass script;
 
 // Found in titlerender.cpp
 void updategraphicsmode(Game& game, Graphics& dwgfx);
@@ -272,7 +276,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                 if (game.currentmenuname == "mainmenu")
                 {
 								
-				#if defined(MAKEANDPLAY)
+            #if defined(MAKEANDPLAY)
 				   if (game.currentmenuoption == 0)
                     {
                       //Bring you to the normal playmenu
@@ -325,7 +329,8 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         dwgfx.fademode = 2;
                     }
                 }
-				#elif !defined(MAKEANDPLAY)
+            #elif !defined(MAKEANDPLAY)
+                #if defined(NO_CUSTOM_LEVELS)
                     if (game.currentmenuoption == 0)
                     {
                         //Play
@@ -345,7 +350,62 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     }
                     else if (game.currentmenuoption == 1)
                     {
-                      //Bring you to the normal playmenu
+                        //Options
+                        music.playef(11, 10);
+                        game.createmenu("graphicoptions");
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 2)
+                    {
+                        //Options
+                        music.playef(11, 10);
+                        game.createmenu("options");
+
+												//Add extra menu for mmmmmm mod
+											  if(music.mmmmmm){
+													game.menuoptions[4] = "soundtrack";
+													game.menuoptionsactive[4] = true;
+													game.menuoptions[5] = "return";
+													game.menuoptionsactive[5] = true;
+													game.nummenuoptions = 6;
+												}
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 3)
+                    {
+                        //Credits
+                        music.playef(11, 10);
+                        game.createmenu("credits");
+                        map.nexttowercolour();
+                    }
+                    else if (game.currentmenuoption == 4)
+                    {
+                        //bye!
+                        music.playef(2, 10);
+                        game.mainmenu = 100;
+                        dwgfx.fademode = 2;
+                    }
+                #else
+                    if (game.currentmenuoption == 0)
+                    {
+                        //Play
+                        if (game.telesummary == "" && game.quicksummary == "")
+                        {
+                            //No saves exist, just start a new game
+                            game.mainmenu = 0;
+                            dwgfx.fademode = 2;
+                        }
+                        else
+                        {
+                            //Bring you to the normal playmenu
+                            music.playef(11, 10);
+                            game.createmenu("play");
+                            map.nexttowercolour();
+                        }
+                    }
+                    else if (game.currentmenuoption == 1)
+                    {
+                        //Bring you to the normal playmenu
                         music.playef(11, 10);
                         game.createmenu("playerworlds");
                         map.nexttowercolour();
@@ -363,14 +423,14 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         music.playef(11, 10);
                         game.createmenu("options");
 
-												//Add extra menu for mmmmmm mod
-											  if(music.mmmmmm){
-													game.menuoptions[4] = "soundtrack";
-													game.menuoptionsactive[4] = true;
-													game.menuoptions[5] = "return";
-													game.menuoptionsactive[5] = true;
-													game.nummenuoptions = 6;
-												}
+                        //Add extra menu for mmmmmm mod
+                        if(music.mmmmmm){
+                            game.menuoptions[4] = "soundtrack";
+                            game.menuoptionsactive[4] = true;
+                            game.menuoptions[5] = "return";
+                            game.menuoptionsactive[5] = true;
+                            game.nummenuoptions = 6;
+                        }
                         map.nexttowercolour();
                     }
                     else if (game.currentmenuoption == 4)
@@ -394,8 +454,10 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         game.mainmenu = 100;
                         dwgfx.fademode = 2;
                     }
+            #endif
                 }
 								#endif
+            #if !defined(NO_CUSTOM_LEVELS)
                 else if(game.currentmenuname=="levellist")
                 {
                   if(game.currentmenuoption==game.nummenuoptions-1){
@@ -413,6 +475,22 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     }
                     game.createmenu("levellist");
                     game.currentmenuoption=game.nummenuoptions-2;
+                    map.nexttowercolour();
+                  }else if(game.currentmenuoption==game.nummenuoptions-3){
+                    //previous page
+                    music.playef(11,10);
+                    if(((game.levelpage*8)+8) <= 8){
+                        if (ed.ListOfMetaData.size() % 8 == 0)
+                        {
+                            game.levelpage = (ed.ListOfMetaData.size() / 8 ) - 1;
+                        }else{
+                            game.levelpage = floor(ed.ListOfMetaData.size() / 8);
+                        }
+                    }else{
+                        game.levelpage--;
+                    }
+                    game.createmenu("levellist");
+                    game.currentmenuoption=game.nummenuoptions-3;
                     map.nexttowercolour();
                   }else{
                     //Ok, launch the level!
@@ -433,6 +511,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 	                  }
                   }
                 }
+            #endif
                 else if(game.currentmenuname=="quickloadlevel")
                 {
                   if(game.currentmenuoption==0){//continue save
@@ -449,18 +528,18 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                       ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map, game);
                       game.customloadtrialsave(ed.ListOfMetaData[game.playcustomlevel].filename);
                       game.createmenu("loadcustomtrial");
-                        for (int i = 0; i < (int)game.customtrials.size(); i++) {
-                            std::string sl = game.customtrials[i].name;
+                        for (int i = 0; i < (int)ed.customtrials.size(); i++) {
+                            std::string sl = ed.customtrials[i].name;
                             std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower); 
                             game.menuoptions[i] = sl;
                             game.menuoptionsactive[i] = true;
                         }
-                        if (game.customtrials.size() > 0) {
-                            game.nummenuoptions = (int)game.customtrials.size() + 1;
+                        if (ed.customtrials.size() > 0) {
+                            game.nummenuoptions = (int)ed.customtrials.size() + 1;
                             game.menuoptions[game.nummenuoptions-1] = "return to menu";
                             game.menuoptionsactive[game.nummenuoptions-1] = true;
                         }
-                    //customtrial currenttrial = game.customtrials[i];
+                    //customtrial currenttrial = ed.customtrials[i];
                       map.nexttowercolour();
                   }else if(game.currentmenuoption==3){
                     music.playef(11, 10);
@@ -470,7 +549,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                   }
                 }
                 else if (game.currentmenuname=="loadcustomtrial") {
-                    if (game.customtrials.size() == 0 || (game.currentmenuoption + 1 == game.nummenuoptions)) {
+                    if (ed.customtrials.size() == 0 || (game.currentmenuoption + 1 == game.nummenuoptions)) {
                         game.createmenu("quickloadlevel");
                         music.playef(11, 10);
                         map.nexttowercolour();
@@ -480,8 +559,10 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                         dwgfx.fademode = 2;
                     }
                 }
+            #if !defined(NO_CUSTOM_LEVELS)
                 else if(game.currentmenuname=="playerworlds")
                 {
+                #if !defined(NO_EDITOR)
                   if(game.currentmenuoption==0){
 
                     music.playef(11, 10);
@@ -508,7 +589,29 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     game.createmenu("mainmenu");
                     map.nexttowercolour();
                   }
+                #else
+                  if(game.currentmenuoption==0){
+                    music.playef(11, 10);
+                    game.levelpage=0;
+                    ed.getDirectoryData();
+                    game.loadcustomlevelstats(); //Should only load a file if it's needed
+                    game.createmenu("levellist");
+                    map.nexttowercolour();
+                  }else if(game.currentmenuoption==1){
+                    if (FILESYSTEM_openDirectory(FILESYSTEM_getUserLevelDirectory())) {
+                        music.playef(11, 10);
+                    } else {
+                        music.playef(2, 10);
+                    }
+                  }else if(game.currentmenuoption==2){
+                    //back
+                    music.playef(11, 10);
+                    game.createmenu("mainmenu");
+                    map.nexttowercolour();
+                  }
+                #endif
                 }
+            #endif
                 else if(game.currentmenuname=="errornostart"){
                   music.playef(11, 10);
                   game.createmenu("mainmenu");
@@ -699,6 +802,13 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     {
                         music.playef(11, 10);
                         game.createmenu(game.previousmenuname);
+                        if(game.previousmenuname == "options" && music.mmmmmm){
+                            game.menuoptions[4] = "soundtrack";
+                            game.menuoptionsactive[4] = true;
+                            game.menuoptions[5] = "return";
+                            game.menuoptionsactive[5] = true;
+                            game.nummenuoptions = 6;
+                       }
                         map.nexttowercolour();
                     }
                 }
@@ -1201,7 +1311,20 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 #elif !defined(MAKEANDPLAY)
                         //next page
                         music.playef(11, 10);
-                        game.createmenu("credits25");
+                        game.current_credits_list_index += 14;
+
+                        if (game.current_credits_list_index >= (int)game.patrons.size())
+                        {
+                            // No more patrons. Move to the next credits section
+                            game.current_credits_list_index = 0;
+                            game.createmenu("credits5");
+                        }
+                        else
+                        {
+                            // There are more patrons. Refresh the menu with the next ones
+                            game.createmenu("credits4");
+                        }
+
                         map.nexttowercolour();
 #endif
                     }
@@ -1209,6 +1332,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     {
                         //back
                         music.playef(11, 10);
+                        game.current_credits_list_index = 0;
                         game.createmenu("mainmenu");
                         map.nexttowercolour();
                     }
@@ -1219,120 +1343,32 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     {
                         //next page
                         music.playef(11, 10);
-                        game.createmenu("credits3");
+                        game.current_credits_list_index += 9;
+
+                        if (game.current_credits_list_index >= (int)game.githubfriends.size())
+                        {
+                            // No more GitHub contributors. Move to the next credits section
+                            game.current_credits_list_index = 0;
+                            game.createmenu("credits6");
+                        }
+                        else
+                        {
+                            // There are more GitHub contributors. Refresh the menu with the next ones
+                            game.createmenu("credits5");
+                        }
+
                         map.nexttowercolour();
                     }
                     else
                     {
                         //back
                         music.playef(11, 10);
+                        game.current_credits_list_index = 0;
                         game.createmenu("mainmenu");
                         map.nexttowercolour();
                     }
                 }
                 else if (game.currentmenuname == "credits3")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits4");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits4")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits5");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits5")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits6");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits6")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits7");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits7")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits8");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits8")
-                {
-                    if (game.currentmenuoption == 0)
-                    {
-                        //next page
-                        music.playef(11, 10);
-                        game.createmenu("credits9");
-                        map.nexttowercolour();
-                    }
-                    else
-                    {
-                        //back
-                        music.playef(11, 10);
-                        game.createmenu("mainmenu");
-                        map.nexttowercolour();
-                    }
-                }
-                else if (game.currentmenuname == "credits9")
                 {
                     if (game.currentmenuoption == 0)
                     {
@@ -1490,7 +1526,24 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
 						}
 					}
 
-					if (game.currentmenuoption == 4)
+                                        if (game.currentmenuoption == 4) {
+                                            music.playef(11, 10);
+                                            auto c = game.currentmenuoption;
+                                            if (key.type == holdinput) {
+                                                key.type = swipeinput;
+                                            } else if (key.type == swipeinput) {
+                                                key.type = holdinput;
+                                            }
+                                            game.createmenu("controller");
+                                            key.keymap[SDLK_RIGHT] = 0;
+                                            key.keymap[SDLK_LEFT] = 0;
+                                            key.keymap[SDLK_v] = 0;
+                                            key.delayed_left_time = -10;
+                                            key.delayed_right_time = -10;
+                                            game.currentmenuoption = c;
+                                        }
+
+					if (game.currentmenuoption == 5)
 					{
 						music.playef(11, 10);
 						game.createmenu("options");
@@ -2015,13 +2068,15 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     }
 
     //Returning to editor mode must always be possible
-    if(map.custommode && !map.custommodeforreal){
+#if !defined(NO_CUSTOM_LEVELS)
+    if((map.custommode && !map.custommodeforreal) && !script.killedviridian){
       if ((game.press_map || key.isDown(27)) && !game.mapheld){
         game.mapheld = true;
         //Return to level editor
         if (game.activeactivity > -1 && game.press_map){
            if((int(std::abs(obj.entities[obj.getplayer()].vx))<=1) && (int(obj.entities[obj.getplayer()].vy) == 0) )
             {
+                script.callstack.clear();
                 script.load(obj.blocks[game.activeactivity].script);
                 obj.removeblock(game.activeactivity);
             }
@@ -2037,6 +2092,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
           game.completestop = false;
           game.state = 0;
 			    dwgfx.showcutscenebars = false;
+					dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
           dwgfx.backgrounddrawn=false;
           music.fadeout();
@@ -2051,6 +2107,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         }
       }
     }
+#endif
 
     //Entity type 0 is player controled
     for (int ie = 0; ie < obj.nentity; ++ie)
@@ -2153,6 +2210,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     {
                         if((int(std::abs(obj.entities[ie].vx))<=1) && (int(obj.entities[ie].vy) == 0) )
                         {
+                            script.callstack.clear();
                             script.load(obj.blocks[game.activeactivity].script);
                             obj.removeblock(game.activeactivity);
                         }
@@ -2281,6 +2339,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (game.jumppressed > 0)
                 {
                     bool infiniflipkludge = false;
+                    script.callback("on_input_flip");
                     game.jumppressed--;
                     if ((obj.entities[ie].onground>0 || game.infiniflip) && game.gravitycontrol == 0 && !game.noflip)
                     {
@@ -2294,6 +2353,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         game.totalflips++;
                         if (game.infiniflip)
                             infiniflipkludge = true;
+                        script.callback("on_input_flip_up");
                     }
                     if ((obj.entities[ie].onroof>0 || game.infiniflip) && game.gravitycontrol == 1 && !game.noflip && !infiniflipkludge)
                     {
@@ -2305,6 +2365,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         music.playef(1, 10);
                         game.jumppressed = 0;
                         game.totalflips++;
+                        script.callback("on_input_flip_down");
                     }
                 }
             }
@@ -2470,9 +2531,14 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
             if (game.roomx >= 102 && game.roomx <= 104 && game.roomy >= 110 && game.roomy <= 111) game.savearea = "The Ship";
 
-            if(map.custommodeforreal){
+        #if !defined(NO_CUSTOM_LEVELS)
+            if(map.custommodeforreal)
+            {
               game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename, map, obj, music, dwgfx);
-            }else{
+            }
+            else
+        #endif
+            {
               game.savequick(map, obj, music);
             }
         }

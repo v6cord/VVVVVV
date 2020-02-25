@@ -1188,13 +1188,13 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             setblockcolour(k, "orange");
             trig=0;
             break;
-        case 100: // Used by customactivityzone()
+        case 100: // Used by customactivityzone() with 1 color argument for predefined colors
             blocks[k].prompt = customprompt;
             blocks[k].script = "custom_"+customscript;
             setblockcolour(k, customcolour);
             trig=0;
             break;
-        case 101: // Used by customactivityzonergb()
+        case 101: // Used by customactivityzone() with 3 color arguments for RGB
             blocks[k].prompt = customprompt;
             blocks[k].script = "custom_"+customscript;
             blocks[k].r = customr;
@@ -2120,8 +2120,8 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
         entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
+        entities[k].colour = 0;
         entities[k].behave = vx;
-        entities[k].para = vy;
         entities[k].onentity = 1;
         entities[k].animate = 100;
         break;
@@ -3287,8 +3287,12 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     if (entities[i].life <= 0)
                     {
                         removeblockat(entities[i].xp, entities[i].yp);
-                        entities[i].state = 3;
-                        entities[i].invis = true;
+                        if (IS_VCE_LEVEL) {
+                            entities[i].state = 3;
+                            entities[i].invis = true;
+                        } else {
+                            entities[i].active = false;
+                        }
                     }
                 }
                 else if (entities[i].state == 3)
@@ -3321,14 +3325,8 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                 if (entities[i].state == 1)
                 {
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
-                    if (entities[getplayer()].onground > 0) {
-                        music.playef(0, 10);
-                    } else if (entities[getplayer()].onroof > 0) {
-                        music.playef(1, 10);
-                    } else {
+                    if (IS_VCE_LEVEL) {
                         music.playef(8, 10);
-                    }
-                    if (entities[i].para != 0) {
                         // Remove it, but respawn it upon death
                         entities[i].invis = true;
                         entities[i].state = 2;
@@ -3348,6 +3346,8 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                     entities[i].state = 0;
                     entities[i].invis = false;
                     entities[i].onentity = 1;
+                    // Spin really fast for half a second!
+                    entities[i].life = 4;
                 }
                 break;
             case 5:  //Particle sprays
@@ -4342,18 +4342,27 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
 
             case 4: // Gravity token anim
                 entities[_i].framedelay--;
-                if(entities[_i].framedelay<=0)
-                {
-                    entities[_i].framedelay = 8;
+                if (entities[_i].framedelay <= 0) {
+                    if (entities[_i].life > 0) {
+                        entities[_i].framedelay = 4;
+                        entities[_i].life--;
+                        entities[k].colour = 10;
+                    } else {
+                        entities[k].colour = 0;
+                        entities[_i].framedelay = 8;
+                    }
                     entities[_i].walkingframe++;
                     if (entities[_i].walkingframe == 4)
                     {
                         entities[_i].walkingframe = 0;
                     }
+                } else if (entities[_i].life > 0 && entities[_i].framedelay > 4) {
+                    // Clamp it down to 4 frames when respawning
+                    entities[_i].framedelay = 4;
                 }
 
                 entities[_i].drawframe = entities[_i].tile;
-                if (entities[_i].para != 0) {
+                if (IS_VCE_LEVEL) {
                     entities[_i].drawframe += (entities[_i].walkingframe);
                 }
                 break;

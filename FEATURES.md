@@ -3,19 +3,18 @@ A list of all the new features added to VVVVVV: Community Edition. This list is 
 VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, Allison Fleischer, and Dav999.
 
 ## Version c1.0
-- Added UTF-8 support
 
 - Removed having to use a load script to use internal scripting
 
 - Added automatic loading of custom assets - make a folder with the same name as your level file, and put the assets in there.
 
-- `pdelay(n)` - a `delay(n)` that doesn't lock the players movement
+- `pdelay(n)` - a `delay(n)` that doesn't lock the player's movement
 
 - `setroomname()` - sets the roomname to the next line
 
 - `settile(x,y,tile)` - place a tile temporarily in the room
 
-- `textcolo(u)r(r,g,b,x,y,lines)` - `text()` but you can set the color directly - r,g,b is 0-255 - if r,g,b is 0,0,0 only the text will show up and not the text box
+- You can now use `text()` like `text(r,g,b,x,y,lines)` - r,g,b is 0-255 - if r,g,b is 0,0,0 only the text will show up and not the text box
 
 - `reloadroom()` - reloads the current room
 
@@ -111,7 +110,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - You can now place flipped terminals
 
-- Add showmarkers/hidemarkers to temporarily disable markmap markers
+- `hidemarkers()` - disable `markmap()` markers
+
+- `showmarkers()` - undo the above
 
 - `setspeed(x)` for player speed, 3 by default
 
@@ -119,11 +120,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `pinf` - variant of `inf` to automatically `pdelay(1)` if no delay occurred
 
-- `nobars()` - to disable automatic cutscene bars from a script
+- `noautobars()` - to disable automatic cutscene bars from a script
 
-- `finalstretchon` - turn on Final Level palette swap
-
-- `finalstretchoff` - turn off Final Level palette swap
+- `finalstretch(on/off)` - toggle Final Level palette swap
 
 - `reloadscriptboxes()` - reload script boxes without affecting entities
 
@@ -155,9 +154,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `enablesuicide` - enable pressing R
 
-- `customactivityzone(x,y,w,h,color,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, prompt goes on the next line
-
-- `customactivityzonergb(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, r,g,b is 0-255, prompt goes on the next line
+- `customactivityzone(x,y,w,h,color,script)` OR `customactivityzone(x,y,w,h,r,g,b,script)` - x,y,w,h in pixels, color is `red`/`orange`/`yellow`/`green`/`cyan`/`blue`/`pink`/`purple` (actually pink)/`white`/`gray`, if invalid it defaults to gray, r,g,b is 0-255, prompt goes on the next line
 
 - Fixed the 2-frame delay to execute a script when entering a room
 
@@ -193,19 +190,21 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `addvar(name [, value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
 
-- Upped the trinkets/crewmates limit to 100
+- Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
+
+- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%gravitycontrol%`, `%room_x%`, `%room_y%`, `%trinkets%`, `%crewmates%`, `%coins%`, `%battery_level%`, `%on_battery%`, `%unix_time%`, `%hhmmss_time%`)
 
 - Upped the map size limit to 100 by 100
 
-- Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
+- `ifcrewmates(n,script)` - go to script if the player has rescued at least *n* crewmates
 
-- Built-in variables (`%deaths%`, `%player_x%`, `%player_y%`, `%trinkets%`, `%coins%`)
+- `ifcrewmatesless(n,script)` - go to script if the player has rescued less than *n* crewmates
 
-- `ifcoins(x)` - Run a script if the player has collected at least `x` coins
+- `ifcoins(n,script)` - go to script if the player has collected at least *n* coins
 
-- `ifcoinsless(x)` - Run a script if the player has less than `x` coins
+- `ifcoinsless(n,script)` - go to script if the player has collected less than *n* coins
 
-- Coins are now placeable in the editor using the G tool
+- Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
 - Coins display in the roomname if there's any coins in the map
 
@@ -217,7 +216,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
 
-- Flip tokens are now placeable in the editor using the F tool
+- Flip tokens are now placeable in the editor using the ^1 tool (press Shift+1)
 
 - `stop()` - A command for convenience: stops the script, also runs `endcutscene()`
 
@@ -251,9 +250,13 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added one-time script boxes - hold X when placing down a script box to make it run only once
 
-- Flip tokens now respawn upon death
+- Flip tokens now play the gravity line sound effect when touched in VCE levels
 
-- 1x1 quicksand now respawn upon death
+- Flip tokens now respawn upon death in VCE levels
+
+- 1x1 quicksand now respawn upon death in VCE levels
+
+- Terminals' activity zones are aligned properly in VCE levels
 
 - `nointerrupt()` - prevent interrupting a script when player moves into a script box
 
@@ -264,3 +267,27 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `load()` - load a custom script without having to type iftrinkets()
 
 - You can now use Minecraft-like relative tilde syntax in `gotoroom()` and `gotoposition()`
+
+- `sayquiet` and `replyquiet` - same as normal `say` and `reply`, but without a squeak
+
+- Added dimensions, so you can properly have more than one dimension in a custom level
+
+- `gotodimension(n)` - go to dimension n
+
+- `ifkey(key,script)` - If `key` is pressed, load the script `script`. `left`, `right`, `up` and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup` and `rdown`.
+
+- `ifflipmode(script)` - go to script if the game is in flip mode
+
+- `delchar(var,n)` - remove *n* chars from the end of the variable *var*
+
+- `getvar(var1[,var2])` - set *var1* to contents of *var2*, if *var2* is not given it uses the next line
+
+- `analogue(on/off)` - toggle Analogue Mode screen filter
+
+- `jump(script)` - go to script without adding a stack frame
+
+- Added callbacks - `on_death_start`, `on_death_end`, `on_input_flip`, `on_input_flip_up`, `on_input_flip_down`
+
+- `setcallback(callback,script)` - run script when callback is triggered
+
+- One-way tiles are now automatically recolored to match the tileset

@@ -4,10 +4,18 @@
 #include "Map.h"
 #include "Screen.h"
 #include "FileSystemUtils.h"
+#include "preloader.h"
 #include <utf8/checked.h>
 #include <physfs.h>
 #include <iterator>
+#ifndef __ANDROID__
 #include <fribidi/fribidi.h>
+#else
+#include <string.h>
+#define fribidi_log2vis(src, size, typ, dst, ...) (memcpy((dst), (src), sizeof(uint32_t) * (size)), 1)
+#define FriBidiParType int
+#define FRIBIDI_TYPE_ON 0
+#endif
 
 void Graphics::init()
 {
@@ -134,7 +142,7 @@ void Graphics::init()
     showmousecursor = true;
 }
 
-int Graphics::font_idx(char32_t ch) {
+int Graphics::font_idx(uint32_t ch) {
     if (font_positions.size() > 0) {
         auto iter = font_positions.find(ch);
         if (iter == font_positions.end()) {
@@ -212,7 +220,7 @@ void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
     FILESYSTEM_freeMemory(&charmap);
 }
 
-int Graphics::bfontlen(char32_t ch) {
+int Graphics::bfontlen(uint32_t ch) {
     auto real = bfont[font_idx(ch)]->w;
     if (ch < 32 && real == 8) return 6;
     return real;
@@ -340,14 +348,18 @@ void Graphics::MakeSpriteArray()
     }
 }
 
+bool Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ ) {
+    return PrintAlpha(_x,_y,_s,r,g,b,255,cen);
+}
 
-bool Graphics::Print( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
+bool Graphics::PrintAlpha( int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen /*= false*/ )
 {
     r = clamp(r,0,255);
     g = clamp(g,0,255);
     b = clamp(b,0,255);
+    a = clamp(a,0,255);
 
-    ct.colour = getRGB(r, g, b);
+    ct.colour = getRGBA(r, g, b, a);
 
     if (cen)
         _x = ((160 ) - ((len(_s)) / 2));
@@ -451,13 +463,18 @@ int Graphics::len(std::string t)
     return bfontpos;
 }
 
-void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
+void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ ) {
+    PrintOffAlpha(_x,_y,_s,r,g,b,255,cen);
+}
+
+void Graphics::PrintOffAlpha( int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen /*= false*/ )
 {
     r = clamp(r,0,255);
     g = clamp(g,0,255);
     b = clamp(b,0,255);
+    a = clamp(a,0,255);
 
-    ct.colour = getRGB(r, g, b);
+    ct.colour = getRGBA(r, g, b, a);
 
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
@@ -493,28 +510,32 @@ void Graphics::PrintOff( int _x, int _y, std::string _s, int r, int g, int b, bo
     }
 }
 
-void Graphics::bprint( int x, int y, std::string t, int r, int g, int b, bool cen /*= false*/ )
+void Graphics::bprint( int x, int y, std::string t, int r, int g, int b, bool cen /*= false*/ ) {
+    bprintalpha(x,y,t,r,g,b,255,cen);
+}
+
+void Graphics::bprintalpha( int x, int y, std::string t, int r, int g, int b, int a, bool cen /*= false*/ )
 {
 
     //printmask(x, y, t, cen);
     if (!notextoutline)
     {
-        Print(x, y - 1, t, 0, 0, 0, cen);
+        PrintAlpha(x, y - 1, t, 0, 0, 0, a, cen);
         if (cen)
         {
             //TODO find different
-            PrintOff(-1, y, t, 0, 0, 0, cen);
-            PrintOff(1, y, t, 0, 0, 0, cen);
+            PrintOffAlpha(-1, y, t, 0, 0, 0, a, cen);
+            PrintOffAlpha(1, y, t, 0, 0, 0, a, cen);
         }
         else
         {
-            Print(x  -1, y, t, 0, 0, 0, cen);
-            Print(x  +1, y, t, 0, 0, 0, cen);
+            PrintAlpha(x  -1, y, t, 0, 0, 0, a, cen);
+            PrintAlpha(x  +1, y, t, 0, 0, 0, a, cen);
         }
-        Print(x, y+1, t, 0, 0, 0, cen);
+        PrintAlpha(x, y+1, t, 0, 0, 0, a, cen);
     }
 
-    Print(x, y, t, r, g, b, cen);
+    PrintAlpha(x, y, t, r, g, b, a, cen);
 }
 
 void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool cen /*= false*/ )
@@ -647,14 +668,24 @@ void Graphics::drawsprite( int x, int y, int t, int r, int g,  int b )
 void Graphics::drawtile( int x, int y, int t, int r, int g,  int b )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles[t], NULL, backBuffer, &rect);
+    if (t >= 14 && t <= 17) {
+        colourTransform thect = {.colour = ed.getonewaycol()};
+        BlitSurfaceTint(tiles[t], NULL, backBuffer, &rect, thect);
+    } else {
+        BlitSurfaceStandard(tiles[t], NULL, backBuffer, &rect);
+    }
 }
 
 
 void Graphics::drawtile2( int x, int y, int t, int r, int g,  int b )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles2[t], NULL, backBuffer, &rect);
+    if (t >= 14 && t <= 17) {
+        colourTransform thect = {.colour = ed.getonewaycol()};
+        BlitSurfaceTint(tiles2[t], NULL, backBuffer, &rect, thect);
+    } else {
+        BlitSurfaceStandard(tiles2[t], NULL, backBuffer, &rect);
+    }
 }
 
 
@@ -1298,7 +1329,7 @@ void Graphics::drawlevelmenu( Game& game, int cr, int cg, int cb, int division /
     {
         if (i == game.currentmenuoption)
         {
-          if(game.nummenuoptions-i<=2){
+          if(game.nummenuoptions-i<=3){
             //Draw it highlighted
             if (game.menuoptionsactive[i])
             {
@@ -1321,20 +1352,20 @@ void Graphics::drawlevelmenu( Game& game, int cr, int cg, int cb, int division /
                 tempstring = game.menuoptions[i];
                 std::transform(tempstring.begin(), tempstring.end(),tempstring.begin(), ::toupper);
                 tempstring = std::string("[ ") + tempstring + std::string(" ]");
-                Print(110 + (i * division) - 16 +game.menuxoff, 140 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
+                Print(110 + (i * division) - 16 +game.menuxoff, 144 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
             }
             else
             {
                 tempstring = game.menuoptions[i];
                 tempstring = "[ " + tempstring + " ]";
                 //Draw it in gray
-                Print(110 + (i * division) - 16 +game.menuxoff, 140 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
+                Print(110 + (i * division) - 16 +game.menuxoff, 144 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
             }
           }
         }
         else
         {
-          if(game.nummenuoptions-i<=2){
+          if(game.nummenuoptions-i<=3){
             //Draw it normally
             if (game.menuoptionsactive[i])
             {
@@ -1349,12 +1380,12 @@ void Graphics::drawlevelmenu( Game& game, int cr, int cg, int cb, int division /
             //Draw it normally
             if (game.menuoptionsactive[i])
             {
-                Print(110 + (i * division) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i], cr, cg, cb);
+                Print(110 + (i * division) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i], cr, cg, cb);
             }
             else
             {
                 //Draw it in gray
-                Print(110 + (i * division) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i], 128, 128, 128);
+                Print(110 + (i * division) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i], 128, 128, 128);
             }
           }
         }
@@ -2587,10 +2618,10 @@ void Graphics::drawtowermap( mapclass& map )
     int temp;
     for (int j = 0; j < 30; j++)
     {
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < 41; i++)
         {
-            temp = map.tower.at(i, j, map.ypos);
-            if (temp > 0) drawtile3(i * 8, (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
+            temp = map.tower.at(i, j, map.xpos, map.ypos);
+            if (temp > 0) drawtile3((i * 8) - ((int)map.xpos % 8), (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
         }
     }
 }
@@ -2602,8 +2633,8 @@ void Graphics::drawtowermap_nobackground( mapclass& map )
     {
         for (int i = 0; i < 40; i++)
         {
-            temp = map.tower.at(i, j, map.ypos);
-            if (temp > 0 && temp<28) drawtile3(i * 8, (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
+            temp = map.tower.at(i, j, map.xpos, map.ypos);
+            if (temp > 0 && temp<28) drawtile3((i * 8) - ((int)map.xpos % 8), (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
         }
     }
 }
@@ -2632,7 +2663,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             if (obj.entities[i].size == 0)        // Sprites
             {
 				trinketcolset = false;
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp-map.xpos;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 setcol(obj.entities[i].colour, help);
                 setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
@@ -2660,7 +2691,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             else if (obj.entities[i].size == 1)
             {
                 // Tiles
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp-map.xpos;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
                 BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
@@ -2668,7 +2699,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             else if (obj.entities[i].size == 2)
             {
                 // Special: Moving platform, 4 tiles
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp-map.xpos;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x;
@@ -2693,7 +2724,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
-                prect.x = obj.entities[i].xp;
+                prect.x = obj.entities[i].xp-map.xpos;
                 prect.y = obj.entities[i].yp-map.ypos;
                 //A seperate index of colours, for simplicity
                 if(obj.entities[i].colour==1)
@@ -2707,11 +2738,11 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 4)    // Small pickups
             {
-                drawhuetile(obj.entities[i].xp, obj.entities[i].yp-map.ypos, obj.entities[i].tile, obj.entities[i].colour);
+                drawhuetile(obj.entities[i].xp-map.xpos, obj.entities[i].yp-map.ypos, obj.entities[i].tile, obj.entities[i].colour);
             }
             else if (obj.entities[i].size == 5)    //Horizontal Line
             {
-                line_rect.x = obj.entities[i].xp;
+                line_rect.x = obj.entities[i].xp-map.xpos;
                 line_rect.y = obj.entities[i].yp-map.ypos;
                 line_rect.w = obj.entities[i].w;
                 line_rect.h = 1;
@@ -2719,7 +2750,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 6)    //Vertical Line
             {
-                line_rect.x = obj.entities[i].xp;
+                line_rect.x = obj.entities[i].xp-map.xpos;
                 line_rect.y = obj.entities[i].yp-map.ypos;
                 line_rect.w = 1;
                 line_rect.h = obj.entities[i].h;
@@ -2727,11 +2758,11 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 7)    //Teleporter
             {
-                drawtele(obj.entities[i].xp, obj.entities[i].yp - map.ypos, obj.entities[i].drawframe, obj.entities[i].colour, help);
+                drawtele(obj.entities[i].xp - map.xpos, obj.entities[i].yp - map.ypos, obj.entities[i].drawframe, obj.entities[i].colour, help);
             }
             else if (obj.entities[i].size == 8)    // Special: Moving platform, 8 tiles
             {
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp - map.xpos;
                 tpoint.y = obj.entities[i].yp - map.ypos;
                 drawRect = sprites_rect;
                 drawRect.x += tpoint.x;
@@ -2759,7 +2790,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             {
 				//TODO elephant bug
                 setcol(obj.entities[i].colour, help);
-                drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp-map.ypos);
+                drawimagecol(3, obj.entities[i].xp-map.xpos, obj.entities[i].yp-map.ypos);
             }
         }
     }
@@ -2769,8 +2800,12 @@ void Graphics::drawtowerspikes( mapclass& map )
 {
     for (int i = 0; i < 40; i++)
     {
-        drawtile3(i * 8, -8+map.spikeleveltop, 9, map.colstate);
-        drawtile3(i * 8, 230-map.spikelevelbottom, 8, map.colstate);
+        drawtile3(i * 8, -8  + map.spikeleveltop,    9,  map.colstate);
+        drawtile3(i * 8, 230 - map.spikelevelbottom, 8,  map.colstate);
+    }
+    for (int i = 0; i < 30; i++) {
+        drawtile3(-8  + map.spikelevelleft,   i * 8,    10, map.colstate);
+        drawtile3(320 - map.spikelevelright,  i * 8,    11, map.colstate);
     }
 }
 
@@ -3372,14 +3407,19 @@ void Graphics::drawtelepart(int x, int y, int t, int c, UtilityClass& help)
 	BlitSurfaceColoured(tele[t], &telerect2, backBuffer, &telerect, ct);
 }
 
+Uint32 Graphics::getRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	return SDL_MapRGBA(backBuffer->format, b, g, r, a);
+}
+
 Uint32 Graphics::getRGB(Uint8 r, Uint8 g, Uint8 b)
 {
-	return SDL_MapRGB(backBuffer->format, b, g, r);
+	return SDL_MapRGBA(backBuffer->format, b, g, r, 255);
 }
 
 Uint32 Graphics::getBGR(Uint8 r, Uint8 g, Uint8 b)
 {
-	return SDL_MapRGB(backBuffer->format, r, g, b);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
 Uint32 Graphics::getRGB(Uint32 _col)
@@ -3389,7 +3429,7 @@ Uint32 Graphics::getRGB(Uint32 _col)
 
 Uint32 Graphics::RGBflip(Uint8  r, Uint8  g, Uint8  b)
 {
-	return SDL_MapRGB(backBuffer->format, r, g, b);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
 Uint32 Graphics::RGBf(int r, int g, int b)
@@ -3397,7 +3437,7 @@ Uint32 Graphics::RGBf(int r, int g, int b)
 	r = (r+128) / 3;
 	g = (g+128) / 3;
 	b = (b+128) / 3;
-	return SDL_MapRGB(backBuffer->format, r, g, b);
+	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
 void Graphics::setcolreal(Uint32 t)
@@ -3419,7 +3459,12 @@ void Graphics::drawforetile(int x, int y, int t)
             //frontbuffer.copyPixels(tiles[t], tiles_rect, tpoint);
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
+            if (tile >= 14 && tile <= 17) {
+                colourTransform thect = {.colour = ed.getonewaycol()};
+                BlitSurfaceTint(tiles[t], NULL, foregroundBuffer, &rect, thect);
+            } else {
+                BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
+            }
         }
 }
 
@@ -3430,7 +3475,12 @@ void Graphics::drawforetile2(int x, int y, int t)
             //frontbuffer.copyPixels(tiles2[t], tiles_rect, tpoint);
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
+            if (tile >= 14 && tile <= 17) {
+                colourTransform thect = {.colour = ed.getonewaycol()};
+                BlitSurfaceTint(tiles2[t], NULL, foregroundBuffer, &rect, thect);
+            } else {
+                BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
+            }
         }
 }
 
@@ -3478,7 +3528,9 @@ bool Graphics::onscreen(int t)
 
 void Graphics::reloadresources(bool fast /*= false*/) {
     grphx = GraphicsResources();
+    pre_fakepercent.store(81);
     grphx.init();
+    pre_fakepercent.store(90);
 
     images.clear();
     tiles.clear();
@@ -3489,10 +3541,15 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     flipsprites.clear();
     tele.clear();
 
+    pre_fakepercent.store(91);
     MakeTileArray();
+    pre_fakepercent.store(92);
     MakeSpriteArray();
+    pre_fakepercent.store(93);
     maketelearray();
+    pre_fakepercent.store(94);
     Makebfont();
+    pre_fakepercent.store(95);
 
     images.push_back(grphx.im_image0);
     images.push_back(grphx.im_image1);
@@ -3502,12 +3559,15 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     images.push_back(grphx.im_image5);
     images.push_back(grphx.im_image6);
 
+    pre_fakepercent.store(97);
+
     images.push_back(grphx.im_image7);
     images.push_back(grphx.im_image8);
     images.push_back(grphx.im_image9);
     images.push_back(grphx.im_image10);
     images.push_back(grphx.im_image11);
     images.push_back(grphx.im_image12);
+    pre_fakepercent.store(99);
 
     if (!fast) music.init();
 }

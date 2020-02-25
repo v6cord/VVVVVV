@@ -1,15 +1,18 @@
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
 	#include <SDL2/SDL.h>
 #else
 	#include <SDL.h>
 #endif
 #include <stdio.h>
 #include <utility>
+#include <physfs.h>
 #include "Music.h"
 #include "BinaryBlob.h"
 
 void musicclass::init()
 {
+        if (!loaded) soundSystem.init();
+
         soundTracks.clear();
         musicTracks.clear();
 
@@ -65,17 +68,17 @@ void musicclass::init()
 #endif
 
 	binaryBlob musicReadBlob;
-	if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
+        if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
 	{
 		mmmmmm = false;
-		usingmmmmmm=false;
+		if (!loaded) usingmmmmmm=false;
 		bool ohCrap = musicReadBlob.unPackBinary("vvvvvvmusic.vvv");
 		SDL_assert(ohCrap && "Music not found!");
 	}
 	else
 	{
 		mmmmmm = true;
-		usingmmmmmm = true;
+		if (!loaded) usingmmmmmm = true;
 		int index = musicReadBlob.getIndex("data/music/0levelcomplete.ogg");
 		SDL_RWops *rw = SDL_RWFromMem(musicReadBlob.getAddress(index), musicReadBlob.getSize(index));
 		musicTracks.push_back(std::move(MusicTrack( rw )));
@@ -224,6 +227,8 @@ void musicclass::init()
 	volume = 0.0f;
 	fadeoutqueuesong = -1;
 	dontquickfade = false;
+
+        loaded = true;
 }
 
 void musicclass::play(int t, int fadeintime /* = 3000*/)
@@ -260,7 +265,7 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 		{
 			// musicfade = 0;
 			currentsong = t;
-			if (currentsong == 0 || currentsong == 7)
+			if (currentsong == 0 || currentsong == 7 || currentsong == 16 || currentsong == 23)
 			{
 				// Level Complete theme, no fade in or repeat
 				// musicchannel = musicchan[currentsong].play(0);
@@ -438,7 +443,7 @@ void musicclass::processmusic()
 void musicclass::niceplay(int t)
 {
 	// important: do nothing if the correct song is playing!
-	if(currentsong!=t)
+	if((!mmmmmm && currentsong!=t) || (mmmmmm && usingmmmmmm && currentsong!=t) || (mmmmmm && !usingmmmmmm && currentsong!=t+16))
 	{
 		if(currentsong!=-1)
 		{
@@ -491,13 +496,25 @@ void musicclass::initefchannels()
 	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
 }
 
-void musicclass::playfile(const char* t, std::string track)
+void musicclass::playfile(const char* t, std::string track, bool internal /*= false*/)
 {
+    std::string temp;
+    if (internal) {
+        --t; // weird pointer bug?
+        temp = t;
+        temp += ".ogg";
+        t = temp.c_str();
+        if (PHYSFS_getRealDir(t) != PHYSFS_getRealDir("VVVVVV.png")) return;
+    }
+
     int channel = 0;
 
     auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
     if (inserted) {
-        pair->second = SoundTrack(t);
+        SoundTrack track(t);
+        pair->second.sound = track.sound;
+        pair->second.isValid = track.isValid;
+        track.isValid = false;
     }
 
     if (track != "") {

@@ -1,3 +1,5 @@
+#if !defined(NO_CUSTOM_LEVELS)
+
 #ifndef EDITOR_H
 #define EDITOR_H
 
@@ -8,6 +10,7 @@
 #include "Script.h"
 
 #define VCEVERSION 1
+#define IS_VCE_LEVEL (map.custommode && ed.vceversion > 0)
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 
@@ -102,6 +105,8 @@ public:
     edtower();
     int size = 40; // minimum size
     int scroll = 0; // scroll direction (0=The Tower, 1=Panic Room)
+    int width = 40;
+    int height = 30;
     growing_vector<int> tiles;
 
     void reset(void);
@@ -125,10 +130,20 @@ struct LevelMetaData
 };
 
 struct GhostInfo {
+    int rx; // game.roomx-100
+    int ry; // game.roomy-100
     int x; // .xp
     int y; // .yp
     int col; // .colour
     int frame; // .drawframe
+};
+
+struct Dimension {
+    std::string name;
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
 };
 
 extern growing_vector<edentities> edentity;
@@ -239,6 +254,8 @@ public:
     bool find_tower(int tower, int &rx, int &ry);
     int tower_size(int tower);
     int tower_scroll(int tower);
+    int tower_width(int tower);
+    int tower_height(int tower);
     bool intower(void);
     int tower_row(int rx, int ry);
 
@@ -385,6 +402,7 @@ public:
 
     growing_vector<edaltstate> altstates;
     growing_vector<edtower> towers;
+    growing_vector<customtrial> customtrials;
 
     int ypos; // tower mode y position
 
@@ -398,10 +416,16 @@ public:
     int gettowerplattile(int col);
 
     growing_vector<GhostInfo> ghosts;
+    std::vector<Dimension> dimensions; // no need to be a growing_vector
 
     int currentghosts = 0;
 
     void switchroomsinput();
+
+    Uint32 getonewaycol(int rx, int ry);
+    Uint32 getonewaycol();
+
+    int returneditoralpha = 0;
 };
 
 void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
@@ -432,3 +456,5 @@ void editorinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                  entityclass& obj, UtilityClass& help, musicclass& music);
 
 #endif /* EDITOR_H */
+
+#endif /* NO_CUSTOM_LEVELS */

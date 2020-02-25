@@ -4,9 +4,11 @@
 #include <string>
 #include <vector>
 #include "Game.h"
+#include "Enums.h"
 #include <map> // FIXME: I should feel very bad for using C++ -flibit
+#include <unordered_map>
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
 	#include <SDL2/SDL.h>
 #else
 	#include <SDL.h>
@@ -65,6 +67,8 @@ public:
 	bool isDown(growing_vector<SDL_GameControllerButton> buttons);
 	bool isDown(SDL_GameControllerButton button);
 	bool controllerButtonDown();
+	bool controllerWantsUp();
+	bool controllerWantsDown();
 	bool controllerWantsLeft(bool includeVert);
 	bool controllerWantsRight(bool includeVert);
 	bool controllerWantsRLeft(bool includeVert);
@@ -78,12 +82,18 @@ public:
 	bool textentrymode = false;
 	int keyentered, keybufferlen = 0;
 	bool pressedbackspace = false;
+        bool wantsOSKClose = false;
 	std::string keybuffer;
 
 	bool linealreadyemptykludge;
 
         SDL_Keycode fakekey;
         int fakekeytimer = -1;
+        std::unordered_map<SDL_FingerID, SDL_Keycode> finger_buttons;
+        int delayed_left_time = -1;
+        int delayed_right_time = -1;
+        float orig_x = 0;
+        input_type type = swipeinput;
 
 private:
 	std::map<SDL_JoystickID, SDL_GameController*> controllers;

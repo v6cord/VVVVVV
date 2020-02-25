@@ -70,6 +70,10 @@ Screen::Screen()
     badSignalEffect = false;
 
     glScreen = true;
+
+#ifdef __ANDROID__
+    ResizeScreen(-1, -1);
+#endif
 }
 
 void Screen::ResizeScreen(int x , int y)
@@ -131,6 +135,18 @@ void Screen::UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect )
         buffer = ApplyFilter(buffer);
     }
 
+    if(game.cutemode)
+    {
+        buffer = ApplyCuteFilter(buffer);
+    }
+	else if(game.allymode)
+    {
+        buffer = ApplyAllyFilter(buffer);
+    }
+    else if(game.misamode)
+    {
+        buffer = ApplyMisaFilter(buffer);
+    }
 
     FillRect(m_screen, 0x000);
     BlitSurfaceStandard(buffer,NULL,m_screen,rect);

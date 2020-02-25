@@ -1,10 +1,11 @@
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
 	#include <SDL2/SDL.h>
 #else
 	#include <SDL.h>
 #endif
 #include "SoundSystem.h"
 #include "FileSystemUtils.h"
+#include "Utilities.h"
 
 MusicTrack::MusicTrack(const char* fileName)
 {
@@ -63,11 +64,15 @@ SoundTrack::SoundTrack(SoundTrack&& moved) : sound(std::move(moved.sound)), isVa
 }
 
 SoundTrack::~SoundTrack() {
-    if (isValid) Mix_FreeChunk(sound);
+    //if (isValid) Mix_FreeChunk(sound);
     isValid = false;
 }
 
+#ifdef __ANDROID__
+void SoundSystem::init()
+#else
 SoundSystem::SoundSystem()
+#endif
 {
 	int audio_rate = 44100;
 	Uint16 audio_format = AUDIO_S16SYS;
@@ -80,6 +85,13 @@ SoundSystem::SoundSystem()
 		SDL_assert(0 && "Unable to initialize audio!");
 	}
 }
+
+#ifdef __ANDROID__
+SoundSystem::SoundSystem()
+#else
+void SoundSystem::init()
+#endif
+{}
 
 void SoundSystem::playMusic(MusicTrack* music)
 {

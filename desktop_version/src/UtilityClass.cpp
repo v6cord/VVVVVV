@@ -1,6 +1,6 @@
 #include "UtilityClass.h"
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
 	#include <SDL2/SDL.h>
 #else
 	#include <SDL.h>
@@ -64,8 +64,9 @@ const char *GCChar(SDL_GameControllerButton button)
 bool is_number(const std::string& s)
 {
     try {
-        (void)std::stod(s);
-        return true;
+        std::size_t pos;
+        (void)std::stod(s, &pos);
+        return pos == s.size();
     } catch (std::invalid_argument &) {
         return false;
     }
@@ -74,7 +75,7 @@ bool is_number(const std::string& s)
 int ss_toi( std::string _s )
 {
 	std::istringstream i(_s);
-	int x;
+	int x = 0;
 	i >> x;
 	return x;
 }
@@ -269,4 +270,22 @@ int relativepos(int original, std::string parsethis)
 void relativepos(int* original, std::string parsethis)
 {
     *original = relativepos(*original, parsethis);
+}
+
+bool parsebool(std::string parsethis)
+{
+    if (parsethis == "true"
+    || parsethis == "yes"
+    || parsethis == "y"
+    || parsethis == "on"
+    || parsethis == "enable")
+        return true;
+    else if (parsethis == "false"
+    || parsethis == "no"
+    || parsethis == "n"
+    || parsethis == "off"
+    || parsethis == "disable")
+        return false;
+
+    return ss_toi(parsethis);
 }

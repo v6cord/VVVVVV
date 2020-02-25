@@ -8,4 +8,8 @@ enum
 
 };
 
+enum input_type : int {
+    swipeinput, holdinput
+};
+
 #endif /* ENUMGAME_H */

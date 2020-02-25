@@ -1,4 +1,4 @@
-#ifndef __SWITCH__
+#if !defined(__SWITCH__) && !defined(__ANDROID__)
 
 #include "Network.h"
 

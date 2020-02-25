@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>
@@ -151,7 +151,7 @@ public:
     int door_right = 0;
     int door_up = 0;
     int door_down = 0;
-    int roomx, roomy, roomchangedir = 0;
+    int roomx, roomy, roomchangedir, roomchangevdir = 0;
     int prevroomx, prevroomy = 0;
     int temp, j, k = 0;
 
@@ -218,6 +218,7 @@ public:
     growing_vector<int> menuoptionsactive;
     int nummenuoptions, currentmenuoption = 0;
     std::string menuselection, currentmenuname, previousmenuname;
+    int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
 
     int menucountdown = 0;
@@ -417,7 +418,6 @@ public:
     growing_vector<SDL_Surface*> script_images;
     growing_vector<std::string> script_image_names;
 
-    growing_vector<customtrial> customtrials;
     bool incustomtrial = false;
     int currenttrial = 0;
 
@@ -428,6 +428,10 @@ public:
     bool quiet = false;
 
     growing_vector<std::string> onetimescripts;
+
+    bool cutemode = false;
+    bool allymode = false;
+    bool misamode = false;
 };
 
 extern Game game;

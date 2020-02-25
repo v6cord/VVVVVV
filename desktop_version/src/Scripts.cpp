@@ -6,6 +6,7 @@
 #endif
 
 #include "Script.h"
+#include "Map.h"
 
 #include <algorithm>
 
@@ -51,11 +52,13 @@ void scriptclass::load(std::string t)
         cscriptname = cscriptname.substr(0, dollar);
       }
 
-      nlabels = 0;
+      labels.clear();
       scriptname = t;
       scriptlength=0;
       position = 0;
       running = true;
+      if (passive)
+        scriptdelay = 0;
 
       int scriptstart=-1;
       int scriptend=-1;
@@ -70,7 +73,11 @@ void scriptclass::load(std::string t)
         }else if(scriptend==-1){
           //Find the end
           tstring=script.customscript[i];
-          tstring=tstring[tstring.size()-1];
+          if (tstring.size() > 0) {
+            tstring=tstring[tstring.size()-1];
+          } else {
+            tstring="";
+          }
           if(tstring==":"){
             scriptend=i;
           }
@@ -85,11 +92,11 @@ void scriptclass::load(std::string t)
         int customcutscenemode=0;
         for(int i=scriptstart; i<scriptend; i++){
           tokenize(script.customscript[i]);
-          if(words[0] == "say"){
+          if(words[0] == "say" || words[0] == "sayquiet"){
             customcutscenemode=1;
-          }else if(words[0] == "reply"){
+          }else if(words[0] == "reply" || words[0] == "replyquiet"){
             customcutscenemode=1;
-          }else if(words[0] == "nobars"){
+          }else if(words[0] == "noautobars"){
             customcutscenemode=0;
             break;
           }
@@ -261,7 +268,7 @@ void scriptclass::load(std::string t)
             if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4") speakermode=4;
             if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5") speakermode=5;
             if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6") speakermode=6;
-          }else if(words[0] == "say"){
+          }else if(words[0] == "say" || words[0] == "sayquiet"){
             //Speakers!
             if(words[2]=="terminal" || words[2]=="gray" || words[2]=="grey" || words[2]=="0") speakermode=0;
             if(words[2]=="cyan" || words[2]=="viridian" || words[2]=="player" || words[2]=="1") speakermode=1;
@@ -272,31 +279,31 @@ void scriptclass::load(std::string t)
             if(words[2]=="blue" || words[2]=="victoria" || words[2]=="6") speakermode=6;
             switch(speakermode){
               case 0:
-                if(squeakmode==0) add("squeak(terminal)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(terminal)");
                 add("text(gray,0,114,"+words[1]+")");
               break;
               case 1: //NOT THE PLAYER
-                if(squeakmode==0) add("squeak(cyan)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(cyan)");
                 add("text(cyan,0,0,"+words[1]+")");
               break;
               case 2:
-                if(squeakmode==0) add("squeak(purple)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(purple)");
                 add("text(purple,0,0,"+words[1]+")");
               break;
               case 3:
-                if(squeakmode==0) add("squeak(yellow)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(yellow)");
                 add("text(yellow,0,0,"+words[1]+")");
               break;
               case 4:
-                if(squeakmode==0) add("squeak(red)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(red)");
                 add("text(red,0,0,"+words[1]+")");
               break;
               case 5:
-                if(squeakmode==0) add("squeak(green)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(green)");
                 add("text(green,0,0,"+words[1]+")");
               break;
               case 6:
-                if(squeakmode==0) add("squeak(blue)");
+                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(blue)");
                 add("text(blue,0,0,"+words[1]+")");
               break;
             }
@@ -323,9 +330,9 @@ void scriptclass::load(std::string t)
             }
             add("speak_active");
             customtextmode=1;
-          }else if(words[0] == "reply"){
+          }else if(words[0] == "reply" || words[0] == "replyquiet"){
             //For this version, terminal only
-            if(squeakmode==0) add("squeak(player)");
+            if(squeakmode==0  && words[0] != "replyquiet") add("squeak(player)");
             add("text(cyan,0,0,"+words[1]+")");
 
             int ti = 1;
@@ -346,29 +353,38 @@ void scriptclass::load(std::string t)
             if(customtextmode==1){ add("endtext"); customtextmode=0;}
             if (words[0] == "setroomname"
             || words[0] == "drawtext"
-            || words[0] == "text"
-            || words[0] == "textcolor"
-            || words[0] == "textcolour"
             || words[0] == "createroomtext"
             || words[0] == "customactivityzone"
-            || words[0] == "customactivityzonergb") {
+            || ((words[0] == "addvar" || words[0] == "setvar" || words[0] == "getvar") && words[2] == "")
+            || ((words[0] == "ifvar" || words[0] == "if") && words[4] == "")) {
               // Don't parse the next line if it is a textbox-like line
               add(script.customscript[i]);
               i++;
+            } else if (words[0] == "text") {
+              // Ok, it's actually a text box with potentially more than one line
+              int lines;
+              if (words[5] != "" && words[6] != "")
+                // RGB version, 3 color args, 6 args
+                lines = ss_toi(words[6]);
+              else
+                // Predefined color version, 1 color arg, 4 args
+                lines = ss_toi(words[4]);
+              for (int c = 0; c < lines; c++) {
+                add(script.customscript[i]);
+                i++;
+              }
             }
-            add(script.customscript[i]);
+            if (IS_VCE_LEVEL) // Don't call one-command internal scripts twice in vanilla levels
+                add(script.customscript[i]);
 
             // Is this a label?
             if (words[0].length() > 2 && words[0].substr(0, 1) == "$" && words[0].substr(words[0].length()-1, 1) == "$") {
               std::string thislabel = words[0].substr(1, words[0].length()-2);
-              labelnames[nlabels] = thislabel;
 
               // Important - use `scriptlength` instead of `i`
               // The former is the internal script's position which is what we want,
               // and the latter is the simplified script's position
-              labelpositions[nlabels] = scriptlength;
-
-              nlabels++;
+              labels[thislabel] = scriptlength;
             }
           }
         }
@@ -379,18 +395,15 @@ void scriptclass::load(std::string t)
           add("untilbars()");
         }
 
-        if (!thelabel.empty()) {
-          int labelnum = getlabelnum(thelabel);
-          if (labelnum != -1)
-            position = labelpositions[labelnum];
-        }
+        if (!thelabel.empty() && labels.find(thelabel) != labels.end())
+          position = labels[thelabel];
       }
 
       return;
     }
 
     scriptlength=0;
-    nlabels = 0;
+    labels.clear();
     position = 0;
     running = true;
     scriptname = t;

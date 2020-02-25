@@ -4,6 +4,9 @@
 #include "Graphics.h"
 #include "Entity.h"
 #include "Map.h"
+#include "Script.h"
+
+#include "KeyPoll.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -236,6 +239,7 @@ void Game::init(void)
     currentmenuoption = 0;
     menuselection = "null";
     currentmenuname = "null";
+    current_credits_list_index = 0;
     menuxoff = 0;
     menuyoff = 0;
     menucountdown = 0;
@@ -412,6 +416,7 @@ void Game::init(void)
     superpatrons.push_back("Daniel Benmergui");
     superpatrons.push_back("David Pittman");
     superpatrons.push_back("Ian Bogost");
+    superpatrons.push_back("Ian Poma");
     superpatrons.push_back("Jaz McDougall");
     superpatrons.push_back("John Faulkenbury");
     superpatrons.push_back("Jonathan Whiting");
@@ -474,18 +479,22 @@ void Game::init(void)
     patrons.push_back("Timothy Bragan");
 
     /* CONTRIBUTORS.txt, again listed alphabetically (according to `sort`) by last name */
+    githubfriends.push_back("Matt \"Stelpjo\" Aaldenberg");
     githubfriends.push_back("Christoph B{hmwalder");
     githubfriends.push_back("Charlie Bruce");
     githubfriends.push_back("Brian Callahan");
     githubfriends.push_back("Dav999");
     githubfriends.push_back("Allison Fleischer");
     githubfriends.push_back("Daniel Lee");
+    githubfriends.push_back("Fredrik Ljungdahl");
+    githubfriends.push_back("Matt Penny");
     githubfriends.push_back("Elliott Saltar");
     githubfriends.push_back("Marvin Scholz");
     githubfriends.push_back("Keith Stellyes");
     githubfriends.push_back("Elijah Stone");
     githubfriends.push_back("Thomas S|nger");
     githubfriends.push_back("Info Teddy");
+    githubfriends.push_back("Alexandra Tildea");
     githubfriends.push_back("leo60228");
     githubfriends.push_back("Emmanuel Vadot");
     githubfriends.push_back("Remi Verschelde"); // TODO: Change to "Rémi" if/when UTF-8 support is added
@@ -1789,6 +1798,70 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
         case 334:
         case 335:
         case 336:
+        // In vanilla, there's only 300..336, but VCE adds a lot more
+        case 337:
+        case 338:
+        case 339:
+        case 340:
+        case 341:
+        case 342:
+        case 343:
+        case 344:
+        case 345:
+        case 346:
+        case 347:
+        case 348:
+        case 349:
+        case 350:
+        case 351:
+        case 352:
+        case 353:
+        case 354:
+        case 355:
+        case 356:
+        case 357:
+        case 358:
+        case 359:
+        case 360:
+        case 361:
+        case 362:
+        case 363:
+        case 364:
+        case 365:
+        case 366:
+        case 367:
+        case 368:
+        case 369:
+        case 370:
+        case 371:
+        case 372:
+        case 373:
+        case 374:
+        case 375:
+        case 376:
+        case 377:
+        case 378:
+        case 379:
+        case 380:
+        case 381:
+        case 382:
+        case 383:
+        case 384:
+        case 385:
+        case 386:
+        case 387:
+        case 388:
+        case 389:
+        case 390:
+        case 391:
+        case 392:
+        case 393:
+        case 394:
+        case 395:
+        case 396:
+        case 397:
+        case 398:
+        case 399:
             // WARNING: If updating this code, make sure to update the 2-frame-delay init fix in Logic.cpp!
             startscript = true;
             newscript="custom_"+customscript[state - 300];
@@ -1864,7 +1937,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             statedelay = 15;
             break;
         case 1011:
-            //Found a trinket!
+            //Found a crewmate!
             advancetext = true;
             state++;
             if (dwgfx.flipmode)
@@ -1876,15 +1949,15 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
 
                 if(int(map.customcrewmates-crewmates)==0)
                 {
-                    dwgfx.createtextbox("     All crewmates rescued!    ", 50, 135, 174, 174, 174);
+                    dwgfx.createtextbox("     All crewmates rescued!    ", 50, 65, 174, 174, 174);
                 }
                 else if(map.customcrewmates-crewmates==1)
                 {
-                    dwgfx.createtextbox("    " + help.number(int(map.customcrewmates-crewmates))+ " remains    ", 50, 135, 174, 174, 174);
+                    dwgfx.createtextbox("    " + help.number(int(map.customcrewmates-crewmates))+ " remains    ", 50, 65, 174, 174, 174);
                 }
                 else
                 {
-                    dwgfx.createtextbox("     " + help.number(int(map.customcrewmates-crewmates))+ " remain    ", 50, 135, 174, 174, 174);
+                    dwgfx.createtextbox("     " + help.number(int(map.customcrewmates-crewmates))+ " remain    ", 50, 65, 174, 174, 174);
                 }
                 dwgfx.textboxcenterx();
 
@@ -1911,6 +1984,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
                 dwgfx.textboxcenterx();
             }
             break;
+#if !defined(NO_CUSTOM_LEVELS)
         case 1013:
             dwgfx.textboxremove();
             hascontrol = true;
@@ -1941,6 +2015,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             }
             dwgfx.showcutscenebars = false;
             break;
+#endif
         case 1014:
             frames--;
             if(dwgfx.fademode == 1)	state++;
@@ -4361,6 +4436,10 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx, musicclass& music )
 			controllerSensitivity = atoi(pText);
 		}
 
+                if (pKey == "touchMode") {
+                        key.type = (input_type) atoi(pText);
+                }
+
     }
 
     if(fullscreen)
@@ -4585,6 +4664,10 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx, musicclass& _music )
 	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
 	dataNode->LinkEndChild( msg );
 
+	msg = new TiXmlElement( "touchMode" );
+	msg->LinkEndChild( new TiXmlText( tu.String(key.type).c_str()));
+	dataNode->LinkEndChild( msg );
+
     FILESYSTEM_saveTiXmlDocument("saves/unlock.vvv", &doc);
 }
 
@@ -4661,6 +4744,7 @@ void Game::deathsequence( mapclass& map, entityclass& obj, musicclass& music )
     obj.entities[i].invis = false;
     if (deathseq == 30)
     {
+        script.callback("on_death_start");
         if (nodeathmode)
         {
             music.fadeout();
@@ -5493,15 +5577,32 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 if (pText == NULL)
                     pText = "";
 
-                // Do we NEED the parentheses around `pText`? Whatever
-                std::string TextString = (pText);
+                std::string TextString = pText;
 
                 if (TextString.length()) {
                     const char* cStrName;
                     cStrName = varEl->Attribute("name");
-                    std::string name = (cStrName);
-                    script.variablenames.push_back(name);
-                    script.variablecontents.push_back(TextString);
+                    std::string name = cStrName;
+                    script.variables[name] = TextString;
+                }
+            }
+        }
+        else if (pKey == "callbacks")
+        {
+            for (TiXmlElement* callbackEl = pElem->FirstChildElement(); callbackEl; callbackEl = callbackEl->NextSiblingElement()) {
+                std::string pKey(callbackEl->Value());
+                const char* pText = callbackEl->GetText();
+
+                if (pText == NULL)
+                    pText = "";
+
+                std::string TextString = pText;
+
+                if (TextString.length()) {
+                    const char* cStrName;
+                    cStrName = callbackEl->Attribute("name");
+                    std::string name = cStrName;
+                    script.callbacks[name] = TextString;
                 }
             }
         }
@@ -5526,8 +5627,7 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
                 if (pText == NULL)
                     pText = "";
 
-                // Do we NEED the parentheses around `pText`? Whatever
-                std::string TextString = (pText);
+                std::string TextString = pText;
 
                 // No TextString.length() check because empty script names are valid
                 game.onetimescripts.push_back(TextString);
@@ -6599,14 +6699,30 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
     msgs->LinkEndChild( msg );
 
     msg = new TiXmlElement( "variables" );
-    for (std::size_t i = 0; i < script.variablenames.size(); i++) {
-        if (script.variablenames[i].empty())
+    for (auto variable : script.variables) {
+        if (variable.first.empty())
             continue;
 
+#define X(t, k, v, ii, s) if (variable.first == k) continue;
+        SPECIALVARS
+#undef X
+
         TiXmlElement *varEl = new TiXmlElement( "var" );
-        varEl->SetAttribute( "name", script.variablenames[i].c_str() );
-        varEl->LinkEndChild( new TiXmlText( script.variablecontents[i].c_str() )) ;
-        msg->LinkEndChild( varEl );
+        varEl->SetAttribute("name", variable.first.c_str());
+        varEl->LinkEndChild(new TiXmlText(variable.second.c_str()));
+        msg->LinkEndChild(varEl);
+    }
+    msgs->LinkEndChild(msg);
+
+    msg = new TiXmlElement("callbacks");
+    for (auto callback : script.callbacks) {
+        if (callback.second.empty())
+            continue;
+
+        TiXmlElement *callbackEl = new TiXmlElement("callback");
+        callbackEl->SetAttribute("name", callback.first.c_str());
+        callbackEl->LinkEndChild(new TiXmlText(callback.second.c_str()));
+        msg->LinkEndChild(callbackEl);
     }
     msgs->LinkEndChild(msg);
 
@@ -7031,7 +7147,7 @@ void Game::createmenu( std::string t )
 
     if (t == "mainmenu")
     {
-				#if defined(MAKEANDPLAY)
+			#if defined(MAKEANDPLAY)
 					menuoptions[0] = "player levels";
 					menuoptionsactive[0] = true;
 					menuoptions[1] = "graphic options";
@@ -7047,7 +7163,22 @@ void Game::createmenu( std::string t )
 					nummenuoptions = 6;
 					menuxoff = -16;
 					menuyoff = -10;
-				#elif !defined(MAKEANDPLAY)
+			#elif !defined(MAKEANDPLAY)
+				#if defined(NO_CUSTOM_LEVELS)
+					menuoptions[0] = "start game";
+					menuoptionsactive[0] = true;
+					menuoptions[1] = "graphic options";
+					menuoptionsactive[1] = true;
+					menuoptions[2] = "game options";
+					menuoptionsactive[2] = true;
+					menuoptions[3] = "view credits";
+					menuoptionsactive[3] = true;
+					menuoptions[4] = "quit game";
+					menuoptionsactive[4] = true;
+					nummenuoptions = 5;
+					menuxoff = -16;
+					menuyoff = -10;
+				#else
 					menuoptions[0] = "start game";
 					menuoptionsactive[0] = true;
 					menuoptions[1] = "player levels";
@@ -7066,9 +7197,12 @@ void Game::createmenu( std::string t )
 					menuxoff = -16;
 					menuyoff = -10;
 				#endif
+			#endif
     }
+#if !defined(NO_CUSTOM_LEVELS)
     else if (t == "playerworlds")
     {
+    #if !defined(NO_EDITOR)
         menuoptions[0] = "play a level";
         menuoptionsactive[0] = true;
         menuoptions[1] = "level editor";
@@ -7080,6 +7214,17 @@ void Game::createmenu( std::string t )
         nummenuoptions = 4;
         menuxoff = -30;
         menuyoff = -40;
+    #else
+        menuoptions[0] = "play a level";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "open level folder";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "back to menu";
+        menuoptionsactive[2] = true;
+        nummenuoptions = 2;
+        menuxoff = -30;
+        menuyoff = -40;
+    #endif
     }
     else if (t == "quickloadlevel")
     {
@@ -7108,14 +7253,6 @@ void Game::createmenu( std::string t )
         menuoptions[1] = "no, return";
         menuoptionsactive[1] = true;
         nummenuoptions = 2;
-        menuxoff = 0;
-        menuyoff = -20;
-    }
-    else if (t == "errornostart")
-    {
-        menuoptions[0] = "ok";
-        menuoptionsactive[0] = true;
-        nummenuoptions = 1;
         menuxoff = 0;
         menuyoff = -20;
     }
@@ -7170,6 +7307,17 @@ void Game::createmenu( std::string t )
                     tcount++;
                 }
             }
+            if(((levelpage*8+8) >8)){
+                menuoptions[tcount] = "previous page";
+                menuoptionsactive[tcount] = true;
+                tcount++;
+            }
+            else
+            {
+                menuoptions[tcount] = "last page";
+                menuoptionsactive[tcount] = true;
+                tcount++;
+            }
             if((size_t) ((levelpage*8)+8) <ed.ListOfMetaData.size())
             {
                 menuoptions[tcount] = "next page";
@@ -7190,6 +7338,37 @@ void Game::createmenu( std::string t )
             menuxoff = -90;
             menuyoff = 70-(tcount*10);
         }
+    }
+#endif
+    else if (t == "quickloadlevel")
+    {
+        menuoptions[0] = "continue from save";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "start from beginning";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "back to levels";
+        menuoptionsactive[2] = true;
+        nummenuoptions = 3;
+        menuxoff = -40;
+        menuyoff = -30;
+    }
+    else if (t == "youwannaquit")
+    {
+        menuoptions[0] = "yes, quit";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "no, return";
+        menuoptionsactive[1] = true;
+        nummenuoptions = 2;
+        menuxoff = 0;
+        menuyoff = -20;
+    }
+    else if (t == "errornostart")
+    {
+        menuoptions[0] = "ok";
+        menuoptionsactive[0] = true;
+        nummenuoptions = 1;
+        menuxoff = 0;
+        menuyoff = -20;
     }
     else if (t == "graphicoptions")
     {
@@ -7329,24 +7508,34 @@ void Game::createmenu( std::string t )
     {
         int tower = ed.get_tower(ed.levx, ed.levy);
 
-        nummenuoptions = 0;
-        menuoptions[nummenuoptions++] = "toggle tower";
+        nummenuoptions = -1;
+        menuoptions[++nummenuoptions] = "toggle tower";
         menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "toggle direct mode";
+        menuoptions[++nummenuoptions] = "toggle direct mode";
         menuoptionsactive[nummenuoptions] = true;
-        if (!tower) {
-            menuoptions[nummenuoptions++] = "change alt state";
-            menuoptionsactive[nummenuoptions] = true;
-            menuoptions[nummenuoptions++] = "change warp dir";
-            menuoptionsactive[nummenuoptions] = true;
-        }
-        menuoptions[nummenuoptions++] = "change roomname";
+        menuoptions[++nummenuoptions] = "change alt state";
+        menuoptionsactive[nummenuoptions] = !tower;
+        menuoptions[++nummenuoptions] = "change warp dir";
+        menuoptionsactive[nummenuoptions] = !tower;
+        menuoptions[++nummenuoptions] = "change roomname";
         menuoptionsactive[nummenuoptions] = true;
-        menuoptions[nummenuoptions++] = "first page";
+        menuoptions[++nummenuoptions] = "create dimension";
         menuoptionsactive[nummenuoptions] = true;
+        menuoptions[++nummenuoptions] = "first page";
+        menuoptionsactive[nummenuoptions] = true;
+        nummenuoptions++;
 
         menuxoff = -50;
         menuyoff = -20;
+    }
+    else if (t == "ed_dimensions") {
+        nummenuoptions = 2;
+        menuoptions[0] = "add new dimension";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "return to settings";
+        menuoptionsactive[1] = true;
+        menuxoff = -20;
+        menuyoff = 74;
     }
     else if (t == "ed_trials")
     {
@@ -7417,7 +7606,7 @@ void Game::createmenu( std::string t )
 					menuoptionsactive[0] = true;
 					menuoptions[1] = "game pad options";
 					menuoptionsactive[1] = true;
-                    menuoptions[2] = "flip mode";
+                                        menuoptions[2] = "flip mode";
 					menuoptionsactive[2] = true;
 					menuoptions[3] = "clear data";
 					menuoptionsactive[3] = true;
@@ -7475,10 +7664,16 @@ void Game::createmenu( std::string t )
 		menuoptionsactive[2] = true;
 		menuoptions[3] = "bind menu";
 		menuoptionsactive[3] = true;
-		menuoptions[4] = "return";
+                if (key.type == holdinput) {
+                    menuoptions[4] = "touch input (hold)";
+                } else if (key.type == swipeinput) {
+                    menuoptions[4] = "touch input (swipe)";
+                }
 		menuoptionsactive[4] = true;
-		nummenuoptions = 5;
-		menuxoff = -40;
+		menuoptions[5] = "return";
+		menuoptionsactive[5] = true;
+		nummenuoptions = 6;
+		menuxoff = -60;
 		menuyoff = 10;
 	}
     else if (t == "cleardatamenu")
@@ -7598,66 +7793,6 @@ void Game::createmenu( std::string t )
         menuyoff = 64;
     }
     else if (t == "credits3")
-    {
-        menuoptions[0] = "next page";
-        menuoptionsactive[0] = true;
-        menuoptions[1] = "return";
-        menuoptionsactive[1] = true;
-        nummenuoptions = 2;
-        menuxoff = 20;
-        menuyoff = 64;
-    }
-    else if (t == "credits4")
-    {
-        menuoptions[0] = "next page";
-        menuoptionsactive[0] = true;
-        menuoptions[1] = "return";
-        menuoptionsactive[1] = true;
-        nummenuoptions = 2;
-        menuxoff = 20;
-        menuyoff = 64;
-    }
-    else if (t == "credits5")
-    {
-        menuoptions[0] = "next page";
-        menuoptionsactive[0] = true;
-        menuoptions[1] = "return";
-        menuoptionsactive[1] = true;
-        nummenuoptions = 2;
-        menuxoff = 20;
-        menuyoff = 64;
-    }
-    else if (t == "credits6")
-    {
-        menuoptions[0] = "next page";
-        menuoptionsactive[0] = true;
-        menuoptions[1] = "return";
-        menuoptionsactive[1] = true;
-        nummenuoptions = 2;
-        menuxoff = 20;
-        menuyoff = 64;
-    }
-    else if (t == "credits7")
-    {
-        menuoptions[0] = "next page";
-        menuoptionsactive[0] = true;
-        menuoptions[1] = "return";
-        menuoptionsactive[1] = true;
-        nummenuoptions = 2;
-        menuxoff = 20;
-        menuyoff = 64;
-    }
-    else if (t == "credits8")
-    {
-        menuoptions[0] = "next page";
-        menuoptionsactive[0] = true;
-        menuoptions[1] = "return";
-        menuoptionsactive[1] = true;
-        nummenuoptions = 2;
-        menuxoff = 20;
-        menuyoff = 64;
-    }
-    else if (t == "credits9")
     {
         menuoptions[0] = "first page";
         menuoptionsactive[0] = true;

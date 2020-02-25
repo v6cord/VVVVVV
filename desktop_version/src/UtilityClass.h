@@ -1,7 +1,7 @@
 #ifndef UTILITYCLASS_H
 #define UTILITYCLASS_H
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>
@@ -62,6 +62,8 @@ int relativepos(int original, std::string parsethis);
 void relativepos(int* original, std::string parsethis);
 
 bool is_number(const std::string& s);
+
+bool parsebool(std::string parsethis);
 
 growing_vector<std::string> split(const std::string &s, char delim, growing_vector<std::string> &elems);
 

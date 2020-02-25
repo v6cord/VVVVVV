@@ -9,8 +9,8 @@
 
 #include "tinyxml.h"
 
-int FILESYSTEM_init(char *argvZero, char* assetsPath);
-int FILESYSTEM_initCore(char *argvZero, char* assetsPath);
+int FILESYSTEM_init(char *argvZero, char *baseDir, char* assetsPath);
+int FILESYSTEM_initCore(char *argvZero, char *baseDir, char* assetsPath);
 void FILESYSTEM_deinit();
 
 char *FILESYSTEM_getUserSaveDirectory();
@@ -32,5 +32,6 @@ bool FILESYSTEM_openDirectory(const char *dname);
 char* FILESYSTEM_realPath(const char *rel);
 char* FILESYSTEM_dirname(const char *file);
 char* FILESYSTEM_basename(const char *file);
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]);
 
 #endif /* FILESYSTEMUTILS_H */

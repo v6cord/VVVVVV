@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include "Game.h"
 #include "ScriptX.h"
 #include "Enums.h"
@@ -37,11 +38,11 @@ public:
 
     int getimage(Game& game, std::string n);
 
-    int getvar(std::string n);
-
     void setvar(std::string n, std::string c);
 
     void updatevars();
+
+    std::string evalvar(std::string t);
 
     std::string processvars(std::string t);
 
@@ -62,7 +63,7 @@ public:
     void hardreset(KeyPoll& key, Graphics& dwgfx, Game& game,mapclass& map,
                    entityclass& obj, UtilityClass& help, musicclass& music);
 
-    int getlabelnum(std::string thelabel);
+    void callback(std::string name);
 
     //Script contents
     growing_vector<std::string> commands;
@@ -96,12 +97,9 @@ public:
 
     bool loopdelay = false;
 
-    growing_vector<std::string> labelnames;
-    growing_vector<int> labelpositions;
-    int nlabels;
-
-    growing_vector<std::string> variablenames;
-    growing_vector<std::string> variablecontents;
+    std::unordered_map<std::string, int> labels; // key is name, value is position
+    std::unordered_map<std::string, std::string> variables; // key is name, value is contents
+    std::unordered_map<std::string, std::string> callbacks; // key is name, value is script
 
     std::vector<stackframe> callstack;
 
@@ -109,6 +107,28 @@ public:
     int getpixely = -1;
 
     growing_vector<scriptx> active_scripts;
+
+    bool killedviridian = false;
+    int killtimer = 0;
 };
+
+// Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)
+// Slow variables cannot be used in expressions, but are not automatically updated every frame
+#define SPECIALVARS \
+    X(INT_SPECIALVAR, "deaths", game.deathcounts, 0, 0) \
+    X(INT_SPECIALVAR, "player_x", obj.entities[obj.getplayer()].xp, -6, 0) \
+    X(INT_SPECIALVAR, "player_y", obj.entities[obj.getplayer()].yp, -2, 0) \
+    X(INT_SPECIALVAR, "player_onground", obj.entities[obj.getplayer()].onground, 0, 0) \
+    X(INT_SPECIALVAR, "player_onroof", obj.entities[obj.getplayer()].onroof, 0, 0) \
+    X(INT_SPECIALVAR, "gravitycontrol", game.gravitycontrol, 0, 0) \
+    X(INT_SPECIALVAR, "room_x", game.roomx, 100, 0) \
+    X(INT_SPECIALVAR, "room_y", game.roomy, 100, 0) \
+    X(INT_SPECIALVAR, "trinkets", game.trinkets, 0, 0) \
+    X(INT_SPECIALVAR, "crewmates", game.crewmates, 0, 0) \
+    X(INT_SPECIALVAR, "coins", game.coins, 0, 0) \
+    X(INT_SPECIALVAR, "battery_level", battery_level(), 0, 1) \
+    X(INT_SPECIALVAR, "on_battery", ((int) on_battery()), 0, 1) \
+    X(INT_SPECIALVAR, "unix_time", ((int) unix_time()), 0, 0) \
+    X(STR_SPECIALVAR, "hhmmss_time", hhmmss_time(), 0, 0)
 
 #endif /* SCRIPT_H */

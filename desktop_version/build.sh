@@ -2,6 +2,9 @@
 set -e
 
 cd "$(dirname "$0")"
+if [ ! -z "$VVVVVV_CE_ANDROID_BUILD" ]; then
+    exec ./android-build.sh
+fi
 
 CC="${CC:-cc}"
 if [ ! -z "$VVVVVV_CE_SWITCH_BUILD" ]; then

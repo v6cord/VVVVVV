@@ -1,4 +1,6 @@
 #include "KeyPoll.h"
+#include "Enums.h"
+#include "Graphics.h"
 #include <stdio.h>
 #include <string.h>
 #include <utf8/checked.h>
@@ -63,12 +65,14 @@ void KeyPoll::enabletextentry()
 	keybuffer="";
 	textentrymode = true;
 	SDL_StartTextInput();
+        wantsOSKClose = SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window);
 }
 
 void KeyPoll::disabletextentry()
 {
 	textentrymode = false;
 	SDL_StopTextInput();
+        wantsOSKClose = false;
 }
 
 static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
@@ -108,6 +112,22 @@ void KeyPoll::Poll()
         } else if (fakekeytimer > 0) {
             keymap[fakekey] = 1;
             --fakekeytimer;
+        } else if (fakekeytimer == -2) {
+            keymap[fakekey] = 1;
+        }
+
+        if (delayed_left_time == 0) {
+            delayed_left_time = -1;
+            keymap[SDLK_LEFT] = 1;
+        } else if (delayed_left_time > -10) {
+            --delayed_left_time;
+        }
+
+        if (delayed_right_time == 0) {
+            delayed_right_time = -1;
+            keymap[SDLK_RIGHT] = 1;
+        } else if (delayed_right_time > -10) {
+            --delayed_right_time;
         }
 
 	SDL_Event evt;
@@ -218,24 +238,111 @@ void KeyPoll::Poll()
 				middlebutton=0;
 			}
 		}
-                else if(!was_ctrl_click && evt.type == SDL_FINGERDOWN)
+                else if(game.gamestate == EDITORMODE && !was_ctrl_click && evt.type == SDL_FINGERDOWN)
                 {
                     leftbutton = 1;
                     realleftbutton = 1;
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }
-                else if(evt.type == SDL_FINGERMOTION)
+                else if(game.gamestate == EDITORMODE && evt.type == SDL_FINGERMOTION)
                 {
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
                 }
-                else if(!was_ctrl_click && evt.type == SDL_FINGERUP)
+                else if(game.gamestate == EDITORMODE && !was_ctrl_click && evt.type == SDL_FINGERUP)
                 {
                     leftbutton = 0;
                     realleftbutton = 0;
                     mx = evt.tfinger.x * 320;
                     my = evt.tfinger.y * 240;
+                }
+                else if(evt.type == SDL_FINGERDOWN)
+                {
+                    auto absx = evt.tfinger.x * 320;
+                    auto absy = evt.tfinger.y * 240;
+                    if (absx < 30 && absy < 30) {
+                        if (fakekeytimer > 0) {
+                            keymap[fakekey] = 0;
+                        }
+                        fakekey = SDLK_RETURN;
+                        fakekeytimer = 6;
+                    } else if (absx > 290 && absy < 30) {
+                        if (fakekeytimer > 0) {
+                            keymap[fakekey] = 0;
+                        }
+                        fakekey = SDLK_ESCAPE;
+                        fakekeytimer = 6;
+                    } else if (type == holdinput) {
+                        if (evt.tfinger.x < 0.5) {
+                            if (keymap[SDLK_RIGHT] || delayed_right_time > -3) {
+                                keymap[SDLK_v] = 1;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                                if (delayed_right_time > -3) {
+                                    keymap[SDLK_RIGHT] = 0;
+                                }
+                                delayed_right_time = 0;
+                            } else {
+                                delayed_left_time = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
+                            }
+                        } else {
+                            if (keymap[SDLK_LEFT] || delayed_left_time > -3) {
+                                keymap[SDLK_v] = 1;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                                if (delayed_left_time > -3) {
+                                    keymap[SDLK_LEFT] = 0;
+                                }
+                                delayed_left_time = 0;
+                            } else {
+                                delayed_right_time = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
+                            }
+                        }
+                    } else if (type == swipeinput && evt.tfinger.x > 0.5) {
+                        keymap[SDLK_v] = 1;
+                        finger_buttons[evt.tfinger.fingerId] = SDLK_v;
+                    } else if (type == swipeinput) {
+                        orig_x = evt.tfinger.x;
+                    }
+                }
+                else if(evt.type == SDL_FINGERMOTION)
+                {
+                    if (type == swipeinput) {
+                        bool flip = false;
+                        auto iter = finger_buttons.find(evt.tfinger.fingerId);
+                        if (iter != finger_buttons.end()) {
+                            if (iter->second == SDLK_v) flip = true;
+                        }
+                        if (!flip) {
+                            float dist = evt.tfinger.x - orig_x;
+                            if (dist < -0.05) orig_x = evt.tfinger.x + 0.01;
+                            else if (dist > 0.05) orig_x = evt.tfinger.x - 0.01;
+
+                            if (dist > 0) {
+                                keymap[SDLK_RIGHT] = 1;
+                                keymap[SDLK_LEFT] = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_RIGHT;
+                            } else if (dist < 0) {
+                                keymap[SDLK_LEFT] = 1;
+                                keymap[SDLK_RIGHT] = 0;
+                                finger_buttons[evt.tfinger.fingerId] = SDLK_LEFT;
+                            }
+                        }
+                    }
+                }
+                else if(evt.type == SDL_FINGERUP)
+                {
+                    auto iter = finger_buttons.find(evt.tfinger.fingerId);
+                    if (iter != finger_buttons.end()) {
+                        keymap[iter->second] = 0;
+                        if (iter->second == SDLK_LEFT) {
+                            delayed_left_time = -10;
+                        } else if (iter->second == SDLK_RIGHT) {
+                            delayed_right_time = -10;
+                        }
+                        finger_buttons.erase(iter);
+                    }
                 }
 
 		/* Controller Input */
@@ -367,9 +474,9 @@ void KeyPoll::Poll()
 			quitProgram = true;
 		}
 	}
-#ifdef __SWITCH__
         if (textentrymode)
         {
+#ifdef __SWITCH__
             char buf[512] = {0};
             SwkbdConfig conf;
             swkbdCreate(&conf, 0);
@@ -378,9 +485,24 @@ void KeyPoll::Poll()
             swkbdShow(&conf, buf, sizeof(buf));
             swkbdClose(&conf);
             keybuffer = buf;
-            textentrymode = false;
-        }
+            if (fakekeytimer > 0) {
+                keymap[fakekey] = 0;
+            }
+            fakekey = SDLK_RETURN;
+            fakekeytimer = 6;
+            textentrymode = 0;
+#else
+            //if (wantsOSKClose && !SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window)) {
+            if (SDL_HasScreenKeyboardSupport() && !SDL_IsScreenKeyboardShown(graphics.screenbuffer->m_window)) {
+                if (fakekeytimer > 0) {
+                    keymap[fakekey] = 0;
+                }
+                fakekey = SDLK_RETURN;
+                fakekeytimer = 6;
+                textentrymode = 0;
+            }
 #endif
+        }
 }
 
 bool KeyPoll::isDown(SDL_Keycode key)
@@ -441,6 +563,16 @@ bool KeyPoll::controllerWantsRight(bool includeVert)
 			(	includeVert &&
 				(	buttonmap[SDL_CONTROLLER_BUTTON_DPAD_DOWN] ||
 					yVel > 0	)	)	);
+}
+
+bool KeyPoll::controllerWantsUp()
+{
+	return (buttonmap[SDL_CONTROLLER_BUTTON_DPAD_UP] || yVel < 0);
+}
+
+bool KeyPoll::controllerWantsDown()
+{
+	return (buttonmap[SDL_CONTROLLER_BUTTON_DPAD_DOWN] || yVel > 0);
 }
 
 bool KeyPoll::controllerWantsRLeft(bool includeVert)

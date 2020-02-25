@@ -2,7 +2,9 @@
 
 #include "MakeAndPlay.h"
 
-extern editorclass ed;
+#if !defined(NO_CUSTOM_LEVELS)
+	extern editorclass ed;
+#endif
 
 mapclass::mapclass()
 {
@@ -15,6 +17,8 @@ mapclass::mapclass()
 	colsuperstate = 0;
 	spikeleveltop = 0;
 	spikelevelbottom = 0;
+	spikelevelleft = 0;
+	spikelevelright = 0;
 	warpx = false;
 	warpy = false;
 	extrarow = 0;
@@ -725,7 +729,7 @@ void mapclass::settowercolour(int t)
 bool mapclass::spikecollide(int x, int y)
 {
 	if (invincibility) return false;
-	if (tower.at(x,y,0)>= 6 && tower.at(x,y,0) <= 11) return true;
+	if (tower.at(x,y,0,0)>= 6 && tower.at(x,y,0,0) <= 11) return true;
 	return false;
 }
 
@@ -733,10 +737,10 @@ bool mapclass::collide(int x, int y)
 {
 	if (towermode)
 	{
-		if (tower.at(x, y, 0) >= 12 && tower.at(x, y, 0) <= 27) return true;
+		if (tower.at(x, y, 0, 0) >= 12 && tower.at(x, y, 0, 0) <= 27) return true;
 		if (invincibility)
 		{
-			if (tower.at(x, y, 0) >= 6 && tower.at(x, y, 0) <= 11) return true;
+			if (tower.at(x, y, 0, 0) >= 6 && tower.at(x, y, 0, 0) <= 11) return true;
 		}
 	}
 	else if (tileset == 2)
@@ -803,10 +807,10 @@ void mapclass::settile(int xp, int yp, int t)
 
 void mapclass::settile_special(int x, int y, int tile) {
 	if (towermode || tileset == 2 || tile != 10) // There's nothing behind 1x1 quicksand
-		map.settile(x, y, tile);
+		settile(x, y, tile);
 	else
 		// Don't change the `tile` var, we createentity by checking `tile` later
-		map.settile(x, y, 0);
+		settile(x, y, 0);
 	graphics.foregrounddrawn = false;
 
 	// Towers don't use blocks for spikes, and you can't place one-ways / 1x1 quicksand with tiles
@@ -858,7 +862,7 @@ void mapclass::settile_special(int x, int y, int tile) {
 	// This is all copy-pasted from Map.cpp
 
 	// Spikes
-	if (map.tileset == 0) {
+	if (tileset == 0) {
 		if (tile == 6 || tile == 8)
 			// Sticking up
 			obj.createblock(DAMAGE, 8*x, 8*y + 4, 8, 4);
@@ -868,7 +872,7 @@ void mapclass::settile_special(int x, int y, int tile) {
 		if (tile == 49 || tile == 50)
 			// Left or right
 			obj.createblock(DAMAGE, 8*x, 8*y + 3, 8, 2);
-	} else if (map.tileset == 1) {
+	} else if (tileset == 1) {
 		if ((tile >= 63 && tile <= 74) || (tile >= 6 && tile <= 9)) {
 			// Correct the {odd, even}-type of the tile, this will be un-corrected later
 			if (tile < 10)
@@ -979,10 +983,10 @@ void mapclass::showship()
 // Centers the tower camera on the player position
 void mapclass::realign_tower() {
 	int i = obj.getplayer();
+	xpos = obj.entities[i].xp - 160;
 	ypos = obj.entities[i].yp - 120;
-
-	if (ypos < 0)
-		ypos = 0;
+	if (xpos < 0) xpos = 0;
+	if (ypos < 0) ypos = 0;
 	bypos = ypos / 2;
 }
 
@@ -1064,12 +1068,13 @@ int mapclass::tower_row(int rx, int ry) {
 	return 0;
 }
 
-int mapclass::get_tower_offset(int tower, int ix, int iy, int *ry, int ypos) {
+int mapclass::get_tower_offset(int tower, int ix, int iy, int *rx, int *ry, int ypos) {
 	if (tower != get_tower(ix, iy))
 		return -1;
 
 	int rpos = tower_row(ix, iy) * 8;
 	if (rpos >= 0 && ypos >= rpos && ypos < rpos + 240) {
+		*rx += (ix - (*rx));
 		*ry += (iy - (*ry));
 		return ypos - rpos;
 	}
@@ -1094,6 +1099,8 @@ int mapclass::tower_connection(int *rx, int *ry, int ypos) {
 	   position. */
 	int ymin = 100;
 	int ymax = 100 + ed.maxheight - 1;
+	int xmin = 100;
+	int xmax = 100 + ed.maxwidth - 1;
 	int tower = get_tower(ix, iy);
 	if (!custommode) {
 		ymax = 119;
@@ -1101,15 +1108,20 @@ int mapclass::tower_connection(int *rx, int *ry, int ypos) {
 			ymin = 52;
 			ymax = 54;
 		}
+		xmin = rix;
+		xmax = rix;
 	}
 
-	for (iy = riy; iy >= ymin; iy--)
-		if ((rpos = get_tower_offset(tower, ix, iy, ry, ypos)) >= 0)
-			return rpos;
+	// Scan x from 0..max, but scan y based on closeness to current y
+	for (ix = xmin; ix <= xmax; ix++) {
+		for (iy = riy; iy >= ymin; iy--)
+			if ((rpos = get_tower_offset(tower, ix, iy, rx, ry, ypos)) >= 0)
+				return rpos;
 
-	for (iy = riy + 1; iy <= ymax; iy++)
-		if ((rpos = get_tower_offset(tower, ix, iy, ry, ypos)) >= 0)
-			return rpos;
+		for (iy = riy + 1; iy <= ymax; iy++)
+			if ((rpos = get_tower_offset(tower, ix, iy, rx, ry, ypos)) >= 0)
+				return rpos;
+	}
 
 	// We failed to find an exit boundary!
 	return -1;
@@ -1206,10 +1218,49 @@ void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, G
 		realign_tower();
 }
 
+// Set map dimension to one containing this room if current doesn't
+// Set to -1 if no dimension holds this room.
+void mapclass::gotodimroom(int rx, int ry) {
+#ifdef NO_CUSTOM_LEVELS
+    return; // do nothing
+#else
+    if (!custommode || dimension < 0)
+        return;
+
+    // Dimensions doesn't use 100-indexing
+    int ox = rx - 100;
+    int oy = ry - 100;
+
+    // First, check if the dimension we were in last is still valid
+    int ix = ox;
+    int iy = oy;
+    dimensionwraparound(&ix, &iy);
+    if (ix == ox && iy == oy)
+        return;
+
+    // Otherwise, find one that is
+    Dimension *dim;
+    for (int i = 0; (dim = getdimension(i)); i++) {
+        dimension = i;
+        ix = ox;
+        iy = oy;
+        dimensionwraparound(&ix, &iy);
+        if (ix == ox && iy == oy) {
+            ed.generatecustomminimap(graphics, map);
+            return;
+        }
+    }
+
+    dimension = -1;
+
+    ed.generatecustomminimap(graphics, map);
+#endif
+}
+
 void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
 {
-	ed.ghosts.clear(); // Let's make sure to clear the ghosts
-	FillRect(dwgfx.backBuffer,0x00000);
+	if (dwgfx.noclear)
+		FillRect(dwgfx.backBuffer,0x00000);
 
 	//First, destroy the current room
 	obj.removeallblocks();
@@ -1255,6 +1306,14 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	{
 		game.roomchangedir = 1;
 	}
+	if (ry < game.roomy)
+	{
+		game.roomchangevdir = 0;
+	}
+	else
+	{
+		game.roomchangevdir = 1;
+	}
 
 	if (finalmode)
 	{
@@ -1292,19 +1351,25 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 			if (game.roomx == 46 && game.roomy == 54) music.niceplay(15); //Final level remix
 		}
 	}
+#if !defined(NO_CUSTOM_LEVELS)
 	else if (custommode)
 	{
 		// Get a positive modulo
 		int ix = rx - 100;
 		int iy = ry - 100;
+		// Are we in a dimension?
+		// Do this before we convert it back to 100-indexing
+		if (dimension >= 0)
+			dimensionwraparound(&ix, &iy);
 		int ih = ed.mapheight;
 		int iw = ed.mapwidth;
-		ix = (iw + (ix % iw)) % iw;
-		iy = (ih + (iy % ih)) % ih;
+		ix = mod(ix, iw);
+		iy = mod(iy, ih);
 		game.roomx = ix + 100;
 		game.roomy = iy + 100;
 		game.roomchange = true;
 	}
+#endif
 	else
 	{
 	game.roomx = rx;
@@ -1529,6 +1594,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
 	towermode = false;
 	ypos = 0;
+	xpos = 0;
 	extrarow = 0;
 
 	//Custom stuff for warplines
@@ -1799,6 +1865,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 	}
 		break;
 					#endif
+#if !defined(NO_CUSTOM_LEVELS)
 	case 12: //Custom level
 		int curlevel=(rx-100)+((ry-100)*ed.maxwidth);
 		game.customcol=ed.getlevelcol(curlevel)+1;
@@ -1809,6 +1876,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			tower.minitowermode = true;
 			minitowersize = ed.tower_size(newtower);
 			scrolldir = ed.tower_scroll(newtower);
+			tower.width  = ed.tower_width(newtower);
+			tower.height = ed.tower_height(newtower);
 
 			extrarow = 0;
 
@@ -1990,7 +2059,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				obj.createentity(game, ex, ey, 3);
 				break;
 			case 5: // Flip tokens
-				obj.createentity(game, ex, ey, 5, edentity[edi].p1, edentity[edi].p2);
+				obj.createentity(game, ex, ey, 5, edentity[edi].p1);
 				break;
 			case 8: // Coins
 				obj.createentity(game, ex, ey, 8, ed.findcoin(edi));
@@ -2029,15 +2098,22 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				roomtext[roomtextnumlines] = edentity[edi].scriptname;
 				roomtextnumlines++;
 				break;
-			case 18: // Terminals
+			case 18: { // Terminals
 				obj.customscript = edentity[edi].scriptname;
 
 				if (!edentity[edi].p1) // Unflipped
 					ey += 8;
 
 				obj.createentity(game, ex, ey, 20, !edentity[edi].p1);
-				obj.createblock(5, ex-8, ey, 20, 16, 35);
+				int ew = 16;
+				if (!IS_VCE_LEVEL) {
+					// Misalign the activity zone exactly like it's misaligned in vanilla
+					ex -= 8; // only modify ex here because it's also used in the createentity above
+					ew += 4;
+				}
+				obj.createblock(5, ex, ey, ew, 16, 35);
 				break;
+			}
 			case 19: // Script Box
 				game.customscript[tempscriptbox]=edentity[edi].scriptname;
 				if (edentity[edi].onetime)
@@ -2092,6 +2168,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		customcrewmates=ed.numcrewmates;
 
 		break;
+#endif
 	}
 	//The room's loaded: now we fill out damage blocks based on the tiles.
 	if (towermode)
@@ -2397,14 +2474,77 @@ void mapclass::updatetowerentcol(int col)
     }
 }
 
+Dimension* mapclass::getdimension(int index)
+{
+    // Return a pointer to the given dimension
+    // Does important error checking to make sure both the index and the dimension are valid!
+    // Make sure to check for NULL
+    //
+    // See below for version that automatically uses map.dimension
+    if (index < 0 || index >= (int) ed.dimensions.size())
+        return NULL;
+
+    Dimension* dim = &ed.dimensions[index];
+
+    // Dimensions cannot overlap themselves
+    // and they have to have positive dimensions
+    if (dim->w > ed.mapwidth || dim->h > ed.mapheight
+    || dim->w <= 0 || dim->h <= 0)
+        return NULL;
+
+    return dim;
+}
+
+// This is the above, but it automatically uses map.dimension
+Dimension* mapclass::getdimension()
+{
+    return getdimension(dimension);
+}
+
+void mapclass::dimensionwraparound(int* rx, int* ry)
+{
+    // If rx/ry is outside the current dimension, wrap it around!
+    // rx/ry here is 0-indexed
+    // NOTE: Depends on game.roomchangedir and game.roomchangevdir
+
+    Dimension* dim = getdimension();
+    if (dim == NULL)
+        return;
+
+    // If we're negative from the dimension's point of view, correct for it
+    if (*rx < dim->x)
+        *rx += ed.mapwidth;
+    if (*ry < dim->y)
+        *ry += ed.mapheight;
+
+    // Correct for the space in between the ends of the dimension depending on which direction we're going
+    if (*rx > dim->w && game.roomchangedir == 0)
+        *rx -= ed.mapwidth - dim->w;
+    if (*ry > dim->h && game.roomchangevdir == 0)
+        *ry -= ed.mapheight - dim->h;
+
+    // Translate to dimension's coordinate space
+    *rx -= dim->x;
+    *ry -= dim->y;
+
+    // Wrap around
+    *rx = (*rx) % dim->w;
+    *ry = (*ry) % dim->h;
+
+    // Translate back to normal coordinate space
+    *rx += dim->x;
+    *ry += dim->y;
+}
+
 void twoframedelayfix()
 {
     // Kludge to remove 2-frame-delay when loading init scripts for a room
-    if (map.custommode && ed.vceversion > 0 && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
+    if (IS_VCE_LEVEL && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
         game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
         obj.kludgeonetimescript = true;
         obj.removetrigger(obj.activetrigger);
         game.state = 0;
+        script.callstack.clear();
         script.load(game.newscript);
     }
 }

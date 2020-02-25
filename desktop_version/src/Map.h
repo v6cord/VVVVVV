@@ -14,7 +14,9 @@
 #include "Music.h"
 #include "editor.h"
 
-extern editorclass ed;
+#if !defined(NO_CUSTOM_LEVELS)
+	extern editorclass ed;
+#endif
 
 void twoframedelayfix();
 
@@ -83,7 +85,7 @@ public:
     void resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
     int tower_row(int rx, int ry);
-    int get_tower_offset(int tower, int ix, int iy, int *ry, int ypos);
+    int get_tower_offset(int tower, int ix, int iy, int *rx, int *ry, int ypos);
     int tower_connection(int *rx, int *ry, int ypos);
     int get_tower(int rx, int ry);
     int entering_tower(int rx, int ry, int *entry);
@@ -91,11 +93,16 @@ public:
     void custom_warpto(int ent);
     void warpto(int rx, int ry , int t, int tx, int ty,  Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
 
+    void gotodimroom(int rx, int ry);
     void gotoroom(int rx, int ry, Graphics& dwgfx,  Game& game, entityclass& obj, musicclass& music);
 
     std::string currentarea(int t);
 
     void loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music);
+
+    Dimension* getdimension(int index);
+    Dimension* getdimension();
+    void dimensionwraparound(int* rx, int* ry);
 
 
     growing_vector <int> roomdeaths;
@@ -121,6 +128,7 @@ public:
     //Special tower stuff
     bool towermode = false;
     float ypos = 0.0;
+    float xpos = 0.0;
     int bypos = 0;
     int cameramode = 0;
     int cameraseek, cameraseekframe = 0;
@@ -135,7 +143,10 @@ public:
     int towercol = 0;
     int colstate, colstatedelay = 0;
     int colsuperstate = 0;
-    int spikeleveltop, spikelevelbottom = 0;
+    int spikeleveltop = 0;
+    int spikelevelbottom = 0;
+    int spikelevelleft = 0;
+    int spikelevelright = 0;
     bool tdrawback = false;
     int bscroll = 0;
     //final level navigation
@@ -149,6 +160,7 @@ public:
     bool custommodeforreal = false;
     int customx, customy = 0;
     int customwidth, customheight = 0;
+    int custommmstartx, custommmstarty = 0;
     int customtrinkets = 0;
     int customcoins=0;
     int customcrewmates = 0;
@@ -199,6 +211,8 @@ public:
     bool nofog = false;
 
     void updatetowerentcol(int col);
+
+    int dimension = -1;
 };
 
 extern mapclass map;

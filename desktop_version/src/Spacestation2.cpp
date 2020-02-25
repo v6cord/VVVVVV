@@ -18,7 +18,7 @@ growing_vector<std::string> spacestation2class::loadlevel(int rx, int ry, Game& 
 
 	switch(t)
 	{
-			#if !defined(MAKEANDPLAY)
+#if !defined(MAKEANDPLAY)
 	case rn(50,50):
 
 		tmap.push_back("492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492,492");
@@ -3213,7 +3213,13 @@ growing_vector<std::string> spacestation2class::loadlevel(int rx, int ry, Game& 
 		roomname = "Outer Space";
 		obj.fatal_bottom();
 		break;
-					#endif
+#else
+	default:
+		for (int j = 0; j < 30; j++)
+		{
+			tmap.push_back("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+		}
+#endif
 	}
 
 	return tmap;

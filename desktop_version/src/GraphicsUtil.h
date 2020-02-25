@@ -1,7 +1,7 @@
 #ifndef GRAPHICSUTIL_H
 #define GRAPHICSUTIL_H
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>
@@ -30,6 +30,8 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
 
 void BlitSurfaceColoured( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, colourTransform& ct );
 
+void BlitSurfaceTint( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, colourTransform& ct );
+
 void FillRect( SDL_Surface* surface, const int x, const int y, const int w, const int h, const int r, int g, int b );
 
 void FillRect( SDL_Surface* surface, const int r, int g, int b );
@@ -52,6 +54,9 @@ SDL_Surface * FlipSurfaceHorizontal(SDL_Surface* _src);
 SDL_Surface * FlipSurfaceVerticle(SDL_Surface* _src);
 SDL_Surface * ScaleSurfaceSlow( SDL_Surface *_surface, int Width, int Height );
 SDL_Surface* ApplyFilter( SDL_Surface* _src );
+SDL_Surface* ApplyCuteFilter( SDL_Surface* _src );
+SDL_Surface* ApplyAllyFilter( SDL_Surface* _src );
+SDL_Surface* ApplyMisaFilter( SDL_Surface* _src );
 
 struct RgbColor {
     unsigned char r;

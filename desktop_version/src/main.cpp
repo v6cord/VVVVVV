@@ -1,4 +1,4 @@
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__ANDROID__)
 #include <SDL2/SDL.h>
 #else
 #include <SDL.h>
@@ -49,7 +49,7 @@
 #include <mingw.thread.h>
 #include <mingw.condition_variable.h>
 #include <mingw.mutex.h>
-#else
+#elif !defined(__APPLE__)
 #include <thread>
 #include <condition_variable>
 #include <mutex>
@@ -61,8 +61,10 @@
 using namespace std::literals::chrono_literals;
 
 scriptclass script;
-growing_vector<edentities> edentity;
-editorclass ed;
+#if !defined(NO_CUSTOM_LEVELS)
+	growing_vector<edentities> edentity;
+	editorclass ed;
+#endif
 
 bool startinplaytest = false;
 bool savefileplaytest = false;
@@ -89,17 +91,16 @@ FILE* logger;
 
 int main(int argc, char *argv[])
 {
+    argv = FILESYSTEM_argv(argc, &argc, argv);
+
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
-#if defined(__APPLE__) || defined(__SWITCH__)
-    bool syslog = true;
-#else
-    bool syslog = false;
-#endif
+    bool syslog = log_default();
 
-    char* assets = NULL;
     bool playtestmount = false;
+    char* baseDir = NULL;
+    char* assetsPath = NULL;
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
@@ -120,7 +121,7 @@ int main(int argc, char *argv[])
         if (strcmp(argv[i], "--no-syslog") == 0) {
             syslog = false;
         }
-        if ((std::string(argv[i]) == "--playing") || (std::string(argv[i]) == "-p")) {
+        if ((std::string(argv[i]) == "-playing") || (std::string(argv[i]) == "-p")) {
             if (i + 1 < argc) {
                 startinplaytest = true;
                 i++;
@@ -133,60 +134,45 @@ int main(int argc, char *argv[])
                     playtestname.append(std::string(".vvvvvv"));
                 }
             } else {
-                printf("--playing option requires one argument.\n");
+                printf("-playing option requires one argument.\n");
                 return 1;
             }
         }
-        if (strcmp(argv[i], "--playx") == 0 ||
-                strcmp(argv[i], "--playy") == 0 ||
-                strcmp(argv[i], "--playrx") == 0 ||
-                strcmp(argv[i], "--playry") == 0 ||
-                strcmp(argv[i], "--playgc") == 0 ||
-                strcmp(argv[i], "--playmusic") == 0) {
+        if (strcmp(argv[i], "-playx") == 0 ||
+                strcmp(argv[i], "-playy") == 0 ||
+                strcmp(argv[i], "-playrx") == 0 ||
+                strcmp(argv[i], "-playry") == 0 ||
+                strcmp(argv[i], "-playgc") == 0 ||
+                strcmp(argv[i], "-playmusic") == 0) {
             if (i + 1 < argc) {
                 savefileplaytest = true;
                 auto v = std::atoi(argv[i+1]);
-                if (strcmp(argv[i], "--playx") == 0) savex = v;
-                else if (strcmp(argv[i], "--playy") == 0) savey = v;
-                else if (strcmp(argv[i], "--playrx") == 0) saverx = v;
-                else if (strcmp(argv[i], "--playry") == 0) savery = v;
-                else if (strcmp(argv[i], "--playgc") == 0) savegc = v;
-                else if (strcmp(argv[i], "--playmusic") == 0) savemusic = v;
+                if (strcmp(argv[i], "-playx") == 0) savex = v;
+                else if (strcmp(argv[i], "-playy") == 0) savey = v;
+                else if (strcmp(argv[i], "-playrx") == 0) saverx = v;
+                else if (strcmp(argv[i], "-playry") == 0) savery = v;
+                else if (strcmp(argv[i], "-playgc") == 0) savegc = v;
+                else if (strcmp(argv[i], "-playmusic") == 0) savemusic = v;
                 i++;
             } else {
-                printf("--playing option requires one argument.\n");
+                printf("-playing option requires one argument.\n");
                 return 1;
             }
         }
         if (std::string(argv[i]) == "-renderer") {
             i++;
             SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
-        }
-        if (strcmp(argv[i], "-assets") == 0) {
+        } else if (strcmp(argv[i], "-basedir") == 0) {
             ++i;
-            assets = argv[i];
+            baseDir = argv[i];
+        } else if (strcmp(argv[i], "-assets") == 0) {
+            ++i;
+            assetsPath = argv[i];
         }
     }
 
     if (syslog) {
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
-        puts("Switching to syslog...");
-#ifdef __SWITCH__
-        logger = fopen("sdmc:/switch/VVVVVV/vvvvvv-ce.log", "a");
-#else
-        auto logger = popen("logger", "w");
-#endif
-        if (logger) {
-            auto logger_fd = fileno(logger);
-            auto stdout_fd = fileno(stdout);
-            auto stderr_fd = fileno(stderr);
-            dup2(logger_fd, stdout_fd);
-            dup2(logger_fd, stderr_fd);
-            setbuf(stdout, nullptr);
-        } else {
-            puts("Couldn't create logger!");
-        }
-#endif
+        log_init();
     }
 
     if (!game.quiet) {
@@ -220,16 +206,19 @@ int main(int argc, char *argv[])
         printf("\t\t\n");
     }
 
-    SDL_Init(
-        SDL_INIT_VIDEO |
-        SDL_INIT_AUDIO |
-        SDL_INIT_JOYSTICK |
-        SDL_INIT_GAMECONTROLLER
-    );
-
-    if(!FILESYSTEM_initCore(argv[0], assets))
+    if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
     {
         return 1;
+    }
+
+    SDL_SetMainReady();
+    if (SDL_Init(
+            SDL_INIT_VIDEO |
+            SDL_INIT_AUDIO |
+            SDL_INIT_JOYSTICK |
+            SDL_INIT_GAMECONTROLLER
+        ) < 0) {
+        fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
     }
 
     game.init();
@@ -268,11 +257,13 @@ int main(int argc, char *argv[])
     game.gametimer = 0;
     obj.init();
     game.loadstats(map, graphics, music);
+#if !defined(__APPLE__)
     std::condition_variable timeout;
     std::mutex mutex;
     std::thread init([&]() {
         auto start = std::chrono::steady_clock::now();
-        if(!FILESYSTEM_init(argv[0], assets)) {
+#endif
+        if(!FILESYSTEM_init(argv[0], baseDir, assetsPath)) {
             exit(1);
         }
         pre_fakepercent.store(50);
@@ -280,8 +271,9 @@ int main(int argc, char *argv[])
         pre_fakepercent.store(80);
         graphics.reloadresources(true);
         pre_fakepercent.store(100);
+#if !defined(__APPLE__)
         auto end = std::chrono::steady_clock::now();
-        if (end - start < 400ms) {
+        if (end - start < 1s) {
             pre_quickend.store(true);
         }
         std::unique_lock<std::mutex> lock(mutex);
@@ -290,10 +282,11 @@ int main(int argc, char *argv[])
     });
 
     std::unique_lock<std::mutex> uniq(mutex);
-    timeout.wait_for(uniq, 400ms);
+    timeout.wait_for(uniq, 1s);
     uniq.unlock();
     preloaderloop();
     init.join();
+#endif
 
     if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 
@@ -446,8 +439,18 @@ int main(int argc, char *argv[])
 
     volatile Uint32 time, timePrev = 0;
 
+#ifdef VCE_DEBUG
+    auto last_gamestate = game.gamestate;
+#endif
+
     while(!key.quitProgram)
     {
+#ifdef VCE_DEBUG
+        if (last_gamestate != game.gamestate) {
+            printf("gamestate %i -> %i\n", last_gamestate, game.gamestate);
+            last_gamestate = game.gamestate;
+        }
+#endif
 		//gameScreen.ClearScreen(0x00);
 
         time = SDL_GetTicks();
@@ -547,6 +550,7 @@ int main(int argc, char *argv[])
                 //Render
                 preloaderrender(graphics, game, help);
                 break;
+        #if !defined(NO_CUSTOM_LEVELS)
             case EDITORMODE:
 				graphics.flipmode = false;
                 //Input
@@ -556,6 +560,7 @@ int main(int argc, char *argv[])
                 ////Logic
                 editorlogic(key, graphics, game, obj, music, map, help);
                 break;
+        #endif
             case TITLEMODE:
                 //Input
                 changeloginput(key, graphics, map, game, obj, help, music);
@@ -699,8 +704,12 @@ int main(int argc, char *argv[])
         }
 
         //Mute button
-        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry &&
-            !ed.textmod && ed.scripthelppage != 1)
+    #if !defined(NO_CUSTOM_LEVELS)
+        bool inEditor = ed.textentry || ed.textmod || ed.scripthelppage == 1;
+    #else
+        bool inEditor = false;
+    #endif
+        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !inEditor)
         {
             game.mutebutton = 8;
             if (game.muted)
@@ -760,9 +769,7 @@ int main(int argc, char *argv[])
     SDL_Quit();
     FILESYSTEM_deinit();
 
-#ifdef __SWITCH__
-    fclose(logger);
-#endif
+    log_close();
 
     return 0;
 }

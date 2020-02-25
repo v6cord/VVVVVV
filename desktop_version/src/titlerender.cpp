@@ -28,7 +28,6 @@ growing_vector<std::string> changelog = {
     // --------------------------------------
     "Version c1.0",
     "[line]",
-    "- Added UTF-8 support",
     "- Removed having to use a load script",
     "  to use internal scripting",
     "- Added automatic loading of custom",
@@ -36,16 +35,15 @@ growing_vector<std::string> changelog = {
     "  name as your level file, and put the",
     "  assets in there.",
     "- pdelay(n) - a delay(n) that doesn't",
-    "  lock the players movement",
+    "  lock the player's movement",
     "- setroomname() - sets the roomname to",
     "  the next line",
     "- settile(x,y,tile) - place a tile",
     "  temporarily in the room",
-    "- textcolo(u)r(r,g,b,x,y,lines) - text()",
-    "  but you can set the color directly -",
-    "  r,g,b is 0-255 - if r,g,b is 0,0,0",
-    "  only the text will show up and not the",
-    "  text box",
+    "- You can now use text() like",
+    "  text(r,g,b,x,y,lines) - r,g,b is 0-255",
+    "  - if r,g,b is 0,0,0 only the text will",
+    "  show up and not the text box",
     "- reloadroom() - reloads the current",
     "  room",
     "- toceil() - inverted tofloor()",
@@ -162,20 +160,19 @@ growing_vector<std::string> changelog = {
     "- Allowed placed terminals to use any",
     "  sprite they want",
     "- You can now place flipped terminals",
-    "- Add showmarkers/hidemarkers to",
-    "  temporarily disable markmap markers",
+    "- hidemarkers() - disable markmap()",
+    "  markers",
+    "- showmarkers() - undo the above",
     "- setspeed(x) - set player speed, 3",
     "  by default",
     "- setvelocity(x) - push the player",
     "  (affected by inertia)",
     "- pinf - variant of inf to automatically",
     "  pdelay(1) if no delay occurred",
-    "- nobars() - to disable automatic",
+    "- noautobars() - to disable automatic",
     "  cutscene bars from a script",
-    "- finalstretchon - turn on Final Level",
-    "  palette swap",
-    "- finalstretchoff - turn off Final Level",
-    "  palette swap",
+    "- finalstretch(on/off) - toggle Final",
+    "  Level palette swap",
     "- reloadscriptboxes() - reload script",
     "  boxes without affecting entities",
     "- puntilbars() - untilbars() with pdelay",
@@ -209,14 +206,13 @@ growing_vector<std::string> changelog = {
     "- disablesuicide - disable pressing R",
     "- enablesuicide - enable pressing R",
     "- customactivityzone(x,y,w,h,color,",
-    "  script) - x,y,w,h in pixels, color is",
-    "  red/orange/yellow/green/cyan/blue/pink",
-    "  /purple (actually pink)/white/gray, if",
-    "  invalid it defaults to gray, prompt",
-    "  goes on the next line",
-    "- customactivityzonergb(x,y,w,h,r,g,b,",
-    "  script) - x,y,w,h in pixels, r,g,b is",
-    "  0-255, prompt goes on the next line",
+    "  script) OR customactivityzone(x,y,w,h,",
+    "  r,g,b,script) - x,y,w,h in pixels,",
+    "  color is red/orange/yellow/green/cyan",
+    "  blue/pink/purple (actually pink)/white",
+    "  /gray, if invalid it defaults to gray,",
+    "  r,g,b is 0-255, prompt goes on the",
+    "  next line",
     "- Fixed the 2-frame delay to execute a",
     "  script when entering a room",
     "- position(centerx,<line>) - ",
@@ -260,20 +256,29 @@ growing_vector<std::string> changelog = {
     "  variable, using either a given",
     "  argument or whatever is on the next",
     "  line",
-    "- Upped the trinkets/crewmates limit to",
-    "  100",
     "- Variable assignments (var = contents,",  
     "  var++, var += 1, var -= 1, var--)",
     "- Built-in variables (%deaths%,",
-    "  %player_x%, %player_y%, %trinkets%,",
-    "  %coins%)",
+    "  %player_x%, %player_y%,",
+    "  %gravitycontrol%, %room_x%, %room_y%,",
+    "  %trinkets%, %crewmates%, %coins%,",
+    "  %battery_level%, %on_battery%,",
+    "  %unix_time%, %hhmmss_time%)",
     "- Upped the map size limit to 100 by 100",
-    "- ifcoins(x) - Run a script if the player",
-    "  has collected at least x coins",
-    "- ifcoinsless(x) - Run a script if the",
-    "  player has less than x coins",
+    "- ifcrewmates(n,script) - go to script",
+    "  if the player has rescued at least n",
+    "  crewmates",
+    "- ifcrewmatesless(n,script) - go to",
+    "  script if the player has rescued less",
+    "  than n crewmates",
+    "- ifcoins(n,script) - go to script if",
+    "  the player has collected at least n",
+    "  coins",
+    "- ifcoinsless(n,script) - go to script",
+    "  if the player has collected less",
+    "  than n coins",
     "- Coins are now placeable in the editor",
-    "  using the G tool",
+    "  using the ^2 tool (press Shift+2)",
     "- Coins display in the roomname if there's",
     "  any coins in the map",
     "- Coins and trinkets no longer share IDs",
@@ -291,7 +296,8 @@ growing_vector<std::string> changelog = {
     "- stop() - Stop the script and remove",
     "  cutscene bars",
     "- Flip tokens are now placeable in the",
-    "  editor using the F tool",
+    "  editor using the ^1 tool (press",
+    "  Shift+1)",
     "- You can place activity zones in the",
     "  editor by holding down Z while placing",
     "  a script box",
@@ -329,8 +335,15 @@ growing_vector<std::string> changelog = {
     "- Added one-time script boxes - hold X",
     "  when placing down a script box to make",
     "  it run only once",
-    "- Flip tokens now respawn upon death",
+    "- Flip tokens now play the gravity line",
+    "  sound effect when touched in VCE",
+    "  levels",
+    "- Flip tokens now respawn upon death in",
+    "  VCE levels",
     "- 1x1 quicksand now respawn upon death",
+    "  in VCE levels",
+    "- Terminals' activity zones are aligned",
+    "  properly in VCE levels",
     "- nointerrupt() - prevent interrupting a",
     "  script when player moves into a script",
     "  box",
@@ -343,6 +356,36 @@ growing_vector<std::string> changelog = {
     "- You can now use Minecraft-like",
     "  relative tilde syntax in gotoroom()",
     "  and gotoposition()",
+    "- sayquiet and replyquiet - same as",
+    "  normal say and reply, but without",
+    "  a squeak",
+    "- Added dimensions, so you can properly",
+    "  have more than one dimension in a",
+    "  custom level",
+    "- gotodimension(n) - go to dimension n",
+    "- ifkey(key,script) - If key is pressed,",
+    "  load the script script. left, right,",
+    "  up and down count controllers and",
+    "  WASD, so to get ONLY the arrow keys,",
+    "  use rleft, rright, rup and rdown.",
+    "- ifflipmode(script) - go to script if",
+    "  the game is in flip mode",
+    "- delchar(var,n) - remove n chars from",
+    "  the end of the variable var",
+    "- getvar(var1[,var2]) - set var1 to",
+    "  contents of var2, if var2 is not given",
+    "  it uses the next line",
+    "- analogue(on/off) - toggle Analogue",
+    "  Mode screen filter",
+    "- jump(script) - go to script without",
+    "  adding a stack frame",
+    "- Added callbacks - on_death_start,",
+    "  on_death_end, on_input_flip,",
+    "  on_input_flip_up, on_input_flip_down",
+    "- setcallback(callback,script) - run",
+    "  script when callback is triggered",
+    "- One-way tiles are now automatically",
+    "  recolored to match the tileset",
 
 };
 
@@ -379,6 +422,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
     else
     {
         if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo(map);
+        dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
         tr = map.r - (help.glow / 4) - int(fRandom() * 4);
         tg = map.g - (help.glow / 4) - int(fRandom() * 4);
@@ -422,13 +466,13 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         }
         else if (game.currentmenuname == "loadcustomtrial")
         {
-            if (game.customtrials.size() == 0) {
+            if (ed.customtrials.size() == 0) {
                 dwgfx.Print( -1, 65, "No time trials...", tr, tg, tb, true);
-            } else if (game.currentmenuoption == (int)game.customtrials.size()) {
+            } else if (game.currentmenuoption == (int)ed.customtrials.size()) {
                 dwgfx.Print( -1, 65, "Select a time trial to play!", tr, tg, tb, true);
             } else {
-                game.timetrialpar = game.customtrials[game.currentmenuoption].par;
-                dwgfx.bigprint( -1, 30, game.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
+                game.timetrialpar = ed.customtrials[game.currentmenuoption].par;
+                dwgfx.bigprint( -1, 30, ed.customtrials[game.currentmenuoption].name, tr, tg, tb, true);
                 if ((game.currentmenuoption + 1) > (int)game.customtrialstats.size()) {
                     dwgfx.Print( -1, 75, "Not yet attempted", tr, tg, tb, true);
                 } else if (!game.customtrialstats[game.currentmenuoption].attempted) {
@@ -438,7 +482,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                     dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                     dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
                     dwgfx.Print( 110, 65, game.timetstring(game.customtrialstats[game.currentmenuoption].time, help), tr, tg, tb);
-                    dwgfx.Print( 110, 75, help.String(game.customtrialstats[game.currentmenuoption].trinkets)+"/" + help.String(game.customtrials[game.currentmenuoption].trinkets), tr, tg, tb);
+                    dwgfx.Print( 110, 75, help.String(game.customtrialstats[game.currentmenuoption].trinkets)+"/" + help.String(ed.customtrials[game.currentmenuoption].trinkets), tr, tg, tb);
                     dwgfx.Print( 110, 85, help.String(game.customtrialstats[game.currentmenuoption].lives), tr, tg, tb);
                     dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(help), tr, tg, tb);
                     dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);
@@ -498,6 +542,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 }
             }
         }
+    #if !defined(NO_CUSTOM_LEVELS)
         else if (game.currentmenuname == "levellist")
         {
           if(ed.ListOfMetaData.size()==0){
@@ -506,7 +551,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
           int tmp=game.currentmenuoption+(game.levelpage*8);
           if(tmp>=0 && tmp < (int) ed.ListOfMetaData.size()){ // FIXME: size_t/int! -flibit
             //Don't show next page or return to menu options here!
-            if(game.nummenuoptions - game.currentmenuoption<=2){
+            if(game.nummenuoptions - game.currentmenuoption<=3){
 
             }else{
               dwgfx.bigprint( -1, 15, ed.ListOfMetaData[tmp].title, tr, tg, tb, true);
@@ -518,6 +563,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
           }
         }
+    #endif
         else if (game.currentmenuname == "errornostart")
         {
           dwgfx.Print( -1, 65, "ERROR: This level has", tr, tg, tb, true);
@@ -713,103 +759,61 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             dwgfx.Print( -1, 20, "VVVVVV is supported by", tr, tg, tb, true);
             dwgfx.Print( 40, 30, "the following patrons", tr, tg, tb, true);
 
-            dwgfx.Print( 80-16, 40+20, "Anders Ekermo", tr, tg, tb);
-            dwgfx.Print( 80-12, 54+20, "Andreas K|mper", tr, tg, tb);
-            dwgfx.Print( 80-8, 68+20, "Anthony Burch", tr, tg, tb);
-            dwgfx.Print( 80-4, 82+20, "Bennett Foddy", tr, tg, tb);
-            dwgfx.Print( 80, 96+20, "Brendan O'Sullivan", tr, tg, tb);
-            dwgfx.Print( 80+4, 110+20, "Christopher Armstrong", tr, tg, tb);
-            dwgfx.Print( 80+8, 124+20, "Daniel Benmergui", tr, tg, tb);
-            dwgfx.Print( 80+12, 138+20, "David Pittman", tr, tg, tb);
-            dwgfx.Print( 80+16, 152+20, "Ian Bogost", tr, tg, tb);
+            int startidx = game.current_credits_list_index;
+            int endidx = std::min(startidx + 9, (int)game.superpatrons.size());
+
+            int xofs = 80 - 16;
+            int yofs = 40 + 20;
+
+            for (int i = startidx; i < endidx; ++i)
+            {
+                dwgfx.Print(xofs, yofs, game.superpatrons[i], tr, tg, tb);
+                xofs += 4;
+                yofs += 14;
+            }
         }
         else if (game.currentmenuname == "credits4")
         {
-            dwgfx.Print( -1, 20, "VVVVVV is supported by", tr, tg, tb, true);
-            dwgfx.Print( 40, 30, "the following patrons", tr, tg, tb, true);
-            dwgfx.Print( 80-16, 20+40, "Ian Poma", tr, tg, tb);
-            dwgfx.Print( 80-12, 34+40, "Jaz McDougall", tr, tg, tb);
-            dwgfx.Print( 80-8, 48+40, "John Faulkenbury", tr, tg, tb);
-            dwgfx.Print( 80-4, 62+40, "Jonathan Whiting", tr, tg, tb);
-            dwgfx.Print( 80, 76+40, "Kyle Pulver", tr, tg, tb);
-            dwgfx.Print( 80+4, 90+40, "Markus Persson", tr, tg, tb);
-            dwgfx.Print( 80+8, 104+40, "Nathan Ostgard", tr, tg, tb);
-            dwgfx.Print( 80+12, 118+40, "Nick Easler", tr, tg, tb);
-            dwgfx.Print( 80+16, 132+40, "Stephen Lavelle", tr, tg, tb);
+            dwgfx.Print( -1, 20, "and also by", tr, tg, tb, true);
+
+            int startidx = game.current_credits_list_index;
+            int endidx = std::min(startidx + 14, (int)game.patrons.size());
+
+            int maxheight = 10 * 14;
+            int totalheight = (endidx - startidx) * 10;
+            int emptyspace = maxheight - totalheight;
+
+            int yofs = 40 + (emptyspace / 2);
+
+            for (int i = startidx; i < endidx; ++i)
+            {
+                dwgfx.Print(80, yofs, game.patrons[i], tr, tg, tb);
+                yofs += 10;
+            }
         }
         else if (game.currentmenuname == "credits5")
         {
-            dwgfx.Print( -1, 20, "and also by", tr, tg, tb, true);
+            dwgfx.Print( -1, 20, "With contributions on", tr, tg, tb, true);
+            dwgfx.Print( 40, 30, "GitHub from", tr, tg, tb, true);
 
-            dwgfx.Print( 80, 40,"Adam Wendt", tr, tg, tb);
-            dwgfx.Print( 80, 50,"Andreas J{rgensen", tr, tg, tb);
-            dwgfx.Print( 80, 60,"}ngel Louzao Penalva", tr, tg, tb);
-            dwgfx.Print( 80, 70,"Ashley Burton", tr, tg, tb);
-            dwgfx.Print( 80, 80,"Aubrey Hesselgren", tr, tg, tb);
-            dwgfx.Print( 80, 90,"Bradley Rose", tr, tg, tb);
-            dwgfx.Print( 80, 100,"Brendan Urquhart", tr, tg, tb);
-            dwgfx.Print( 80, 110,"Chris Ayotte", tr, tg, tb);
-            dwgfx.Print( 80, 120,"Christopher Zamanillo", tr, tg, tb);
-            dwgfx.Print( 80, 130,"Daniel Schuller", tr, tg, tb);
-            dwgfx.Print( 80, 140,"Hybrid Mind Studios", tr, tg, tb);
-            dwgfx.Print( 80, 150,"Emilie McGinley", tr, tg, tb);
-            dwgfx.Print( 80, 160,"Francisco Solares", tr, tg, tb);
-            dwgfx.Print( 80, 170,"Hal Helms", tr, tg, tb);
+            int startidx = game.current_credits_list_index;
+            int endidx = std::min(startidx + 9, (int)game.githubfriends.size());
+
+            int maxheight = 14 * 9;
+            int totalheight = (endidx - startidx) * 14;
+            int emptyspace = maxheight - totalheight;
+
+            int xofs = 80 - 16;
+            int yofs = 40 + 20 + (emptyspace / 2);
+
+            for (int i = startidx; i < endidx; ++i)
+            {
+                dwgfx.Print(xofs, yofs, game.githubfriends[i], tr, tg, tb);
+                xofs += 4;
+                yofs += 14;
+            }
         }
         else if (game.currentmenuname == "credits6")
-        {
-            dwgfx.Print( -1, 20, "and also by", tr, tg, tb, true);
-
-            dwgfx.Print( 80, 40,"Hayden Scott-Baron", tr, tg, tb);
-            dwgfx.Print( 80, 50,"Hermit Games", tr, tg, tb);
-            dwgfx.Print( 80, 60,"Ido Yehieli", tr, tg, tb);
-            dwgfx.Print( 80, 70,"Jade Vault Games", tr, tg, tb);
-            dwgfx.Print( 80, 80,"James Andrews", tr, tg, tb);
-            dwgfx.Print( 80, 90,"James Riley", tr, tg, tb);
-            dwgfx.Print( 80, 100,"James Hsieh", tr, tg, tb);
-            dwgfx.Print( 80, 110,"Jasper Byrne", tr, tg, tb);
-            dwgfx.Print( 80, 120,"Jedediah Baker", tr, tg, tb);
-            dwgfx.Print( 80, 130,"Jens Bergensten", tr, tg, tb);
-            dwgfx.Print( 80, 140,"Jeremy J. Penner", tr, tg, tb);
-            dwgfx.Print( 80, 150,"Jeremy Peterson", tr, tg, tb);
-            dwgfx.Print( 80, 160,"Jim McGinley", tr, tg, tb);
-            dwgfx.Print( 80, 170,"Jonathan Cartwright", tr, tg, tb);
-        }
-        else if (game.currentmenuname == "credits7")
-        {
-            dwgfx.Print( -1, 20, "and also by", tr, tg, tb, true);
-
-            dwgfx.Print( 80, 40,"John Nesky", tr, tg, tb);
-            dwgfx.Print( 80, 50,"Jos Yule", tr, tg, tb);
-            dwgfx.Print( 80, 60,"Jose Flores", tr, tg, tb);
-            dwgfx.Print( 80, 70,"Josh Bizeau", tr, tg, tb);
-            dwgfx.Print( 80, 80,"Joshua Buergel", tr, tg, tb);
-            dwgfx.Print( 80, 90,"Joshua Hochner", tr, tg, tb);
-            dwgfx.Print( 80, 100,"Kurt Ostfeld", tr, tg, tb);
-            dwgfx.Print( 80, 110,"Magnus P~lsson", tr, tg, tb);
-            dwgfx.Print( 80, 120,"Mark Neschadimenko", tr, tg, tb);
-            dwgfx.Print( 80, 130,"Matt Antonellis", tr, tg, tb);
-            dwgfx.Print( 80, 140,"Matthew Reppert", tr, tg, tb);
-            dwgfx.Print( 80, 150,"Michael Falkensteiner", tr, tg, tb);
-            dwgfx.Print( 80, 160,"Michael Vendittelli", tr, tg, tb);
-            dwgfx.Print( 80, 170,"Mike Kasprzak", tr, tg, tb);
-        }
-        else if (game.currentmenuname == "credits8")
-        {
-            dwgfx.Print( -1, 20, "and also by", tr, tg, tb, true);
-
-            dwgfx.Print( 80, 70,"Mitchel Stein", tr, tg, tb);
-            dwgfx.Print( 80, 80,"Sean Murray", tr, tg, tb);
-            dwgfx.Print( 80, 90,"Simon Michael", tr, tg, tb);
-            dwgfx.Print( 80, 100,"Simon Schmid", tr, tg, tb);
-            dwgfx.Print( 80, 110,"Stephen Maxwell", tr, tg, tb);
-            dwgfx.Print( 80, 120,"Swing Swing Submarine", tr, tg, tb);
-            dwgfx.Print( 80, 130,"Tam Toucan", tr, tg, tb);
-            dwgfx.Print( 80, 140,"Terry Dooher", tr, tg, tb);
-            dwgfx.Print( 80, 150,"Tim W.", tr, tg, tb);
-            dwgfx.Print( 80, 160,"Timothy Bragan", tr, tg, tb);
-        }
-        else if (game.currentmenuname == "credits9")
         {
             dwgfx.Print( -1, 20, "and thanks also to:", tr, tg, tb, true);
 
@@ -2004,17 +2008,21 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
         dwgfx.drawentities(map, obj, help);
 
-        if (game.gametimer % 3 == 0) {
-            int i = obj.getplayer();
-            GhostInfo ghost;
-            ghost.x = obj.entities[i].xp;
-            ghost.y = obj.entities[i].yp;
-            ghost.col = obj.entities[i].colour;
-            ghost.frame = obj.entities[i].drawframe;
-            ed.ghosts.push_back(ghost);
-        }
-        if (ed.ghosts.size() > 100) {
-            ed.ghosts.erase(ed.ghosts.begin());
+        if (map.custommode && !map.custommodeforreal) {
+            if (game.gametimer % 3 == 0) {
+                int i = obj.getplayer();
+                GhostInfo ghost;
+                ghost.rx = game.roomx-100;
+                ghost.ry = game.roomy-100;
+                ghost.x = obj.entities[i].xp;
+                ghost.y = obj.entities[i].yp;
+                ghost.col = obj.entities[i].colour;
+                ghost.frame = obj.entities[i].drawframe;
+                ed.ghosts.push_back(ghost);
+            }
+            if (ed.ghosts.size() > 100) {
+                ed.ghosts.erase(ed.ghosts.begin());
+            }
         }
     }
 
@@ -2097,10 +2105,15 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     }
     script.scriptrender.clear();
 
+#if !defined(NO_CUSTOM_LEVELS)
     if(map.custommode && !map.custommodeforreal && !game.advancetext){
         //Return to level editor
-        dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
+        dwgfx.bprintalpha(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), ed.returneditoralpha, false);
+        if (ed.returneditoralpha > 0) {
+            ed.returneditoralpha -= 15;
+        }
     }
+#endif
 
 
     dwgfx.cutscenebars();
@@ -2452,7 +2465,13 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
         map.glitchname = map.getglitchname(game.roomx, game.roomy);
         dwgfx.Print(5, 2, map.glitchname, 196, 196, 255 - help.glow, true);
       }else{
-        dwgfx.Print(5, 2, map.roomname, 196, 196, 255 - help.glow, true);
+        std::string usethisname;
+        Dimension* dim = map.getdimension();
+        if (!map.roomname.length() && dim != NULL)
+            usethisname = dim->name;
+        else
+            usethisname = map.roomname;
+        dwgfx.Print(5, 2, usethisname, 196, 196, 255 - help.glow, true);
       }
     }
 
@@ -2515,7 +2534,9 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             if(map.customzoom==4){
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*ed.maxwidth)]==0){
+                    int i2 = i + map.custommmstartx;
+                    int j2 = j + map.custommmstarty;
+                    if(map.explored[i2+(j2*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 48), map.custommmyoff+21 + (j * 36), false);
                     dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 48), map.custommmyoff+21 + (j * 36), false);
@@ -2542,7 +2563,9 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }else if(map.customzoom==2){
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*ed.maxwidth)]==0){
+                    int i2 = i + map.custommmstartx;
+                    int j2 = j + map.custommmstarty;
+                    if(map.explored[i2+(j2*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 24), map.custommmyoff+21 + (j * 18), false);
                     dwgfx.drawimage(2, map.custommmxoff+40 + 12 + (i * 24), map.custommmyoff+21 + (j * 18), false);
@@ -2554,7 +2577,9 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             }else{
                 for (int j = 0; j < map.customheight; j++){
                 for (int i = 0; i < map.customwidth; i++){
-                    if(map.explored[i+(j*ed.maxwidth)]==0){
+                    int i2 = i + map.custommmstartx;
+                    int j2 = j + map.custommmstarty;
+                    if(map.explored[i2+(j2*ed.maxwidth)]==0){
                     //Draw the fog of war on the map
                     dwgfx.drawimage(2, map.custommmxoff+40 + (i * 12), map.custommmyoff+21 + (j * 9), false);
                     }
@@ -2580,34 +2605,34 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
           if(map.customzoom==4){
             if(map.cursorstate==1){
               if (int(map.cursordelay / 4) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 48) +map.custommmxoff, 21 + ((game.roomy - 100) * 36)+map.custommmyoff , 48 , 36 , 255,255,255);
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 48) +map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 36)+map.custommmyoff , 48 , 36 , 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 255,255,255);
               }
             }else if (map.cursorstate == 2){
               if (int(map.cursordelay / 15) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 16, 245 - (help.glow), 245 - (help.glow));
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 48) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 36) + 2+map.custommmyoff, 48 - 4, 36 - 4, 16, 245 - (help.glow), 245 - (help.glow));
               }
             }
           }else if(map.customzoom==2){
             if(map.cursorstate==1){
               if (int(map.cursordelay / 4) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 24)+map.custommmxoff , 21 + ((game.roomy - 100) * 18)+map.custommmyoff , 24 , 18 , 255,255,255);
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 24)+map.custommmxoff , 21 + ((game.roomy - 100 - map.custommmstarty) * 18)+map.custommmyoff , 24 , 18 , 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 255,255,255);
               }
             }else if (map.cursorstate == 2){
               if (int(map.cursordelay / 15) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 16, 245 - (help.glow), 245 - (help.glow));
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 24) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 18) + 2+map.custommmyoff, 24 - 4, 18 - 4, 16, 245 - (help.glow), 245 - (help.glow));
               }
             }
           }else{
             if(map.cursorstate==1){
               if (int(map.cursordelay / 4) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 12)+map.custommmxoff , 21 + ((game.roomy - 100) * 9)+map.custommmyoff , 12 , 9 , 255,255,255);
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 12)+map.custommmxoff , 21 + ((game.roomy - 100 - map.custommmstarty) * 9)+map.custommmyoff , 12 , 9 , 255,255,255);
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 255,255,255);
               }
             }else if (map.cursorstate == 2){
               if (int(map.cursordelay / 15) % 2 == 0){
-                dwgfx.drawrect(40 + ((game.roomx - 100) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 16, 245 - (help.glow), 245 - (help.glow));
+                dwgfx.drawrect(40 + ((game.roomx - 100 - map.custommmstartx) * 12) + 2+map.custommmxoff, 21 + ((game.roomy - 100 - map.custommmstarty) * 9) + 2+map.custommmyoff, 12 - 4, 9 - 4, 16, 245 - (help.glow), 245 - (help.glow));
               }
             }
           }
@@ -2818,6 +2843,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
 
             dwgfx.Print(0, 105, "Press ACTION to warp to the ship.", 196, 196, 255 - help.glow, true);
         }
+    #if !defined(NO_CUSTOM_LEVELS)
         else if(map.custommode){
           dwgfx.Print(30, 220, "MAP", 64,64,64);
             dwgfx.Print(103-8, 220, "[CREW]", 196, 196, 255 - help.glow);
@@ -2855,6 +2881,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
               }
             }
         }
+    #endif
         else
         {
             dwgfx.Print(30, 220, "MAP", 64,64,64);
@@ -3340,7 +3367,10 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
 
     if(map.custommode && !map.custommodeforreal && !game.advancetext){
         //Return to level editor
-        dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
+        dwgfx.bprintalpha(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), ed.returneditoralpha, false);
+        if (ed.returneditoralpha > 0) {
+            ed.returneditoralpha -= 15;
+        }
     }
 
     dwgfx.cutscenebars();

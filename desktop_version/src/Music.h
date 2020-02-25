@@ -40,7 +40,7 @@ public:
 	// Play a sound effect! There are 16 channels, which iterate
 	void initefchannels();
 
-	void playfile(const char* t, std::string track);
+	void playfile(const char* t, std::string track, bool internal = false);
 	void stopfile(std::string track);
 
 	void playef(int t, int offset = 0);
@@ -67,6 +67,7 @@ public:
 	// MMMMMM mod settings
 	bool mmmmmm = false;
 	bool usingmmmmmm = false;
+        bool loaded = false;
 
         bool muted = false;
 

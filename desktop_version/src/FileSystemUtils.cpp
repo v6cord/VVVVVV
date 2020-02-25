@@ -12,7 +12,11 @@
 #include <string.h>
 #include <assert.h>
 
+#if defined(__SWITCH__) || defined(__ANDROID__)
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 #include <physfs.h>
 
 #include "tinyxml.h"
@@ -25,6 +29,8 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <processenv.h>
+#include <shellapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
 int mkdir(char* path, int mode)
@@ -56,8 +62,13 @@ void PLATFORM_migrateSaveData(char* output);
 void PLATFORM_copyFile(const char *oldLocation, const char *newLocation);
 
 extern "C" {
+#ifdef LD_VCE_ZIP
+    extern const char _binary_vce_zip_start;
+    extern const char _binary_vce_zip_end;
+#else
     extern const unsigned char vce_zip[];
     extern const unsigned vce_zip_size;
+#endif
 }
 
 static bool cached_data_zip_load(const char* path) {
@@ -86,45 +97,100 @@ static bool cached_data_zip_load(const char* path) {
     }
     fclose(file);
 
-    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 0)) {
+    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 1)) {
+        free(buf);
+        return false;
+    }
+    return true;
+#elif defined(__ANDROID__)
+    SDL_RWops* file = SDL_RWFromFile("data.zip", "rb");
+    if (file == nullptr) return false;
+    long size = file->size(file);
+    if (size == -1) {
+        file->close(file);
+        return false;
+    }
+    unsigned char* buf = (unsigned char*) malloc(size);
+    size_t read = file->read(file, buf, 1, size);
+    if (read == 0) {
+        file->close(file);
+        free(buf);
+        return false;
+    }
+    file->close(file);
+
+    if (!PHYSFS_mountMemory(buf, read, nullptr, "data.zip", NULL, 1)) {
         free(buf);
         return false;
     }
     return true;
 #else
-    return PHYSFS_mount(path, NULL, 0);
+    return PHYSFS_mount(path, NULL, 1);
 #endif
 }
 
-int FILESYSTEM_initCore(char *argvZero, char *assetsPath)
+int FILESYSTEM_initCore(char *argvZero, char *baseDir, char *assetsPath)
 {
 	char output[MAX_PATH + 9];
+	const char* pathSep = PHYSFS_getDirSeparator();
 
 	PHYSFS_init(argvZero);
 	PHYSFS_permitSymbolicLinks(1);
 
-        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 1);
+#ifdef LD_VCE_ZIP
+        PHYSFS_mountMemory(&_binary_vce_zip_start, &_binary_vce_zip_end - &_binary_vce_zip_start, nullptr, "vce.zip", nullptr, 0);
+#else
+        PHYSFS_mountMemory(vce_zip, vce_zip_size, nullptr, "vce.zip", nullptr, 0);
+#endif
 
-	PLATFORM_getOSDirectory(output);
-	PHYSFS_mount(output, NULL, 1);
+	/* Determine the OS user directory */
+	if (baseDir && strlen(baseDir) > 0)
+	{
+		strcpy(output, baseDir);
+
+		/* We later append to this path and assume it ends in a slash */
+		if (strcmp(std::string(1, output[strlen(output) - 1]).c_str(), pathSep) != 0)
+		{
+			strcat(output, pathSep);
+		}
+	}
+	else
+	{
+		PLATFORM_getOSDirectory(output);
+	}
+	PHYSFS_mount(output, NULL, 0);
 
         return 1;
 }
 
-int FILESYSTEM_init(char *argvZero, char *assetsPath)
+int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 {
 	char output[MAX_PATH + 9];
 	int mkdirResult;
+	const char* pathSep = PHYSFS_getDirSeparator();
 
 	/* Determine the OS user directory */
-	PLATFORM_getOSDirectory(output);
+	if (baseDir && strlen(baseDir) > 0)
+	{
+		strcpy(output, baseDir);
+
+		/* We later append to this path and assume it ends in a slash */
+		if (strcmp(std::string(1, output[strlen(output) - 1]).c_str(), pathSep) != 0)
+		{
+			strcat(output, pathSep);
+		}
+	}
+	else
+	{
+		PLATFORM_getOSDirectory(output);
+	}
 
 	/* Create base user directory, mount */
 	mkdirResult = mkdir(output, 0777);
 
 	/* Mount our base user directory */
         PHYSFS_unmount(output);
-	PHYSFS_mount(output, NULL, 1);
+	PHYSFS_mount(output, NULL, 0);
 	PHYSFS_setWriteDir(output);
 	if (!game.quiet) printf("Base directory: %s\n", output);
 
@@ -159,9 +225,7 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 	if (assetsPath) {
             strcpy_safe(output, assetsPath);
         } else {
-#if defined(DATA_ZIP_PATH)
-            strcpy_safe(output, DATA_ZIP_PATH);
-#elif defined(__APPLE__)
+#if defined(__APPLE__)
             CFURLRef appUrlRef = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("data.zip"), NULL, NULL);
             if (!appUrlRef) {
                 SDL_ShowSimpleMessageBox(
@@ -183,6 +247,8 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                 return 0;
             }
             CFRelease(appUrlRef);
+#elif defined(DATA_ZIP_PATH)
+            strcpy_safe(output, DATA_ZIP_PATH);
 #else
             strcpy_safe(output, PHYSFS_getBaseDir());
             strcat(output, "data.zip");
@@ -193,10 +259,12 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
 
 	if (!cached_data_zip_load(output))
 	{
+#ifndef __APPLE__
                 if (!getcwd(output, MAX_PATH)) ;
                 strcat(output, "/data.zip");
                 if (!cached_data_zip_load(output))
                 {
+#endif
                         puts("Error: data.zip missing!");
                         puts("You do not have data.zip!");
                         puts("Grab it from your purchased copy of the game,");
@@ -213,7 +281,9 @@ int FILESYSTEM_init(char *argvZero, char *assetsPath)
                                 NULL
                         );
                         return 0;
+#ifndef __APPLE__
                 }
+#endif
         }
 
         pre_fakepercent.store(45);
@@ -373,6 +443,9 @@ void PLATFORM_getOSDirectory(char* output)
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
 	bsd_strlcpy(output, "sdmc:/switch/VVVVVV/", MAX_PATH);
+#elif defined(__ANDROID__)
+        bsd_strlcpy(output, SDL_AndroidGetExternalStoragePath(), MAX_PATH - 1);
+        strcat(output, "/");
 #else
 	bsd_strlcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"), MAX_PATH);
 #endif
@@ -591,7 +664,7 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__ANDROID__)
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
@@ -624,22 +697,37 @@ bool FILESYSTEM_openDirectory(const char *dname) {
 
 #ifdef _WIN32
 char* FILESYSTEM_realPath(const char* rel) {
-    return _fullpath(nullptr, rel, MAX_PATH);
+    size_t src_len = strlen(rel) + 1;
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(rel, (PHYSFS_uint16*) srcw, src_len * 2);
+    wchar_t* dstw = _wfullpath(nullptr, srcw, MAX_PATH);
+    size_t dst_len = wcslen(dstw) + 1;
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 
 char* FILESYSTEM_dirname(const char* file) {
-    char* dir = (char*) malloc(MAX_PATH + 1);
-    bsd_strlcpy(dir, file, MAX_PATH + 1);
-    PathRemoveFileSpecA(dir);
-    return dir;
+    size_t src_len = strlen(file) + 1;
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
+    PathRemoveFileSpecW(srcw);
+    wchar_t* dstw = srcw;
+    size_t dst_len = wcslen(dstw) + 1;
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 
 char* FILESYSTEM_basename(const char* file) {
-    const char* base = PathFindFileNameA(file);
-    size_t base_len = strlen(base) + 1;
-    char* base_copy = (char*) malloc(base_len);
-    bsd_strlcpy(base_copy, base, base_len);
-    return base_copy;
+    size_t src_len = strlen(file) + 1;
+    wchar_t* srcw = (wchar_t*) malloc(src_len * 2);
+    PHYSFS_utf8ToUtf16(file, (PHYSFS_uint16*) srcw, src_len * 2);
+    LPCWSTR dstw = PathFindFileNameW(srcw);
+    size_t dst_len = wcslen(dstw) + 1;
+    char* dst = (char*) malloc(dst_len * 2);
+    PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) dstw, dst, dst_len * 2);
+    return dst;
 }
 #elif defined(__SWITCH__)
 char* FILESYSTEM_realPath(const char* rel) {
@@ -686,5 +774,25 @@ char* FILESYSTEM_basename(const char* file) {
     char* base_copy = (char*) malloc(base_len);
     bsd_strlcpy(base_copy, base, base_len);
     return base_copy;
+}
+#endif
+
+#ifdef _WIN32
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
+    LPWSTR unparsed = GetCommandLineW();
+    LPWSTR* split = CommandLineToArgvW(unparsed, argc);
+    char** utf8 = (char**) malloc(*argc * sizeof(char*));
+    for (int i = 0; i < *argc; ++i) {
+        size_t len = wcslen(split[i]) + 1;
+        utf8[i] = (char*) malloc(len * 2);
+        PHYSFS_utf8FromUtf16((const PHYSFS_uint16*) split[i], utf8[i], len * 2);
+    }
+    LocalFree(split);
+    return utf8;
+}
+#else
+char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]) {
+    *argc = real_argc;
+    return argv;
 }
 #endif
