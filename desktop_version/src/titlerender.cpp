@@ -261,6 +261,7 @@ growing_vector<std::string> changelog = {
     "- Built-in variables (%deaths%,",
     "  %player_x%, %player_y%,",
     "  %gravitycontrol%, %room_x%, %room_y%,",
+    "  %player_onroof%, %player_onfloor%,",
     "  %trinkets%, %crewmates%, %coins%,",
     "  %battery_level%, %on_battery%,",
     "  %unix_time%, %hhmmss_time%)",
