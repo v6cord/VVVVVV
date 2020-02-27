@@ -1006,6 +1006,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     scriptrender.push_back(temp);
                 }
             }
+            if (words[0] == "removeimage") {
+                // removeimage(id), to be used with drawimagepersist
+                scriptrender.erase(scriptrender.begin() + ss_toi(words[1]));
+            }
             if (words[0] == "flag") {
                 if (ss_toi(words[1]) >= 0 && ss_toi(words[1]) < 1000) {
                     if (words[2] == "on") {
