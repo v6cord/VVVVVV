@@ -985,7 +985,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 game.script_images.push_back(LoadImage(words[1].c_str()));
                 game.script_image_names.push_back(words[1]);
             }
-            if (words[0] == "drawimage") {
+            if ((words[0] == "drawimage") || (words[0] == "drawimagepersist")) {
                 // drawimage(x,y,name[, centered])
                 int tempindex = getimage(game, words[3]);
                 if (tempindex == -1) {
@@ -1001,6 +1001,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     temp.y = ss_toi(words[2]);
                     temp.index = tempindex;
                     temp.center = parsebool(words[4]);
+					if (words[0] == "drawimagepersist") temp.persistent = true;
+					if (words[0] == "drawimagepersist") setvar("return", std::to_string((int)scriptrender.size()));
                     scriptrender.push_back(temp);
                 }
             }

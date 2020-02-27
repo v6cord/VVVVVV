@@ -2104,7 +2104,15 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center );
         }
     }
-    script.scriptrender.clear();
+
+    // Now we have to clear the vector
+    if (script.scriptrender.size() > 0) {
+        for(int i = (int)script.scriptrender.size() - 1; i >= 0; i--) {
+            if (!script.scriptrender[i].persistent) {
+                script.scriptrender.erase(script.scriptrender.begin() + i);
+            }
+        }
+    }
 
 #if !defined(NO_CUSTOM_LEVELS)
     if(map.custommode && !map.custommodeforreal && !game.advancetext){
