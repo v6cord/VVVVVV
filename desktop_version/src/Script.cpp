@@ -4327,6 +4327,7 @@ void scriptclass::hardreset(KeyPoll& key, Graphics& dwgfx, Game& game,
     variables.clear();
     callbacks.clear();
 
+    scriptrender.clear();
     game.script_images.clear();
     game.script_image_names.clear();
 
