@@ -1949,6 +1949,9 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             case 24:
                                 obj.setenemyroom(k, 14 + 100, 13 + 100);
                                 break;  // DABBING SKELETON
+                            case 25:
+                                obj.setenemyroom(k, 44, 51);
+                                break;  // enemy in vertigo
                             default:
                                 obj.setenemyroom(k, 4 + 100, 0 + 100);
                                 break;

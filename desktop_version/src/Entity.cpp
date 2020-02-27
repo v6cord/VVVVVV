@@ -2821,6 +2821,7 @@ int entityclass::createentity( Game& game, float xp, float yp, int t, float vx /
           case 22: setenemyroom(k, 14+100, 8+100); break; // what the fuck is this
           case 23: setenemyroom(k, 11+100, 13+100); break; // TRUTH
           case 24: setenemyroom(k, 14+100, 13+100); break; // DABBING SKELETON
+          case 25: setenemyroom(k, 44, 51); break; // enemy in vertigo
           default: setenemyroom(k, 4+100, 0+100); break;
         }
 
