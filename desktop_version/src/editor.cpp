@@ -4221,12 +4221,41 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 xmult = 24;
                 ymult = 18;
             }
+            int lastcolor = -1;
             for (int i = 0; i < (int)ed.dimensions.size(); i++) {
+                // game.mx
+                // game.my
                 Dimension dim = ed.dimensions[i];
                 int color = i % 6;
-                fillboxabs(dwgfx, 40 + (dim.x * xmult) + map.custommmxoff, 21+ (dim.y * ymult) + map.custommmyoff, (dim.w * xmult), (dim.h * ymult),
+                lastcolor = color;
+                int x_ = 40 + (dim.x * xmult) + map.custommmxoff;
+                int y_ = 21 + (dim.y * ymult) + map.custommmyoff;
+                int w_ = (dim.w * xmult);
+                int h_ = (dim.h * ymult);
+                fillboxabs(dwgfx, x_, y_, w_, h_,
                            dwgfx.getRGB(colors[color][2],colors[color][1],colors[color][0]));
             }
+            bool stoploop = false;
+            for (int y = 0; y < map.customheight; y++) {
+                for (int x = 0; x < map.customwidth; x++) {
+                    int x_ = 40 + (x * xmult) + map.custommmxoff;
+                    int y_ = 21 + (y * ymult) + map.custommmyoff;
+                    if ((game.mx > x_) && ((game.mx - 1) < (x_ + xmult))) {
+                        if ((game.my > y_) && ((game.my - 1) < (y_ + ymult))) {
+                            ed.cursor_x = x;
+                            ed.cursor_y = y;
+                            stoploop = true;
+                            break;
+                        }
+                    }
+                }
+                if (stoploop) break;
+            }
+            int color = (lastcolor + 1) % 6;
+            int display_x = 40 + (ed.cursor_x * xmult) + map.custommmxoff;
+            int display_y = 21 + (ed.cursor_y * ymult) + map.custommmyoff;
+            fillboxabs(dwgfx, display_x, display_y, xmult, ymult,
+                dwgfx.getRGB(colors[color][2],colors[color][1],colors[color][0]));
         }
         else if (game.currentmenuname == "ed_edit_trial") {
             customtrial ctrial = ed.customtrials[ed.edtrial];
