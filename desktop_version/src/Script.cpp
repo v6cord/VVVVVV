@@ -252,6 +252,16 @@ bool parse<bool>(std::string val) {
     return parsebool(val);
 }
 
+template<class T>
+std::string stringify(T val) {
+    return std::to_string(val);
+}
+
+template<>
+std::string stringify<bool>(bool val) {
+    return val ? "true" : "false";
+}
+
 void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                       entityclass& obj, UtilityClass& help, musicclass& music) {
     if (scriptdelay == 0) {
@@ -2033,6 +2043,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 X(xp);
             } else if (words[0] == "setentitydata") {
 #define X(FIELD) if (words[2] == #FIELD) obj.entities[ss_toi(words[1])].FIELD = parse<decltype(obj.entities[ss_toi(words[1])].FIELD)>(words[3]);
+                ENTITYDATA
+#undef X
+            } else if (words[0] == "getentitydata") {
+#define X(FIELD) if (words[2] == #FIELD) setvar(words[3], stringify(obj.entities[ss_toi(words[1])].FIELD));
                 ENTITYDATA
 #undef X
             } else if (words[0] == "createcrewman") {
