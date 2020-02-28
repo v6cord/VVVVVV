@@ -1973,6 +1973,54 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 game.supercrewmate = false;
             } else if (words[0] == "supercrewmateroom") {
                 game.scmprogress = game.roomx - 41;
+            } else if (words[0] == "setentitydata") {
+                if (words[2] == "active") obj.entities[ss_toi(words[1])].active           = parsebool(words[3]);
+                if (words[2] == "invis") obj.entities[ss_toi(words[1])].invis             = parsebool(words[3]);
+                if (words[2] == "type") obj.entities[ss_toi(words[1])].type               = ss_toi(words[3]);
+                if (words[2] == "size") obj.entities[ss_toi(words[1])].size               = ss_toi(words[3]);
+                if (words[2] == "tile") obj.entities[ss_toi(words[1])].tile               = ss_toi(words[3]);
+                if (words[2] == "rule") obj.entities[ss_toi(words[1])].rule               = ss_toi(words[3]);
+                if (words[2] == "state") obj.entities[ss_toi(words[1])].state             = ss_toi(words[3]);
+                if (words[2] == "statedelay") obj.entities[ss_toi(words[1])].statedelay   = ss_toi(words[3]);
+                if (words[2] == "behave") obj.entities[ss_toi(words[1])].behave           = ss_toi(words[3]);
+                if (words[2] == "animate") obj.entities[ss_toi(words[1])].animate         = ss_toi(words[3]);
+                if (words[2] == "para") obj.entities[ss_toi(words[1])].para               = (float) ss_toi(words[3]);
+                if (words[2] == "life") obj.entities[ss_toi(words[1])].life               = ss_toi(words[3]);
+                if (words[2] == "colour") obj.entities[ss_toi(words[1])].colour           = ss_toi(words[3]);
+                if (words[2] == "oldxp") obj.entities[ss_toi(words[1])].oldxp             = ss_toi(words[3]);
+                if (words[2] == "oldyp") obj.entities[ss_toi(words[1])].oldyp             = ss_toi(words[3]);
+                if (words[2] == "ax") obj.entities[ss_toi(words[1])].ax                   = (float) ss_toi(words[3]);
+                if (words[2] == "ay") obj.entities[ss_toi(words[1])].ay                   = (float) ss_toi(words[3]);
+                if (words[2] == "vx") obj.entities[ss_toi(words[1])].vx                   = (float) ss_toi(words[3]);
+                if (words[2] == "vy") obj.entities[ss_toi(words[1])].vy                   = (float) ss_toi(words[3]);
+                if (words[2] == "cx") obj.entities[ss_toi(words[1])].cx                   = ss_toi(words[3]);
+                if (words[2] == "cy") obj.entities[ss_toi(words[1])].cy                   = ss_toi(words[3]);
+                if (words[2] == "w") obj.entities[ss_toi(words[1])].w                     = ss_toi(words[3]);
+                if (words[2] == "h") obj.entities[ss_toi(words[1])].h                     = ss_toi(words[3]);
+                if (words[2] == "newxp") obj.entities[ss_toi(words[1])].newxp             = (float) ss_toi(words[3]);
+                if (words[2] == "newyp") obj.entities[ss_toi(words[1])].newyp             = (float) ss_toi(words[3]);
+                if (words[2] == "isplatform") obj.entities[ss_toi(words[1])].isplatform   = parsebool(words[3]);
+                if (words[2] == "x1") obj.entities[ss_toi(words[1])].x1                   = ss_toi(words[3]);
+                if (words[2] == "y1") obj.entities[ss_toi(words[1])].y1                   = ss_toi(words[3]);
+                if (words[2] == "x2") obj.entities[ss_toi(words[1])].x2                   = ss_toi(words[3]);
+                if (words[2] == "y2") obj.entities[ss_toi(words[1])].y2                   = ss_toi(words[3]);
+                if (words[2] == "onentity") obj.entities[ss_toi(words[1])].onentity       = parsebool(words[3]);
+                if (words[2] == "harmful") obj.entities[ss_toi(words[1])].harmful         = parsebool(words[3]);
+                if (words[2] == "onwall") obj.entities[ss_toi(words[1])].onwall           = ss_toi(words[3]);
+                if (words[2] == "onxwall") obj.entities[ss_toi(words[1])].onxwall         = ss_toi(words[3]);
+                if (words[2] == "onywall") obj.entities[ss_toi(words[1])].onywall         = ss_toi(words[3]);
+                if (words[2] == "jumping") obj.entities[ss_toi(words[1])].jumping         = parsebool(words[3]);
+                if (words[2] == "gravity") obj.entities[ss_toi(words[1])].gravity         = parsebool(words[3]);
+                if (words[2] == "onground") obj.entities[ss_toi(words[1])].onground       = ss_toi(words[3]);
+                if (words[2] == "onroof") obj.entities[ss_toi(words[1])].onroof           = ss_toi(words[3]);
+                if (words[2] == "jumpframe") obj.entities[ss_toi(words[1])].jumpframe     = ss_toi(words[3]);
+                if (words[2] == "framedelay") obj.entities[ss_toi(words[1])].framedelay   = ss_toi(words[3]);
+                if (words[2] == "drawframe") obj.entities[ss_toi(words[1])].drawframe     = ss_toi(words[3]);
+                if (words[2] == "walkingframe") obj.entities[ss_toi(words[1])].walking    = ss_toi(words[3]);
+                if (words[2] == "dir") obj.entities[ss_toi(words[1])].dir                 = ss_toi(words[3]);
+                if (words[2] == "actionframe") obj.entities[ss_toi(words[1])].actionframe = ss_toi(words[3]);
+                if (words[2] == "yp") obj.entities[ss_toi(words[1])].yp                   = ss_toi(words[3]);
+                if (words[2] == "xp") obj.entities[ss_toi(words[1])].xp                   = ss_toi(words[3]);
             } else if (words[0] == "createcrewman") {
                 if (words[3] == "cyan") {
                     r = 0;
