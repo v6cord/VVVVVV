@@ -242,6 +242,16 @@ void scriptclass::tokenize(std::string t) {
     words.push_back("");
 }
 
+template<class T>
+T parse(std::string val) {
+    return static_cast<T>(ss_toi(val));
+}
+
+template<>
+bool parse<bool>(std::string val) {
+    return parsebool(val);
+}
+
 void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                       entityclass& obj, UtilityClass& help, musicclass& music) {
     if (scriptdelay == 0) {
@@ -1974,53 +1984,55 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             } else if (words[0] == "supercrewmateroom") {
                 game.scmprogress = game.roomx - 41;
             } else if (words[0] == "setentitydata") {
-                if (words[2] == "active") obj.entities[ss_toi(words[1])].active             = parsebool(words[3]);
-                if (words[2] == "invis") obj.entities[ss_toi(words[1])].invis               = parsebool(words[3]);
-                if (words[2] == "type") obj.entities[ss_toi(words[1])].type                 = ss_toi(words[3]);
-                if (words[2] == "size") obj.entities[ss_toi(words[1])].size                 = ss_toi(words[3]);
-                if (words[2] == "tile") obj.entities[ss_toi(words[1])].tile                 = ss_toi(words[3]);
-                if (words[2] == "rule") obj.entities[ss_toi(words[1])].rule                 = ss_toi(words[3]);
-                if (words[2] == "state") obj.entities[ss_toi(words[1])].state               = ss_toi(words[3]);
-                if (words[2] == "statedelay") obj.entities[ss_toi(words[1])].statedelay     = ss_toi(words[3]);
-                if (words[2] == "behave") obj.entities[ss_toi(words[1])].behave             = ss_toi(words[3]);
-                if (words[2] == "animate") obj.entities[ss_toi(words[1])].animate           = ss_toi(words[3]);
-                if (words[2] == "para") obj.entities[ss_toi(words[1])].para                 = (float) ss_toi(words[3]);
-                if (words[2] == "life") obj.entities[ss_toi(words[1])].life                 = ss_toi(words[3]);
-                if (words[2] == "colour") obj.entities[ss_toi(words[1])].colour             = ss_toi(words[3]);
-                if (words[2] == "oldxp") obj.entities[ss_toi(words[1])].oldxp               = ss_toi(words[3]);
-                if (words[2] == "oldyp") obj.entities[ss_toi(words[1])].oldyp               = ss_toi(words[3]);
-                if (words[2] == "ax") obj.entities[ss_toi(words[1])].ax                     = (float) ss_toi(words[3]);
-                if (words[2] == "ay") obj.entities[ss_toi(words[1])].ay                     = (float) ss_toi(words[3]);
-                if (words[2] == "vx") obj.entities[ss_toi(words[1])].vx                     = (float) ss_toi(words[3]);
-                if (words[2] == "vy") obj.entities[ss_toi(words[1])].vy                     = (float) ss_toi(words[3]);
-                if (words[2] == "cx") obj.entities[ss_toi(words[1])].cx                     = ss_toi(words[3]);
-                if (words[2] == "cy") obj.entities[ss_toi(words[1])].cy                     = ss_toi(words[3]);
-                if (words[2] == "w") obj.entities[ss_toi(words[1])].w                       = ss_toi(words[3]);
-                if (words[2] == "h") obj.entities[ss_toi(words[1])].h                       = ss_toi(words[3]);
-                if (words[2] == "newxp") obj.entities[ss_toi(words[1])].newxp               = (float) ss_toi(words[3]);
-                if (words[2] == "newyp") obj.entities[ss_toi(words[1])].newyp               = (float) ss_toi(words[3]);
-                if (words[2] == "isplatform") obj.entities[ss_toi(words[1])].isplatform     = parsebool(words[3]);
-                if (words[2] == "x1") obj.entities[ss_toi(words[1])].x1                     = ss_toi(words[3]);
-                if (words[2] == "y1") obj.entities[ss_toi(words[1])].y1                     = ss_toi(words[3]);
-                if (words[2] == "x2") obj.entities[ss_toi(words[1])].x2                     = ss_toi(words[3]);
-                if (words[2] == "y2") obj.entities[ss_toi(words[1])].y2                     = ss_toi(words[3]);
-                if (words[2] == "onentity") obj.entities[ss_toi(words[1])].onentity         = parsebool(words[3]);
-                if (words[2] == "harmful") obj.entities[ss_toi(words[1])].harmful           = parsebool(words[3]);
-                if (words[2] == "onwall") obj.entities[ss_toi(words[1])].onwall             = ss_toi(words[3]);
-                if (words[2] == "onxwall") obj.entities[ss_toi(words[1])].onxwall           = ss_toi(words[3]);
-                if (words[2] == "onywall") obj.entities[ss_toi(words[1])].onywall           = ss_toi(words[3]);
-                if (words[2] == "jumping") obj.entities[ss_toi(words[1])].jumping           = parsebool(words[3]);
-                if (words[2] == "gravity") obj.entities[ss_toi(words[1])].gravity           = parsebool(words[3]);
-                if (words[2] == "onground") obj.entities[ss_toi(words[1])].onground         = ss_toi(words[3]);
-                if (words[2] == "onroof") obj.entities[ss_toi(words[1])].onroof             = ss_toi(words[3]);
-                if (words[2] == "jumpframe") obj.entities[ss_toi(words[1])].jumpframe       = ss_toi(words[3]);
-                if (words[2] == "framedelay") obj.entities[ss_toi(words[1])].framedelay     = ss_toi(words[3]);
-                if (words[2] == "drawframe") obj.entities[ss_toi(words[1])].drawframe       = ss_toi(words[3]);
-                if (words[2] == "walkingframe") obj.entities[ss_toi(words[1])].walkingframe = ss_toi(words[3]);
-                if (words[2] == "dir") obj.entities[ss_toi(words[1])].dir                   = ss_toi(words[3]);
-                if (words[2] == "actionframe") obj.entities[ss_toi(words[1])].actionframe   = ss_toi(words[3]);
-                if (words[2] == "yp") obj.entities[ss_toi(words[1])].yp                     = ss_toi(words[3]);
-                if (words[2] == "xp") obj.entities[ss_toi(words[1])].xp                     = ss_toi(words[3]);
+#define SET_FIELD(FIELD) if (words[2] == #FIELD) obj.entities[ss_toi(words[1])].FIELD = parse<decltype(obj.entities[ss_toi(words[1])].FIELD)>(words[3]);
+                SET_FIELD(active);
+                SET_FIELD(invis);
+                SET_FIELD(type);
+                SET_FIELD(size);
+                SET_FIELD(tile);
+                SET_FIELD(rule);
+                SET_FIELD(state);
+                SET_FIELD(statedelay);
+                SET_FIELD(behave);
+                SET_FIELD(animate);
+                SET_FIELD(para);
+                SET_FIELD(life);
+                SET_FIELD(colour);
+                SET_FIELD(oldxp);
+                SET_FIELD(oldyp);
+                SET_FIELD(ax);
+                SET_FIELD(ay);
+                SET_FIELD(vx);
+                SET_FIELD(vy);
+                SET_FIELD(cx);
+                SET_FIELD(cy);
+                SET_FIELD(w);
+                SET_FIELD(h);
+                SET_FIELD(newxp);
+                SET_FIELD(newyp);
+                SET_FIELD(isplatform);
+                SET_FIELD(x1);
+                SET_FIELD(y1);
+                SET_FIELD(x2);
+                SET_FIELD(y2);
+                SET_FIELD(onentity);
+                SET_FIELD(harmful);
+                SET_FIELD(onwall);
+                SET_FIELD(onxwall);
+                SET_FIELD(onywall);
+                SET_FIELD(jumping);
+                SET_FIELD(gravity);
+                SET_FIELD(onground);
+                SET_FIELD(onroof);
+                SET_FIELD(jumpframe);
+                SET_FIELD(framedelay);
+                SET_FIELD(drawframe);
+                SET_FIELD(walkingframe);
+                SET_FIELD(dir);
+                SET_FIELD(actionframe);
+                SET_FIELD(yp);
+                SET_FIELD(xp);
+#undef SET_FIELD
             } else if (words[0] == "createcrewman") {
                 if (words[3] == "cyan") {
                     r = 0;
