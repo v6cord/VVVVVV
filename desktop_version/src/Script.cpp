@@ -1983,56 +1983,58 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 game.supercrewmate = false;
             } else if (words[0] == "supercrewmateroom") {
                 game.scmprogress = game.roomx - 41;
+#define ENTITYDATA \
+                X(active); \
+                X(invis); \
+                X(type); \
+                X(size); \
+                X(tile); \
+                X(rule); \
+                X(state); \
+                X(statedelay); \
+                X(behave); \
+                X(animate); \
+                X(para); \
+                X(life); \
+                X(colour); \
+                X(oldxp); \
+                X(oldyp); \
+                X(ax); \
+                X(ay); \
+                X(vx); \
+                X(vy); \
+                X(cx); \
+                X(cy); \
+                X(w); \
+                X(h); \
+                X(newxp); \
+                X(newyp); \
+                X(isplatform); \
+                X(x1); \
+                X(y1); \
+                X(x2); \
+                X(y2); \
+                X(onentity); \
+                X(harmful); \
+                X(onwall); \
+                X(onxwall); \
+                X(onywall); \
+                X(jumping); \
+                X(gravity); \
+                X(onground); \
+                X(onroof); \
+                X(jumpframe); \
+                X(framedelay); \
+                X(drawframe); \
+                X(walkingframe); \
+                X(dir); \
+                X(actionframe); \
+                X(yp); \
+                X(xp);
             } else if (words[0] == "setentitydata") {
-#define SET_FIELD(FIELD) if (words[2] == #FIELD) obj.entities[ss_toi(words[1])].FIELD = parse<decltype(obj.entities[ss_toi(words[1])].FIELD)>(words[3]);
-                SET_FIELD(active);
-                SET_FIELD(invis);
-                SET_FIELD(type);
-                SET_FIELD(size);
-                SET_FIELD(tile);
-                SET_FIELD(rule);
-                SET_FIELD(state);
-                SET_FIELD(statedelay);
-                SET_FIELD(behave);
-                SET_FIELD(animate);
-                SET_FIELD(para);
-                SET_FIELD(life);
-                SET_FIELD(colour);
-                SET_FIELD(oldxp);
-                SET_FIELD(oldyp);
-                SET_FIELD(ax);
-                SET_FIELD(ay);
-                SET_FIELD(vx);
-                SET_FIELD(vy);
-                SET_FIELD(cx);
-                SET_FIELD(cy);
-                SET_FIELD(w);
-                SET_FIELD(h);
-                SET_FIELD(newxp);
-                SET_FIELD(newyp);
-                SET_FIELD(isplatform);
-                SET_FIELD(x1);
-                SET_FIELD(y1);
-                SET_FIELD(x2);
-                SET_FIELD(y2);
-                SET_FIELD(onentity);
-                SET_FIELD(harmful);
-                SET_FIELD(onwall);
-                SET_FIELD(onxwall);
-                SET_FIELD(onywall);
-                SET_FIELD(jumping);
-                SET_FIELD(gravity);
-                SET_FIELD(onground);
-                SET_FIELD(onroof);
-                SET_FIELD(jumpframe);
-                SET_FIELD(framedelay);
-                SET_FIELD(drawframe);
-                SET_FIELD(walkingframe);
-                SET_FIELD(dir);
-                SET_FIELD(actionframe);
-                SET_FIELD(yp);
-                SET_FIELD(xp);
-#undef SET_FIELD
+#define X(FIELD) if (words[2] == #FIELD) obj.entities[ss_toi(words[1])].FIELD = parse<decltype(obj.entities[ss_toi(words[1])].FIELD)>(words[3]);
+                ENTITYDATA
+#undef X
             } else if (words[0] == "createcrewman") {
                 if (words[3] == "cyan") {
                     r = 0;
