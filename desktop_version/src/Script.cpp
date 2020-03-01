@@ -500,6 +500,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             map.warpy = true;
                             break;
                     }
+
+                    // Don't forget about roomtext
+                    map.roomtexton = false;
+                    map.roomtext.clear();
                 } else if (words[1] == "conveyors") {
                     // Copy-pasted from above
                     for (int edc = 0; edc < obj.nentity; edc++) {
