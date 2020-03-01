@@ -10,7 +10,7 @@
 
 struct Roomtext
 {
-    int x, y;
+    int x, y, subx, suby;
     std::string text;
 };
 

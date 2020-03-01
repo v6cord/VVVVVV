@@ -2069,7 +2069,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         //Draw room text!
         for (size_t i = 0; i < map.roomtext.size(); i++)
         {
-            dwgfx.Print(map.roomtext[i].x*8, (map.roomtext[i].y*8), map.roomtext[i].text, 196, 196, 255 - help.glow);
+            dwgfx.Print(map.roomtext[i].x*8 + map.roomtext[i].subx, (map.roomtext[i].y*8) + map.roomtext[i].suby, map.roomtext[i].text, 196, 196, 255 - help.glow);
         }
     }
 
@@ -3418,7 +3418,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         //Draw room text!
         for (size_t i = 0; i < map.roomtext.size(); i++)
         {
-            dwgfx.Print(map.roomtext[i].x*8, (map.roomtext[i].y*8) - map.ypos, map.roomtext[i].text, 196, 196, 255 - help.glow);
+            dwgfx.Print(map.roomtext[i].x*8 + map.roomtext[i].subx, (map.roomtext[i].y*8) + map.roomtext[i].suby - map.ypos, map.roomtext[i].text, 196, 196, 255 - help.glow);
         }
     }
 

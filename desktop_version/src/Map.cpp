@@ -2079,6 +2079,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				Roomtext text;
 				text.x = ex / 8;
 				text.y = ey / 8;
+				text.subx = edentity[edi].subx;
+				text.suby = edentity[edi].suby;
 				text.text = edentity[edi].scriptname;
 				roomtext.push_back(text);
 				break;
