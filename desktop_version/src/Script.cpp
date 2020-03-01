@@ -2126,8 +2126,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 map.roomtexton = true;
                 position++;
                 map.roomtext.push_back(Roomtext{
-                    .x = ss_toi(words[1]),
-                    .y = ss_toi(words[2]),
+                    .x = ss_toi(words[1]) / 8,
+                    .y = ss_toi(words[2]) / 8,
+                    .subx = ss_toi(words[1]) % 8,
+                    .suby = ss_toi(words[2]) % 8,
                     .text = commands[position],
                 });
             } else if (words[0] == "createscriptbox") {
