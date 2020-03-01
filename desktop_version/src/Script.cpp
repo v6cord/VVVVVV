@@ -609,7 +609,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             obj.entities[egi].active = false;
                 } else if (words[1] == "roomtext") {
                     map.roomtexton = false;
-                    map.roomtextnumlines = 0;
+                    map.roomtext.clear();
                 } else if (words[1] == "crewmates") {
                     for (int eci = 0; eci < obj.nentity; eci++)
                         if (obj.entities[eci].type == 12 ||
@@ -2120,12 +2120,12 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 }
             } else if (words[0] == "createroomtext") {
                 map.roomtexton = true;
-                map.roomtextx[map.roomtextnumlines] = ss_toi(words[1]);
-                map.roomtexty[map.roomtextnumlines] = ss_toi(words[2]);
                 position++;
-                map.roomtext[map.roomtextnumlines] =
-                    processvars(commands[position]);
-                map.roomtextnumlines++;
+                map.roomtext.push_back(Roomtext{
+                    .x = ss_toi(words[1]),
+                    .y = ss_toi(words[2]),
+                    .text = commands[position],
+                });
             } else if (words[0] == "createscriptbox") {
                 // Ok, first figure out the first available script box slot
                 int lastslot = 0;

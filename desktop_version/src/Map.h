@@ -188,10 +188,8 @@ public:
     bool showteleporters, showtargets, showtrinkets = false;
 
     //Roomtext
-    int roomtextx[100], roomtexty[100] = {0};
-    bool roomtexton = true;
-    growing_vector<std::string> roomtext;
-    int roomtextnumlines = 0;
+    bool roomtexton = false;
+    std::vector<Roomtext> roomtext;
 
     //Levels
     otherlevelclass otherlevel;

@@ -87,17 +87,6 @@ mapclass::mapclass()
 	}
 	resetnames();
 
-	//roomtext
-
-	for (int i = 0; i < 100; i++)
-	{
-		roomtextx[i]=0;
-		roomtexty[i]=0;
-		roomtext.push_back(std::string());
-	}
-	roomtexton = false;
-	roomtextnumlines = 0;
-
 	//Areamap starts at 100,100 and extends 20x20
 	growing_vector<std::string> tmap;
 	tmap.push_back("1,2,2,2,2,2,2,2,0,3,0,0,0,4,4,4,4,4,4,4");
@@ -1581,7 +1570,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
 
 	roomtexton = false;
-	roomtextnumlines = 0;
+	roomtext.clear();
 
 	obj.platformtile = 0;
 	obj.customplatformtile=0;
@@ -1717,13 +1706,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		if (otherlevel.roomtexton)
 		{
 			roomtexton = true;
-			roomtextx[0] = otherlevel.roomtextx;
-			roomtexty[0] = otherlevel.roomtexty;
-			roomtextnumlines = otherlevel.roomtextnumlines;
-			for (int i = 0; i < roomtextnumlines; i++)
-			{
-				roomtext[i] = otherlevel.roomtext[i];
-			}
+			roomtext = std::vector<Roomtext>(otherlevel.roomtext);
 		}
 		break;
 	case 2: //The Lab
@@ -1982,7 +1965,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		}
 
 		roomtexton = false;
-		roomtextnumlines=0;
+		roomtext.clear();
 
 		//Entities have to be created HERE, akwardly
 		int tempcheckpoints=0;
@@ -2091,13 +2074,15 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				obj.createentity(game, ex, ey, 55, ed.findcrewmate(edi),
 								 edentity[edi].p1, edentity[edi].p2);
 				break;
-			case 17: // Roomtext!
+			case 17: { // Roomtext!
 				roomtexton = true;
-				roomtextx[roomtextnumlines] = ex / 8;
-				roomtexty[roomtextnumlines] = ey / 8;
-				roomtext[roomtextnumlines] = edentity[edi].scriptname;
-				roomtextnumlines++;
+				Roomtext text;
+				text.x = ex / 8;
+				text.y = ey / 8;
+				text.text = edentity[edi].scriptname;
+				roomtext.push_back(text);
 				break;
+			}
 			case 18: { // Terminals
 				obj.customscript = edentity[edi].scriptname;
 
@@ -2167,6 +2152,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		customcoins=ed.numcoins;
 		customcrewmates=ed.numcrewmates;
 
+		//do the appear/remove roomname here
 		break;
 #endif
 	}
