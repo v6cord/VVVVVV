@@ -292,7 +292,7 @@ void editorclass::reset()
     numtrinkets=0;
     numcoins=0;
     numcrewmates=0;
-    EditorData::GetInstance().numedentities=0;
+    edentity.clear();
     levmusic=0;
 
     for (int j = 0; j < maxheight; j++)
@@ -1844,7 +1844,7 @@ void editorclass::findstartpoint(Game& game)
     //Ok! Scan the room for the closest checkpoint
     int testeditor=-1;
     //First up; is there a start point on this screen?
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(size_t i=0; i<edentity.size(); i++)
     {
         //if() on screen
         if(edentity[i].t==16 && testeditor==-1)
@@ -1936,7 +1936,7 @@ void editorclass::saveconvertor()
 int editorclass::findtrinket(int t)
 {
     int ttrinket=0;
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(int i=0; i<(int)edentity.size(); i++)
     {
         if(i==t) return ttrinket;
         if(edentity[i].t==9) ttrinket++;
@@ -1947,7 +1947,7 @@ int editorclass::findtrinket(int t)
 int editorclass::findcoin(int t)
 {
     int tcoin=0;
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(int i=0; i<(int)edentity.size(); i++)
     {
         if(i==t) return tcoin;
         if(edentity[i].t==8) tcoin++;
@@ -1958,7 +1958,7 @@ int editorclass::findcoin(int t)
 int editorclass::findcrewmate(int t)
 {
     int ttrinket=0;
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(int i=0; i<(int)edentity.size(); i++)
     {
         if(i==t) return ttrinket;
         if(edentity[i].t==15) ttrinket++;
@@ -1969,7 +1969,7 @@ int editorclass::findcrewmate(int t)
 int editorclass::findwarptoken(int t)
 {
     int ttrinket=0;
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(int i=0; i<(int)edentity.size(); i++)
     {
         if(i==t) return ttrinket;
         if(edentity[i].t==13) ttrinket++;
@@ -2005,7 +2005,7 @@ void editorclass::countstuff()
     numtrinkets=0;
     numcoins=0;
     numcrewmates=0;
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(size_t i=0; i<edentity.size(); i++)
     {
         if(edentity[i].t==9) numtrinkets++;
         if(edentity[i].t==8) numcoins++;
@@ -2273,7 +2273,7 @@ void editorclass::shift_tower(int tower, int y) {
     }
 
     // Shift entities
-    for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
+    for (size_t i = 0; i < edentity.size(); i++) {
         if (tower == edentity[i].intower)
             edentity[i].y += y;
         if (edentity[i].t == 13 && tower == edentity[i].p3)
@@ -2671,51 +2671,48 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
 
         if (pKey == "edEntities")
         {
-            int i = 0;
             for( TiXmlElement* edEntityEl = pElem->FirstChildElement(); edEntityEl; edEntityEl=edEntityEl->NextSiblingElement())
             {
+                edentities entity;
+
                 std::string pKey(edEntityEl->Value());
-                //const char* pText = edEntityEl->GetText() ;
-                if(edEntityEl->GetText() != NULL)
+                if (edEntityEl->GetText() != NULL)
                 {
-                    edentity[i].scriptname = std::string(edEntityEl->GetText()) ;
+                    entity.scriptname = std::string(edEntityEl->GetText());
                 }
 
                 if (edEntityEl->Attribute("activityname")) {
-                    edentity[i].activityname = edEntityEl->Attribute("activityname");
+                    entity.activityname = edEntityEl->Attribute("activityname");
                 } else {
-                    edentity[i].activityname = "";
+                    entity.activityname = "";
                 }
 
                 if (edEntityEl->Attribute("activitycolor")) {
-                    edentity[i].activitycolor = edEntityEl->Attribute("activitycolor");
+                    entity.activitycolor = edEntityEl->Attribute("activitycolor");
                 } else {
-                    edentity[i].activitycolor = "";
+                    entity.activitycolor = "";
                 }
 
-                edEntityEl->QueryIntAttribute("x", &edentity[i].x);
-                edEntityEl->QueryIntAttribute("y", &edentity[i].y);
-                edEntityEl->QueryIntAttribute("subx", &edentity[i].subx);
-                edEntityEl->QueryIntAttribute("suby", &edentity[i].suby);
-                edEntityEl->QueryIntAttribute("t", &edentity[i].t);
+                edEntityEl->QueryIntAttribute("x", &entity.x);
+                edEntityEl->QueryIntAttribute("y", &entity.y);
+                edEntityEl->QueryIntAttribute("subx", &entity.subx);
+                edEntityEl->QueryIntAttribute("suby", &entity.suby);
+                edEntityEl->QueryIntAttribute("t", &entity.t);
 
-                edEntityEl->QueryIntAttribute("p1", &edentity[i].p1);
-                edEntityEl->QueryIntAttribute("p2", &edentity[i].p2);
-                edEntityEl->QueryIntAttribute("p3", &edentity[i].p3);
-                edEntityEl->QueryIntAttribute("p4", &edentity[i].p4);
-                edEntityEl->QueryIntAttribute("p5", &edentity[i].p5);
-                edEntityEl->QueryIntAttribute("p6", &edentity[i].p6);
+                edEntityEl->QueryIntAttribute("p1", &entity.p1);
+                edEntityEl->QueryIntAttribute("p2", &entity.p2);
+                edEntityEl->QueryIntAttribute("p3", &entity.p3);
+                edEntityEl->QueryIntAttribute("p4", &entity.p4);
+                edEntityEl->QueryIntAttribute("p5", &entity.p5);
+                edEntityEl->QueryIntAttribute("p6", &entity.p6);
 
-                edEntityEl->QueryIntAttribute("state", &edentity[i].state);
-                edEntityEl->QueryIntAttribute("intower", &edentity[i].intower);
+                edEntityEl->QueryIntAttribute("state", &entity.state);
+                edEntityEl->QueryIntAttribute("intower", &entity.intower);
 
-                edEntityEl->QueryIntAttribute("onetime", (int*) &edentity[i].onetime);
+                edEntityEl->QueryIntAttribute("onetime", (int*) &entity.onetime);
 
-                i++;
-
+                edentity.push_back(entity);
             }
-
-            EditorData::GetInstance().numedentities = i;
         }
 
         if (pKey == "levelMetaData")
@@ -2945,7 +2942,7 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
                         level[twx + twy * maxwidth].tower--;
 
             // Shift tower ID in entities
-            for (int i = 0; i < EditorData::GetInstance().numedentities; i++) {
+            for (size_t i = 0; i < edentity.size(); i++) {
                 if (edentity[i].intower == t ||
                     (edentity[i].t == 13 && edentity[i].p3 == t)) {
                     removeedentity(i);
@@ -3034,7 +3031,7 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
     data->LinkEndChild(msg);
 
     msg = new TiXmlElement( "edEntities" );
-    for(int i = 0; i < EditorData::GetInstance().numedentities; i++)
+    for(size_t i = 0; i < edentity.size(); i++)
     {
         TiXmlElement *edentityElement = new TiXmlElement( "edentity" );
         edentityElement->SetAttribute( "x", edentity[i].x);
@@ -3119,86 +3116,37 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
 
 void addedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
 {
+    edentities entity;
+
     int tower = ed.get_tower(ed.levx, ed.levy);
-    edentity[EditorData::GetInstance().numedentities].x=xp;
-    edentity[EditorData::GetInstance().numedentities].y=yp;
-    edentity[EditorData::GetInstance().numedentities].subx=0;
-    edentity[EditorData::GetInstance().numedentities].suby=0;
-    edentity[EditorData::GetInstance().numedentities].t=tp;
-    edentity[EditorData::GetInstance().numedentities].p1=p1;
-    edentity[EditorData::GetInstance().numedentities].p2=p2;
-    edentity[EditorData::GetInstance().numedentities].p3=p3;
-    edentity[EditorData::GetInstance().numedentities].p4=p4;
-    edentity[EditorData::GetInstance().numedentities].p5=p5;
-    edentity[EditorData::GetInstance().numedentities].p6=p6;
-    edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
-    edentity[EditorData::GetInstance().numedentities].intower=tower;
-    edentity[EditorData::GetInstance().numedentities].scriptname="";
-    edentity[EditorData::GetInstance().numedentities].activityname="";
-    edentity[EditorData::GetInstance().numedentities].activitycolor="";
-    edentity[EditorData::GetInstance().numedentities].onetime = false;
+    entity.x=xp;
+    entity.y=yp;
+    entity.subx=0;
+    entity.suby=0;
+    entity.t=tp;
+    entity.p1=p1;
+    entity.p2=p2;
+    entity.p3=p3;
+    entity.p4=p4;
+    entity.p5=p5;
+    entity.p6=p6;
+    entity.state=ed.levaltstate;
+    entity.intower=tower;
+    entity.scriptname="";
+    entity.activityname="";
+    entity.activitycolor="";
+    entity.onetime = false;
 
-    EditorData::GetInstance().numedentities++;
-}
-
-void naddedentity( int xp, int yp, int tp, int p1/*=0*/, int p2/*=0*/, int p3/*=0*/, int p4/*=0*/, int p5/*=320*/, int p6/*=240*/)
-{
-    int tower = ed.get_tower(ed.levx, ed.levy);
-    edentity[EditorData::GetInstance().numedentities].x=xp;
-    edentity[EditorData::GetInstance().numedentities].y=yp;
-    edentity[EditorData::GetInstance().numedentities].subx=0;
-    edentity[EditorData::GetInstance().numedentities].suby=0;
-    edentity[EditorData::GetInstance().numedentities].t=tp;
-    edentity[EditorData::GetInstance().numedentities].p1=p1;
-    edentity[EditorData::GetInstance().numedentities].p2=p2;
-    edentity[EditorData::GetInstance().numedentities].p3=p3;
-    edentity[EditorData::GetInstance().numedentities].p4=p4;
-    edentity[EditorData::GetInstance().numedentities].p5=p5;
-    edentity[EditorData::GetInstance().numedentities].p6=p6;
-    edentity[EditorData::GetInstance().numedentities].state=ed.levaltstate;
-    edentity[EditorData::GetInstance().numedentities].intower=tower;
-    edentity[EditorData::GetInstance().numedentities].scriptname="";
-    edentity[EditorData::GetInstance().numedentities].activityname="";
-    edentity[EditorData::GetInstance().numedentities].activitycolor="";
-    edentity[EditorData::GetInstance().numedentities].onetime = false;
-}
-
-void copyedentity( int a, int b )
-{
-    edentity[a].x=edentity[b].x;
-    edentity[a].y=edentity[b].y;
-    edentity[a].subx=edentity[b].subx;
-    edentity[a].suby=edentity[b].suby;
-    edentity[a].t=edentity[b].t;
-    edentity[a].p1=edentity[b].p1;
-    edentity[a].p2=edentity[b].p2;
-    edentity[a].p3=edentity[b].p3;
-    edentity[a].p4=edentity[b].p4;
-    edentity[a].p5=edentity[b].p5;
-    edentity[a].p6=edentity[b].p6;
-    edentity[a].state=edentity[b].state;
-    edentity[a].intower=edentity[b].intower;
-    edentity[a].scriptname=edentity[b].scriptname;
-    edentity[a].activityname=edentity[b].activityname;
-    edentity[a].activitycolor=edentity[b].activitycolor;
-    edentity[a].onetime = edentity[b].onetime;
+    edentity.push_back(entity);
 }
 
 void removeedentity( int t )
 {
-    if(t==EditorData::GetInstance().numedentities-1)
-    {
-        EditorData::GetInstance().numedentities--;
-    }
-    else
-    {
-        for(int m=t; m<EditorData::GetInstance().numedentities; m++) copyedentity(m,m+1);
-        EditorData::GetInstance().numedentities--;
-    }
+    edentity.erase(edentity.begin() + t);
 }
 
 int edentat(int x, int y, int state, int tower) {
-    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+    for(size_t i=0; i<edentity.size(); i++)
         if (edentity[i].x==x && edentity[i].y==y &&
             edentity[i].state==state && edentity[i].intower==tower)
             return i;
@@ -3544,7 +3492,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     ed.temp=edentat(tx, ty, ed.levaltstate, tower);
 
     // Iterate backwards to make the editor draw in the same order as ingame
-    for(int i=EditorData::GetInstance().numedentities - 1; i >= 0; i--) {
+    for(int i=edentity.size() - 1; i >= 0; i--) {
         // Entity locations
         int ex = edentity[i].x;
         int ey = edentity[i].y;
@@ -5753,7 +5701,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                 music.playef(2, 10);
                             } else {
                                 int j=0, tx=0, ty=0;
-                                for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+                                for(size_t i=0; i<edentity.size(); i++)
                                 {
                                     if(edentity[i].t==50)
                                     {
@@ -5945,9 +5893,8 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 // Find next entity of this kind
                 ed.entcycle++;
                 int num_ents = 0;
-                int i;
-                for (i = 0; i < EditorData::GetInstance().numedentities;
-                     i++)
+                size_t i;
+                for (i = 0; i < edentity.size(); i++)
                     if (edentity[i].t == ent)
                         num_ents++;
 
@@ -5955,8 +5902,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     ed.entcycle = 1;
 
                 num_ents = 0;
-                for (i = 0; i < EditorData::GetInstance().numedentities;
-                     i++) {
+                for (i = 0; i < edentity.size(); i++) {
                     if (edentity[i].t == ent) {
                         num_ents++;
                         if (ed.entcycle == num_ents)
@@ -6231,7 +6177,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_w])
             {
                 int j=0, tx=0, ty=0;
-                for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+                for(size_t i=0; i<edentity.size(); i++)
                 {
                     if(edentity[i].t==50)
                     {
@@ -6339,8 +6285,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     int ey = 0;
                     int enttyp = 16;
                     do {
-                        for (int i=0; i<EditorData::GetInstance().numedentities;
-                             i++) {
+                        for (size_t i=0; i<edentity.size(); i++) {
                             if (edentity[i].t != enttyp ||
                                 edentity[i].intower != tower ||
                                 edentity[i].state != ed.levaltstate)
@@ -6501,20 +6446,20 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             {
                                 //Script trigger
                                 ed.lclickdelay=1;
-                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.textent=edentity.size();
                                 addedentity((ed.boundx1/8),(ed.boundy1/8),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
                                 ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
                                           &(edentity[ed.textent].scriptname));
                                 if (ed.boundarytype==5)
-                                    // Don't forget to subtract 1 from index because addedentity incremented it
-                                    edentity[EditorData::GetInstance().numedentities-1].onetime = true;
+                                    // Don't forget to subtract 1 from index because we added an entity
+                                    edentity[edentity.size()-1].onetime = true;
                             }
                             else if(ed.boundarytype==4)
                             {
                                 //Activity zone
                                 ed.lclickdelay=1;
-                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.textent=edentity.size();
                                 ed.textcount = 2;
                                 addedentity((ed.boundx1/8),(ed.boundy1/8),20,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
@@ -6768,7 +6713,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             if(ed.drawmode==10)
                             {
                                 ed.lclickdelay=1;
-                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.textent=edentity.size();
                                 addedentity(tx, ty, 17);
                                 ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
                                           &(edentity[ed.textent].scriptname));
@@ -6838,7 +6783,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             else if(ed.drawmode==11)
                             {
                                 ed.lclickdelay=1;
-                                ed.textent=EditorData::GetInstance().numedentities;
+                                ed.textent=edentity.size();
                                 addedentity(tx, ty, 18, 0);
                                 ed.getlin(key, TEXT_SCRIPT, "Enter script name",
                                           &(edentity[ed.textent].scriptname));
@@ -6846,7 +6791,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             else if(ed.drawmode==13)
                             {
                                 ed.warpmod=true;
-                                ed.warpent=EditorData::GetInstance().numedentities;
+                                ed.warpent=edentity.size();
                                 addedentity(tx, ty, 13);
                                 ed.lclickdelay=1;
                             }
@@ -6896,7 +6841,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                                     ed.notedelay = 45;
                                 } else {
                                     //If there is another start point, destroy it
-                                    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+                                    for(size_t i=0; i<edentity.size(); i++)
                                     {
                                         if(edentity[i].t==16)
                                         {
@@ -7052,7 +6997,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                     {
                         ed.placetilelocal(ed.tilex, ed.tiley, 0);
                     }
-                    for(int i=0; i<EditorData::GetInstance().numedentities; i++)
+                    for(size_t i=0; i<edentity.size(); i++)
                     {
                         if (edentity[i].x==tx && edentity[i].y==ty &&
                             edentity[i].state==ed.levaltstate &&
@@ -7296,8 +7241,8 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                     altstates[i].tiles[tx + ty*40] = contents[tx + rxi*40 + vmult[ty + ryi*30]];
 
             // Copy the entities from the main state
-            // But since we're incrementing numedentities, don't use it as a bounds check!
-            int limit = EditorData::GetInstance().numedentities;
+            // But since we're incrementing edentity.size(), don't use it as a bounds check!
+            int limit = edentity.size();
             for (int i = 0; i < limit; i++)
                 if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
                 && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
@@ -7316,11 +7261,7 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                         // Don't copy the start point
                         continue;
                     }
-                    // Why does copyedentity() copy from argument #2 to argument #1 instead of 1 to 2??? Makes no sense
-                    copyedentity(EditorData::GetInstance().numedentities, i);
-                    edentity[EditorData::GetInstance().numedentities].state = state;
-                    edentity[EditorData::GetInstance().numedentities].intower = 0;
-                    EditorData::GetInstance().numedentities++;
+                    edentity.push_back(edentity[i]);
                 }
 
             break;
@@ -7338,7 +7279,7 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
     altstates[n].x = -1;
     altstates[n].y = -1;
 
-    for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
+    for (size_t i = 0; i < edentity.size(); i++)
         if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
         && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
         && edentity[i].state == state && edentity[i].intower == 0) {
@@ -7361,7 +7302,7 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
     }
 
     // Don't forget to update entities
-    for (int i = 0; i < EditorData::GetInstance().numedentities; i++)
+    for (size_t i = 0; i < edentity.size(); i++)
         if (edentity[i].x >= rxi*40 && edentity[i].x < (rxi+1)*40
         && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
         && edentity[i].state > state && edentity[i].intower == 0)

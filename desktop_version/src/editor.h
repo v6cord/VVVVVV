@@ -161,7 +161,6 @@ class EditorData
     }
 
 
-    int numedentities;
     std::string title;
     std::string creator;
 
@@ -172,8 +171,7 @@ class EditorData
 private:
 
 
-    EditorData():
-    numedentities(0)
+    EditorData()
     {
     }
 
@@ -432,10 +430,6 @@ public:
 };
 
 void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
-
-void naddedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);
-
-void copyedentity(int a, int b);
 
 void removeedentity(int t);
 
