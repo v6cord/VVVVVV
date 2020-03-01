@@ -159,7 +159,7 @@ growing_vector<std::string> changelog = {
     "- Added hourglasses as enemy type 10",
     "- Fixed enemies in Warp Zone gray not",
     "  being gray",
-    "- createroomtext(x,y) - x,y in tiles,",
+    "- createroomtext(x,y) - x,y in pixels,",
     "  roomtext on next line",
     "- createscriptbox(x,y,w,h,script) -",
     "  x,y,w,h in pixels",
