@@ -6,7 +6,6 @@
 
 #include <string>
 #include <vector>
-#include "Game.h"
 
 struct Roomtext
 {
