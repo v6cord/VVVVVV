@@ -1415,10 +1415,10 @@ int editorclass::towerspikefree(int x, int y) {
     if (!intower())
         return spikefree(x, y);
 
-    if (x == -1) return 1;
-    if (x == 40) return 1;
-    if (y == -1) return 1;
-    if (y >= size) return 1;
+    if (x == -1) x = 0;
+    if (x == 40) x = 39;
+    if (y == -1) y = 0;
+    if (y >= size) y = size - 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
     temp = gettiletyp(level[levx + levy * maxwidth].tileset, tile);
@@ -1429,10 +1429,10 @@ int editorclass::towerspikefree(int x, int y) {
 
 int editorclass::spikefree(int x, int y) {
     //Returns 0 if tile is not a block or spike, 1 otherwise
-    if(x==-1) return 1;
-    if(y==-1) return 1;
-    if(x==40) return 1;
-    if(y==30) return 1;
+    if (x == -1) x = 0;
+    if (x == 40) x = 39;
+    if (y == -1) y = 0;
+    if (y == 30) y = 29;
 
     temp = gettiletyplocal(x, y);
     if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
@@ -1455,10 +1455,10 @@ int editorclass::towerfree(int x, int y) {
     if (!intower())
         return free(x, y);
 
-    if (x == -1) return 1;
-    if (x == 40) return 1;
-    if (y == -1) return 1;
-    if (y >= size) return 1;
+    if (x == -1) x = 0;
+    if (x == 40) x = 39;
+    if (y == -1) y = 0;
+    if (y >= size) y = size - 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
     return getfree(gettiletyp(level[levx + levy * maxwidth].tileset,
@@ -1467,10 +1467,10 @@ int editorclass::towerfree(int x, int y) {
 
 int editorclass::free(int x, int y) {
     //Returns 0 if tile is not a block, 1 otherwise
-    if(x==-1) return 1;
-    if(y==-1) return 1;
-    if(x==40) return 1;
-    if(y==30) return 1;
+    if (x == -1) x = 0;
+    if (x == 40) x = 39;
+    if (y == -1) y = 0;
+    if (y == 30) y = 29;
 
     return getfree(gettiletyplocal(x, y));
 }
@@ -3519,6 +3519,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
         int len;
         SDL_Rect drawRect;
+        int y_size = 30;
+        if (tower)
+            y_size = ed.tower_size(tower);
 
         // WARNING: Don't get any bright ideas about reducing indentation by negating this conditional and using a `continue`
         if (edentity[i].state == ed.levaltstate &&
@@ -3623,16 +3626,16 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             case 11: // Gravity lines
                 fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
                 if(edentity[i].p1 == 0) { //Horizontal
-                    while (!ed.spikefree(tx, ey / 8)) tx--;
-                    while (!ed.spikefree(tx2, ey / 8)) tx2++;
+                    while (tx >= 0 && !ed.spikefree(tx, ey / 8)) tx--;
+                    while (tx2 < 40 && !ed.spikefree(tx2, ey / 8)) tx2++;
                     tx++;
                     FillRect(dwgfx.backBuffer, (tx*8), ey+4, (tx2-tx)*8, 1,
                              dwgfx.getRGB(194,194,194));
                     edentity[i].p2 = tx;
                     edentity[i].p3 = (tx2-tx)*8;
                 } else { // Vertical
-                    while (!ed.towerspikefree(tx, ty)) ty--;
-                    while (!ed.towerspikefree(tx, ty2)) ty2++;
+                    while (ty >= 0 && !ed.towerspikefree(tx, ty)) ty--;
+                    while (ty2 < y_size && !ed.towerspikefree(tx, ty2)) ty2++;
                     ty++;
                     FillRect(dwgfx.backBuffer, (tx*8)+3, (ty*8) - (ed.ypos*8), 1,
                              (ty2-ty)*8, dwgfx.getRGB(194,194,194));
@@ -3709,16 +3712,16 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             case 50: // Warp lines
                 fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(164,255,164));
                 if (edentity[i].p1>=2) { //Horizontal
-                    while (!ed.free(tx, ey / 8)) tx--;
-                    while (!ed.free(tx2, ey / 8)) tx2++;
+                    while (tx >= 0 && !ed.free(tx, ey / 8)) tx--;
+                    while (tx2 < 40 && !ed.free(tx2, ey / 8)) tx2++;
                     tx++;
                     fillboxabs(dwgfx, (tx*8), ey+1, (tx2-tx)*8, 6,
                                dwgfx.getRGB(255,255,194));
                     edentity[i].p2=tx;
                     edentity[i].p3=(tx2-tx)*8;
                 } else { // Vertical
-                    while (!ed.towerfree(tx, ty)) ty--;
-                    while (!ed.towerfree(tx, ty2)) ty2++;
+                    while (ty >= 0 && !ed.towerfree(tx, ty)) ty--;
+                    while (ty2 < y_size && !ed.towerfree(tx, ty2)) ty2++;
                     ty++;
                     fillboxabs(dwgfx, (tx*8)+1, (ty*8) - (ed.ypos*8), 6,
                                (ty2-ty)*8, dwgfx.getRGB(255,255,194));
