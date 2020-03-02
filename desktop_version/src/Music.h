@@ -41,6 +41,7 @@ public:
 	void initefchannels();
 
 	void playfile(const char* t, std::string track, bool internal = false);
+	void playmusicfile(const char* t);
 	void stopfile(std::string track);
 
 	void playef(int t, int offset = 0);
@@ -72,8 +73,10 @@ public:
         bool muted = false;
 
         std::unordered_map<std::string, SoundTrack> custom_files;
+        std::unordered_map<std::string, MusicTrack> custom_music_files;
         std::unordered_map<std::string, int> custom_file_channels;
         std::unordered_map<std::string, std::string> custom_file_paths;
+        Mix_Music* custom_music = nullptr;
 };
 
 extern musicclass music;

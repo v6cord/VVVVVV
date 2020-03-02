@@ -233,15 +233,21 @@ void musicclass::init()
 
 void musicclass::play(int t, int fadeintime /* = 3000*/)
 {
-  t = (t % 16);
+    Mix_Music* track;
+    if (t == 32) {
+        track = custom_music;
+    } else {
+        t = (t % 16);
 
-	if(mmmmmm)
-	{
-		if(!usingmmmmmm)
-		{
-			t += 16;
-		}
-	}
+        if(mmmmmm)
+        {
+            if(!usingmmmmmm)
+            {
+                t += 16;
+            }
+        }
+        track = musicTracks[t].m_music;
+    }
     if (muted)
     {
         currentsong = t;
@@ -270,7 +276,7 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 				// Level Complete theme, no fade in or repeat
 				// musicchannel = musicchan[currentsong].play(0);
 				// musicchannel.soundTransform = new SoundTransform(1.0);
-				if(Mix_FadeInMusic(musicTracks[t].m_music, 0, 0)==-1)
+				if(Mix_FadeInMusic(track, 0, 0)==-1)
 				{
 					printf("Mix_PlayMusic: %s\n", Mix_GetError());
 				}
@@ -290,7 +296,7 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 					else
 						dontquickfade = false;
 				}
-				else if(Mix_FadeInMusic(musicTracks[t].m_music, -1, fadeintime)==-1)
+				else if(Mix_FadeInMusic(track, -1, fadeintime)==-1)
 				{
 					printf("Mix_FadeInMusic: %s\n", Mix_GetError());
 				}
@@ -530,6 +536,20 @@ void musicclass::playfile(const char* t, std::string track, bool internal /*= fa
     } else if (track != "") {
         custom_file_channels[track] = channel;
     }
+}
+
+void musicclass::playmusicfile(const char* t)
+{
+    auto[pair, inserted] = custom_music_files.insert(std::make_pair(t, MusicTrack()));
+    if (inserted) {
+        MusicTrack track(t);
+        pair->second.m_music = track.m_music;
+        pair->second.m_isValid = track.m_isValid;
+        track.m_isValid = false;
+    }
+
+    custom_music = pair->second.m_music;
+    play(32);
 }
 
 void musicclass::stopfile(std::string track) {

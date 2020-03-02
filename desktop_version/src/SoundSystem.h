@@ -14,6 +14,7 @@ public:
 	MusicTrack(SDL_RWops *rw);
         MusicTrack(MusicTrack&& moved);
         MusicTrack& operator=(const MusicTrack& other) = default;
+	MusicTrack() = default;
         ~MusicTrack();
 	Mix_Music *m_music;
 	bool m_isValid = false;
