@@ -10,12 +10,12 @@ function finish {
     rm -rf "$XDG_RUNTIME_DIR"
 }
 trap finish EXIT
+source ./build.sh
 
 if [ ! -f data.zip ]; then
-    ln -s data-zip/data.zip data.zip || true
+    ln -sv data-zip/data.zip data.zip || true
 fi
 
-source ./build.sh
 set +e -o pipefail
 failed=0
 for testcase in "$XDG_DATA_HOME"/VVVVVV/levels/*.{vvvvvv,zip}; do
