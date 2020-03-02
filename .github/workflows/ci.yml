@@ -54,7 +54,7 @@ jobs:
         path: desktop_version/build/VVVVVV-CE
 
     - name: Run tests
-      run: cd ${SRC_DIR_PATH} && ./tests.sh
+      run: cd ${SRC_DIR_PATH} && dont_build=1 ./tests.sh
 
   build-mac:
     name: Build (macOS)

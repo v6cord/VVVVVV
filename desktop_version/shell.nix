@@ -1,14 +1,14 @@
-{ cross ? false, clang ? false, debug ? false, android ? false }:
-let pkgsNative = import (builtins.fetchTarball {
+{ cross ? false, clang ? false, debug ? false, android ? false, pinned ? true }:
+let pkgsNative = if pinned then (import (builtins.fetchTarball {
   name = "cross-compile-nixpkgs";
   url = https://github.com/nixos/nixpkgs/archive/2436c27541b2f52deea3a4c1691216a02152e729.tar.gz;
   sha256 = "0p98dwy3rbvdp6np596sfqnwlra11pif3rbdh02pwdyjmdvkmbvd";
-}) {};
+}) {}) else (import <nixpkgs> {});
     pkgs = if cross then pkgsNative.pkgsCross.mingwW64 else pkgsNative;
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
   pkgs.callPackage (
-    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, automake, fribidi, pkgconfig, ninja, zlib, libpng, libicns, imagemagick}:
+    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, automake, fribidi, pkgconfig, ninja, zlib, libpng, libicns, imagemagick, xorg}:
     (mkShell.override { inherit stdenv; }) (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
         outputs = ["out"];
         outputBin = "out";
@@ -42,7 +42,7 @@ in
         }))
         zlib
         libpng
-      ] else if android then [ pkgsNative.android-studio ] else [ SDL2 fribidi zlib libpng ];
+      ] else if android then [ pkgsNative.android-studio ] else [ SDL2 fribidi zlib libpng xorg.libXcursor ];
       CMAKE_MODULE_PATH = if stdenv.targetPlatform.isWindows then "${sdl}/lib/cmake/SDL2/" else "${SDL2.dev}/lib/cmake/SDL2/";
     })
   ) {}
