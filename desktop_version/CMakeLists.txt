@@ -406,8 +406,8 @@ if(NOT ANDROID)
     endif()
     include(ExternalProject)
     externalproject_add(SDL_mixer_X_build
-        URL https://github.com/WohlSoft/SDL-Mixer-X/archive/fd0449298cc10e6dfb9e070e37e710368d995f8f.tar.gz
-        URL_HASH SHA256=d266dc1df027571f4b5c8be5b9275aaf6485c14a7b8c437e8802b9cf4850f2d3
+        URL https://github.com/WohlSoft/SDL-Mixer-X/archive/67405364cea87a6a7d0ec589054785c2dbeca406.tar.gz
+        URL_HASH SHA256=29e040e85c34145aa74d5c8c2f69ec69d5375fa15344f3a6d481293869e9b736
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
