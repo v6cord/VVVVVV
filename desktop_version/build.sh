@@ -50,5 +50,5 @@ if [ -z "$dont_build" ]; then
 fi
 
 if [ ! -z "$windows" ]; then
-    cp -uv ../../.github/libs/* .
+    cp -uv ../../.github/libs/* SDL_mixer_X_build-prefix/bin/*.dll SDL_mixer_X_build-prefix/lib/*.dll .
 fi
