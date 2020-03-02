@@ -51,7 +51,7 @@ growing_vector<std::string> changelog = {
     "  a sound effect. if you specify an id,",
     "  the file loops",
     "- playmusicfile(file) - play a file as",
-    "  music.",
+    "  music",
     "- stopfile(id) - stops playing a looping",
     "  audio file",
     "- ifnotflag() - an inverted version of",
