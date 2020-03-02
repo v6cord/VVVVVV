@@ -377,13 +377,13 @@ endif()
 
 if(NOT ANDROID AND NOT SWITCH)
     if(WIN32)
-        set(prefix "")
+        set(prefix "bin/")
         set(suffix ".dll")
     elseif(APPLE)
-        set(prefix "lib")
+        set(prefix "lib/lib")
         set(suffix ".dylib")
     else()
-        set(prefix "lib")
+        set(prefix "lib/lib")
         set(suffix ".so")
     endif()
     include(ExternalProject)
@@ -399,7 +399,7 @@ if(NOT ANDROID AND NOT SWITCH)
             -DDOWNLOAD_SDL2_DEPENDENCY=OFF
             -DADLMIDI_FLAGS=-DCMAKE_INSTALL_LIBDIR=lib
             -DCMAKE_C_FLAGS=-DSDL_strtokr=_Mix_strtokr
-        BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/lib/${prefix}SDL2_mixer_ext${suffix}
+        BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix}
     )
     ExternalProject_Get_Property(SDL_mixer_X_build INSTALL_DIR)
     set(MIXER_LIBRARIES ${INSTALL_DIR}/lib/${prefix}SDL2_mixer_ext${suffix})
