@@ -155,7 +155,7 @@ jobs:
     - name: Copy artifacts
       run: |
         mkdir -p $SRC_DIR_PATH/build/VVVVVV-CE-Windows
-        cp -rv .github/libs/* $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
+        cp -rv .github/libs/* $SRC_DIR_PATH/build/SDL_mixer_X_build-prefix/bin/*.dll $SRC_DIR_PATH/build/SDL_mixer_X_build-prefix/lib/*.dll $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
 
     - name: Cache data.zip
       uses: actions/cache@v1
