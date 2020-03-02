@@ -1986,6 +1986,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     }
                     obj.entities[k].colour = ss_toi(words[6]);
                 }
+                setvar("return", std::to_string(k));
             } else if (words[0] == "fatal_left") {
                 obj.fatal_left();
             } else if (words[0] == "fatal_right") {
