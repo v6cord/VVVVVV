@@ -22,31 +22,33 @@ mkdir -pv build.$CC/
 ln -sfvn build.$CC build
 cd build/
 
-timestamp_ref="$(mktemp)"
-function finish {
-    rm -f "$timestamp_ref"
-}
-trap finish EXIT
+if [ -z "$dont_build" ]; then
+    timestamp_ref="$(mktemp)"
+    function finish {
+        rm -f "$timestamp_ref"
+    }
+    trap finish EXIT
 
-if [ -e vce.zip.c ]; then
-    cp -a vce.zip.c "$timestamp_ref"
+    if [ -e vce.zip.c ]; then
+        cp -a vce.zip.c "$timestamp_ref"
+    fi
+
+    cmake -G Ninja \
+        ${debug:+-DCMAKE_BUILD_TYPE=Debug} \
+        ${debug:--DCMAKE_BUILD_TYPE=RelWithDebInfo} \
+        ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
+        ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_TOOLCHAIN_FILE=/usr/local/share/switch-cmake/DevkitA64Libnx.cmake} \
+        ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_MODULE_PATH=/usr/local/share/switch-cmake/cmake} \
+        "$@" \
+        ..
+
+    if cmp -s "$timestamp_ref" vce.zip.c; then
+        touch -r "$timestamp_ref" vce.zip.c
+    fi
+
+    ninja ${verbose:+-v}
 fi
-
-cmake -G Ninja \
-    ${debug:+-DCMAKE_BUILD_TYPE=Debug} \
-    ${debug:--DCMAKE_BUILD_TYPE=RelWithDebInfo} \
-    ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
-    ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_TOOLCHAIN_FILE=/usr/local/share/switch-cmake/DevkitA64Libnx.cmake} \
-    ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_MODULE_PATH=/usr/local/share/switch-cmake/cmake} \
-    "$@" \
-    ..
-
-if cmp -s "$timestamp_ref" vce.zip.c; then
-    touch -r "$timestamp_ref" vce.zip.c
-fi
-
-ninja ${verbose:+-v}
 
 if [ ! -z "$windows" ]; then
-    cp -uv ../../.github/libs/* .
+    cp -uv ../../.github/libs/* SDL_mixer_X_build-prefix/bin/*.dll SDL_mixer_X_build-prefix/lib/*.dll . || true
 fi

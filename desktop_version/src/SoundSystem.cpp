@@ -9,13 +9,21 @@
 
 MusicTrack::MusicTrack(const char* fileName)
 {
-	m_music = Mix_LoadMUS(fileName);
-	m_isValid = true;
-	if(m_music == NULL)
+	unsigned char *mem;
+	size_t length = 0;
+	FILESYSTEM_loadFileToMemory(fileName, &mem, &length);
+	SDL_RWops *fileIn = SDL_RWFromMem(mem, length);
+	m_music = Mix_LoadMUS_RW(fileIn, 1);
+	if (length)
 	{
-		fprintf(stderr, "Unable to load Ogg Music file: %s\n", Mix_GetError());;
-		m_isValid = false;
+		FILESYSTEM_freeMemory(&mem);
 	}
+
+	if (m_music == NULL) {
+            fprintf(stderr, "Unable to load music file: %s\n", Mix_GetError());
+	} else {
+            m_isValid = true;
+        }
 }
 
 MusicTrack::MusicTrack(SDL_RWops *rw)

@@ -19,6 +19,7 @@ OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
 OPTION(ENABLE_PROFILE "Enable profiler" OFF)
 OPTION(ENABLE_DEBUG "Enable debug messages" OFF)
+OPTION(SDL_MIXER_X_USE_SYSTEM_SDL2 "Should SDL-Mixer-X use the system SDL2?" OFF)
 
 SET(CUSTOM_LEVEL_SUPPORT ENABLED CACHE STRING "Optionally disable playing and/or editing of custom levels")
 SET_PROPERTY(CACHE CUSTOM_LEVEL_SUPPORT PROPERTY STRINGS ENABLED NO_EDITOR DISABLED)
@@ -78,24 +79,6 @@ ADD_DEFINITIONS(-DPHYSFS_SUPPORTS_DEFAULT=0 -DPHYSFS_SUPPORTS_ZIP=1)
 if (MINGW OR MSYS)
     add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
 endif()
-
-# RPATH
-IF(NOT WIN32)
-	IF(APPLE)
-		SET(BIN_LIBROOT "osx")
-		SET(BIN_RPATH "@executable_path/osx")
-	ELSEIF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-		SET(BIN_LIBROOT "lib64")
-		SET(BIN_RPATH "\$ORIGIN/lib64")
-	ELSE()
-		SET(BIN_LIBROOT "lib")
-		SET(BIN_RPATH "\$ORIGIN/lib")
-	ENDIF()
-	SET(CMAKE_SKIP_BUILD_RPATH TRUE)
-	SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-	SET(CMAKE_INSTALL_RPATH ${BIN_RPATH})
-	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
-ENDIF()
 
 # Creates C resources file from files in given directory
 function(create_c_resource bin output)
@@ -393,6 +376,38 @@ if(NOT PNG_FOUND)
     add_dependencies(PNG::PNG libpng)
 endif()
 
+if(NOT ANDROID AND NOT SWITCH)
+    if(WIN32)
+        set(prefix "bin/")
+        set(suffix ".dll")
+    elseif(APPLE)
+        set(prefix "lib/lib")
+        set(suffix ".dylib")
+    else()
+        set(prefix "lib/lib")
+        set(suffix ".so")
+    endif()
+    include(ExternalProject)
+    externalproject_add(SDL_mixer_X_build
+        URL https://github.com/WohlSoft/SDL-Mixer-X/archive/67405364cea87a6a7d0ec589054785c2dbeca406.tar.gz
+        URL_HASH SHA256=29e040e85c34145aa74d5c8c2f69ec69d5375fa15344f3a6d481293869e9b736
+        CMAKE_ARGS
+            -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+            -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+            -DDOWNLOAD_AUDIO_CODECS_DEPENDENCY=ON
+            -DUSE_SYSTEM_SDL2=${SDL_MIXER_X_USE_SYSTEM_SDL2}
+            -DADLMIDI_FLAGS=-DCMAKE_INSTALL_LIBDIR=lib
+            -DCMAKE_C_FLAGS=-DSDL_strtokr=_Mix_strtokr
+        BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix}
+    )
+    ExternalProject_Get_Property(SDL_mixer_X_build INSTALL_DIR)
+    set(MIXER_LIBRARIES ${INSTALL_DIR}/${prefix}SDL2_mixer_ext${suffix})
+    set(MIXER_INCLUDE "${INSTALL_DIR}/include")
+    set(MIXER_DEPENDENCY SDL_mixer_X_build)
+endif()
+
 find_package(Threads)
 
 # Static Dependencies
@@ -400,7 +415,11 @@ if(ANDROID)
     TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads ${MIXER_LIBRARIES})
+    TARGET_INCLUDE_DIRECTORIES(VVVVVV-CE PUBLIC ${MIXER_INCLUDE})
+    if(NOT SWITCH)
+        ADD_DEPENDENCIES(VVVVVV-CE ${MIXER_DEPENDENCY})
+    endif()
 endif()
 
 # data.zip path
@@ -434,7 +453,7 @@ elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS)
         add_subdirectory(../third_party/mingw-std-threads ${CMAKE_CURRENT_BINARY_DIR}/mingw-std-threads)
 
 	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-	target_link_libraries(VVVVVV-CE SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES} shlwapi mingw_stdthreads)
+        target_link_libraries(VVVVVV-CE mingw32 winmm ${SDL2_LIBRARIES} shlwapi mingw_stdthreads)
 elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
 	message(STATUS "Using pre-defined SDL2 variables SDL2_INCLUDE_DIRS and SDL2_LIBRARIES")
         if(ANDROID)
@@ -452,14 +471,14 @@ else()
                 if(ANDROID)
                     target_link_libraries(main SDL2::SDL2 SDL2_mixer vorbisfile vorbis ogg)
                 else()
-                    target_link_libraries(VVVVVV-CE SDL2::SDL2 SDL2_mixer)
+                    target_link_libraries(VVVVVV-CE SDL2::SDL2)
                 endif()
 	elseif (TARGET SDL2)
 		message(STATUS "Using TARGET SDL2")
                 if(ANDROID)
                     target_link_libraries(main SDL2 SDL2_mixer vorbisfile vorbis ogg)
                 else()
-                    target_link_libraries(VVVVVV-CE SDL2 SDL2_mixer)
+                    target_link_libraries(VVVVVV-CE SDL2)
                 endif()
 	else()
 		message(STATUS "No TARGET SDL2::SDL2, or SDL2, using variables")
@@ -468,7 +487,7 @@ else()
                     target_link_libraries(main ${SDL2_LIBRARIES} SDL2_mixer vorbisfile vorbis ogg)
                 else()
                     target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-                    target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES} SDL2_mixer)
+                    target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES})
                 endif()
 	endif()
 endif()

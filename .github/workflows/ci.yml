@@ -44,9 +44,6 @@ jobs:
       run: cd ${SRC_DIR_PATH}/build && ../download-data.sh
       if: steps.cache-data.outputs.cache-hit != 'true'
 
-    - name: CPack build
-      run: cd ${SRC_DIR_PATH} && ./cpack.sh
-
     - name: Show build artifacts
       run: tree ${SRC_DIR_PATH}/build
 
@@ -56,14 +53,8 @@ jobs:
         name: VVVVVV-CE-LinuxBinary
         path: desktop_version/build/VVVVVV-CE
 
-    - name: Upload .deb
-      uses: actions/upload-artifact@v1
-      with:
-        name: VVVVVV-CE-LinuxDeb
-        path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
-
     - name: Run tests
-      run: cd ${SRC_DIR_PATH} && ./tests.sh
+      run: cd ${SRC_DIR_PATH} && dont_build=1 ./tests.sh
 
   build-mac:
     name: Build (macOS)
@@ -164,7 +155,7 @@ jobs:
     - name: Copy artifacts
       run: |
         mkdir -p $SRC_DIR_PATH/build/VVVVVV-CE-Windows
-        cp -rv .github/libs/* $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
+        cp -rv .github/libs/* $SRC_DIR_PATH/build/SDL_mixer_X_build-prefix/bin/SDL2_mixer_ext.dll $SRC_DIR_PATH/build/VVVVVV-CE.exe $SRC_DIR_PATH/build/VVVVVV-CE-Windows/
 
     - name: Cache data.zip
       uses: actions/cache@v1
