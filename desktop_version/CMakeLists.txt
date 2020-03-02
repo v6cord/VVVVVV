@@ -393,6 +393,40 @@ if(NOT PNG_FOUND)
     add_dependencies(PNG::PNG libpng)
 endif()
 
+if(NOT ANDROID)
+    if(WIN32)
+        set(prefix "")
+        set(suffix ".lib")
+    elseif(APPLE)
+        set(prefix "lib")
+        set(suffix ".so")
+    else()
+        set(prefix "lib")
+        set(suffix ".so")
+    endif()
+    include(ExternalProject)
+    externalproject_add(SDL_mixer_X_build
+        URL https://github.com/WohlSoft/SDL-Mixer-X/archive/fd0449298cc10e6dfb9e070e37e710368d995f8f.tar.gz
+        URL_HASH SHA256=d266dc1df027571f4b5c8be5b9275aaf6485c14a7b8c437e8802b9cf4850f2d3
+        CMAKE_ARGS
+            -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+            -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+            -DDOWNLOAD_AUDIO_CODECS_DEPENDENCY=ON
+            -DDOWNLOAD_SDL2_DEPENDENCY=OFF
+            -DADLMIDI_FLAGS=-DCMAKE_INSTALL_LIBDIR=lib
+            -DCMAKE_C_FLAGS=-DSDL_strtokr=_Mix_strtokr
+        BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/lib/${prefix}SDL2_mixer_ext${suffix}
+    )
+    ExternalProject_Get_Property(SDL_mixer_X_build INSTALL_DIR)
+    add_library(SDL_mixer_X::SDL_mixer_X SHARED IMPORTED)
+    set_target_properties(SDL_mixer_X::SDL_mixer_X PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${prefix}SDL2_mixer_ext${suffix})
+    file(MAKE_DIRECTORY "${INSTALL_DIR}/include")
+    set_target_properties(SDL_mixer_X::SDL_mixer_X PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${INSTALL_DIR}/include")
+    add_dependencies(SDL_mixer_X::SDL_mixer_X SDL_mixer_X_build)
+endif()
+
 find_package(Threads)
 
 # Static Dependencies
@@ -400,7 +434,7 @@ if(ANDROID)
     TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads SDL_mixer_X::SDL_mixer_X)
 endif()
 
 # data.zip path
@@ -434,7 +468,7 @@ elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES AND (MINGW OR MSYS)
         add_subdirectory(../third_party/mingw-std-threads ${CMAKE_CURRENT_BINARY_DIR}/mingw-std-threads)
 
 	target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-	target_link_libraries(VVVVVV-CE SDL2_mixer mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES} shlwapi mingw_stdthreads)
+	target_link_libraries(VVVVVV-CE mingw32 winmm vorbisfile vorbis ${SDL2_LIBRARIES} shlwapi mingw_stdthreads)
 elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
 	message(STATUS "Using pre-defined SDL2 variables SDL2_INCLUDE_DIRS and SDL2_LIBRARIES")
         if(ANDROID)
@@ -452,14 +486,14 @@ else()
                 if(ANDROID)
                     target_link_libraries(main SDL2::SDL2 SDL2_mixer vorbisfile vorbis ogg)
                 else()
-                    target_link_libraries(VVVVVV-CE SDL2::SDL2 SDL2_mixer)
+                    target_link_libraries(VVVVVV-CE SDL2::SDL2)
                 endif()
 	elseif (TARGET SDL2)
 		message(STATUS "Using TARGET SDL2")
                 if(ANDROID)
                     target_link_libraries(main SDL2 SDL2_mixer vorbisfile vorbis ogg)
                 else()
-                    target_link_libraries(VVVVVV-CE SDL2 SDL2_mixer)
+                    target_link_libraries(VVVVVV-CE SDL2)
                 endif()
 	else()
 		message(STATUS "No TARGET SDL2::SDL2, or SDL2, using variables")
@@ -468,7 +502,7 @@ else()
                     target_link_libraries(main ${SDL2_LIBRARIES} SDL2_mixer vorbisfile vorbis ogg)
                 else()
                     target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
-                    target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES} SDL2_mixer)
+                    target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES})
                 endif()
 	endif()
 endif()

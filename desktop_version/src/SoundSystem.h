@@ -3,8 +3,10 @@
 
 #if defined(__SWITCH__)
 	#include <SDL2/SDL_mixer.h>
-#else
+#elif defined(__ANDROID__)
 	#include <SDL_mixer.h>
+#else
+	#include <SDL2/SDL_mixer_ext.h>
 #endif
 
 class MusicTrack
