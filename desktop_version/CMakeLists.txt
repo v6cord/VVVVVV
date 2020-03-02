@@ -79,24 +79,6 @@ if (MINGW OR MSYS)
     add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
 endif()
 
-# RPATH
-IF(NOT WIN32)
-	IF(APPLE)
-		SET(BIN_LIBROOT "osx")
-		SET(BIN_RPATH "@executable_path/osx")
-	ELSEIF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-		SET(BIN_LIBROOT "lib64")
-		SET(BIN_RPATH "\$ORIGIN/lib64")
-	ELSE()
-		SET(BIN_LIBROOT "lib")
-		SET(BIN_RPATH "\$ORIGIN/lib")
-	ENDIF()
-	SET(CMAKE_SKIP_BUILD_RPATH TRUE)
-	SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-	SET(CMAKE_INSTALL_RPATH ${BIN_RPATH})
-	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
-ENDIF()
-
 # Creates C resources file from files in given directory
 function(create_c_resource bin output)
     # Create empty output file
