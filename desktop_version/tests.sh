@@ -4,11 +4,16 @@ unset DISPLAY
 export XDG_DATA_HOME="$(pwd)/tests"
 export USERPROFILE="$(pwd)/tests"
 export SDL_AUDIODRIVER=dummy
+export SDL_VIDEODRIVER=dummy
 export XDG_RUNTIME_DIR="$(mktemp -d)"
 function finish {
-    rm -f "$XDG_RUNTIME_DIR"
+    rm -rf "$XDG_RUNTIME_DIR"
 }
 trap finish EXIT
+
+if [ ! -f data.zip ]; then
+    ln -s data-zip/data.zip data.zip || true
+fi
 
 source ./build.sh
 set +e -o pipefail
