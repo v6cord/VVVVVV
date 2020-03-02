@@ -340,6 +340,27 @@ void BlitSurfaceColoured(
     SDL_FreeSurface(tempsurface);
 }
 
+void EraseSurface(
+    SDL_Surface* _src,
+    SDL_Surface* _dest
+) {
+    for (int x = 0; x < _dest->w; x++) {
+        for (int y = 0; y < _dest->h; y++) {
+            Uint32 src_pixel = ReadPixel(_src, x, y);
+            Uint32 pixel = ReadPixel(_dest, x, y);
+
+            Uint8 pixred = (pixel & _dest->format->Rmask) >> 16;
+            Uint8 pixgreen = (pixel & _dest->format->Gmask) >> 8;
+            Uint8 pixblue = (pixel & _dest->format->Bmask) >> 0;
+            Uint8 pixalpha = (src_pixel & _src->format->Amask) == 0 ? (pixel & _dest->format->Amask) : 0;
+
+            Uint32 result = pixalpha | (pixred << 16) | (pixgreen << 8) | (pixblue << 0);
+
+            DrawPixel(_dest, x, y, result);
+        }
+    }
+}
+
 bool alreadydone = false; // TEMP DEBUG
 void BlitSurfaceTint(
     SDL_Surface* _src,

@@ -32,6 +32,8 @@ void BlitSurfaceColoured( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
 
 void BlitSurfaceTint( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, colourTransform& ct );
 
+void EraseSurface(SDL_Surface* _src, SDL_Surface* _dest);
+
 void FillRect( SDL_Surface* surface, const int x, const int y, const int w, const int h, const int r, int g, int b );
 
 void FillRect( SDL_Surface* surface, const int r, int g, int b );
