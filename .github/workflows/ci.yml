@@ -44,9 +44,6 @@ jobs:
       run: cd ${SRC_DIR_PATH}/build && ../download-data.sh
       if: steps.cache-data.outputs.cache-hit != 'true'
 
-    - name: Build
-      run: cd ${SRC_DIR_PATH} && ./build.sh
-
     - name: Show build artifacts
       run: tree ${SRC_DIR_PATH}/build
 
