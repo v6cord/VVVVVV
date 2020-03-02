@@ -402,7 +402,7 @@ if(NOT ANDROID AND NOT SWITCH)
         BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix}
     )
     ExternalProject_Get_Property(SDL_mixer_X_build INSTALL_DIR)
-    set(MIXER_LIBRARIES ${INSTALL_DIR}/lib/${prefix}SDL2_mixer_ext${suffix})
+    set(MIXER_LIBRARIES ${INSTALL_DIR}/${prefix}SDL2_mixer_ext${suffix})
     set(MIXER_INCLUDE "${INSTALL_DIR}/include")
     set(MIXER_DEPENDENCY SDL_mixer_X_build)
 endif()
