@@ -313,6 +313,8 @@ public:
         bool translucentroomname = false;;
 
 	bool showmousecursor = false;
+
+        SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
 
 extern Graphics graphics;

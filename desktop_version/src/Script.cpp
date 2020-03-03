@@ -1058,6 +1058,17 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     scriptrender.push_back(temp);
                 }
             }
+            if (words[0] == "setblendmode") {
+                SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
+                if (words[1] == "none") {
+                    blend = SDL_BLENDMODE_NONE;
+                } else if (words[1] == "add") {
+                    blend = SDL_BLENDMODE_ADD;
+                } else if (words[1] == "mod") {
+                    blend = SDL_BLENDMODE_MOD;
+                }
+                dwgfx.blendmode = blend;
+            }
             if (words[0] == "removeimage") {
                 // removeimage(id), to be used with drawimagepersist
                 scriptrender.erase(scriptrender.begin() + ss_toi(words[1]));
