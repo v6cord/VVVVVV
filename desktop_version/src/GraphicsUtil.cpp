@@ -286,8 +286,8 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
 
         SDL_Surface* tempsurface =  SDL_CreateRGBSurface(
             SDL_SWSURFACE,
-            _src->w,
-            _src->h,
+            tempRect->w,
+            tempRect->h,
             fmt.BitsPerPixel,
             fmt.Rmask,
             fmt.Gmask,
@@ -295,9 +295,12 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
             fmt.Amask
         );
 
-        for (int x = 0; x < _dest->w; x++) {
-            for (int y = 0; y < _dest->h; y++) {
-                Uint32 src_pixel = ReadPixel(_src, x, y);
+        for (int srcX = 0; srcX < _dest->w; srcX++) {
+            for (int srcY = 0; srcY < _dest->h; srcY++) {
+                Uint32 src_pixel = ReadPixel(_src, srcX, srcY);
+
+                int x = srcX + tempRect->x;
+                int y = srcX + tempRect->y;
                 Uint32 pixel = ReadPixel(_dest, x, y);
 
                 Uint8 pixalpha = (pixel & _dest->format->Amask) >> _dest->format->Ashift;
@@ -321,7 +324,7 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
 
                 Uint32 result = (pixalpha << _dest->format->Ashift) + (pixred << _dest->format->Rshift) + (pixgreen << _dest->format->Gshift) + (pixblue << _dest->format->Bshift);
 
-                DrawPixel(tempsurface, x, y, result);
+                DrawPixel(tempsurface, srcX, srcY, result);
             }
         }
 
