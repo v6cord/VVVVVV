@@ -12,9 +12,9 @@ public:
 
     int backat(int xp, int yp, int yoff);
 
-    int at(int xp, int yp, int xoff, int yoff);
+    int at(int xp, int yp, int yoff);
 
-    int miniat(int xp, int yp, int xoff, int yoff);
+    int miniat(int xp, int yp, int yoff);
 
     void fillbackground(growing_vector<std::string>& tmap);
 
@@ -45,9 +45,6 @@ public:
     bool minitowermode = false;
     int i = 0;
     int k = 0;
-
-    int width = 40;
-    int height = 100;
 };
 
 

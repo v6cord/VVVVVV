@@ -49,11 +49,11 @@ int towerclass::backat(int xp, int yp, int yoff)
     return 0;
 }
 
-int towerclass::at(int xp, int yp, int xoff, int yoff)
+int towerclass::at(int xp, int yp, int yoff)
 {
     if (minitowermode)
     {
-        return miniat(xp, yp, xoff, yoff);
+        return miniat(xp, yp, yoff);
     }
     else
     {
@@ -80,31 +80,25 @@ int towerclass::at(int xp, int yp, int xoff, int yoff)
     }
 }
 
-int towerclass::miniat(int xp, int yp, int xoff, int yoff)
+int towerclass::miniat(int xp, int yp, int yoff)
 {
-    //xp *= 8;
-    //xp += xoff;
-    //xoff = xp % 8;
-    //xp = (xp - xoff) / 8;
-    //xp /= (minitower.size() / height);
+    yp = yp * 8;
+    yp += yoff;
+    yoff = yp % 8;
+    yp = (yp - yoff) / 8;
 
-    xp += (xoff / 8);
-    xp %= width;
-
-    yp += (yoff / 8);
-    yp %= height;
-
-    if (xp >= 0 && xp < width)
+    yp %= (minitower.size() / 40);
+    if (xp >= 0 && xp < 40)
     {
-        return minitower[xp + yp * width];
+        return minitower[xp + vmult[yp]];
     }
     else if (xp == -1)
     {
-        return minitower[yp * width];
+        return minitower[vmult[yp]];
     }
-    else if (xp == width)
+    else if (xp == 40)
     {
-        return minitower[width - 1 + yp * width];
+        return minitower[39 + vmult[yp]];
     }
     return 0;
 }

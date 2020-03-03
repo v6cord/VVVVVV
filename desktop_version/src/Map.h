@@ -128,7 +128,6 @@ public:
     //Special tower stuff
     bool towermode = false;
     float ypos = 0.0;
-    float xpos = 0.0;
     int bypos = 0;
     int cameramode = 0;
     int cameraseek, cameraseekframe = 0;
@@ -143,10 +142,7 @@ public:
     int towercol = 0;
     int colstate, colstatedelay = 0;
     int colsuperstate = 0;
-    int spikeleveltop = 0;
-    int spikelevelbottom = 0;
-    int spikelevelleft = 0;
-    int spikelevelright = 0;
+    int spikeleveltop, spikelevelbottom = 0;
     bool tdrawback = false;
     int bscroll = 0;
     //final level navigation
