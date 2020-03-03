@@ -903,7 +903,7 @@ void Graphics::drawscriptimage( Game& game, int t, int xp, int yp, bool cent/*=f
     if (blend == SDL_BLENDMODE_BLEND) blend = blendmode;
 
     SDL_SetSurfaceAlphaMod(game.script_images[t], alpha);
-    SDL_SetSurfaceBlendMode(game.script_images[t], blend);
+    SDL_SetSurfaceBlendMode(game.script_images[t], SDL_BLENDMODE_BLEND);
     SDL_SetSurfaceBlendMode(backBuffer, blend);
 
     SDL_Rect trect;
