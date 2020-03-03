@@ -297,3 +297,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `setcallback(callback,script)` - run script when callback is triggered
 
 - One-way tiles are now automatically recolored to match the tileset
+
+- `setblendmode(mode)` - set the blend mode used for drawing script images, *mode* is `none`/`add`/`mod`

@@ -397,6 +397,9 @@ growing_vector<std::string> changelog = {
     "  script when callback is triggered",
     "- One-way tiles are now automatically",
     "  recolored to match the tileset",
+    "- setblendmode(mode) - set the blend",
+    "  mode used for drawing script images,",
+    "  mode is none/add/mod",
 
 };
 
