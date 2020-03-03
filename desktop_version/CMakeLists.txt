@@ -130,15 +130,6 @@ else()
     create_bin_resources(VCE_ZIP_OBJ vce.zip)
 endif()
 
-# Include Directories
-INCLUDE_DIRECTORIES(
-	src
-	../third_party/tinyxml
-	../third_party/physfs
-	../third_party/utfcpp/source
-        ../third_party/cparse
-        ${CMAKE_BINARY_DIR}
-)
 include(sdl2-config OPTIONAL)
 
 # Source Lists
@@ -235,6 +226,12 @@ ELSE()
 	ADD_EXECUTABLE(VVVVVV-CE ${VVV_SRC})
 ENDIF()
 
+if(ANDROID)
+    target_include_directories(main PUBLIC src ${CMAKE_BINARY_DIR} ../third_party/utfcpp/source)
+else()
+    target_include_directories(VVVVVV-CE PUBLIC src ${CMAKE_BINARY_DIR} ../third_party/utfcpp/source)
+endif()
+
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     SET_SOURCE_FILES_PROPERTIES(src/Scripts.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
 endif()
@@ -275,8 +272,11 @@ ENDIF()
 
 # Library information
 ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
+target_include_directories(tinyxml-static PUBLIC ../third_party/tinyxml)
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
+target_include_directories(physfs-static PUBLIC ../third_party/physfs)
 ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
+target_include_directories(cparse-static PUBLIC ../third_party/cparse)
 
 if (SWITCH)
     target_compile_options(cparse-static PUBLIC -fexceptions)
