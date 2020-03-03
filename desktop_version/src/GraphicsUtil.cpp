@@ -1,5 +1,5 @@
 #include "Graphics.h"
-
+#include <algorithm>
 
 
 
@@ -310,9 +310,9 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
                 Uint8 src_pixblue = (src_pixel & _src->format->Bmask) >> 0;
 
                 if (blend == SDL_BLENDMODE_ADD) {
-                    pixred += src_pixred * (double(src_pixalpha) / 255.0);
-                    pixgreen += src_pixgreen * (double(src_pixalpha) / 255.0);
-                    pixblue += src_pixblue * (double(src_pixalpha) / 255.0);
+                    pixred += std::min(double(src_pixred) * (double(src_pixalpha) / 255.0), 255.0);
+                    pixgreen += std::min(double(src_pixgreen) * (double(src_pixalpha) / 255.0), 255.0);
+                    pixblue += std::min(double(src_pixblue) * (double(src_pixalpha) / 255.0), 255.0);
                 } else if (blend == SDL_BLENDMODE_MOD) {
                     pixred = (double(src_pixred) / 255.0) * pixred;
                     pixgreen = (double(src_pixgreen) / 255.0) * pixgreen;
