@@ -300,14 +300,14 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
                 Uint32 src_pixel = ReadPixel(_src, x, y);
                 Uint32 pixel = ReadPixel(_dest, x, y);
 
-                Uint8 pixalpha = (pixel & _dest->format->Amask) >> 24;
-                Uint8 pixred = (pixel & _dest->format->Rmask) >> 16;
-                Uint8 pixgreen = (pixel & _dest->format->Gmask) >> 8;
-                Uint8 pixblue = (pixel & _dest->format->Bmask) >> 0;
-                Uint8 src_pixalpha = (src_pixel & _src->format->Amask) >> 24;
-                Uint8 src_pixred = (src_pixel & _src->format->Rmask) >> 16;
-                Uint8 src_pixgreen = (src_pixel & _src->format->Gmask) >> 8;
-                Uint8 src_pixblue = (src_pixel & _src->format->Bmask) >> 0;
+                Uint8 pixalpha = (pixel & _dest->format->Amask) >> _dest->format->Ashift;
+                Uint8 pixred = (pixel & _dest->format->Rmask) >> _dest->format->Rshift;
+                Uint8 pixgreen = (pixel & _dest->format->Gmask) >> _dest->format->Gshift;
+                Uint8 pixblue = (pixel & _dest->format->Bmask) >> _dest->format->Bshift;
+                Uint8 src_pixalpha = (src_pixel & _src->format->Amask) >> _src->format->Ashift;
+                Uint8 src_pixred = (src_pixel & _src->format->Rmask) >> _src->format->Rshift;
+                Uint8 src_pixgreen = (src_pixel & _src->format->Gmask) >> _src->format->Gshift;
+                Uint8 src_pixblue = (src_pixel & _src->format->Bmask) >> _src->format->Bshift;
 
                 if (blend == SDL_BLENDMODE_ADD) {
                     pixred += std::min(double(src_pixred) * (double(src_pixalpha) / 255.0), 255.0);
@@ -319,7 +319,7 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
                     pixblue = (double(src_pixblue) / 255.0) * pixblue;
                 }
 
-                Uint32 result = (pixalpha << 24) + (pixred << 16) + (pixgreen << 8) + (pixblue << 0);
+                Uint32 result = (pixalpha << _dest->format->Ashift) + (pixred << _dest->format->Rshift) + (pixgreen << _dest->format->Gshift) + (pixblue << _dest->format->Bshift);
 
                 DrawPixel(tempsurface, x, y, result);
             }
