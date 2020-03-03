@@ -1044,6 +1044,15 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     } else {
                         temp.alpha = 255;
                     }
+                    if (words[6] == "none") {
+                        temp.blend = SDL_BLENDMODE_NONE;
+                    } else if (words[6] == "add") {
+                        temp.blend = SDL_BLENDMODE_ADD;
+                    } else if (words[6] == "mod") {
+                        temp.blend = SDL_BLENDMODE_MOD;
+                    } else {
+                        temp.blend = SDL_BLENDMODE_BLEND;
+                    }
                     if (words[0] == "drawimagepersist") temp.persistent = true;
                     if (words[0] == "drawimagepersist") setvar("return", std::to_string((int)scriptrender.size()));
                     scriptrender.push_back(temp);

@@ -27,6 +27,7 @@ struct scriptimage {
     bool persistent = false;
     int alpha = 0;
     int background = false;
+    SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
 };
 
 template<typename T>

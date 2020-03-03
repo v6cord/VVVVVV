@@ -898,9 +898,10 @@ void Graphics::drawimagecol( int t, int xp, int yp, int r = 0, int g = 0, int b 
     }
 }
 
-void Graphics::drawscriptimage( Game& game, int t, int xp, int yp, bool cent/*=false*/, int alpha/*=255*/ )
+void Graphics::drawscriptimage( Game& game, int t, int xp, int yp, bool cent/*=false*/, int alpha/*=255*/, SDL_BlendMode blend/*=SDL_BLENDMODE_BLEND*/)
 {
     SDL_SetSurfaceAlphaMod(game.script_images[t], alpha);
+    SDL_SetSurfaceBlendMode(game.script_images[t], blend);
 
     SDL_Rect trect;
     if (cent)

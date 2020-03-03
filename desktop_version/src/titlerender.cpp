@@ -67,10 +67,11 @@ growing_vector<std::string> changelog = {
     "- drawrect(x,y,w,h,r,g,b[,a]) - draw a",
     "  rectangle for one frame - r,g,b,a is",
     "  0-255",
-    "- drawimage(x,y,filename[, centered[, alpha[, background]]]) -",
+    "- drawimage(x,y,filename[, centered",
+    "  [, alpha[, background[, blend]]]]) -",
     "  draw an image on the screen for one",
     "  frame (alpha 0-255, background true/",
-    "  false)",
+    "  false, blend none/blend/add/mod)",
     "- loadimage(filename) - add the image",
     "  to the cache without actually drawing",
     "  it",
@@ -1981,7 +1982,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
             scriptimage current = script.scriptrender[i];
             if (current.type == 3 && current.background) {
-                dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha );
+                dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
             }
         }
         if (map.final_colormode)
@@ -2130,7 +2131,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             SDL_BlitSurface(s, nullptr, dwgfx.backBuffer, &temprect);
             SDL_FreeSurface(s);
         } else if (current.type == 3 && !current.background) {
-            dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha );
+            dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
         }
     }
 
