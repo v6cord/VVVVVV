@@ -1000,6 +1000,11 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 temp.r = ss_toi(words[5]);
                 temp.g = ss_toi(words[6]);
                 temp.b = ss_toi(words[7]);
+                if (words[8] != "") {
+                    temp.alpha = ss_toi(words[8]);
+                } else {
+                    temp.alpha = 255;
+                }
                 scriptrender.push_back(temp);
             }
             if (words[0] == "drawpixel") {

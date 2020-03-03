@@ -64,9 +64,9 @@ growing_vector<std::string> changelog = {
     "  normal text, 1 for bordered text and",
     "  2 for big text; use an optional eighth",
     "  argument for text scale (default is 2)",
-    "- drawrect(x,y,w,h,r,g,b) - draw a",
-    "  rectangle for one frame - r,g,b is 0-",
-    "  255",
+    "- drawrect(x,y,w,h,r,g,b[,a]) - draw a",
+    "  rectangle for one frame - r,g,b,a is",
+    "  0-255",
     "- drawimage(x,y,filename[, centered[, alpha[, background]]]) -",
     "  draw an image on the screen for one",
     "  frame (alpha 0-255, background true/",
@@ -2114,7 +2114,21 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             temprect.y = current.y;
             temprect.w = current.w;
             temprect.h = current.h;
-            SDL_FillRect(dwgfx.backBuffer, &temprect, dwgfx.getRGB(current.r,current.g,current.b));
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+            auto rmask = 0xff000000;
+            auto gmask = 0x00ff0000;
+            auto bmask = 0x0000ff00;
+            auto amask = 0x000000ff;
+#else
+            auto rmask = 0x000000ff;
+            auto gmask = 0x0000ff00;
+            auto bmask = 0x00ff0000;
+            auto amask = 0xff000000;
+#endif
+            auto s = SDL_CreateRGBSurface(0, current.w, current.h, 32, rmask, gmask, bmask, amask);
+            SDL_FillRect(s, nullptr, SDL_MapRGBA(s->format, current.r, current.b, current.g, current.alpha));
+            SDL_BlitSurface(s, nullptr, dwgfx.backBuffer, &temprect);
+            SDL_FreeSurface(s);
         } else if (current.type == 3 && !current.background) {
             dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha );
         }
