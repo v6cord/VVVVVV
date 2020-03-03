@@ -671,7 +671,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             if (words[0] == "ifflipmode") {
                 if (dwgfx.setflipmode) {
                     call("custom_" + words[1]);
-                    return;
+                    position--;
                 }
             }
             if (words[0] == "custommap") {
@@ -724,11 +724,11 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     if (words[2] != "") {
                         if (game.currenttrial == ss_toi(words[1])) {
                             call("custom_" + words[2]);
-                            return;
+                            position--;
                         }
                     } else {
                         call("custom_" + words[1]);
-                        return;
+                        position--;
                     }
                 }
             }
@@ -751,7 +751,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                      (key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_s) ||
                       key.controllerWantsDown()))) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 } else {
                     const Uint8* state = SDL_GetKeyboardState(NULL);
                     if (words[1] == "rleft") words[1] = "left";
@@ -761,7 +761,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     SDL_Keycode key = SDL_GetKeyFromName(words[1].c_str());
                     if (state[SDL_GetScancodeFromKey(key)]) {
                         call("custom_" + words[2]);
-                        return;
+                        position--;
                     }
                 }
             }
@@ -840,7 +840,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             if (variables[var] ==
                                 processvars(commands[position])) {
                                 call("custom_" + words[3]);
-                                return;
+                                position--;
                             }
                         }
                         if ((words[2] == "notequal") || (words[2] == "noteq") ||
@@ -849,7 +849,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             if (variables[var] !=
                                 processvars(commands[position])) {
                                 call("custom_" + words[3]);
-                                return;
+                                position--;
                             }
                         }
 
@@ -859,7 +859,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             (words[2] == "==")) {
                             if (variables[var] == words[3]) {
                                 call("custom_" + words[4]);
-                                return;
+                                position--;
                             }
                         }
                         if ((words[2] == "notequal") || (words[2] == "noteq") ||
@@ -867,35 +867,35 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             (words[2] == "notequal") || (words[2] == "!=")) {
                             if (variables[var] != words[3]) {
                                 call("custom_" + words[4]);
-                                return;
+                                position--;
                             }
                         }
                         if ((words[2] == "less") || (words[2] == "lt") ||
                             (words[2] == "<")) {
                             if (variables[var] < words[3]) {
                                 call("custom_" + words[4]);
-                                return;
+                                position--;
                             }
                         }
                         if ((words[2] == "lesseq") || (words[2] == "leq") ||
                             (words[2] == "<=")) {
                             if (variables[var] <= words[3]) {
                                 call("custom_" + words[4]);
-                                return;
+                                position--;
                             }
                         }
                         if ((words[2] == "greater") || (words[2] == "gt") ||
                             (words[2] == ">")) {
                             if (variables[var] > words[3]) {
                                 call("custom_" + words[4]);
-                                return;
+                                position--;
                             }
                         }
                         if ((words[2] == "greatereq") || (words[2] == "geq") ||
                             (words[2] == ">=")) {
                             if (variables[var] >= words[3]) {
                                 call("custom_" + words[4]);
-                                return;
+                                position--;
                             }
                         }
                     }
@@ -2397,7 +2397,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             } else if (words[0] == "ifnotflag") {
                 if (obj.flags[ss_toi(words[1])] != 1) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "ifcrewlost") {
                 if (game.crewstats[ss_toi(words[1])] == false) {
@@ -2412,12 +2412,12 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             } else if (words[0] == "ifcrewmates") {
                 if (game.crewmates >= ss_toi(words[1])) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "ifcoins") {
                 if (game.coins >= ss_toi(words[1])) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "iftrinketsless") {
                 if (game.stat_trinkets < ss_toi(words[1])) {
@@ -2427,40 +2427,40 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
             } else if (words[0] == "ifcrewmatesless") {
                 if (game.crewmates < ss_toi(words[1])) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "ifcoinsless") {
                 if (game.coins < ss_toi(words[1])) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "ifrand") {
                 int den = ss_toi(words[1]);
                 if (fRandom() < 1.0f / den) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "ifvce") {
                 call("custom_" + words[1]);
-                return;
+                position--;
             } else if (words[0] == "ifmod") {
                 if (words[1] == "mmmmmm" && music.mmmmmm) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 } else if ((words[1] == "mmmmmm_on" ||
                             words[1] == "mmmmmm_enabled") &&
                            music.mmmmmm && music.usingmmmmmm) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 } else if ((words[1] == "mmmmmm_off" ||
                             words[1] == "mmmmmm_disabled") &&
                            music.mmmmmm && !music.usingmmmmmm) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 } else if (words[1] == "unifont" && dwgfx.grphx.im_unifont &&
                            dwgfx.grphx.im_wideunifont) {
                     call("custom_" + words[2]);
-                    return;
+                    position--;
                 }
             } else if (words[0] == "hidecoordinates") {
                 map.explored[ss_toi(words[1]) +
@@ -2601,10 +2601,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 position--;
             } else if (words[0] == "load") {
                 call("custom_" + words[1]);
-                return;
+                position--;
             } else if (words[0] == "jump") {
                 load("custom_" + words[1]);
-                return;
+                position--;
             } else if (words[0] == "rollcredits") {
                 game.gamestate = 6;
                 dwgfx.fademode = 4;
