@@ -16,6 +16,7 @@
 #include "Map.h"
 #include "Music.h"
 #include "Utilities.h"
+#include "Maths.h"
 
 scriptclass::scriptclass() {
     // Init
@@ -57,6 +58,12 @@ void scriptclass::call(std::string script) {
     load(script);
 }
 
+packToken cparse_rand(TokenMap scope) {
+    int N = scope["N"].asInt();
+    int result = fRandom() * N;
+    return result;
+}
+
 std::string scriptclass::evalvar(std::string expr) {
     cparse_startup();
     TokenMap vars;
@@ -70,6 +77,7 @@ std::string scriptclass::evalvar(std::string expr) {
             vars[variable.first] = contents;
         }
     }
+    vars["rand"] = CppFunction(&cparse_rand, {"N"}, "rand");
     auto token = calculator::calculate(expr.c_str(), vars);
     try {
         return token.asString();
