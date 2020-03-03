@@ -105,6 +105,8 @@ public:
     edtower();
     int size = 40; // minimum size
     int scroll = 0; // scroll direction (0=The Tower, 1=Panic Room)
+    int width = 40;
+    int height = 30;
     growing_vector<int> tiles;
 
     void reset(void);
@@ -250,6 +252,8 @@ public:
     bool find_tower(int tower, int &rx, int &ry);
     int tower_size(int tower);
     int tower_scroll(int tower);
+    int tower_width(int tower);
+    int tower_height(int tower);
     bool intower(void);
     int tower_row(int rx, int ry);
 

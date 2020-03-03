@@ -152,9 +152,14 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                 map.bypos -= 1;
                 map.bscroll = -1;
             }
-            else
+            else if (map.scrolldir==1)
             {
                 map.ypos += 2;
+                map.bypos += 1;
+                map.bscroll = 1;
+            }
+            else if (map.scrolldir==2) {
+                map.xpos += 2;
                 map.bypos += 1;
                 map.bscroll = 1;
             }
@@ -230,12 +235,16 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
     }
     if (map.minitowermode)
     {
-        if (map.ypos >= map.minitowersize * 8 - 232)
-        {
-            map.ypos = map.minitowersize * 8 - 232;
+        if (map.xpos >= map.tower.width * 8 - 312) {
+            map.xpos = map.tower.width * 8 - 312;
+            map.bypos = map.xpos / 2;
+            map.bscroll = 0;
+        }
+        if (map.ypos >= map.tower.height * 8 - 232) {
+            map.ypos = map.tower.height * 8 - 232;
             map.bypos = map.ypos / 2;
             map.bscroll = 0;
-        } //100-29 * 8 = 568
+        }
     }
     else
     {
@@ -540,13 +549,22 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                 int player = obj.getplayer();
                 if(!map.invincibility)
                 {
-                    if (obj.entities[player].yp-map.ypos <= 0)
-                    {
-                        game.deathseq = 30;
-                    }
-                    else if (obj.entities[player].yp-map.ypos >= 208)
-                    {
-                        game.deathseq = 30;
+                    if (map.scrolldir == 0 || map.scrolldir == 1) {
+                        if (obj.entities[player].yp-map.ypos <= 0)
+                        {
+                            game.deathseq = 30;
+                        }
+                        else if (obj.entities[player].yp-map.ypos >= 208)
+                        {
+                            game.deathseq = 30;
+                        }
+                    } else {
+                        if (obj.entities[player].xp-map.xpos <= 4) {
+                            game.deathseq = 30;
+                        }
+                        else if (obj.entities[player].xp-map.xpos >= 316) {
+                            game.deathseq = 30;
+                        }
                     }
                 }
                 else
@@ -565,24 +583,46 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                     }
                 }
 
-                if (obj.entities[player].yp - map.ypos <= 40)
-                {
-                    map.spikeleveltop++;
-                    if (map.spikeleveltop >= 8) map.spikeleveltop = 8;
-                }
-                else
-                {
-                    if (map.spikeleveltop > 0) map.spikeleveltop--;
-                }
+                if (map.scrolldir == 0 || map.scrolldir == 1) {
+                    if (obj.entities[player].yp - map.ypos <= 40)
+                    {
+                        map.spikeleveltop++;
+                        if (map.spikeleveltop >= 8) map.spikeleveltop = 8;
+                    }
+                    else
+                    {
+                        if (map.spikeleveltop > 0) map.spikeleveltop--;
+                    }
 
-                if (obj.entities[player].yp - map.ypos >= 164)
-                {
-                    map.spikelevelbottom++;
-                    if (map.spikelevelbottom >= 8) map.spikelevelbottom = 8;
-                }
-                else
-                {
-                    if (map.spikelevelbottom > 0) map.spikelevelbottom--;
+                    if (obj.entities[player].yp - map.ypos >= 164)
+                    {
+                        map.spikelevelbottom++;
+                        if (map.spikelevelbottom >= 8) map.spikelevelbottom = 8;
+                    }
+                    else
+                    {
+                        if (map.spikelevelbottom > 0) map.spikelevelbottom--;
+                    }
+                } else {
+                    if (obj.entities[player].xp - map.xpos <= 40)
+                    {
+                        map.spikelevelleft++;
+                        if (map.spikelevelleft >= 8) map.spikelevelleft = 8;
+                    }
+                    else
+                    {
+                        if (map.spikelevelleft > 0) map.spikelevelleft--;
+                    }
+
+                    if (obj.entities[player].xp - map.xpos >= 244)
+                    {
+                        map.spikelevelright++;
+                        if (map.spikelevelright >= 8) map.spikelevelright = 8;
+                    }
+                    else
+                    {
+                        if (map.spikelevelright > 0) map.spikelevelright--;
+                    }
                 }
 
             }

@@ -2618,10 +2618,10 @@ void Graphics::drawtowermap( mapclass& map )
     int temp;
     for (int j = 0; j < 30; j++)
     {
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < 41; i++)
         {
-            temp = map.tower.at(i, j, map.ypos);
-            if (temp > 0) drawtile3(i * 8, (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
+            temp = map.tower.at(i, j, map.xpos, map.ypos);
+            if (temp > 0) drawtile3((i * 8) - ((int)map.xpos % 8), (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
         }
     }
 }
@@ -2633,8 +2633,8 @@ void Graphics::drawtowermap_nobackground( mapclass& map )
     {
         for (int i = 0; i < 40; i++)
         {
-            temp = map.tower.at(i, j, map.ypos);
-            if (temp > 0 && temp<28) drawtile3(i * 8, (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
+            temp = map.tower.at(i, j, map.xpos, map.ypos);
+            if (temp > 0 && temp<28) drawtile3((i * 8) - ((int)map.xpos % 8), (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
         }
     }
 }
@@ -2663,7 +2663,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             if (obj.entities[i].size == 0)        // Sprites
             {
 				trinketcolset = false;
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp-map.xpos;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 setcol(obj.entities[i].colour, help);
                 setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
@@ -2691,7 +2691,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             else if (obj.entities[i].size == 1)
             {
                 // Tiles
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp-map.xpos;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
                 BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
@@ -2699,7 +2699,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             else if (obj.entities[i].size == 2)
             {
                 // Special: Moving platform, 4 tiles
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp-map.xpos;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x;
@@ -2724,7 +2724,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
-                prect.x = obj.entities[i].xp;
+                prect.x = obj.entities[i].xp-map.xpos;
                 prect.y = obj.entities[i].yp-map.ypos;
                 //A seperate index of colours, for simplicity
                 if(obj.entities[i].colour==1)
@@ -2738,11 +2738,11 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 4)    // Small pickups
             {
-                drawhuetile(obj.entities[i].xp, obj.entities[i].yp-map.ypos, obj.entities[i].tile, obj.entities[i].colour);
+                drawhuetile(obj.entities[i].xp-map.xpos, obj.entities[i].yp-map.ypos, obj.entities[i].tile, obj.entities[i].colour);
             }
             else if (obj.entities[i].size == 5)    //Horizontal Line
             {
-                line_rect.x = obj.entities[i].xp;
+                line_rect.x = obj.entities[i].xp-map.xpos;
                 line_rect.y = obj.entities[i].yp-map.ypos;
                 line_rect.w = obj.entities[i].w;
                 line_rect.h = 1;
@@ -2750,7 +2750,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 6)    //Vertical Line
             {
-                line_rect.x = obj.entities[i].xp;
+                line_rect.x = obj.entities[i].xp-map.xpos;
                 line_rect.y = obj.entities[i].yp-map.ypos;
                 line_rect.w = 1;
                 line_rect.h = obj.entities[i].h;
@@ -2758,11 +2758,11 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             }
             else if (obj.entities[i].size == 7)    //Teleporter
             {
-                drawtele(obj.entities[i].xp, obj.entities[i].yp - map.ypos, obj.entities[i].drawframe, obj.entities[i].colour, help);
+                drawtele(obj.entities[i].xp - map.xpos, obj.entities[i].yp - map.ypos, obj.entities[i].drawframe, obj.entities[i].colour, help);
             }
             else if (obj.entities[i].size == 8)    // Special: Moving platform, 8 tiles
             {
-                tpoint.x = obj.entities[i].xp;
+                tpoint.x = obj.entities[i].xp - map.xpos;
                 tpoint.y = obj.entities[i].yp - map.ypos;
                 drawRect = sprites_rect;
                 drawRect.x += tpoint.x;
@@ -2790,7 +2790,7 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             {
 				//TODO elephant bug
                 setcol(obj.entities[i].colour, help);
-                drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp-map.ypos);
+                drawimagecol(3, obj.entities[i].xp-map.xpos, obj.entities[i].yp-map.ypos);
             }
         }
     }
@@ -2800,8 +2800,12 @@ void Graphics::drawtowerspikes( mapclass& map )
 {
     for (int i = 0; i < 40; i++)
     {
-        drawtile3(i * 8, -8+map.spikeleveltop, 9, map.colstate);
-        drawtile3(i * 8, 230-map.spikelevelbottom, 8, map.colstate);
+        drawtile3(i * 8, -8  + map.spikeleveltop,    9,  map.colstate);
+        drawtile3(i * 8, 230 - map.spikelevelbottom, 8,  map.colstate);
+    }
+    for (int i = 0; i < 30; i++) {
+        drawtile3(-8  + map.spikelevelleft,   i * 8,    10, map.colstate);
+        drawtile3(320 - map.spikelevelright,  i * 8,    11, map.colstate);
     }
 }
 

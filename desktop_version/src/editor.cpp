@@ -2333,6 +2333,14 @@ int editorclass::tower_scroll(int tower) {
     return towers[tower-1].scroll;
 }
 
+int editorclass::tower_width(int tower) {
+    return towers[tower-1].width;
+}
+
+int editorclass::tower_height(int tower) {
+    return towers[tower-1].height;
+}
+
 bool editorclass::intower(void) {
     return !!get_tower(levx, levy);
 }
@@ -2617,6 +2625,8 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
                 if (TextString.length()) {
                     edTowerEl->QueryIntAttribute("size", &towers[i].size);
                     edTowerEl->QueryIntAttribute("scroll", &towers[i].scroll);
+                    edTowerEl->QueryIntAttribute("width", &towers[i].width);
+                    edTowerEl->QueryIntAttribute("height", &towers[i].height);
 
                     growing_vector<std::string> values = split(TextString, ',');
 
@@ -2916,8 +2926,10 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
 
         if (!found) {
             for (int u = (t + 1); u < max_tower; u++) {
-                towers[u - 1].size = towers[u].size;
+                towers[u - 1].size   = towers[u].size;
                 towers[u - 1].scroll = towers[u].scroll;
+                towers[u - 1].width  = towers[u].width;
+                towers[u - 1].height = towers[u].height;
                 towers[u - 1].tiles.resize(40 * towers[u - 1].size);
                 for (int i = 0; i < 40 * towers[u - 1].size; i++)
                     towers[u - 1].tiles[i] = towers[u].tiles[i];
@@ -2955,8 +2967,10 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
                 tiles += UtilityClass::String(towers[t].tiles[x + y*40]) + ",";
 
         tw = new TiXmlElement("tower");
-        tw->SetAttribute("size", towers[t].size);
+        tw->SetAttribute("size",   towers[t].size);
         tw->SetAttribute("scroll", towers[t].scroll);
+        tw->SetAttribute("width",  towers[t].width);
+        tw->SetAttribute("height", towers[t].height);
         tw->LinkEndChild(new TiXmlText(tiles.c_str()));
         msg->LinkEndChild(tw);
     }
