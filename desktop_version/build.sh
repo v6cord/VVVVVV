@@ -36,7 +36,7 @@ if [ -z "$dont_build" ]; then
     cmake -G Ninja \
         ${debug:+-DCMAKE_BUILD_TYPE=Debug} \
         ${debug:--DCMAKE_BUILD_TYPE=RelWithDebInfo} \
-        ${windows:+-DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
+        ${windows:+-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain.cmake -DCMAKE_MODULE_PATH="$CMAKE_MODULE_PATH"} \
         ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_TOOLCHAIN_FILE=/usr/local/share/switch-cmake/DevkitA64Libnx.cmake} \
         ${VVVVVV_CE_SWITCH_BUILD:+-DCMAKE_MODULE_PATH=/usr/local/share/switch-cmake/cmake} \
         "$@" \
