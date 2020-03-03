@@ -300,10 +300,10 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
                 Uint32 src_pixel = ReadPixel(_src, x, y);
                 Uint32 pixel = ReadPixel(_dest, x, y);
 
-                Uint8 pixalpha = (pixel & _src->format->Amask) >> 24;
-                Uint8 pixred = (pixel & _src->format->Rmask) >> 16;
-                Uint8 pixgreen = (pixel & _src->format->Gmask) >> 8;
-                Uint8 pixblue = (pixel & _src->format->Bmask) >> 0;
+                Uint8 pixalpha = (pixel & _dest->format->Amask) >> 24;
+                Uint8 pixred = (pixel & _dest->format->Rmask) >> 16;
+                Uint8 pixgreen = (pixel & _dest->format->Gmask) >> 8;
+                Uint8 pixblue = (pixel & _dest->format->Bmask) >> 0;
                 Uint8 src_pixalpha = (src_pixel & _src->format->Amask) >> 24;
                 Uint8 src_pixred = (src_pixel & _src->format->Rmask) >> 16;
                 Uint8 src_pixgreen = (src_pixel & _src->format->Gmask) >> 8;
