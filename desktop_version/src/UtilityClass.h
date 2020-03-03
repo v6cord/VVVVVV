@@ -25,6 +25,8 @@ struct scriptimage {
     int bord = false;
     int sc = 2;
     bool persistent = false;
+    int alpha = 0;
+    int background = false;
 };
 
 template<typename T>

@@ -1033,6 +1033,12 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     temp.y = ss_toi(words[2]);
                     temp.index = tempindex;
                     temp.center = parsebool(words[4]);
+                    if (words[5] != "") {
+                        temp.alpha = ss_toi(words[5]);
+                        temp.background = parsebool(words[6]);
+                    } else {
+                        temp.alpha = 255;
+                    }
                     if (words[0] == "drawimagepersist") temp.persistent = true;
                     if (words[0] == "drawimagepersist") setvar("return", std::to_string((int)scriptrender.size()));
                     scriptrender.push_back(temp);

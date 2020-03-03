@@ -103,7 +103,7 @@ public:
 
 	void drawpartimage(int t, int xp, int yp, int wp, int hp);
 
-	void drawscriptimage(Game& game, int t, int xp, int yp, bool cent=false);
+	void drawscriptimage(Game& game, int t, int xp, int yp, bool cent=false, int alpha=255);
 
 	void drawimage(int t, int xp, int yp, bool cent=false);
 

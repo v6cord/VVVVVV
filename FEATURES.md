@@ -32,7 +32,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `drawrect(x,y,w,h,r,g,b)` - draw a rectangle for one frame - r,g,b is 0-255
 
-- `drawimage(x,y,filename[, centered])` - draw an image on the screen for one frame
+- drawimage(x,y,filename[, centered[, alpha[, background]]]) - draw an image on the screen for one frame (alpha 0-255, background true/false)
 
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
