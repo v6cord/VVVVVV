@@ -275,25 +275,59 @@ SDL_Surface *  FlipSurfaceVerticle(SDL_Surface* _src)
 
 void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect )
 {
-    //SDL_Rect tempRect = *_destRect;
-    //tempRect.w  ;
-    //tempRect.h  ;
-    //tempRect.x *=globalScale;
-    //tempRect.y *=globalScale;
+    SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
+    SDL_GetSurfaceBlendMode(_src, &blend);
+    if (blend == SDL_BLENDMODE_BLEND || blend == SDL_BLENDMODE_NONE) {
+        SDL_BlitSurface( _src, _srcRect, _dest, _destRect );
+    } else {
+        SDL_Rect *tempRect = _destRect;
 
+        const SDL_PixelFormat& fmt = *(_src->format);
 
-    //if(globalScale != 1)
-    //{
-    //	SDL_Surface* tempScaled = ScaleSurface(_src, tempRect.w, tempRect.h);
+        SDL_Surface* tempsurface =  SDL_CreateRGBSurface(
+            SDL_SWSURFACE,
+            _src->w,
+            _src->h,
+            fmt.BitsPerPixel,
+            fmt.Rmask,
+            fmt.Gmask,
+            fmt.Bmask,
+            fmt.Amask
+        );
 
-    //	SDL_BlitSurface( tempScaled, _srcRect, _dest, &tempRect );
+        for (int x = 0; x < _dest->w; x++) {
+            for (int y = 0; y < _dest->h; y++) {
+                Uint32 src_pixel = ReadPixel(_src, x, y);
+                Uint32 pixel = ReadPixel(_dest, x, y);
 
-    //	SDL_FreeSurface(tempScaled);
-    //}
-    //else
-    //{
-    SDL_BlitSurface( _src, _srcRect, _dest, _destRect );
-    //}
+                Uint8 pixalpha = (pixel & _src->format->Amask) >> 24;
+                Uint8 pixred = (pixel & _src->format->Rmask) >> 16;
+                Uint8 pixgreen = (pixel & _src->format->Gmask) >> 8;
+                Uint8 pixblue = (pixel & _src->format->Bmask) >> 0;
+                Uint8 src_pixalpha = (src_pixel & _src->format->Amask) >> 24;
+                Uint8 src_pixred = (src_pixel & _src->format->Rmask) >> 16;
+                Uint8 src_pixgreen = (src_pixel & _src->format->Gmask) >> 8;
+                Uint8 src_pixblue = (src_pixel & _src->format->Bmask) >> 0;
+
+                if (blend == SDL_BLENDMODE_ADD) {
+                    pixred += src_pixred * (double(src_pixalpha) / 255.0);
+                    pixgreen += src_pixgreen * (double(src_pixalpha) / 255.0);
+                    pixblue += src_pixblue * (double(src_pixalpha) / 255.0);
+                } else if (blend == SDL_BLENDMODE_MOD) {
+                    pixred = (double(src_pixred) / 255.0) * pixred;
+                    pixgreen = (double(src_pixgreen) / 255.0) * pixgreen;
+                    pixblue = (double(src_pixblue) / 255.0) * pixblue;
+                }
+
+                Uint32 result = (pixalpha << 24) + (pixred << 16) + (pixgreen << 8) + (pixblue << 0);
+
+                DrawPixel(tempsurface, x, y, result);
+            }
+        }
+
+        SDL_BlitSurface(tempsurface, _srcRect, _dest, tempRect);
+        SDL_FreeSurface(tempsurface);
+    }
 }
 
 void BlitSurfaceColoured(
