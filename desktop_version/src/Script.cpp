@@ -54,7 +54,11 @@ scriptclass::scriptclass() {
 void scriptclass::clearcustom() { customscript.clear(); }
 
 void scriptclass::call(std::string script) {
-    callstack.push_back(stackframe{.script = scriptname, .line = position});
+    if (script[0] == '@') {
+        script = script.substr(1);
+    } else {
+        callstack.push_back(stackframe{.script = scriptname, .line = position});
+    }
     load(script);
 }
 
