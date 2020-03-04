@@ -80,14 +80,23 @@ void Screen::ResizeScreen(int x , int y)
 {
         if (headless) return;
 #ifndef __SWITCH__
-	static int resX = 320;
-	static int resY = 240;
+	int resX = 320;
+	int resY = 240;
 	if (x != -1 && y != -1)
 	{
 		// This is a user resize!
 		resX = x;
 		resY = y;
 	}
+
+        if (stretchMode > 2) {
+            resX *= stretchMode - 2;
+            resY *= stretchMode - 2;
+            SDL_SetWindowResizable(m_window, SDL_FALSE);
+            SDL_SetWindowSize(m_window, resX, resY);
+        } else {
+            SDL_SetWindowResizable(m_window, SDL_TRUE);
+        }
 
 	if(!isWindowed)
 	{
@@ -190,7 +199,7 @@ void Screen::toggleFullScreen()
 
 void Screen::toggleStretchMode()
 {
-	stretchMode = (stretchMode + 1) % 3;
+	stretchMode = (stretchMode + 1) % 7;
 	ResizeScreen(-1, -1);
 }
 

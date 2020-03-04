@@ -630,7 +630,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                   }else if (game.currentmenuoption == 1){
                     music.playef(11, 10);
                     dwgfx.screenbuffer->toggleStretchMode();
-                    game.stretchMode = (game.stretchMode + 1) % 3;
+                    game.stretchMode = (game.stretchMode + 1) % 7;
                     updategraphicsmode(game, dwgfx);
                     game.savestats(map, dwgfx, music);
                     game.createmenu("graphicoptions");

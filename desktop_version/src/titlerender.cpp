@@ -685,7 +685,15 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                     dwgfx.bigprint( -1, 30, "Toggle Letterbox", tr, tg, tb, true);
                     dwgfx.Print( -1, 65, "Choose letterbox/stretch/integer mode.", tr, tg, tb, true);
 
-              if(game.stretchMode == 2){
+              if(game.stretchMode == 6){
+                dwgfx.Print( -1, 85, "Current mode: 4X", tr, tg, tb, true);
+              }else if (game.stretchMode == 5){
+                dwgfx.Print( -1, 85, "Current mode: 3X", tr, tg, tb, true);
+              }else if (game.stretchMode == 4){
+                dwgfx.Print( -1, 85, "Current mode: 2X", tr, tg, tb, true);
+              }else if (game.stretchMode == 3){
+                dwgfx.Print( -1, 85, "Current mode: 1X", tr, tg, tb, true);
+              }else if (game.stretchMode == 2){
                 dwgfx.Print( -1, 85, "Current mode: INTEGER", tr, tg, tb, true);
               }else if (game.stretchMode == 1){
                 dwgfx.Print( -1, 85, "Current mode: STRETCH", tr, tg, tb, true);
