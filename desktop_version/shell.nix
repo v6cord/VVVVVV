@@ -42,7 +42,7 @@ in
         }))
         zlib
         libpng
-      ] else if android then [ pkgsNative.android-studio ] else [ SDL2 fribidi zlib libpng xorg.libXcursor ];
+      ] else if android then [ pkgsNative.android-studio ] else [ SDL2 fribidi zlib libpng xorg.libXcursor xorg.libXext ];
       CMAKE_MODULE_PATH = if stdenv.targetPlatform.isWindows then "${sdl}/lib/cmake/SDL2/" else "${SDL2.dev}/lib/cmake/SDL2/";
     })
   ) {}
