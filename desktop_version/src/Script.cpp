@@ -3369,6 +3369,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
                                 UtilityClass& help, musicclass& music) {
     dwgfx.noclear = false;
     dwgfx.mapimage = std::nullopt;
+    callstack.clear();
 
     switch (t) {
         case 0:  // Normal new game
