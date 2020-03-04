@@ -290,7 +290,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `analogue(on/off)` - toggle Analogue Mode screen filter
 
-- `jump(script)` - go to script without adding a stack frame
+- To go to script without adding a stack frame, prefix it with `@`
 
 - Added callbacks - `on_death_start`, `on_death_end`, `on_input_flip`, `on_input_flip_up`, `on_input_flip_down`
 
