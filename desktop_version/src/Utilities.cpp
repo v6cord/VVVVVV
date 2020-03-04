@@ -6,6 +6,9 @@
 #include <sstream>
 #include <iomanip>
 #include "Utilities.h"
+#include "Script.h"
+
+extern scriptclass script;
 
 #ifdef __SWITCH__
 #include <switch.h>
@@ -214,3 +217,24 @@ void log_close() {
     if (logger) pclose(logger);
 #endif
 }
+
+void handle_exception(const std::exception& ex) {
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", ex.what(), nullptr);
+}
+
+const char* script_exception::what() const noexcept {
+    return message.c_str();
+}
+
+script_exception::script_exception(const char* msg) {
+    message = "Script error on line ";
+    message += script.scriptname;
+    message += ":";
+    message += std::to_string(script.position);
+    message += " (`";
+    message += script.commands[script.position];
+    message += "`): ";
+    message += msg;
+}
+
+script_exception::script_exception(const std::exception& ex) : script_exception(ex.what()) {}

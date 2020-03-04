@@ -5,6 +5,7 @@
 #include <chrono>
 #include <string>
 #include <sstream>
+#include <exception>
 #include <stdint.h>
 
 uint64_t splitmix64(uint64_t& x);
@@ -50,5 +51,16 @@ std::string dtos(double val);
 void log_init();
 void log_close();
 bool log_default();
+
+void handle_exception(const std::exception& ex);
+
+struct script_exception : public std::exception {
+    std::string message;
+
+    const char* what() const noexcept override;
+
+    script_exception(const std::exception& ex);
+    script_exception(const char* message);
+};
 
 #endif
