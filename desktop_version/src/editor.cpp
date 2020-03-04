@@ -3659,17 +3659,16 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 else
                     dwgfx.Print(ex - 12, ey - 8, "START", 196, 196, 196);
                 break;
-            case 17: //Roomtext
-                if(edentity[i].scriptname.length()<1)
-                {
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),8,8,dwgfx.getRGB(96,96,96));
+            case 17: // Roomtext
+                if(edentity[i].scriptname.length()<1) {
+                    fillboxabs(dwgfx, ex, ey, 8, 8, dwgfx.getRGB(96, 96, 96));
+                } else {
+                    auto length = utf8::distance(edentity[i].scriptname.begin(),
+                                                 edentity[i].scriptname.end());
+                    fillboxabs(dwgfx, ex, ey, length*8, 8, dwgfx.getRGB(96,96,96));
                 }
-                else
-                {
-                    int length = utf8::unchecked::distance(edentity[i].scriptname.begin(), edentity[i].scriptname.end());
-                    fillboxabs(dwgfx, (edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8),length*8,8,dwgfx.getRGB(96,96,96));
-                }
-                dwgfx.Print((edentity[i].x*8)- (ed.levx*40*8),(edentity[i].y*8)- (ed.levy*30*8), edentity[i].scriptname, 196, 196, 255 - help.glow);
+                dwgfx.Print(ex, ey, edentity[i].scriptname,
+                            196, 196, 255 - help.glow);
                 break;
             case 18: // Terminals
                 ty = ey;
