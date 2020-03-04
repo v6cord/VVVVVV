@@ -367,7 +367,6 @@ void editorclass::reset()
         towers[i].reset();
 
     edentity.clear();
-    edentity.resize(3000);
 
     returneditoralpha = 0;
 
