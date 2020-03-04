@@ -19,7 +19,7 @@ OPTION(ENABLE_WARNINGS "Enable compilation warnings" ON)
 OPTION(ENABLE_WERROR "Treat compilation warnings as errors" OFF)
 OPTION(ENABLE_PROFILE "Enable profiler" OFF)
 OPTION(ENABLE_DEBUG "Enable debug messages" OFF)
-OPTION(SDL_MIXER_X_USE_SYSTEM_SDL2 "Should SDL-Mixer-X use the system SDL2?" OFF)
+OPTION(SDL_MIXER_X_USE_SYSTEM_SDL2 "Should SDL-Mixer-X use the system SDL2?" ON)
 
 SET(CUSTOM_LEVEL_SUPPORT ENABLED CACHE STRING "Optionally disable playing and/or editing of custom levels")
 SET_PROPERTY(CACHE CUSTOM_LEVEL_SUPPORT PROPERTY STRINGS ENABLED NO_EDITOR DISABLED)
