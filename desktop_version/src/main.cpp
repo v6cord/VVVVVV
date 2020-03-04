@@ -55,9 +55,6 @@
 #include <mutex>
 #endif
 
-#define STRINGIFY_UNEXPANDED(s) #s
-#define STRINGIFY(s) STRINGIFY_UNEXPANDED(s)
-
 using namespace std::literals::chrono_literals;
 
 scriptclass script;
@@ -89,6 +86,8 @@ entityclass obj;
 FILE* logger;
 #endif
 
+extern const char* git_rev;
+
 int main(int argc, char *argv[])
 {
     argv = FILESYSTEM_argv(argc, &argc, argv);
@@ -109,7 +108,7 @@ int main(int argc, char *argv[])
         if (strcmp(argv[i], "--version") == 0) {
             puts("VVVVVV-CE");
             puts("Version c1.0");
-            puts("Built from commit " STRINGIFY(GIT_HASH_RAW));
+            printf("Built from commit %s\n", git_rev);
             return 0;
         }
         if (strcmp(argv[i], "--headless") == 0) {

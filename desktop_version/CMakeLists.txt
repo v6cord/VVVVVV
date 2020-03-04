@@ -50,24 +50,13 @@ endif()
 
 PROJECT(VVVVVV-CE)
 
-find_package(Git)
-
-SET(GITREV_BARE_FILE git-rev.h)
-SET(GITREV_BARE_TMP git-rev-tmp.h)
-SET(GITREV_FILE ${CMAKE_BINARY_DIR}/${GITREV_BARE_FILE})
-SET(GITREV_TMP ${CMAKE_BINARY_DIR}/${GITREV_BARE_TMP})
+SET(GITREV_FILE ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
 
 ADD_CUSTOM_COMMAND(
-    OUTPUT ${GITREV_TMP}
-    COMMAND ${CMAKE_COMMAND} -E echo_append "#define GIT_BRANCH_RAW " > ${GITREV_TMP}
-    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD >> ${GITREV_TMP}
-    COMMAND ${CMAKE_COMMAND} -E echo_append "#define GIT_HASH_RAW " >> ${GITREV_TMP}
-    COMMAND ${GIT_EXECUTABLE} describe --always --dirty --abbrev=40 --match="NoTagWithThisName" >> ${GITREV_TMP}
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${GITREV_TMP} ${GITREV_FILE}
-    COMMAND ${CMAKE_COMMAND} -E remove ${GITREV_TMP}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    VERBATIM
-)
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/_version.cpp
+    COMMAND ${CMAKE_COMMAND} -P
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.cmake)
 
 IF(APPLE)
 	MESSAGE(STATUS "Using macOS SDK at ${CMAKE_OSX_SYSROOT}")
@@ -169,7 +158,7 @@ SET(VVV_SRC
 	src/SteamNetwork.c
 	src/GOGNetwork.c
 	src/Utilities.cpp
-        ${GITREV_TMP}
+        ${GITREV_FILE}
         ${VCE_ZIP_OBJ}
 )
 IF(ENABLE_PROFILE)
