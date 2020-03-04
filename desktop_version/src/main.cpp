@@ -33,8 +33,6 @@
 #include "FileSystemUtils.h"
 #include "Network.h"
 
-#include "git-rev.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
