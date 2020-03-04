@@ -71,7 +71,11 @@ packToken cparse_rand(TokenMap scope) {
 }
 
 std::string scriptclass::evalvar(std::string expr) {
-    cparse_startup();
+    static bool CPARSE_INITIALIZED = false;
+    if (!CPARSE_INITIALIZED) {
+        cparse_startup();
+        CPARSE_INITIALIZED = true;
+    }
     TokenMap vars;
     for (auto variable : script.variables) {
         if (variable.first == "") continue;
