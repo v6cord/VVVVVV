@@ -742,18 +742,38 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 map.roomname = processvars(commands[position]);
             }
             if (words[0] == "ifkey") {
-                if ((words[1] == "left" &&
-                     (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) ||
-                      key.controllerWantsLeft(false))) ||
-                    (words[1] == "right" &&
-                     (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d) ||
-                      key.controllerWantsRight(false))) ||
-                    (words[1] == "up" &&
-                     (key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_w) ||
-                      key.controllerWantsUp())) ||
-                    (words[1] == "down" &&
-                     (key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_s) ||
-                      key.controllerWantsDown()))) {
+                bool up = false;
+                bool down = false;
+                bool left = false;
+                bool right = false;
+                bool flip = false;
+                bool action = false;
+                if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) ||
+                    key.controllerWantsLeft(false))
+                    left = true;
+                if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d) ||
+                    key.controllerWantsRight(false))
+                    right = true;
+                if (key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_w) ||
+                    key.controllerWantsUp())
+                    up = true;
+                if (key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_s) ||
+                    key.controllerWantsDown())
+                    down = true;
+                if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) ||
+                    key.isDown(KEYBOARD_v) ||
+                    key.isDown(game.controllerButton_flip))
+                    action = true;
+
+                if (action || up || down)
+                    flip = true;
+
+                if ((words[1] == "left" && left) ||
+                    (words[1] == "right" && right) ||
+                    (words[1] == "up" && up) ||
+                    (words[1] == "down" && down) ||
+                    (words[1] == "action" && action) ||
+                    (words[1] == "flip" && flip)) {
                     call("custom_" + words[2]);
                     position--;
                 } else {
