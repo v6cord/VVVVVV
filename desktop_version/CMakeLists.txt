@@ -390,8 +390,8 @@ if(NOT SDLMIXERX_FOUND AND NOT ANDROID AND NOT SWITCH)
             -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
             -DDOWNLOAD_AUDIO_CODECS_DEPENDENCY=ON
             -DUSE_SYSTEM_SDL2=${SDL_MIXER_X_USE_SYSTEM_SDL2}
-            -DADLMIDI_FLAGS=-DCMAKE_INSTALL_LIBDIR=lib
             -DCMAKE_C_FLAGS=-DSDL_strtokr=_Mix_strtokr
+        PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/DownloadAudioCodecs.cmake <SOURCE_DIR>/cmake/DownloadAudioCodecs.cmake
         BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix}
     )
     ExternalProject_Get_Property(SDL_mixer_X_build INSTALL_DIR)
