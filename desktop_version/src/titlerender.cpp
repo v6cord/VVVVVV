@@ -399,7 +399,8 @@ growing_vector<std::string> changelog = {
     "  recolored to match the tileset",
     "- setblendmode(mode) - set the blend",
     "  mode used for drawing script images,",
-    "  mode is none/add/mod",
+    "  mode is blend/none/add/mod, blend is",
+    "  default",
 
 };
 
