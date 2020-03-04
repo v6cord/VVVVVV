@@ -20,10 +20,10 @@ include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set SDLMIXERX_FOUND to TRUE
 # if all listed variables are TRUE
 find_package_handle_standard_args(SDLMixerX  DEFAULT_MSG
-                                  SDLMIXERX_LIBRARY SDLMIXERX2_INCLUDE_DIR)
+                                  SDLMIXERX_LIBRARY SDLMIXERX_INCLUDE_DIR)
 
-mark_as_advanced(SDLMIXERX_INCLUDE_DIR SDLMIXERX2_LIBRARY )
+mark_as_advanced(SDLMIXERX_INCLUDE_DIR SDLMIXERX_LIBRARY )
 
-set(SDLMIXERX_LIBRARIES ${SDLMIXERX2_LIBRARY} )
-set(SDLMIXERX_INCLUDE_DIRS ${SDLMIXERX2_INCLUDE_DIR} )
+set(SDLMIXERX_LIBRARIES ${SDLMIXERX_LIBRARY} )
+set(SDLMIXERX_INCLUDE_DIRS ${SDLMIXERX_INCLUDE_DIR} )
 
