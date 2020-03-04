@@ -740,11 +740,7 @@ int main(int argc, char *argv[])
             Mix_Volume(-1,MIX_MAX_VOLUME);
         }
 
-		if(key.resetWindow)
-		{
-			key.resetWindow = false;
-			gameScreen.ResizeScreen(-1, -1);
-		}
+        gameScreen.ResizeScreen(-1, -1);
 
         music.processmusic();
         graphics.processfade();
