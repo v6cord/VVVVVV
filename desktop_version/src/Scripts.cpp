@@ -29,9 +29,9 @@ void scriptclass::load(std::string t)
 
       std::string thelabel;
       // Is the script name a label, or a script name + label?
-      if (cscriptname.substr(0, 1) == "$" && cscriptname.substr(cscriptname.length()-1, 1) == "$") {
+      if (cscriptname.substr(0, 1) == ".") {
         // It's fully a label
-        thelabel = cscriptname.substr(1, cscriptname.length()-2);
+        thelabel = cscriptname.substr(1, cscriptname.length()-1);
 
         // And it's intended to be within the same script
         std::string actualname = "";
@@ -42,14 +42,14 @@ void scriptclass::load(std::string t)
 
         cscriptname = actualname;
         t = "custom_" + cscriptname;
-      } else if (cscriptname.length() && cscriptname.substr(cscriptname.length()-1, 1) == "$" && cscriptname.substr(0, cscriptname.length()-1).find("$") != std::string::npos) {
+      } else if (cscriptname.find(".") != std::string::npos) {
         // It's a script name concatenated with a label
-        int dollar = cscriptname.find("$");
-        thelabel = cscriptname.substr(0, cscriptname.length()-1).substr(dollar+1, std::string::npos);
+        int period = cscriptname.find(".");
+        thelabel = cscriptname.substr(period+1, std::string::npos);
 
         // Remove the label from the script name!
-        t = t.substr(0, t.find("$"));
-        cscriptname = cscriptname.substr(0, dollar);
+        t = t.substr(0, t.find("."));
+        cscriptname = cscriptname.substr(0, period);
       }
 
       labels.clear();
@@ -378,8 +378,8 @@ void scriptclass::load(std::string t)
                 add(script.customscript[i]);
 
             // Is this a label?
-            if (words[0].length() > 2 && words[0].substr(0, 1) == "$" && words[0].substr(words[0].length()-1, 1) == "$") {
-              std::string thislabel = words[0].substr(1, words[0].length()-2);
+            if (words[0].length() > 1 && words[0].substr(0, 1) == ".") {
+              std::string thislabel = words[0].substr(1, words[0].length()-1);
 
               // Important - use `scriptlength` instead of `i`
               // The former is the internal script's position which is what we want,
