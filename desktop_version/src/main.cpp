@@ -743,12 +743,17 @@ int main(int argc, char *argv[])
                 Mix_Volume(-1,MIX_MAX_VOLUME);
             }
 
-            gameScreen.ResizeScreen(-1, -1);
-
             music.processmusic();
             graphics.processfade();
             game.gameclock();
             gameScreen.FlipScreen();
+
+            if (key.resetWindow)
+            {
+                key.resetWindow = false;
+                gameScreen.ResizeScreen(-1, -1);
+            }
+
 
             //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
         }
@@ -766,6 +771,12 @@ int main(int argc, char *argv[])
         FILESYSTEM_deinit();
 
         log_close();
+
+        //Quit SDL
+        game.savestats(map, graphics, music);
+        NETWORK_shutdown();
+        SDL_Quit();
+        FILESYSTEM_deinit();
 
         return 0;
     } catch (const std::exception& ex) {
