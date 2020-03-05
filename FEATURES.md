@@ -150,7 +150,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `puntilmusic()` - `untilmusic()` with `pdelay()`
 
-- Added a label and goto system - write down `$label$` on a line, then to go to it, use `$label$` as a script name if you're in the same script, or write `scriptname$label$` to jump to the label from another script
+- Added a label and goto system - write down `.label` on a line, then to go to it, use `.label` as a script name if you're in the same script, or write `scriptname.label` to jump to the label from another script
 
 - `ifvce()` - detect if game is VVVVVV: Community Edition or not
 
