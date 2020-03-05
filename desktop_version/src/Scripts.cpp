@@ -33,14 +33,7 @@ void scriptclass::load(std::string t)
         // It's fully a label
         thelabel = cscriptname.substr(1, cscriptname.length()-1);
 
-        // And it's intended to be within the same script
-        std::string actualname = "";
-        // Code duplicate from above, lol
-        for (size_t i = 0; i < scriptname.length(); i++)
-          if (i >= 7)
-            actualname += scriptname[i];
-
-        cscriptname = actualname;
+        cscriptname = scriptname.substr(7, std::string::npos);
         t = "custom_" + cscriptname;
       } else if (cscriptname.find(".") != std::string::npos) {
         // It's a script name concatenated with a label
