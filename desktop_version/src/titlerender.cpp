@@ -401,12 +401,12 @@ growing_vector<std::string> changelog = {
     "  mode used for drawing script images,",
     "  mode is blend/none/add/mod, blend is",
     "  default",
-    "- csay(lines,crewmate) - say() but it",
-    "  puts the dialogue above createcrewman",
-    "  crewmates instead",
-    "- csayquiet(lines,crewmate) - sayquiet()",
-    "  but it puts the dialogue above",
+    "- csay([lines[,crewmate]]) - say() but",
+    "  it puts the dialogue above",
     "  createcrewman crewmates instead",
+    "- csayquiet([lines[,crewmate]]) -",
+    "  sayquiet() but it puts the dialogue",
+    "  above createcrewman crewmates instead",
 
 };
 
