@@ -85,7 +85,7 @@ void scriptclass::load(std::string t)
         int customcutscenemode=0;
         for(int i=scriptstart; i<scriptend; i++){
           tokenize(script.customscript[i]);
-          if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay"){
+          if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay" || words[0] == "csayquiet"){
             customcutscenemode=1;
           }else if(words[0] == "reply" || words[0] == "replyquiet"){
             customcutscenemode=1;
@@ -261,7 +261,7 @@ void scriptclass::load(std::string t)
             if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4") speakermode=4;
             if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5") speakermode=5;
             if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6") speakermode=6;
-          }else if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay"){
+          }else if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay" || words[0] == "csayquiet"){
             //Speakers!
             if(words[2]=="terminal" || words[2]=="gray" || words[2]=="grey" || words[2]=="0") speakermode=0;
             if(words[2]=="cyan" || words[2]=="viridian" || words[2]=="player" || words[2]=="1") speakermode=1;
@@ -272,31 +272,31 @@ void scriptclass::load(std::string t)
             if(words[2]=="blue" || words[2]=="victoria" || words[2]=="6") speakermode=6;
             switch(speakermode){
               case 0:
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(terminal)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(terminal)");
                 add("text(gray,0,114,"+words[1]+")");
               break;
               case 1: //NOT THE PLAYER
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(cyan)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(cyan)");
                 add("text(cyan,0,0,"+words[1]+")");
               break;
               case 2:
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(purple)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(purple)");
                 add("text(purple,0,0,"+words[1]+")");
               break;
               case 3:
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(yellow)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(yellow)");
                 add("text(yellow,0,0,"+words[1]+")");
               break;
               case 4:
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(red)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(red)");
                 add("text(red,0,0,"+words[1]+")");
               break;
               case 5:
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(green)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(green)");
                 add("text(green,0,0,"+words[1]+")");
               break;
               case 6:
-                if(squeakmode==0 && words[0] != "sayquiet") add("squeak(blue)");
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(blue)");
                 add("text(blue,0,0,"+words[1]+")");
               break;
             }
@@ -313,7 +313,7 @@ void scriptclass::load(std::string t)
             }
 
             std::string addthis;
-            if (words[0] != "csay")
+            if (words[0] != "csay" && words[0] != "csayquiet")
               addthis += "custom";
             addthis += "position(";
             switch(speakermode){
