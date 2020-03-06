@@ -85,7 +85,7 @@ void scriptclass::load(std::string t)
         int customcutscenemode=0;
         for(int i=scriptstart; i<scriptend; i++){
           tokenize(script.customscript[i]);
-          if(words[0] == "say" || words[0] == "sayquiet"){
+          if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay"){
             customcutscenemode=1;
           }else if(words[0] == "reply" || words[0] == "replyquiet"){
             customcutscenemode=1;
@@ -261,7 +261,7 @@ void scriptclass::load(std::string t)
             if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4") speakermode=4;
             if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5") speakermode=5;
             if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6") speakermode=6;
-          }else if(words[0] == "say" || words[0] == "sayquiet"){
+          }else if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay"){
             //Speakers!
             if(words[2]=="terminal" || words[2]=="gray" || words[2]=="grey" || words[2]=="0") speakermode=0;
             if(words[2]=="cyan" || words[2]=="viridian" || words[2]=="player" || words[2]=="1") speakermode=1;
@@ -312,15 +312,21 @@ void scriptclass::load(std::string t)
               i++; add(script.customscript[i]);
             }
 
+            std::string addthis;
+            if (words[0] != "csay")
+              addthis += "custom";
+            addthis += "position(";
             switch(speakermode){
-              case 0: add("customposition(center)"); break;
-              case 1: add("customposition(cyan,above)"); break;
-              case 2: add("customposition(purple,above)"); break;
-              case 3: add("customposition(yellow,above)"); break;
-              case 4: add("customposition(red,above)"); break;
-              case 5: add("customposition(green,above)"); break;
-              case 6: add("customposition(blue,above)"); break;
+              case 0: addthis += "center"; break;
+              case 1: addthis += "cyan,above"; break;
+              case 2: addthis += "purple,above"; break;
+              case 3: addthis += "yellow,above"; break;
+              case 4: addthis += "red,above"; break;
+              case 5: addthis += "green,above"; break;
+              case 6: addthis += "blue,above"; break;
             }
+            addthis += ")";
+            add(addthis);
             add("speak_active");
             customtextmode=1;
           }else if(words[0] == "reply" || words[0] == "replyquiet"){
