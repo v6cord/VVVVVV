@@ -765,11 +765,6 @@ int main(int argc, char *argv[])
         //Free the loaded image
         //SDL_FreeSurface( gameScreen );
 
-        //Quit SDL
-        NETWORK_shutdown();
-        SDL_Quit();
-        FILESYSTEM_deinit();
-
         log_close();
 
         //Quit SDL
