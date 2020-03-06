@@ -404,6 +404,9 @@ growing_vector<std::string> changelog = {
     "- csay(lines,crewmate) - say() but it",
     "  puts the dialogue above createcrewman",
     "  crewmates instead",
+    "- csayquiet(lines,crewmate) - sayquiet()",
+    "  but it puts the dialogue above",
+    "  createcrewman crewmates instead",
 
 };
 
