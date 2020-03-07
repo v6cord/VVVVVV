@@ -67,6 +67,7 @@ public:
 
     void settile(int xp, int yp, int t);
     void settile_special(int x, int y, int tile);
+    void fake_settile_special(int x, int y, int tile);
 
 
     void fillcontent(growing_vector<std::string>& tmap);

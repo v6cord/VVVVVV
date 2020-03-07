@@ -792,6 +792,8 @@ void mapclass::settile(int xp, int yp, int t)
 	}
 }
 
+void mapclass::fake_settile_special(int x, int y, int tile) {}
+
 void mapclass::settile_special(int x, int y, int tile) {
 	if (towermode || tileset == 2 || tile != 10) // There's nothing behind 1x1 quicksand
 		settile(x, y, tile);

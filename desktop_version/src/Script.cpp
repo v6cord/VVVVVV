@@ -744,7 +744,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         int x = i % 40;
                         int y = i / 40;
                         if (contents[i] == tile1) {
-                            map.settile_special(x, y, tile2);
+                            map.fake_settile_special(x, y, tile2);
                         }
                     }
                 } else if (words[0] == "endtrial") {
