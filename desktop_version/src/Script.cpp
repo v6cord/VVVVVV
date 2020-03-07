@@ -739,14 +739,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     // replacetiles(tile 1,tile 2)
                     int tile1 = ss_toi(words[1]);
                     int tile2 = ss_toi(words[2]);
-                    auto begin = map.contents.begin();
-                    auto end = map.contents.end();
-                    auto it = begin;
-                    while ((it = std::find(it, end, tile1)) != end) {
-                        if (*it == tile1) {
-                            int i = it - begin;
-                            int x = i % 40;
-                            int y = i / 40;
+                    for (int i = 0; i < 1200; i++) {
+                        int x = i % 40;
+                        int y = i / 40;
+                        if (map.contents[i] == tile1) {
                             map.settile_special(x, y, tile2);
                         }
                     }
