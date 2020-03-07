@@ -1,7 +1,6 @@
 #include "Script.h"
-#include <shunting-yard.h>
+#include <exprtk.hpp>
 #include <algorithm>
-#include <builtin-features.inc>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -64,40 +63,42 @@ void scriptclass::call(std::string script) {
     load(script);
 }
 
-packToken cparse_rand(TokenMap scope) {
-    int N = scope["N"].asInt();
+template <typename T>
+inline T rand(T N) {
     int result = fRandom() * N;
     return result;
 }
 
 std::string scriptclass::evalvar(std::string expr) {
-    static bool CPARSE_INITIALIZED = false;
-    if (!CPARSE_INITIALIZED) {
-        cparse_startup();
-        CPARSE_INITIALIZED = true;
-    }
-    TokenMap vars;
+    typedef exprtk::symbol_table<double> symbol_table_t;
+    typedef exprtk::expression<double> expression_t;
+    typedef exprtk::parser<double> parser_t;
+
+    std::unordered_map<std::string, double> vars;
     for (auto variable : script.variables) {
         if (variable.first == "") continue;
-        try {
-            auto contents = std::stod(variable.second);
-            vars[variable.first] = contents;
-        } catch (const std::invalid_argument& ex) {
-            auto contents = variable.second;
+        const char* str = variable.second.c_str();
+        char* str_end;
+        double contents = std::strtod(str, &str_end);
+        if (str_end != str) {
             vars[variable.first] = contents;
         }
     }
-    vars["rand"] = CppFunction(&cparse_rand, {"N"}, "rand");
-    auto token = calculator::calculate(expr.c_str(), vars);
-    try {
-        return token.asString();
-    } catch (const bad_cast& ex) {
-        try {
-            return dtos(token.asDouble());
-        } catch (const bad_cast& ex) {
-            return token.str();
-        }
+
+    symbol_table_t symbol_table;
+    for (auto& variable : vars) {
+        symbol_table.add_variable(variable.first, variable.second);
     }
+    symbol_table.add_function("rand", rand);
+    symbol_table.add_constants();
+
+    expression_t expression;
+    expression.register_symbol_table(symbol_table);
+
+    parser_t parser;
+    parser.compile(expr, expression);
+
+    return dtos(expression.value());
 }
 
 int scriptclass::getimage(Game& game, std::string n) {

@@ -186,12 +186,6 @@ SET(PFS_SRC
 	../third_party/physfs/physfs_platform_windows.c
 	../third_party/physfs/physfs_platform_haiku.cpp
 )
-SET(PARSE_SRC
-        ../third_party/cparse/shunting-yard.cpp
-        ../third_party/cparse/packToken.cpp
-        ../third_party/cparse/functions.cpp
-        ../third_party/cparse/containers.cpp
-)
 IF(APPLE)
 	# Are you noticing a pattern with this Apple crap yet?
 	SET(PFS_SRC ${PFS_SRC} ../third_party/physfs/physfs_platform_apple.m)
@@ -216,9 +210,9 @@ ELSE()
 ENDIF()
 
 if(ANDROID)
-    target_include_directories(main PUBLIC src ${CMAKE_BINARY_DIR} ../third_party/utfcpp/source)
+    target_include_directories(main PUBLIC src ${CMAKE_BINARY_DIR} ../third_party/utfcpp/source ../third_party/exprtk)
 else()
-    target_include_directories(VVVVVV-CE PUBLIC src ${CMAKE_BINARY_DIR} ../third_party/utfcpp/source)
+    target_include_directories(VVVVVV-CE PUBLIC src ${CMAKE_BINARY_DIR} ../third_party/utfcpp/source ../third_party/exprtk)
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -264,17 +258,10 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 target_include_directories(tinyxml-static PUBLIC ../third_party/tinyxml)
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 target_include_directories(physfs-static PUBLIC ../third_party/physfs)
-ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
-target_include_directories(cparse-static PUBLIC ../third_party/cparse)
-
-if (SWITCH)
-    target_compile_options(cparse-static PUBLIC -fexceptions)
-endif()
 
 if(ANDROID)
     set_target_properties(tinyxml-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(physfs-static PROPERTIES LINKER_LANGUAGE CXX)
-    set_target_properties(cparse-static PROPERTIES LINKER_LANGUAGE CXX)
 endif()
 
 # FriBidi (Detection pulled from HHVM)
@@ -404,10 +391,10 @@ find_package(Threads)
 
 # Static Dependencies
 if(ANDROID)
-    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static fribidi PNG::PNG Threads::Threads)
     if(SDLMIXERX_INCLUDE_DIRS AND SDLMIXERX_LIBRARIES)
         TARGET_INCLUDE_DIRECTORIES(VVVVVV-CE PUBLIC ${SDLMIXERX_INCLUDE_DIRS})
         TARGET_LINK_LIBRARIES(VVVVVV-CE ${SDLMIXERX_LIBRARIES})
