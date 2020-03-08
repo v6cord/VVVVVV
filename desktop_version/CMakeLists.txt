@@ -67,6 +67,7 @@ ADD_DEFINITIONS(-DPHYSFS_SUPPORTS_DEFAULT=0 -DPHYSFS_SUPPORTS_ZIP=1)
 
 if (MINGW OR MSYS)
     add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+    add_compile_options(-Wa,-mbig-obj)
 endif()
 
 # Creates C resources file from files in given directory
