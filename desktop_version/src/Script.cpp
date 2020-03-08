@@ -17,6 +17,7 @@
 #include "Maths.h"
 
 #include <exprtk.hpp>
+#undef LoadImage
 
 scriptclass::scriptclass() {
     // Init
