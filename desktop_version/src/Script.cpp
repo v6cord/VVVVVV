@@ -1,5 +1,4 @@
 #include "Script.h"
-#include <exprtk.hpp>
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -16,6 +15,8 @@
 #include "Music.h"
 #include "Utilities.h"
 #include "Maths.h"
+
+#include <exprtk.hpp>
 
 scriptclass::scriptclass() {
     // Init
