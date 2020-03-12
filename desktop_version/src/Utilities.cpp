@@ -226,7 +226,7 @@ const char* script_exception::what() const noexcept {
     return message.c_str();
 }
 
-script_exception::script_exception(const char* msg) {
+script_exception::script_exception(const char* msg, scriptx& script) {
     message = "Script error on line ";
     message += script.scriptname;
     message += ":";
@@ -237,4 +237,4 @@ script_exception::script_exception(const char* msg) {
     message += msg;
 }
 
-script_exception::script_exception(const std::exception& ex) : script_exception(ex.what()) {}
+script_exception::script_exception(const std::exception& ex, scriptx& script) : script_exception(ex.what(), script) {}

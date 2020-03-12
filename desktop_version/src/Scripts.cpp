@@ -12,7 +12,7 @@
 
 extern scriptclass script;
 
-void scriptclass::load(std::string t)
+void scriptx::load(std::string t)
 {
 	int maxlength = (std::min(int(t.length()),7));
     std::string customstring="";
@@ -57,7 +57,7 @@ void scriptclass::load(std::string t)
       int scriptend=-1;
       std::string tstring;
 
-      for(size_t i=0; i<customscript.size(); i++){
+      for(size_t i=0; i<script.customscript.size(); i++){
         if(scriptstart==-1){
           //Find start of the script
           if(script.customscript[i]==cscriptname+":"){
@@ -78,7 +78,7 @@ void scriptclass::load(std::string t)
       }
       if(scriptstart>-1){
         if(scriptend==-1){
-          scriptend=customscript.size();
+          scriptend=script.customscript.size();
         }
 
         //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!

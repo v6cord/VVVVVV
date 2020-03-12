@@ -573,7 +573,7 @@ int main(int argc, char *argv[])
                 case GAMEMODE:
                     if (map.towermode)
                     {
-                        if (script.running)
+                        if (script.running())
                         {
                             script.run(key, graphics, game, map, obj, help, music);
                         }
@@ -599,13 +599,9 @@ int main(int argc, char *argv[])
                         }
                         else
                         {
-                            if (script.running)
+                            if (script.running())
                             {
                                 script.run(key, graphics, game, map, obj, help, music);
-                            }
-
-                            for (int i = 0; i < (int)script.active_scripts.size(); i++) {
-                                script.active_scripts[i].update();
                             }
 
                             gameinput(key, graphics, game, map, obj, help, music);
@@ -642,7 +638,7 @@ int main(int argc, char *argv[])
                             }
                             else
                             {
-                                if (script.running)
+                                if (script.running())
                                 {
                                     script.run(key, graphics, game, map, obj, help, music);
                                 }

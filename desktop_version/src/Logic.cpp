@@ -618,18 +618,18 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         }
     }
 
-    if (script.killedviridian) {
-        if (script.killtimer > 0) script.killtimer--;
-        if (script.killtimer == 0) {
-            script.killtimer = -1;
-            SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "",
-                    "You killed Viridian.",
-                    NULL
-            );
-        }
-    }
+    //if (script.killedviridian) {
+    //    if (script.killtimer > 0) script.killtimer--;
+    //    if (script.killtimer == 0) {
+    //        script.killtimer = -1;
+    //        SDL_ShowSimpleMessageBox(
+    //                SDL_MESSAGEBOX_ERROR,
+    //                "",
+    //                "You killed Viridian.",
+    //                NULL
+    //        );
+    //    }
+    //}
 
     if (obj.nearelephant)
     {
@@ -829,8 +829,9 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         game.updatestate(dwgfx, map, obj, help, music);
         if (game.startscript)
         {
-            script.callstack.clear();
-            script.load(game.newscript);
+            scriptx scr;
+            scr.load(game.newscript);
+            script.active_scripts.push_back(scr);
             game.startscript = false;
         }
 

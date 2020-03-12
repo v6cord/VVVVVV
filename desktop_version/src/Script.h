@@ -7,14 +7,10 @@
 #include "Game.h"
 #include "ScriptX.h"
 #include "Enums.h"
+#include "UtilityClass.h"
 
 
-class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;class musicclass;
-
-struct stackframe {
-    std::string script;
-    int line;
-};
+class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;class musicclass;class scriptx;
 
 class scriptclass
 {
@@ -22,19 +18,6 @@ public:
 
 
     scriptclass();
-
-	void load(std::string t);
-	void call(std::string t);
-	void loadother(std::string t);
-
-
-    void inline add(std::string t)
-    {
-        commands[scriptlength] = t;
-        scriptlength++;
-    }
-
-    void clearcustom();
 
     int getimage(Game& game, std::string n);
 
@@ -45,8 +28,6 @@ public:
     std::string evalvar(std::string t);
 
     std::string processvars(std::string t);
-
-    void tokenize(std::string t);
 
     void run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
              entityclass& obj, UtilityClass& help, musicclass& music);
@@ -65,21 +46,6 @@ public:
 
     void callback(std::string name);
 
-    //Script contents
-    growing_vector<std::string> commands;
-    growing_vector<std::string> words;
-    growing_vector<std::string> txt;
-    std::string scriptname;
-    int position, scriptlength = 0;
-    int looppoint, loopcount = 0;
-
-    int scriptdelay = 0;
-    bool running = false;
-    bool nointerrupt = false;
-    bool passive = false;
-    std::string tempword;
-    std::string currentletter;
-
     //Textbox stuff
     int textx = 0;
     int texty = 0;
@@ -90,27 +56,24 @@ public:
     //Misc
     int i, j, k = 0;
 
-    //Custom level stuff
-     growing_vector <std::string>  customscript;
-
-    growing_vector<scriptimage> scriptrender;
-
-    bool loopdelay = false;
-
-    std::unordered_map<std::string, int> labels; // key is name, value is position
     std::unordered_map<std::string, std::string> variables; // key is name, value is contents
     std::unordered_map<std::string, std::string> callbacks; // key is name, value is script
 
-    std::vector<stackframe> callstack;
-
-    int getpixelx = -1;
-    int getpixely = -1;
-
     growing_vector<scriptx> active_scripts;
 
-    bool killedviridian = false;
-    int killtimer = 0;
+    bool running();
+    bool passive();
+
+    growing_vector <std::string>  customscript;
+
+    bool nointerrupt = false;
+
+    void clearcustom();
+
+    growing_vector<scriptimage> scriptrender;
 };
+
+extern scriptclass script;
 
 // Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)
 // Slow variables cannot be used in expressions, but are not automatically updated every frame

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <exception>
 #include <stdint.h>
+#include "ScriptX.h"
 
 uint64_t splitmix64(uint64_t& x);
 void seed_xoshiro(uint64_t s1, uint64_t s2, uint64_t s3, uint64_t s4);
@@ -59,8 +60,8 @@ struct script_exception : public std::exception {
 
     const char* what() const noexcept override;
 
-    script_exception(const std::exception& ex);
-    script_exception(const char* message);
+    script_exception(const std::exception& ex, scriptx& script);
+    script_exception(const char* message, scriptx& script);
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 #include "Script.h"
 
-void scriptclass::loadother(std::string t)
+void scriptx::loadother(std::string t)
 {
     //loads script name t into the array
     if (t == "terminal_station_1")

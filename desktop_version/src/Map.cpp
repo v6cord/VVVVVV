@@ -2527,7 +2527,8 @@ void twoframedelayfix()
         obj.kludgeonetimescript = true;
         obj.removetrigger(obj.activetrigger);
         game.state = 0;
-        script.callstack.clear();
-        script.load(game.newscript);
+        scriptx scr;
+        scr.load(game.newscript);
+        script.active_scripts.push_back(scr);
     }
 }

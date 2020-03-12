@@ -9,8 +9,6 @@
 #include "FileSystemUtils.h"
 #include <cstdlib>
 
-extern scriptclass script;
-
 // Found in titlerender.cpp
 void updategraphicsmode(Game& game, Graphics& dwgfx);
 
@@ -1911,7 +1909,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     //game.mx = (mouseX / 2);
     //game.my = (mouseY / 2);
 
-    if(!script.running || (script.running && script.passive))
+    if(!script.running() || (script.running() && script.passive()))
     {
         game.press_left = false;
         game.press_right = false;
@@ -1977,7 +1975,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     }
     else
     { */
-        if(!script.running || (script.running && script.passive))
+        if(!script.running() || (script.running() && script.passive()))
         {
             if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false))
             {
@@ -2069,15 +2067,16 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 
     //Returning to editor mode must always be possible
 #if !defined(NO_CUSTOM_LEVELS)
-    if((map.custommode && !map.custommodeforreal) && !script.killedviridian){
+    if((map.custommode && !map.custommodeforreal)){
       if ((game.press_map || key.isDown(27)) && !game.mapheld){
         game.mapheld = true;
         //Return to level editor
         if (game.activeactivity > -1 && game.press_map){
            if((int(std::abs(obj.entities[obj.getplayer()].vx))<=1) && (int(obj.entities[obj.getplayer()].vy) == 0) )
             {
-                script.callstack.clear();
-                script.load(obj.blocks[game.activeactivity].script);
+                scriptx scr;
+                scr.load(obj.blocks[game.activeactivity].script);
+                script.active_scripts.push_back(scr);
                 obj.removeblock(game.activeactivity);
             }
         } else if (game.activetele && game.readytotele > 20) {
@@ -2210,8 +2209,9 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     {
                         if((int(std::abs(obj.entities[ie].vx))<=1) && (int(obj.entities[ie].vy) == 0) )
                         {
-                            script.callstack.clear();
-                            script.load(obj.blocks[game.activeactivity].script);
+                            scriptx scr;
+                            scr.load(obj.blocks[game.activeactivity].script);
+                            script.active_scripts.push_back(scr);
                             obj.removeblock(game.activeactivity);
                         }
                     }

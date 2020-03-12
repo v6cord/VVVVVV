@@ -3,7 +3,9 @@
 
 #include <cmath>
 #include <stdlib.h>
-#include "Utilities.h"
+#include <stdint.h>
+
+uint64_t xoshiro_next(void);
 
 //// This header holds Maths functions that emulate the functionality of flash's
 
