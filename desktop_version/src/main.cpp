@@ -483,44 +483,34 @@ int main(int argc, char *argv[])
 
 
             key.Poll();
-                    if(key.toggleFullscreen)
-                    {
-                            if(!gameScreen.isWindowed)
-                            {
-                                    //SDL_WM_GrabInput(SDL_GRAB_ON);
-                                    SDL_ShowCursor(SDL_DISABLE);
-                                    SDL_ShowCursor(SDL_ENABLE);
-                            }
-                            else
-                            {
-                                    SDL_ShowCursor(SDL_ENABLE);
-                            }
+            if(key.toggleFullscreen)
+            {
+                if(!gameScreen.isWindowed)
+                {
+                    SDL_ShowCursor(SDL_DISABLE);
+                    SDL_ShowCursor(SDL_ENABLE);
+                }
+                else
+                {
+                    SDL_ShowCursor(SDL_ENABLE);
+                }
 
 
-                            if(game.gamestate == EDITORMODE)
-                            {
-                                    SDL_ShowCursor(SDL_ENABLE);
-                            }
+                if(game.gamestate == EDITORMODE)
+                {
+                    SDL_ShowCursor(SDL_ENABLE);
+                }
 
-                            gameScreen.toggleFullScreen();
-                            game.fullscreen = !game.fullscreen;
-                            key.toggleFullscreen = false;
+                gameScreen.toggleFullScreen();
+                game.fullscreen = !game.fullscreen;
+                key.toggleFullscreen = false;
 
-                                    key.keymap.clear(); //we lost the input due to a new window.
-                                    game.press_left = false;
-                                    game.press_right = false;
-                                    game.press_action = true;
-                                    game.press_map = false;
-                            printf("Error: failed: %s\n", SDL_GetError());
-
-
-
-
-                    }
-                    /*if(key.quitProgram)
-                    {
-                            music.playef(2);
-                    }*/
+                key.keymap.clear(); //we lost the input due to a new window.
+                game.press_left = false;
+                game.press_right = false;
+                game.press_action = true;
+                game.press_map = false;
+            }
 
             game.infocus = key.isActive;
             if(!game.infocus)

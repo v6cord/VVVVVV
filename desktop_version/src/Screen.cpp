@@ -76,7 +76,7 @@ Screen::Screen()
 #endif
 }
 
-void Screen::ResizeScreen(int x , int y)
+void Screen::ResizeScreen(int x, int y)
 {
         if (headless) return;
 #ifndef __SWITCH__
@@ -100,11 +100,21 @@ void Screen::ResizeScreen(int x , int y)
 
 	if(!isWindowed)
 	{
-		SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		int result = SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		if (result != 0)
+		{
+			printf("Error: could not set the game to fullscreen mode: %s\n", SDL_GetError());
+			return;
+		}
 	}
 	else
 	{
-		SDL_SetWindowFullscreen(m_window, 0);
+		int result = SDL_SetWindowFullscreen(m_window, 0);
+		if (result != 0)
+		{
+			printf("Error: could not set the game to windowed mode: %s\n", SDL_GetError());
+			return;
+		}
 		if (x != -1 && y != -1)
 		{
 			SDL_SetWindowSize(m_window, resX, resY);
@@ -116,13 +126,28 @@ void Screen::ResizeScreen(int x , int y)
 	{
 		int winX, winY;
 		SDL_GetWindowSize(m_window, &winX, &winY);
-		SDL_RenderSetLogicalSize(m_renderer, winX, winY);
-		SDL_RenderSetIntegerScale(m_renderer, SDL_FALSE);
+		int result = SDL_RenderSetLogicalSize(m_renderer, winX, winY);
+		if (result != 0)
+		{
+			printf("Error: could not set logical size: %s\n", SDL_GetError());
+			return;
+		}
+		result = SDL_RenderSetIntegerScale(m_renderer, SDL_FALSE);
+		if (result != 0)
+		{
+			printf("Error: could not set scale: %s\n", SDL_GetError());
+			return;
+		}
 	}
 	else
 	{
 		SDL_RenderSetLogicalSize(m_renderer, 320, 240);
-		SDL_RenderSetIntegerScale(m_renderer, (SDL_bool) (stretchMode == 2));
+		int result = SDL_RenderSetIntegerScale(m_renderer, (SDL_bool) (stretchMode == 2));
+		if (result != 0)
+		{
+			printf("Error: could not set scale: %s\n", SDL_GetError());
+			return;
+		}
 	}
 	SDL_ShowWindow(m_window);
 }

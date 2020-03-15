@@ -139,18 +139,21 @@ void KeyPoll::Poll()
 		if (evt.type == SDL_KEYDOWN)
 		{
 			keymap[evt.key.keysym.sym] = true;
+
 			if (evt.key.keysym.sym == SDLK_BACKSPACE)
 			{
 				pressedbackspace = true;
 			}
-			else if (	(	evt.key.keysym.sym == SDLK_RETURN ||
-						evt.key.keysym.sym == SDLK_f	) &&
-#ifdef __APPLE__ /* OSX prefers the command key over the alt keys. -flibit */
-					keymap[SDLK_LGUI]	)
+
+#ifdef __APPLE__ /* OSX prefers the command keys over the alt keys. -flibit */
+			bool altpressed = keymap[SDLK_LGUI] || keymap[SDLK_RGUI];
 #else
-					(	keymap[SDLK_LALT] ||
-						keymap[SDLK_RALT]	)	)
+			bool altpressed = keymap[SDLK_LALT] || keymap[SDLK_RALT];
 #endif
+			bool returnpressed = evt.key.keysym.sym == SDLK_RETURN;
+			bool fpressed = evt.key.keysym.sym == SDLK_f;
+			bool f11pressed = evt.key.keysym.sym == SDLK_F11;
+			if ((altpressed && (returnpressed || fpressed)) || f11pressed)
 			{
 				toggleFullscreen = true;
 			}
