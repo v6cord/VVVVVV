@@ -829,9 +829,15 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
         game.updatestate(dwgfx, map, obj, help, music);
         if (game.startscript)
         {
-            scriptx scr;
-            scr.load(game.newscript);
-            script.active_scripts.push_back(scr);
+            bool needs_load = true;
+            for (auto script : script.active_scripts) {
+                if (script.scriptname == game.newscript) needs_load = false;
+            }
+            if (needs_load) {
+                scriptx scr;
+                scr.load(game.newscript);
+                script.active_scripts.push_back(scr);
+            }
             game.startscript = false;
         }
 

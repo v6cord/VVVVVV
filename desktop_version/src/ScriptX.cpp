@@ -26,7 +26,7 @@ scriptx::scriptx() {
     position = 0;
     scriptlength = 0;
     scriptdelay = 0;
-    running = false;
+    running = true;
     passive = false;
 
     i = 0;

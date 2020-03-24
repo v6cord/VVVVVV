@@ -1327,5 +1327,5 @@ bool scriptclass::passive() {
     for (auto script : active_scripts) {
         if (!script.passive) return false;
     }
-    return true;
+    return !active_scripts.empty();
 }
