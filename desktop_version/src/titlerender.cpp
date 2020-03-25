@@ -409,6 +409,10 @@ growing_vector<std::string> changelog = {
     "  above createcrewman crewmates instead",
     "- gamestatedelay(n) - delay running a",
     "  gamestate for n frames",
+    "- randchoose(varname,options...) -",
+    "  randomly set varname to any of the",
+    "  given arguments afterwards, with equal",
+    "  probability for each",
 
 };
 
