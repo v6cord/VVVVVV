@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: VVVVVV-CE-LinuxDeb
-        path: desktop_version/build/VVVVVV-CE-1.0.0-Linux.deb
+        path: desktop_version/build/VVVVVV-CE.deb
 
     - name: Run tests
       run: cd ${SRC_DIR_PATH} && dont_build=1 ./tests.sh
