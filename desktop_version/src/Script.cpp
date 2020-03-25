@@ -868,6 +868,18 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         setvar(words[1], tempcontents);
                     }
                 }
+                if (words[0] == "randchoose") {
+                    std::vector<std::string> options;
+                    for (size_t ti = 2; ti < words.size(); ti++) {
+                        if (words[ti].empty())
+                            break;
+
+                        options.push_back(words[ti]);
+                    }
+
+                    int chosen = fRandom() * options.size();
+                    setvar(words[1], options[chosen]);
+                }
                 if (words[0] == "delchar") {
                     std::string var = words[1];
                     if (variables.find(var) != variables.end() &&
