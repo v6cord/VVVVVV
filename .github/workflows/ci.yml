@@ -59,6 +59,8 @@ jobs:
   build-mac:
     name: Build (macOS)
 
+    if: false
+
     runs-on: macos-latest
 
     env:
