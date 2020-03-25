@@ -377,9 +377,14 @@ if(NOT SDLMIXERX_FOUND AND NOT ANDROID AND NOT SWITCH)
         set(suffix ".dylib")
     else()
         set(prefix "lib/lib")
-        set(suffix ".so")
+        set(suffix ".a")
     endif()
     include(ExternalProject)
+    if(WIN32 OR APPLE)
+        set(SDLMIXERX_LIBRARIES <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix})
+    else()
+        set(SDLMIXERX_LIBRARIES <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix} <INSTALL_DIR>/${prefix}FLAC${suffix} <INSTALL_DIR>/${prefix}opusfile${suffix} <INSTALL_DIR>/${prefix}opus${suffix} <INSTALL_DIR>/${prefix}vorbisfile${suffix} <INSTALL_DIR>/${prefix}vorbis${suffix} <INSTALL_DIR>/${prefix}ogg${suffix} <INSTALL_DIR>/${prefix}mad${suffix} <INSTALL_DIR>/${prefix}id3tag${suffix} <INSTALL_DIR>/${prefix}modplug${suffix} <INSTALL_DIR>/${prefix}ADLMIDI${suffix} <INSTALL_DIR>/${prefix}OPNMIDI${suffix} <INSTALL_DIR>/${prefix}timidity_sdl2${suffix} <INSTALL_DIR>/${prefix}gme${suffix} <INSTALL_DIR>/${prefix}zlib${suffix} <INSTALL_DIR>/${prefix}xmp${suffix})
+    endif()
     externalproject_add(SDL_mixer_X_build
         URL https://github.com/WohlSoft/SDL-Mixer-X/archive/67405364cea87a6a7d0ec589054785c2dbeca406.tar.gz
         URL_HASH SHA256=29e040e85c34145aa74d5c8c2f69ec69d5375fa15344f3a6d481293869e9b736
@@ -392,10 +397,14 @@ if(NOT SDLMIXERX_FOUND AND NOT ANDROID AND NOT SWITCH)
             -DUSE_SYSTEM_SDL2=${SDL_MIXER_X_USE_SYSTEM_SDL2}
             -DCMAKE_C_FLAGS=-DSDL_strtokr=_Mix_strtokr
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/DownloadAudioCodecs.cmake <SOURCE_DIR>/cmake/DownloadAudioCodecs.cmake
-        BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h <INSTALL_DIR>/${prefix}SDL2_mixer_ext${suffix}
+        BUILD_BYPRODUCTS <INSTALL_DIR>/include/SDL2/SDL_mixer_ext.h ${SDLMIXERX_LIBRARIES}
     )
     ExternalProject_Get_Property(SDL_mixer_X_build INSTALL_DIR)
-    set(SDLMIXERX_LIBRARIES ${INSTALL_DIR}/${prefix}SDL2_mixer_ext${suffix})
+    if(WIN32 OR APPLE)
+        set(SDLMIXERX_LIBRARIES ${INSTALL_DIR}/${prefix}SDL2_mixer_ext${suffix})
+    else()
+        set(SDLMIXERX_LIBRARIES ${INSTALL_DIR}/${prefix}SDL2_mixer_ext${suffix} ${INSTALL_DIR}/${prefix}FLAC${suffix} ${INSTALL_DIR}/${prefix}opusfile${suffix} ${INSTALL_DIR}/${prefix}opus${suffix} ${INSTALL_DIR}/${prefix}vorbisfile${suffix} ${INSTALL_DIR}/${prefix}vorbis${suffix} ${INSTALL_DIR}/${prefix}ogg${suffix} ${INSTALL_DIR}/${prefix}mad${suffix} ${INSTALL_DIR}/${prefix}id3tag${suffix} ${INSTALL_DIR}/${prefix}modplug${suffix} ${INSTALL_DIR}/${prefix}ADLMIDI${suffix} ${INSTALL_DIR}/${prefix}OPNMIDI${suffix} ${INSTALL_DIR}/${prefix}timidity_sdl2${suffix} ${INSTALL_DIR}/${prefix}gme${suffix} ${INSTALL_DIR}/${prefix}zlib${suffix} ${INSTALL_DIR}/${prefix}xmp${suffix})
+    endif()
     set(SDLMIXERX_INCLUDE_DIRS "${INSTALL_DIR}/include")
     set(SDLMIXERX_DEPENDENCY SDL_mixer_X_build)
 endif()
