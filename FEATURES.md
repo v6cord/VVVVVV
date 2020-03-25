@@ -303,3 +303,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `csay([lines[,crewmate]])` - `say()` but it puts the dialogue above `createcrewman` crewmates instead
 
 - `csayquiet([lines[,crewmate]])` - `sayquiet()` but it puts the dialogue above `createcrewman` crewmates instead
+
+- `gamestatedelay(n)` - delay running a gamestate for *n* frames

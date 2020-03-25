@@ -407,6 +407,8 @@ growing_vector<std::string> changelog = {
     "- csayquiet([lines[,crewmate]]) -",
     "  sayquiet() but it puts the dialogue",
     "  above createcrewman crewmates instead",
+    "- gamestatedelay(n) - delay running a",
+    "  gamestate for n frames",
 
 };
 
