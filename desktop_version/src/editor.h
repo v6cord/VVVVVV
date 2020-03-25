@@ -191,6 +191,7 @@ public:
     growing_vector<std::string> directoryList;
     growing_vector<LevelMetaData> ListOfMetaData;
 
+    void loadZips();
     void getDirectoryData();
     bool getLevelMetaData(std::string& filename, LevelMetaData& _data );
 

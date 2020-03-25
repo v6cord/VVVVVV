@@ -369,8 +369,15 @@ int main(int argc, char *argv[])
             if (ed.getLevelMetaData(playtestname, meta)) {
                 ed.ListOfMetaData = { meta };
             } else {
-                printf("Level not found\n");
-                return 1;
+                ed.loadZips();
+
+                ed.directoryList = { playtestname };
+                if (ed.getLevelMetaData(playtestname, meta)) {
+                    ed.ListOfMetaData = { meta };
+                } else {
+                    printf("Level not found\n");
+                    return 1;
+                }
             }
 
             game.loadcustomlevelstats();

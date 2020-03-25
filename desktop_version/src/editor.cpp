@@ -134,12 +134,8 @@ static bool endsWith(const std::string& str, const std::string& suffix) {
     return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
 }
 
-void editorclass::getDirectoryData()
+void editorclass::loadZips()
 {
-
-    ListOfMetaData.clear();
-    directoryList.clear();
-
     directoryList = FILESYSTEM_getLevelDirFileNames();
     bool needsReload = false;
 
@@ -156,6 +152,15 @@ void editorclass::getDirectoryData()
     }
 
     if (needsReload) directoryList = FILESYSTEM_getLevelDirFileNames();
+}
+
+void editorclass::getDirectoryData()
+{
+
+    ListOfMetaData.clear();
+    directoryList.clear();
+
+    loadZips();
 
     for(size_t i = 0; i < directoryList.size(); i++)
     {
