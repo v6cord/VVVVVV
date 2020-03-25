@@ -90,16 +90,13 @@ extern const char* git_rev;
 
 int main(int argc, char *argv[])
 {
-    argv = FILESYSTEM_argv(argc, &argc, argv);
-
     seed_xoshiro_64(std::time(nullptr));
 
     bool headless = false;
     bool syslog = log_default();
 
-    bool playtestmount = false;
-    char* baseDir = NULL;
     char* assetsPath = NULL;
+    char* baseDir = NULL;
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--quiet") == 0) {
@@ -124,14 +121,9 @@ int main(int argc, char *argv[])
             if (i + 1 < argc) {
                 startinplaytest = true;
                 i++;
-                if (strchr(argv[i], '/')) {
-                    playtestname = FILESYSTEM_realPath(argv[i]);
-                    playtestmount = true;
-                } else {
-                    playtestname = std::string("levels/");
-                    playtestname.append(argv[i]);
-                    playtestname.append(std::string(".vvvvvv"));
-                }
+                playtestname = std::string("levels/");
+                playtestname.append(argv[i]);
+                playtestname.append(std::string(".vvvvvv"));
             } else {
                 printf("-playing option requires one argument.\n");
                 return 1;
@@ -366,16 +358,6 @@ int main(int argc, char *argv[])
                     if(game.bestrank[5]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
 
         //entityclass obj;
-
-        if (playtestmount) {
-            char* dir = FILESYSTEM_dirname(playtestname.c_str());
-            PHYSFS_mount(dir, "levels", 0);
-            free(dir);
-            char* file = FILESYSTEM_basename(playtestname.c_str());
-            playtestname = "levels/";
-            playtestname += file;
-            free(file);
-        }
 
         if (startinplaytest) {
             game.levelpage=0;

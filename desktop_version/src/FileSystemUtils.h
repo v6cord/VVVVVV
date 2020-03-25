@@ -29,9 +29,4 @@ growing_vector<std::string> FILESYSTEM_getLevelDirFileNames();
 
 bool FILESYSTEM_openDirectory(const char *dname);
 
-char* FILESYSTEM_realPath(const char *rel);
-char* FILESYSTEM_dirname(const char *file);
-char* FILESYSTEM_basename(const char *file);
-char** FILESYSTEM_argv(int real_argc, int* argc, char* argv[]);
-
 #endif /* FILESYSTEMUTILS_H */
