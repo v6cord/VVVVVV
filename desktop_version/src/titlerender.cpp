@@ -413,6 +413,10 @@ growing_vector<std::string> changelog = {
     "  randomly set varname to any of the",
     "  given arguments afterwards, with equal",
     "  probability for each",
+    "- randrange(varname[,start],end) -",
+    "  randomly set varname to the range",
+    "  between start and end excluding end",
+    "  start defaults to 0",
 
 };
 
