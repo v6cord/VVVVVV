@@ -2435,6 +2435,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 } else if (words[0] == "gamestate") {
                     game.state = ss_toi(words[1]);
                     game.statedelay = 0;
+                } else if (words[0] == "gamestatedelay") {
+                    relativepos(&game.statedelay, words[1]);
                 } else if (words[0] == "textboxactive") {
                     dwgfx.textboxactive();
                 } else if (words[0] == "gamemode") {
