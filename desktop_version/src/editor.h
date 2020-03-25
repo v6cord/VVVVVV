@@ -11,6 +11,8 @@
 
 #define VCEVERSION 1
 #define IS_VCE_LEVEL (map.custommode && ed.vceversion > 0)
+#define ACTUAL_MAX_WIDTH 100
+#define ACTUAL_MAX_HEIGHT 100
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 
@@ -352,8 +354,8 @@ public:
     int mapwidth, mapheight = 0; //Actual width and height of stage
 
     //Special; the physical max the engine allows
-    int maxwidth = 100;
-    int maxheight = 100;
+    int maxwidth = ACTUAL_MAX_WIDTH;
+    int maxheight = ACTUAL_MAX_HEIGHT;
 
     int version = 0;
     int vceversion = 0;
