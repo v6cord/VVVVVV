@@ -360,25 +360,21 @@ int main(int argc, char *argv[])
         //entityclass obj;
 
         if (startinplaytest) {
-            game.levelpage=0;
-            ed.getDirectoryData();
-            game.loadcustomlevelstats();
+            game.levelpage = 0;
+            game.playcustomlevel = 0;
 
-            bool found = false;
+            ed.directoryList = { playtestname };
 
-            // search for the file in the vector
-            for(growing_vector<std::string>::size_type i = 0; i < ed.ListOfMetaData.size(); i++) {
-                LevelMetaData currentmeta = ed.ListOfMetaData[i];
-                if (currentmeta.filename == playtestname) {
-                    game.playcustomlevel = (int)i;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
+            LevelMetaData meta;
+            if (ed.getLevelMetaData(playtestname, meta)) {
+                ed.ListOfMetaData = { meta };
+            } else {
                 printf("Level not found\n");
                 return 1;
             }
+
+            game.loadcustomlevelstats();
+
             game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
             game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
             if (savefileplaytest) {
