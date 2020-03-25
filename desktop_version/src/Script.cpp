@@ -880,6 +880,24 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     int chosen = fRandom() * options.size();
                     setvar(words[1], options[chosen]);
                 }
+                if (words[0] == "randrange") {
+                    int start, end;
+                    if (words[3] == "") {
+                        start = 0;
+                        end = ss_toi(words[2]);
+                    } else {
+                        start = ss_toi(words[2]);
+                        end = ss_toi(words[3]);
+                    }
+
+                    int length = end - start;
+                    int offset = start;
+
+                    int chosenzero = fRandom() * length;
+                    int chosenoffset = chosenzero + offset;
+
+                    setvar(words[1], help.String(chosenoffset));
+                }
                 if (words[0] == "delchar") {
                     std::string var = words[1];
                     if (variables.find(var) != variables.end() &&
