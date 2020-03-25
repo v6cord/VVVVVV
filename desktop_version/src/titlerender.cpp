@@ -26,7 +26,7 @@ growing_vector<std::string> changelog = {
     // [line] is a huge line, have fun with that
     // The text should not be bigger than this line:
     // --------------------------------------
-    "Version c0.9",
+    "Version c1.0-pre1",
     "[line]",
     "- Removed having to use a load script",
     "  to use internal scripting",
@@ -482,7 +482,8 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 }
             }
 
-            dwgfx.Print( 310 - (4*8), 230, "c0.9", tr/2, tg/2, tb/2);
+            dwgfx.Print( 310 - (4*8), 220, "c1.0", tr/2, tg/2, tb/2);
+            dwgfx.Print( 310 - (4*8), 230, "pre1", tr/2, tg/2, tb/2);
             int modoffset = 230;
             dwgfx.Print( 10, modoffset, "git.io/v6-ce", tr/2, tg/2, tb/2);
             modoffset -= 10;
