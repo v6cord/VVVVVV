@@ -4223,6 +4223,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             else
                 dwgfx.Print( 16, 85,  "TIME       " + game.partimestring(help), tr, tg, tb);
         }
+        else if (game.currentmenuname == "ed_remove_trial") {
+            dwgfx.bigprint( -1, 35, "Are you sure?", tr, tg, tb, true);
+        }
         else if (game.currentmenuname == "ed_trials")
         {
             dwgfx.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
@@ -5434,7 +5437,25 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                         }
                         if (game.currentmenuoption == 5) {
                             music.playef(11, 10);
+                            game.createmenu("ed_remove_trial");
+                            map.nexttowercolour();
+                        }
+                        if (game.currentmenuoption == 6) {
+                            music.playef(11, 10);
                             game.createmenu("ed_trials");
+                            map.nexttowercolour();
+                        }
+                    }
+                    else if (game.currentmenuname == "ed_remove_trial")
+                    {
+                        if (game.currentmenuoption == 0) {
+                            ed.customtrials.erase(ed.customtrials.begin() + ed.edtrial);
+                            music.playef(11, 10);
+                            game.createmenu("ed_trials");
+                            map.nexttowercolour();
+                        } else {
+                            music.playef(11, 10);
+                            game.createmenu("ed_edit_trial");
                             map.nexttowercolour();
                         }
                     }

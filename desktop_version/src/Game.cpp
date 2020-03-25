@@ -7572,12 +7572,25 @@ void Game::createmenu( std::string t )
         menuoptionsactive[3] = true;
         menuoptions[4] = "par time";
         menuoptionsactive[4] = true;
-        menuoptions[5] = "return to menu";
+        menuoptions[5] = "remove trial";
         menuoptionsactive[5] = true;
-        
+        menuoptions[6] = "return to menu";
+        menuoptionsactive[6] = true;
+
         menuxoff = -50;
         menuyoff = -20;
-        nummenuoptions = 6;
+        nummenuoptions = 7;
+    }
+    else if (t == "ed_remove_trial")
+    {
+        menuoptions[0] = "yes";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "no";
+        menuoptionsactive[1] = true;
+
+        menuxoff = -50;
+        menuyoff = -20;
+        nummenuoptions = 2;
     }
     else if (t == "ed_desc")
     {
