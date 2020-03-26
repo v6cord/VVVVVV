@@ -285,7 +285,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `return()` - return to the previous script and line number if you jumped to a script
 
-- `load()` - load a custom script without having to type iftrinkets()
+- `load(script)` - load *script* without having to type `iftrinkets(0,script)`
 
 - You can now use Minecraft-like relative tilde syntax in `gotoroom()` and `gotoposition()`
 
