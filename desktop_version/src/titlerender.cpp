@@ -419,6 +419,9 @@ growing_vector<std::string> changelog = {
     "  start defaults to 0",
     "- moveplayer(x, y) - moveplayer without",
     "  going through walls",
+    "- supercrewmate(on/off) - toggle whether",
+    "  the Intermission 1 crewmate collides",
+    "  with hazards or not",
 
 };
 
