@@ -188,7 +188,7 @@ jobs:
     name: Build (Switch)
 
     runs-on: ubuntu-18.04
-    container: leo60228/vvvvvv-ce-switch:2020-02-06
+    container: leo60228/vvvvvv-ce-switch:2020-03-26
 
     steps:
     - uses: actions/checkout@v1

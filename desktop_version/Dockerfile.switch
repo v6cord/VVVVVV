@@ -10,11 +10,14 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.16.4/cmake-3.16.4
       && /tmp/cmake-install.sh --skip-license --prefix=/usr/local/ \
       && rm /tmp/cmake-install.sh
 
-RUN wget -qO- https://github.com/vbe0201/switch-cmake/archive/b01464ae55dfc705dd7e75ba577dc0a238eae7aa.tar.gz | \
-    tar --transform 's/^switch-cmake-b01464ae55dfc705dd7e75ba577dc0a238eae7aa/switch-cmake/' \
+RUN wget -qO- https://github.com/vbe0201/switch-cmake/archive/c5b5441d956e23d801089260a84199bc6def82b3.tar.gz | \
+    tar --transform 's/^switch-cmake-c5b5441d956e23d801089260a84199bc6def82b3/switch-cmake/' \
         -xzv -C /usr/local/share/
 
 RUN apt-get update && apt-get install -y ninja-build && rm -rf /var/lib/apt/lists/*
+
+# makes debugging easier
+RUN rm -fv /opt/devkitpro/libnx/default_icon.jpg
 
 ENV VVVVVV_CE_SWITCH_BUILD=1
 

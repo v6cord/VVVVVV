@@ -544,11 +544,12 @@ if (NOT ANDROID)
     set(CPACK_GENERATOR "STGZ;DEB")
     include(CPack)
 
+    set(NO_ICON OFF)
     set_target_properties(VVVVVV-CE PROPERTIES
         APP_TITLE VVVVVV-CE
         APP_AUTHOR ${CPACK_PACKAGE_VENDOR}
         APP_VERSION ${CPACK_PACKAGE_VERSION}
-        ICON ${CMAKE_CURRENT_SOURCE_DIR}/data/VVVVVV.png)
+        ICON ${CMAKE_CURRENT_SOURCE_DIR}/icon.jpg)
 
     if (SWITCH)
         include(SwitchTools)
