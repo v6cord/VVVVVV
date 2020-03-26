@@ -328,3 +328,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `moveplayersafe(x, y)` - `moveplayer` without going through walls
 
 - `supercrewmate(on/off)` - toggle whether the Intermission 1 crewmate collides with hazards or not
+
+- `supercrewmateroom()` - set the progress of the super crewmate to the current room

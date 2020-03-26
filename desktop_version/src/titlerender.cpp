@@ -422,6 +422,9 @@ growing_vector<std::string> changelog = {
     "- supercrewmate(on/off) - toggle whether",
     "  the Intermission 1 crewmate collides",
     "  with hazards or not",
+    "- supercrewmateroom() - set the progress",
+    "  of the super crewmate to the current",
+    "  room",
 
 };
 
