@@ -334,23 +334,11 @@ void editorclass::reset()
         }
     }
 
-    if(numhooks>0)
-    {
-        for(int i=0; i<numhooks; i++)
-        {
-            removehook(hooklist[i]);
-        }
-    }
+    hooklist.clear();
 
     sb.clear();
-    sb.resize(500);
-    for (int i = 0; i < 500; i++)
-    {
-        hooklist[i]="";
-    }
 
     clearscriptbuffer();
-    sblength=1;
     sbx=0;
     sby=0;
     pagey=0;
@@ -361,7 +349,6 @@ void editorclass::reset()
 
     hookmenupage=0;
     hookmenu=0;
-    numhooks=0;
     script.customscript.clear();
 
     grayenemieskludge = false;
@@ -391,7 +378,7 @@ void editorclass::weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, 
 void editorclass::gethooks()
 {
     //Scan through the script and create a hooks list based on it
-    numhooks=0;
+    hooklist.clear();
     std::string tstring;
     std::string tstring2;
     for(size_t i=0; i<script.customscript.size(); i++)
@@ -413,8 +400,7 @@ void editorclass::gethooks()
             {
                 tstring2+=tstring[j];
             }
-            hooklist[numhooks]=tstring2;
-            numhooks++;
+            hooklist.push_back(tstring2);
         }
     }
 }
@@ -448,12 +434,15 @@ void editorclass::loadhookineditor(std::string t)
             else
             {
                 //load in this line
-                sb[sblength-1]=script.customscript[i];
-                sblength++;
+                sb.push_back(script.customscript[i]);
             }
         }
     }
-    if(sblength>1) sblength--;
+    if(sb.empty())
+    {
+        //Always have one line or we'll have problems
+        sb.resize(1);
+    }
 }
 
 void editorclass::addhooktoscript(std::string t)
@@ -461,12 +450,9 @@ void editorclass::addhooktoscript(std::string t)
     //Adds hook+the scriptbuffer to the end of the scriptclass
     removehookfromscript(t);
     script.customscript.push_back(t+":");
-    if(sblength>=1)
+    for(size_t i=0; i<sb.size(); i++)
     {
-        for(int i=0; i<sblength; i++)
-        {
-            script.customscript.push_back(sb[i]);
-        }
+        script.customscript.push_back(sb[i]);
     }
 }
 
@@ -521,35 +507,22 @@ void editorclass::removehookfromscript(std::string t)
 void editorclass::removehook(std::string t)
 {
     //Check the hooklist for the hook t. If it's there, remove it from here and the script
-    for(int i=0; i<numhooks; i++)
-    {
-        if(hooklist[i]==t)
-        {
-            removehookfromscript(t);
-            for(int j=i; j<numhooks; j++)
-            {
-                hooklist[j]=hooklist[j+1];
-            }
-            hooklist[numhooks]="";
-            numhooks--;
-            i--;
-        }
-    }
+    removehookfromscript(t);
+    hooklist.erase(std::remove(hooklist.begin(), hooklist.end(), t), hooklist.end());
 }
 
 void editorclass::addhook(std::string t)
 {
     //Add an empty function to the list in both editor and script
     removehook(t);
-    hooklist[numhooks]=t;
-    numhooks++;
+    hooklist.push_back(t);
     addhooktoscript(t);
 }
 
 bool editorclass::checkhook(std::string t)
 {
     //returns true if hook t already is in the list
-    for(int i=0; i<numhooks; i++)
+    for(size_t i=0; i<hooklist.size(); i++)
     {
         if(hooklist[i]==t) return true;
     }
@@ -559,43 +532,22 @@ bool editorclass::checkhook(std::string t)
 
 void editorclass::clearscriptbuffer()
 {
-    for(int i=0; i<sblength+1; i++)
-    {
-        sb[i]="";
-    }
-    sblength=1;
+    sb.clear();
 }
 
 void editorclass::removeline(int t)
 {
     //Remove line t from the script
-    if(sblength>1)
+    if((int)sb.size()>1)
     {
-        if(sblength==t)
-        {
-            sblength--;
-        }
-        else
-        {
-            for(int i=t; i<sblength; i++)
-            {
-                sb[i]=sb[i+1];
-            }
-            sb[sblength]="";
-            sblength--;
-        }
+        sb.erase(sb.begin() + t);
     }
 }
 
 void editorclass::insertline(int t)
 {
     //insert a blank line into script at line t
-    for(int i=sblength; i>=t; i--)
-    {
-        sb[i+1]=sb[i];
-    }
-    sb[t]="";
-    sblength++;
+    sb.insert(sb.begin() + t, "");
 }
 
 void editorclass::getlin(KeyPoll& key, enum textmode mode, std::string prompt,
@@ -4076,21 +4028,21 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.Print(16,44,"PRESS ESC TO RETURN TO MENU", 123, 111, 218, true);
             //dwgfx.Print(16,60,"READY.", 123, 111, 218, false);
 
-            if(ed.numhooks>0)
+            if(!ed.hooklist.empty())
             {
                 for(int i=0; i<9; i++)
                 {
-                    if(ed.hookmenupage+i<ed.numhooks)
+                    if(ed.hookmenupage+i<(int)ed.hooklist.size())
                     {
                         if(ed.hookmenupage+i==ed.hookmenu)
                         {
-                            std::string tstring="> " + ed.hooklist[(ed.numhooks-1)-(ed.hookmenupage+i)] + " <";
+                            std::string tstring="> " + ed.hooklist[(ed.hooklist.size()-1)-(ed.hookmenupage+i)] + " <";
                             std::transform(tstring.begin(), tstring.end(),tstring.begin(), ::toupper);
                             dwgfx.Print(16,68+(i*16),tstring,123, 111, 218, true);
                         }
                         else
                         {
-                            dwgfx.Print(16,68+(i*16),ed.hooklist[(ed.numhooks-1)-(ed.hookmenupage+i)],123, 111, 218, true);
+                            dwgfx.Print(16,68+(i*16),ed.hooklist[(ed.hooklist.size()-1)-(ed.hookmenupage+i)],123, 111, 218, true);
                         }
                     }
                 }
@@ -4110,12 +4062,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             int y = 20;
             for(int i=0; i<25; i++)
             {
-                auto text = ed.sb[i+ed.pagey];
-                if (i == ed.sby && ed.entframe < 2) text += "_";
-                if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
-                    y += 16;
-                } else {
-                    y += 8;
+                if(i+ed.pagey<(int)ed.sb.size())
+                {
+                    auto text = ed.sb[i+ed.pagey];
+                    if (i == ed.sby && ed.entframe < 2) text += "_";
+                    if (dwgfx.Print(16,y,text, 123, 111, 218, false)) {
+                        y += 16;
+                    } else {
+                        y += 8;
+                    }
                 }
             }
             break;
@@ -4806,10 +4761,10 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
     dwgfx.Print(0,8*script.customscript.size(),help.String(script.customscript.size()),255,255,255);
 
-    for(int i=0; i<ed.numhooks; i++){
+    for(size_t i=0; i<ed.hooklist.size(); i++){
       dwgfx.Print(260,i*8,ed.hooklist[i],255,255,255);
     }
-    dwgfx.Print(260,8*ed.numhooks,help.String(ed.numhooks),255,255,255);
+    dwgfx.Print(260,8*ed.hooklist.size(),help.String(ed.hooklist.size()),255,255,255);
     */
 
     if(ed.notedelay>0)
@@ -4997,9 +4952,9 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.hookmenu++;
             }
 
-            if(ed.hookmenu>=ed.numhooks)
+            if(ed.hookmenu>=(int)ed.hooklist.size())
             {
-                ed.hookmenu=ed.numhooks-1;
+                ed.hookmenu=ed.hooklist.size()-1;
             }
             if(ed.hookmenu<0) ed.hookmenu=0;
 
@@ -5019,7 +4974,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             {
                 ed.deletekeyheld=1;
                 music.playef(2);
-                ed.removehook(ed.hooklist[(ed.numhooks-1)-ed.hookmenu]);
+                ed.removehook(ed.hooklist[(ed.hooklist.size()-1)-ed.hookmenu]);
             }
 
             if (!game.press_action && !game.press_left && !game.press_right
@@ -5033,15 +4988,15 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 {
                     game.jumpheld = true;
                 }
-                if ((game.press_action || game.press_map) && ed.numhooks>0)
+                if ((game.press_action || game.press_map) && !ed.hooklist.empty())
                 {
                     game.mapheld=true;
                     ed.scripthelppage=1;
                     key.keybuffer="";
-                    ed.sbscript=ed.hooklist[(ed.numhooks-1)-ed.hookmenu];
+                    ed.sbscript=ed.hooklist[(ed.hooklist.size()-1)-ed.hookmenu];
                     ed.loadhookineditor(ed.sbscript);
 
-                    ed.sby=ed.sblength-1;
+                    ed.sby=ed.sb.size()-1;
                     ed.pagey=0;
                     while(ed.sby>=20)
                     {
@@ -5095,7 +5050,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
             if(key.keymap[SDLK_DOWN] && ed.keydelay<=0)
             {
                 ed.keydelay=6;
-                if(ed.sby+ed.pagey<ed.sblength-1)
+                if(ed.sby+ed.pagey<(int)ed.sb.size()-1)
                 {
                     ed.sby++;
                     if(ed.sby>=20)
@@ -5144,7 +5099,7 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 {
                     game.mapheld=true;
                     //Continue to next line
-                    if(ed.sby+ed.pagey>=ed.sblength) //we're on the last line
+                    if(ed.sby+ed.pagey>=(int)ed.sb.size()) //we're on the last line
                     {
                         ed.sby++;
                         if(ed.sby>=20)
@@ -5152,7 +5107,6 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                             ed.pagey++;
                             ed.sby--;
                         }
-                        if(ed.sby+ed.pagey>=ed.sblength) ed.sblength=ed.sby+ed.pagey;
                         key.keybuffer=ed.sb[ed.pagey+ed.sby];
                         ed.sbx = graphics.strwidth(ed.sb[ed.pagey+ed.sby]) / 8;
                     }

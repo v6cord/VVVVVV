@@ -47,7 +47,7 @@ void scriptclass::load(std::string t)
 
       labels.clear();
       scriptname = t;
-      scriptlength=0;
+      commands.clear();
       position = 0;
       running = true;
       if (passive)
@@ -380,10 +380,10 @@ void scriptclass::load(std::string t)
             if (words[0].length() > 1 && words[0].substr(0, 1) == ".") {
               std::string thislabel = words[0].substr(1, words[0].length()-1);
 
-              // Important - use `scriptlength` instead of `i`
+              // Important - use `commands.size()` instead of `i`
               // The former is the internal script's position which is what we want,
               // and the latter is the simplified script's position
-              labels[thislabel] = scriptlength;
+              labels[thislabel] = commands.size();
             }
           }
         }
@@ -401,7 +401,7 @@ void scriptclass::load(std::string t)
       return;
     }
 
-    scriptlength=0;
+    commands.clear();
     labels.clear();
     position = 0;
     running = true;

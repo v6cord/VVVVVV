@@ -365,9 +365,8 @@ public:
 
     bool scripteditmod = false;
     int scripthelppage, scripthelppagedelay = 0;
-    growing_vector<std::string> sb;
+    std::vector<std::string> sb;
     std::string sbscript;
-    int sblength = 0;
     int sbx, sby = 0;
     int pagey = 0;
 
@@ -384,8 +383,7 @@ public:
     void clearscriptbuffer();
     void gethooks();
     bool checkhook(std::string t);
-    std::string hooklist[500];
-    int numhooks = 0;
+    std::vector<std::string> hooklist;
 
     int hookmenupage, hookmenu = 0;
 

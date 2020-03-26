@@ -30,8 +30,7 @@ public:
 
     void inline add(std::string t)
     {
-        commands[scriptlength] = t;
-        scriptlength++;
+        commands.push_back(t);
     }
 
     void clearcustom();
@@ -66,11 +65,11 @@ public:
     void callback(std::string name);
 
     //Script contents
-    growing_vector<std::string> commands;
+    std::vector<std::string> commands;
     growing_vector<std::string> words;
     growing_vector<std::string> txt;
     std::string scriptname;
-    int position, scriptlength = 0;
+    int position = 0;
     int looppoint, loopcount = 0;
 
     int scriptdelay = 0;
