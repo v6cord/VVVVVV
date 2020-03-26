@@ -23,11 +23,11 @@ Screen::Screen()
     filterSubrect.h = 238;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
-#ifdef __SWITCH__
+#if defined(__SWITCH__) || defined(__ANDROID__)
 	SDL_CreateWindowAndRenderer(
 		1920,
 		1080,
-		SDL_WINDOW_FULLSCREEN,
+		SDL_WINDOW_FULLSCREEN_DESKTOP,
 		&m_window,
 		&m_renderer
 	);
