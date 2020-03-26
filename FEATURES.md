@@ -131,9 +131,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - You can now place flipped terminals
 
-- `hidemarkers()` - disable `markmap()` markers
-
-- `showmarkers()` - undo the above
+- `markers(hide/show)` - disable/reenable `markmap()` markers
 
 - `setspeed(x)` for player speed, 3 by default
 
@@ -255,9 +253,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added sub-tile positioning of edentities
 
-- `hidecoincounter()`
-
-- `showcoincounter()`
+- `coincounter(hide/show)`
 
 - Raised the number of flags to 1000, now they go from 0-999
 

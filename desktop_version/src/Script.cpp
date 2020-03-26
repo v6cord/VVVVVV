@@ -1310,11 +1310,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             return marker.x == x && marker.y == y;
                         }));
                 }
-                if (words[0] == "hidemarkers") {
-                    game.hidemarkers = true;
-                }
-                if (words[0] == "showmarkers") {
-                    game.hidemarkers = false;
+                if (words[0] == "markers") {
+                    game.hidemarkers = !parsebool(words[1]);
                 }
                 if (words[0] == "mapimage") {
                     SDL_FreeSurface(dwgfx.images[12]);
@@ -2683,10 +2680,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 } else if (words[0] == "killplayer") {
                     if (!map.invincibility && game.deathseq <= 0)
                         game.deathseq = 30;
-                } else if (words[0] == "hidecoincounter") {
-                    game.nocoincounter = true;
-                } else if (words[0] == "showcoincounter") {
-                    game.nocoincounter = true;
+                } else if (words[0] == "coincounter") {
+                    game.nocoincounter = !parsebool(words[1]);
                 } else if (words[0] == "teleportscript") {
                     game.teleportscript = words[1];
                 } else if (words[0] == "clearteleportscript") {
