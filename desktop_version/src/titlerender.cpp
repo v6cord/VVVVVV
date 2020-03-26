@@ -152,7 +152,7 @@ growing_vector<std::string> changelog = {
     "- markmap(x,y,tile) to put a tile on any",
     "  minimap coordinate",
     "- unmarkmap(x,y) to undo the above",
-    "- mapimage(path/name.png) to use any map",
+    "- mapimage(image.png) to use any map",
     "  image",
     "- automapimage to undo",
     "- enablefog/disablefog to enable/disable",

@@ -96,7 +96,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `unmarkmap(x,y)` to undo
 
-- `mapimage(path/name.png)` to use any map image
+- `mapimage(image.png)` to use any map image
 
 - `automapimage` to undo
 
