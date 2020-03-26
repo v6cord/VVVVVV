@@ -20,7 +20,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `toceil()` - inverted `tofloor()`
 
-- `playfile(file[, id])` - play a file as either music or a sound effect. if you specify an id, the file loops
+- `playfile(file[,id])` - play a file as either music or a sound effect. if you specify an id, the file loops
 
 - `playmusicfile(file)` - play a file as music
 
@@ -32,7 +32,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `drawrect(x,y,w,h,r,g,b[,a])` - draw a rectangle for one frame - r,g,b,a is 0-255
 
-- drawimage(x,y,filename[, centered[, alpha[, background[,  blend]]]]) - draw an image on the screen for one frame (alpha 0-255, background true/false, blend none/blend/add/mod)
+- drawimage(x,y,filename[,centered[,alpha[,background[,blend]]]]) - draw an image on the screen for one frame (alpha 0-255, background true/false, blend none/blend/add/mod)
 
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
@@ -207,9 +207,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `endcutscenefast()` - instantly remove cutscene bars
 
-- `setvar(name [, contents])` - set a variable to a given argument, or to whatever is on the next line
+- `setvar(name[,contents])` - set a variable to a given argument, or to whatever is on the next line
 
-- `addvar(name [, value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
+- `addvar(name[,value])` - add or subtract a number to a given variable, or concatenate a string to a given variable, using either a given argument or whatever is on the next line
 
 - Variable assignments (`var = contents`, `var++`, `var += 1`, `var -= 1`, `var--`)
 
@@ -235,7 +235,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Selecting level music from the editor is no longer limited
 
-- `ifvar(var, operator[, value], script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
+- `ifvar(var,operator[,value],script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
 
 - Flip tokens are now placeable in the editor using the ^1 tool (press Shift+1)
 
@@ -263,7 +263,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Time trials now exist in custom levels! Your time trials stats are saved as `saves/<levelname>.vvvvvv.trial`, and you can add time trials to your level through the editor.
 
-- `iftrial([id, ]script)` - Run a custom script if you're currently in a trial and the trial's id matches up with the `id` argument. If the `id` argument isn't passed, the script is ran if you're in any trial.
+- `iftrial([id,]script)` - Run a custom script if you're currently in a trial and the trial's id matches up with the `id` argument. If the `id` argument isn't passed, the script is ran if you're in any trial.
 
 - `endtrial()` - Ends a time trial! This is functionally identical as `gamestate(82)`.
 
@@ -325,7 +325,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `randrange(varname[,start],end)` - randomly set *varname* to the range between *start* and *end* excluding *end*, *start* defaults to 0
 
-- `moveplayersafe(x, y)` - `moveplayer` without going through walls
+- `moveplayersafe(x,y)` - `moveplayer` without going through walls
 
 - `supercrewmate(on/off)` - toggle whether the Intermission 1 crewmate collides with hazards or not
 
