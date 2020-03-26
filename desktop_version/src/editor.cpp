@@ -6091,13 +6091,13 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.ypos += modpos;
                 ed.snap_tower_entry(ed.levx, ed.levy);
             }
-            if(key.keymap[SDLK_F1])
+            if(!tower && key.keymap[SDLK_F1])
             {
                 ed.switch_tileset(false);
                 dwgfx.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
-            if(key.keymap[SDLK_F2])
+            if(!tower && key.keymap[SDLK_F2])
             {
                 ed.switch_tilecol(false);
                 dwgfx.backgrounddrawn=false;
