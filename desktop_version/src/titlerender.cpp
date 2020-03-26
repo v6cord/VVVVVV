@@ -417,6 +417,8 @@ growing_vector<std::string> changelog = {
     "  randomly set varname to the range",
     "  between start and end excluding end",
     "  start defaults to 0",
+    "- moveplayer(x, y) - moveplayer without",
+    "  going through walls",
 
 };
 

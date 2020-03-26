@@ -4,6 +4,7 @@
 #include <builtin-features.inc>
 #include <cstdlib>
 #include <cstring>
+#include <cmath>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
@@ -325,6 +326,69 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     int player = obj.getplayer();
                     obj.entities[player].xp += ss_toi(words[1]);
                     obj.entities[player].yp += ss_toi(words[2]);
+                    scriptdelay = 1;
+                }
+                if (words[0] == "moveplayersafe") {
+                    // USAGE: moveplayersafe(x offset, y offset)
+                    int player = obj.getplayer();
+
+                    int px;
+                    double dpy;
+
+                    int tx = ss_toi(words[1]);
+                    double ty = ss_toi(words[2]);
+                    bool swapped = std::abs(tx) < std::abs(ty);
+                    if (swapped) {
+                        tx = ss_toi(words[2]);
+                        ty = ss_toi(words[1]);
+                        px = obj.entities[player].yp;
+                        dpy = obj.entities[player].xp;
+                    } else {
+                        px = obj.entities[player].xp;
+                        dpy = obj.entities[player].yp;
+                    }
+
+                    int target;
+                    int offset;
+                    if (tx < 0) {
+                        target = -tx;
+                        offset = -1;
+                    } else {
+                        target = tx;
+                        offset = 1;
+                    }
+
+                    double slope = ty / std::abs(tx);
+
+                    int py = dpy;
+
+                    int cx = obj.entities[player].cx;
+                    int cy = obj.entities[player].cy;
+                    int w = obj.entities[player].w;
+                    int h = obj.entities[player].h;
+
+                    for (int i = 0; i < target; ++i) {
+                        int npx = px + offset;
+                        double ndpy = dpy + slope;
+                        int npy = std::lround(ndpy);
+                        if (swapped) {
+                            obj.rectset(npy + cx, npx + cy, w, h);
+                        } else {
+                            obj.rectset(npx + cx, npy + cy, w, h);
+                        }
+                        if (obj.checkwall(map)) break;
+                        px = npx;
+                        dpy = ndpy;
+                        py = npy;
+                    }
+
+                    if (swapped) {
+                        obj.entities[player].xp = py;
+                        obj.entities[player].yp = px;
+                    } else {
+                        obj.entities[player].xp = px;
+                        obj.entities[player].yp = py;
+                    }
                     scriptdelay = 1;
                 }
 #if !defined(NO_CUSTOM_LEVELS)
