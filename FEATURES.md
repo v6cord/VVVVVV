@@ -36,7 +36,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
-- `drawimagepersist([...])` - Same as `drawimage`, but it stays on screen for more than a frame. It sets `%return%` to its id, so you're able to remove it
+- `drawimagepersist(x,y,filename[,centered[,alpha[,background[,blend]]]])` - Same as `drawimage`, but it stays on screen for more than a frame. It sets `%return%` to its id, so you're able to remove it
 
 - `removeimage(id)` - Remove a persistent image
 
