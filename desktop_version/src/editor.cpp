@@ -1426,7 +1426,7 @@ int editorclass::towerspikefree(int x, int y) {
 
     int tile = towers[tower-1].tiles[x + y*40];
     temp = gettiletyp(level[levx + levy * maxwidth].tileset, tile);
-    if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
+    if (temp == TILE_FOREGROUND || temp == TILE_BACKGROUND || temp == TILE_SPIKE)
         return 1;
     return 0;
 }
@@ -1439,7 +1439,7 @@ int editorclass::spikefree(int x, int y) {
     if (y == 30) y = 29;
 
     temp = gettiletyplocal(x, y);
-    if (temp == TILE_FOREGROUND || temp == TILE_SPIKE)
+    if (temp == TILE_FOREGROUND || temp == TILE_BACKGROUND || temp == TILE_SPIKE)
         return 1;
     return 0;
 }
