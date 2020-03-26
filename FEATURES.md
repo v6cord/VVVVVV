@@ -167,7 +167,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added a label and goto system - write down `.label` on a line, then to go to it, use `.label` as a script name if you're in the same script, or write `scriptname.label` to jump to the label from another script
 
-- `ifvce()` - detect if game is VVVVVV: Community Edition or not
+- `ifvce(script)` - detect if game is VVVVVV: Community Edition or not
 
 - `ifmod(mod,script)` - Checks for a mod. `mod` can be `mmmmmm` (checks if MMMMMM is installed), `mmmmmm_on`/`mmmmmm_enabled`/`mmmmmm_off`/`mmmmmm_disabled` (checks if MMMMMM is installed AND enabled/disabled) or `unifont` (checks if Unifont is installed). Jump to `script` if so.
 
