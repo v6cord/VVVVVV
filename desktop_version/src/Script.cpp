@@ -2179,10 +2179,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     obj.fatal_top();
                 } else if (words[0] == "fatal_bottom") {
                     obj.fatal_bottom();
-                } else if (words[0] == "supercrewmateon") {
-                    game.supercrewmate = true;
-                } else if (words[0] == "supercrewmateoff") {
-                    game.supercrewmate = false;
+                } else if (words[0] == "supercrewmate") {
+                    game.supercrewmate = parsebool(words[1]);
                 } else if (words[0] == "supercrewmateroom") {
                     game.scmprogress = game.roomx - 41;
 #define ENTITYDATA \
