@@ -2775,15 +2775,6 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
     countstuff();
     version=2;
     //saveconvertor();
-
-    // Does this map want to use the bigger-than-20x20 wraparound behavior in vanilla?
-    if (IS_VCE_LEVEL) {
-        maxwidth = ACTUAL_MAX_WIDTH;
-        maxheight = ACTUAL_MAX_HEIGHT;
-    } else {
-        maxwidth = 20;
-        maxheight = 20;
-    }
 }
 
 void editorclass::save(std::string& _path, mapclass& map, Game& game)
