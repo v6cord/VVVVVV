@@ -1320,11 +1320,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     ed.generatecustomminimap(dwgfx, map);
                     dwgfx.mapimage = std::nullopt;
                 }
-                if (words[0] == "disablefog") {
-                    map.nofog = true;
-                }
-                if (words[0] == "enablefog") {
-                    map.nofog = false;
+                if (words[0] == "fog") {
+                    map.nofog = !parsebool(words[1]);
                 }
                 if (words[0] == "finalstretch") {
                     if (parsebool(words[1])) {
