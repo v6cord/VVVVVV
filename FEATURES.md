@@ -36,7 +36,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `stopfile(id)` - stops playing a looping audio file
 
-- `ifnotflag()` - an inverted version of `ifflag()`
+- `ifnotflag(n,script)` - an inverted version of `ifflag(n,script)`
 
 - `drawtext(x,y,r,g,b,center,type)` - draw text for one frame, the text you want to display should be on the next line - r,g,b is 0-255, `center` is `0`/`1`/`true`/`false`, `type` can be 0 for normal text, 1 for bordered text and 2 for big text; use an optional eighth argument for text scale (default is 2)
 
