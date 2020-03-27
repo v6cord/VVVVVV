@@ -338,3 +338,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `supercrewmateroom()` - set the progress of the super crewmate to the current room
 
 - `moveplayer()` is instant in VCE levels
+
+- You can place teleporters using the ^3 tool (press Shift+3)
