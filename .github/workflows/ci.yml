@@ -26,7 +26,7 @@ jobs:
         wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
         sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-mixer-dev gcc-8 g++-8 tree libfribidi-dev
+        sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-mixer-dev gcc-8 g++-8 tree libfribidi-dev zip
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
@@ -43,6 +43,9 @@ jobs:
     - name: Download data.zip
       run: cd ${SRC_DIR_PATH}/build && ../download-data.sh
       if: steps.cache-data.outputs.cache-hit != 'true'
+
+    - name: Merge data.zip
+      run: cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/build/data-zip/data.zip .
 
     - name: CPack build
       run: cd ${SRC_DIR_PATH} && ./cpack.sh
@@ -176,6 +179,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH/build/
         ../download-data.sh
+        (cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/build/data-zip/data.zip .)
         cp -v data-zip/data.zip VVVVVV-CE-Windows/
 
     - name: Upload artifacts
@@ -206,6 +210,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH/build/
         ../download-data.sh
+        (cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/build/data-zip/data.zip .)
         mkdir -pv VVVVVV-CE-Switch/switch/
         mv -v data-zip/data.zip VVVVVV-CE-Switch/switch/
         mv -v VVVVVV-CE.nro VVVVVV-CE-Switch/switch/
@@ -254,6 +259,7 @@ jobs:
       run: |
           cd .github/resources/
           ../../desktop_version/download-data.sh
+          (cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/../.github/resources/data-zip/data.zip .)
           mkdir -p ../../${SRC_DIR_PATH}/android-project/app/src/main/assets/
           cp -v data-zip/data.zip ../../${SRC_DIR_PATH}/android-project/app/src/main/assets/data.zip
 
