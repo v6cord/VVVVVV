@@ -26,6 +26,11 @@ growing_vector<std::string> changelog = {
     // [line] is a huge line, have fun with that
     // The text should not be bigger than this line:
     // --------------------------------------
+    "Version c1.0-pre2",
+    "[line]",
+    "- enablefog/disablefog are now",
+    "  fog(enable/disable)",
+    "",
     "Version c1.0-pre1",
     "[line]",
     "- Removed having to use a load script",
