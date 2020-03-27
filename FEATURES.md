@@ -88,7 +88,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `killplayer()`
 
-- `customquicksave()`
+- `customquicksave()` - quicksaves the level
 
 - `niceplay()` - use this for better area music transitions
 
