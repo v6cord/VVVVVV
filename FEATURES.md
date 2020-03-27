@@ -92,7 +92,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `niceplay()` - use this for better area music transitions
 
-- `inf` - like `do(x)`, but an infinite amount of times
+- `inf` - like `do(n)`, but an infinite amount of times
 
 - Added a seventh argument to `createcrewman`, if it is `flip` it spawns a flipped crewmate
 
@@ -164,9 +164,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `markers(hide/show)` - disable/reenable `markmap()` markers
 
-- `setspeed(x)` - set player speed, 3 by default
+- `setspeed(speed)` - set player speed, 3 by default
 
-- `setvelocity(x)` - push the player (affected by inertia)
+- `setvelocity(velocity)` - push the player (affected by inertia)
 
 - `pinf` - variant of `inf` to automatically `pdelay(1)` if no delay occurred
 
