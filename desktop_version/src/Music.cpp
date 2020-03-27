@@ -532,7 +532,7 @@ static Mix_Chunk* seek_chunk(Mix_Chunk* src, int pos, int len) {
         bytes_len = src->alen - bytes_pos;
     }
     Uint8* mem = src->abuf + bytes_pos;
-    Mix_Chunk* dst = Mix_QuickLoad_RAW(mem, bytes_len); 
+    Mix_Chunk* dst = Mix_QuickLoad_RAW(mem, bytes_len);
     dst->volume = src->volume;
     return dst;
 }
@@ -591,6 +591,7 @@ void musicclass::stopfile(std::string track) {
     auto iter = custom_file_channels.find(track);
     if (iter != custom_file_channels.end()) {
         Mix_FadeOutChannel(iter->second, 100);
+        custom_file_loops.erase(iter->second);
         custom_file_channels.erase(iter);
     }
     custom_file_paths.erase(track);
