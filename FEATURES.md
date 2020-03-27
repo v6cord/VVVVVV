@@ -46,7 +46,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
-- `drawimagepersist(x,y,filename[,centered[,alpha[,background[,blend]]]])` - Same as `drawimage`, but it stays on screen for more than a frame. It sets `%return%` to its id, so you're able to remove it
+- `drawimagepersist(x,y,filename[,centered[,alpha[,background[,blend]]]])` - Same as `drawimage()`, but it stays on screen for more than a frame. It sets `%return%` to its id, so you're able to remove it
 
 - `removeimage(id)` - Remove a persistent image
 
@@ -295,7 +295,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - You can now use Minecraft-like relative tilde syntax in `gotoroom()` and `gotoposition()`
 
-- `sayquiet` and `replyquiet` - same as normal `say` and `reply`, but without a squeak
+- `sayquiet()` and `replyquiet()` - same as normal `say()` and `reply()`, but without a squeak
 
 - Added dimensions, so you can properly have more than one dimension in a custom level
 
