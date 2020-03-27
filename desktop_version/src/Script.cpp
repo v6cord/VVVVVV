@@ -1337,11 +1337,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         dwgfx.foregrounddrawn = false;
                     }
                 }
-                if (words[0] == "disableflip") {
-                    game.noflip = true;
-                }
-                if (words[0] == "enableflip") {
-                    game.noflip = false;
+                if (words[0] == "toggleflip") {
+                    game.noflip = !parsebool(words[1]);
                 }
                 if (words[0] == "enableinfiniflip") {
                     game.infiniflip = true;
