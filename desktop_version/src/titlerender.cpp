@@ -34,6 +34,8 @@ growing_vector<std::string> changelog = {
     "  toggleflip(enable/disable)",
     "- enableinfiniflip/disableinfiniflip are",
     "  now infiniflip(enable/disable)",
+    "- enablesuicide/disablesuicide are now",
+    "  suicide(enable/disable)",
     "",
     "Version c1.0-pre1",
     "[line]",
