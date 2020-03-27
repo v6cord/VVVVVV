@@ -45,7 +45,7 @@ jobs:
       if: steps.cache-data.outputs.cache-hit != 'true'
 
     - name: Merge data.zip
-      run: cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/build/data-zip/data.zip .
+      run: cd ${SRC_DIR_PATH}/data && zip -r ../build/data-zip/data.zip graphics/
 
     - name: CPack build
       run: cd ${SRC_DIR_PATH} && ./cpack.sh
@@ -179,7 +179,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH/build/
         ../download-data.sh
-        (cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/build/data-zip/data.zip .)
+        (cd ../data && zip -r ../build/data-zip/data.zip graphics/)
         cp -v data-zip/data.zip VVVVVV-CE-Windows/
 
     - name: Upload artifacts
@@ -210,7 +210,7 @@ jobs:
       run: |
         cd $SRC_DIR_PATH/build/
         ../download-data.sh
-        (cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/build/data-zip/data.zip .)
+        (cd ../data && zip -r ../build/data-zip/data.zip graphics/)
         mkdir -pv VVVVVV-CE-Switch/switch/
         mv -v data-zip/data.zip VVVVVV-CE-Switch/switch/
         mv -v VVVVVV-CE.nro VVVVVV-CE-Switch/switch/
@@ -259,7 +259,7 @@ jobs:
       run: |
           cd .github/resources/
           ../../desktop_version/download-data.sh
-          (cd ${SRC_DIR_PATH}/data && zip -r ${SRC_DIR_PATH}/../.github/resources/data-zip/data.zip .)
+          (cd ../../desktop_version/data && zip -r ../../.github/resources/data-zip/data.zip graphics/)
           mkdir -p ../../${SRC_DIR_PATH}/android-project/app/src/main/assets/
           cp -v data-zip/data.zip ../../${SRC_DIR_PATH}/android-project/app/src/main/assets/data.zip
 
