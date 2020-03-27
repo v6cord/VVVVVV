@@ -416,6 +416,13 @@ void musicclass::processmusic()
 		processmusicfadein();
 	}
 
+        for (auto[channel, track] : custom_file_loops) {
+            if (!Mix_Playing(channel)) {
+                custom_file_channels[track] = Mix_PlayChannel(-1, custom_files[track].sound, -1);
+                custom_file_loops.erase(channel);
+            }
+        }
+
 	//musicstopother--;
 	//if (musicstopother == 1) {
 	//	musicstopother = 0;
@@ -496,6 +503,51 @@ void musicclass::initefchannels()
 	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
 }
 
+static int bytes_per_second() {
+    int freq = 44100;
+    Uint16 format = AUDIO_U16SYS;
+    int channels = 2;
+    Mix_QuerySpec(&freq, &format, &channels);
+
+    int width = 2;
+    switch (format) {
+        case AUDIO_U8: width = 1; break;
+        case AUDIO_S8: width = 1; break;
+        case AUDIO_U16LSB: width = 2; break;
+        case AUDIO_S16LSB: width = 2; break;
+        case AUDIO_U16MSB: width = 2; break;
+        case AUDIO_S16MSB: width = 2; break;
+    }
+
+    return freq * channels * width;
+}
+
+static Mix_Chunk* seek_chunk(Mix_Chunk* src, int pos, int len) {
+    double bytes_per_ms = bytes_per_second() / 1000.0;
+    int bytes_pos = pos * bytes_per_ms;
+    Uint32 bytes_len;
+    if (len > 0) {
+        bytes_len = len * bytes_per_ms;
+    } else {
+        bytes_len = src->alen - bytes_pos;
+    }
+    Uint8* mem = src->abuf + bytes_pos;
+    Mix_Chunk* dst = Mix_QuickLoad_RAW(mem, bytes_len); 
+    dst->volume = src->volume;
+    return dst;
+}
+
+void musicclass::loadfile(const char* t, int loopstart) {
+    auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
+    if (inserted) {
+        SoundTrack track(t);
+        pair->second.sound = seek_chunk(track.sound, loopstart, 0);
+        custom_file_intros[t] = seek_chunk(track.sound, 0, loopstart);
+        pair->second.isValid = track.isValid;
+        track.isValid = false;
+    }
+}
+
 void musicclass::playfile(const char* t, std::string track, bool internal /*= false*/)
 {
     std::string temp;
@@ -513,13 +565,15 @@ void musicclass::playfile(const char* t, std::string track, bool internal /*= fa
     if (inserted) {
         SoundTrack track(t);
         pair->second.sound = track.sound;
+        custom_file_intros[t] = track.sound;
+        custom_file_intros[t]->allocated = 0;
         pair->second.isValid = track.isValid;
         track.isValid = false;
     }
 
     if (track != "") {
         stopfile(track);
-        if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+        if (!muted) channel = Mix_PlayChannel(-1, custom_file_intros[t], 1);
         custom_file_paths[track] = t;
     } else {
         channel = Mix_PlayChannel(-1, pair->second.sound, 0);
@@ -529,6 +583,7 @@ void musicclass::playfile(const char* t, std::string track, bool internal /*= fa
         fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
     } else if (track != "") {
         custom_file_channels[track] = channel;
+        custom_file_loops[channel] = track;
     }
 }
 
