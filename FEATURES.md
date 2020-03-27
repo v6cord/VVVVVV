@@ -198,7 +198,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifvce(script)` - detect if game is VVVVVV: Community Edition or not
 
-- `ifmod(mod,script)` - checks for a mod - *mod* can be `mmmmmm` (checks if MMMMMM is installed), `mmmmmm_on`/`mmmmmm_enabled`/`mmmmmm_off`/`mmmmmm_disabled` (checks if MMMMMM is installed AND enabled/disabled) or `unifont` (checks if Unifont is installed) - jump to *script* if so
+- `ifmod(mod,script)` - checks for a mod - *mod* can be `mmmmmm` (checks if MMMMMM is installed), `mmmmmm_on`/`mmmmmm_enabled`/`mmmmmm_off`/`mmmmmm_disabled` (checks if MMMMMM is installed AND enabled/disabled) or `unifont` (checks if Unifont is installed)
 
 - `disablesuicide` - disable pressing R
 
@@ -246,13 +246,13 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Upped the map size limit to 100 by 100
 
-- `ifcrewmates(n,script)` - go to script if the player has rescued at least *n* crewmates
+- `ifcrewmates(n,script)` - go to *script* if the player has rescued at least *n* crewmates
 
-- `ifcrewmatesless(n,script)` - go to script if the player has rescued less than *n* crewmates
+- `ifcrewmatesless(n,script)` - go to *script* if the player has rescued less than *n* crewmates
 
-- `ifcoins(n,script)` - go to script if the player has collected at least *n* coins
+- `ifcoins(n,script)` - go to *script* if the player has collected at least *n* coins
 
-- `ifcoinsless(n,script)` - go to script if the player has collected less than *n* coins
+- `ifcoinsless(n,script)` - go to *script* if the player has collected less than *n* coins
 
 - Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
@@ -262,7 +262,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Selecting level music from the editor is no longer limited
 
-- `ifvar(var,operator[,value],script)` - run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to *value* - if the *value* argument isn't given, it reads the text from the next line
+- `ifvar(var,operator[,value],script)` - go to *script* if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to *value* - if *value* not given, uses the next line
 
 - Flip tokens are now placeable in the editor using the ^1 tool (press Shift+1)
 
@@ -288,7 +288,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Time trials now exist in custom levels! Your time trials stats are saved as `saves/<levelname>.vvvvvv.trial`, and you can add time trials to your level through the editor.
 
-- `iftrial([id,]script)` - run a custom script if you're currently in a trial and the trial's id matches up with the *id* argument - if the *id* argument isn't passed, the script is ran if you're in any trial
+- `iftrial([id,]script)` - go to *script* if you're in a trial and trial's id is *id* - if *id* not given, go to *script* if you're in any trial
 
 - `endtrial()` - ends a time trial - this is functionally identical as `gamestate(82)`.
 
@@ -320,9 +320,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `gotodimension(n)` - go to dimension n
 
-- `ifkey(key,script)` - if *key* is pressed, load the script *script* - `left`, `right`, `up` and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup` and `rdown`.
+- `ifkey(key,script)` - if *key* is pressed, go to *script* - `left`, `right`, `up`, and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup`, and `rdown`.
 
-- `ifflipmode(script)` - go to script if the game is in flip mode
+- `ifflipmode(script)` - go to *script* if the game is in flip mode
 
 - `delchar(var,n)` - remove *n* chars from the end of the variable *var*
 
@@ -334,7 +334,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added callbacks - `on_death_start`, `on_death_end`, `on_input_flip`, `on_input_flip_up`, `on_input_flip_down`
 
-- `setcallback(callback,script)` - run script when callback is triggered
+- `setcallback(callback,script)` - run *script* when callback is triggered
 
 - One-way tiles are now automatically recolored to match the tileset
 
