@@ -134,7 +134,23 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - All names (including `player`) now work with all functions
 
-- Added hourglasses as enemy type 10
+- Added the following enemy types:
+  - Hourglasses
+  - Yes Men
+  - Stop signs
+  - Linear Colliders
+  - Red pills
+  - Mannequins
+  - ZZT centipedes
+  - OBEY
+  - Edge Games
+  - Trench Warfare
+  - Tomb of Mad Carew
+  - Brass Sent Us Under The Top
+  - Wheel of Fortune
+  - TRUTH
+  - Skeletons
+  - Vertigo
 
 - Fixed enemies in Warp Zone gray not being gray
 
@@ -243,8 +259,6 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - Coins display in the roomname if there's any coins in the map
 
 - Coins and trinkets no longer share IDs
-
-- Large enemies are now enemy types you can select in the editor
 
 - Selecting level music from the editor is no longer limited
 
