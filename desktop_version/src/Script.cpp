@@ -1343,11 +1343,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (words[0] == "infiniflip") {
                     game.infiniflip = parsebool(words[1]);
                 }
-                if (words[0] == "disablesuicide") {
-                    game.nosuicide = true;
-                }
-                if (words[0] == "enablesuicide") {
-                    game.nosuicide = false;
+                if (words[0] == "suicide") {
+                    game.nosuicide = !parsebool(words[1]);
                 }
                 if (words[0] == "setspeed") {
                     game.playerspeed = std::stoi(words[1]);
