@@ -19,6 +19,8 @@
 #include "Utilities.h"
 #include "Maths.h"
 
+extern bool headless;
+
 scriptclass::scriptclass() {
     // Init
     words.resize(40);
@@ -1079,24 +1081,24 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     SDL_BlitSurface(s, nullptr, dwgfx.backBuffer, nullptr);
                     SDL_FreeSurface(s);
                 }
-                if (words[0] == "debuggetpixel") {
+                if (words[0] == "debuggetpixel" && headless) {
                     getpixelx = ss_toi(words[1]);
                     getpixely = ss_toi(words[2]);
                 }
-                if (words[0] == "debugprint") {
+                if (words[0] == "debugprint" && headless) {
                     position++;
                     std::cerr << processvars(commands[position]) << std::endl;
                 }
-                if (words[0] == "debugexit") {
+                if (words[0] == "debugexit" && headless) {
                     auto code = ss_toi(words[1]);
                     std::exit(code);
                 }
-                if (words[0] == "debugsetglow") {
+                if (words[0] == "debugsetglow" && headless) {
                     auto glow = ss_toi(words[1]);
                     help.freezeglow = true;
                     help.glow = glow;
                 }
-                if (words[0] == "debugseedrng") {
+                if (words[0] == "debugseedrng" && headless) {
                     auto s1 = ss_toi(words[1]);
                     auto s2 = ss_toi(words[2]);
                     auto s3 = ss_toi(words[3]);

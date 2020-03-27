@@ -87,12 +87,12 @@ FILE* logger;
 #endif
 
 extern const char* git_rev;
+bool headless = false;
 
 int main(int argc, char *argv[])
 {
     seed_xoshiro_64(std::time(nullptr));
 
-    bool headless = false;
     bool syslog = log_default();
 
     char* assetsPath = NULL;
