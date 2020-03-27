@@ -36,6 +36,8 @@ std::vector<std::string> changelog = {
     "  now infiniflip(enable/disable)",
     "- enablesuicide/disablesuicide are now",
     "  suicide(enable/disable)",
+    "- nointerrupt/yesinterrupt are now",
+    "  setinterrupt(on/off)",
     "",
     "Version c1.0-pre1",
     "[line]",

@@ -12,6 +12,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `enablesuicide`/`disablesuicide` are now `suicide(enable/disable)`
 
+- `nointerrupt`/`yesinterrupt` are now `setinterrupt(on/off)`
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
