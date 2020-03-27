@@ -56,7 +56,12 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - There's now an option to disable only the music
 
-- All limits have been removed
+- The following limits have been removed:
+  - 500 scripts
+  - 500 script lines
+  - 200 entities in one room
+  - 100 roomtexts in one room
+  - 3000 placeable entities
 
 - `destroy(crewmates)` - destroy non-rescuable crewmates
 
