@@ -785,11 +785,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     scriptdelay = ss_toi(words[1]);
                     loopdelay = true;
                 }
-                if (words[0] == "nointerrupt") {
-                    nointerrupt = true;
-                }
-                if (words[0] == "yesinterrupt") {
-                    nointerrupt = false;
+                if (words[0] == "setinterrupt") {
+                    nointerrupt = !parsebool(words[1]);
                 }
                 if (words[0] == "settile") {
                     // settile(x,y,tile)
