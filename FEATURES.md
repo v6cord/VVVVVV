@@ -110,7 +110,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `gotocheckpoint()` - teleports the player to their last checkpoint
 
-- Added 6th argument to `createentity` that sets entity 1/56 type (Ved numbers)
+- Added 6th argument to `createentity` that sets enemy type
 
 - Automatically pause/unpause all audio on focus change
 
