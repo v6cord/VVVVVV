@@ -40,7 +40,6 @@ public:
 	// Play a sound effect! There are 16 channels, which iterate
 	void initefchannels();
 
-        void loadfile(const char* t, int loopstart);
 	void playfile(const char* t, std::string track, bool internal = false);
 	void stopfile(std::string track);
 
@@ -72,10 +71,9 @@ public:
 
         bool muted = false;
 
-        std::unordered_map<std::string, Mix_Chunk*> custom_file_intros;
         std::unordered_map<std::string, SoundTrack> custom_files;
         std::unordered_map<std::string, int> custom_file_channels;
-        std::unordered_map<int, std::string> custom_file_loops;
+        std::unordered_map<int, std::string> custom_channel_paths;
         std::unordered_map<std::string, std::string> custom_file_paths;
 };
 

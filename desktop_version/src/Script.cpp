@@ -1358,9 +1358,6 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (words[0] == "playef") {
                     music.playef(ss_toi(words[1]), ss_toi(words[2]));
                 }
-                if (words[0] == "loadfile") {
-                    music.loadfile(words[1].c_str(), ss_toi(words[2]));
-                }
                 if (words[0] == "playfile") {
                     music.playfile(words[1].c_str(), words[2]);
                 }

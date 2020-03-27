@@ -14,6 +14,10 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `nointerrupt`/`yesinterrupt` are now `setinterrupt(on/off)`
 
+- `playmusicfile(file)` has been removed
+
+- you can use the newly-added callback `custom_sfx_ended`, which sets %path%, for many of the same usecases
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
