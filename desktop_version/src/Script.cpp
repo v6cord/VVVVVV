@@ -1340,11 +1340,8 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (words[0] == "toggleflip") {
                     game.noflip = !parsebool(words[1]);
                 }
-                if (words[0] == "enableinfiniflip") {
-                    game.infiniflip = true;
-                }
-                if (words[0] == "disableinfiniflip") {
-                    game.infiniflip = false;
+                if (words[0] == "infiniflip") {
+                    game.infiniflip = parsebool(words[1]);
                 }
                 if (words[0] == "disablesuicide") {
                     game.nosuicide = true;
