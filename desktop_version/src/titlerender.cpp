@@ -446,6 +446,9 @@ growing_vector<std::string> changelog = {
     "- moveplayer() is instant in VCE levels",
     "- You can place teleporters using the ^3",
     "  tool (press Shift+3)",
+    "- Added towers - press F8 to toggle",
+    "  tower mode - use plus and minus to go",
+    "  up and down",
 
 };
 
