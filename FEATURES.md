@@ -8,6 +8,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `enableflip`/`disableflip` are now `toggleflip(enable/disable)`
 
+- `enableinfiniflip`/`disableinfiniflip` are now `infiniflip(enable/disable)`
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
