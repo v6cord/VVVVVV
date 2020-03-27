@@ -34,8 +34,6 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `playfile(file[,id])` - play a file as either music or a sound effect. if you specify an id, the file loops
 
-- `playmusicfile(file)` - play a file as music
-
 - `stopfile(id)` - stops playing a looping audio file
 
 - `ifnotflag(n,script)` - an inverted version of `ifflag(n,script)`
