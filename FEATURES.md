@@ -46,9 +46,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
-- `drawimagepersist(x,y,filename[,centered[,alpha[,background[,blend]]]])` - Same as `drawimage()`, but it stays on screen for more than a frame. It sets `%return%` to its id, so you're able to remove it
+- `drawimagepersist(x,y,filename[,centered[,alpha[,background[,blend]]]])` - same as `drawimage()`, but it stays on screen for more than a frame - it sets `%return%` to its id, so you're able to remove it
 
-- `removeimage(id)` - Remove a persistent image
+- `removeimage(id)` - remove a persistent image
 
 - `drawpixel(x,y,r,g,b)` - draw a pixel on the screen for one frame
 
@@ -143,9 +143,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `markers(hide/show)` - disable/reenable `markmap()` markers
 
-- `setspeed(x)` for player speed, 3 by default
+- `setspeed(x)` - set player speed, 3 by default
 
-- `setvelocity(x)` to push the player (affected by inertia)
+- `setvelocity(x)` - push the player (affected by inertia)
 
 - `pinf` - variant of `inf` to automatically `pdelay(1)` if no delay occurred
 
@@ -177,7 +177,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `ifvce(script)` - detect if game is VVVVVV: Community Edition or not
 
-- `ifmod(mod,script)` - Checks for a mod. `mod` can be `mmmmmm` (checks if MMMMMM is installed), `mmmmmm_on`/`mmmmmm_enabled`/`mmmmmm_off`/`mmmmmm_disabled` (checks if MMMMMM is installed AND enabled/disabled) or `unifont` (checks if Unifont is installed). Jump to `script` if so.
+- `ifmod(mod,script)` - checks for a mod - `mod` can be `mmmmmm` (checks if MMMMMM is installed), `mmmmmm_on`/`mmmmmm_enabled`/`mmmmmm_off`/`mmmmmm_disabled` (checks if MMMMMM is installed AND enabled/disabled) or `unifont` (checks if Unifont is installed) - jump to `script` if so
 
 - `disablesuicide` - disable pressing R
 
@@ -243,17 +243,17 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Selecting level music from the editor is no longer limited
 
-- `ifvar(var,operator[,value],script)` - Run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value`. If the `value` argument isn't given, it reads the text from the next line.
+- `ifvar(var,operator[,value],script)` - run a script if a variable equals/isn't equal to/is greater than/is lesser than/is greater or equal to/is lesser or equal to `value` - if the `value` argument isn't given, it reads the text from the next line
 
 - Flip tokens are now placeable in the editor using the ^1 tool (press Shift+1)
 
-- `stop()` - A command for convenience: stops the script, also runs `endcutscene()`
+- `stop()` - stop the script and remove cutscene bars
 
 - You can place activity zones in the editor by holding down `Z` while placing a script box
 
 - You can change the speed of enemies you're placing down by using Ctrl+Period/Comma. Speeds are 0 - 8, but since by default `p2` is `0`, the speeds are saved as `-4` to `4`
 
-- `replacetiles(a,b)` - Replace all instances of tile `a` with tile `b` in the room 
+- `replacetiles(a,b)` - replace all instances of tile `a` with tile `b` in the room 
 
 - Added being able to use orange as a color in `text()`
 
@@ -269,9 +269,9 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Time trials now exist in custom levels! Your time trials stats are saved as `saves/<levelname>.vvvvvv.trial`, and you can add time trials to your level through the editor.
 
-- `iftrial([id,]script)` - Run a custom script if you're currently in a trial and the trial's id matches up with the `id` argument. If the `id` argument isn't passed, the script is ran if you're in any trial.
+- `iftrial([id,]script)` - run a custom script if you're currently in a trial and the trial's id matches up with the `id` argument - if the `id` argument isn't passed, the script is ran if you're in any trial
 
-- `endtrial()` - Ends a time trial! This is functionally identical as `gamestate(82)`.
+- `endtrial()` - ends a time trial - this is functionally identical as `gamestate(82)`.
 
 - Added sub-tile dimensions of script boxes and activity zones
 
@@ -301,7 +301,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `gotodimension(n)` - go to dimension n
 
-- `ifkey(key,script)` - If `key` is pressed, load the script `script`. `left`, `right`, `up` and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup` and `rdown`.
+- `ifkey(key,script)` - if `key` is pressed, load the script `script` - `left`, `right`, `up` and `down` count controllers and WASD, so to get ONLY the arrow keys, use `rleft`, `rright`, `rup` and `rdown`.
 
 - `ifflipmode(script)` - go to script if the game is in flip mode
 
