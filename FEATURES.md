@@ -1,4 +1,4 @@
-A list of all the new features added to VVVVVV: Community Edition. This list is updated with each major release.
+A list of all the new features added to VVVVVV: Community Edition.
 
 VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, Allison Fleischer, and Dav999.
 
