@@ -63,8 +63,6 @@ std::vector<std::string> changelog = {
     "- playfile(file[,id]) - play a file as",
     "  a sound effect. if you specify an id,",
     "  the file loops",
-    "- playmusicfile(file) - play a file as",
-    "  music",
     "- stopfile(id) - stops playing a looping",
     "  audio file",
     "- ifnotflag(n,script) - an inverted",
