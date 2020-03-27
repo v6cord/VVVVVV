@@ -326,7 +326,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     int player = obj.getplayer();
                     obj.entities[player].xp += ss_toi(words[1]);
                     obj.entities[player].yp += ss_toi(words[2]);
-                    if (ed.vceversion == 0) scriptdelay = 1;
+                    if (!IS_VCE_LEVEL) scriptdelay = 1;
                 }
                 if (words[0] == "moveplayersafe") {
                     // USAGE: moveplayersafe(x offset, y offset)
