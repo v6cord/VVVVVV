@@ -8,7 +8,7 @@ let pkgsNative = if pinned then (import (builtins.fetchTarball {
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
   pkgs.callPackage (
-    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, automake, fribidi, pkgconfig, ninja, zlib, libpng, libicns, imagemagick, xorg}:
+    {smpeg2, mkShell, cmake, pkgsStatic, SDL2, SDL2_mixer, automake, fribidi, pkgconfig, ninja, zlib, libpng, libicns, imagemagick, xorg}:
     (mkShell.override { inherit stdenv; }) (let sdl = (SDL2.override {x11Support = stdenv.isLinux;}).overrideAttrs (oldAttrs: {
         outputs = ["out"];
         outputBin = "out";
@@ -42,7 +42,7 @@ in
         }))
         zlib
         libpng
-      ] else if android then [ pkgsNative.android-studio ] else [ SDL2 fribidi zlib libpng xorg.libXcursor xorg.libXext ];
+      ] else if android then [ pkgsNative.android-studio ] else [ SDL2 SDL2_mixer fribidi zlib libpng xorg.libXcursor xorg.libXext ];
       CMAKE_MODULE_PATH = if stdenv.targetPlatform.isWindows then "${sdl}/lib/cmake/SDL2/" else "${SDL2.dev}/lib/cmake/SDL2/";
     })
   ) {}

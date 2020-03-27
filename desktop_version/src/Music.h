@@ -73,6 +73,7 @@ public:
 
         std::unordered_map<std::string, SoundTrack> custom_files;
         std::unordered_map<std::string, int> custom_file_channels;
+        std::unordered_map<int, std::string> custom_channel_paths;
         std::unordered_map<std::string, std::string> custom_file_paths;
 };
 
