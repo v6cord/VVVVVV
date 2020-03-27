@@ -14,10 +14,7 @@ RUN wget -qO- https://github.com/vbe0201/switch-cmake/archive/c5b5441d956e23d801
     tar --transform 's/^switch-cmake-c5b5441d956e23d801089260a84199bc6def82b3/switch-cmake/' \
         -xzv -C /usr/local/share/
 
-RUN apt-get update && apt-get install -y ninja-build && rm -rf /var/lib/apt/lists/*
-
-# makes debugging easier
-RUN rm -fv /opt/devkitpro/libnx/default_icon.jpg
+RUN apt-get update && apt-get install -y ninja-build zip && rm -rf /var/lib/apt/lists/*
 
 ENV VVVVVV_CE_SWITCH_BUILD=1
 
