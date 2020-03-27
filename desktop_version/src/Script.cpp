@@ -1115,11 +1115,16 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         words[7] = "1";
                     else if (words[7] == "false" || words[7] == "")
                         words[7] = "0";
-                    if (words[7] == "2") {
-                        if (words[8] != "")
-                            temp.sc = ss_toi(words[8]);
-                        else
-                            temp.sc = 2;
+                    if (words[8] != "") {
+                        if (words[7] == "1") {
+                            handle_exception(script_exception("Large text can't have a border!"));
+                            call("stop");
+                            continue;
+                        }
+                        words[7] = "2";
+                        temp.sc = ss_toi(words[8]);
+                    } else {
+                        temp.sc = 2;
                     }
                     temp.center = parsebool(words[6]);
                     temp.bord = ss_toi(words[7]);
