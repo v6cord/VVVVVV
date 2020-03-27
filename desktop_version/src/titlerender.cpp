@@ -425,6 +425,7 @@ growing_vector<std::string> changelog = {
     "- supercrewmateroom() - set the progress",
     "  of the super crewmate to the current",
     "  room",
+    "- moveplayer() is instant in VCE levels",
 
 };
 

@@ -324,7 +324,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     int player = obj.getplayer();
                     obj.entities[player].xp += ss_toi(words[1]);
                     obj.entities[player].yp += ss_toi(words[2]);
-                    scriptdelay = 1;
+                    if (ed.vceversion == 0) scriptdelay = 1;
                 }
                 if (words[0] == "moveplayersafe") {
                     // USAGE: moveplayersafe(x offset, y offset)
@@ -387,7 +387,6 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                         obj.entities[player].xp = px;
                         obj.entities[player].yp = py;
                     }
-                    scriptdelay = 1;
                 }
 #if !defined(NO_CUSTOM_LEVELS)
                 if (words[0] == "warpdir") {

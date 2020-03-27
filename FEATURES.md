@@ -326,3 +326,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `supercrewmate(on/off)` - toggle whether the Intermission 1 crewmate collides with hazards or not
 
 - `supercrewmateroom()` - set the progress of the super crewmate to the current room
+
+- `moveplayer()` is instant in VCE levels
