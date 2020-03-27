@@ -22,7 +22,7 @@ int tr;
 int tg;
 int tb;
 
-growing_vector<std::string> changelog = {
+std::vector<std::string> changelog = {
     // [line] is a huge line, have fun with that
     // The text should not be bigger than this line:
     // --------------------------------------
