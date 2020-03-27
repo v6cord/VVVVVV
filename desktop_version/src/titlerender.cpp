@@ -30,6 +30,8 @@ growing_vector<std::string> changelog = {
     "[line]",
     "- enablefog/disablefog are now",
     "  fog(enable/disable)",
+    "- enableflip/disableflip are now",
+    "  toggleflip(enable/disable)",
     "",
     "Version c1.0-pre1",
     "[line]",

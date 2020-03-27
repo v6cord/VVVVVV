@@ -6,6 +6,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `enablefog`/`disablefog` are now `fog(enable/disable)`
 
+- `enableflip`/`disableflip` are now `toggleflip(enable/disable)`
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
