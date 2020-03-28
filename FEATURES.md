@@ -318,7 +318,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `sayquiet()` and `replyquiet()` - same as normal `say()` and `reply()`, but without a squeak
 
-- Added dimensions, so you can properly have more than one dimension in a custom level
+- Added dimensions, so you can properly have more than one dimension in a custom level - they are rectangles of rooms that the game will keep you in and let you wrap around
 
 - `gotodimension(n)` - go to dimension n
 
