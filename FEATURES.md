@@ -16,7 +16,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `playmusicfile(file)` has been removed
 
-- You can use the newly-added callback `custom_sfx_ended`, which sets %path%, for many of the same usecases
+- You can use the newly-added callback `custom_sfx_ended`, which sets `%path%`, for many of the same usecases
 
 ## Version c1.0-pre1
 
