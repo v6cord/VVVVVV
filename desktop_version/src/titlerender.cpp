@@ -471,6 +471,13 @@ std::vector<std::string> changelog = {
     "  to ID of newly-created entity,",
     "  attribute is internal VVVVVV attribute",
     "  name",
+    "- getentitydata(id,attribute,varname) -",
+    "  set varname to value of an entity's",
+    "  attribute - id is slot number in array",
+    "  of entities and createentity() will",
+    "  set %return% to ID of newly-created",
+    "  entity, attribute is internal VVVVVV",
+    "  attribute name",
 
 };
 
