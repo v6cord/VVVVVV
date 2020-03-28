@@ -464,6 +464,13 @@ std::vector<std::string> changelog = {
     "- Added towers - press F8 to toggle",
     "  tower mode - use plus and minus to go",
     "  up and down",
+    "- setentitydata(id,attribute,value) -",
+    "  set attribute of entity to value - id",
+    "  is slot number in array of entities",
+    "  and createentity() will set %return%",
+    "  to ID of newly-created entity,",
+    "  attribute is internal VVVVVV attribute",
+    "  name",
 
 };
 
