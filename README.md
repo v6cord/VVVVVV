@@ -8,4 +8,4 @@ The features that this version includes, along with a list of who has contribute
 
 Most of our discussion is concentrated in [the VVVVVV Discord server](https://discord.gg/Zf7Nzea).
 
-[Terry Cavanagh has granted us an exception to VVVVVV's custom license](https://twitter.com/terrycavanagh/status/1216657316067663872), letting us distribute our fork with `data.zip` included, provided we do not distribute any of the original main game levels.
+[Terry Cavanagh has granted us an exception to VVVVVV's custom license](https://github.com/TerryCavanagh/VVVVVV/blob/master/License%20exceptions.md), letting us distribute our fork with `data.zip` included, provided we do not distribute any of the original main game levels.
