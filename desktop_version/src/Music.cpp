@@ -419,16 +419,16 @@ void musicclass::processmusic()
 		processmusicfadein();
 	}
 
-        auto iter = custom_channel_paths.begin();
-        while (iter != custom_channel_paths.end()) {
-            if (!Mix_Playing(iter->first)) {
-                script.setvar("path", iter->second);
-                script.callback("on_custom_sfx_ended");
-                iter = custom_channel_paths.erase(iter);
-            } else {
-                ++iter;
-            }
-        }
+	auto iter = custom_channel_paths.begin();
+	while (iter != custom_channel_paths.end()) {
+		if (!Mix_Playing(iter->first)) {
+			script.setvar("path", iter->second);
+			script.callback("on_custom_sfx_ended");
+			iter = custom_channel_paths.erase(iter);
+		} else {
+			++iter;
+		}
+	}
 
 	//musicstopother--;
 	//if (musicstopother == 1) {
