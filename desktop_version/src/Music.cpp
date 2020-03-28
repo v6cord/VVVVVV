@@ -423,7 +423,7 @@ void musicclass::processmusic()
 	while (iter != custom_channel_paths.end()) {
 		if (!Mix_Playing(iter->first)) {
 			script.setvar("path", iter->second);
-			script.callback("on_custom_sfx_ended");
+			script.callback("on_custom_sfx_end");
 			iter = custom_channel_paths.erase(iter);
 		} else {
 			++iter;
