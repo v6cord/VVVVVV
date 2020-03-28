@@ -39,7 +39,7 @@ std::vector<std::string> changelog = {
     "- nointerrupt/yesinterrupt are now",
     "  setinterrupt(on/off)",
     "- playmusicfile(file) has been removed",
-    "- you can use the newly-added callback",
+    "- You can use the newly-added callback",
     "  custom_sfx_ended, which sets %path%, ",
     "  for many of the same usecases",
     "",
