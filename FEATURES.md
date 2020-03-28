@@ -18,6 +18,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Instead of using `playmusicfile()`, simply use `playfile(file[,id])`. To get much of the additional functionality of `playmusicfile()`, use the newly-added callback `on_custom_sfx_end`, which sets `%path%`.
 
+- Added optional third argument to `playfile()` for loop count
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting

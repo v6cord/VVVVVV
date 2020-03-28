@@ -5619,9 +5619,9 @@ void Game::customloadquick(std::string savfile, mapclass& map, entityclass& obj,
             if(TextString.length())
             {
                 growing_vector<std::string> values = split(TextString,',');
-                for(auto iter = values.begin(); iter < values.end(); iter += 2)
+                for(auto iter = values.begin(); iter < values.end(); iter += 3)
                 {
-                    music.playfile(iter[1].c_str(), iter[0]);
+                    music.playfile(iter[1].c_str(), iter[0], ss_toi(iter[2]));
                 }
             }
         }
@@ -6751,6 +6751,7 @@ void Game::customsavequick(std::string savfile, mapclass& map, entityclass& obj,
         {
             tracks += id + ",";
             tracks += path + ",";
+            tracks += std::to_string(music.custom_file_loops[id]) + ",";
         }
         msg = new TiXmlElement( "customtracks" );
         msg->LinkEndChild( new TiXmlText( tracks.c_str() ));

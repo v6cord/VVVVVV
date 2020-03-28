@@ -1286,7 +1286,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     obj.entities[i].rule = -1;
                     game.hascontrol = false;
                     music.fadeout();
-                    music.playfile("pop.wav", "");
+                    music.playfile("pop.wav", "", 0);
                     SDL_SetWindowTitle(graphics.screenbuffer->m_window, "");
                     dwgfx.showcutscenebars = false;
                     running = false;
@@ -1359,11 +1359,19 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     music.playef(ss_toi(words[1]), ss_toi(words[2]));
                 }
                 if (words[0] == "playfile") {
-                    music.playfile(words[1].c_str(), words[2]);
+                    int loops;
+                    if (words[3] != "") {
+                        loops = ss_toi(words[3]);
+                    } else if (words[2] != "") {
+                        loops = -1;
+                    } else {
+                        loops = 1;
+                    }
+                    music.playfile(words[1].c_str(), words[2], loops);
                 }
                 const char* word;
                 if (strcmp((word = words[0].c_str()), "playfile")) {
-                    music.playfile(++word, word, true);
+                    music.playfile(++word, word, -1, true);
                 }
                 if (words[0] == "stopfile") {
                     music.stopfile(words[1]);

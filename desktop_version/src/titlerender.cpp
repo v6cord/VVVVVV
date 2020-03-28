@@ -26,6 +26,7 @@ std::vector<std::string> changelog = {
     // [line] is a huge line, have fun with that
     // The text should not be bigger than this line:
     // --------------------------------------
+    // (vim users: `:set cc=46`)
     "Version c1.0-pre2",
     "[line]",
     "- enablefog/disablefog are now",
@@ -45,6 +46,8 @@ std::vector<std::string> changelog = {
     "  functionality of playmusicfile(),",
     "  use the newly-added callback",
     "  on_custom_sfx_end, which sets %path%.",
+    "- Added optional third argument to",
+    "  playfile() for loop count",
     "",
     "Version c1.0-pre1",
     "[line]",

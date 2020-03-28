@@ -40,7 +40,7 @@ public:
 	// Play a sound effect! There are 16 channels, which iterate
 	void initefchannels();
 
-	void playfile(const char* t, std::string track, bool internal = false);
+	void playfile(const char* t, std::string track, int loops, bool internal = false);
 	void stopfile(std::string track);
 
 	void playef(int t, int offset = 0);
@@ -75,6 +75,7 @@ public:
         std::unordered_map<std::string, int> custom_file_channels;
         std::unordered_map<int, std::string> custom_channel_paths;
         std::unordered_map<std::string, std::string> custom_file_paths;
+        std::unordered_map<std::string, int> custom_file_loops;
 };
 
 extern musicclass music;

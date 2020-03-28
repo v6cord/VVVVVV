@@ -510,7 +510,7 @@ void musicclass::initefchannels()
 	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
 }
 
-void musicclass::playfile(const char* t, std::string track, bool internal /*= false*/)
+void musicclass::playfile(const char* t, std::string track, int loops, bool internal /*= false*/)
 {
     std::string temp;
     if (internal) {
@@ -532,18 +532,29 @@ void musicclass::playfile(const char* t, std::string track, bool internal /*= fa
     }
 
     if (track != "") {
+        custom_file_loops[track] = loops;
+    }
+
+    if (loops != -1) {
+        --loops;
+    }
+
+    if (track != "") {
         stopfile(track);
-        if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, -1);
+        if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, loops);
         custom_file_paths[track] = t;
     } else {
-        channel = Mix_PlayChannel(-1, pair->second.sound, 0);
+        channel = Mix_PlayChannel(-1, pair->second.sound, loops);
     }
 
     if (channel == -1) {
         fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+        return;
     } else if (track != "") {
         custom_file_channels[track] = channel;
-    } else {
+    }
+
+    if (track == "" || loops >= 0) {
         custom_channel_paths[channel] = t;
     }
 }
