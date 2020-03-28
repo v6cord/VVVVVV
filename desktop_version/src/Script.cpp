@@ -788,6 +788,13 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 if (words[0] == "setinterrupt") {
                     nointerrupt = !parsebool(words[1]);
                 }
+                if (words[0] == "createdamage") {
+                    int x = ss_toi(words[1]);
+                    int y = ss_toi(words[2]);
+                    int w = ss_toi(words[3]);
+                    int h = ss_toi(words[4]);
+                    obj.createblock(DAMAGE, x, y, w, h);
+                }
                 if (words[0] == "settile") {
                     // settile(x,y,tile)
                     int x = ss_toi(words[1]);

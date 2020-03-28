@@ -50,6 +50,8 @@ std::vector<std::string> changelog = {
     "  playfile() for loop count",
     "- unloadscriptimages - unload images",
     "  loaded by drawimage",
+    "- createdamage(x,y,w,h) - makes a region",
+    "  that hurts the player like spikes",
     "",
     "Version c1.0-pre1",
     "[line]",

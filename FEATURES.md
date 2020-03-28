@@ -22,6 +22,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `unloadscriptimages` - unload images loaded by `drawimage`
 
+- `createdamage(x,y,w,h)` - makes a region that hurts the player like spikes
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
