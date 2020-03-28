@@ -2078,12 +2078,6 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                 FillRect(dwgfx.backBuffer,0x00000);
             }
         }
-        for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
-            scriptimage current = script.scriptrender[i];
-            if (current.type == 3 && current.background) {
-                dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
-            }
-        }
         if (map.final_colormode)
 		{
         	dwgfx.drawfinalmap(map);
@@ -2093,6 +2087,12 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         dwgfx.drawmap(map);
         }
 
+        for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
+            scriptimage current = script.scriptrender[i];
+            if (current.type == 3 && current.background) {
+                dwgfx.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
+            }
+        }
 
         if(!game.completestop)
         {
