@@ -16,7 +16,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `playmusicfile(file)` has been removed
 
-- Instead of using `playmusicfile()`, use the newly-added callback `on_custom_sfx_end`, which sets `%path%`, for many of the same usecases
+- Instead of using `playmusicfile()`, simply use `playfile(file[,id])`. To get much of the additional functionality of `playmusicfile()`, use the newly-added callback `on_custom_sfx_end`, which sets `%path%`.
 
 ## Version c1.0-pre1
 
