@@ -2,7 +2,7 @@ A list of all the new features added to VVVVVV: Community Edition.
 
 VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, Allison Fleischer, and Dav999.
 
-## Version c1.0-pre2
+## Version c1.0-pre2 (upcoming)
 
 - `enablefog`/`disablefog` are now `fog(enable/disable)`
 
