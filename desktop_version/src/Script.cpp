@@ -1165,6 +1165,10 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     game.script_images.push_back(LoadImage(words[1].c_str()));
                     game.script_image_names.push_back(words[1]);
                 }
+                if (words[0] == "unloadscriptimages") {
+                    game.script_images.clear();
+                    game.script_image_names.clear();
+                }
                 if ((words[0] == "drawimage") || (words[0] == "drawimagepersist")) {
                     // drawimage(x,y,name[, centered])
                     int tempindex = getimage(game, words[3]);

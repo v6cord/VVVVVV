@@ -48,6 +48,8 @@ std::vector<std::string> changelog = {
     "  on_custom_sfx_end, which sets %path%.",
     "- Added optional third argument to",
     "  playfile() for loop count",
+    "- unloadscriptimages - unload images",
+    "  loaded by drawimage",
     "",
     "Version c1.0-pre1",
     "[line]",
