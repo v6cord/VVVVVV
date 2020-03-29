@@ -52,6 +52,8 @@ std::vector<std::string> changelog = {
     "  loaded by drawimage",
     "- createdamage(x,y,w,h) - makes a region",
     "  that hurts the player like spikes",
+    "- Fixed changeplayercolor alias of",
+    "  changeplayercolour not working",
     "",
     "Version c1.0-pre1",
     "[line]",
