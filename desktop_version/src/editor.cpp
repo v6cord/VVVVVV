@@ -200,11 +200,8 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
     std::unique_ptr<char[], free_delete> mem((char*) uMem);
 
     try {
-        _data.timeCreated = find_created(mem.get());
         _data.creator = find_creator(mem.get());
         _data.title = find_title(mem.get());
-        _data.timeModified = find_modified(mem.get());
-        _data.modifier = find_modifiers(mem.get());
         _data.Desc1 = find_desc1(mem.get());
         _data.Desc2 = find_desc2(mem.get());
         _data.Desc3 = find_desc3(mem.get());
@@ -7524,9 +7521,6 @@ TAG_FINDER(find_desc2, "Desc2");
 TAG_FINDER(find_desc3, "Desc3");
 TAG_FINDER(find_creator, "Creator");
 TAG_FINDER(find_website, "website");
-TAG_FINDER(find_created, "Created");
-TAG_FINDER(find_modified, "Modified");
-TAG_FINDER(find_modifiers, "Modifiers");
 
 #undef TAG_FINDER
 
