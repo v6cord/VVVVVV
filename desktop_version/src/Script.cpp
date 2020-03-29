@@ -2967,7 +2967,7 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     i = obj.getplayer();
                     obj.entities[i].colour = 0;
                 } else if (words[0] == "changeplayercolour" ||
-                        words[0] == "changeplayercolour") {
+                        words[0] == "changeplayercolor") {
                     i = obj.getplayer();
 
                     if (words[1] == "cyan") {
