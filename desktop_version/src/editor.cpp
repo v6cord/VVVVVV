@@ -6105,6 +6105,37 @@ void editorinput( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, enti
                 ed.updatetiles=true;
                 ed.keydelay=6;
             }
+            if(key.keymap[SDLK_F9]) {
+                bool currentonefound = false;
+                int currenttilesheet = ed.getcustomtiles();
+                int firsttilesheet = 0;
+                int nexttilesheet = 0;
+                for (auto tilesheet : dwgfx.customtiles) {
+                    if (firsttilesheet == 0)
+                        firsttilesheet = tilesheet.first;
+
+                    if (currentonefound) {
+                        nexttilesheet = tilesheet.first;
+                        break;
+                    }
+
+                    if (tilesheet.first == currenttilesheet)
+                        currentonefound = true;
+                }
+
+                if (!currentonefound)
+                    nexttilesheet = firsttilesheet;
+
+                ed.level[ed.levx + ed.levy*ed.maxwidth].customtileset = nexttilesheet;
+
+                if (nexttilesheet == 0)
+                    ed.note = "Now using default tilesheet";
+                else
+                    ed.note = "Now using tiles" + std::to_string(nexttilesheet) + ".png";
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.keydelay = 6;
+            }
             if(key.keymap[SDLK_F10])
             {
                 if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
