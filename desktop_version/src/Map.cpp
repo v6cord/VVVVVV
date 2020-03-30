@@ -743,8 +743,8 @@ bool mapclass::collide(int x, int y)
 		{
 			if (tile >= 6 && tile <= 11) return true;
 		}
-                if (collidefloor && contents[x + vmult[y]] == 14) return true;
-                if (collideroof && contents[x + vmult[y]] == 15) return true;
+		if (collidefloor && contents[x + vmult[y]] == 14) return true;
+		if (collideroof && contents[x + vmult[y]] == 15) return true;
 	}
 	else
 	{
@@ -757,8 +757,8 @@ bool mapclass::collide(int x, int y)
 		if (tileset==0 && contents[x + vmult[y]] == 59) return true;
 		if (contents[x + vmult[y]]>= 80 && contents[x + vmult[y]] < 680) return true;
 		if (contents[x + vmult[y]] == 740 && tileset==1) return true;
-                if (collidefloor && contents[x + vmult[y]] == 14) return true;
-                if (collideroof && contents[x + vmult[y]] == 15) return true;
+		if (collidefloor && contents[x + vmult[y]] == 14) return true;
+		if (collideroof && contents[x + vmult[y]] == 15) return true;
 		if (invincibility)
 		{
 			if (contents[x + vmult[y]]>= 6 && contents[x + vmult[y]] <= 9) return true;
