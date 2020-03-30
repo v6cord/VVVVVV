@@ -4,6 +4,7 @@
 #include "GraphicsResources.h"
 #include <vector>
 #include <unordered_map>
+#include <map>
 
 
 
@@ -50,6 +51,8 @@ public:
 	void MakeSpriteArray();
 
 	void maketelearray();
+
+	void makecustomtilearray();
 
 	void drawcoloredtile(int x, int y, int t, int r, int g, int b);
 
@@ -240,6 +243,7 @@ public:
 	std::vector <SDL_Surface*> bfontmask;
 	std::vector <SDL_Surface*> flipbfont;
 	std::vector <SDL_Surface*> flipbfontmask;
+	std::map <int, std::vector<SDL_Surface*>> customtiles;
 
 	bool flipmode = false;
 	bool setflipmode = false;

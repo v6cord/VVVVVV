@@ -292,6 +292,16 @@ void Graphics::MakeTileArray()
     }
 }
 
+void Graphics::makecustomtilearray()
+{
+    for (auto tilesheet : grphx.im_customtiles)
+        for (int j = 0; j < tilesheet.second->h / 8; j++)
+            for (int i = 0; i < tilesheet.second->w / 8; i++) {
+                SDL_Surface* temp = GetSubSurface(tilesheet.second, i*8, j*8, 8, 8);
+                customtiles[tilesheet.first].push_back(temp);
+            }
+}
+
 void Graphics::maketelearray()
 {
     for (int i = 0; i < 10; i++)
@@ -667,10 +677,13 @@ void Graphics::drawsprite( int x, int y, int t, int r, int g,  int b )
 
 void Graphics::drawtile( int x, int y, int t, int r, int g,  int b )
 {
+    int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (t >= 14 && t <= 17) {
+    if (t >= 14 && t <= 17 && customts <= 3) {
         colourTransform thect = {.colour = ed.getonewaycol()};
         BlitSurfaceTint(tiles[t], NULL, backBuffer, &rect, thect);
+    } else if (customtiles.find(customts) != customtiles.end()) {
+        BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
     } else {
         BlitSurfaceStandard(tiles[t], NULL, backBuffer, &rect);
     }
@@ -679,10 +692,13 @@ void Graphics::drawtile( int x, int y, int t, int r, int g,  int b )
 
 void Graphics::drawtile2( int x, int y, int t, int r, int g,  int b )
 {
+    int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (t >= 14 && t <= 17) {
+    if (t >= 14 && t <= 17 && customts <= 3) {
         colourTransform thect = {.colour = ed.getonewaycol()};
         BlitSurfaceTint(tiles2[t], NULL, backBuffer, &rect, thect);
+    } else if (customtiles.find(customts) != customtiles.end()) {
+        BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
     } else {
         BlitSurfaceStandard(tiles2[t], NULL, backBuffer, &rect);
     }
@@ -691,8 +707,12 @@ void Graphics::drawtile2( int x, int y, int t, int r, int g,  int b )
 
 void Graphics::drawtile3( int x, int y, int t, int r, int g,  int b )
 {
+    int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles3[t], NULL, backBuffer, &rect);
+    if (customtiles.find(customts) != customtiles.end())
+        BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
+    else
+        BlitSurfaceStandard(tiles3[t], NULL, backBuffer, &rect);
 }
 
 
@@ -3459,9 +3479,12 @@ void Graphics::drawforetile(int x, int y, int t)
             //frontbuffer.copyPixels(tiles[t], tiles_rect, tpoint);
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            if (tile >= 14 && tile <= 17) {
+            int customts = ed.getcustomtiles();
+            if (tile >= 14 && tile <= 17 && customts <= 3) {
                 colourTransform thect = {.colour = ed.getonewaycol()};
                 BlitSurfaceTint(tiles[t], NULL, foregroundBuffer, &rect, thect);
+            } else if (customtiles.find(customts) != customtiles.end()) {
+                BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
             } else {
                 BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
             }
@@ -3475,9 +3498,12 @@ void Graphics::drawforetile2(int x, int y, int t)
             //frontbuffer.copyPixels(tiles2[t], tiles_rect, tpoint);
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            if (tile >= 14 && tile <= 17) {
+            int customts = ed.getcustomtiles();
+            if (tile >= 14 && tile <= 17 && customts <= 3) {
                 colourTransform thect = {.colour = ed.getonewaycol()};
                 BlitSurfaceTint(tiles2[t], NULL, foregroundBuffer, &rect, thect);
+            } else if (customtiles.find(customts) != customtiles.end()) {
+                BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
             } else {
                 BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
             }
@@ -3490,7 +3516,11 @@ void Graphics::drawforetile3(int x, int y, int t, int off)
         if (!noclear || (tile >= 6 && tile <= 11) || (tile >= 12 && tile <= 27)) {
             SDL_Rect rect;
             setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
-            BlitSurfaceStandard(tiles3[t+(off*30)],NULL, foregroundBuffer, &rect  );
+            int customts = ed.getcustomtiles();
+            if (customtiles.find(customts) != customtiles.end())
+                BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
+            else
+                BlitSurfaceStandard(tiles3[t+(off*30)],NULL, foregroundBuffer, &rect  );
             //frontbuffer.copyPixels(tiles3[t+(off*30)], tiles_rect, tpoint);
         }
 }
@@ -3540,6 +3570,7 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     sprites.clear();
     flipsprites.clear();
     tele.clear();
+    customtiles.clear();
 
     pre_fakepercent.store(91);
     MakeTileArray();
@@ -3550,6 +3581,8 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     pre_fakepercent.store(94);
     Makebfont();
     pre_fakepercent.store(95);
+    makecustomtilearray();
+    pre_fakepercent.store(96);
 
     images.push_back(grphx.im_image0);
     images.push_back(grphx.im_image1);

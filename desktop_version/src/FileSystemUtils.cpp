@@ -459,6 +459,27 @@ growing_vector<std::string> FILESYSTEM_getLevelDirFileNames()
 	return list;
 }
 
+std::vector<std::string> FILESYSTEM_getGraphicsDirFileNames()
+{
+	std::vector<std::string> list;
+	char **fileList = PHYSFS_enumerateFiles("/graphics");
+	std::string builtLocation;
+
+	for (char **i = fileList; *i != NULL; i++)
+	{
+		if (strcmp(*i, "data") == 0)
+		{
+			continue;
+		}
+		builtLocation = "graphics/";
+		builtLocation += *i;
+		list.push_back(builtLocation);
+	}
+
+	PHYSFS_freeList(fileList);
+	return list;
+}
+
 void PLATFORM_getOSDirectory(char* output)
 {
 #ifdef _WIN32

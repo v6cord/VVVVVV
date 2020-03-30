@@ -7,6 +7,8 @@
     #include <SDL.h>
 #endif
 
+#include <map>
+
 SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha = false, bool optional = false);
 
 class GraphicsResources
@@ -39,6 +41,8 @@ public:
     SDL_Surface* im_image10;
     SDL_Surface* im_image11;
     SDL_Surface* im_image12;
+
+    std::map<int, SDL_Surface*> im_customtiles;
 };
 
 #endif /* GRAPHICSRESOURCES_H */

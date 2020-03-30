@@ -110,6 +110,25 @@ void GraphicsResources::init(void)
 	im_image10 =		LoadImage("graphics/ending.png");
 	im_image11 =		LoadImage("graphics/site4.png");
 	im_image12 =		LoadImage("graphics/minimap.png");
+
+	auto templist = FILESYSTEM_getGraphicsDirFileNames();
+	for (auto name : templist) {
+		if (name.find("graphics/tiles") != 0 || name.length() < 4 || name.substr(name.length()-4, 4) != ".png")
+			continue;
+
+		std::string thenumber = name.substr(14, name.length()-18);
+
+		if (!is_number(thenumber))
+			continue;
+
+		int sheetnum = atoi(thenumber.c_str());
+		if (sheetnum <= 3)
+			// Tilesheet 0 just means "just use the default tiles/tiles2/tiles3"
+			// Negative numbers are also equally invalid
+			continue;
+
+		im_customtiles[sheetnum] = LoadImage(name.c_str());
+	}
 }
 
 
@@ -140,4 +159,7 @@ GraphicsResources::~GraphicsResources(void)
 	SDL_FreeSurface(im_image10);
 	SDL_FreeSurface(im_image11);
 	SDL_FreeSurface(im_image12);
+
+	for (auto tilesheet : im_customtiles)
+		SDL_FreeSurface(tilesheet.second);
 }

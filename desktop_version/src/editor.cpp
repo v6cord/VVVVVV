@@ -2673,6 +2673,7 @@ void editorclass::load(std::string& _path, Graphics& dwgfx, mapclass& map, Game&
 
                 edLevelClassElement->QueryIntAttribute("tileset", &level[i].tileset);
                 edLevelClassElement->QueryIntAttribute("tilecol", &level[i].tilecol);
+                edLevelClassElement->QueryIntAttribute("customtileset", &level[i].customtileset);
                 edLevelClassElement->QueryIntAttribute("platx1", &level[i].platx1);
                 edLevelClassElement->QueryIntAttribute("platy1", &level[i].platy1);
                 edLevelClassElement->QueryIntAttribute("platx2", &level[i].platx2);
@@ -3010,6 +3011,7 @@ void editorclass::save(std::string& _path, mapclass& map, Game& game)
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
+        edlevelclassElement->SetAttribute(  "customtileset", level[i].customtileset);
         edlevelclassElement->SetAttribute(  "platx1", level[i].platx1);
         edlevelclassElement->SetAttribute(  "platy1", level[i].platy1);
         edlevelclassElement->SetAttribute(  "platx2", level[i].platx2);
@@ -7511,6 +7513,23 @@ Uint32 editorclass::getonewaycol()
 
     // Uh, I guess return solid white
     return graphics.getRGB(255, 255, 255);
+}
+
+// Return the number of the custom tilesheet to use for rendering
+int editorclass::getcustomtiles(int rx, int ry)
+{
+    return level[rx + ry*maxwidth].customtileset;
+}
+
+// This version detects the room automatically
+int editorclass::getcustomtiles()
+{
+    if (game.gamestate == EDITORMODE)
+        return getcustomtiles(ed.levx, ed.levy);
+    else if (map.custommode)
+        return getcustomtiles(game.roomx - 100, game.roomy - 100);
+
+    return 0;
 }
 
 #define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }

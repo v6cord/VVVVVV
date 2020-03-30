@@ -72,7 +72,7 @@ public:
 class edlevelclass{
 public:
     edlevelclass();
-    int tileset, tilecol = 0;
+    int tileset, tilecol, customtileset = 0;
     std::string roomname;
     int warpdir = 0;
     int platx1 = 0;
@@ -414,6 +414,9 @@ public:
 
     Uint32 getonewaycol(int rx, int ry);
     Uint32 getonewaycol();
+
+    int getcustomtiles(int rx, int ry);
+    int getcustomtiles();
 
     int returneditoralpha = 0;
 
