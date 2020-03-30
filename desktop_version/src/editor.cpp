@@ -4632,30 +4632,30 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
         if(ed.shiftmenu)
         {
-            fillboxabs(dwgfx, 0, 57,161+8,200,dwgfx.getRGB(64,64,64));
-            FillRect(dwgfx.backBuffer, 0,58,160+8,200, dwgfx.getRGB(0,0,0));
-            dwgfx.Print(4, 60, "Space: Mode Select", 164, 164, 164, false);
+            fillboxabs(dwgfx, 0, 47,161+8,200,dwgfx.getRGB(64,64,64));
+            FillRect(dwgfx.backBuffer, 0,48,160+8,200, dwgfx.getRGB(0,0,0));
+            dwgfx.Print(4, 50, "Space: Mode Select", 164, 164, 164, false);
             if (tower) {
-                dwgfx.Print(4, 70, "F1: Tower Direction",164,164,164,false);
-                dwgfx.Print(4, 80, "F2: Tower Entry",164,164,164,false);
+                dwgfx.Print(4, 60, "F1: Tower Direction",164,164,164,false);
+                dwgfx.Print(4, 70, "F2: Tower Entry",164,164,164,false);
             } else {
-                dwgfx.Print(4,  70, "F1: Change Tileset",164,164,164,false);
-                dwgfx.Print(4,  80, "F2: Change Colour",164,164,164,false);
+                dwgfx.Print(4,  60, "F1: Change Tileset",164,164,164,false);
+                dwgfx.Print(4,  70, "F2: Change Colour",164,164,164,false);
             }
-            dwgfx.Print(4,  90, "F3: Change Enemies",164,164,164,false);
-            dwgfx.Print(4, 100, "F4: Enemy Bounds",164,164,164,false);
-            dwgfx.Print(4, 110, "F5: Platform Bounds",164,164,164,false);
+            dwgfx.Print(4,  80, "F3: Change Enemies",164,164,164,false);
+            dwgfx.Print(4,  90, "F4: Enemy Bounds",164,164,164,false);
+            dwgfx.Print(4, 100, "F5: Platform Bounds",164,164,164,false);
 
             if (tower) {
-                dwgfx.Print(4, 130, "F6: Next Tower",164,164,164,false);
-                dwgfx.Print(4, 140, "F7: Previous Tower",164,164,164,false);
+                dwgfx.Print(4, 120, "F6: Next Tower",164,164,164,false);
+                dwgfx.Print(4, 130, "F7: Previous Tower",164,164,164,false);
             } else {
-                dwgfx.Print(4, 130, "F6: New Alt State",164,164,164,false);
-                dwgfx.Print(4, 140, "F7: Remove Alt State",164,164,164,false);
+                dwgfx.Print(4, 120, "F6: New Alt State",164,164,164,false);
+                dwgfx.Print(4, 130, "F7: Remove Alt State",164,164,164,false);
             }
 
-            dwgfx.Print(4, 160, "F8: Tower Mode",164,164,164,false);
-
+            dwgfx.Print(4, 150, "F8: Tower Mode",164,164,164,false);
+            dwgfx.Print(4, 160, "F9: Custom Tileset",164,164,164,false);
             dwgfx.Print(4, 180, "F10: Direct Mode",164,164,164,false);
 
             if (tower) {
