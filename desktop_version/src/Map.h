@@ -207,6 +207,9 @@ public:
     void updatetowerentcol(int col);
 
     int dimension = -1;
+
+    bool collidefloor = false;
+    bool collideroof = false;
 };
 
 extern mapclass map;

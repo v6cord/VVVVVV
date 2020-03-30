@@ -58,6 +58,7 @@ std::vector<std::string> changelog = {
     "  tiles5.png, tiles6.png, etc. and using",
     "  F9 to switch between them in the",
     "  editor",
+    "- Fix one-way stickiness in VCE levels",
     "",
     "Version c1.0-pre1",
     "[line]",

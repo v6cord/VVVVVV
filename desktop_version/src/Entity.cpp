@@ -5163,8 +5163,10 @@ bool entityclass::entitycollidefloor( mapclass& map, int t )
     temph = entities[t].h;
     rectset(tempx, tempy, tempw, temph);
 
-    if (checkwall(map)) return true;
-    return false;
+    map.collidefloor = IS_VCE_LEVEL;
+    bool check = checkwall(map);
+    map.collidefloor = false;
+    return check;
 }
 
 bool entityclass::entitycollideroof( mapclass& map, int t )
@@ -5176,8 +5178,10 @@ bool entityclass::entitycollideroof( mapclass& map, int t )
     temph = entities[t].h;
     rectset(tempx, tempy, tempw, temph);
 
-    if (checkwall(map)) return true;
-    return false;
+    map.collideroof = IS_VCE_LEVEL;
+    bool check = checkwall(map);
+    map.collideroof = false;
+    return check;
 }
 
 bool entityclass::testwallsx( int t, mapclass& map, int tx, int ty )

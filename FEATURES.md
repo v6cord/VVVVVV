@@ -28,6 +28,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added being able to use `tiles4.png`, `tiles5.png`, `tiles6.png`, etc. and using F9 to switch between them in the editor
 
+- Fix one-way stickiness in VCE levels
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
