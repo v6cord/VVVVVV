@@ -152,7 +152,7 @@ void KeyPoll::Poll()
 #endif
 			bool returnpressed = evt.key.keysym.sym == SDLK_RETURN;
 			bool fpressed = evt.key.keysym.sym == SDLK_f;
-			bool f11pressed = evt.key.keysym.sym == SDLK_F11;
+			bool f11pressed = evt.key.keysym.sym == SDLK_F11 && game.gamestate != EDITORMODE;
 			if ((altpressed && (returnpressed || fpressed)) || f11pressed)
 			{
 				toggleFullscreen = true;
