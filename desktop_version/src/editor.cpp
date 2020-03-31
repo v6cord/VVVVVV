@@ -7263,7 +7263,9 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                         // Don't copy the start point
                         continue;
                     }
-                    edentity.push_back(edentity[i]);
+                    edentities newentity = edentity[i];
+                    newentity.state = state;
+                    edentity.push_back(newentity);
                 }
 
             break;
