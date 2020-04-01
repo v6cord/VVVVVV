@@ -1020,28 +1020,28 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             }
                             if ((words[2] == "less") || (words[2] == "lt") ||
                                 (words[2] == "<")) {
-                                if (variables[var] < words[3]) {
+                                if (ss_toi(variables[var]) < ss_toi(words[3])) {
                                     call("custom_" + words[4]);
                                     continue;
                                 }
                             }
                             if ((words[2] == "lesseq") || (words[2] == "leq") ||
                                 (words[2] == "<=")) {
-                                if (variables[var] <= words[3]) {
+                                if (ss_toi(variables[var]) <= ss_toi(words[3])) {
                                     call("custom_" + words[4]);
                                     continue;
                                 }
                             }
                             if ((words[2] == "greater") || (words[2] == "gt") ||
                                 (words[2] == ">")) {
-                                if (variables[var] > words[3]) {
+                                if (ss_toi(variables[var]) > ss_toi(words[3])) {
                                     call("custom_" + words[4]);
                                     continue;
                                 }
                             }
                             if ((words[2] == "greatereq") || (words[2] == "geq") ||
                                 (words[2] == ">=")) {
-                                if (variables[var] >= words[3]) {
+                                if (ss_toi(variables[var]) >= ss_toi(words[3])) {
                                     call("custom_" + words[4]);
                                     continue;
                                 }
