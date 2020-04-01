@@ -36,6 +36,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Fixed an infinite loop that could happen if you died while a 1x1 quicksand was in the process of crumbling in a vanilla level
 
+- Removed the limit where every 21st text box in a row would not show up (the removal of this limit only applies in VCE levels)
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
