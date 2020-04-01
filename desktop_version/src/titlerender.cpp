@@ -59,7 +59,7 @@ std::vector<std::string> changelog = {
     "  F9 to switch between them in the",
     "  editor",
     "- Fixed one-way stickiness in VCE levels",
-    "- Remove createentity's color argument",
+    "- Removed createentity's color argument",
     "  (6th argument is now enemy type)",
     "",
     "Version c1.0-pre1",

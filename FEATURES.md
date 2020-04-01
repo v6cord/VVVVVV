@@ -30,7 +30,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Fixed one-way stickiness in VCE levels
 
-- Remove `createentity`'s color argument (6th argument is now enemy type)
+- Removed `createentity`'s color argument (6th argument is now enemy type)
 
 ## Version c1.0-pre1
 
