@@ -34,6 +34,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Fixed `ifvar()` not working with the less-than and greater-than operators, or their "or equal to" counterparts
 
+- Fixed an infinite loop that could happen if you died while a 1x1 quicksand was in the process of crumbling in a vanilla level
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
