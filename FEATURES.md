@@ -28,7 +28,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added being able to use `tiles4.png`, `tiles5.png`, `tiles6.png`, etc. and using F9 to switch between them in the editor
 
-- Fix one-way stickiness in VCE levels
+- Fixed one-way stickiness in VCE levels
 
 - Remove `createentity`'s color argument (6th argument is now enemy type)
 
