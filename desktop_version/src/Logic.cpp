@@ -705,7 +705,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                 // Restart the 1x1 quicksand
                 obj.entities[i].state = 4;
             }
-            else if (obj.entities[i].type == 3 && obj.entities[i].state == 2)
+            else if (obj.entities[i].type == 3 && obj.entities[i].state == 2 && IS_VCE_LEVEL)
             {
                 // Ok, unfortunate case where the 1x1 quicksand hasn't fully disappeared.
                 // Accept a little graphical ugliness to avoid breaking the room!
