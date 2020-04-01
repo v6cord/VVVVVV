@@ -1227,7 +1227,7 @@ void Graphics::createtextbox( std::string t, int xp, int yp, int r/*= 255*/, int
         ntextbox++;
     }
 
-    if(m<20)
+    if(m<20 || IS_VCE_LEVEL)
     {
         textbox[m].clear();
         textbox[m].line[0] = t;

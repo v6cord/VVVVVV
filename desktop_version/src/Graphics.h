@@ -292,7 +292,7 @@ public:
 	bool trinketcolset = false;
 	int trinketr, trinketg, trinketb = 0;
 
-	std::vector <textboxclass> textbox;
+	growing_vector <textboxclass> textbox;
 	int ntextbox = 0;
 
 	bool showcutscenebars = false;
