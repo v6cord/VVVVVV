@@ -32,6 +32,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Removed `createentity`'s color argument (6th argument is now enemy type)
 
+- Fixed `ifvar()` not working with the less-than and greater-than operators, or their "or equal to" counterparts
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
