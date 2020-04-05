@@ -1450,6 +1450,9 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     // USAGE: reloadroom()
                     map.gotoroom(game.roomx, game.roomy, dwgfx, game, obj, music);
                 }
+                if (words[0] == "reloadonetime") {
+                    game.onetimescripts.erase(std::remove(game.onetimescripts.begin(), game.onetimescripts.end(), words[1]), game.onetimescripts.end());
+                }
                 if (words[0] == "reloadscriptboxes") {
                     for (int brs = 0; brs < obj.nresurrectblocks; brs++)
                         if (obj.resurrectblocks[brs].active &&
