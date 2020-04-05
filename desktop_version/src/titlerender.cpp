@@ -72,6 +72,9 @@ std::vector<std::string> changelog = {
     "  text box in a row would not show up",
     "  (the removal of this limit only",
     "  applies in VCE levels)",
+    "- reloadonetime(script) - allow re-",
+    "  triggering of one-time script boxes",
+    "  with the given script name"
     "",
     "Version c1.0-pre1",
     "[line]",

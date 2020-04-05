@@ -38,6 +38,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Removed the limit where every 21st text box in a row would not show up (the removal of this limit only applies in VCE levels)
 
+- `reloadonetime(script)` - allow re-triggering of one-time script boxes with the given script name
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
