@@ -11,7 +11,7 @@
 class spacestation2class
 {
 public:
-	growing_vector<std::string> loadlevel(int rx, int ry, Game& game, entityclass& obj);
+	growing_vector<std::string> loadlevel(int rx, int ry);
 	std::string roomname;
 };
 

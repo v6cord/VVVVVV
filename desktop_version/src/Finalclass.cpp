@@ -2,7 +2,7 @@
 
 #include "MakeAndPlay.h"
 
-growing_vector<std::string> finalclass::loadlevel(int rx, int ry, Game& game, entityclass& obj)
+growing_vector<std::string> finalclass::loadlevel(int rx, int ry)
 {
 	int t;
 
