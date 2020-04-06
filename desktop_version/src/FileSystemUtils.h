@@ -17,8 +17,8 @@ char *FILESYSTEM_getUserSaveDirectory();
 char *FILESYSTEM_getUserLevelDirectory();
 
 bool FILESYSTEM_directoryExists(const char *fname);
-void FILESYSTEM_mount(const char *fname, Graphics& dwgfx);
-void FILESYSTEM_unmountassets(Graphics& dwgfx);
+void FILESYSTEM_mount(const char *fname);
+void FILESYSTEM_unmountassets();
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
                                  size_t *len, bool addnull = false);
 void FILESYSTEM_freeMemory(unsigned char **mem);

@@ -9,8 +9,6 @@
 #include "Enums.h"
 
 
-class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;class musicclass;
-
 struct stackframe {
     std::string script;
     int line;

@@ -329,7 +329,7 @@ const char pathSeparator =
                             '/';
 #endif
 
-void FILESYSTEM_mount(const char *fname, Graphics& dwgfx)
+void FILESYSTEM_mount(const char *fname)
 {
     std::string path(PHYSFS_getRealDir(fname));
     path += pathSeparator;
@@ -337,17 +337,17 @@ void FILESYSTEM_mount(const char *fname, Graphics& dwgfx)
     if (!PHYSFS_mount(path.c_str(), NULL, 0)) {
         printf("Error mounting: %s\n", PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
     } else
-        dwgfx.assetdir = path.c_str();
+        graphics.assetdir = path.c_str();
 }
 
-void FILESYSTEM_unmountassets(Graphics& dwgfx)
+void FILESYSTEM_unmountassets()
 {
-    if (dwgfx.assetdir != "")
+    if (graphics.assetdir != "")
     {
-        if (!game.quiet) printf("Unmounting %s\n", dwgfx.assetdir.c_str());
-        PHYSFS_unmount(dwgfx.assetdir.c_str());
-        dwgfx.assetdir = "";
-        dwgfx.reloadresources();
+        if (!game.quiet) printf("Unmounting %s\n", graphics.assetdir.c_str());
+        PHYSFS_unmount(graphics.assetdir.c_str());
+        graphics.assetdir = "";
+        graphics.reloadresources();
     } else if (!game.quiet) printf("Cannot unmount when no asset directory is mounted\n");
 }
 

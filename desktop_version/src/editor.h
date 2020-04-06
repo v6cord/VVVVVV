@@ -190,7 +190,7 @@ public:
 
     void saveconvertor();
     void reset();
-    void getlin(KeyPoll& key, enum textmode mode, std::string prompt, std::string *ptr);
+    void getlin(enum textmode mode, std::string prompt, std::string *ptr);
     void loadlevel(int rxi, int ryi, int altstate);
 
     void placetile(int x, int y, int t);

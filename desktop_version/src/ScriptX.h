@@ -8,14 +8,6 @@
 #include "Enums.h"
 
 
-class KeyPoll;
-class Graphics;
-class Game;
-class mapclass;
-class entityclass;
-class UtilityClass;
-class musicclass;
-
 class scriptx
 {
 public:

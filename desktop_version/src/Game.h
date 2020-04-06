@@ -12,8 +12,6 @@
 #include "UtilityClass.h"
 #include "GraphicsUtil.h"
 
-class Graphics;
-
 struct scriptmarker {
     int x = 0;
     int y = 0;

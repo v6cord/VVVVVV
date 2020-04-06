@@ -547,8 +547,7 @@ void editorclass::insertline(int t)
     sb.insert(sb.begin() + t, "");
 }
 
-void editorclass::getlin(KeyPoll& key, enum textmode mode, std::string prompt,
-                         std::string *ptr) {
+void editorclass::getlin(enum textmode mode, std::string prompt, std::string *ptr) {
     ed.textmod = mode;
     ed.textptr = ptr;
     ed.textdesc = prompt;
@@ -2325,7 +2324,7 @@ void editorclass::load(std::string& _path)
     //graphics.assetdir = "";
     //graphics.reloadresources();
 
-    FILESYSTEM_unmountassets(graphics);
+    FILESYSTEM_unmountassets();
 
     std::string zippath = "levels/" + _path.substr(7,_path.size()-14) + ".data.zip";
     std::string dirpath = "levels/" + _path.substr(7,_path.size()-14) + "/";
@@ -2334,7 +2333,7 @@ void editorclass::load(std::string& _path)
     if (cstr) zip_path = cstr;
     if (cstr && FILESYSTEM_directoryExists(zippath.c_str())) {
         if (!game.quiet) printf("Custom asset directory exists at %s\n",zippath.c_str());
-        FILESYSTEM_mount(zippath.c_str(), graphics);
+        FILESYSTEM_mount(zippath.c_str());
         graphics.reloadresources();
         music.init();
     } else if (zip_path != "data.zip" && !endsWith(zip_path, "/data.zip") && endsWith(zip_path, ".zip")) {
@@ -2351,7 +2350,7 @@ void editorclass::load(std::string& _path)
         graphics.reloadresources();
     } else if (FILESYSTEM_directoryExists(dirpath.c_str())) {
         if (!game.quiet) printf("Custom asset directory exists at %s\n",dirpath.c_str());
-        FILESYSTEM_mount(dirpath.c_str(), graphics);
+        FILESYSTEM_mount(dirpath.c_str());
         graphics.reloadresources();
     } else if (!game.quiet) {
         printf("Custom asset directory does not exist\n");
@@ -5495,7 +5494,7 @@ void editorinput()
                             map.nexttowercolour();
 
                             ed.keydelay = 6;
-                            ed.getlin(key, TEXT_LOAD, "Enter map filename "
+                            ed.getlin(TEXT_LOAD, "Enter map filename "
                                       "to load:", &(ed.filename));
                             game.mapheld=true;
                             graphics.backgrounddrawn=false;
@@ -5507,7 +5506,7 @@ void editorinput()
                             map.nexttowercolour();
 
                             ed.keydelay = 6;
-                            ed.getlin(key, TEXT_SAVE, "Enter map filename "
+                            ed.getlin(TEXT_SAVE, "Enter map filename "
                                       "to save map as:", &(ed.filename));
                             game.mapheld=true;
                             graphics.backgrounddrawn=false;
@@ -5715,7 +5714,7 @@ void editorinput()
                                 ed.keydelay=6;
                             }
                         } else if (game.currentmenuoption == 4) {
-                            ed.getlin(key, TEXT_ROOMNAME, "Enter new room name:",
+                            ed.getlin(TEXT_ROOMNAME, "Enter new room name:",
                                 &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
                             ed.settingsmod = 0;
                         } else if (game.currentmenuoption == 5) {
@@ -5764,7 +5763,7 @@ void editorinput()
                             map.nexttowercolour();
 
                             ed.keydelay = 6;
-                            ed.getlin(key, TEXT_SAVE, "Enter map filename "
+                            ed.getlin(TEXT_SAVE, "Enter map filename "
                                       "to save map as:", &(ed.filename));
                             game.mapheld=true;
                             graphics.backgrounddrawn=false;
@@ -6223,13 +6222,13 @@ void editorinput()
             }
             if (key.keymap[SDLK_e]) {
                 ed.keydelay = 6;
-                ed.getlin(key, TEXT_ROOMNAME, "Enter new room name:",
+                ed.getlin(TEXT_ROOMNAME, "Enter new room name:",
                           &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
                 game.mapheld=true;
             }
             if (key.keymap[SDLK_g]) {
                 ed.keydelay = 6;
-                ed.getlin(key, TEXT_GOTOROOM, "Enter room coordinates (x,y):",
+                ed.getlin(TEXT_GOTOROOM, "Enter room coordinates (x,y):",
                           NULL);
                 game.mapheld=true;
             }
@@ -6251,7 +6250,7 @@ void editorinput()
             if(key.keymap[SDLK_s])
             {
                 ed.keydelay = 6;
-                ed.getlin(key, TEXT_SAVE, "Enter map filename to save map as:",
+                ed.getlin(TEXT_SAVE, "Enter map filename to save map as:",
                           &(ed.filename));
                 game.mapheld=true;
                 graphics.backgrounddrawn=false;
@@ -6260,7 +6259,7 @@ void editorinput()
             if(key.keymap[SDLK_l])
             {
                 ed.keydelay = 6;
-                ed.getlin(key, TEXT_LOAD, "Enter map filename to load:",
+                ed.getlin(TEXT_LOAD, "Enter map filename to load:",
                           &(ed.filename));
                 game.mapheld=true;
                 graphics.backgrounddrawn=false;
@@ -6444,7 +6443,7 @@ void editorinput()
                                 ed.textent=edentity.size();
                                 addedentity((ed.boundx1/8),(ed.boundy1/8),19,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
-                                ed.getlin(key, TEXT_SCRIPT, "Enter script name:",
+                                ed.getlin(TEXT_SCRIPT, "Enter script name:",
                                           &(edentity[ed.textent].scriptname));
                                 if (ed.boundarytype==5)
                                     // Don't forget to subtract 1 from index because we added an entity
@@ -6458,7 +6457,7 @@ void editorinput()
                                 ed.textcount = 2;
                                 addedentity((ed.boundx1/8),(ed.boundy1/8),20,
                                             (ed.boundx2-ed.boundx1)/8, (ed.boundy2-ed.boundy1)/8);
-                                ed.getlin(key, TEXT_ACTIVITYZONE,
+                                ed.getlin(TEXT_ACTIVITYZONE,
                                           "Enter activity zone text:",
                                           &(edentity[ed.textent].activityname));
                             }
@@ -6710,7 +6709,7 @@ void editorinput()
                                 ed.lclickdelay=1;
                                 ed.textent=edentity.size();
                                 addedentity(tx, ty, 17);
-                                ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
+                                ed.getlin(TEXT_ROOMTEXT, "Enter roomtext:",
                                           &(edentity[ed.textent].scriptname));
                                 graphics.backgrounddrawn=false;
                             }
@@ -6780,7 +6779,7 @@ void editorinput()
                                 ed.lclickdelay=1;
                                 ed.textent=edentity.size();
                                 addedentity(tx, ty, 18, 0);
-                                ed.getlin(key, TEXT_SCRIPT, "Enter script name",
+                                ed.getlin(TEXT_SCRIPT, "Enter script name",
                                           &(edentity[ed.textent].scriptname));
                             }
                             else if(ed.drawmode==13)
@@ -6925,14 +6924,14 @@ void editorinput()
                         else if(edentity[tmp].t==17)
                         {
                             ed.lclickdelay=1;
-                            ed.getlin(key, TEXT_ROOMTEXT, "Enter roomtext:",
+                            ed.getlin(TEXT_ROOMTEXT, "Enter roomtext:",
                                       &(edentity[tmp].scriptname));
                             ed.textent=tmp;
                         }
                         else if(edentity[tmp].t==18 || edentity[tmp].t==19)
                         {
                             ed.lclickdelay=1;
-                            ed.getlin(key, TEXT_ROOMTEXT, "Enter script name:",
+                            ed.getlin(TEXT_ROOMTEXT, "Enter script name:",
                                       &(edentity[ed.textent].scriptname));
                             ed.textent=tmp;
 

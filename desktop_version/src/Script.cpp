@@ -285,7 +285,7 @@ void quit() {
     if(map.custommodeforreal) {
         graphics.flipmode = false;
         game.gamestate = TITLEMODE;
-        FILESYSTEM_unmountassets(graphics);
+        FILESYSTEM_unmountassets();
         graphics.fademode = 4;
         music.niceplay(6);
         graphics.backgrounddrawn = true;
@@ -3496,7 +3496,7 @@ void scriptclass::run() {
 
 void scriptclass::resetgametomenu() {
     game.gamestate = TITLEMODE;
-    FILESYSTEM_unmountassets(graphics);
+    FILESYSTEM_unmountassets();
     graphics.flipmode = false;
     obj.nentity = 0;
     graphics.fademode = 4;

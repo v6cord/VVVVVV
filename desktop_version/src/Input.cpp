@@ -2560,7 +2560,7 @@ void mapinput()
                 graphics.fademode = 2;
                 music.fadeout();
                 map.nexttowercolour();
-                FILESYSTEM_unmountassets(graphics);
+                FILESYSTEM_unmountassets();
             }
         }
 

@@ -2025,7 +2025,7 @@ void Game::updatestate()
         case 1015:
             graphics.flipmode = false;
             gamestate = TITLEMODE;
-            FILESYSTEM_unmountassets(graphics);
+            FILESYSTEM_unmountassets();
             graphics.fademode = 4;
             music.play(6);
             graphics.backgrounddrawn = true;
