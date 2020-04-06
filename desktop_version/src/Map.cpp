@@ -1698,7 +1698,7 @@ void mapclass::loadlevel(int rx, int ry)
 	case 1: //World Map
 		tileset = 1;
 		extrarow = 1;
-		tmap = otherlevel.loadlevel(rx, ry, game, obj);
+		tmap = otherlevel.loadlevel(rx, ry);
 		fillcontent(tmap);
 		roomname = otherlevel.roomname;
 		tileset = otherlevel.roomtileset;
@@ -1711,7 +1711,7 @@ void mapclass::loadlevel(int rx, int ry)
 		}
 		break;
 	case 2: //The Lab
-		tmap = lablevel.loadlevel(rx, ry, game, obj);
+		tmap = lablevel.loadlevel(rx, ry);
 		fillcontent(tmap);
 		roomname = lablevel.roomname;
 		tileset = 1;
@@ -1747,7 +1747,7 @@ void mapclass::loadlevel(int rx, int ry)
 		obj.createentity(280, 3216, 9, 8); // (shiny trinket)
 		break;
 	case 4: //The Warpzone
-		tmap = warplevel.loadlevel(rx, ry, game, obj);
+		tmap = warplevel.loadlevel(rx, ry);
 		fillcontent(tmap);
 		roomname = warplevel.roomname;
 		tileset = 1;
@@ -1763,13 +1763,13 @@ void mapclass::loadlevel(int rx, int ry)
 		if (warpx && warpy) background = 5;
 		break;
 	case 5: //Space station
-		tmap = spacestation2.loadlevel(rx, ry, game, obj);
+		tmap = spacestation2.loadlevel(rx, ry);
 		fillcontent(tmap);
 		roomname = spacestation2.roomname;
 		tileset = 0;
 		break;
 	case 6: //final level
-		tmap = finallevel.loadlevel(finalx, finaly, game, obj);
+		tmap = finallevel.loadlevel(finalx, finaly);
 		fillcontent(tmap);
 		roomname = finallevel.roomname;
 		tileset = 1;
@@ -1827,7 +1827,7 @@ void mapclass::loadlevel(int rx, int ry)
 		break;
 	case 11: //Tower Hallways //Content is held in final level routine
 	{
-		tmap = finallevel.loadlevel(rx, ry, game, obj);
+		tmap = finallevel.loadlevel(rx, ry);
 		fillcontent(tmap);
 		roomname = finallevel.roomname;
 		tileset = 2;
