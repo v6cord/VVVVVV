@@ -1568,24 +1568,12 @@ void entityclass::setenemyroom( int t, int rx, int ry )
         break;
     case rn(18, 2): // Thinking with Portals
         //depends on direction
-        if (entities[t].xp ==88)
-        {
-            entities[t].tile = 54+12;
-            entities[t].colour = 12;
-            entities[t].animate = 100;
-            entities[t].w = 60;
-            entities[t].h = 16;
-            entities[t].size = 10;
-        }
-        else
-        {
-            entities[t].tile = 54;
-            entities[t].colour = 12;
-            entities[t].animate = 100;
-            entities[t].w = 60;
-            entities[t].h = 16;
-            entities[t].size = 10;
-        }
+        entities[t].tile = 54;
+        entities[t].colour = 12;
+        entities[t].animate = 9;
+        entities[t].w = 60;
+        entities[t].h = 16;
+        entities[t].size = 10;
         break;
         //Final level
     case rn(50-100, 53-100):  //The Yes Men
@@ -4305,6 +4293,11 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                     entities[_i].drawframe += entities[_i].walkingframe;
 
                     if (entities[_i].vx > 0.000f ) entities[_i].drawframe -= 4;
+                    break;
+                case 9:
+                    // No animation (with directions)
+                    entities[_i].drawframe = entities[_i].tile;
+                    if (entities[_i].vx < 0.000f ) entities[_i].drawframe += 12;
                     break;
                 case 10:
                     //Threadmill left
