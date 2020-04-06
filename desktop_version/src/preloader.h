@@ -6,7 +6,7 @@
 #include "UtilityClass.h"
 #include <atomic>
 
-void preloaderrender(Graphics& dwgfx, Game& game, UtilityClass& help);
+void preloaderrender();
 void preloaderloop();
 extern std::atomic_int pre_fakepercent;
 extern std::atomic_bool pre_quickend;
