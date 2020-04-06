@@ -338,7 +338,8 @@ void BlitSurfaceColoured(
     SDL_Rect* _srcRect,
     SDL_Surface* _dest,
     SDL_Rect* _destRect,
-    colourTransform& ct
+    colourTransform& ct,
+    int flipped/*= 0*/
 ) {
     if (ct.nocolor) return BlitSurfaceStandard(_src, _srcRect, _dest, _destRect);
 
@@ -362,7 +363,11 @@ void BlitSurfaceColoured(
     {
         for(int y = 0; y < tempsurface->h; y++)
         {
-            Uint32 pixel = ReadPixel(_src, x, y);
+            int srcx = x;
+            if (flipped) {
+                srcx = flipped - x - 1;
+            }
+            Uint32 pixel = ReadPixel(_src, srcx, y);
             Uint32 Alpha = pixel & fmt.Amask;
             Uint32 result = ct.colour & 0x00FFFFFF;
             Uint32 CTAlpha = ct.colour & fmt.Amask;

@@ -1512,7 +1512,8 @@ void entityclass::setenemyroom( int t, int rx, int ry )
     case rn(16, 2): // (Manequins)
         entities[t].tile = 52;
         entities[t].colour = 7;
-        entities[t].animate = 5;
+        entities[t].animate = 12;
+        entities[t].flippedsize = 24;
         entities[t].w = 16;
         entities[t].h = 25;
         entities[t].yp -= 4;
@@ -4334,6 +4335,23 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                 case 100:
                     //Simple case for no animation (platforms, etc)
                     entities[_i].drawframe = entities[_i].tile;
+                    break;
+                case 12:
+                    //Simpler Loop (just two frames) (slower) (directionally flipped)
+                    entities[_i].framedelay--;
+                    if(entities[_i].framedelay<=0)
+                    {
+                        entities[_i].framedelay = 6;
+                        entities[_i].walkingframe++;
+                        if (entities[_i].walkingframe == 2)
+                        {
+                            entities[_i].walkingframe = 0;
+                        }
+                    }
+
+                    entities[_i].drawframe = entities[_i].tile;
+                    entities[_i].drawframe += entities[_i].walkingframe;
+                    entities[_i].flipped = entities[_i].vx < 0.000f ? entities[_i].flippedsize : 0;
                     break;
                 default:
                     entities[_i].drawframe = entities[_i].tile;

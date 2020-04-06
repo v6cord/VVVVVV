@@ -39,6 +39,8 @@ public:
     //Animation
     int framedelay, drawframe, walkingframe, dir, actionframe = 0;
     int yp, xp = 0;
+    int flipped = 0;
+    int flippedsize = 0;
 };
 
 #endif /* ENT_H */
