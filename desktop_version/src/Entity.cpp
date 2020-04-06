@@ -1512,8 +1512,12 @@ void entityclass::setenemyroom( int t, int rx, int ry )
     case rn(16, 2): // (Manequins)
         entities[t].tile = 52;
         entities[t].colour = 7;
-        entities[t].animate = 12;
-        entities[t].flippedsize = 24;
+        if (IS_VCE_LEVEL) {
+            entities[t].animate = 12;
+            entities[t].flippedsize = 24;
+        } else {
+            entities[t].animate = 5;
+        }
         entities[t].w = 16;
         entities[t].h = 25;
         entities[t].yp -= 4;
@@ -1547,11 +1551,25 @@ void entityclass::setenemyroom( int t, int rx, int ry )
         entities[t].h = 16;
         break;
     case rn(17, 3): // Edge Games
-        entities[t].tile = 160;
-        entities[t].colour = 8;
-        entities[t].animate = 8;
-        entities[t].w = 16;
-        entities[t].h = 16;
+        if (IS_VCE_LEVEL) {
+            entities[t].tile = 160;
+            entities[t].colour = 8;
+            entities[t].animate = 8;
+            entities[t].w = 16;
+            entities[t].h = 16;
+        } else if (entities[t].yp == 96) {
+            entities[t].tile = 160;
+            entities[t].colour = 8;
+            entities[t].animate = 1;
+            entities[t].w = 16;
+            entities[t].h = 16;
+        } else {
+            entities[t].tile = 156;
+            entities[t].colour = 8;
+            entities[t].animate = 1;
+            entities[t].w = 16;
+            entities[t].h = 16;
+        }
         break;
     case rn(16, 0): // I love you
         entities[t].tile = 112;
@@ -1569,12 +1587,28 @@ void entityclass::setenemyroom( int t, int rx, int ry )
         break;
     case rn(18, 2): // Thinking with Portals
         //depends on direction
-        entities[t].tile = 54;
-        entities[t].colour = 12;
-        entities[t].animate = 9;
-        entities[t].w = 60;
-        entities[t].h = 16;
-        entities[t].size = 10;
+        if (IS_VCE_LEVEL) {
+            entities[t].tile = 54;
+            entities[t].colour = 12;
+            entities[t].animate = 9;
+            entities[t].w = 60;
+            entities[t].h = 16;
+            entities[t].size = 10;
+        } else if (entities[t].xp == 88) {
+            entities[t].tile = 54+12;
+            entities[t].colour = 12;
+            entities[t].animate = 100;
+            entities[t].w = 60;
+            entities[t].h = 16;
+            entities[t].size = 10;
+        } else {
+            entities[t].tile = 54;
+            entities[t].colour = 12;
+            entities[t].animate = 100;
+            entities[t].w = 60;
+            entities[t].h = 16;
+            entities[t].size = 10;
+        }
         break;
         //Final level
     case rn(50-100, 53-100):  //The Yes Men
