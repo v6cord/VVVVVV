@@ -608,10 +608,10 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                     dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                     dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                     dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                    dwgfx.Print( 110, 65, game.timetstring(game.customtrialstats[game.currentmenuoption].time, help), tr, tg, tb);
+                    dwgfx.Print( 110, 65, game.timetstring(game.customtrialstats[game.currentmenuoption].time), tr, tg, tb);
                     dwgfx.Print( 110, 75, help.String(game.customtrialstats[game.currentmenuoption].trinkets)+"/" + help.String(ed.customtrials[game.currentmenuoption].trinkets), tr, tg, tb);
                     dwgfx.Print( 110, 85, help.String(game.customtrialstats[game.currentmenuoption].lives), tr, tg, tb);
-                    dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(help), tr, tg, tb);
+                    dwgfx.Print( 170, 65, "PAR TIME    " + game.partimestring(), tr, tg, tb);
                     dwgfx.Print( 170, 85, "Best Rank", tr, tg, tb);
                     switch(game.customtrialstats[game.currentmenuoption].rank)
                     {
@@ -1350,7 +1350,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         {
             dwgfx.bigprint( -1, 20, "Results", tr, tg, tb, true, 3);
 
-            tempstring = game.resulttimestring(help) + " / " + game.partimestring(help);
+            tempstring = game.resulttimestring() + " / " + game.partimestring();
 
             dwgfx.drawspritesetcol(30, 80-15, 50, 22, help);
             dwgfx.Print(65, 80-15, "TIME TAKEN:", 255, 255, 255);
@@ -1424,7 +1424,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                         dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                         dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                         dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[0], help), tr, tg, tb);
+                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[0]), tr, tg, tb);
                         dwgfx.Print( 110, 75, help.String(game.besttrinkets[0])+"/2", tr, tg, tb);
                         dwgfx.Print( 110, 85,help.String(game.bestlives[0]), tr, tg, tb);
 
@@ -1471,7 +1471,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                         dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                         dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                         dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[1], help), tr, tg, tb);
+                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[1]), tr, tg, tb);
                         dwgfx.Print( 110, 75, help.String(game.besttrinkets[1])+"/4", tr, tg, tb);
                         dwgfx.Print( 110, 85, help.String(game.bestlives[1]), tr, tg, tb);
 
@@ -1518,7 +1518,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                         dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                         dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                         dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[2], help), tr, tg, tb);
+                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[2]), tr, tg, tb);
                         dwgfx.Print( 110, 75, help.String(game.besttrinkets[2])+"/2", tr, tg, tb);
                         dwgfx.Print( 110, 85, help.String(game.bestlives[2]), tr, tg, tb);
 
@@ -1565,7 +1565,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                         dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                         dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                         dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[3], help), tr, tg, tb);
+                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[3]), tr, tg, tb);
                         dwgfx.Print( 110, 75, help.String(game.besttrinkets[3])+"/5", tr, tg, tb);
                         dwgfx.Print( 110, 85, help.String(game.bestlives[3]), tr, tg, tb);
 
@@ -1612,7 +1612,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                         dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                         dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                         dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[4], help), tr, tg, tb);
+                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[4]), tr, tg, tb);
                         dwgfx.Print( 110, 75, help.String(game.besttrinkets[4])+"/1", tr, tg, tb);
                         dwgfx.Print( 110, 85, help.String(game.bestlives[4]), tr, tg, tb);
 
@@ -1659,7 +1659,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                         dwgfx.Print( 16, 65, "BEST TIME  ", tr, tg, tb);
                         dwgfx.Print( 16, 75, "BEST SHINY ", tr, tg, tb);
                         dwgfx.Print( 16, 85, "BEST LIVES ", tr, tg, tb);
-                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[5], help), tr, tg, tb);
+                        dwgfx.Print( 110, 65, game.timetstring(game.besttimes[5]), tr, tg, tb);
                         dwgfx.Print( 110, 75, help.String(game.besttrinkets[5])+"/1", tr, tg, tb);
                         dwgfx.Print( 110, 85, help.String(game.bestlives[5]), tr, tg, tb);
 
@@ -2447,11 +2447,11 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
             if(game.timetrialparlost)
             {
-                dwgfx.bprint(56, 18, game.timestring(help),  196, 80, 80);
+                dwgfx.bprint(56, 18, game.timestring(),  196, 80, 80);
             }
             else
             {
-                dwgfx.bprint(56, 18, game.timestring(help),  196, 196, 196);
+                dwgfx.bprint(56, 18, game.timestring(),  196, 196, 196);
             }
             if(game.deathcounts>0)
             {
@@ -2473,12 +2473,12 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             if(game.timetrialparlost)
             {
                 dwgfx.bprint(195, 214, "PAR TIME:",  80, 80, 80);
-                dwgfx.bprint(275, 214, game.partimestring(help),  80, 80, 80);
+                dwgfx.bprint(275, 214, game.partimestring(),  80, 80, 80);
             }
             else
             {
                 dwgfx.bprint(195, 214, "PAR TIME:",  255, 255, 255);
-                dwgfx.bprint(275, 214, game.partimestring(help),  196, 196, 196);
+                dwgfx.bprint(275, 214, game.partimestring(),  196, 196, 196);
             }
         }
     }
@@ -3139,7 +3139,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
               dwgfx.Print(0, 102,help.String(game.deathcounts),  96,96,96, true);
 
               dwgfx.Print(0, 64, "[Time Taken]", 196, 196, 255 - help.glow, true);
-              dwgfx.Print(0, 52, game.timestring(help),  96, 96, 96, true);
+              dwgfx.Print(0, 52, game.timestring(),  96, 96, 96, true);
           }
           else
           {
@@ -3150,7 +3150,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
               dwgfx.Print(0, 114,help.String(game.deathcounts),  96,96,96, true);
 
               dwgfx.Print(0, 152, "[Time Taken]", 196, 196, 255 - help.glow, true);
-              dwgfx.Print(0, 164, game.timestring(help),  96, 96, 96, true);
+              dwgfx.Print(0, 164, game.timestring(),  96, 96, 96, true);
           }
         }else{
           if (dwgfx.flipmode)
@@ -3162,7 +3162,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
               dwgfx.Print(0, 102,help.String(game.deathcounts),  96,96,96, true);
 
               dwgfx.Print(0, 64, "[Time Taken]", 196, 196, 255 - help.glow, true);
-              dwgfx.Print(0, 52, game.timestring(help),  96, 96, 96, true);
+              dwgfx.Print(0, 52, game.timestring(),  96, 96, 96, true);
           }
           else
           {
@@ -3173,7 +3173,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
               dwgfx.Print(0, 114,help.String(game.deathcounts),  96,96,96, true);
 
               dwgfx.Print(0, 152, "[Time Taken]", 196, 196, 255 - help.glow, true);
-              dwgfx.Print(0, 164, game.timestring(help),  96, 96, 96, true);
+              dwgfx.Print(0, 164, game.timestring(),  96, 96, 96, true);
           }
         }
         break;
@@ -3612,11 +3612,11 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
 
             if(game.timetrialparlost)
             {
-                dwgfx.bprint(56, 18, game.timestring(help),  196, 80, 80);
+                dwgfx.bprint(56, 18, game.timestring(),  196, 80, 80);
             }
             else
             {
-                dwgfx.bprint(56, 18, game.timestring(help),  196, 196, 196);
+                dwgfx.bprint(56, 18, game.timestring(),  196, 196, 196);
             }
             if(game.deathcounts>0)
             {
@@ -3638,12 +3638,12 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
             if(game.timetrialparlost)
             {
                 dwgfx.bprint(195, 214, "PAR TIME:",  80, 80, 80);
-                dwgfx.bprint(275, 214, game.partimestring(help),  80, 80, 80);
+                dwgfx.bprint(275, 214, game.partimestring(),  80, 80, 80);
             }
             else
             {
                 dwgfx.bprint(195, 214, "PAR TIME:",  255, 255, 255);
-                dwgfx.bprint(275, 214, game.partimestring(help),  196, 196, 196);
+                dwgfx.bprint(275, 214, game.partimestring(),  196, 196, 196);
             }
         }
     }

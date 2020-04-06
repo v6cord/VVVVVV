@@ -4178,9 +4178,9 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             else
                 dwgfx.Print( 16, 75,  "TRINKETS   " + help.number(ctrial.trinkets), tr, tg, tb);
             if (ed.trialmod && (game.currentmenuoption == 4))
-                dwgfx.Print( 16, 85,  "TIME       < " + game.partimestring(help) + " >", tr, tg, tb);
+                dwgfx.Print( 16, 85,  "TIME       < " + game.partimestring() + " >", tr, tg, tb);
             else
-                dwgfx.Print( 16, 85,  "TIME       " + game.partimestring(help), tr, tg, tb);
+                dwgfx.Print( 16, 85,  "TIME       " + game.partimestring(), tr, tg, tb);
         }
         else if (game.currentmenuname == "ed_remove_trial") {
             dwgfx.bigprint( -1, 35, "Are you sure?", tr, tg, tb, true);

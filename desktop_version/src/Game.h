@@ -12,10 +12,7 @@
 #include "UtilityClass.h"
 #include "GraphicsUtil.h"
 
-class entityclass;
-class mapclass;
 class Graphics;
-class musicclass;
 
 struct scriptmarker {
     int x = 0;
@@ -66,52 +63,52 @@ public:
 
     void resetgameclock();
 
-    void customsavequick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx);
-    void savequick(mapclass& map, entityclass& obj, musicclass& music);
+    void customsavequick(std::string savfile);
+    void savequick();
 
     void gameclock();
 
-    std::string giventimestring(int hrs, int min, int sec, UtilityClass& help );
+    std::string giventimestring(int hrs, int min, int sec);
 
-    std::string  timestring(UtilityClass& help);
+    std::string  timestring();
 
-    std::string partimestring(UtilityClass& help);
+    std::string partimestring();
 
-    std::string resulttimestring(UtilityClass& help);
+    std::string resulttimestring();
 
-    std::string timetstring(int t, UtilityClass& help);
+    std::string timetstring(int t);
 
     void  createmenu(std::string t);
 
-    void lifesequence(entityclass& obj);
+    void lifesequence();
 
-    void gethardestroom(mapclass& map);
+    void gethardestroom();
 
-    void updatestate(Graphics& dwgfx, mapclass& map, entityclass& obj, UtilityClass& help, musicclass& music);
+    void updatestate();
 
-    void unlocknum(int t, mapclass& map, Graphics& dwgfx, musicclass& music);
+    void unlocknum(int t);
 
-    void loadstats(mapclass& map, Graphics& dwgfx, musicclass& music);
+    void loadstats();
 
-    void  savestats(mapclass& map, Graphics& dwgfx, musicclass& music);
+    void  savestats();
 
-    void deletestats(mapclass& map, Graphics& dwgfx, musicclass& music);
+    void deletestats();
 
     void deletequick();
 
-    void savetele(mapclass& map, entityclass& obj, musicclass& music);
+    void savetele();
 
-    void loadtele(mapclass& map, entityclass& obj, musicclass& music);
+    void loadtele();
 
     void deletetele();
 
-    void customstart(entityclass& obj, musicclass& music );
+    void customstart();
 
-    void start(entityclass& obj, musicclass& music );
+    void start();
 
-    void startspecial(int t, entityclass& obj, musicclass& music);
+    void startspecial(int t);
 
-    void starttrial(int t, entityclass& obj, musicclass& music);
+    void starttrial(int t);
 
     void telegotoship()
     {
@@ -133,16 +130,16 @@ public:
 
     void swnpenalty();
 
-    void deathsequence(mapclass& map, entityclass& obj, musicclass& music);
+    void deathsequence();
 
     void customloadtrialsave(std::string savfile);
     void customsavetrialsave(std::string savfile);
-    void customloadquick(std::string savfile, mapclass& map, entityclass& obj, musicclass& music, Graphics& dwgfx, Game& game);
-    void loadquick(mapclass& map, entityclass& obj, musicclass& music);
+    void customloadquick(std::string savfile);
+    void loadquick();
 
-    void loadsummary(mapclass& map, UtilityClass& help);
+    void loadsummary();
 
-    void initteleportermode(mapclass& map);
+    void initteleportermode();
 
 	std::string saveFilePath;
 

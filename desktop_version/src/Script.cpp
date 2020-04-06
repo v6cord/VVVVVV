@@ -3096,13 +3096,11 @@ void scriptclass::run(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 } else if (words[0] == "telesave") {
                     if (!game.intimetrial && !game.nodeathmode &&
                         !game.inintermission)
-                        game.savetele(map, obj, music);
+                        game.savetele();
                 } else if (words[0] == "customquicksave") {
                     if (!map.custommode || map.custommodeforreal)
                         if (!game.intimetrial && !game.nodeathmode)
-                            game.customsavequick(
-                                ed.ListOfMetaData[game.playcustomlevel].filename,
-                                map, obj, music, dwgfx);
+                            game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename);
                 } else if (words[0] == "createlastrescued") {
                     if (game.lastsaved == 2) {
                         r = 14;
@@ -3520,7 +3518,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
         case 0:  // Normal new game
             game.gamestate = GAMEMODE;
             hardreset(key, dwgfx, game, map, obj, help, music);
-            game.start(obj, music);
+            game.start();
             game.jumpheld = true;
             dwgfx.showcutscenebars = true;
             dwgfx.cutscenebarspos = 320;
@@ -3541,8 +3539,8 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
         case 1:
             game.gamestate = GAMEMODE;
             hardreset(key, dwgfx, game, map, obj, help, music);
-            game.start(obj, music);
-            game.loadtele(map, obj, music);
+            game.start();
+            game.loadtele();
             game.gravitycontrol = game.savegc;
             game.jumpheld = true;
 
@@ -3561,8 +3559,8 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
         case 2:  // Load Quicksave
             game.gamestate = GAMEMODE;
             hardreset(key, dwgfx, game, map, obj, help, music);
-            game.start(obj, music);
-            game.loadquick(map, obj, music);
+            game.start();
+            game.loadquick();
             game.gravitycontrol = game.savegc;
             game.jumpheld = true;
 
@@ -3602,7 +3600,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
 
             music.fadeout();
             game.gamestate = GAMEMODE;
-            game.starttrial(game.timetriallevel, obj, music);
+            game.starttrial(game.timetriallevel);
             game.jumpheld = true;
 
             if (dwgfx.setflipmode) dwgfx.flipmode = true;  // set flipmode
@@ -3628,7 +3626,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
 
             music.fadeout();
             game.gamestate = GAMEMODE;
-            game.starttrial(game.timetriallevel, obj, music);
+            game.starttrial(game.timetriallevel);
             game.jumpheld = true;
 
             if (dwgfx.setflipmode) dwgfx.flipmode = true;  // set flipmode
@@ -3654,7 +3652,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
 
             music.fadeout();
             game.gamestate = GAMEMODE;
-            game.starttrial(game.timetriallevel, obj, music);
+            game.starttrial(game.timetriallevel);
             game.jumpheld = true;
 
             if (dwgfx.setflipmode) dwgfx.flipmode = true;  // set flipmode
@@ -3680,7 +3678,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
 
             music.fadeout();
             game.gamestate = GAMEMODE;
-            game.starttrial(game.timetriallevel, obj, music);
+            game.starttrial(game.timetriallevel);
             game.jumpheld = true;
 
             if (dwgfx.setflipmode) dwgfx.flipmode = true;  // set flipmode
@@ -3706,7 +3704,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
 
             music.fadeout();
             game.gamestate = GAMEMODE;
-            game.starttrial(game.timetriallevel, obj, music);
+            game.starttrial(game.timetriallevel);
             game.jumpheld = true;
 
             if (dwgfx.setflipmode) dwgfx.flipmode = true;  // set flipmode
@@ -3738,7 +3736,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_mapcol = 0;
             map.final_colorframe = 0;
             game.gamestate = GAMEMODE;
-            game.starttrial(game.timetriallevel, obj, music);
+            game.starttrial(game.timetriallevel);
             game.jumpheld = true;
 
             if (dwgfx.setflipmode) dwgfx.flipmode = true;  // set flipmode
@@ -3755,11 +3753,11 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             game.gamestate = GAMEMODE;
             hardreset(key, dwgfx, game, map, obj, help, music);
             game.nodeathmode = true;
-            game.start(obj, music);
+            game.start();
             game.jumpheld = true;
             dwgfx.showcutscenebars = true;
             dwgfx.cutscenebarspos = 320;
-            // game.starttest(obj, music);
+            // game.starttest();
             // music.play(4);
 
             // set flipmode
@@ -3781,11 +3779,11 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             game.nodeathmode = true;
             game.nocutscenes = true;
 
-            game.start(obj, music);
+            game.start();
             game.jumpheld = true;
             dwgfx.showcutscenebars = true;
             dwgfx.cutscenebarspos = 320;
-            // game.starttest(obj, music);
+            // game.starttest();
             // music.play(4);
 
             // set flipmode
@@ -3805,7 +3803,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             game.gamestate = GAMEMODE;
             hardreset(key, dwgfx, game, map, obj, help, music);
 
-            game.startspecial(0, obj, music);
+            game.startspecial(0);
             game.jumpheld = true;
 
             // Secret lab, so reveal the map, give them all 20 trinkets
@@ -3849,7 +3847,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -3882,7 +3880,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -3915,7 +3913,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -3948,7 +3946,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -3978,7 +3976,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -4008,7 +4006,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -4038,7 +4036,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -4068,7 +4066,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.final_colormode = false;
             map.final_mapcol = 0;
             map.final_colorframe = 0;
-            game.startspecial(1, obj, music);
+            game.startspecial(1);
             game.jumpheld = true;
 
             // set flipmode
@@ -4117,7 +4115,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
                         ed.level[i + (j * ed.maxwidth)].warpdir;
                 }
             }
-            game.customstart(obj, music);
+            game.customstart();
             game.jumpheld = true;
 
             ed.vceversion = VCEVERSION;
@@ -4163,7 +4161,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             game.gamestate = GAMEMODE;
             music.fadeout();
             hardreset(key, dwgfx, game, map, obj, help, music);
-            game.customstart(obj, music);
+            game.customstart();
             game.jumpheld = true;
 
             map.custommodeforreal = true;
@@ -4210,10 +4208,8 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.customx = 100;
             map.customy = 100;
 
-            game.customstart(obj, music);
-            game.customloadquick(
-                ed.ListOfMetaData[game.playcustomlevel].filename, map, obj,
-                music, dwgfx, game);
+            game.customstart();
+            game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename);
             game.jumpheld = true;
             game.gravitycontrol = game.savegc;
 
@@ -4260,12 +4256,9 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
             map.customx = 100;
             map.customy = 100;
 
-            game.customstart(obj,
-                             music);  // I honestly have no idea what this does
+            game.customstart();  // I honestly have no idea what this does
             // Actually, the level is already loaded! This is just to be safe...
-            game.customloadquick(
-                ed.ListOfMetaData[game.playcustomlevel].filename, map, obj,
-                music, dwgfx, game);
+            game.customloadquick(ed.ListOfMetaData[game.playcustomlevel].filename);
             game.jumpheld = true;
             game.gravitycontrol = game.savegc;
 
@@ -4311,7 +4304,7 @@ void scriptclass::startgamemode(int t, KeyPoll& key, Graphics& dwgfx,
 
 #endif
         case 100:
-            game.savestats(map, dwgfx, music);
+            game.savestats();
 
             SDL_Quit();
             exit(0);
@@ -4410,11 +4403,9 @@ void scriptclass::teleport(Graphics& dwgfx, Game& game, mapclass& map,
                 dwgfx.textboxtimer(25);
             }
             if (map.custommodeforreal)
-                game.customsavequick(
-                    ed.ListOfMetaData[game.playcustomlevel].filename, map, obj,
-                    music, dwgfx);
+                game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename);
             else if (!map.custommode)
-                game.savetele(map, obj, music);
+                game.savetele();
         }
     }
 }

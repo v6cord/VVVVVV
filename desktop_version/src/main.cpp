@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
         key.isActive = true;
         game.gametimer = 0;
         obj.init();
-        game.loadstats(map, graphics, music);
+        game.loadstats();
 #if !defined(__APPLE__)
         std::condition_variable timeout;
         std::mutex mutex;
@@ -675,7 +675,7 @@ int main(int argc, char *argv[])
             if (game.savemystats)
             {
                 game.savemystats = false;
-                game.savestats(map, graphics, music);
+                game.savestats();
             }
 
             //Mute button
@@ -743,7 +743,7 @@ int main(int argc, char *argv[])
         log_close();
 
         //Quit SDL
-        game.savestats(map, graphics, music);
+        game.savestats();
         NETWORK_shutdown();
         SDL_Quit();
         FILESYSTEM_deinit();

@@ -267,7 +267,7 @@ void preloaderloop() {
         if (game.savemystats)
         {
             game.savemystats = false;
-            game.savestats(map, graphics, music);
+            game.savestats();
         }
 
         //Mute button
