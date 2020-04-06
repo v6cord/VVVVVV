@@ -3312,29 +3312,29 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
 
     //Or draw background
-    //dwgfx.drawbackground(1, map);
+    //dwgfx.drawbackground(1);
     if(!ed.settingsmod)
     {
         switch(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir)
         {
         case 1:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(3, map);
+            dwgfx.drawbackground(3);
             break;
         case 2:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(4, map);
+            dwgfx.drawbackground(4);
             break;
         case 3:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(5, map);
+            dwgfx.drawbackground(5);
             break;
         default:
             break;
         }
 
         if (ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower)
-            dwgfx.drawbackground(9, map);
+            dwgfx.drawbackground(9);
     }
 
     //Draw map, in function
@@ -3471,7 +3471,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             switch(edentity[i].t) {
             case 1: // Enemies
-                dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcol,help);
+                dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcol);
                 if(edentity[i].p1==0)
                     dwgfx.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
                 if(edentity[i].p1==1)
@@ -3544,7 +3544,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 break;
             }
             case 5: // Flip Tokens
-                dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0), help);
+                dwgfx.drawspritesetcol(ex, ey, 192, obj.crewcolour(0));
                 //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
                 fillboxabs(dwgfx, ex, ey, 16, 16, dwgfx.getRGB(164,164,255));
                 break;
@@ -3594,21 +3594,18 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                                 help.String(ed.findwarptoken(i)),210,210,255);
                 break;
             case 14: // Teleporter
-                dwgfx.drawtele(ex, ey, 1, 100, help);
+                dwgfx.drawtele(ex, ey, 1, 100);
                 fillboxabs(dwgfx, ex, ey, 8*12, 8*12, dwgfx.getRGB(164,164,255));
                 break;
             case 15: // Crewmates
-                dwgfx.drawspritesetcol(ex - 4, ey, 144,
-                                       obj.crewcolour(edentity[i].p1), help);
+                dwgfx.drawspritesetcol(ex - 4, ey, 144, obj.crewcolour(edentity[i].p1));
                 fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
                 break;
             case 16: // Start
                 if (edentity[i].p1==0) // Left
-                    dwgfx.drawspritesetcol(ex - 4, ey, 0,
-                                           obj.crewcolour(0), help);
+                    dwgfx.drawspritesetcol(ex - 4, ey, 0, obj.crewcolour(0));
                 else if (edentity[i].p1==1)
-                    dwgfx.drawspritesetcol(ex - 4, ey, 3,
-                                           obj.crewcolour(0), help);
+                    dwgfx.drawspritesetcol(ex - 4, ey, 3, obj.crewcolour(0));
                 fillboxabs(dwgfx, ex, ey, 16, 24, dwgfx.getRGB(164,164,164));
                 if(ed.entframe<2)
                     dwgfx.Print(ex - 12, ey - 8, "START", 255, 255, 255);
@@ -3671,8 +3668,8 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 }
                 break;
             case 999: // ?
-                //dwgfx.drawspritesetcol(ex, ey, 3, 102, help);
-                dwgfx.setcol(102, help);
+                //dwgfx.drawspritesetcol(ex, ey, 3, 102);
+                dwgfx.setcol(102);
                 dwgfx.drawimage(3, ex, ey);
                 //dwgfx.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
                 fillboxabs(dwgfx, ex, ey, 464, 320, dwgfx.getRGB(164,164,255));
@@ -3767,7 +3764,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             point tpoint;
             tpoint.x = ed.ghosts[i].x;
             tpoint.y = ed.ghosts[i].y;
-            graphics.setcol(ed.ghosts[i].col, help);
+            graphics.setcol(ed.ghosts[i].col);
             Uint32 alpha = graphics.ct.colour & graphics.backBuffer->format->Amask;
             Uint32 therest = graphics.ct.colour & 0x00FFFFFF;
             alpha = (3 * (alpha >> 24) / 4) << 24;
@@ -3854,7 +3851,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             }
         }
     } else {
-        dwgfx.drawspritesetcol((ed.tilex*8) - 4, (ed.tiley*8), 0, obj.crewcolour(0), help);
+        dwgfx.drawspritesetcol((ed.tilex*8) - 4, (ed.tiley*8), 0, obj.crewcolour(0));
         fillboxabs(dwgfx, (ed.tilex*8),(ed.tiley*8),16,24, dwgfx.getRGB(200,32,32));
     }
 
@@ -4082,7 +4079,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
     }
     else if(ed.settingsmod)
     {
-        if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo(map);
+        if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo();
 
         int tr = map.r - (help.glow / 4) - int(fRandom() * 4);
         int tg = map.g - (help.glow / 4) - int(fRandom() * 4);
@@ -4369,7 +4366,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
             dwgfx.bigprint( -1, 110, "quitting?", tr, tg, tb, true);
         }
 
-        dwgfx.drawmenu(game, tr, tg, tb, 15);
+        dwgfx.drawmenu(tr, tg, tb, 15);
 
         /*
         dwgfx.Print(4, 224, "Enter name to save map as:", 255,255,255, false);
@@ -4506,7 +4503,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
                 dwgfx.drawhuetile(tx+8, ty+8, 48, 8);
                 //19:
                 tx+=tg;
-                dwgfx.drawtelepart(tx, ty, 1, 100, help);
+                dwgfx.drawtelepart(tx, ty, 1, 100);
 
                 std::string toolkeys [10] = {"R","T","Y","U","I","O","P","^1","^2","^3"};
                 for (int i = 0; i < 10; i++) {

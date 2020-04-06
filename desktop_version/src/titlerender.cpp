@@ -547,7 +547,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
     }
     else
     {
-        if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo(map);
+        if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo();
         dwgfx.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
         tr = map.r - (help.glow / 4) - int(fRandom() * 4);
@@ -1244,13 +1244,13 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 dwgfx.Print(0, 80-20, game.tele_currentarea, 25, 255 - (help.glow / 2), 255 - (help.glow / 2), true);
                 for (int i = 0; i < 6; i++)
                 {
-                    dwgfx.drawcrewman(169-(3*42)+(i*42), 95-20, i, game.tele_crewstats[i], help, true);
+                    dwgfx.drawcrewman(169-(3*42)+(i*42), 95-20, i, game.tele_crewstats[i], true);
                 }
                 dwgfx.Print(160 - 84, 132-20, game.tele_gametime, 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
                 dwgfx.Print(160 + 40, 132-20, help.number(game.tele_trinkets), 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
 
-                dwgfx.drawspritesetcol(50, 126-20, 50, 18, help);
-                dwgfx.drawspritesetcol(175, 126-20, 22, 18, help);
+                dwgfx.drawspritesetcol(50, 126-20, 50, 18);
+                dwgfx.drawspritesetcol(175, 126-20, 22, 18);
             }
             else if (game.currentmenuoption == 1)
             {
@@ -1261,13 +1261,13 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
                 dwgfx.Print(0, 80-20, game.quick_currentarea, 25, 255 - (help.glow / 2), 255 - (help.glow / 2), true);
                 for (int i = 0; i < 6; i++)
                 {
-                    dwgfx.drawcrewman(169-(3*42)+(i*42), 95-20, i, game.quick_crewstats[i], help, true);
+                    dwgfx.drawcrewman(169-(3*42)+(i*42), 95-20, i, game.quick_crewstats[i], true);
                 }
                 dwgfx.Print(160 - 84, 132-20, game.quick_gametime, 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
                 dwgfx.Print(160 + 40, 132-20, help.number(game.quick_trinkets), 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
 
-                dwgfx.drawspritesetcol(50, 126-20, 50, 18, help);
-                dwgfx.drawspritesetcol(175, 126-20, 22, 18, help);
+                dwgfx.drawspritesetcol(50, 126-20, 50, 18);
+                dwgfx.drawspritesetcol(175, 126-20, 22, 18);
             }
         }
         else if (game.currentmenuname == "gameover" || game.currentmenuname == "gameover2")
@@ -1282,7 +1282,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
             for (int i = 0; i < 6; i++)
             {
-                dwgfx.drawcrewman(169-(3*42)+(i*42), 68, i, game.crewstats[i], help, true);
+                dwgfx.drawcrewman(169-(3*42)+(i*42), 68, i, game.crewstats[i], true);
             }
             tempstring = "You rescued " + help.number(game.crewrescued()) + " crewmates";
             dwgfx.Print(0, 100, tempstring, tr, tg, tb, true);
@@ -1333,7 +1333,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
             for (int i = 0; i < 6; i++)
             {
-                dwgfx.drawcrewman(169-(3*42)+(i*42), 68, i, game.crewstats[i], help, true);
+                dwgfx.drawcrewman(169-(3*42)+(i*42), 68, i, game.crewstats[i], true);
             }
             tempstring = "You rescued all the crewmates!";
             dwgfx.Print(0, 100, tempstring, tr, tg, tb, true);
@@ -1352,7 +1352,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
 
             tempstring = game.resulttimestring() + " / " + game.partimestring();
 
-            dwgfx.drawspritesetcol(30, 80-15, 50, 22, help);
+            dwgfx.drawspritesetcol(30, 80-15, 50, 22);
             dwgfx.Print(65, 80-15, "TIME TAKEN:", 255, 255, 255);
             dwgfx.Print(65, 90-15, tempstring, tr, tg, tb);
             if (game.timetrialresulttime <= game.timetrialpar)
@@ -1361,7 +1361,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
 
             tempstring = help.String(game.deathcounts);
-            dwgfx.drawspritesetcol(30-4, 80+20-4, 12, 22, help);
+            dwgfx.drawspritesetcol(30-4, 80+20-4, 12, 22);
             dwgfx.Print(65, 80+20, "NUMBER OF DEATHS:", 255, 255, 255);
             dwgfx.Print(65, 90+20, tempstring, tr, tg, tb);
             if (game.deathcounts == 0)
@@ -1370,7 +1370,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             }
 
             tempstring = help.String(game.trinkets) + " of " + help.String(game.timetrialshinytarget);
-            dwgfx.drawspritesetcol(30, 80+55, 22, 22, help);
+            dwgfx.drawspritesetcol(30, 80+55, 22, 22);
             dwgfx.Print(65, 80+55, "SHINY TRINKETS:", 255, 255, 255);
             dwgfx.Print(65, 90+55, tempstring, tr, tg, tb);
             if (game.trinkets >= game.timetrialshinytarget)
@@ -1801,31 +1801,31 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
         if(tb>255) tb=255;
         if (game.currentmenuname == "timetrials" || game.currentmenuname == "unlockmenutrials")
         {
-            dwgfx.drawmenu(game, tr, tg, tb, 15);
+            dwgfx.drawmenu(tr, tg, tb, 15);
         }
         else if (game.currentmenuname == "unlockmenu")
         {
-            dwgfx.drawmenu(game, tr, tg, tb, 15);
+            dwgfx.drawmenu(tr, tg, tb, 15);
         }
         else if (game.currentmenuname == "playmodes")
         {
-            dwgfx.drawmenu(game, tr, tg, tb, 20);
+            dwgfx.drawmenu(tr, tg, tb, 20);
         }
         else if (game.currentmenuname == "mainmenu")
         {
-            dwgfx.drawmenu(game, tr, tg, tb, 15);
+            dwgfx.drawmenu(tr, tg, tb, 15);
         }
         else if (game.currentmenuname == "playerworlds")
         {
-            dwgfx.drawmenu(game, tr, tg, tb, 15);
+            dwgfx.drawmenu(tr, tg, tb, 15);
         }
         else if (game.currentmenuname == "levellist")
         {
-            dwgfx.drawlevelmenu(game, tr, tg, tb, 5);
+            dwgfx.drawlevelmenu(tr, tg, tb, 5);
         }
         else
         {
-            dwgfx.drawmenu(game, tr, tg, tb);
+            dwgfx.drawmenu(tr, tg, tb);
         }
 
         //dwgfx.Print(5, 228, "Left/Right to Choose, V to Select", tr, tg, tb, true);
@@ -1861,8 +1861,8 @@ void gamecompleterender(Graphics& dwgfx, Game& game, entityclass& obj, UtilityCl
     //dwgfx.backbuffer.lock();
     FillRect(dwgfx.backBuffer, 0x000000);
 
-    if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo(map);
-    //dwgfx.drawtowermap(map);
+    if(!game.colourblindmode) dwgfx.drawtowerbackgroundsolo();
+    //dwgfx.drawtowermap();
 
     for (int i = 0; i < 6; i++)
     {
@@ -1897,32 +1897,32 @@ void gamecompleterender(Graphics& dwgfx, Game& game, entityclass& obj, UtilityCl
 
     if (dwgfx.onscreen(320 + game.creditposition))
     {
-        dwgfx.drawcrewman(70, 320 + game.creditposition, 0, true, help);
+        dwgfx.drawcrewman(70, 320 + game.creditposition, 0, true);
         dwgfx.Print(100, 330 + game.creditposition, "Captain Viridian", tr, tg, tb);
     }
     if (dwgfx.onscreen(350 + game.creditposition))
     {
-        dwgfx.drawcrewman(70, 350 + game.creditposition, 1, true, help);
+        dwgfx.drawcrewman(70, 350 + game.creditposition, 1, true);
         dwgfx.Print(100, 360 + game.creditposition, "Doctor Violet", tr, tg, tb);
     }
     if (dwgfx.onscreen(380 + game.creditposition))
     {
-        dwgfx.drawcrewman(70, 380 + game.creditposition, 2, true, help);
+        dwgfx.drawcrewman(70, 380 + game.creditposition, 2, true);
         dwgfx.Print(100, 390 + game.creditposition, "Professor Vitellary", tr, tg, tb);
     }
     if (dwgfx.onscreen(410 + game.creditposition))
     {
-        dwgfx.drawcrewman(70, 410 + game.creditposition, 3, true, help);
+        dwgfx.drawcrewman(70, 410 + game.creditposition, 3, true);
         dwgfx.Print(100, 420 + game.creditposition, "Officer Vermilion", tr, tg, tb);
     }
     if (dwgfx.onscreen(440 + game.creditposition))
     {
-        dwgfx.drawcrewman(70, 440 + game.creditposition, 4, true, help);
+        dwgfx.drawcrewman(70, 440 + game.creditposition, 4, true);
         dwgfx.Print(100, 450 + game.creditposition, "Chief Verdigris", tr, tg, tb);
     }
     if (dwgfx.onscreen(470 + game.creditposition))
     {
-        dwgfx.drawcrewman(70, 470 + game.creditposition, 5, true, help);
+        dwgfx.drawcrewman(70, 470 + game.creditposition, 5, true);
         dwgfx.Print(100, 480 + game.creditposition, "Doctor Victoria", tr, tg, tb);
     }
 
@@ -2096,7 +2096,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         if (!dwgfx.noclear) {
             if(!game.colourblindmode)
             {
-                dwgfx.drawbackground(map.background, map);
+                dwgfx.drawbackground(map.background);
             }
             else
             {
@@ -2105,11 +2105,11 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         }
         if (map.final_colormode)
 		{
-        	dwgfx.drawfinalmap(map);
+        	dwgfx.drawfinalmap();
         }
         else
 		{
-        dwgfx.drawmap(map);
+        dwgfx.drawmap();
         }
 
         for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
@@ -2147,7 +2147,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             }
         }
 
-        dwgfx.drawentities(map, obj, help);
+        dwgfx.drawentities();
 
         if (map.custommode && !map.custommodeforreal) {
             if (game.gametimer % 3 == 0) {
@@ -2283,7 +2283,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     dwgfx.drawfade();
 	BlitSurfaceStandard(dwgfx.backBuffer, NULL, dwgfx.tempBuffer, NULL);
 
-    dwgfx.drawgui(help);
+    dwgfx.drawgui();
     if (dwgfx.flipmode)
     {
         if (game.advancetext) dwgfx.bprint(5, 228, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
@@ -2510,7 +2510,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
     if (obj.trophytext > 0)
     {
-        dwgfx.drawtrophytext(obj, help);
+        dwgfx.drawtrophytext();
         obj.trophytext--;
     }
 
@@ -2605,7 +2605,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
     //dwgfx.backbuffer.lock();
 
 
-    dwgfx.drawgui(help);
+    dwgfx.drawgui();
 
     //draw screen alliteration
     //Roomname:
@@ -3056,7 +3056,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    dwgfx.drawcrewman(16, 32 + (i * 64), 2-i, game.crewstats[2-i], help);
+                    dwgfx.drawcrewman(16, 32 + (i * 64), 2-i, game.crewstats[2-i]);
                     if (game.crewstats[(2-i)])
                     {
                         dwgfx.printcrewname(44, 32 + (i * 64)+4+10, 2-i);
@@ -3068,7 +3068,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
                         dwgfx.Print(44, 32 + (i * 64) + 4, "Missing...", 64,64,64);
                     }
 
-                    dwgfx.drawcrewman(16+160, 32 + (i * 64), (2-i)+3, game.crewstats[(2-i)+3], help);
+                    dwgfx.drawcrewman(16+160, 32 + (i * 64), (2-i)+3, game.crewstats[(2-i)+3]);
                     if (game.crewstats[(2-i)+3])
                     {
                         dwgfx.printcrewname(44+160, 32 + (i * 64)+4+10, (2-i)+3);
@@ -3085,7 +3085,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    dwgfx.drawcrewman(16, 32 + (i * 64), i, game.crewstats[i], help);
+                    dwgfx.drawcrewman(16, 32 + (i * 64), i, game.crewstats[i]);
                     if (game.crewstats[i])
                     {
                         dwgfx.printcrewname(44, 32 + (i * 64)+4, i);
@@ -3097,7 +3097,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
                         dwgfx.Print(44, 32 + (i * 64) + 4 + 10, "Missing...", 64,64,64);
                     }
 
-                    dwgfx.drawcrewman(16+160, 32 + (i * 64), i+3, game.crewstats[i+3], help);
+                    dwgfx.drawcrewman(16+160, 32 + (i * 64), i+3, game.crewstats[i+3]);
                     if (game.crewstats[i+3])
                     {
                         dwgfx.printcrewname(44+160, 32 + (i * 64)+4, i+3);
@@ -3224,8 +3224,8 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
                     dwgfx.Print(160 - 84, 78, game.savetime, 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
                     dwgfx.Print(160 + 40, 78, help.number(game.savetrinkets), 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
 
-                    dwgfx.drawspritesetcol(50, 74, 50, 18, help);
-                    dwgfx.drawspritesetcol(175, 74, 22, 18, help);
+                    dwgfx.drawspritesetcol(50, 74, 50, 18);
+                    dwgfx.drawspritesetcol(175, 74, 22, 18);
                 }
                 else
                 {
@@ -3233,8 +3233,8 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
                     dwgfx.Print(160 - 84, 132, game.savetime, 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
                     dwgfx.Print(160 + 40, 132, help.number(game.savetrinkets), 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
 
-                    dwgfx.drawspritesetcol(50, 126, 50, 18, help);
-                    dwgfx.drawspritesetcol(175, 126, 22, 18, help);
+                    dwgfx.drawspritesetcol(50, 126, 50, 18);
+                    dwgfx.drawspritesetcol(175, 126, 22, 18);
                 }
             }
             else
@@ -3266,26 +3266,26 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
                     dwgfx.Print(0, 132, game.savearea, 25, 255 - (help.glow / 2), 255 - (help.glow / 2), true);
                     for (int i = 0; i < 6; i++)
                     {
-                        dwgfx.drawcrewman(169-(3*42)+(i*42), 98, i, game.crewstats[i], help, true);
+                        dwgfx.drawcrewman(169-(3*42)+(i*42), 98, i, game.crewstats[i], true);
                     }
                     dwgfx.Print(160 - 84, 78, game.savetime, 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
                     dwgfx.Print(160 + 40, 78, help.number(game.savetrinkets), 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
 
-                    dwgfx.drawspritesetcol(50, 74, 50, 18, help);
-                    dwgfx.drawspritesetcol(175, 74, 22, 18, help);
+                    dwgfx.drawspritesetcol(50, 74, 50, 18);
+                    dwgfx.drawspritesetcol(175, 74, 22, 18);
                 }
                 else
                 {
                     dwgfx.Print(0, 80, game.savearea, 25, 255 - (help.glow / 2), 255 - (help.glow / 2), true);
                     for (int i = 0; i < 6; i++)
                     {
-                        dwgfx.drawcrewman(169-(3*42)+(i*42), 95, i, game.crewstats[i], help, true);
+                        dwgfx.drawcrewman(169-(3*42)+(i*42), 95, i, game.crewstats[i], true);
                     }
                     dwgfx.Print(160 - 84, 132, game.savetime, 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
                     dwgfx.Print(160 + 40, 132, help.number(game.savetrinkets), 255 - (help.glow / 2), 255 - (help.glow / 2), 255 - (help.glow / 2));
 
-                    dwgfx.drawspritesetcol(50, 126, 50, 18, help);
-                    dwgfx.drawspritesetcol(175, 126, 22, 18, help);
+                    dwgfx.drawspritesetcol(50, 126, 50, 18);
+                    dwgfx.drawspritesetcol(175, 126, 22, 18);
                 }
             }
             else
@@ -3487,12 +3487,12 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
 
     if (!game.colourblindmode)
     {
-        dwgfx.drawtowerbackground(map);
-        dwgfx.drawtowermap(map);
+        dwgfx.drawtowerbackground();
+        dwgfx.drawtowermap();
     }
     else
     {
-        dwgfx.drawtowermap_nobackground(map);
+        dwgfx.drawtowermap_nobackground();
     }
 
     if(!game.completestop)
@@ -3523,9 +3523,9 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         }
     }
 
-    dwgfx.drawtowerentities(map, obj, help);
+    dwgfx.drawtowerentities();
 
-    dwgfx.drawtowerspikes(map);
+    dwgfx.drawtowerspikes();
 
 
     if(map.custommode && !map.custommodeforreal && !game.advancetext){
@@ -3539,7 +3539,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
     dwgfx.cutscenebars();
     BlitSurfaceStandard(dwgfx.backBuffer, NULL, dwgfx.tempBuffer, NULL);
 
-    dwgfx.drawgui(help);
+    dwgfx.drawgui();
     if (dwgfx.flipmode)
     {
         if (game.advancetext) dwgfx.bprint(5, 228, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
@@ -3884,7 +3884,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         dwgfx.Print(5, 225, "Press ENTER to Teleport", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
-    dwgfx.drawgui(help);
+    dwgfx.drawgui();
 
     if (dwgfx.flipmode)
     {
