@@ -1329,7 +1329,7 @@ void scriptclass::run() {
                     graphics.mapimage = words[1];
                 }
                 if (words[0] == "automapimage") {
-                    ed.generatecustomminimap(graphics, map);
+                    ed.generatecustomminimap();
                     graphics.mapimage = std::nullopt;
                 }
                 if (words[0] == "fog") {
@@ -1437,7 +1437,7 @@ void scriptclass::run() {
                 }
                 if (words[0] == "gotodimension") {
                     relativepos(&map.dimension, words[1]);
-                    ed.generatecustomminimap(graphics, map);
+                    ed.generatecustomminimap();
                 }
                 if (words[0] == "gotoroom") {
                     // USAGE: gotoroom(x,y) (manually add 100)
@@ -4094,7 +4094,7 @@ void scriptclass::startgamemode(int t) {
                 map.resetplayer();
             }
             map.gotoroom(game.saverx, game.savery);
-            ed.generatecustomminimap(graphics, map);
+            ed.generatecustomminimap();
             graphics.fademode = 4;
             break;
         case 21:  // play custom level (in editor)
@@ -4148,8 +4148,7 @@ void scriptclass::startgamemode(int t) {
         case 22:  // play custom level (in game)
             // Initilise the level
             // First up, find the start point
-            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,
-                              graphics, map, game);
+            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
             ed.findstartpoint(game);
 
             game.gamestate = GAMEMODE;
@@ -4177,7 +4176,7 @@ void scriptclass::startgamemode(int t) {
             }
             map.gotoroom(game.saverx, game.savery);
 
-            ed.generatecustomminimap(graphics, map);
+            ed.generatecustomminimap();
             map.customshowmm = true;
             if (ed.levmusic > 0) {
                 music.play(ed.levmusic);
@@ -4190,8 +4189,7 @@ void scriptclass::startgamemode(int t) {
         case 23:  // Continue in custom level
                   // Initilise the level
             // First up, find the start point
-            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,
-                              graphics, map, game);
+            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
             ed.findstartpoint(game);
 
             game.gamestate = GAMEMODE;
@@ -4227,7 +4225,7 @@ void scriptclass::startgamemode(int t) {
               music.currentsong=-1;
                 }
                 */
-            ed.generatecustomminimap(graphics, map);
+            ed.generatecustomminimap();
             graphics.fademode = 4;
             // call("intro");
             break;
@@ -4235,8 +4233,7 @@ void scriptclass::startgamemode(int t) {
         case 24:  // Custom level time trial!
             // Load the level first
             game.incustomtrial = true;
-            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,
-                              graphics, map, game);
+            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
             // ...then find the start point
             ed.findstartpoint(game);
 
@@ -4290,7 +4287,7 @@ void scriptclass::startgamemode(int t) {
             map.gotoroom(game.saverx, game.savery);
             // music.play(-1);
             music.currentsong = -1;
-            ed.generatecustomminimap(graphics, map);
+            ed.generatecustomminimap();
             graphics.fademode = 4;
             // call("intro");
             break;

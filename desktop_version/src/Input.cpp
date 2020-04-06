@@ -525,7 +525,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                       //dwgfx.fademode = 2;
                       music.playef(11, 10);
                       game.customtrialstats.clear();
-                      ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename,dwgfx, map, game);
+                      ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
                       game.customloadtrialsave(ed.ListOfMetaData[game.playcustomlevel].filename);
                       game.createmenu("loadcustomtrial");
                         for (int i = 0; i < (int)ed.customtrials.size(); i++) {

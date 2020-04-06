@@ -1237,14 +1237,14 @@ void mapclass::gotodimroom(int rx, int ry) {
         iy = oy;
         dimensionwraparound(&ix, &iy);
         if (ix == ox && iy == oy) {
-            ed.generatecustomminimap(graphics, map);
+            ed.generatecustomminimap();
             return;
         }
     }
 
     dimension = -1;
 
-    ed.generatecustomminimap(graphics, map);
+    ed.generatecustomminimap();
 #endif
 }
 

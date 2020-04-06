@@ -12,8 +12,6 @@
 #define VCEVERSION 1
 #define IS_VCE_LEVEL (map.custommode && ed.vceversion > 0)
 
-class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
-
 enum tiletyp {
     TILE_NONE,
     TILE_BACKGROUND,
@@ -251,9 +249,9 @@ public:
     bool intower(void);
     int tower_row(int rx, int ry);
 
-    void load(std::string& _path, Graphics& dwgfx, mapclass& map, Game& game);
-    void save(std::string& _path, mapclass& map, Game& game);
-    void generatecustomminimap(Graphics& dwgfx, mapclass& map);
+    void load(std::string& _path);
+    void save(std::string& _path);
+    void generatecustomminimap();
     int toweredgetile(int x, int y);
     int edgetile(int x, int y);
     int warpzoneedgetile(int x, int y);
@@ -272,7 +270,7 @@ public:
     std::string warptokendest(int t);
     void countstuff();
     void findstartpoint(Game& game);
-    void weirdloadthing(std::string t, Graphics& dwgfx, mapclass& map, Game& game);
+    void weirdloadthing(std::string t);
     int getlevelcol(int t);
     int getenemycol(int t);
     int entcol = 0;
@@ -433,19 +431,18 @@ int edentat(int x, int y, int state = 0, int tower = 0);
 
 bool edentclear(int x, int y, int state = 0, int tower = 0);
 
-void fillbox(Graphics& dwgfx, int x, int y, int x2, int y2, int c);
+void fillbox(int x, int y, int x2, int y2, int c);
 
-void fillboxabs(Graphics& dwgfx, int x, int y, int x2, int y2, int c);
+void fillboxabs(int x, int y, int x2, int y2, int c);
 
 int dmcap(void);
 int dmwidth(void);
 
-void editorrender(KeyPoll& key, Graphics& dwgfx, Game& game,  mapclass& map, entityclass& obj, UtilityClass& help);
+void editorrender();
 
-void editorlogic(KeyPoll& key, Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music, mapclass& map, UtilityClass& help);
+void editorlogic();
 
-void editorinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
-                 entityclass& obj, UtilityClass& help, musicclass& music);
+void editorinput();
 
 #endif /* EDITOR_H */
 
