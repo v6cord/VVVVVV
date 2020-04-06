@@ -521,7 +521,7 @@ int mapclass::maptiletoenemycol(int t)
 	return 11;
 }
 
-void mapclass::changefinalcol(int t, entityclass& obj, Game& game)
+void mapclass::changefinalcol(int t)
 {
 	//change the map to colour t - for the game's final stretch.
 	//First up, the tiles. This is just a setting:
@@ -981,7 +981,7 @@ void mapclass::realign_tower() {
 	bypos = ypos / 2;
 }
 
-void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music) {
+void mapclass::resetplayer() {
 	// Possibly warp if we died in a different room than our checkpoint is
 	bool room_different = true;
 	int old_tower = get_tower(game.roomx, game.roomy);
@@ -996,10 +996,10 @@ void mapclass::resetplayer(Graphics& dwgfx, Game& game, entityclass& obj, musicc
 		room_different = false;
 
 	if (room_different) {
-		gotoroom(game.saverx, game.savery, dwgfx, game, obj, music);
+		gotoroom(game.saverx, game.savery);
 		// If in finalstretch, update the colors of entities immediately
 		if (custommode && finalstretch)
-			changefinalcol(final_mapcol, obj, game);
+			changefinalcol(final_mapcol);
 	}
 
 	game.deathseq = -1;
@@ -1192,15 +1192,15 @@ void mapclass::custom_warpto(int ent)
 	rx += 100;
 	ry += 100;
 
-	warpto(rx, ry, obj.getplayer(), ex, ey, graphics, game, obj, music);
+	warpto(rx, ry, obj.getplayer(), ex, ey);
 	game.teleport = false;
 	game.flashlight = 6;
 	game.screenshake = 25;
 }
 
-void mapclass::warpto(int rx, int ry , int t, int tx, int ty, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
+void mapclass::warpto(int rx, int ry , int t, int tx, int ty)
 {
-	gotoroom(rx, ry, dwgfx, game, obj, music);
+	gotoroom(rx, ry);
 	game.teleport = false;
 	obj.entities[t].xp = tx * 8;
 	obj.entities[t].yp = (ty * 8) - obj.entities[t].h;
@@ -1248,10 +1248,10 @@ void mapclass::gotodimroom(int rx, int ry) {
 #endif
 }
 
-void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
+void mapclass::gotoroom(int rx, int ry)
 {
-	if (dwgfx.noclear)
-		FillRect(dwgfx.backBuffer,0x00000);
+	if (graphics.noclear)
+		FillRect(graphics.backBuffer,0x00000);
 
 	//First, destroy the current room
 	obj.removeallblocks();
@@ -1381,7 +1381,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	if (game.roomx == 107 && game.roomy == 109) music.niceplay(4);
 	if (game.roomx == 108 && game.roomy == 109)
 	{
-		if (dwgfx.setflipmode)
+		if (graphics.setflipmode)
 		{
 			music.niceplay(9);
 		}
@@ -1392,7 +1392,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	}
 	if (game.roomx == 109)
 	{
-		if (dwgfx.setflipmode)
+		if (graphics.setflipmode)
 		{
 			music.niceplay(9);
 		}
@@ -1435,7 +1435,7 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 	if (game.roomx == 104 && game.roomy == 112) music.niceplay(4);
 	}
 	temp = rx + (ry * 100);
-	loadlevel(game.roomx, game.roomy, dwgfx, game, obj, music);
+	loadlevel(game.roomx, game.roomy);
 
 
 	//Do we need to reload the background?
@@ -1443,9 +1443,9 @@ void mapclass::gotoroom(int rx, int ry, Graphics& dwgfx, Game& game, entityclass
 
 	if(redrawbg)
 	{
-		dwgfx.backgrounddrawn = false; //Used for background caching speedup
+		graphics.backgrounddrawn = false; //Used for background caching speedup
 	}
-	dwgfx.foregrounddrawn = false; //Used for background caching speedup
+	graphics.foregrounddrawn = false; //Used for background caching speedup
 
 	game.prevroomx = game.roomx;
 	game.prevroomy = game.roomy;
@@ -1556,7 +1556,7 @@ std::string mapclass::currentarea(int t)
 	return "???";
 }
 
-void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclass& obj, musicclass& music)
+void mapclass::loadlevel(int rx, int ry)
 {
 	int t;
 	//t = rx + (ry * 100);
@@ -1669,13 +1669,13 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 						{
 							//in the secret lab! Crazy background!
 							background = 2;
-							if (rx == 116 && ry == 105) dwgfx.rcol = 1;
-							if (rx == 117 && ry == 105) dwgfx.rcol = 5;
-							if (rx == 118 && ry == 105) dwgfx.rcol = 4;
-							if (rx == 117 && ry == 106) dwgfx.rcol = 2;
-							if (rx == 118 && ry == 106) dwgfx.rcol = 0;
-							if (rx == 119 && ry == 106) dwgfx.rcol = 3;
-							if (rx == 119 && ry == 107) dwgfx.rcol = 1;
+							if (rx == 116 && ry == 105) graphics.rcol = 1;
+							if (rx == 117 && ry == 105) graphics.rcol = 5;
+							if (rx == 118 && ry == 105) graphics.rcol = 4;
+							if (rx == 117 && ry == 106) graphics.rcol = 2;
+							if (rx == 118 && ry == 106) graphics.rcol = 0;
+							if (rx == 119 && ry == 106) graphics.rcol = 3;
+							if (rx == 119 && ry == 107) graphics.rcol = 1;
 						}
 					}
 				}
@@ -1686,7 +1686,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 	if (rx == 119 && ry == 108 && !custommode)
 	{
 		background = 5;
-		dwgfx.rcol = 3;
+		graphics.rcol = 3;
 		warpx = true;
 		warpy = true;
 	}
@@ -1716,7 +1716,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		roomname = lablevel.roomname;
 		tileset = 1;
 		background = 2;
-		dwgfx.rcol = lablevel.rcol;
+		graphics.rcol = lablevel.rcol;
 		break;
 	case 3: //The Tower
 		roomname = "The Tower";
@@ -1752,8 +1752,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		roomname = warplevel.roomname;
 		tileset = 1;
 		background = 3;
-		dwgfx.rcol = warplevel.rcol;
-		dwgfx.backgrounddrawn = false;
+		graphics.rcol = warplevel.rcol;
+		graphics.backgrounddrawn = false;
 
 		warpx = warplevel.warpx;
 		warpy = warplevel.warpy;
@@ -1774,8 +1774,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		roomname = finallevel.roomname;
 		tileset = 1;
 		background = 3;
-		dwgfx.rcol = finallevel.rcol;
-		dwgfx.backgrounddrawn = false;
+		graphics.rcol = finallevel.rcol;
+		graphics.backgrounddrawn = false;
 
 		if (finalstretch)
 		{
@@ -1791,8 +1791,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			if (warpx && warpy) background = 5;
 		}
 
-		dwgfx.rcol = 6;
-		changefinalcol(final_mapcol, obj, game);
+		graphics.rcol = 6;
+		changefinalcol(final_mapcol);
 		break;
 	case 7: //Final Level, Tower 1
 	case 8:
@@ -1881,7 +1881,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			case 2: //Lab
 				tileset = 1;
 				background = 2;
-				dwgfx.rcol = ed.level[curlevel].tilecol;
+				graphics.rcol = ed.level[curlevel].tilecol;
 				break;
 			case 3: //Warp Zone/intermission
 				tileset = 1;
@@ -1894,7 +1894,7 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			case 5://Tower
 				tileset = 2;
 				background = 10;
-				dwgfx.rcol = ed.level[curlevel].tilecol;
+				graphics.rcol = ed.level[curlevel].tilecol;
 				break;
 			default:
 				tileset = 1;
@@ -1903,21 +1903,21 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			}
 
 			//If screen warping, then override all that:
-			dwgfx.backgrounddrawn = false;
+			graphics.backgrounddrawn = false;
 
 			if (ed.level[curlevel].warpdir > 0) {
 				if(ed.level[curlevel].warpdir==1){
 					warpx=true;
 					background=3;
-					dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+					graphics.rcol = ed.getwarpbackground(rx-100,ry-100);
 				}else if(ed.level[curlevel].warpdir==2){
 					warpy=true;
 					background=4;
-					dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+					graphics.rcol = ed.getwarpbackground(rx-100,ry-100);
 				}else if(ed.level[curlevel].warpdir==3){
 					warpx=true; warpy=true;
 					background = 5;
-					dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+					graphics.rcol = ed.getwarpbackground(rx-100,ry-100);
 				}
 			}
 
@@ -1940,21 +1940,21 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		//If screen warping, then override all that:
 		bool redrawbg = game.roomx != game.prevroomx || game.roomy != game.prevroomy;
 		if(redrawbg){
-			dwgfx.backgrounddrawn = false;
+			graphics.backgrounddrawn = false;
 		}
 		if(ed.level[curlevel].warpdir>0){
 			if(ed.level[curlevel].warpdir==1){
 			warpx=true;
 			background=3;
-			dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+			graphics.rcol = ed.getwarpbackground(rx-100,ry-100);
 			}else if(ed.level[curlevel].warpdir==2){
 			warpy=true;
 			background=4;
-			dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+			graphics.rcol = ed.getwarpbackground(rx-100,ry-100);
 			}else if(ed.level[curlevel].warpdir==3){
 			warpx=true; warpy=true;
 			background = 5;
-			dwgfx.rcol = ed.getwarpbackground(rx-100,ry-100);
+			graphics.rcol = ed.getwarpbackground(rx-100,ry-100);
 			}
 		}
 
