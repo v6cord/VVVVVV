@@ -12,7 +12,7 @@
 extern scriptclass script;
 
 // Found in titlerender.cpp
-void updategraphicsmode(Game& game, Graphics& graphics);
+void updategraphicsmode();
 
 void updatebuttonmappings(int bind)
 {
@@ -623,7 +623,7 @@ void titleinput()
                     music.playef(11, 10);
                     graphics.screenbuffer->toggleFullScreen();
                     game.fullscreen = !game.fullscreen;
-                    updategraphicsmode(game, graphics);
+                    updategraphicsmode();
                     game.savestats();
                     game.createmenu("graphicoptions");
                     game.currentmenuoption = 0;
@@ -631,7 +631,7 @@ void titleinput()
                     music.playef(11, 10);
                     graphics.screenbuffer->toggleStretchMode();
                     game.stretchMode = (game.stretchMode + 1) % 7;
-                    updategraphicsmode(game, graphics);
+                    updategraphicsmode();
                     game.savestats();
                     game.createmenu("graphicoptions");
                     game.currentmenuoption = 1;
@@ -639,7 +639,7 @@ void titleinput()
                     music.playef(11, 10);
                     graphics.screenbuffer->toggleLinearFilter();
                     game.useLinearFilter = !game.useLinearFilter;
-                    updategraphicsmode(game, graphics);
+                    updategraphicsmode();
                     game.savestats();
                     game.createmenu("graphicoptions");
                     game.currentmenuoption = 2;
@@ -648,7 +648,7 @@ void titleinput()
                       music.playef(11, 10);
                       game.fullScreenEffect_badSignal = !game.fullScreenEffect_badSignal;
                       //Hook the analogue thing in here: ABCDEFG
-                      updategraphicsmode(game, graphics);
+                      updategraphicsmode();
 					  graphics.screenbuffer->badSignalEffect= !graphics.screenbuffer->badSignalEffect;
                       game.savestats();
                       game.createmenu("graphicoptions");
@@ -689,7 +689,7 @@ void titleinput()
                             {
                                 game.fullscreen = true;
                             }
-                            updategraphicsmode(game, graphics);
+                            updategraphicsmode();
                             game.savestats();
                             game.createmenu("graphicoptions");
                         }
@@ -701,10 +701,10 @@ void titleinput()
                             if (game.fullscreen)
                             {
                                 game.fullscreen = false;
-                                updategraphicsmode(game, graphics);
+                                updategraphicsmode();
                                 game.fullscreen = true;
                             }
-                            updategraphicsmode(game, graphics);
+                            updategraphicsmode();
 
                             game.savestats();
                             game.createmenu("graphicoptions");
@@ -717,7 +717,7 @@ void titleinput()
                             game.advanced_scaling = (game.advanced_scaling + 1) % 5;
                             graphics.screenbuffer->ResizeScreen(320 *game.advanced_scaling,240*game.advanced_scaling );
                             graphics.screenbuffer->SetScale(game.advanced_scaling);
-                            updategraphicsmode(game, graphics);
+                            updategraphicsmode();
 
                             game.savestats();
                             game.createmenu("graphicoptions");
@@ -728,7 +728,7 @@ void titleinput()
                             //change smoothing
                             music.playef(11, 10);
                             game.advanced_smoothing = !game.advanced_smoothing;
-                            updategraphicsmode(game, graphics);
+                            updategraphicsmode();
 
                             game.savestats();
                             game.createmenu("graphicoptions");
@@ -757,7 +757,7 @@ void titleinput()
                             {
                                 game.fullscreen = true;
                             }
-                            updategraphicsmode(game, graphics);
+                            updategraphicsmode();
 
                             game.savestats();
                             game.createmenu("graphicoptions");
@@ -770,10 +770,10 @@ void titleinput()
                             if (game.fullscreen)
                             {
                                 game.fullscreen = false;
-                                updategraphicsmode(game, graphics);
+                                updategraphicsmode();
                                 game.fullscreen = true;
                             }
-                            updategraphicsmode(game, graphics);
+                            updategraphicsmode();
 
                             game.savestats();
                             game.createmenu("graphicoptions");
