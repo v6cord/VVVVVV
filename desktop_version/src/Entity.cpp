@@ -1546,22 +1546,11 @@ void entityclass::setenemyroom( int t, int rx, int ry )
         entities[t].h = 16;
         break;
     case rn(17, 3): // Edge Games
-        if (entities[t].yp ==96)
-        {
-            entities[t].tile = 160;
-            entities[t].colour = 8;
-            entities[t].animate = 1;
-            entities[t].w = 16;
-            entities[t].h = 16;
-        }
-        else
-        {
-            entities[t].tile = 156;
-            entities[t].colour = 8;
-            entities[t].animate = 1;
-            entities[t].w = 16;
-            entities[t].h = 16;
-        }
+        entities[t].tile = 160;
+        entities[t].colour = 8;
+        entities[t].animate = 8;
+        entities[t].w = 16;
+        entities[t].h = 16;
         break;
     case rn(16, 0): // I love you
         entities[t].tile = 112;
@@ -4298,6 +4287,24 @@ void entityclass::animateentities( int _i, Game& game, UtilityClass& help )
                     entities[_i].drawframe += entities[_i].walkingframe;
 
                     if (entities[_i].vx > 0.000f ) entities[_i].drawframe += 2;
+                    break;
+                case 8:
+                    //Simple Loop (with directions)
+                    entities[_i].framedelay--;
+                    if(entities[_i].framedelay<=0)
+                    {
+                        entities[_i].framedelay = 8;
+                        entities[_i].walkingframe++;
+                        if (entities[_i].walkingframe == 4)
+                        {
+                            entities[_i].walkingframe = 0;
+                        }
+                    }
+
+                    entities[_i].drawframe = entities[_i].tile;
+                    entities[_i].drawframe += entities[_i].walkingframe;
+
+                    if (entities[_i].vx > 0.000f ) entities[_i].drawframe -= 4;
                     break;
                 case 10:
                     //Threadmill left
