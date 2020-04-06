@@ -202,7 +202,7 @@ public:
     int gettilelocal(int x, int y);
     void settilelocal(int x, int y, int tile);
 
-    int getenemyframe(int t);
+    int getenemyframe(int t, int dir);
     int base(int x, int y);
 
     int backbase(int x, int y);

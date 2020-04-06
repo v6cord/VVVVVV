@@ -995,7 +995,7 @@ int editorclass::getwarpbackground(int rx, int ry)
     }
 }
 
-int editorclass::getenemyframe(int t)
+int editorclass::getenemyframe(int t, int dir)
 {
     switch(t)
     {
@@ -1054,7 +1054,7 @@ int editorclass::getenemyframe(int t)
         return 51;
         break;
     case 18:
-        return 156;
+        return dir == 2 ? 160 : 156;
         break;
     case 19:
         return 44;
@@ -3471,7 +3471,7 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
 
             switch(edentity[i].t) {
             case 1: // Enemies
-                dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype),ed.entcol,help);
+                dwgfx.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcol,help);
                 if(edentity[i].p1==0)
                     dwgfx.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
                 if(edentity[i].p1==1)
