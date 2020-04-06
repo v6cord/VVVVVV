@@ -2124,7 +2124,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             for (int i = 0; i < obj.nentity; i++)
             {
                 //Is this entity on the ground? (needed for jumping)
-                if (obj.entitycollidefloor(map, i))
+                if (obj.entitycollidefloor(i))
                 {
                     obj.entities[i].onground = 2;
                 }
@@ -2133,7 +2133,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                     obj.entities[i].onground--;
                 }
 
-                if (obj.entitycollideroof(map, i))
+                if (obj.entitycollideroof(i))
                 {
                     obj.entities[i].onroof = 2;
                 }
@@ -2143,7 +2143,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                 }
 
                 //Animate the entities
-                obj.animateentities(i, game, help);
+                obj.animateentities(i);
             }
         }
 
@@ -3500,7 +3500,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         for (int i = 0; i < obj.nentity; i++)
         {
             //Is this entity on the ground? (needed for jumping)
-            if (obj.entitycollidefloor(map, i))
+            if (obj.entitycollidefloor(i))
             {
                 obj.entities[i].onground = 2;
             }
@@ -3509,7 +3509,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
                 obj.entities[i].onground--;
             }
 
-            if (obj.entitycollideroof(map, i))
+            if (obj.entitycollideroof(i))
             {
                 obj.entities[i].onroof = 2;
             }
@@ -3519,7 +3519,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
             }
 
             //Animate the entities
-            obj.animateentities(i, game, help);
+            obj.animateentities(i);
         }
     }
 
