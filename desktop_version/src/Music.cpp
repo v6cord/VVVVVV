@@ -505,11 +505,6 @@ void musicclass::changemusicarea(int x, int y)
 	}
 }
 
-void musicclass::initefchannels()
-{
-	// for (var i:int = 0; i < 16; i++) efchannel.push(new SoundChannel);
-}
-
 void musicclass::playfile(const char* t, std::string track, int loops, bool internal /*= false*/)
 {
     std::string temp;

@@ -37,9 +37,6 @@ public:
 
 	//public var nicefade:int, nicechange:int;
 
-	// Play a sound effect! There are 16 channels, which iterate
-	void initefchannels();
-
 	void playfile(const char* t, std::string track, int loops, bool internal = false);
 	void stopfile(std::string track);
 
