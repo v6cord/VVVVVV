@@ -167,7 +167,6 @@ void preloaderloop() {
     auto gameScreen = graphics.screenbuffer;
     while(!key.quitProgram)
     {
-		//gameScreen->ClearScreen(0x00);
 
         time = SDL_GetTicks();
 

@@ -436,7 +436,6 @@ int main(int argc, char *argv[])
                 last_gamestate = game.gamestate;
             }
 #endif
-                    //gameScreen.ClearScreen(0x00);
 
             time = SDL_GetTicks();
 

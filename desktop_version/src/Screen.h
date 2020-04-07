@@ -16,7 +16,6 @@ public:
 	void GetWindowSize(int* x, int* y);
 
 	void UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect);
-	void ClearScreen(int colour);
 	void FlipScreen();
 
 	const SDL_PixelFormat* GetFormat();

@@ -241,8 +241,3 @@ void Screen::toggleLinearFilter()
 		240
 	);
 }
-
-void Screen::ClearScreen( int colour )
-{
-    //FillRect(m_screen, colour) ;
-}
