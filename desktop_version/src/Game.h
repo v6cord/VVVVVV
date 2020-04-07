@@ -204,9 +204,6 @@ public:
     int creditposx, creditposy, creditposdelay = 0;
 
 
-    //60 fps mode!
-    bool sfpsmode = false;
-
     //Sine Wave Ninja Minigame
     bool swnmode = false;
     int swngame, swnstate, swnstate2, swnstate3, swnstate4, swndelay, swndeaths = 0;
