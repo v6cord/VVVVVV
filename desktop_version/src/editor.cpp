@@ -3345,7 +3345,7 @@ void editorrender()
             for (int i = 0; i < 40; i++)
             {
                 temp = ed.gettilelocal(i, j);
-                if(temp>0) graphics.drawtile(i*8,j*8,temp,0,0,0);
+                if(temp>0) graphics.drawtile(i*8,j*8,temp);
             }
         }
     }
@@ -3876,11 +3876,11 @@ void editorrender()
             {
                 for(int i=0; i<dmwidth(); i++)
                 {
-                    graphics.drawtile(i*8,0-t2,(temp+dmcap()+i)%dmcap(),0,0,0);
-                    graphics.drawtile(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap(),0,0,0);
-                    graphics.drawtile(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap(),0,0,0);
-                    graphics.drawtile(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap(),0,0,0);
-                    graphics.drawtile(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap(),0,0,0);
+                    graphics.drawtile(i*8,0-t2,(temp+dmcap()+i)%dmcap());
+                    graphics.drawtile(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap());
+                    graphics.drawtile(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap());
+                    graphics.drawtile(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap());
+                    graphics.drawtile(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap());
                 }
             }
             else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
@@ -3919,7 +3919,7 @@ void editorrender()
 
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
             {
-                graphics.drawtile(45,45-t2,ed.dmtile,0,0,0);
+                graphics.drawtile(45,45-t2,ed.dmtile);
             }
             else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
             {
@@ -3939,7 +3939,7 @@ void editorrender()
 
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==0)
             {
-                graphics.drawtile(45,12,ed.dmtile,0,0,0);
+                graphics.drawtile(45,12,ed.dmtile);
             }
             else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
             {
@@ -4412,19 +4412,19 @@ void editorrender()
                 }
                 FillRect(graphics.backBuffer, 4+(ed.drawmode*tg), 209,20,20,graphics.getRGB(64,64,64));
                 //0:
-                graphics.drawtile(tx,ty,83,0,0,0);
-                graphics.drawtile(tx+8,ty,83,0,0,0);
-                graphics.drawtile(tx,ty+8,83,0,0,0);
-                graphics.drawtile(tx+8,ty+8,83,0,0,0);
+                graphics.drawtile(tx,ty,83);
+                graphics.drawtile(tx+8,ty,83);
+                graphics.drawtile(tx,ty+8,83);
+                graphics.drawtile(tx+8,ty+8,83);
                 //1:
                 tx+=tg;
-                graphics.drawtile(tx,ty,680,0,0,0);
-                graphics.drawtile(tx+8,ty,680,0,0,0);
-                graphics.drawtile(tx,ty+8,680,0,0,0);
-                graphics.drawtile(tx+8,ty+8,680,0,0,0);
+                graphics.drawtile(tx,ty,680);
+                graphics.drawtile(tx+8,ty,680);
+                graphics.drawtile(tx,ty+8,680);
+                graphics.drawtile(tx+8,ty+8,680);
                 //2:
                 tx+=tg;
-                graphics.drawtile(tx+4,ty+4,8,0,0,0);
+                graphics.drawtile(tx+4,ty+4,8);
                 //3:
                 tx+=tg;
                 graphics.drawsprite(tx,ty,22,196,196,196);
@@ -4433,16 +4433,16 @@ void editorrender()
                 graphics.drawsprite(tx,ty,21,196,196,196);
                 //5:
                 tx+=tg;
-                graphics.drawtile(tx,ty+4,3,0,0,0);
-                graphics.drawtile(tx+8,ty+4,4,0,0,0);
+                graphics.drawtile(tx,ty+4,3);
+                graphics.drawtile(tx+8,ty+4,4);
                 //6:
                 tx+=tg;
-                graphics.drawtile(tx,ty+4,24,0,0,0);
-                graphics.drawtile(tx+8,ty+4,24,0,0,0);
+                graphics.drawtile(tx,ty+4,24);
+                graphics.drawtile(tx+8,ty+4,24);
                 //7:
                 tx+=tg;
-                graphics.drawtile(tx,ty+4,1,0,0,0);
-                graphics.drawtile(tx+8,ty+4,1,0,0,0);
+                graphics.drawtile(tx,ty+4,1);
+                graphics.drawtile(tx+8,ty+4,1);
                 //8:
                 tx+=tg;
                 graphics.drawsprite(tx,ty,78+ed.entframe,196,196,196);
