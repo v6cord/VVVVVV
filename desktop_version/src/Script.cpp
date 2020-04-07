@@ -2166,6 +2166,9 @@ void scriptclass::run() {
                                 obj.entities[k].tile = 24;
                                 obj.entities[k].animate = 0;
                                 break;
+                            case 27:
+                                obj.setenemyroom(k, 13+100, 7+100);
+                                break;  // bus
                             default:
                                 obj.setenemyroom(k, 4 + 100, 0 + 100);
                                 break;

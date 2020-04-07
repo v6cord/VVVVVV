@@ -1687,7 +1687,7 @@ void entityclass::setenemyroom( int t, int rx, int ry )
         entities[t].harmful = false;
         break;
     case rn(13, 7): // Bus
-        entities[t].tile = 96;
+        entities[t].tile = 120;
         entities[t].colour = 6;
         entities[t].size = 9;
         entities[t].w = 64;
@@ -2836,6 +2836,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             entities[k].tile = 24;
             entities[k].animate = 0;
             break;
+          case 27: setenemyroom(k, 13+100, 7+100); break; // bus
           default: setenemyroom(k, 4+100, 0+100); break;
         }
 
