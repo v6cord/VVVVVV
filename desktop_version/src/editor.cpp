@@ -1076,6 +1076,9 @@ int editorclass::getenemyframe(int t, int dir)
     case 25:
         return 172;
         break;
+    case 26:
+        return 24;
+        break;
     default:
         return 78;
         break;
@@ -6045,7 +6048,7 @@ void editorinput()
             }
             if(key.keymap[SDLK_F3])
             {
-                ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype+1)%26;
+                ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype+1)%27;
                 ed.keydelay=6;
                 ed.notedelay=45;
                 ed.note="Enemy Type Changed";

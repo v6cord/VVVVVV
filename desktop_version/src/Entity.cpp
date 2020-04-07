@@ -2834,6 +2834,10 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
           case 23: setenemyroom(k, 11+100, 13+100); break; // TRUTH
           case 24: setenemyroom(k, 14+100, 13+100); break; // DABBING SKELETON
           case 25: setenemyroom(k, 44, 51); break; // enemy in vertigo
+          case 26:
+            entities[k].tile = 24;
+            entities[k].animate = 0;
+            break;
           default: setenemyroom(k, 4+100, 0+100); break;
         }
 

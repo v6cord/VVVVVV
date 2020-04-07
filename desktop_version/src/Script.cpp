@@ -2162,6 +2162,10 @@ void scriptclass::run() {
                             case 25:
                                 obj.setenemyroom(k, 44, 51);
                                 break;  // enemy in vertigo
+                            case 26:
+                                obj.entities[k].tile = 24;
+                                obj.entities[k].animate = 0;
+                                break;
                             default:
                                 obj.setenemyroom(k, 4 + 100, 0 + 100);
                                 break;
