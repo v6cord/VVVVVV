@@ -436,7 +436,7 @@ void BlitSurfaceTint(
 
             double temp_pixred = pixred * 0.299;
             double temp_pixgreen = pixgreen * 0.587;
-            double temp_pixblue = pixblue * 0.144;
+            double temp_pixblue = pixblue * 0.114;
 
             double gray = floor((temp_pixred + temp_pixgreen + temp_pixblue + 0.5));
 
@@ -571,7 +571,7 @@ SDL_Surface* ApplyCuteFilter( SDL_Surface* _src )
 
             temp_red   = temp_red   * 0.299;
             temp_green = temp_green * 0.587;
-            temp_blue  = temp_blue  * 0.144;
+            temp_blue  = temp_blue  * 0.114;
 
             double gray = floor((temp_red + temp_green + temp_blue + 0.5));
 
@@ -619,7 +619,7 @@ SDL_Surface* ApplyAllyFilter( SDL_Surface* _src )
 
 			temp_red   = temp_red   * 0.299;
 			temp_green = temp_green * 0.587;
-			temp_blue  = temp_blue  * 0.144;
+			temp_blue  = temp_blue  * 0.114;
 
 			double gray = floor((temp_red + temp_green + temp_blue + 0.5));
 
@@ -684,7 +684,7 @@ SDL_Surface* ApplyMisaFilter( SDL_Surface* _src )
 
 			temp_red   = temp_red   * 0.299;
 			temp_green = temp_green * 0.587;
-			temp_blue  = temp_blue  * 0.144;
+			temp_blue  = temp_blue  * 0.114;
 
 			double gray = floor((temp_red + temp_green + temp_blue + 0.5));
 
