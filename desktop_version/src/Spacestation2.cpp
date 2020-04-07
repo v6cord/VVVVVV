@@ -14,7 +14,7 @@ growing_vector<std::string> spacestation2class::loadlevel(int rx, int ry)
 	t = rx + (ry * 100);
 
 	growing_vector<std::string> tmap;
-	roomname = "Untitled room ["+UtilityClass::String(rx) + "," + UtilityClass::String(ry)+"]";
+	roomname = "Untitled room ["+help.String(rx) + "," + help.String(ry)+"]";
 
 	switch(t)
 	{

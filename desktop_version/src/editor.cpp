@@ -2778,7 +2778,7 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( meta );
 
     meta = new TiXmlElement( "Created" );
-    meta->LinkEndChild( new TiXmlText( UtilityClass::String(version).c_str() ));
+    meta->LinkEndChild( new TiXmlText( help.String(version).c_str() ));
     msg->LinkEndChild( meta );
 
     meta = new TiXmlElement( "Modified" );
@@ -2786,7 +2786,7 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( meta );
 
     meta = new TiXmlElement( "Modifiers" );
-    meta->LinkEndChild( new TiXmlText( UtilityClass::String(version).c_str() ));
+    meta->LinkEndChild( new TiXmlText( help.String(version).c_str() ));
     msg->LinkEndChild( meta );
 
     meta = new TiXmlElement( "Desc1" );
@@ -2808,15 +2808,15 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "mapwidth" );
-    msg->LinkEndChild( new TiXmlText( UtilityClass::String(mapwidth).c_str() ));
+    msg->LinkEndChild( new TiXmlText( help.String(mapwidth).c_str() ));
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "mapheight" );
-    msg->LinkEndChild( new TiXmlText( UtilityClass::String(mapheight).c_str() ));
+    msg->LinkEndChild( new TiXmlText( help.String(mapheight).c_str() ));
     data->LinkEndChild( msg );
 
     msg = new TiXmlElement( "levmusic" );
-    msg->LinkEndChild( new TiXmlText( UtilityClass::String(levmusic).c_str() ));
+    msg->LinkEndChild( new TiXmlText( help.String(levmusic).c_str() ));
     data->LinkEndChild( msg );
 
     //New save format
@@ -2825,7 +2825,7 @@ void editorclass::save(std::string& _path)
     {
         for(int x = 0; x < mapwidth*40; x++ )
         {
-            contentsString += UtilityClass::String(contents[x + (maxwidth*40*y)]) + ",";
+            contentsString += help.String(contents[x + (maxwidth*40*y)]) + ",";
         }
     }
     msg = new TiXmlElement( "contents" );
@@ -2843,7 +2843,7 @@ void editorclass::save(std::string& _path)
         std::string tiles = "";
         for (int y = 0; y < 30; y++)
             for (int x = 0; x < 40; x++)
-                tiles += UtilityClass::String(altstates[a].tiles[x + y*40]) + ",";
+                tiles += help.String(altstates[a].tiles[x + y*40]) + ",";
 
         alt = new TiXmlElement("altstate");
         alt->SetAttribute("x", altstates[a].x);
@@ -2911,7 +2911,7 @@ void editorclass::save(std::string& _path)
         std::string tiles = "";
         for (int y = 0; y < towers[t].size; y++)
             for (int x = 0; x < 40; x++)
-                tiles += UtilityClass::String(towers[t].tiles[x + y*40]) + ",";
+                tiles += help.String(towers[t].tiles[x + y*40]) + ",";
 
         tw = new TiXmlElement("tower");
         tw->SetAttribute("size", towers[t].size);
@@ -2926,7 +2926,7 @@ void editorclass::save(std::string& _path)
     std::string contentsString;
     for(int i = 0; i < contents.size(); i++ )
     {
-    	contentsString += UtilityClass::String(contents[i]) + ",";
+    	contentsString += help.String(contents[i]) + ",";
     }
     msg = new TiXmlElement( "contents" );
     msg->LinkEndChild( new TiXmlText( contentsString.c_str() ));
