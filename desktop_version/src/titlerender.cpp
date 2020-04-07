@@ -515,10 +515,6 @@ std::vector<std::string> changelog = {
 
 std::string tempstring;
 
-void updategraphicsmode()
-{
-}
-
 void titlerender()
 {
 
