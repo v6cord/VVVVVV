@@ -1686,6 +1686,14 @@ void entityclass::setenemyroom( int t, int rx, int ry )
         entities[t].size = 11;
         entities[t].harmful = false;
         break;
+    case rn(13, 7): // Bus
+        entities[t].tile = 96;
+        entities[t].colour = 6;
+        entities[t].size = 9;
+        entities[t].w = 64;
+        entities[t].h = 44;
+        entities[t].animate = 4;
+        break;
     }
 }
 
@@ -1969,16 +1977,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         {
             setenemy(1, k);
             setenemyroom(k, game.roomx, game.roomy); //For colour
-        }
-        else if (game.roomx == 113 && game.roomy == 107)
-        {
-            //MAVVERRRICK
-            entities[k].tile = 96;
-            entities[k].colour = 6;
-            entities[k].size = 9;
-            entities[k].w = 64;
-            entities[k].h = 44;
-            entities[k].animate = 4;
         }
         else
         {
