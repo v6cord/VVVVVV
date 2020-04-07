@@ -3356,7 +3356,7 @@ void editorrender()
             for (int i = 0; i < 40; i++)
             {
                 temp = ed.gettilelocal(i, j);
-                if(temp>0) graphics.drawtile3(i*8,j*8,temp,0,0,0);
+                if(temp>0) graphics.drawtile3(i*8,j*8,temp);
             }
         }
     }
@@ -3367,7 +3367,7 @@ void editorrender()
             for (int i = 0; i < 40; i++)
             {
                 temp = ed.gettilelocal(i, j);
-                if(temp>0) graphics.drawtile2(i*8,j*8,temp,0,0,0);
+                if(temp>0) graphics.drawtile2(i*8,j*8,temp);
             }
         }
     }
@@ -3887,22 +3887,22 @@ void editorrender()
             {
                 for(int i=0; i<dmwidth(); i++)
                 {
-                    graphics.drawtile3(i*8,0-t2,(temp+dmcap()+i)%dmcap(),0,0,0);
-                    graphics.drawtile3(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap(),0,0,0);
-                    graphics.drawtile3(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap(),0,0,0);
-                    graphics.drawtile3(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap(),0,0,0);
-                    graphics.drawtile3(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap(),0,0,0);
+                    graphics.drawtile3(i*8,0-t2,(temp+dmcap()+i)%dmcap());
+                    graphics.drawtile3(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap());
+                    graphics.drawtile3(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap());
+                    graphics.drawtile3(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap());
+                    graphics.drawtile3(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap());
                 }
             }
             else
             {
                 for(int i=0; i<dmwidth(); i++)
                 {
-                    graphics.drawtile2(i*8,0-t2,(temp+dmcap()+i)%dmcap(),0,0,0);
-                    graphics.drawtile2(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap(),0,0,0);
-                    graphics.drawtile2(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap(),0,0,0);
-                    graphics.drawtile2(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap(),0,0,0);
-                    graphics.drawtile2(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap(),0,0,0);
+                    graphics.drawtile2(i*8,0-t2,(temp+dmcap()+i)%dmcap());
+                    graphics.drawtile2(i*8,8-t2,(temp+dmcap()+dmwidth()*1+i)%dmcap());
+                    graphics.drawtile2(i*8,16-t2,(temp+dmcap()+dmwidth()*2+i)%dmcap());
+                    graphics.drawtile2(i*8,24-t2,(temp+dmcap()+dmwidth()*3+i)%dmcap());
+                    graphics.drawtile2(i*8,32-t2,(temp+dmcap()+dmwidth()*4+i)%dmcap());
                 }
             }
             //Highlight our little block
@@ -3923,11 +3923,11 @@ void editorrender()
             }
             else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
             {
-                graphics.drawtile3(45,45-t2,ed.dmtile,0,0,0);
+                graphics.drawtile3(45,45-t2,ed.dmtile);
             }
             else
             {
-                graphics.drawtile2(45,45-t2,ed.dmtile,0,0,0);
+                graphics.drawtile2(45,45-t2,ed.dmtile);
             }
         }
         else
@@ -3943,11 +3943,11 @@ void editorrender()
             }
             else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset==5)
             {
-                graphics.drawtile3(45,12,ed.dmtile,0,0,0);
+                graphics.drawtile3(45,12,ed.dmtile);
             }
             else
             {
-                graphics.drawtile2(45,12,ed.dmtile,0,0,0);
+                graphics.drawtile2(45,12,ed.dmtile);
             }
         }
     }

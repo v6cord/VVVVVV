@@ -690,7 +690,7 @@ void Graphics::drawtile( int x, int y, int t )
 }
 
 
-void Graphics::drawtile2( int x, int y, int t, int r, int g,  int b )
+void Graphics::drawtile2( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
@@ -705,7 +705,7 @@ void Graphics::drawtile2( int x, int y, int t, int r, int g,  int b )
 }
 
 
-void Graphics::drawtile3( int x, int y, int t, int r, int g,  int b )
+void Graphics::drawtile3( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
