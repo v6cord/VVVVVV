@@ -1574,7 +1574,7 @@ void Game::updatestate()
 
 
             companion = 6;
-            i = obj.getcompanion(6);
+            i = obj.getcompanion();
             obj.entities[i].tile = 0;
             obj.entities[i].state = 1;
 
@@ -1600,7 +1600,7 @@ void Game::updatestate()
             state++;
             music.playef(2, 10);
             graphics.textboxactive();
-            i = obj.getcompanion(6);
+            i = obj.getcompanion();
             obj.entities[i].tile = 54;
             obj.entities[i].state = 0;
         }
@@ -1615,7 +1615,7 @@ void Game::updatestate()
         case 110:
         {
 
-            i = obj.getcompanion(6);
+            i = obj.getcompanion();
             obj.entities[i].tile = 0;
             obj.entities[i].state = 1;
             graphics.createtextbox("Follow me!", 185, 154, 164, 164, 255);
@@ -1690,7 +1690,7 @@ void Game::updatestate()
         break;
         case 122:
             companion = 7;
-            i = obj.getcompanion(7);
+            i = obj.getcompanion();
             obj.entities[i].tile = 6;
             obj.entities[i].state = 1;
 
@@ -1707,7 +1707,7 @@ void Game::updatestate()
             state++;
             music.playef(2, 10);
             graphics.textboxactive();
-            i = obj.getcompanion(7);	//obj.entities[i].tile = 66;	obj.entities[i].state = 0;
+            i = obj.getcompanion();	//obj.entities[i].tile = 66;	obj.entities[i].state = 0;
             break;
         case 126:
             graphics.createtextbox("I can help with that!", 125, 152-40, 164, 164, 255);
@@ -1728,7 +1728,7 @@ void Game::updatestate()
             state++;
             music.playef(14, 10);
             graphics.textboxactive();
-            i = obj.getcompanion(7);
+            i = obj.getcompanion();
             obj.entities[i].tile = 6;
             obj.entities[i].state = 1;
             break;
@@ -2251,7 +2251,7 @@ void Game::updatestate()
             obj.entities[i].colour = 0;
             obj.entities[i].invis = true;
 
-            i = obj.getcompanion(companion);
+            i = obj.getcompanion();
             if(i>-1)
             {
                 obj.entities[i].active = false;

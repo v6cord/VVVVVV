@@ -4556,7 +4556,7 @@ bool entityclass::gettype( int t )
     return false;
 }
 
-int entityclass::getcompanion( int t )
+int entityclass::getcompanion()
 {
     //Returns the index of the companion with rule t
     for (int i = 0; i < nentity; i++)
