@@ -14,8 +14,6 @@ public:
     int frameRate = 30;
 };
 
-extern Stage stage;
-extern Stage swfStage;
 extern int temp;
 
 void titlerender();
