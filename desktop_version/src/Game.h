@@ -268,9 +268,6 @@ public:
     growing_vector<int>bestlives;
     growing_vector<int> bestrank;
 
-    bool telecookieexists = false;
-    bool quickcookieexists = false;
-
     std::string tele_gametime;
     int tele_trinkets = 0;
     std::string tele_currentarea;

@@ -300,13 +300,11 @@ void Game::init(void)
     TiXmlDocument doc;
     if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc))
     {
-        quickcookieexists = false;
         quicksummary = "";
         if (!quiet) printf("Quick Save Not Found\n");
     }
     else
     {
-        quickcookieexists = true;
         TiXmlHandle hDoc(&doc);
         TiXmlElement* pElem;
         TiXmlHandle hRoot(0);
@@ -338,13 +336,11 @@ void Game::init(void)
     TiXmlDocument docTele;
     if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
     {
-        telecookieexists = false;
         telesummary = "";
         if (!quiet) printf("Teleporter Save Not Found\n");
     }
     else
     {
-        telecookieexists = true;
         TiXmlHandle hDoc(&docTele);
         TiXmlElement* pElem;
         TiXmlHandle hRoot(0);
@@ -5682,12 +5678,10 @@ void Game::loadsummary()
     TiXmlDocument docTele;
     if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
     {
-        telecookieexists = false;
         telesummary = "";
     }
     else
     {
-        telecookieexists = true;
         TiXmlHandle hDoc(&docTele);
         TiXmlElement* pElem;
         TiXmlHandle hRoot(0);
@@ -5773,12 +5767,10 @@ void Game::loadsummary()
     TiXmlDocument doc;
     if (!FILESYSTEM_loadTiXmlDocument("saves/qsave.vvv", &doc))
     {
-        quickcookieexists = false;
         quicksummary = "";
     }
     else
     {
-        quickcookieexists = true;
         TiXmlHandle hDoc(&doc);
         TiXmlElement* pElem;
         TiXmlHandle hRoot(0);
@@ -5886,7 +5878,6 @@ void Game::savetele()
 
     //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
     //Save to the telesave cookie
-    telecookieexists = true;
 
     if (map.custommode)
     {
@@ -6147,8 +6138,6 @@ void Game::savetele()
 
 void Game::savequick()
 {
-    quickcookieexists = true;
-
     if (map.custommode)
     {
         //Don't trash save data!
@@ -6409,8 +6398,6 @@ void Game::savequick()
 
 void Game::customsavequick(std::string savfile)
 {
-    quickcookieexists = true;
-
     TiXmlDocument doc;
     TiXmlElement* msg;
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -8298,7 +8285,6 @@ void Game::deletequick()
         printf("Error deleting file\n");
 
     quicksummary = "";
-    quickcookieexists = false;
 }
 
 void Game::deletetele()
@@ -8307,7 +8293,6 @@ void Game::deletetele()
         printf("Error deleting file\n");
 
     telesummary = "";
-    telecookieexists = false;
 }
 
 void Game::swnpenalty()
