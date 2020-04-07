@@ -42,6 +42,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Mannequins, ZZT centipedes, and Edge Games fish now face properly
 
+- Added box and bus enemy types
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting

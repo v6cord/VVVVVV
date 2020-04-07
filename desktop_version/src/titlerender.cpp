@@ -75,6 +75,7 @@ std::vector<std::string> changelog = {
     "  with the given script name",
     "- Mannequins, ZZT centipedes, and Edge",
     "  Games fish now face properly",
+    "- Added box and bus enemy types",
     "",
     "Version c1.0-pre1",
     "[line]",
