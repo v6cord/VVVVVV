@@ -40,7 +40,7 @@ public:
 	void playfile(const char* t, std::string track, int loops, bool internal = false);
 	void stopfile(std::string track);
 
-	void playef(int t, int offset = 0);
+	void playef(int t);
 
         std::vector<SoundTrack> soundTracks;
         std::vector<MusicTrack> musicTracks;

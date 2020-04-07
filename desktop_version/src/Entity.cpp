@@ -3240,7 +3240,7 @@ bool entityclass::updateentities( int i )
                     entities[i].state = 2;
                     entities[i].onentity = 0;
 
-                    music.playef(7,10);
+                    music.playef(7);
                 }
                 else if (entities[i].state == 2)
                 {
@@ -3288,7 +3288,7 @@ bool entityclass::updateentities( int i )
                     entities[i].life = 4;
                     entities[i].state = 2;
                     entities[i].onentity = 0;
-                    music.playef(6,10);
+                    music.playef(6);
                     /*}else if (entities[j].vy <= -0.5  && (entities[j].yp>=entities[i].yp+2)) {
                     entities[i].life = 4;
                     entities[i].state = 2; entities[i].onentity = 0;
@@ -3342,7 +3342,7 @@ bool entityclass::updateentities( int i )
                 {
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
                     if (IS_VCE_LEVEL) {
-                        music.playef(8, 10);
+                        music.playef(8);
                         // Remove it, but respawn it upon death
                         entities[i].invis = true;
                         entities[i].state = 2;
@@ -3378,7 +3378,7 @@ bool entityclass::updateentities( int i )
                 if (entities[i].state == 1)
                 {
                     game.coins++;
-                    music.playef(4,10);
+                    music.playef(4);
                     coincollect[entities[i].para] = 1;
 
                     entities[i].active = false;
@@ -3392,14 +3392,14 @@ bool entityclass::updateentities( int i )
                     if (game.intimetrial)
                     {
                         collect[entities[i].para] = 1;
-                        music.playef(25,10);
+                        music.playef(25);
                     }
                     else
                     {
                         game.state = 1000;
                         //music.haltdasmusik();
                         music.silencedasmusik();
-                        music.playef(3,10);
+                        music.playef(3);
                         collect[entities[i].para] = 1;
                         if (game.trinkets > game.stat_trinkets)
                         {
@@ -3426,7 +3426,7 @@ bool entityclass::updateentities( int i )
                     entities[i].colour = 5;
                     entities[i].onentity = 0;
                     game.savepoint = entities[i].para;
-                    music.playef(5,10);
+                    music.playef(5);
 
                     game.savex = entities[i].xp - 4;
 
@@ -3477,7 +3477,7 @@ bool entityclass::updateentities( int i )
                     entities[i].state = 2;
 
 
-                    music.playef(8,10);
+                    music.playef(8);
                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
                     game.totalflips++;
                     temp = getplayer();
@@ -3856,7 +3856,7 @@ bool entityclass::updateentities( int i )
                 {
                     entities[i].colour = 5;
                     entities[i].onentity = 0;
-                    music.playef(17,10);
+                    music.playef(17);
 
                     entities[i].state = 0;
                 }
@@ -4024,14 +4024,14 @@ bool entityclass::updateentities( int i )
                     if (game.intimetrial)
                     {
                         customcollect[entities[i].para] = 1;
-                        music.playef(27,10);
+                        music.playef(27);
                     }
                     else
                     {
                         game.state = 1010;
                         //music.haltdasmusik();
                         if(music.currentsong!=-1) music.silencedasmusik();
-                        music.playef(27,10);
+                        music.playef(27);
                         customcollect[entities[i].para] = 1;
                     }
 
@@ -4044,7 +4044,7 @@ bool entityclass::updateentities( int i )
                     //if inactive, activate!
                     if (entities[i].tile == 1)
                     {
-                        music.playef(18, 10);
+                        music.playef(18);
                         entities[i].onentity = 0;
                         entities[i].tile = 2;
                         entities[i].colour = 101;
@@ -5598,7 +5598,7 @@ void entityclass::entitycollisioncheck()
                             {
                                 if (entityhlinecollide(i, j))
                                 {
-                                    music.playef(8,10);
+                                    music.playef(8);
                                     game.gravitycontrol = (game.gravitycontrol + 1) % 2;
                                     game.totalflips++;
                                     if (game.gravitycontrol == 0)

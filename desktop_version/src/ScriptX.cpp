@@ -62,7 +62,7 @@ void scriptx::update()
 			words = tokenize(commands[position]);
 
 			if (words[0] == "test") {
-				music.playef(11, 10);
+				music.playef(11);
 			}
 
 			position++;

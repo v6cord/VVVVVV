@@ -27,11 +27,11 @@ void titlelogic()
             }
             else if (game.menudest == "gameover2")
             {
-                music.playef(11, 10);
+                music.playef(11);
             }
             else if (game.menudest == "timetrialcomplete3")
             {
-                music.playef(3, 10);
+                music.playef(3);
             }
             game.createmenu(game.menudest);
         }
@@ -120,7 +120,7 @@ void gamecompletelogic2()
         map.colstate = 10;
         game.gamestate = 1;
         graphics.fademode = 4;
-        music.playef(18, 10);
+        music.playef(18);
         game.createmenu("gamecompletecontinue");
         map.nexttowercolour();
     }
@@ -352,9 +352,9 @@ void towerlogic()
                 {
                     game.hascontrol = false;
                 }
-                if(game.timetrialcountdown == 120) music.playef(21, 10);
-                if(game.timetrialcountdown == 90) music.playef(21, 10);
-                if(game.timetrialcountdown == 60) music.playef(21, 10);
+                if(game.timetrialcountdown == 120) music.playef(21);
+                if(game.timetrialcountdown == 90) music.playef(21);
+                if(game.timetrialcountdown == 60) music.playef(21);
                 if (game.timetrialcountdown == 30)
                 {
                     switch(game.timetriallevel)
@@ -381,7 +381,7 @@ void towerlogic()
                         music.play(ed.customtrials[game.currenttrial].music);
                         break;
                     }
-                    music.playef(22, 10);
+                    music.playef(22);
                 }
             }
 
@@ -396,7 +396,7 @@ void towerlogic()
                     {
                         obj.entities[i].tile = 144;
                     }
-                    music.playef(2, 10);
+                    music.playef(2);
                 }
             }
         }
@@ -638,7 +638,7 @@ void gamelogic()
             //change player to sad
             int i = obj.getplayer();
             obj.entities[i].tile = 144;
-            music.playef(2, 10);
+            music.playef(2);
         }
         if (obj.upset > 301) obj.upset = 301;
     }
@@ -748,7 +748,7 @@ void gamelogic()
                 game.swndelay = 0;
                 if (game.swntimer >= game.swnrecord)
                 {
-                    if (game.swnmessage == 0) music.playef(25, 10);
+                    if (game.swnmessage == 0) music.playef(25);
                     game.swnmessage = 1;
                     game.swnrecord = game.swntimer;
                 }
@@ -876,7 +876,7 @@ void gamelogic()
                                                 NETWORK_unlockAchievement("vvvvvvsupgrav5");
                         game.swnbestrank = 1;
                         game.swnmessage = 2+30;
-                        music.playef(26, 10);
+                        music.playef(26);
                     }
                 }
                 else if (game.swntimer >= 300 && game.swnrank == 1)
@@ -887,7 +887,7 @@ void gamelogic()
                                                 NETWORK_unlockAchievement("vvvvvvsupgrav10");
                         game.swnbestrank = 2;
                         game.swnmessage = 2+30;
-                        music.playef(26, 10);
+                        music.playef(26);
                     }
                 }
                 else if (game.swntimer >= 450 && game.swnrank == 2)
@@ -898,7 +898,7 @@ void gamelogic()
                                                 NETWORK_unlockAchievement("vvvvvvsupgrav15");
                         game.swnbestrank = 3;
                         game.swnmessage = 2+30;
-                        music.playef(26, 10);
+                        music.playef(26);
                     }
                 }
                 else if (game.swntimer >= 600 && game.swnrank == 3)
@@ -909,7 +909,7 @@ void gamelogic()
                                                 NETWORK_unlockAchievement("vvvvvvsupgrav20");
                         game.swnbestrank = 4;
                         game.swnmessage = 2+30;
-                        music.playef(26, 10);
+                        music.playef(26);
                     }
                 }
                 else if (game.swntimer >= 900 && game.swnrank == 4)
@@ -920,7 +920,7 @@ void gamelogic()
                                                 NETWORK_unlockAchievement("vvvvvvsupgrav30");
                         game.swnbestrank = 5;
                         game.swnmessage = 2+30;
-                        music.playef(26, 10);
+                        music.playef(26);
                     }
                 }
                 else if (game.swntimer >= 1800 && game.swnrank == 5)
@@ -931,7 +931,7 @@ void gamelogic()
                                                 NETWORK_unlockAchievement("vvvvvvsupgrav60");
                         game.swnbestrank = 6;
                         game.swnmessage = 2+30;
-                        music.playef(26, 10);
+                        music.playef(26);
                     }
                 }
 
@@ -1015,9 +1015,9 @@ void gamelogic()
                 {
                     game.hascontrol = false;
                 }
-                if(game.timetrialcountdown == 120) music.playef(21, 10);
-                if(game.timetrialcountdown == 90) music.playef(21, 10);
-                if(game.timetrialcountdown == 60) music.playef(21, 10);
+                if(game.timetrialcountdown == 120) music.playef(21);
+                if(game.timetrialcountdown == 90) music.playef(21);
+                if(game.timetrialcountdown == 60) music.playef(21);
                 if (game.timetrialcountdown == 30)
                 {
                     switch(game.timetriallevel)
@@ -1044,7 +1044,7 @@ void gamelogic()
                         music.play(ed.customtrials[game.currenttrial].music);
                         break;
                     }
-                    music.playef(22, 10);
+                    music.playef(22);
                 }
             }
 
@@ -1059,7 +1059,7 @@ void gamelogic()
                     {
                         obj.entities[i].tile = 144;
                     }
-                    music.playef(2, 10);
+                    music.playef(2);
                 }
             }
         }

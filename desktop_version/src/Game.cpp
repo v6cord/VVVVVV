@@ -924,7 +924,7 @@ void Game::updatestate()
             if(obj.entities[obj.getplayer()].tile == 0)
             {
                 obj.entities[obj.getplayer()].tile = 144;
-                music.playef(2, 10);
+                music.playef(2);
             }
             state = 0;
             break;
@@ -1302,7 +1302,7 @@ void Game::updatestate()
             break;
 
         case 50:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("Help! Can anyone hear", 35, 15, 255, 134, 255);
             graphics.addline("this message?");
             graphics.textboxtimer(60);
@@ -1310,7 +1310,7 @@ void Game::updatestate()
             statedelay = 100;
             break;
         case 51:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("Verdigris? Are you out", 30, 12, 255, 134, 255);
             graphics.addline("there? Are you ok?");
             graphics.textboxtimer(60);
@@ -1318,7 +1318,7 @@ void Game::updatestate()
             statedelay = 100;
             break;
         case 52:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("Please help us! We've crashed", 5, 22, 255, 134, 255);
             graphics.addline("and need assistance!");
             graphics.textboxtimer(60);
@@ -1326,14 +1326,14 @@ void Game::updatestate()
             statedelay = 100;
             break;
         case 53:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("Hello? Anyone out there?", 40, 15, 255, 134, 255);
             graphics.textboxtimer(60);
             state++;
             statedelay = 100;
             break;
         case 54:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("This is Doctor Violet from the", 5, 8, 255, 134, 255);
             graphics.addline("D.S.S. Souleye! Please respond!");
             graphics.textboxtimer(60);
@@ -1341,14 +1341,14 @@ void Game::updatestate()
             statedelay = 100;
             break;
         case 55:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("Please... Anyone...", 45, 14, 255, 134, 255);
             graphics.textboxtimer(60);
             state++;
             statedelay = 100;
             break;
         case 56:
-            music.playef(15, 10);
+            music.playef(15);
             graphics.createtextbox("Please be alright, everyone...", 25, 18, 255, 134, 255);
             graphics.textboxtimer(60);
             state=50;
@@ -1463,7 +1463,7 @@ void Game::updatestate()
             obj.removetrigger(85);
             //Init final stretch
             state++;
-            music.playef(9, 10);
+            music.playef(9);
             music.play(2);
             obj.flags[72] = 1;
 
@@ -1556,7 +1556,7 @@ void Game::updatestate()
             if (obj.entities[i].onroof > 0 && gravitycontrol == 1)
             {
                 gravitycontrol = 0;
-                music.playef(1, 10);
+                music.playef(1);
             }
             if (obj.entities[i].onground > 0)
             {
@@ -1578,13 +1578,13 @@ void Game::updatestate()
 
             graphics.createtextbox("Captain! I've been so worried!", 60, 90, 164, 255, 164);
             state++;
-            music.playef(12, 10);
+            music.playef(12);
         }
         break;
         case 104:
             graphics.createtextbox("I'm glad you're ok!", 135, 152, 164, 164, 255);
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
             break;
         case 106:
@@ -1593,7 +1593,7 @@ void Game::updatestate()
             graphics.addline("way out, but I keep going");
             graphics.addline("around in circles...");
             state++;
-            music.playef(2, 10);
+            music.playef(2);
             graphics.textboxactive();
             i = obj.getcompanion();
             obj.entities[i].tile = 54;
@@ -1604,7 +1604,7 @@ void Game::updatestate()
             graphics.createtextbox("Don't worry! I have a", 125, 152, 164, 164, 255);
             graphics.addline("teleporter key!");
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
             break;
         case 110:
@@ -1615,7 +1615,7 @@ void Game::updatestate()
             obj.entities[i].state = 1;
             graphics.createtextbox("Follow me!", 185, 154, 164, 164, 255);
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
 
         }
@@ -1674,7 +1674,7 @@ void Game::updatestate()
             if (obj.entities[i].onground > 0 && gravitycontrol == 0)
             {
                 gravitycontrol = 1;
-                music.playef(1, 10);
+                music.playef(1);
             }
             if (obj.entities[i].onroof > 0)
             {
@@ -1694,34 +1694,34 @@ void Game::updatestate()
 
             graphics.createtextbox("Captain! You're ok!", 60-10, 90-40, 255, 255, 134);
             state++;
-            music.playef(14, 10);
+            music.playef(14);
             break;
         case 124:
             graphics.createtextbox("I've found a teleporter, but", 60-20, 90 - 40, 255, 255, 134);
             graphics.addline("I can't get it to go anywhere...");
             state++;
-            music.playef(2, 10);
+            music.playef(2);
             graphics.textboxactive();
             i = obj.getcompanion();	//obj.entities[i].tile = 66;	obj.entities[i].state = 0;
             break;
         case 126:
             graphics.createtextbox("I can help with that!", 125, 152-40, 164, 164, 255);
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
             break;
         case 128:
             graphics.createtextbox("I have the teleporter", 130, 152-35, 164, 164, 255);
             graphics.addline("codex for our ship!");
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
             break;
 
         case 130:
             graphics.createtextbox("Yey! Let's go home!", 60-30, 90-35, 255, 255, 134);
             state++;
-            music.playef(14, 10);
+            music.playef(14);
             graphics.textboxactive();
             i = obj.getcompanion();
             obj.entities[i].tile = 6;
@@ -1738,7 +1738,7 @@ void Game::updatestate()
         case 200:
             //Init final stretch
             state++;
-            music.playef(9, 10);
+            music.playef(9);
             //music.play(2);
             obj.flags[72] = 1;
 
@@ -2082,7 +2082,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 2501:
             //Activating a teleporter 2
@@ -2091,7 +2091,7 @@ void Game::updatestate()
             flashlight = 5;
             screenshake = 0;
             //we're done here!
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 2502:
             //Activating a teleporter 2
@@ -2154,7 +2154,7 @@ void Game::updatestate()
             hascontrol = false;
             graphics.createtextbox("Hello?", 125+24, 152-20, 164, 164, 255);
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
             break;
         case 2512:
@@ -2162,7 +2162,7 @@ void Game::updatestate()
             hascontrol = false;
             graphics.createtextbox("Is anyone there?", 125+8, 152-24, 164, 164, 255);
             state++;
-            music.playef(11, 10);
+            music.playef(11);
             graphics.textboxactive();
             break;
         case 2514:
@@ -2181,28 +2181,28 @@ void Game::updatestate()
             statedelay = 30;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3001:
             //Activating a teleporter 2
             state++;
             statedelay = 15;
             flashlight = 5;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3002:
             //Activating a teleporter 2
             state++;
             statedelay = 15;
             flashlight = 5;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3003:
             //Activating a teleporter 2
             state++;
             statedelay = 15;
             flashlight = 5;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3004:
             //Activating a teleporter 2
@@ -2211,7 +2211,7 @@ void Game::updatestate()
             flashlight = 5;
             screenshake = 0;
             //we're done here!
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 3005:
             //Activating a teleporter 2
@@ -3225,28 +3225,28 @@ void Game::updatestate()
             statedelay = 30;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3512:
             //Activating a teleporter 2
             state++;
             statedelay = 15;
             flashlight = 5;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3513:
             //Activating a teleporter 2
             state++;
             statedelay = 15;
             flashlight = 5;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3514:
             //Activating a teleporter 2
             state++;
             statedelay = 15;
             flashlight = 5;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 3515:
             //Activating a teleporter 2
@@ -3260,7 +3260,7 @@ void Game::updatestate()
             obj.entities[i].invis = true;
 
             //we're done here!
-            music.playef(10, 10);
+            music.playef(10);
             statedelay = 60;
             break;
         case 3516:
@@ -3322,7 +3322,7 @@ void Game::updatestate()
             statedelay = 10;
             flashlight = 5;
             screenshake = 10;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4001:
             //Activating a teleporter 2
@@ -3331,7 +3331,7 @@ void Game::updatestate()
             flashlight = 5;
             screenshake = 0;
             //we're done here!
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4002:
             //Activating a teleporter 2
@@ -3365,7 +3365,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4011:
             //Activating a teleporter 2
@@ -3373,7 +3373,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4012:
             //Activating a teleporter 2
@@ -3455,7 +3455,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4021:
             //Activating a teleporter 2
@@ -3463,7 +3463,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4022:
             //Activating a teleporter 2
@@ -3531,7 +3531,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4031:
             //Activating a teleporter 2
@@ -3539,7 +3539,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4032:
             //Activating a teleporter 2
@@ -3607,7 +3607,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4041:
             //Activating a teleporter 2
@@ -3615,7 +3615,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4042:
             //Activating a teleporter 2
@@ -3688,7 +3688,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4051:
             //Activating a teleporter 2
@@ -3696,7 +3696,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4052:
             //Activating a teleporter 2
@@ -3769,7 +3769,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4061:
             //Activating a teleporter 2
@@ -3777,7 +3777,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4062:
             //Activating a teleporter 2
@@ -3848,7 +3848,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4071:
             //Activating a teleporter 2
@@ -3856,7 +3856,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4072:
             //Activating a teleporter 2
@@ -3924,7 +3924,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4081:
             //Activating a teleporter 2
@@ -3932,7 +3932,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4082:
             //Activating a teleporter 2
@@ -4000,7 +4000,7 @@ void Game::updatestate()
             statedelay = 15;
             flashlight = 5;
             screenshake = 90;
-            music.playef(9, 10);
+            music.playef(9);
             break;
         case 4091:
             //Activating a teleporter 2
@@ -4008,7 +4008,7 @@ void Game::updatestate()
             statedelay = 0;
             flashlight = 5;
             screenshake = 0;
-            music.playef(10, 10);
+            music.playef(10);
             break;
         case 4092:
             //Activating a teleporter 2
@@ -4754,7 +4754,7 @@ void Game::deathsequence()
             gameoverdelay = 60;
         }
         deathcounts++;
-        music.playef(2,10);
+        music.playef(2);
         obj.entities[i].invis = true;
         if (map.finalmode)
         {

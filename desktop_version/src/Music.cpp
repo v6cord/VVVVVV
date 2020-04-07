@@ -563,7 +563,7 @@ void musicclass::stopfile(std::string track) {
     custom_file_paths.erase(track);
 }
 
-void musicclass::playef(int t, int offset)
+void musicclass::playef(int t)
 {
 	// efchannel[currentefchan] = efchan[t].play(offset);
 	// currentefchan++;

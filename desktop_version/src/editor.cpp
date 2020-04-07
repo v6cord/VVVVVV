@@ -5325,7 +5325,7 @@ void editorinput()
                     if (game.press_action) {
                         ed.trialmod = false;
                         game.jumpheld = true;
-                        music.playef(11, 10);
+                        music.playef(11);
                     }
                     if (game.currentmenuoption == 3) {
                         if (game.press_left || key.keymap[SDLK_UP]) ed.customtrials[ed.edtrial].trinkets--;
@@ -5352,19 +5352,19 @@ void editorinput()
                             temp.name = "Trial " + std::to_string(ed.customtrials.size() + 1);
                             ed.customtrials.push_back(temp);
                             ed.edtrial = (int)ed.customtrials.size() - 1;
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_edit_trial");
                         }
                         else if (game.currentmenuoption == (int)ed.customtrials.size()+1)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();
                         }
                         else
                         {
                             ed.edtrial = game.currentmenuoption;
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_edit_trial");
                         }
                     }
@@ -5380,28 +5380,28 @@ void editorinput()
                         if (game.currentmenuoption == 1) {
                             ed.trialstartpoint = true;
                             ed.settingsmod = false;
-                            music.playef(11, 10);
+                            music.playef(11);
                         }
                         if (game.currentmenuoption == 2) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             ed.customtrials[ed.edtrial].music++;
                             if (ed.customtrials[ed.edtrial].music > 15) ed.customtrials[ed.edtrial].music = 0;
                         }
                         if (game.currentmenuoption == 3) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             ed.trialmod = true;
                         }
                         if (game.currentmenuoption == 4) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             ed.trialmod = true;
                         }
                         if (game.currentmenuoption == 5) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_remove_trial");
                             map.nexttowercolour();
                         }
                         if (game.currentmenuoption == 6) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_trials");
                             map.nexttowercolour();
                         }
@@ -5410,11 +5410,11 @@ void editorinput()
                     {
                         if (game.currentmenuoption == 0) {
                             ed.customtrials.erase(ed.customtrials.begin() + ed.edtrial);
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_trials");
                             map.nexttowercolour();
                         } else {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_edit_trial");
                             map.nexttowercolour();
                         }
@@ -5451,7 +5451,7 @@ void editorinput()
                         }
                         else if (game.currentmenuoption == 4)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();
                         }
@@ -5461,14 +5461,14 @@ void editorinput()
                         if (game.currentmenuoption == 0)
                         {
                             //Change level description stuff
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_desc");
                             map.nexttowercolour();
                         }
                         else if (game.currentmenuoption == 1)
                         {
                             //Enter script editormode
-                            music.playef(11, 10);
+                            music.playef(11);
                             ed.scripteditmod=true;
                             ed.clearscriptbuffer();
                             key.enabletextentry();
@@ -5482,13 +5482,13 @@ void editorinput()
                         }
                         else if (game.currentmenuoption == 2)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_trials");
                             map.nexttowercolour();
                         }
                         else if (game.currentmenuoption == 3)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_music");
                             map.nexttowercolour();
                             if(ed.levmusic>0) music.play(ed.levmusic);
@@ -5519,13 +5519,13 @@ void editorinput()
                         }
                         else if (game.currentmenuoption == 6)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_settings2");
                             map.nexttowercolour();
                         }
                         else if (game.currentmenuoption == 7)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_quit");
                             map.nexttowercolour();
                         }
@@ -5611,7 +5611,7 @@ void editorinput()
                                 ed.notedelay = 45;
                             }
                         } else if (game.currentmenuoption == game.nummenuoptions - 1) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_settings3");
                             map.nexttowercolour();
                         }
@@ -5651,7 +5651,7 @@ void editorinput()
                         } else if (game.currentmenuoption == 2) {
                             int tower = ed.get_tower(ed.levx, ed.levy);
                             if (tower) {
-                                music.playef(2, 10);
+                                music.playef(2);
                             } else {
                                 if (ed.getedaltstatenum(ed.levx, ed.levy, ed.levaltstate + 1) != -1) {
                                     ed.levaltstate++;
@@ -5667,7 +5667,7 @@ void editorinput()
                         } else if (game.currentmenuoption == 3) {
                             int tower = ed.get_tower(ed.levx, ed.levy);
                             if (tower) {
-                                music.playef(2, 10);
+                                music.playef(2);
                             } else {
                                 int j=0, tx=0, ty=0;
                                 for(size_t i=0; i<edentity.size(); i++)
@@ -5726,7 +5726,7 @@ void editorinput()
                         } else if (game.currentmenuoption == 5) {
                             game.createmenu("ed_dimensions");
                         } else if (game.currentmenuoption == game.nummenuoptions - 1) {
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();
                         }
@@ -5749,11 +5749,11 @@ void editorinput()
                             {
                                 music.haltdasmusik();
                             }
-                            music.playef(11, 10);
+                            music.playef(11);
                         }
                         else if (game.currentmenuoption == 1)
                         {
-                            music.playef(11, 10);
+                            music.playef(11);
                             music.fadeout();
                             game.createmenu("ed_settings");
                             map.nexttowercolour();
@@ -5777,14 +5777,14 @@ void editorinput()
                         else if (game.currentmenuoption == 1)
                         {
                             //Quit without saving
-                            music.playef(11, 10);
+                            music.playef(11);
                             music.fadeout();
                             graphics.fademode = 2;
                         }
                         else if (game.currentmenuoption == 2)
                         {
                             //Go back to editor
-                            music.playef(11, 10);
+                            music.playef(11);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();
                         }
