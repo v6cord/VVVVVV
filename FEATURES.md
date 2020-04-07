@@ -40,6 +40,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `reloadonetime(script)` - allow re-triggering of one-time script boxes with the given script name
 
+- Mannequins, ZZT centipedes, and Edge Games fish now face properly
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting

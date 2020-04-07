@@ -72,7 +72,9 @@ std::vector<std::string> changelog = {
     "  applies in VCE levels)",
     "- reloadonetime(script) - allow re-",
     "  triggering of one-time script boxes",
-    "  with the given script name"
+    "  with the given script name",
+    "- Mannequins, ZZT centipedes, and Edge",
+    "  Games fish now face properly",
     "",
     "Version c1.0-pre1",
     "[line]",
