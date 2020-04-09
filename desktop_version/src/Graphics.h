@@ -210,7 +210,7 @@ public:
 
 	void setcol(int t);
 	void drawfinalmap();
-    
+
     void reloadresources(bool fast = false);
 
 	void textboxcreatefast();

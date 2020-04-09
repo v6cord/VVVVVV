@@ -29,7 +29,7 @@ growing_vector<std::string> scriptx::tokenize(std::string command) {
 
 	growing_vector<std::string> temp;
 	std::string tempword = "";
-    
+
 	for (size_t i = 0; i < command.length(); i++)
 	{
 		std::string currentletter = command.substr(i, 1);

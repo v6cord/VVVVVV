@@ -4471,7 +4471,7 @@ void editorrender()
 
                 graphics.Print(4, 232, "1/2", 196, 196, 255 - help.glow, false);
             } else {
-                for(int i=0; i<10; i++) 
+                for(int i=0; i<10; i++)
                     FillRect(graphics.backBuffer, 4+(i*tg), 209,20,20,graphics.getRGB(32,32,32));
                 FillRect(graphics.backBuffer, 4+((ed.drawmode-10)*tg), 209,20,20,graphics.getRGB(64,64,64));
                 //10:

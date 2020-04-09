@@ -338,7 +338,7 @@ std::vector<std::string> changelog = {
     "  variable, using either a given",
     "  argument or whatever is on the next",
     "  line",
-    "- Variable assignments (var = contents,",  
+    "- Variable assignments (var = contents,",
     "  var++, var += 1, var -= 1, var--)",
     "- Built-in variables (%deaths%,",
     "  %player_x%, %player_y%,",
@@ -694,7 +694,7 @@ void titlerender()
         }
         else if (game.currentmenuname == "options")
         {
-				
+
 						#if defined(MAKEANDPLAY)
 							if (game.currentmenuoption == 0)
 							{
@@ -1742,7 +1742,7 @@ void titlerender()
             graphics.Print( -1, 125, "Your have unlocked", tr, tg, tb, true);
             graphics.Print( -1, 135, "the intermission levels.", tr, tg, tb, true);
         }else if (game.currentmenuname == "playerworlds")
-        {   
+        {
 						graphics.tempstring = FILESYSTEM_getUserLevelDirectory();
 						if(graphics.tempstring.length()>80){
 							graphics.Print( -1, 160, "To install new player levels, copy", tr, tg, tb, true);
@@ -2187,7 +2187,7 @@ void gamerender()
         	map.glitchname = map.getglitchname(game.roomx, game.roomy);
           graphics.bprint(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }else{
-            
+
             graphics.bprint(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
             //graphics.Print(304 - (map.customcoins / 10) * 8, 231, std::to_string(map.customcoins), 255, 255, 255);
             //graphics.drawhuetile(312, 231, 48, 8);

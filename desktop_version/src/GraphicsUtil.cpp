@@ -872,7 +872,7 @@ RgbColor HsvToRgb(HsvColor hsv)
     }
 
     region = hsv.h / 43;
-    remainder = (hsv.h - (region * 43)) * 6; 
+    remainder = (hsv.h - (region * 43)) * 6;
 
     p = (hsv.v * (255 - hsv.s)) >> 8;
     q = (hsv.v * (255 - ((hsv.s * remainder) >> 8))) >> 8;

@@ -150,7 +150,7 @@ public:
     bool entityhlinecollide(int t, int l);
 
     bool entityvlinecollide(int t, int l);
-		
+
 		bool entitywarphlinecollide(int t, int l);
 		bool entitywarpvlinecollide(int t, int l);
 

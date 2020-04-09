@@ -1381,7 +1381,7 @@ void Game::updatestate()
             if (trinkets >= timetrialshinytarget) timetrialrank++;
             if (deathcounts == 0) timetrialrank++;
 
-            
+
 
             if (incustomtrial) {
                 if ((currenttrial + 1) > (int)customtrialstats.size()) {
@@ -3198,7 +3198,7 @@ void Game::updatestate()
 								NETWORK_unlockAchievement("vvvvvvcomplete50");
 							}
 						}
-						
+
 
             savestats();
             if (nodeathmode)
@@ -4619,7 +4619,7 @@ void Game::savestats()
     msg->LinkEndChild( new TiXmlText( tu.String(fullScreenEffect_badSignal).c_str()));
     dataNode->LinkEndChild( msg );
 
-		
+
     msg = new TiXmlElement( "usingmmmmmm" );
     msg->LinkEndChild( new TiXmlText( tu.String(usingmmmmmm).c_str()));
     dataNode->LinkEndChild( msg );

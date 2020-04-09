@@ -272,7 +272,7 @@ void titleinput()
             {
                 if (game.currentmenuname == "mainmenu")
                 {
-								
+
             #if defined(MAKEANDPLAY)
 				   if (game.currentmenuoption == 0)
                     {
@@ -527,7 +527,7 @@ void titleinput()
                       game.createmenu("loadcustomtrial");
                         for (int i = 0; i < (int)ed.customtrials.size(); i++) {
                             std::string sl = ed.customtrials[i].name;
-                            std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower); 
+                            std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);
                             game.menuoptions[i] = sl;
                             game.menuoptionsactive[i] = true;
                         }
@@ -990,7 +990,7 @@ void titleinput()
                 }
                 else if (game.currentmenuname == "options")
                 {
-								
+
 				#if defined(MAKEANDPLAY)
 				if (game.currentmenuoption == 0)
                     {
@@ -999,7 +999,7 @@ void titleinput()
                         game.createmenu("accessibility");
                         map.nexttowercolour();
                     }
-                   
+
 					else if (game.currentmenuoption == 1)
 					{
 						//clear data menu
@@ -1055,7 +1055,7 @@ void titleinput()
 													map.nexttowercolour();
 											}
 										}
-                    
+
 				#elif !defined(MAKEANDPLAY)
                     if (game.currentmenuoption == 0)
                     {
@@ -1085,7 +1085,7 @@ void titleinput()
                         game.createmenu("cleardatamenu");
                         map.nexttowercolour();
                     }
-                    
+
 										if(music.mmmmmm){
 											if (game.currentmenuoption == 4)
 											{
