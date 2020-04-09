@@ -32,13 +32,13 @@ public:
 
 	int bfontlen(uint32_t ch);
 	int font_idx(uint32_t ch);
-        int strwidth(std::string_view s);
-        int strheight(std::string_view s);
+	int strwidth(std::string_view s);
+	int strheight(std::string_view s);
 
 	void Makebfont();
 	void load_font(const char* path, SDL_Surface* img, int char_w, int char_h, int& pos);
 
-    std::string assetdir;
+	std::string assetdir;
 
 	void drawhuetile(int x, int y, int t, int c);
 
@@ -211,7 +211,7 @@ public:
 	void setcol(int t);
 	void drawfinalmap();
 
-    void reloadresources(bool fast = false);
+	void reloadresources(bool fast = false);
 
 	void textboxcreatefast();
 
@@ -254,7 +254,7 @@ public:
 	SDL_Surface* tempBuffer;
 
 	SDL_Rect bfont_rect = {0};
- 	SDL_Rect tiles_rect = {0};
+	SDL_Rect tiles_rect = {0};
 	SDL_Rect sprites_rect = {0};
 	SDL_Rect bfontmask_rect = {0};
 	SDL_Rect images_rect = {0};
@@ -306,15 +306,15 @@ public:
 
 	int warpskip, warpfcol, warpbcol = 0;
 
-        std::unordered_map<int, int> font_positions;
-        std::optional<std::string> mapimage;
+	std::unordered_map<int, int> font_positions;
+	std::optional<std::string> mapimage;
 
-        bool noclear = false;
-        bool translucentroomname = false;;
+	bool noclear = false;
+	bool translucentroomname = false;;
 
 	bool showmousecursor = false;
 
-        SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
+	SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
 
 extern Graphics graphics;
