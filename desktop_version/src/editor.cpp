@@ -1047,7 +1047,7 @@ int editorclass::getenemyframe(int t, int dir)
         return 52;
         break;
     case 16:
-        return 54;
+        return dir == 2 ? 66 : 54;
         break;
     case 17:
         return 51;
@@ -3474,9 +3474,10 @@ void editorrender()
             edentity[i].intower == tower &&
             (tower || (ex >= 0 && ex < 320 && ey >= 0 && ey < 240))) {
 
+            int flipped = ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype == 15 && edentity[i].p1 == 2 ? 24 : 0;
             switch(edentity[i].t) {
             case 1: // Enemies
-                graphics.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcol);
+                graphics.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcol,flipped);
                 if(edentity[i].p1==0)
                     graphics.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
                 if(edentity[i].p1==1)
