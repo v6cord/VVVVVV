@@ -121,7 +121,7 @@ public:
 
     void initteleportermode();
 
-	std::string saveFilePath;
+    std::string saveFilePath;
 
 
     int door_left = 0;
@@ -142,9 +142,9 @@ public:
     //State logic stuff
     int state, statedelay = 0;
 
-		bool glitchrunkludge = false;
+    bool glitchrunkludge = false;
 
-		int usingmmmmmm = 0;
+    int usingmmmmmm = 0;
 
     int gamestate = 0;
     bool hascontrol, jumpheld = false;
@@ -154,10 +154,10 @@ public:
     bool infocus = false;
     bool muted = false;
     int mutebutton = 0;
-	private:
+private:
     float m_globalVol = 0.0;
 
-	public:
+public:
 
     int tapleft, tapright = 0;
 
@@ -167,7 +167,7 @@ public:
     //public var crewstats:Array = new Array();
     int lastsaved = 0;
     int deathcounts = 0;
-	int timerStartTime = 0;
+    int timerStartTime = 0;
 
     int frames, seconds, minutes, hours = 0;
     bool gamesaved = false;
@@ -316,9 +316,9 @@ public:
 
     bool advanced_mode = false;
     bool fullScreenEffect_badSignal = false;
-	bool useLinearFilter = false;
-	int stretchMode = 0;
-	int controllerSensitivity = 0;
+    bool useLinearFilter = false;
+    int stretchMode = 0;
+    int controllerSensitivity = 0;
 
     //Screenrecording stuff, for beta/trailer
     int recording = 0;
@@ -361,9 +361,9 @@ public:
     bool customlevelstatsloaded = false;
 
 
-	growing_vector<SDL_GameControllerButton> controllerButton_map;
-	growing_vector<SDL_GameControllerButton> controllerButton_flip;
-	growing_vector<SDL_GameControllerButton> controllerButton_esc;
+    growing_vector<SDL_GameControllerButton> controllerButton_map;
+    growing_vector<SDL_GameControllerButton> controllerButton_flip;
+    growing_vector<SDL_GameControllerButton> controllerButton_esc;
     growing_vector<scriptmarker> scriptmarkers;
 
     bool hidemarkers = false;

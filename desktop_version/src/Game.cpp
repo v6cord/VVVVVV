@@ -43,77 +43,77 @@ const char* BoolToString(bool _b)
 
 bool GetButtonFromString(const char *pText, SDL_GameControllerButton *button)
 {
-	if (	*pText == '0' ||
-		*pText == 'a' ||
-		*pText == 'A'	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_A;
-		return true;
-	}
-	if (	strcmp(pText, "1") == 0 ||
-		*pText == 'b' ||
-		*pText == 'B'	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_B;
-		return true;
-	}
-	if (	*pText == '2' ||
-		*pText == 'x' ||
-		*pText == 'X'	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_X;
-		return true;
-	}
-	if (	*pText == '3' ||
-		*pText == 'y' ||
-		*pText == 'Y'	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_Y;
-		return true;
-	}
-	if (	*pText == '4' ||
-		strcasecmp(pText, "BACK") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_BACK;
-		return true;
-	}
-	if (	*pText == '5' ||
-		strcasecmp(pText, "GUIDE") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_GUIDE;
-		return true;
-	}
-	if (	*pText == '6' ||
-		strcasecmp(pText, "START") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_START;
-		return true;
-	}
-	if (	*pText == '7' ||
-		strcasecmp(pText, "LS") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_LEFTSTICK;
-		return true;
-	}
-	if (	*pText == '8' ||
-		strcasecmp(pText, "RS") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_RIGHTSTICK;
-		return true;
-	}
-	if (	*pText == '9' ||
-		strcasecmp(pText, "LB") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-		return true;
-	}
-	if (	strcmp(pText, "10") == 0 ||
-		strcasecmp(pText, "RB") == 0	)
-	{
-		*button = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
-		return true;
-	}
-	return false;
+    if (*pText == '0' ||
+        *pText == 'a' ||
+        *pText == 'A')
+    {
+        *button = SDL_CONTROLLER_BUTTON_A;
+        return true;
+    }
+    if (strcmp(pText, "1") == 0 ||
+        *pText == 'b' ||
+        *pText == 'B')
+    {
+        *button = SDL_CONTROLLER_BUTTON_B;
+        return true;
+    }
+    if (*pText == '2' ||
+        *pText == 'x' ||
+        *pText == 'X')
+    {
+        *button = SDL_CONTROLLER_BUTTON_X;
+        return true;
+    }
+    if (*pText == '3' ||
+        *pText == 'y' ||
+        *pText == 'Y')
+    {
+        *button = SDL_CONTROLLER_BUTTON_Y;
+        return true;
+    }
+    if (*pText == '4' ||
+        strcasecmp(pText, "BACK") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_BACK;
+        return true;
+    }
+    if (*pText == '5' ||
+        strcasecmp(pText, "GUIDE") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_GUIDE;
+        return true;
+    }
+    if (*pText == '6' ||
+        strcasecmp(pText, "START") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_START;
+        return true;
+    }
+    if (*pText == '7' ||
+        strcasecmp(pText, "LS") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_LEFTSTICK;
+        return true;
+    }
+    if (*pText == '8' ||
+        strcasecmp(pText, "RS") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_RIGHTSTICK;
+        return true;
+    }
+    if (*pText == '9' ||
+        strcasecmp(pText, "LB") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+        return true;
+    }
+    if (strcmp(pText, "10") == 0 ||
+        strcasecmp(pText, "RB") == 0)
+    {
+        *button = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
+        return true;
+    }
+    return false;
 }
 
 
@@ -128,7 +128,7 @@ void Game::init(void)
 
     timerStartTime= SDL_GetTicks();
 
-		glitchrunkludge = false;
+    glitchrunkludge = false;
     hascontrol = true;
     jumpheld = false;
     advancetext = false;
@@ -199,8 +199,8 @@ void Game::init(void)
     useLinearFilter = false;
     advanced_mode = false;
     fullScreenEffect_badSignal = false;
-	// 0..5
-	controllerSensitivity = 2;
+    // 0..5
+    controllerSensitivity = 2;
 
     nodeathmode = false;
     nocutscenes = false;
@@ -705,9 +705,9 @@ void Game::updatestate()
     int i;
     statedelay--;
     if(statedelay<=0){
-		  statedelay=0;
-			glitchrunkludge=false;
-		}
+        statedelay=0;
+        glitchrunkludge=false;
+    }
     if (statedelay <= 0)
     {
         switch(state)
@@ -1427,14 +1427,14 @@ void Game::updatestate()
                 if (timetrialrank > bestrank[timetriallevel] || bestrank[timetriallevel]==-1)
                 {
                     bestrank[timetriallevel] = timetrialrank;
-    				if(timetrialrank>=3){
-    					if(timetriallevel==0) NETWORK_unlockAchievement("vvvvvvtimetrial_station1_fixed");
-    					if(timetriallevel==1) NETWORK_unlockAchievement("vvvvvvtimetrial_lab_fixed");
-    					if(timetriallevel==2) NETWORK_unlockAchievement("vvvvvvtimetrial_tower_fixed");
-    					if(timetriallevel==3) NETWORK_unlockAchievement("vvvvvvtimetrial_station2_fixed");
-    					if(timetriallevel==4) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
-    					if(timetriallevel==5) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
-    				}
+                    if(timetrialrank>=3){
+                        if(timetriallevel==0) NETWORK_unlockAchievement("vvvvvvtimetrial_station1_fixed");
+                        if(timetriallevel==1) NETWORK_unlockAchievement("vvvvvvtimetrial_lab_fixed");
+                        if(timetriallevel==2) NETWORK_unlockAchievement("vvvvvvtimetrial_tower_fixed");
+                        if(timetriallevel==3) NETWORK_unlockAchievement("vvvvvvtimetrial_station2_fixed");
+                        if(timetriallevel==4) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
+                        if(timetriallevel==5) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
+                    }
                 }
                 savestats();
             }
@@ -3028,7 +3028,7 @@ void Game::updatestate()
             break;
         case 3501:
             //Game complete!
-						NETWORK_unlockAchievement("vvvvvvgamecomplete");
+            NETWORK_unlockAchievement("vvvvvvgamecomplete");
             unlocknum(5);
             crewstats[0] = true;
             state++;
@@ -3168,7 +3168,7 @@ void Game::updatestate()
             if (obj.flags[73] == 0)
             {
                 //flip mode complete
-								NETWORK_unlockAchievement("vvvvvvgamecompleteflip");
+                NETWORK_unlockAchievement("vvvvvvgamecompleteflip");
                 unlock[19] = true;
             }
 
@@ -3184,26 +3184,26 @@ void Game::updatestate()
                 }
             }
 
-						if (bestgamedeaths > -1) {
-							if (bestgamedeaths <= 500) {
-							  NETWORK_unlockAchievement("vvvvvvcomplete500");
-							}
-							if (bestgamedeaths <= 250) {
-								NETWORK_unlockAchievement("vvvvvvcomplete250");
-							}
-							if (bestgamedeaths <= 100) {
-								NETWORK_unlockAchievement("vvvvvvcomplete100");
-							}
-							if (bestgamedeaths <= 50) {
-								NETWORK_unlockAchievement("vvvvvvcomplete50");
-							}
-						}
+            if (bestgamedeaths > -1) {
+                if (bestgamedeaths <= 500) {
+                    NETWORK_unlockAchievement("vvvvvvcomplete500");
+                }
+            if (bestgamedeaths <= 250) {
+                NETWORK_unlockAchievement("vvvvvvcomplete250");
+            }
+            if (bestgamedeaths <= 100) {
+                NETWORK_unlockAchievement("vvvvvvcomplete100");
+            }
+            if (bestgamedeaths <= 50) {
+                NETWORK_unlockAchievement("vvvvvvcomplete50");
+            }
+        }
 
 
             savestats();
             if (nodeathmode)
             {
-								NETWORK_unlockAchievement("vvvvvvmaster"); //bloody hell
+                NETWORK_unlockAchievement("vvvvvvmaster"); //bloody hell
                 unlock[20] = true;
                 state = 3520;
                 statedelay = 0;
@@ -4288,24 +4288,24 @@ void Game::loadstats()
             fullscreen = atoi(pText);
         }
 
-	if (pKey == "stretch")
-	{
-		stretchMode = atoi(pText);
-	}
+        if (pKey == "stretch")
+        {
+            stretchMode = atoi(pText);
+        }
 
-	if (pKey == "useLinearFilter")
-	{
-		useLinearFilter = atoi(pText);
-	}
+        if (pKey == "useLinearFilter")
+        {
+            useLinearFilter = atoi(pText);
+        }
 
-	if (pKey == "window_width")
-	{
-		width = atoi(pText);
-	}
-	if (pKey == "window_height")
-	{
-		height = atoi(pText);
-	}
+        if (pKey == "window_width")
+        {
+            width = atoi(pText);
+        }
+        if (pKey == "window_height")
+        {
+            height = atoi(pText);
+        }
 
 
         if (pKey == "noflashingmode")
@@ -4373,13 +4373,13 @@ void Game::loadstats()
             graphics.screenbuffer->badSignalEffect = fullScreenEffect_badSignal;
         }
 
-				if (pKey == "usingmmmmmm")
+        if (pKey == "usingmmmmmm")
         {
-					if(atoi(pText)>0){
-            usingmmmmmm = 1;
-					}else{
-					  usingmmmmmm = 0;
-					}
+            if(atoi(pText)>0){
+                usingmmmmmm = 1;
+            }else{
+                usingmmmmmm = 0;
+            }
         }
 
         if (pKey == "skipfakeload")
@@ -4407,37 +4407,37 @@ void Game::loadstats()
             graphics.showmousecursor = atoi(pText);
         }
 
-		if (pKey == "flipButton")
-		{
-			SDL_GameControllerButton newButton;
-			if (GetButtonFromString(pText, &newButton))
-			{
-				controllerButton_flip.push_back(newButton);
-			}
-		}
+        if (pKey == "flipButton")
+        {
+            SDL_GameControllerButton newButton;
+            if (GetButtonFromString(pText, &newButton))
+            {
+                controllerButton_flip.push_back(newButton);
+            }
+        }
 
-		if (pKey == "enterButton")
-		{
-			SDL_GameControllerButton newButton;
-			if (GetButtonFromString(pText, &newButton))
-			{
-				controllerButton_map.push_back(newButton);
-			}
-		}
+        if (pKey == "enterButton")
+        {
+            SDL_GameControllerButton newButton;
+            if (GetButtonFromString(pText, &newButton))
+            {
+                controllerButton_map.push_back(newButton);
+            }
+        }
 
-		if (pKey == "escButton")
-		{
-			SDL_GameControllerButton newButton;
-			if (GetButtonFromString(pText, &newButton))
-			{
-				controllerButton_esc.push_back(newButton);
-			}
-		}
+        if (pKey == "escButton")
+        {
+            SDL_GameControllerButton newButton;
+            if (GetButtonFromString(pText, &newButton))
+            {
+                controllerButton_esc.push_back(newButton);
+            }
+        }
 
-		if (pKey == "controllerSensitivity")
-		{
-			controllerSensitivity = atoi(pText);
-		}
+        if (pKey == "controllerSensitivity")
+        {
+            controllerSensitivity = atoi(pText);
+        }
 
                 if (pKey == "touchMode") {
                         key.type = (input_type) atoi(pText);
@@ -4663,13 +4663,13 @@ void Game::savestats()
         dataNode->LinkEndChild(msg);
     }
 
-	msg = new TiXmlElement( "controllerSensitivity" );
-	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
-	dataNode->LinkEndChild( msg );
+    msg = new TiXmlElement( "controllerSensitivity" );
+    msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));
+    dataNode->LinkEndChild( msg );
 
-	msg = new TiXmlElement( "touchMode" );
-	msg->LinkEndChild( new TiXmlText( tu.String(key.type).c_str()));
-	dataNode->LinkEndChild( msg );
+    msg = new TiXmlElement( "touchMode" );
+    msg->LinkEndChild( new TiXmlText( tu.String(key.type).c_str()));
+    dataNode->LinkEndChild( msg );
 
     FILESYSTEM_saveTiXmlDocument("saves/unlock.vvv", &doc);
 }
@@ -5085,7 +5085,7 @@ void Game::loadquick()
         else if (pKey == "frames")
         {
             frames = atoi(pText);
-						frames = 0;
+            frames = 0;
         }
         else if (pKey == "seconds")
         {
@@ -5479,7 +5479,7 @@ void Game::customloadquick(std::string savfile)
         else if (pKey == "frames")
         {
             frames = atoi(pText);
-						frames = 0;
+            frames = 0;
         }
         else if (pKey == "seconds")
         {
@@ -6973,7 +6973,7 @@ void Game::loadtele()
         else if (pKey == "frames")
         {
             frames = atoi(pText);
-						frames = 0;
+            frames = 0;
         }
         else if (pKey == "seconds")
         {
@@ -7050,25 +7050,25 @@ void Game::gameclock()
 /*
 test = true;
 std::ostringstream os;
-	os << hours << ":" << minutes << ":" << seconds << ", " << frames;
+    os << hours << ":" << minutes << ":" << seconds << ", " << frames;
 teststring = os.str();
 */
-  frames++;
-	if (frames >= 30)
-	{
-		frames -= 30;
-		seconds++;
-		if (seconds >= 60)
-		{
-			seconds -= 60;
-			minutes++;
-			if (minutes >= 60)
-			{
-				minutes -= 60;
-				hours++;
-			}
-		}
-	}
+    frames++;
+    if (frames >= 30)
+    {
+        frames -= 30;
+        seconds++;
+        if (seconds >= 60)
+        {
+            seconds -= 60;
+            minutes++;
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours++;
+            }
+        }
+    }
 }
 
 std::string Game::giventimestring( int hrs, int min, int sec )
@@ -7151,62 +7151,62 @@ void Game::createmenu( std::string t )
 
     if (t == "mainmenu")
     {
-			#if defined(MAKEANDPLAY)
-					menuoptions[0] = "player levels";
-					menuoptionsactive[0] = true;
-					menuoptions[1] = "graphic options";
-					menuoptionsactive[1] = true;
-					menuoptions[2] = "game options";
-					menuoptionsactive[2] = true;
-					menuoptions[3] = "view credits";
-					menuoptionsactive[3] = true;
-                    menuoptions[4] = "changelog";
-					menuoptionsactive[4] = true;
-					menuoptions[5] = "quit game";
-					menuoptionsactive[5] = true;
-					nummenuoptions = 6;
-					menuxoff = -16;
-					menuyoff = -10;
-			#elif !defined(MAKEANDPLAY)
-				#if defined(NO_CUSTOM_LEVELS)
-					menuoptions[0] = "start game";
-					menuoptionsactive[0] = true;
-					menuoptions[1] = "graphic options";
-					menuoptionsactive[1] = true;
-					menuoptions[2] = "game options";
-					menuoptionsactive[2] = true;
-					menuoptions[3] = "view credits";
-					menuoptionsactive[3] = true;
-					menuoptions[4] = "quit game";
-					menuoptionsactive[4] = true;
-					nummenuoptions = 5;
-					menuxoff = -16;
-					menuyoff = -10;
-				#else
-					menuoptions[0] = "start game";
-					menuoptionsactive[0] = true;
-					menuoptions[1] = "player levels";
-					menuoptionsactive[1] = true;
-					menuoptions[2] = "graphic options";
-					menuoptionsactive[2] = true;
-					menuoptions[3] = "game options";
-					menuoptionsactive[3] = true;
-					menuoptions[4] = "view credits";
-					menuoptionsactive[4] = true;
-                    menuoptions[5] = "changelog";
-					menuoptionsactive[5] = true;
-					menuoptions[6] = "quit game";
-					menuoptionsactive[6] = true;
-					nummenuoptions = 7;
-					menuxoff = -16;
-					menuyoff = -10;
-				#endif
-			#endif
+#if defined(MAKEANDPLAY)
+        menuoptions[0] = "player levels";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "graphic options";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "game options";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "view credits";
+        menuoptionsactive[3] = true;
+        menuoptions[4] = "changelog";
+        menuoptionsactive[4] = true;
+        menuoptions[5] = "quit game";
+        menuoptionsactive[5] = true;
+        nummenuoptions = 6;
+        menuxoff = -16;
+        menuyoff = -10;
+#elif !defined(MAKEANDPLAY)
+ #if defined(NO_CUSTOM_LEVELS)
+        menuoptions[0] = "start game";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "graphic options";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "game options";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "view credits";
+        menuoptionsactive[3] = true;
+        menuoptions[4] = "quit game";
+        menuoptionsactive[4] = true;
+        nummenuoptions = 5;
+        menuxoff = -16;
+        menuyoff = -10;
+ #else
+        menuoptions[0] = "start game";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "player levels";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "graphic options";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "game options";
+        menuoptionsactive[3] = true;
+        menuoptions[4] = "view credits";
+        menuoptionsactive[4] = true;
+        menuoptions[5] = "changelog";
+        menuoptionsactive[5] = true;
+        menuoptions[6] = "quit game";
+        menuoptionsactive[6] = true;
+        nummenuoptions = 7;
+        menuxoff = -16;
+        menuyoff = -10;
+ #endif
+#endif
     }
 #if !defined(NO_CUSTOM_LEVELS)
     else if (t == "playerworlds")
     {
-    #if !defined(NO_EDITOR)
+ #if !defined(NO_EDITOR)
         menuoptions[0] = "play a level";
         menuoptionsactive[0] = true;
         menuoptions[1] = "level editor";
@@ -7218,7 +7218,7 @@ void Game::createmenu( std::string t )
         nummenuoptions = 4;
         menuxoff = -30;
         menuyoff = -40;
-    #else
+ #else
         menuoptions[0] = "play a level";
         menuoptionsactive[0] = true;
         menuoptions[1] = "open level folder";
@@ -7228,7 +7228,7 @@ void Game::createmenu( std::string t )
         nummenuoptions = 2;
         menuxoff = -30;
         menuyoff = -40;
-    #endif
+ #endif
     }
     else if (t == "quickloadlevel")
     {
@@ -7618,36 +7618,36 @@ void Game::createmenu( std::string t )
     }
     else if (t == "options")
     {
-				#if defined(MAKEANDPLAY)
-					menuoptions[0] = "accessibility options";
-					menuoptionsactive[0] = true;
-					menuoptions[1] = "game pad options";
-					menuoptionsactive[1] = true;
-                                        menuoptions[2] = "flip mode";
-					menuoptionsactive[2] = true;
-					menuoptions[3] = "clear data";
-					menuoptionsactive[3] = true;
-					menuoptions[4] = "return";
-					menuoptionsactive[4] = true;
-					nummenuoptions = 5;
-					menuxoff = -40;
-					menuyoff = 0;
-				#elif !defined(MAKEANDPLAY)
-					menuoptions[0] = "accessibility options";
-					menuoptionsactive[0] = true;
-					menuoptions[1] = "unlock play modes";
-					menuoptionsactive[1] = true;
-					menuoptions[2] = "game pad options";
-					menuoptionsactive[2] = true;
-					menuoptions[3] = "clear data";
-					menuoptionsactive[3] = true;
+#if defined(MAKEANDPLAY)
+        menuoptions[0] = "accessibility options";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "game pad options";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "flip mode";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "clear data";
+        menuoptionsactive[3] = true;
+        menuoptions[4] = "return";
+        menuoptionsactive[4] = true;
+        nummenuoptions = 5;
+        menuxoff = -40;
+        menuyoff = 0;
+#elif !defined(MAKEANDPLAY)
+        menuoptions[0] = "accessibility options";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "unlock play modes";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "game pad options";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "clear data";
+        menuoptionsactive[3] = true;
 
-					menuoptions[4] = "return";
-					menuoptionsactive[4] = true;
-					nummenuoptions = 5;
-					menuxoff = -40;
-					menuyoff = 0;
-				#endif
+        menuoptions[4] = "return";
+        menuoptionsactive[4] = true;
+        nummenuoptions = 5;
+        menuxoff = -40;
+        menuyoff = 0;
+#endif
     }
     else if (t == "accessibility")
     {
@@ -7671,28 +7671,28 @@ void Game::createmenu( std::string t )
         menuxoff = -85;
         menuyoff = -10;
     }
-	else if(t == "controller")
-	{
-		menuoptions[0] = "analog stick sensitivity";
-		menuoptionsactive[0] = true;
-		menuoptions[1] = "bind flip";
-		menuoptionsactive[1] = true;
-		menuoptions[2] = "bind enter";
-		menuoptionsactive[2] = true;
-		menuoptions[3] = "bind menu";
-		menuoptionsactive[3] = true;
-                if (key.type == holdinput) {
-                    menuoptions[4] = "touch input (hold)";
-                } else if (key.type == swipeinput) {
-                    menuoptions[4] = "touch input (swipe)";
-                }
-		menuoptionsactive[4] = true;
-		menuoptions[5] = "return";
-		menuoptionsactive[5] = true;
-		nummenuoptions = 6;
-		menuxoff = -60;
-		menuyoff = 10;
-	}
+    else if(t == "controller")
+    {
+        menuoptions[0] = "analog stick sensitivity";
+        menuoptionsactive[0] = true;
+        menuoptions[1] = "bind flip";
+        menuoptionsactive[1] = true;
+        menuoptions[2] = "bind enter";
+        menuoptionsactive[2] = true;
+        menuoptions[3] = "bind menu";
+        menuoptionsactive[3] = true;
+        if (key.type == holdinput) {
+            menuoptions[4] = "touch input (hold)";
+        } else if (key.type == swipeinput) {
+            menuoptions[4] = "touch input (swipe)";
+        }
+        menuoptionsactive[4] = true;
+        menuoptions[5] = "return";
+        menuoptionsactive[5] = true;
+        nummenuoptions = 6;
+        menuxoff = -60;
+        menuyoff = 10;
+    }
     else if (t == "cleardatamenu")
     {
         menuoptions[0] = "no! don't delete";
