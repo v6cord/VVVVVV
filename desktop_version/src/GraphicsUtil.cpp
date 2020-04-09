@@ -366,6 +366,7 @@ void BlitSurfaceColoured(
             int srcx = x;
             if (flipped) {
                 srcx = flipped - x - 1;
+                if (srcx < 0) continue;
             }
             Uint32 pixel = ReadPixel(_src, srcx, y);
             Uint32 Alpha = pixel & fmt.Amask;
