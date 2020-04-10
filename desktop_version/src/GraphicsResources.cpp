@@ -17,7 +17,10 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend /*= true*/, bool noAlp
 
 	unsigned char *fileIn = NULL;
 	size_t length = 0;
-	FILESYSTEM_loadFileToMemory(filename, &fileIn, &length);
+	bool ret = FILESYSTEM_loadFileToMemory(filename, &fileIn, &length);
+    if (!ret) {
+        return nullptr;
+    }
 
         png_image image;
         image.version = PNG_IMAGE_VERSION;

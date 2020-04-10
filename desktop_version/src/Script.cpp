@@ -1168,8 +1168,11 @@ void scriptclass::run() {
                     scriptrender.push_back(temp);
                 }
                 if (words[0] == "loadimage") {
-                    game.script_images.push_back(LoadImage(words[1].c_str()));
-                    game.script_image_names.push_back(words[1]);
+                    SDL_Surface* image = LoadImage(words[1].c_str());
+                    if (image != nullptr) {
+                        game.script_images.push_back(image);
+                        game.script_image_names.push_back(words[1]);
+                    }
                 }
                 if (words[0] == "unloadscriptimages") {
                     game.script_images.clear();
@@ -1179,7 +1182,9 @@ void scriptclass::run() {
                     // drawimage(x,y,name[, centered])
                     int tempindex = getimage(words[3]);
                     if (tempindex == -1) {
-                        game.script_images.push_back(LoadImage(words[3].c_str()));
+                        SDL_Surface* image = LoadImage(words[3].c_str());
+                        if (image == nullptr) continue;
+                        game.script_images.push_back(image);
                         game.script_image_names.push_back(words[3]);
                         tempindex = (int)game.script_images.size() - 1;
                     }
@@ -1215,13 +1220,17 @@ void scriptclass::run() {
                     // drawimage(x,y,name, maskname)
                     int tempindex = getimage(words[3]);
                     if (tempindex == -1) {
-                        game.script_images.push_back(LoadImage(words[3].c_str()));
+                        SDL_Surface* image = LoadImage(words[3].c_str());
+                        if (image == nullptr) continue;
+                        game.script_images.push_back(image);
                         game.script_image_names.push_back(words[3]);
                         tempindex = (int)game.script_images.size() - 1;
                     }
                     int tempindex2 = getimage(words[4]);
                     if (tempindex2 == -1) {
-                        game.script_images.push_back(LoadImage(words[4].c_str()));
+                        SDL_Surface* image = LoadImage(words[4].c_str());
+                        if (image == nullptr) continue;
+                        game.script_images.push_back(image);
                         game.script_image_names.push_back(words[4]);
                         tempindex2 = (int)game.script_images.size() - 1;
                     }
@@ -1349,7 +1358,9 @@ void scriptclass::run() {
                 }
                 if (words[0] == "mapimage") {
                     SDL_FreeSurface(graphics.images[12]);
-                    graphics.images[12] = LoadImage(words[1].c_str());
+                    SDL_Surface* image = LoadImage(words[1].c_str());
+                    if (image == nullptr) continue;
+                    graphics.images[12] = image;
                     graphics.mapimage = words[1];
                 }
                 if (words[0] == "automapimage") {

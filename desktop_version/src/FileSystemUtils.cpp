@@ -351,7 +351,7 @@ void FILESYSTEM_unmountassets()
     } else if (!game.quiet) printf("Cannot unmount when no asset directory is mounted\n");
 }
 
-void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
+bool FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
                                  size_t *len, bool addnull)
 {
         if (strcmp(name, "levels/special/stdin.vvvvvv") == 0) {
@@ -379,7 +379,7 @@ void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
 	PHYSFS_File *handle = PHYSFS_openRead(name);
 	if (handle == NULL)
 	{
-		return;
+		return false;
 	}
 	PHYSFS_uint32 length = PHYSFS_fileLength(handle);
 	if (len != NULL)
@@ -399,6 +399,7 @@ void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
             FILESYSTEM_freeMemory(mem);
         }
 	PHYSFS_close(handle);
+    return true;
 }
 
 void FILESYSTEM_freeMemory(unsigned char **mem)
