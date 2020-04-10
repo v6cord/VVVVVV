@@ -473,6 +473,22 @@ void titleinput()
                         game.createmenu("levellist");
                         game.currentmenuoption=game.nummenuoptions-2;
                         map.nexttowercolour();
+                    }else if(game.currentmenuoption==game.nummenuoptions-3){
+                        //previous page
+                        music.playef(11);
+                        if(((game.levelpage*8)+8) <= 8){
+                            if (ed.ListOfMetaData.size() % 8 == 0)
+                            {
+                                game.levelpage = (ed.ListOfMetaData.size() / 8 ) - 1;
+                            }else{
+                                game.levelpage = floor(ed.ListOfMetaData.size() / 8);
+                            }
+                        }else{
+                            game.levelpage--;
+                        }
+                        game.createmenu("levellist");
+                        game.currentmenuoption=game.nummenuoptions-3;
+                        map.nexttowercolour();
                     }else{
                         //Ok, launch the level!
                         //PLAY CUSTOM LEVEL HOOK
@@ -491,45 +507,8 @@ void titleinput()
                             map.nexttowercolour();
                         }
                     }
-                    game.createmenu("levellist");
-                    game.currentmenuoption=game.nummenuoptions-2;
-                    map.nexttowercolour();
-                  }else if(game.currentmenuoption==game.nummenuoptions-3){
-                    //previous page
-                    music.playef(11);
-                    if(((game.levelpage*8)+8) <= 8){
-                        if (ed.ListOfMetaData.size() % 8 == 0)
-                        {
-                            game.levelpage = (ed.ListOfMetaData.size() / 8 ) - 1;
-                        }else{
-                            game.levelpage = floor(ed.ListOfMetaData.size() / 8);
-                        }
-                    }else{
-                        game.levelpage--;
-                    }
-                    game.createmenu("levellist");
-                    game.currentmenuoption=game.nummenuoptions-3;
-                    map.nexttowercolour();
-                  }else{
-                    //Ok, launch the level!
-                    //PLAY CUSTOM LEVEL HOOK
-                    music.playef(11);
-                    game.playcustomlevel=(game.levelpage*8)+game.currentmenuoption;
-                    game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
-                    game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
-
-                    std::string name = "saves/" + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
-                    TiXmlDocument doc;
-                    if (!FILESYSTEM_loadTiXmlDocument(name.c_str(), &doc)){
-                      game.mainmenu = 22;
-                      graphics.fademode = 2;
-                    }else{
-                      game.createmenu("quickloadlevel");
-                      map.nexttowercolour();
-                    }
-                  }
                 }
-            #endif
+#endif
                 else if(game.currentmenuname=="quickloadlevel")
                 {
                   if(game.currentmenuoption==0){//continue save
