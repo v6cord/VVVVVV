@@ -93,6 +93,8 @@ std::vector<std::string> changelog = {
     "- You can now use setcheckpoint() like",
     "  setcheckpoint(roomx,roomy,posx,posy,",
     "  flipped)",
+    "- The game no longer crashes if you give",
+    "  an invalid filename to a command",
     "",
     "Version c1.0-pre1",
     "[line]",

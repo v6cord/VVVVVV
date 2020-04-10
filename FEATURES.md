@@ -54,6 +54,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - You can now use `setcheckpoint()` like `setcheckpoint(roomx,roomy,posx,posy,flipped)`
 
+- The game no longer crashes if you give an invalid filename to a command
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
