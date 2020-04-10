@@ -27,7 +27,6 @@ public:
 	bool isWindowed = false;
 	bool isFiltered = false;
 	bool badSignalEffect = false;
-	bool glScreen = false;
 	bool headless = false;
 	int stretchMode = 0;
 
