@@ -44,6 +44,12 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added box and bus enemy types
 
+- `drawimagemasked(x,y,filename,mask_filename[,mask_x[,mask_y]])` - draw an image on the screen for one frame that uses the alpha values from another image.
+
+- `togglepause(on/off)` - toggle opening the map or exiting playtesting through enter
+
+- Large coins (10/20/50/100) now exist, and they give you a different amount of coins depending on which size they are. You can place these with Z/X/C/V
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting
@@ -73,8 +79,6 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `drawrect(x,y,w,h,r,g,b[,a])` - draw a rectangle for one frame - r,g,b,a is 0-255
 
 - `drawimage(x,y,filename[,centered[,alpha[,background[,blend]]]])` - draw an image on the screen for one frame (*alpha* 0-255, *background* `true`/`false`, *blend* `none`/`blend`/`add`/`mod`)
-
-- `drawimagemasked(x,y,filename,mask_filename[,mask_x[,mask_y]])` - draw an image on the screen for one frame that uses the alpha values from another image.
 
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
@@ -288,8 +292,6 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
-- Large coins (10/20/50/100) now exist, and they give you a different amount of coins depending on which size they are. You can place these with Z/X/C/V
-
 - Coins display in the roomname if there's any coins in the map
 
 - Coins and trinkets no longer share IDs
@@ -399,5 +401,3 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `setentitydata(id,attribute,value)` - set attribute of entity to *value* - *id* is slot number in array of entities and `createentity()` will set `%return%` to ID of newly-created entity, *attribute* is internal VVVVVV attribute name
 
 - `getentitydata(id,attribute,varname)` - set *varname* to value of an entity's attribute - *id* is slot number in array of entities and `createentity()` will set `%return%` to ID of newly-created entity, *attribute* is internal VVVVVV attribute name
-
-- `togglepause(on/off)` - toggle opening the map or exiting playtesting through enter
