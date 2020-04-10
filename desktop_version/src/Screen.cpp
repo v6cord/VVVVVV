@@ -10,18 +10,18 @@
 
 Screen::Screen()
 {
-    m_window = NULL;
-    m_renderer = NULL;
-    m_screenTexture = NULL;
-    m_screen = NULL;
-    isWindowed = true;
-    stretchMode = 0;
-    isFiltered = false;
-    filterSubrect.x = 1;
-    filterSubrect.y = 1;
-    filterSubrect.w = 318;
-    filterSubrect.h = 238;
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+	m_window = NULL;
+	m_renderer = NULL;
+	m_screenTexture = NULL;
+	m_screen = NULL;
+	isWindowed = true;
+	stretchMode = 0;
+	isFiltered = false;
+	filterSubrect.x = 1;
+	filterSubrect.y = 1;
+	filterSubrect.w = 318;
+	filterSubrect.h = 238;
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
 #if defined(__SWITCH__) || defined(__ANDROID__)
 	SDL_CreateWindowAndRenderer(
@@ -43,7 +43,7 @@ Screen::Screen()
 	);
 	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
 
-        SDL_Surface *icon = LoadImage("VVVVVV.png");
+	SDL_Surface *icon = LoadImage("VVVVVV.png");
 	SDL_SetWindowIcon(m_window, icon);
 	SDL_FreeSurface(icon);
 #endif
@@ -67,18 +67,18 @@ Screen::Screen()
 		240
 	);
 
-    badSignalEffect = false;
+	badSignalEffect = false;
 
-    glScreen = true;
+	glScreen = true;
 
 #ifdef __ANDROID__
-    ResizeScreen(-1, -1);
+	ResizeScreen(-1, -1);
 #endif
 }
 
 void Screen::ResizeScreen(int x, int y)
 {
-        if (headless) return;
+	if (headless) return;
 #ifndef __SWITCH__
 	int resX = 320;
 	int resY = 240;
@@ -89,14 +89,14 @@ void Screen::ResizeScreen(int x, int y)
 		resY = y;
 	}
 
-        if (stretchMode > 2) {
-            resX *= stretchMode - 2;
-            resY *= stretchMode - 2;
-            SDL_SetWindowResizable(m_window, SDL_FALSE);
-            SDL_SetWindowSize(m_window, resX, resY);
-        } else {
-            SDL_SetWindowResizable(m_window, SDL_TRUE);
-        }
+	if (stretchMode > 2) {
+		resX *= stretchMode - 2;
+		resY *= stretchMode - 2;
+		SDL_SetWindowResizable(m_window, SDL_FALSE);
+		SDL_SetWindowSize(m_window, resX, resY);
+	} else {
+		SDL_SetWindowResizable(m_window, SDL_TRUE);
+	}
 
 	if(!isWindowed)
 	{
@@ -159,42 +159,42 @@ void Screen::GetWindowSize(int* x, int* y)
 
 void Screen::UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect )
 {
-    if((buffer == NULL) && (m_screen == NULL) )
-    {
-        return;
-    }
+	if((buffer == NULL) && (m_screen == NULL) )
+	{
+		return;
+	}
 
-    if(badSignalEffect)
-    {
-        buffer = ApplyFilter(buffer);
-    }
+	if(badSignalEffect)
+	{
+		buffer = ApplyFilter(buffer);
+	}
 
-    if(game.cutemode)
-    {
-        buffer = ApplyCuteFilter(buffer);
-    }
+	if(game.cutemode)
+	{
+		buffer = ApplyCuteFilter(buffer);
+	}
 	else if(game.allymode)
-    {
-        buffer = ApplyAllyFilter(buffer);
-    }
-    else if(game.misamode)
-    {
-        buffer = ApplyMisaFilter(buffer);
-    }
+	{
+		buffer = ApplyAllyFilter(buffer);
+	}
+	else if(game.misamode)
+	{
+		buffer = ApplyMisaFilter(buffer);
+	}
 
-    FillRect(m_screen, 0x000);
-    BlitSurfaceStandard(buffer,NULL,m_screen,rect);
+	FillRect(m_screen, 0x000);
+	BlitSurfaceStandard(buffer,NULL,m_screen,rect);
 
-    if(badSignalEffect)
-    {
-        SDL_FreeSurface(buffer);
-    }
+	if(badSignalEffect)
+	{
+		SDL_FreeSurface(buffer);
+	}
 
 }
 
 const SDL_PixelFormat* Screen::GetFormat()
 {
-    return m_screen->format;
+	return m_screen->format;
 }
 
 void Screen::FlipScreen()
