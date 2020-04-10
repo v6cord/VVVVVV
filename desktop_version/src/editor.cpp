@@ -3808,8 +3808,7 @@ void editorrender()
         case 2:
         case 9:
         case 10:
-        case 12:
-        case 18: //Single point
+        case 12: //Single point
             fillboxabs((ed.tilex*8),(ed.tiley*8),8,8, graphics.getRGB(200,32,32));
             break;
         case 3:
@@ -3841,6 +3840,13 @@ void editorrender()
             break;
         case 19: //12x12 :))))))
             fillboxabs((ed.tilex*8),(ed.tiley*8),8*12,8*12, graphics.getRGB(200,32,32));
+            break;
+        case 18: //Coins can be multiple sizes
+            if (ed.zmod)      fillboxabs((ed.tilex*8),(ed.tiley*8),16,16, graphics.getRGB(200,32,32));
+            else if (ed.xmod) fillboxabs((ed.tilex*8),(ed.tiley*8),16,16, graphics.getRGB(200,32,32));
+            else if (ed.cmod) fillboxabs((ed.tilex*8),(ed.tiley*8),24,24, graphics.getRGB(200,32,32));
+            else if (ed.vmod) fillboxabs((ed.tilex*8),(ed.tiley*8),24,24, graphics.getRGB(200,32,32));
+            else fillboxabs((ed.tilex*8),(ed.tiley*8),8,8, graphics.getRGB(200,32,32));
             break;
         case -6: // ...?
             fillboxabs((ed.tilex*8),(ed.tiley*8),464,320, graphics.getRGB(200,32,32));
