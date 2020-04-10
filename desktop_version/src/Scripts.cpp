@@ -14,7 +14,7 @@ extern scriptclass script;
 
 void scriptclass::load(std::string t)
 {
-	int maxlength = (std::min(int(t.length()),7));
+    int maxlength = (std::min(int(t.length()),7));
     std::string customstring="";
     for(int i=0; i<maxlength; i++){
       customstring+=t[i];
@@ -787,7 +787,7 @@ void scriptclass::load(std::string t)
 
         add("endcutscene()");
         add("untilbars()");
-		return;
+        return;
     }
     if (t == "communicationstation")
     {
@@ -1184,7 +1184,7 @@ void scriptclass::load(std::string t)
 
         add("changeplayercolour(yellow)");
         add("gotoroom(15,9)");
-		//(6*8)-21
+        //(6*8)-21
         add("gotoposition(300,27,0)");
 
         add("hideplayer()");
