@@ -1392,15 +1392,7 @@ void scriptclass::run() {
                     relativepos(&obj.entities[player].xp, words[1]);
                     relativepos(&obj.entities[player].yp, words[2]);
                     if (words[3] != "") {
-                        if (words[3] == "~" ||
-                            (words[3].substr(0, 1) == "~" &&
-                            ss_toi(words[3].substr(1, std::string::npos)) == 0))
-                            ;  // Keep the current gravity control
-                        else if (words[3].substr(0, 1) == "~")
-                            // Invert the gravity control
-                            game.gravitycontrol = !game.gravitycontrol;
-                        else
-                            game.gravitycontrol = ss_toi(words[3]);
+                        relativebool((bool*) &game.gravitycontrol, words[3]);
                     } else {
                         game.gravitycontrol = 0;
                     }

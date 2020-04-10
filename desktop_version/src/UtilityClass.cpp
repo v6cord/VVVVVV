@@ -291,3 +291,22 @@ bool parsebool(std::string parsethis)
 
     return ss_toi(parsethis);
 }
+
+// Like relativepos, but for bools
+bool relativebool(bool original, std::string parsethis)
+{
+	if (parsethis == "~" || (parsethis.substr(0, 1) == "~" && ss_toi(parsethis.substr(1, std::string::npos)) == 0))
+		// Keep the current bool
+		return original;
+	else if (parsethis.substr(0, 1) == "~")
+		// Invert the bool
+		return !original;
+	else
+		return ss_toi(parsethis);
+}
+
+// Use this if you want to mutate a bool instead
+void relativebool(bool* original, std::string parsethis)
+{
+	*original = relativebool(*original, parsethis);
+}
