@@ -977,6 +977,7 @@ void scriptclass::run() {
                 if ((words[0] == "ifvar") || (words[0] == "if")) {
                     if (evalvar(words[1]) == "1") {
                         call("custom_" + words[2]);
+                        continue;
                     }
                 }
                 if (words[0] == "setcallback") {
