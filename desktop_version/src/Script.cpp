@@ -1376,6 +1376,9 @@ void scriptclass::run() {
                 if (words[0] == "toggleflip") {
                     game.noflip = !parsebool(words[1]);
                 }
+                if (words[0] == "togglepause") {
+                    game.noenter = !parsebool(words[1]);
+                }
                 if (words[0] == "infiniflip") {
                     game.infiniflip = parsebool(words[1]);
                 }
@@ -4528,6 +4531,9 @@ void scriptclass::hardreset() {
     game.pausescript = false;
 
     game.noflip = false;
+
+    game.noenter = false;
+
     game.infiniflip = false;
 
     game.nosuicide = false;

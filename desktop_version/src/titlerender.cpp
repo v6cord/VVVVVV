@@ -80,7 +80,10 @@ std::vector<std::string> changelog = {
     "  ilename[,mask_x[,mask_y]]) - draw an",
     "  image on the screen for one frame that",
     "  uses the alpha values from another",
-    "  image."
+    "  image",
+    "- togglepause(on/off) - toggle opening",
+    "  the map or exiting playtesting through",
+    "  enter"
     "",
     "Version c1.0-pre1",
     "[line]",

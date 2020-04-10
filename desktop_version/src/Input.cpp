@@ -2063,7 +2063,7 @@ void gameinput()
     //Returning to editor mode must always be possible
 #if !defined(NO_CUSTOM_LEVELS)
     if((map.custommode && !map.custommodeforreal) && !script.killedviridian){
-      if ((game.press_map || key.isDown(27)) && !game.mapheld){
+      if (((game.press_map && !game.noenter) || key.isDown(27)) && !game.mapheld){
         game.mapheld = true;
         //Return to level editor
         if (game.activeactivity > -1 && game.press_map){
@@ -2128,7 +2128,7 @@ void gameinput()
                 }
                 */
 
-                if (game.press_map && !game.mapheld)
+                if (game.press_map && !game.mapheld && !game.noenter)
                 {
                     game.mapheld = true;
 

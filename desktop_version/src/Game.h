@@ -373,6 +373,7 @@ public:
     bool nofriction = false;
 
     bool noflip = false;
+    bool noenter = false;
     bool infiniflip = false;
 
     bool nosuicide = false;

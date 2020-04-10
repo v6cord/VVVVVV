@@ -397,3 +397,5 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 - `setentitydata(id,attribute,value)` - set attribute of entity to *value* - *id* is slot number in array of entities and `createentity()` will set `%return%` to ID of newly-created entity, *attribute* is internal VVVVVV attribute name
 
 - `getentitydata(id,attribute,varname)` - set *varname* to value of an entity's attribute - *id* is slot number in array of entities and `createentity()` will set `%return%` to ID of newly-created entity, *attribute* is internal VVVVVV attribute name
+
+- `togglepause(on/off)` - toggle opening the map or exiting playtesting through enter

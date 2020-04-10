@@ -398,6 +398,7 @@ void Game::init(void)
 
     noflip = false;
     infiniflip = false;
+    noenter = false;
 
     nosuicide = false;
 
@@ -5555,6 +5556,10 @@ void Game::customloadquick(std::string savfile)
         {
             noflip = atoi(pText);
         }
+        else if (pKey == "noenter")
+        {
+            noenter = atoi(pText);
+        }
         else if (pKey == "infiniflip")
         {
             infiniflip = atoi(pText);
@@ -6683,6 +6688,10 @@ void Game::customsavequick(std::string savfile)
 
     msg = new TiXmlElement( "noflip" );
     msg->LinkEndChild( new TiXmlText( help.String(noflip).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "noenter" );
+    msg->LinkEndChild( new TiXmlText( help.String(noenter).c_str() ));
     msgs->LinkEndChild( msg );
 
     msg = new TiXmlElement( "infiniflip" );
