@@ -1177,7 +1177,7 @@ void scriptclass::run() {
                 }
                 if ((words[0] == "drawimage") || (words[0] == "drawimagepersist")) {
                     // drawimage(x,y,name[, centered])
-                    int tempindex = getimage(game, words[3]);
+                    int tempindex = getimage(words[3]);
                     if (tempindex == -1) {
                         game.script_images.push_back(LoadImage(words[3].c_str()));
                         game.script_image_names.push_back(words[3]);
@@ -4152,7 +4152,7 @@ void scriptclass::startgamemode(int t) {
             }
             // call("intro");
             break;
-        case 22:  // play custom level (in game)
+        case 22: {  // play custom level (in game)
             // Initilise the level
             // First up, find the start point
             std::string filename = std::string(ed.ListOfMetaData[game.playcustomlevel].filename);
@@ -4194,12 +4194,13 @@ void scriptclass::startgamemode(int t) {
             graphics.fademode = 4;
             // call("intro");
             break;
-        case 23:  // Continue in custom level
+        }
+        case 23: {  // Continue in custom level
                   // Initilise the level
             // First up, find the start point
             std::string filename = std::string(ed.ListOfMetaData[game.playcustomlevel].filename);
             ed.load(filename);
-            ed.findstartpoint(game);
+            ed.findstartpoint();
 
             game.gamestate = GAMEMODE;
             music.fadeout();
@@ -4238,13 +4239,14 @@ void scriptclass::startgamemode(int t) {
             graphics.fademode = 4;
             // call("intro");
             break;
-
-        case 24:  // Custom level time trial!
+        }
+        case 24: {  // Custom level time trial!
             // Load the level first
             game.incustomtrial = true;
-            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+            std::string filename = std::string(ed.ListOfMetaData[game.playcustomlevel].filename);
+            ed.load(filename);
             // ...then find the start point
-            ed.findstartpoint(game);
+            ed.findstartpoint();
 
             game.gamestate = GAMEMODE;  // Set the gamemode
             music.fadeout();            // Fade out the music
@@ -4300,6 +4302,7 @@ void scriptclass::startgamemode(int t) {
             graphics.fademode = 4;
             // call("intro");
             break;
+        }
 
 #endif
         case 100:

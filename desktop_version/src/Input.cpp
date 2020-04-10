@@ -522,7 +522,8 @@ void titleinput()
                       //graphics.fademode = 2;
                       music.playef(11);
                       game.customtrialstats.clear();
-                      ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
+                      std::string filename = std::string(ed.ListOfMetaData[game.playcustomlevel].filename);
+                      ed.load(filename);
                       game.customloadtrialsave(ed.ListOfMetaData[game.playcustomlevel].filename);
                       game.createmenu("loadcustomtrial");
                         for (int i = 0; i < (int)ed.customtrials.size(); i++) {
