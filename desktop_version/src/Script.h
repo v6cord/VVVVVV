@@ -21,9 +21,9 @@ public:
 
     scriptclass();
 
-	void load(std::string t);
-	void call(std::string t);
-	void loadother(std::string t);
+    void load(std::string t);
+    void call(std::string t);
+    void loadother(std::string t);
 
 
     void inline add(std::string t)
