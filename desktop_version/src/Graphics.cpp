@@ -160,13 +160,13 @@ Graphics::~Graphics()
 
 }
 
-void Graphics::drawspritesetcol(int x, int y, int t, int c)
+void Graphics::drawspritesetcol(int x, int y, int t, int c, int flipped /*= 0*/)
 {
     SDL_Rect rect;
     setRect(rect,x,y,sprites_rect.w,sprites_rect.h);
     setcol(c);
 
-    BlitSurfaceColoured(sprites[t],NULL,backBuffer, &rect, ct);
+    BlitSurfaceColoured(sprites[t],NULL,backBuffer, &rect, ct, flipped);
     //.copyPixels(sprites[t], sprites_rect, backbuffer, tpoint);
 }
 
