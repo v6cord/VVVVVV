@@ -1051,8 +1051,7 @@ int mapclass::tower_row(int rx, int ry) {
 	int tower = get_tower(rx, ry);
 	if (tower == 1 && ry == 109)
 		return 671;
-	else if ((tower == 2 && ry == 53) ||
-			 (tower == 3 && ry == 54))
+	else if ((tower == 2 && ry == 53) || (tower == 3 && ry == 54))
 		return 71;
 	else if (!tower || (tower == 1 && ry != 104))
 		return -1;
@@ -1213,38 +1212,38 @@ void mapclass::warpto(int rx, int ry , int t, int tx, int ty)
 // Set to -1 if no dimension holds this room.
 void mapclass::gotodimroom(int rx, int ry) {
 #ifdef NO_CUSTOM_LEVELS
-    return; // do nothing
+	return; // do nothing
 #else
-    if (!custommode || dimension < 0)
-        return;
+	if (!custommode || dimension < 0)
+		return;
 
-    // Dimensions doesn't use 100-indexing
-    int ox = rx - 100;
-    int oy = ry - 100;
+	// Dimensions doesn't use 100-indexing
+	int ox = rx - 100;
+	int oy = ry - 100;
 
-    // First, check if the dimension we were in last is still valid
-    int ix = ox;
-    int iy = oy;
-    dimensionwraparound(&ix, &iy);
-    if (ix == ox && iy == oy)
-        return;
+	// First, check if the dimension we were in last is still valid
+	int ix = ox;
+	int iy = oy;
+	dimensionwraparound(&ix, &iy);
+	if (ix == ox && iy == oy)
+		return;
 
-    // Otherwise, find one that is
-    Dimension *dim;
-    for (int i = 0; (dim = getdimension(i)); i++) {
-        dimension = i;
-        ix = ox;
-        iy = oy;
-        dimensionwraparound(&ix, &iy);
-        if (ix == ox && iy == oy) {
-            ed.generatecustomminimap();
-            return;
-        }
-    }
+	// Otherwise, find one that is
+	Dimension *dim;
+	for (int i = 0; (dim = getdimension(i)); i++) {
+		dimension = i;
+		ix = ox;
+		iy = oy;
+		dimensionwraparound(&ix, &iy);
+		if (ix == ox && iy == oy) {
+		ed.generatecustomminimap();
+		return;
+		}
+	}
 
-    dimension = -1;
+	dimension = -1;
 
-    ed.generatecustomminimap();
+	ed.generatecustomminimap();
 #endif
 }
 
@@ -2017,8 +2016,7 @@ void mapclass::loadlevel(int rx, int ry)
 			switch (edentity[edi].t){
 			case 1: // Enemies
 				obj.customenemy=ed.level[curlevel].enemytype;
-				obj.createentity(ex, ey, 56, edentity[edi].p1,
-								 ed.level[curlevel].enemyv + edentity[edi].p2, bx1, by1, bx2, by2);
+				obj.createentity(ex, ey, 56, edentity[edi].p1, ed.level[curlevel].enemyv + edentity[edi].p2, bx1, by1, bx2, by2);
 				break;
 			case 2: // Platforms and Threadmills
 				/* Conveyors */
@@ -2034,8 +2032,7 @@ void mapclass::loadlevel(int rx, int ry)
 				if (edentity[edi].p1 < 0)
 					break;
 
-				obj.createentity(ex, ey, 2, edentity[edi].p1,
-								 ed.level[curlevel].platv + edentity[edi].p2, bx1, by1, bx2, by2);
+				obj.createentity(ex, ey, 2, edentity[edi].p1, ed.level[curlevel].platv + edentity[edi].p2, bx1, by1, bx2, by2);
 				break;
 			case 3: // Disappearing platforms
 				obj.createentity(ex, ey, 3);
@@ -2050,28 +2047,23 @@ void mapclass::loadlevel(int rx, int ry)
 				obj.createentity(ex, ey, 9, ed.findtrinket(edi));
 				break;
 			case 10: // Checkpoints
-				obj.createentity(ex, ey, 10, edentity[edi].p1,
-								 ((rx+(ry*100))*20)+tempcheckpoints);
+				obj.createentity(ex, ey, 10, edentity[edi].p1, ((rx+(ry*100))*20)+tempcheckpoints);
 				tempcheckpoints++;
 				break;
 			case 11: // Gravity Lines
 				if (edentity[edi].p1==0) //Horizontal
-					obj.createentity(edentity[edi].p2 * 8, ey + 4, 11,
-									 edentity[edi].p3);
+					obj.createentity(edentity[edi].p2 * 8, ey + 4, 11, edentity[edi].p3);
 				else // Vertical
-					obj.createentity(ex + 3, edentity[edi].p2 * 8, 12,
-									 edentity[edi].p3);
+					obj.createentity(ex + 3, edentity[edi].p2 * 8, 12, edentity[edi].p3);
 				break;
 			case 13: // Warp Tokens
-				obj.createentity(ex, ey, 13, edentity[edi].p1,
-								 edentity[edi].p2, edentity[edi].p3);
+				obj.createentity(ex, ey, 13, edentity[edi].p1, edentity[edi].p2, edentity[edi].p3);
 				break;
 			case 14: // Round teleporter (whyy)
 				obj.createentity(ex, ey, 14);
 				break;
 			case 15: // Collectable crewmate
-				obj.createentity(ex, ey, 55, ed.findcrewmate(edi),
-								 edentity[edi].p1, edentity[edi].p2);
+				obj.createentity(ex, ey, 55, ed.findcrewmate(edi), edentity[edi].p1, edentity[edi].p2);
 				break;
 			case 17: { // Roomtext!
 				roomtexton = true;
@@ -2119,17 +2111,13 @@ void mapclass::loadlevel(int rx, int ry)
 			case 50: // Warp Lines
 				obj.customwarpmode=true;
 				if (edentity[edi].p1==0) //
-					obj.createentity(ex, (edentity[edi].p2*8), 51,
-									 edentity[edi].p3);
+					obj.createentity(ex, (edentity[edi].p2*8), 51, edentity[edi].p3);
 				else if (edentity[edi].p1==1) //Horizontal, right
-					obj.createentity(ex + 4, (edentity[edi].p2*8), 52,
-									 edentity[edi].p3);
+					obj.createentity(ex + 4, (edentity[edi].p2*8), 52, edentity[edi].p3);
 				else if (edentity[edi].p1==2) //Vertical, top
-					obj.createentity((edentity[edi].p2*8), ey + 7, 53,
-									 edentity[edi].p3);
+					obj.createentity((edentity[edi].p2*8), ey + 7, 53, edentity[edi].p3);
 				else if (edentity[edi].p1==3)
-					obj.createentity((edentity[edi].p2*8), ey, 54,
-									 edentity[edi].p3);
+					obj.createentity((edentity[edi].p2*8), ey, 54, edentity[edi].p3);
 				break;
 			case 999: // ?
 				obj.customenemy=ed.level[curlevel].enemytype;
@@ -2420,118 +2408,118 @@ void mapclass::loadlevel(int rx, int ry)
 
 void mapclass::updatetowerentcol(int col)
 {
-    // Update all sprite-based entities in the tower on "stable" colors
-    // TODO: Interpolate between each stable color during transitions between them
+	// Update all sprite-based entities in the tower on "stable" colors
+	// TODO: Interpolate between each stable color during transitions between them
 
-    // WARNING: `59 + col` is duplicated from editorclass::getlevelcol()!
-    int entcol = ed.getenemycol(59 + col);
-    int plattile = ed.gettowerplattile(col * 5);
+	// WARNING: `59 + col` is duplicated from editorclass::getlevelcol()!
+	int entcol = ed.getenemycol(59 + col);
+	int plattile = ed.gettowerplattile(col * 5);
 
-    // I don't want to deal with main game stuff
-    if (!custommode)
-        return;
+	// I don't want to deal with main game stuff
+	if (!custommode)
+		return;
 
-    // Basically copied from mapclass::changefinalcol()
-    for (int i = 0; i < obj.nentity; i++) {
-        if (obj.entities[i].type == 1) { // Something with a movement behavior
-            if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) { // Conveyor
-                obj.entities[i].tile = 4 + plattile*12;
-                if (obj.entities[i].animate == 10)
-                    obj.entities[i].tile += 4;
-            } else if (obj.entities[i].isplatform) { // Moving platform
-                obj.entities[i].tile = plattile*12;
-            } else { // Just an enemy
-                if (obj.entities[i].colour == 102)
-                    ; // If flashy, do nothing!
-                else
-                    obj.entities[i].colour = entcol;
-            }
-        } else if (obj.entities[i].type == 2) { // Disappearing platform
-            if (obj.entities[i].state == 3)
-                // It's disappeared, so its tile is offset, so we have to correct for that offset
-                obj.entities[i].tile = 4 + plattile*12;
-            else
-                // Normal
-                obj.entities[i].tile = plattile * 12;
+	// Basically copied from mapclass::changefinalcol()
+	for (int i = 0; i < obj.nentity; i++) {
+		if (obj.entities[i].type == 1) { // Something with a movement behavior
+			if (obj.entities[i].animate == 10 || obj.entities[i].animate == 11) { // Conveyor
+				obj.entities[i].tile = 4 + plattile*12;
+				if (obj.entities[i].animate == 10)
+					obj.entities[i].tile += 4;
+		} else if (obj.entities[i].isplatform) { // Moving platform
+			obj.entities[i].tile = plattile*12;
+		} else { // Just an enemy
+			if (obj.entities[i].colour == 102)
+				; // If flashy, do nothing!
+			else
+				obj.entities[i].colour = entcol;
+		}
+	} else if (obj.entities[i].type == 2) { // Disappearing platform
+		if (obj.entities[i].state == 3)
+			// It's disappeared, so its tile is offset, so we have to correct for that offset
+			obj.entities[i].tile = 4 + plattile*12;
+		else
+			// Normal
+			obj.entities[i].tile = plattile * 12;
 
-            if (obj.entities[i].state == 5)
-                // Extra kludge for when it respawns
-                obj.entities[i].tile += 3 - obj.entities[i].life/3;
-        }
-    }
+		if (obj.entities[i].state == 5)
+			// Extra kludge for when it respawns
+			obj.entities[i].tile += 3 - obj.entities[i].life/3;
+		}
+	}
 }
 
 Dimension* mapclass::getdimension(int index)
 {
-    // Return a pointer to the given dimension
-    // Does important error checking to make sure both the index and the dimension are valid!
-    // Make sure to check for NULL
-    //
-    // See below for version that automatically uses map.dimension
-    if (index < 0 || index >= (int) ed.dimensions.size())
-        return NULL;
+	// Return a pointer to the given dimension
+	// Does important error checking to make sure both the index and the dimension are valid!
+	// Make sure to check for NULL
+	//
+	// See below for version that automatically uses map.dimension
+	if (index < 0 || index >= (int) ed.dimensions.size())
+		return NULL;
 
-    Dimension* dim = &ed.dimensions[index];
+	Dimension* dim = &ed.dimensions[index];
 
-    // Dimensions cannot overlap themselves
-    // and they have to have positive dimensions
-    if (dim->w > ed.mapwidth || dim->h > ed.mapheight
-    || dim->w <= 0 || dim->h <= 0)
-        return NULL;
+	// Dimensions cannot overlap themselves
+	// and they have to have positive dimensions
+	if (dim->w > ed.mapwidth || dim->h > ed.mapheight
+	|| dim->w <= 0 || dim->h <= 0)
+		return NULL;
 
-    return dim;
+	return dim;
 }
 
 // This is the above, but it automatically uses map.dimension
 Dimension* mapclass::getdimension()
 {
-    return getdimension(dimension);
+	return getdimension(dimension);
 }
 
 void mapclass::dimensionwraparound(int* rx, int* ry)
 {
-    // If rx/ry is outside the current dimension, wrap it around!
-    // rx/ry here is 0-indexed
-    // NOTE: Depends on game.roomchangedir and game.roomchangevdir
+	// If rx/ry is outside the current dimension, wrap it around!
+	// rx/ry here is 0-indexed
+	// NOTE: Depends on game.roomchangedir and game.roomchangevdir
 
-    Dimension* dim = getdimension();
-    if (dim == NULL)
-        return;
+	Dimension* dim = getdimension();
+	if (dim == NULL)
+		return;
 
-    // If we're negative from the dimension's point of view, correct for it
-    if (*rx < dim->x)
-        *rx += ed.mapwidth;
-    if (*ry < dim->y)
-        *ry += ed.mapheight;
+	// If we're negative from the dimension's point of view, correct for it
+	if (*rx < dim->x)
+		*rx += ed.mapwidth;
+	if (*ry < dim->y)
+		*ry += ed.mapheight;
 
-    // Correct for the space in between the ends of the dimension depending on which direction we're going
-    if (*rx > dim->w && game.roomchangedir == 0)
-        *rx -= ed.mapwidth - dim->w;
-    if (*ry > dim->h && game.roomchangevdir == 0)
-        *ry -= ed.mapheight - dim->h;
+	// Correct for the space in between the ends of the dimension depending on which direction we're going
+	if (*rx > dim->w && game.roomchangedir == 0)
+		*rx -= ed.mapwidth - dim->w;
+	if (*ry > dim->h && game.roomchangevdir == 0)
+		*ry -= ed.mapheight - dim->h;
 
-    // Translate to dimension's coordinate space
-    *rx -= dim->x;
-    *ry -= dim->y;
+	// Translate to dimension's coordinate space
+	*rx -= dim->x;
+	*ry -= dim->y;
 
-    // Wrap around
-    *rx = (*rx) % dim->w;
-    *ry = (*ry) % dim->h;
+	// Wrap around
+	*rx = (*rx) % dim->w;
+	*ry = (*ry) % dim->h;
 
-    // Translate back to normal coordinate space
-    *rx += dim->x;
-    *ry += dim->y;
+	// Translate back to normal coordinate space
+	*rx += dim->x;
+	*ry += dim->y;
 }
 
 void twoframedelayfix()
 {
-    // Kludge to remove 2-frame-delay when loading init scripts for a room
-    if (IS_VCE_LEVEL && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
-        game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
-        obj.kludgeonetimescript = true;
-        obj.removetrigger(obj.activetrigger);
-        game.state = 0;
-        script.callstack.clear();
-        script.load(game.newscript);
-    }
+	// Kludge to remove 2-frame-delay when loading init scripts for a room
+	if (IS_VCE_LEVEL && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
+		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
+		obj.kludgeonetimescript = true;
+		obj.removetrigger(obj.activetrigger);
+		game.state = 0;
+		script.callstack.clear();
+		script.load(game.newscript);
+	}
 }

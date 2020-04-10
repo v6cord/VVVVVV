@@ -15,7 +15,7 @@
 #include "editor.h"
 
 #if !defined(NO_CUSTOM_LEVELS)
-	extern editorclass ed;
+extern editorclass ed;
 #endif
 
 void twoframedelayfix();
