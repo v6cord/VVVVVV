@@ -1115,7 +1115,10 @@ void scriptclass::run() {
                     int tempindex = getimage(words[3]);
                     if (tempindex == -1) {
                         SDL_Surface* image = LoadImage(words[3].c_str());
-                        if (image == nullptr) continue;
+                        if (image == nullptr) {
+                            position++;
+                            continue;
+                        }
                         game.script_images.push_back(image);
                         game.script_image_names.push_back(words[3]);
                         tempindex = (int)game.script_images.size() - 1;
@@ -1153,7 +1156,10 @@ void scriptclass::run() {
                     int tempindex = getimage(words[3]);
                     if (tempindex == -1) {
                         SDL_Surface* image = LoadImage(words[3].c_str());
-                        if (image == nullptr) continue;
+                        if (image == nullptr) {
+                            position++;
+                            continue;
+                        }
                         game.script_images.push_back(image);
                         game.script_image_names.push_back(words[3]);
                         tempindex = (int)game.script_images.size() - 1;
@@ -1161,7 +1167,10 @@ void scriptclass::run() {
                     int tempindex2 = getimage(words[4]);
                     if (tempindex2 == -1) {
                         SDL_Surface* image = LoadImage(words[4].c_str());
-                        if (image == nullptr) continue;
+                        if (image == nullptr) {
+                            position++;
+                            continue;
+                        }
                         game.script_images.push_back(image);
                         game.script_image_names.push_back(words[4]);
                         tempindex2 = (int)game.script_images.size() - 1;
@@ -1291,7 +1300,10 @@ void scriptclass::run() {
                 if (words[0] == "mapimage") {
                     SDL_FreeSurface(graphics.images[12]);
                     SDL_Surface* image = LoadImage(words[1].c_str());
-                    if (image == nullptr) continue;
+                    if (image == nullptr) {
+                        position++;
+                        continue;
+                    }
                     graphics.images[12] = image;
                     graphics.mapimage = words[1];
                 }
