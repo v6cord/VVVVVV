@@ -236,7 +236,7 @@ void musicclass::init()
 
 void musicclass::play(int t, int fadeintime /* = 3000*/)
 {
-  t = (t % 16);
+	t = (t % 16);
 
 	if(mmmmmm)
 	{
