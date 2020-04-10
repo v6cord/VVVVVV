@@ -288,6 +288,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Coins are now placeable in the editor using the ^2 tool (press Shift+2)
 
+- Large coins (10/20/50/100) now exist, and they give you a different amount of coins depending on which size they are. You can place these with Z/X/C/V
+
 - Coins display in the roomname if there's any coins in the map
 
 - Coins and trinkets no longer share IDs

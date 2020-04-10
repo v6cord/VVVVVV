@@ -83,7 +83,11 @@ std::vector<std::string> changelog = {
     "  image",
     "- togglepause(on/off) - toggle opening",
     "  the map or exiting playtesting through",
-    "  enter"
+    "  enter",
+    "- Large coins (10/20/50/100) now exist,",
+    "  and they give you a different amount",
+    "  of coins depending on which size they",
+    "  are. You can place these with Z/X/C/V",
     "",
     "Version c1.0-pre1",
     "[line]",
