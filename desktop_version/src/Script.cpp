@@ -2476,11 +2476,26 @@ void scriptclass::run() {
                 } else if (words[0] == "setcheckpoint") {
                     i = obj.getplayer();
                     game.savepoint = 0;
-                    game.savex = obj.entities[i].xp;
-                    game.savey = obj.entities[i].yp;
-                    game.savegc = game.gravitycontrol;
-                    game.saverx = game.roomx;
-                    game.savery = game.roomy;
+                    if (words[3] != "")
+                        relativepos(&game.savex, words[3]);
+                    else
+                        game.savex = obj.entities[i].xp;
+                    if (words[4] != "")
+                        relativepos(&game.savey, words[4]);
+                    else
+                        game.savey = obj.entities[i].yp;
+                    if (words[5] != "")
+                        relativebool((bool*) &game.savegc, words[5]);
+                    else
+                        game.savegc = game.gravitycontrol;
+                    if (words[1] != "")
+                        relativepos(&game.saverx, words[1]);
+                    else
+                        game.saverx = game.roomx;
+                    if (words[2] != "")
+                        relativepos(&game.savery, words[2]);
+                    else
+                        game.savery = game.roomy;
                     game.savedir = obj.entities[i].dir;
                 } else if (words[0] == "gotocheckpoint") {
                     i = obj.getplayer();
