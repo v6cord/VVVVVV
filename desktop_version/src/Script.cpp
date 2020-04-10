@@ -101,7 +101,7 @@ std::string scriptclass::evalvar(std::string expr) {
     }
 }
 
-int scriptclass::getimage(Game& game, std::string n) {
+int scriptclass::getimage(std::string n) {
     for (std::size_t i = 0; i < game.script_images.size(); i++) {
         if (game.script_image_names[i] == n) {
             return i;
@@ -4155,8 +4155,9 @@ void scriptclass::startgamemode(int t) {
         case 22:  // play custom level (in game)
             // Initilise the level
             // First up, find the start point
-            ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
-            ed.findstartpoint(game);
+            std::string filename = std::string(ed.ListOfMetaData[game.playcustomlevel].filename);
+            ed.load(filename);
+            ed.findstartpoint();
 
             game.gamestate = GAMEMODE;
             music.fadeout();
@@ -4193,11 +4194,22 @@ void scriptclass::startgamemode(int t) {
             graphics.fademode = 4;
             // call("intro");
             break;
+<<<<<<< HEAD
         case 23:  // Continue in custom level
                   // Initilise the level
             // First up, find the start point
             ed.weirdloadthing(ed.ListOfMetaData[game.playcustomlevel].filename);
             ed.findstartpoint(game);
+=======
+  }
+  case 23: //Continue in custom level
+  {
+      //Initilise the level
+    //First up, find the start point
+    std::string filename = std::string(ed.ListOfMetaData[game.playcustomlevel].filename);
+    ed.load(filename);
+    ed.findstartpoint();
+>>>>>>> 1310896191b98f475907adc361c72eb5c7a3532e
 
             game.gamestate = GAMEMODE;
             music.fadeout();
@@ -4298,7 +4310,11 @@ void scriptclass::startgamemode(int t) {
             graphics.fademode = 4;
             // call("intro");
             break;
+<<<<<<< HEAD
 
+=======
+  }
+>>>>>>> 1310896191b98f475907adc361c72eb5c7a3532e
 #endif
         case 100:
             game.savestats();

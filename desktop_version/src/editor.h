@@ -269,8 +269,7 @@ public:
     int findwarptoken(int t);
     std::string warptokendest(int t);
     void countstuff();
-    void findstartpoint(Game& game);
-    void weirdloadthing(std::string t);
+    void findstartpoint();
     int getlevelcol(int t);
     int getenemycol(int t);
     int entcol = 0;
