@@ -255,10 +255,7 @@ int relativepos(int original, std::string parsethis)
     if (relative)
         parsethis = parsethis.substr(1, std::string::npos);
 
-    // Have to use this ternary, because passing in an empty string to
-    // ss_toi() seems to be undefined behavior, and I want a simple "~"
-    // to be equivalent to "~0"
-    int num = parsethis != "" ? ss_toi(parsethis) : 0;
+    int num = ss_toi(parsethis);
 
     if (!relative)
         return num;
