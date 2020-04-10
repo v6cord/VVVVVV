@@ -2041,7 +2041,7 @@ void mapclass::loadlevel(int rx, int ry)
 				obj.createentity(ex, ey, 5, edentity[edi].p1);
 				break;
 			case 8: // Coins
-				obj.createentity(ex, ey, 8, ed.findcoin(edi));
+				obj.createentity(ex, ey, 8, ed.findcoin(edi), edentity[edi].p1);
 				break;
 			case 9: // Trinkets
 				obj.createentity(ex, ey, 9, ed.findtrinket(edi));
@@ -2138,7 +2138,18 @@ void mapclass::loadlevel(int rx, int ry)
 			ed.grayenemieskludge = false;
 
 		customtrinkets=ed.numtrinkets;
-		customcoins=ed.numcoins;
+
+		customcoins = 0;
+	    for(size_t i=0; i<edentity.size(); i++) {
+    	    if(edentity[i].t==8) {
+				if (edentity[i].p1 == 0) customcoins++;
+				else if (edentity[i].p1 == 1) customcoins += 10;
+				else if (edentity[i].p1 == 2) customcoins += 20;
+				else if (edentity[i].p1 == 3) customcoins += 50;
+				else if (edentity[i].p1 == 4) customcoins += 100;
+			}
+	    }
+		//customcoins=ed.numcoins;
 		customcrewmates=ed.numcrewmates;
 
 		//do the appear/remove roomname here

@@ -2160,20 +2160,26 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entities[k].life = 12;
         break;
     case 8: //Small collectibles
-        entities[k].rule = 3;
-        entities[k].type = 6;
-        entities[k].size = 4;
-        entities[k].tile = 48;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
-        entities[k].w = 8;
-        entities[k].h = 8;
-        entities[k].onentity = 1;
-        entities[k].animate = 100;
-
-        //Check if it's already been collected
-        entities[k].para = vx;
-        if (coincollect[vx] == 1) entities[k].active = false;
+        {
+            entities[k].rule = 3;
+            entities[k].type = 6;
+            entities[k].size = 4;
+            entities[k].tile = 48;
+            entities[k].xp = xp;
+            entities[k].yp = yp;
+            int temp_size = 8;
+            if (vy == 1 || vy == 2) temp_size = 16;
+            if (vy == 3 || vy == 4) temp_size = 24;
+            entities[k].w = temp_size;
+            entities[k].h = temp_size;
+            entities[k].onentity = 1;
+            entities[k].animate = 100;
+            entities[k].colour = 201;
+            //Check if it's already been collected
+            entities[k].para = vx;
+            entities[k].behave = vy;
+            if (coincollect[vx] == 1) entities[k].active = false;
+        }
         break;
     case 9: //Something Shiny
         entities[k].rule = 3;
@@ -3377,7 +3383,11 @@ bool entityclass::updateentities( int i )
                 //wait for collision
                 if (entities[i].state == 1)
                 {
-                    game.coins++;
+                    if (entities[i].behave == 0) game.coins++;
+                    if (entities[i].behave == 1) game.coins += 10;
+                    if (entities[i].behave == 2) game.coins += 20;
+                    if (entities[i].behave == 3) game.coins += 50;
+                    if (entities[i].behave == 4) game.coins += 100;
                     music.playef(4);
                     coincollect[entities[i].para] = 1;
 

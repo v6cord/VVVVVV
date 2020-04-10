@@ -2213,7 +2213,7 @@ void gamerender()
 
     if (map.customcoins > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
-        if (game.coins == map.customcoins) {
+        if (game.coins >= map.customcoins) {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
         } else {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);

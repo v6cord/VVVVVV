@@ -1810,7 +1810,21 @@ void Graphics::drawentities()
             }
             else if (obj.entities[i].size == 4)    // Small pickups
             {
-                drawhuetile(obj.entities[i].xp, obj.entities[i].yp, obj.entities[i].tile, obj.entities[i].colour);
+                if(obj.entities[i].behave==0) {
+                    drawhuetile(obj.entities[i].xp, obj.entities[i].yp, obj.entities[i].tile, obj.entities[i].colour);
+                }
+                if(obj.entities[i].behave==1) {
+                    graphics.drawspritesetcol(obj.entities[i].xp, obj.entities[i].yp, 196, obj.entities[i].colour);
+                }
+                if(obj.entities[i].behave==2) {
+                    graphics.drawspritesetcol(obj.entities[i].xp, obj.entities[i].yp, 197, obj.entities[i].colour);
+                }
+                if(obj.entities[i].behave==3) {
+                    graphics.drawspritesetcol(obj.entities[i].xp, obj.entities[i].yp, 198, obj.entities[i].colour);
+                }
+                if(obj.entities[i].behave==4) {
+                    graphics.drawspritesetcol(obj.entities[i].xp, obj.entities[i].yp, 199, obj.entities[i].colour);
+                }
             }
             else if (obj.entities[i].size == 5)    //Horizontal Line
             {
@@ -3241,6 +3255,9 @@ void Graphics::setcol( int t )
 			ct.colour = getRGB(rgb.r, rgb.g, rgb.b);
 		}
 		break;
+    case 201:
+		ct.colour = getRGB(250-(fRandom()*32), 250-(fRandom()*32), 10);
+        break;
 
 	default:
 		ct.colour = 0xFFFFFF;
@@ -3311,6 +3328,9 @@ void Graphics::drawhuetile( int x, int y, int t, int c )
 		setcolreal(getRGB(250-int(fRandom()*32), 250-int(fRandom()*32), 10));
 		break;
 	case 1:
+		setcolreal(getRGB(250-int(fRandom()*32), 250-int(fRandom()*32), 10));
+		break;
+	case 201:
 		setcolreal(getRGB(250-int(fRandom()*32), 250-int(fRandom()*32), 10));
 		break;
 	default:

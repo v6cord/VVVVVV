@@ -3547,9 +3547,27 @@ void editorrender()
                 fillboxabs(ex, ey, 16, 16, graphics.getRGB(164,164,255));
                 break;
             case 8: // Coin
-                graphics.drawhuetile(ex, ey, 48, 8);
+                if(edentity[i].p1==0) {
+                    graphics.drawhuetile(ex, ey, 48, 8);
+                    fillboxabs(ex, ey, 8, 8, graphics.getRGB(164,164,164));
+                }
+                if(edentity[i].p1==1) {
+                    graphics.drawspritesetcol(ex, ey, 196, 201);
+                    fillboxabs(ex, ey, 16, 16, graphics.getRGB(164,164,164));
+                }
+                if(edentity[i].p1==2) {
+                    graphics.drawspritesetcol(ex, ey, 197, 201);
+                    fillboxabs(ex, ey, 16, 16, graphics.getRGB(164,164,164));
+                }
+                if(edentity[i].p1==3) {
+                    graphics.drawspritesetcol(ex, ey, 198, 201);
+                    fillboxabs(ex, ey, 24, 24, graphics.getRGB(164,164,164));
+                }
+                if(edentity[i].p1==4) {
+                    graphics.drawspritesetcol(ex, ey, 199, 201);
+                    fillboxabs(ex, ey, 24, 24, graphics.getRGB(164,164,164));
+                }
                 //graphics.drawsprite(ex, ey, 22, 196, 196, 196);
-                fillboxabs(ex, ey, 8, 8, graphics.getRGB(164,164,164));
                 break;
             case 9: // Shiny Trinket
                 graphics.drawsprite(ex, ey, 22, 196, 196, 196);
@@ -4736,7 +4754,11 @@ void editorrender()
             graphics.bprint(2,2, "^1: Flip Token",196, 196, 255 - help.glow);
             break;
         case 18:
-            graphics.bprint(2,2, "^2: Coin",196, 196, 255 - help.glow);
+            if (ed.zmod)      graphics.bprint(2,2, "^2+Z: 10 Coin",196, 196, 255 - help.glow);
+            else if (ed.xmod) graphics.bprint(2,2, "^2+X: 20 Coin",196, 196, 255 - help.glow);
+            else if (ed.cmod) graphics.bprint(2,2, "^2+C: 50 Coin",196, 196, 255 - help.glow);
+            else if (ed.vmod) graphics.bprint(2,2, "^2+V: 100 Coin",196, 196, 255 - help.glow);
+            else              graphics.bprint(2,2, "^2: Coin",196, 196, 255 - help.glow);
             break;
         case 19:
             graphics.bprint(2,2, "^3: Teleporter",196, 196, 255 - help.glow);
@@ -6853,7 +6875,11 @@ void editorinput()
                             }
                             else if(ed.drawmode==18)  // Coins
                             {
-                                addedentity(tx, ty, 8, 0);
+                                if (ed.zmod)      addedentity(tx, ty, 8, 1);
+                                else if (ed.xmod) addedentity(tx, ty, 8, 2);
+                                else if (ed.cmod) addedentity(tx, ty, 8, 3);
+                                else if (ed.vmod) addedentity(tx, ty, 8, 4);
+                                else              addedentity(tx, ty, 8, 0);
                                 ed.numcoins++;
                                 //ed.lclickdelay=1;
                             }
