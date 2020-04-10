@@ -578,7 +578,7 @@ void titleinput()
                       graphics.fademode = 2;
                     }
                 }
-            #if !defined(NO_CUSTOM_LEVELS)
+#if !defined(NO_CUSTOM_LEVELS)
                 else if(game.currentmenuname=="playerworlds")
                 {
  #if !defined(NO_EDITOR)
@@ -608,7 +608,7 @@ void titleinput()
                     game.createmenu("mainmenu");
                     map.nexttowercolour();
                   }
-                #else
+ #else
                   if(game.currentmenuoption==0){
                     music.playef(11);
                     game.levelpage=0;
@@ -627,7 +627,9 @@ void titleinput()
                     music.playef(11);
                     game.createmenu("mainmenu");
                     map.nexttowercolour();
+ #endif
                 }
+#endif
                 else if (game.currentmenuname == "graphicoptions")
                 {
                   if (game.currentmenuoption == 0){
