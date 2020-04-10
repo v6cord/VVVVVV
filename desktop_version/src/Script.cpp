@@ -975,77 +975,8 @@ void scriptclass::run() {
                     }
                 }
                 if ((words[0] == "ifvar") || (words[0] == "if")) {
-                    std::string var = words[1];
-                    if (variables.find(var) != variables.end()) {
-                        if (words[4] ==
-                            "")  // fourth argument doesn't exist: this is a string
-                        {
-                            position++;
-                            if ((words[2] == "equal") || (words[2] == "equals") ||
-                                (words[2] == "eq") || (words[2] == "=") ||
-                                (words[2] == "==")) {
-                                if (variables[var] ==
-                                    processvars(commands[position])) {
-                                    call("custom_" + words[3]);
-                                    continue;
-                                }
-                            }
-                            if ((words[2] == "notequal") || (words[2] == "noteq") ||
-                                (words[2] == "neq") || (words[2] == "not") ||
-                                (words[2] == "notequal") || (words[2] == "!=")) {
-                                if (variables[var] !=
-                                    processvars(commands[position])) {
-                                    call("custom_" + words[3]);
-                                    continue;
-                                }
-                            }
-
-                        } else {  // fourth argument does exist, this is an integer
-                            if ((words[2] == "equal") || (words[2] == "equals") ||
-                                (words[2] == "eq") || (words[2] == "=") ||
-                                (words[2] == "==")) {
-                                if (variables[var] == words[3]) {
-                                    call("custom_" + words[4]);
-                                    continue;
-                                }
-                            }
-                            if ((words[2] == "notequal") || (words[2] == "noteq") ||
-                                (words[2] == "neq") || (words[2] == "not") ||
-                                (words[2] == "notequal") || (words[2] == "!=")) {
-                                if (variables[var] != words[3]) {
-                                    call("custom_" + words[4]);
-                                    continue;
-                                }
-                            }
-                            if ((words[2] == "less") || (words[2] == "lt") ||
-                                (words[2] == "<")) {
-                                if (ss_toi(variables[var]) < ss_toi(words[3])) {
-                                    call("custom_" + words[4]);
-                                    continue;
-                                }
-                            }
-                            if ((words[2] == "lesseq") || (words[2] == "leq") ||
-                                (words[2] == "<=")) {
-                                if (ss_toi(variables[var]) <= ss_toi(words[3])) {
-                                    call("custom_" + words[4]);
-                                    continue;
-                                }
-                            }
-                            if ((words[2] == "greater") || (words[2] == "gt") ||
-                                (words[2] == ">")) {
-                                if (ss_toi(variables[var]) > ss_toi(words[3])) {
-                                    call("custom_" + words[4]);
-                                    continue;
-                                }
-                            }
-                            if ((words[2] == "greatereq") || (words[2] == "geq") ||
-                                (words[2] == ">=")) {
-                                if (ss_toi(variables[var]) >= ss_toi(words[3])) {
-                                    call("custom_" + words[4]);
-                                    continue;
-                                }
-                            }
-                        }
+                    if (evalvar(words[1]) == "1") {
+                        call("custom_" + words[2]);
                     }
                 }
                 if (words[0] == "setcallback") {
