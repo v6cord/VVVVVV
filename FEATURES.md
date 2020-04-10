@@ -44,7 +44,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added box and bus enemy types
 
-- `drawimagemasked(x,y,filename,mask_filename[,mask_x[,mask_y]])` - draw an image on the screen for one frame that uses the alpha values from another image.
+- `drawimagemasked(x,y,filename,mask_filename[,mask_x[,mask_y]])` - draw an image on the screen for one frame that uses the alpha values from another image
 
 - `togglepause(on/off)` - toggle opening the map or exiting playtesting through enter
 
