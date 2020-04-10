@@ -50,6 +50,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Large coins (10/20/50/100) now exist, and they give you a different amount of coins depending on which size they are. You can place these with Z/X/C/V
 
+- `ifvar()` is now `ifvar(expression,script)`
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting

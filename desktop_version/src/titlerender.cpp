@@ -88,6 +88,8 @@ std::vector<std::string> changelog = {
     "  and they give you a different amount",
     "  of coins depending on which size they",
     "  are. You can place these with Z/X/C/V",
+    "- ifvar() is now",
+    "  ifvar(expression,script)",
     "",
     "Version c1.0-pre1",
     "[line]",
