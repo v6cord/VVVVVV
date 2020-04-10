@@ -946,6 +946,23 @@ void Graphics::drawscriptimage( Game& game, int t, int xp, int yp, bool cent/*=f
     }
 }
 
+void Graphics::drawscriptimagemasked( Game& game, int t, int xp, int yp, int t2, int xp2, int yp2)
+{
+
+    SDL_Rect trect;
+    trect.x = xp;
+    trect.y = yp;
+    trect.w = game.script_images[t]->w;
+    trect.h= game.script_images[t]->h;
+
+    SDL_Rect trect2;
+    trect2.x = xp2;
+    trect2.y = yp2;
+    trect2.w = game.script_images[t2]->w;
+    trect2.h= game.script_images[t2]->h;
+    BlitSurfaceMasked(game.script_images[t], game.script_images[t2], NULL, backBuffer, &trect, &trect2);
+}
+
 void Graphics::drawimage( int t, int xp, int yp, bool cent/*=false*/ )
 {
 

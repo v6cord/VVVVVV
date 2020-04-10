@@ -76,6 +76,11 @@ std::vector<std::string> changelog = {
     "- Mannequins, ZZT centipedes, and Edge",
     "  Games fish now face properly",
     "- Added box and bus enemy types",
+    "- drawimagemasked(x,y,filename,mask_f-",
+    "  ilename[,mask_x[,mask_y]]) - draw an",
+    "  image on the screen for one frame that",
+    "  uses the alpha values from another",
+    "  image."
     "",
     "Version c1.0-pre1",
     "[line]",
@@ -2252,6 +2257,8 @@ void gamerender()
             SDL_FreeSurface(s);
         } else if (current.type == 3 && !current.background) {
             graphics.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
+        } else if (current.type == 4) {
+            graphics.drawscriptimagemasked( game, current.index, current.x, current.y, current.mask_index, current.mask_x, current.mask_y );
         }
     }
 

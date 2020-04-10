@@ -106,6 +106,8 @@ public:
 
 	void drawscriptimage(Game& game, int t, int xp, int yp, bool cent=false, int alpha=255, SDL_BlendMode blend=SDL_BLENDMODE_BLEND);
 
+	void drawscriptimagemasked(Game& game, int t, int xp, int yp, int t2, int xp2, int yp2);
+
 	void drawimage(int t, int xp, int yp, bool cent=false);
 
 	void drawimagecol(int t, int xp, int yp, int r, int g, int b, bool cent= false);

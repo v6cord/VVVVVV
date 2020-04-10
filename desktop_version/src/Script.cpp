@@ -1211,6 +1211,30 @@ void scriptclass::run() {
                         scriptrender.push_back(temp);
                     }
                 }
+                if (words[0] == "drawimagemasked") {
+                    // drawimage(x,y,name, maskname)
+                    int tempindex = getimage(words[3]);
+                    if (tempindex == -1) {
+                        game.script_images.push_back(LoadImage(words[3].c_str()));
+                        game.script_image_names.push_back(words[3]);
+                        tempindex = (int)game.script_images.size() - 1;
+                    }
+                    int tempindex2 = getimage(words[4]);
+                    if (tempindex2 == -1) {
+                        game.script_images.push_back(LoadImage(words[4].c_str()));
+                        game.script_image_names.push_back(words[4]);
+                        tempindex2 = (int)game.script_images.size() - 1;
+                    }
+                    scriptimage temp;
+                    temp.type = 4;
+                    temp.x = ss_toi(words[1]);
+                    temp.y = ss_toi(words[2]);
+                    temp.index = tempindex;
+                    temp.mask_index = tempindex2;
+                    temp.mask_x = ss_toi(words[5]);
+                    temp.mask_y = ss_toi(words[6]);
+                    scriptrender.push_back(temp);
+                }
                 if (words[0] == "setblendmode") {
                     SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
                     if (words[1] == "none") {

@@ -74,6 +74,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - `drawimage(x,y,filename[,centered[,alpha[,background[,blend]]]])` - draw an image on the screen for one frame (*alpha* 0-255, *background* `true`/`false`, *blend* `none`/`blend`/`add`/`mod`)
 
+- `drawimagemasked(x,y,filename,mask_filename[,mask_x[,mask_y]])` - draw an image on the screen for one frame that uses the alpha values from another image.
+
 - `loadimage(filename)` - add the image to the cache without actually drawing it
 
 - `drawimagepersist(x,y,filename[,centered[,alpha[,background[,blend]]]])` - same as `drawimage()`, but it stays on screen for more than a frame - it sets `%return%` to its id, so you're able to remove it

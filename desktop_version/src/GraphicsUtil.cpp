@@ -333,6 +333,58 @@ void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _d
     }
 }
 
+void BlitSurfaceMasked( SDL_Surface* _src, SDL_Surface* _src2, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, SDL_Rect* _destRect2 )
+{
+    SDL_Rect *tempRect = _destRect;
+    SDL_Rect *tempRect2 = _destRect2;
+    const SDL_PixelFormat& fmt = *(_src->format);
+    SDL_Surface* tempsurface =  SDL_CreateRGBSurface(
+        SDL_SWSURFACE,
+        _src->w,
+        _src->h,
+        fmt.BitsPerPixel,
+        fmt.Rmask,
+        fmt.Gmask,
+        fmt.Bmask,
+        fmt.Amask
+    );
+    SDL_Surface* masksurface =  SDL_CreateRGBSurface(
+        SDL_SWSURFACE,
+        320,
+        240,
+        fmt.BitsPerPixel,
+        fmt.Rmask,
+        fmt.Gmask,
+        fmt.Bmask,
+        fmt.Amask
+    );
+
+    SDL_BlitSurface(_src2, _srcRect, masksurface, tempRect2);
+
+    for(int x = 0; x < tempsurface->w; x++)
+    {
+        for(int y = 0; y < tempsurface->h; y++)
+        {
+            Uint32 pixel = ReadPixel(_src, x, y);
+            Uint32 Alpha = pixel & fmt.Amask;
+            Uint32 CTAlpha = 255;
+            if (((x + _destRect->x >= 0) && (x + _destRect->x < 320)) && ((y + _destRect->y >= 0) && (y + _destRect->y < 240))) {
+                Uint32 pixel2 = ReadPixel(masksurface, x + _destRect->x, y + _destRect->y);
+                CTAlpha = pixel2 & fmt.Amask;
+            }
+
+            Uint32 result = pixel & 0x00FFFFFF;
+            float div1 = ((Alpha >> 24) / 255.0f);
+            float div2 = ((CTAlpha >> 24) / 255.0f);
+            Uint32 UseAlpha = (div1 * div2) * 255.0f;
+            DrawPixel(tempsurface, x, y, result | (UseAlpha << 24));
+        }
+    }
+
+    SDL_BlitSurface(tempsurface, _srcRect, _dest, tempRect);
+    SDL_FreeSurface(tempsurface);
+}
+
 void BlitSurfaceColoured(
     SDL_Surface* _src,
     SDL_Rect* _srcRect,

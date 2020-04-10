@@ -20,6 +20,9 @@ struct scriptimage {
     int g = 0;
     int b = 0;
     int index = 0;
+    int mask_index = 0;
+    int mask_x = 0;
+    int mask_y = 0;
     std::string text;
     bool center = false;
     int bord = false;

@@ -28,6 +28,8 @@ SDL_Surface * ScaleSurface( SDL_Surface *Surface, int Width, int Height, SDL_Sur
 
 void BlitSurfaceStandard( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect );
 
+void BlitSurfaceMasked( SDL_Surface* _src, SDL_Surface* _src2, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, SDL_Rect* _destRect2 );
+
 void BlitSurfaceColoured( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, colourTransform& ct, int flipped = 0 );
 
 void BlitSurfaceTint( SDL_Surface* _src, SDL_Rect* _srcRect, SDL_Surface* _dest, SDL_Rect* _destRect, colourTransform& ct );
