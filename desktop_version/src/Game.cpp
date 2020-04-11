@@ -4450,9 +4450,8 @@ void Game::loadstats()
     {
         graphics.screenbuffer->toggleFullScreen();
     }
-    for (int i = 0; i < stretchMode; i += 1)
-    {
-        graphics.screenbuffer->toggleStretchMode();
+    if (stretchMode > 0) {
+        graphics.screenbuffer->stretchMode = stretchMode;
     }
     if (useLinearFilter)
     {

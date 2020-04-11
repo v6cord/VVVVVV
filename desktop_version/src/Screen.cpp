@@ -21,6 +21,9 @@ Screen::Screen()
 	filterSubrect.y = 1;
 	filterSubrect.w = 318;
 	filterSubrect.h = 238;
+}
+
+void Screen::init() {
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
 #if defined(__SWITCH__) || defined(__ANDROID__)
@@ -69,14 +72,14 @@ Screen::Screen()
 
 	badSignalEffect = false;
 
-#ifdef __ANDROID__
+	initialized = true;
+
 	ResizeScreen(-1, -1);
-#endif
 }
 
 void Screen::ResizeScreen(int x, int y)
 {
-	if (headless) return;
+	if (headless || !initialized) return;
 #ifndef __SWITCH__
 	int resX = 320;
 	int resY = 240;
