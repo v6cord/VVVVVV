@@ -12,7 +12,7 @@ class Screen
 public:
 	Screen();
 
-        void init();
+	void init();
 
 	void ResizeScreen(int x, int y);
 	void GetWindowSize(int* x, int* y);
@@ -29,8 +29,8 @@ public:
 	bool isWindowed = false;
 	bool isFiltered = false;
 	bool badSignalEffect = false;
-        bool headless = false;
-        bool initialized = false;
+	bool headless = false;
+	bool initialized = false;
 	int stretchMode = 0;
 
 	SDL_Window *m_window;
