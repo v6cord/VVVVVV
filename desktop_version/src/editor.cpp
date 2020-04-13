@@ -1494,21 +1494,6 @@ int editorclass::backmatch( int x, int y )
     // 5 1 6
     // 2 X 4
     // 7 3 8
-    /*
-    if(at(x-1,y)>=80 && at(x,y-1)>=80) return 10;
-    if(at(x+1,y)>=80 && at(x,y-1)>=80) return 11;
-    if(at(x-1,y)>=80 && at(x,y+1)>=80) return 12;
-    if(at(x+1,y)>=80 && at(x,y+1)>=80) return 13;
-
-    if(at(x,y-1)>=80) return 1;
-    if(at(x-1,y)>=80) return 2;
-    if(at(x,y+1)>=80) return 3;
-    if(at(x+1,y)>=80) return 4;
-    if(at(x-1,y-1)>=80) return 5;
-    if(at(x+1,y-1)>=80) return 6;
-    if(at(x-1,y+1)>=80) return 7;
-    if(at(x+1,y+1)>=80) return 8;
-    */
     if(backfree(x-1,y)==0 && backfree(x,y-1)==0 && backfree(x+1,y)==0 && backfree(x,y+1)==0) return 0;
 
     if(backfree(x-1,y)==0 && backfree(x,y-1)==0) return 10;
@@ -2721,7 +2706,6 @@ void editorclass::load(std::string& _path)
     gethooks();
     countstuff();
     version=2;
-    //saveconvertor();
 }
 
 void editorclass::save(std::string& _path)
@@ -2752,7 +2736,6 @@ void editorclass::save(std::string& _path)
     timeinfo = localtime ( &rawtime );
 
     std::string timeAndDate = asctime (timeinfo);
-    //timeAndDate += dateStr;
 
     EditorData::GetInstance().timeModified =  timeAndDate;
     if(EditorData::GetInstance().timeModified == "")
@@ -2912,18 +2895,6 @@ void editorclass::save(std::string& _path)
         msg->LinkEndChild(tw);
     }
     data->LinkEndChild(msg);
-
-    //Old save format
-    /*
-    std::string contentsString;
-    for(int i = 0; i < contents.size(); i++ )
-    {
-    	contentsString += help.String(contents[i]) + ",";
-    }
-    msg = new TiXmlElement( "contents" );
-    msg->LinkEndChild( new TiXmlText( contentsString.c_str() ));
-    data->LinkEndChild( msg );
-    */
 
     msg = new TiXmlElement( "teleporters" );
     for(size_t i = 0; i < map.teleporters.size(); i++)
@@ -3282,9 +3253,6 @@ dmwidth(void)
 
 void editorrender()
 {
-    //TODO
-    //graphics.backbuffer.lock();
-
     //Draw grid
 
     FillRect(graphics.backBuffer, 0, 0, 320,240, graphics.getRGB(0,0,0));
@@ -3309,7 +3277,6 @@ void editorrender()
     }
 
     //Or draw background
-    //graphics.drawbackground(1);
     if(!ed.settingsmod)
     {
         switch(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir)
@@ -3767,9 +3734,6 @@ void editorrender()
         }
     }
 
-    //Draw connecting map guidelines
-    //TODO
-
     //Draw ghosts (spooky!)
     SDL_FillRect(graphics.ghostbuffer, NULL, SDL_MapRGBA(graphics.ghostbuffer->format, 0, 0, 0, 0));
     for (int i = 0; i < (int)ed.ghosts.size(); i++) {
@@ -4044,7 +4008,6 @@ void editorrender()
         case 0:
             graphics.Print(16,28,"**** VVVVVV SCRIPT EDITOR ****", 123, 111, 218, true);
             graphics.Print(16,44,"PRESS ESC TO RETURN TO MENU", 123, 111, 218, true);
-            //graphics.Print(16,60,"READY.", 123, 111, 218, false);
 
             if(!ed.hooklist.empty())
             {
@@ -4389,15 +4352,6 @@ void editorrender()
         }
 
         graphics.drawmenu(tr, tg, tb, 15);
-
-        /*
-        graphics.Print(4, 224, "Enter name to save map as:", 255,255,255, false);
-        if(ed.entframe<2){
-          graphics.Print(4, 232, ed.filename+"_", 196, 196, 255 - help.glow, true);
-        }else{
-          graphics.Print(4, 232, ed.filename+" ", 196, 196, 255 - help.glow, true);
-        }
-        */
     } else if (ed.textmod) {
         FillRect(graphics.backBuffer, 0,221,320,240, graphics.getRGB(32,32,32));
         FillRect(graphics.backBuffer, 0,222,320,240, graphics.getRGB(0,0,0));
@@ -4773,21 +4727,7 @@ void editorrender()
             graphics.bprint(2,2, "?: ???",196, 196, 255 - help.glow);
             break;
         }
-
-        //graphics.Print(254, 2, "F1: HELP", 196, 196, 255 - help.glow, false);
     }
-
-    /*
-    for(int i=0; i<script.customscript.size(); i++){
-      graphics.Print(0,i*8,script.customscript[i],255,255,255);
-    }
-    graphics.Print(0,8*script.customscript.size(),help.String(script.customscript.size()),255,255,255);
-
-    for(size_t i=0; i<ed.hooklist.size(); i++){
-      graphics.Print(260,i*8,ed.hooklist[i],255,255,255);
-    }
-    graphics.Print(260,8*ed.hooklist.size(),help.String(ed.hooklist.size()),255,255,255);
-    */
 
     if(ed.notedelay>0)
     {
@@ -4813,7 +4753,6 @@ void editorrender()
     {
         graphics.render();
     }
-    //graphics.backbuffer.unlock();
 }
 
 void editorlogic()
@@ -4856,7 +4795,6 @@ void editorlogic()
 
 void editorinput()
 {
-    //TODO Mouse Input!
     game.mx = (float) key.mx;
     game.my = (float) key.my;
     ed.tilex=(game.mx - (game.mx%8))/8;
@@ -6360,14 +6298,6 @@ void editorinput()
                         ed.returneditoralpha = 1000; // Let's start it higher than 255 since it gets clamped
                         script.startgamemode(21);
                     }
-
-                    //Return to game
-                    //game.gamestate=GAMEMODE;
-                    /*if(graphics.fademode==0)
-                    {
-                    graphics.fademode = 2;
-                    music.fadeout();
-                    }*/
                 }
             }
 
@@ -7133,12 +7063,11 @@ void editorinput()
                     else if(ed.gettilelocal(i, j)==2 || ed.gettilelocal(i, j)>=680)
                     {
                         //Fix background
-                        ed.settilelocal(i, j, 713);//ed.backbase(ed.levx,ed.levy);
+                        ed.settilelocal(i, j, 713);
                     }
                     else if(ed.gettilelocal(i, j)>0)
                     {
                         //Fix tiles
-                        //ed.settilelocal(i, j, ed.warpzoneedgetile(i,j)+ed.base(ed.levx,ed.levy));
                         ed.settilelocal(i, j, ed.edgetile(i,j)+ed.base(ed.levx,ed.levy));
                     }
                 }
