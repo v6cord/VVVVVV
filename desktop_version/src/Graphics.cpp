@@ -301,6 +301,25 @@ void Graphics::makecustomtilearray()
             }
 }
 
+void Graphics::makecustomspritearray()
+{
+	for (auto spritesheet : grphx.im_customsprites){
+    	customsprites[spritesheet.first] = std::vector<SDL_Surface*>();
+		std::vector<SDL_Surface*>& SpriteVec = customsprites[spritesheet.first];
+
+		int sprites_height = spritesheet.second->h;
+ 		for(int j = 0; j < sprites_height / 32; j++)
+    	{
+        	for(int i = 0; i <12; i++)
+        	{
+        	    SDL_Surface* temp = GetSubSurface(spritesheet.second,i*32,j*32,32,32);
+        	    SpriteVec.push_back(temp);
+        	}
+    	}
+
+	}
+}
+
 void Graphics::maketelearray()
 {
     for (int i = 0; i < 10; i++)
@@ -3026,6 +3045,7 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     Makebfont();
     pre_fakepercent.store(95);
     makecustomtilearray();
+	makecustomspritearray();
     pre_fakepercent.store(96);
 
     images.push_back(grphx.im_image0);

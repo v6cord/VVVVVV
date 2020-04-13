@@ -2671,6 +2671,7 @@ void editorclass::load(std::string& _path)
                 edLevelClassElement->QueryIntAttribute("tileset", &level[i].tileset);
                 edLevelClassElement->QueryIntAttribute("tilecol", &level[i].tilecol);
                 edLevelClassElement->QueryIntAttribute("customtileset", &level[i].customtileset);
+                edLevelClassElement->QueryIntAttribute("customspritesheet", &level[i].customspritesheet);
                 edLevelClassElement->QueryIntAttribute("platx1", &level[i].platx1);
                 edLevelClassElement->QueryIntAttribute("platy1", &level[i].platy1);
                 edLevelClassElement->QueryIntAttribute("platx2", &level[i].platx2);
@@ -3008,7 +3009,11 @@ void editorclass::save(std::string& _path)
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
-        edlevelclassElement->SetAttribute(  "customtileset", level[i].customtileset);
+		// Since these will be 0 aka the default value
+		// We really don't need this for every single room
+		// Only store these if they are a non zero value!
+		if(level[i].customtileset) edlevelclassElement->SetAttribute(  "customtileset", level[i].customtileset);
+		if(level[i].customspritesheet) edlevelclassElement->SetAttribute(  "customspritesheet", level[i].customspritesheet);
         edlevelclassElement->SetAttribute(  "platx1", level[i].platx1);
         edlevelclassElement->SetAttribute(  "platy1", level[i].platy1);
         edlevelclassElement->SetAttribute(  "platx2", level[i].platx2);
@@ -3278,6 +3283,31 @@ dmwidth(void)
     if (ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset == 5)
         return 30;
     return 40;
+}
+
+int cycleThroughCustomResources(int current, std::map <int, std::vector<SDL_Surface*>>& Map)
+{
+	bool currentonefound = false;
+	int currentsheet = current;
+	int firstsheet = 0;
+	int nextsheet = 0;
+	for (auto sheet : Map) {
+		if (firstsheet == 0)
+			firstsheet = sheet.first;
+
+		if (currentonefound) {
+			nextsheet = sheet.first;
+			break;
+		}
+
+		if (sheet.first == currentsheet)
+			currentonefound = true;
+    }
+
+	if (!currentonefound)
+		nextsheet = firstsheet;
+
+	return nextsheet;
 }
 
 void editorrender()
@@ -5981,6 +6011,21 @@ void editorinput()
             if (key.keymap[SDLK_1]) ed.drawmode=17;
             if (key.keymap[SDLK_2]) ed.drawmode=18;
             if (key.keymap[SDLK_3]) ed.drawmode=19;
+
+            if(key.keymap[SDLK_F9]) {
+				int nextspritesheet = cycleThroughCustomResources(ed.getcustomsprites(), graphics.customsprites);
+
+                ed.level[ed.levx + ed.levy*ed.maxwidth].customspritesheet = nextspritesheet;
+
+                if (nextspritesheet == 0)
+                    ed.note = "Now using default spritesheet";
+                else
+                    ed.note = "Now using sprites" + std::to_string(nextspritesheet) + ".png";
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.keydelay = 6;
+				printf("Should cycle to next spritesheet\n");
+			}
         } else {
             // No modifiers
             if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_X) || key.isDown(SDL_CONTROLLER_BUTTON_Y)) {
@@ -6129,25 +6174,27 @@ void editorinput()
                 ed.keydelay=6;
             }
             if(key.keymap[SDLK_F9]) {
-                bool currentonefound = false;
-                int currenttilesheet = ed.getcustomtiles();
-                int firsttilesheet = 0;
-                int nexttilesheet = 0;
-                for (auto tilesheet : graphics.customtiles) {
-                    if (firsttilesheet == 0)
-                        firsttilesheet = tilesheet.first;
+                //bool currentonefound = false;
+                //int currenttilesheet = ed.getcustomtiles();
+                //int firsttilesheet = 0;
+                //int nexttilesheet = 0;
+                //for (auto tilesheet : graphics.customtiles) {
+                //    if (firsttilesheet == 0)
+                //        firsttilesheet = tilesheet.first;
 
-                    if (currentonefound) {
-                        nexttilesheet = tilesheet.first;
-                        break;
-                    }
+                //   if (currentonefound) {
+                //        nexttilesheet = tilesheet.first;
+                //        break;
+                //    }
 
-                    if (tilesheet.first == currenttilesheet)
-                        currentonefound = true;
-                }
+                //    if (tilesheet.first == currenttilesheet)
+                //        currentonefound = true;
+                //}
 
-                if (!currentonefound)
-                    nexttilesheet = firsttilesheet;
+                //if (!currentonefound)
+                //    nexttilesheet = firsttilesheet;
+
+				int nexttilesheet = cycleThroughCustomResources(ed.getcustomtiles(), graphics.customtiles);
 
                 ed.level[ed.levx + ed.levy*ed.maxwidth].customtileset = nexttilesheet;
 
@@ -7581,6 +7628,11 @@ int editorclass::getcustomtiles(int rx, int ry)
     return level[rx + ry*maxwidth].customtileset;
 }
 
+int editorclass::getcustomsprites(int rx, int ry)
+{
+    return level[rx + ry*maxwidth].customspritesheet;
+}
+
 // This version detects the room automatically
 int editorclass::getcustomtiles()
 {
@@ -7588,6 +7640,16 @@ int editorclass::getcustomtiles()
         return getcustomtiles(ed.levx, ed.levy);
     else if (map.custommode)
         return getcustomtiles(game.roomx - 100, game.roomy - 100);
+
+    return 0;
+}
+
+int editorclass::getcustomsprites()
+{
+    if (game.gamestate == EDITORMODE)
+        return getcustomsprites(ed.levx, ed.levy);
+    else if (map.custommode)
+        return getcustomsprites(game.roomx - 100, game.roomy - 100);
 
     return 0;
 }
