@@ -52,6 +52,8 @@ public:
 
 	void makecustomtilearray();
 
+	void makecustomspritearray();
+
 	void drawcoloredtile(int x, int y, int t, int r, int g, int b);
 
 	void drawmenu(int cr, int cg, int cb, int division = 30);
@@ -242,6 +244,7 @@ public:
 	std::vector <SDL_Surface*> flipbfont;
 	std::vector <SDL_Surface*> flipbfontmask;
 	std::map <int, std::vector<SDL_Surface*>> customtiles;
+	std::map <int, std::vector<SDL_Surface*>> customsprites;
 
 	bool flipmode = false;
 	bool setflipmode = false;

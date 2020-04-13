@@ -116,21 +116,32 @@ void GraphicsResources::init(void)
 
 	auto templist = FILESYSTEM_getGraphicsDirFileNames();
 	for (auto name : templist) {
-		if (name.find("graphics/tiles") != 0 || name.length() < 4 || name.substr(name.length()-4, 4) != ".png")
-			continue;
+		printf("%s\n", name.c_str());
+		if (name.find("graphics/tiles") == 0) {
+			if (name.substr(name.length()-4, 4) != ".png") continue;
 
-		std::string thenumber = name.substr(14, name.length()-18);
+			std::string thenumber = name.substr(14, name.length()-18);
 
-		if (!is_number(thenumber))
-			continue;
+			if (!is_number(thenumber)) continue;
 
-		int sheetnum = atoi(thenumber.c_str());
-		if (sheetnum <= 3)
+			int sheetnum = atoi(thenumber.c_str());
 			// Tilesheet 0 just means "just use the default tiles/tiles2/tiles3"
 			// Negative numbers are also equally invalid
-			continue;
+			if (sheetnum <= 3) continue;
 
-		im_customtiles[sheetnum] = LoadImage(name.c_str());
+			im_customtiles[sheetnum] = LoadImage(name.c_str());
+		} else if(name.find("graphics/sprites") == 0) {
+			if (name.substr(name.length()-4, 4) != ".png") continue;
+
+			std::string thenumber = name.substr(16, name.length()-20);
+
+			if (!is_number(thenumber)) continue;
+
+			int sheetnum = atoi(thenumber.c_str());
+			if (sheetnum <= 1) continue;
+
+			im_customsprites[sheetnum] = LoadImage(name.c_str());
+		}
 	}
 }
 
@@ -165,4 +176,7 @@ GraphicsResources::~GraphicsResources(void)
 
 	for (auto tilesheet : im_customtiles)
 		SDL_FreeSurface(tilesheet.second);
+	
+	for (auto spritesheet : im_customsprites)
+		SDL_FreeSurface(spritesheet.second);
 }

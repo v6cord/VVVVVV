@@ -157,7 +157,6 @@ int Graphics::font_idx(uint32_t ch) {
 
 Graphics::~Graphics()
 {
-
 }
 
 void Graphics::drawspritesetcol(int x, int y, int t, int c, int flipped /*= 0*/)
@@ -3000,15 +2999,22 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     grphx.init();
     pre_fakepercent.store(90);
 
-    images.clear();
-    tiles.clear();
-    tiles2.clear();
-    tiles3.clear();
-    entcolours.clear();
-    sprites.clear();
-    flipsprites.clear();
-    tele.clear();
-    customtiles.clear();
+#define SDLVecClear(A) for(auto x : A){ SDL_FreeSurface(x); } A.clear();
+#define SDLMapClear(A) for(auto x : A){ for(auto y : x.second){ SDL_FreeSurface(y); } } A.clear();
+    SDLVecClear(images);
+    SDLVecClear(tiles);
+    SDLVecClear(tiles2);
+    SDLVecClear(tiles3);
+    SDLVecClear(entcolours);
+    SDLVecClear(sprites);
+	// Freeing flipsprites causes double free
+	// Someone who understands this please deal with this
+	flipsprites.clear();
+    SDLVecClear(tele);
+    SDLMapClear(customtiles);
+	SDLMapClear(customsprites);
+#undef SDLVecClear
+#undef SDLMapClear
 
     pre_fakepercent.store(91);
     MakeTileArray();

@@ -16,3 +16,6 @@ VVVVVV
 # Game data
 data.zip
 leo.ogg
+
+# Ignore any swap file
+*.swp
