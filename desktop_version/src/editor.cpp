@@ -3009,11 +3009,8 @@ void editorclass::save(std::string& _path)
         TiXmlElement *edlevelclassElement = new TiXmlElement( "edLevelClass" );
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
-		// Since these will be 0 aka the default value
-		// We really don't need this for every single room
-		// Only store these if they are a non zero value!
-		if(level[i].customtileset) edlevelclassElement->SetAttribute(  "customtileset", level[i].customtileset);
-		if(level[i].customspritesheet) edlevelclassElement->SetAttribute(  "customspritesheet", level[i].customspritesheet);
+        edlevelclassElement->SetAttribute(  "customtileset", level[i].customtileset);
+        edlevelclassElement->SetAttribute(  "customspritesheet", level[i].customspritesheet);
         edlevelclassElement->SetAttribute(  "platx1", level[i].platx1);
         edlevelclassElement->SetAttribute(  "platy1", level[i].platy1);
         edlevelclassElement->SetAttribute(  "platx2", level[i].platx2);
@@ -3285,29 +3282,29 @@ dmwidth(void)
     return 40;
 }
 
-int cycleThroughCustomResources(int current, std::map <int, std::vector<SDL_Surface*>>& Map)
+int cycle_through_custom_resources(int current, std::map <int, std::vector<SDL_Surface*>>& Map)
 {
-	bool currentonefound = false;
-	int currentsheet = current;
-	int firstsheet = 0;
-	int nextsheet = 0;
-	for (auto sheet : Map) {
-		if (firstsheet == 0)
-			firstsheet = sheet.first;
+    bool currentonefound = false;
+    int currentsheet = current;
+    int firstsheet = 0;
+    int nextsheet = 0;
+    for (auto sheet : Map) {
+        if (firstsheet == 0)
+            firstsheet = sheet.first;
 
-		if (currentonefound) {
-			nextsheet = sheet.first;
-			break;
-		}
+        if (currentonefound) {
+            nextsheet = sheet.first;
+            break;
+        }
 
-		if (sheet.first == currentsheet)
-			currentonefound = true;
+        if (sheet.first == currentsheet)
+            currentonefound = true;
     }
 
-	if (!currentonefound)
-		nextsheet = firstsheet;
+    if (!currentonefound)
+        nextsheet = firstsheet;
 
-	return nextsheet;
+    return nextsheet;
 }
 
 void editorrender()
@@ -5961,6 +5958,20 @@ void editorinput()
                 if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
             }
 
+            if(key.keymap[SDLK_F9]) {
+                int nextspritesheet = cycle_through_custom_resources(ed.getcustomsprites(), graphics.customsprites);
+
+                ed.level[ed.levx + ed.levy*ed.maxwidth].customspritesheet = nextspritesheet;
+
+                if (nextspritesheet == 0)
+                    ed.note = "Now using default spritesheet";
+                else
+                    ed.note = "Now using sprites" + std::to_string(nextspritesheet) + ".png";
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.keydelay = 6;
+            }
+
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
             // Shift modifiers
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
@@ -6012,20 +6023,6 @@ void editorinput()
             if (key.keymap[SDLK_2]) ed.drawmode=18;
             if (key.keymap[SDLK_3]) ed.drawmode=19;
 
-            if(key.keymap[SDLK_F9]) {
-				int nextspritesheet = cycleThroughCustomResources(ed.getcustomsprites(), graphics.customsprites);
-
-                ed.level[ed.levx + ed.levy*ed.maxwidth].customspritesheet = nextspritesheet;
-
-                if (nextspritesheet == 0)
-                    ed.note = "Now using default spritesheet";
-                else
-                    ed.note = "Now using sprites" + std::to_string(nextspritesheet) + ".png";
-                ed.notedelay = 45;
-                ed.updatetiles = true;
-                ed.keydelay = 6;
-				printf("Should cycle to next spritesheet\n");
-			}
         } else {
             // No modifiers
             if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_X) || key.isDown(SDL_CONTROLLER_BUTTON_Y)) {
@@ -6174,7 +6171,7 @@ void editorinput()
                 ed.keydelay=6;
             }
             if(key.keymap[SDLK_F9]) {
-				int nexttilesheet = cycleThroughCustomResources(ed.getcustomtiles(), graphics.customtiles);
+                int nexttilesheet = cycle_through_custom_resources(ed.getcustomtiles(), graphics.customtiles);
 
                 ed.level[ed.levx + ed.levy*ed.maxwidth].customtileset = nexttilesheet;
 

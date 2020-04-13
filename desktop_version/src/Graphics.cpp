@@ -303,21 +303,20 @@ void Graphics::makecustomtilearray()
 
 void Graphics::makecustomspritearray()
 {
-	for (auto spritesheet : grphx.im_customsprites){
-    	customsprites[spritesheet.first] = std::vector<SDL_Surface*>();
-		std::vector<SDL_Surface*>& SpriteVec = customsprites[spritesheet.first];
+    for (auto spritesheet : grphx.im_customsprites){
+        customsprites[spritesheet.first] = std::vector<SDL_Surface*>();
+        std::vector<SDL_Surface*>& SpriteVec = customsprites[spritesheet.first];
 
-		int sprites_height = spritesheet.second->h;
- 		for(int j = 0; j < sprites_height / 32; j++)
-    	{
-        	for(int i = 0; i <12; i++)
-        	{
-        	    SDL_Surface* temp = GetSubSurface(spritesheet.second,i*32,j*32,32,32);
-        	    SpriteVec.push_back(temp);
-        	}
-    	}
-
-	}
+        int sprites_height = spritesheet.second->h;
+        for(int j = 0; j < sprites_height / 32; j++)
+        {
+            for(int i = 0; i <12; i++)
+            {
+                SDL_Surface* temp = GetSubSurface(spritesheet.second,i*32,j*32,32,32);
+                SpriteVec.push_back(temp);
+            }
+        }
+    }
 }
 
 void Graphics::maketelearray()
@@ -1669,13 +1668,13 @@ void Graphics::drawentities()
             {
                 int flipped = obj.entities[i].flipped;
                 // Select what sprites we should use
-				std::vector <SDL_Surface*>* spritePtr = flipmode ? (&flipsprites) : (&sprites);
-				// Check for custom sprites
-        		int customs = ed.getcustomsprites();
-				if((customs > 1) && (customsprites.find(customs) != customsprites.end()))
-				{
-					spritePtr = &customsprites[customs];
-				}
+                std::vector <SDL_Surface*>* spritePtr = flipmode ? (&flipsprites) : (&sprites);
+                // Check for custom sprites
+                int customs = ed.getcustomsprites();
+                if((customs > 1) && (customsprites.find(customs) != customsprites.end()))
+                {
+                    spritePtr = &customsprites[customs];
+                }
 
                 {
                     tpoint.x = obj.entities[i].xp;
@@ -2971,22 +2970,29 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     grphx.init();
     pre_fakepercent.store(90);
 
-#define SDLVecClear(A) for(auto x : A){ SDL_FreeSurface(x); } A.clear();
-#define SDLMapClear(A) for(auto x : A){ for(auto y : x.second){ SDL_FreeSurface(y); } } A.clear();
-    SDLVecClear(images);
-    SDLVecClear(tiles);
-    SDLVecClear(tiles2);
-    SDLVecClear(tiles3);
-    SDLVecClear(entcolours);
-    SDLVecClear(sprites);
-	// Freeing flipsprites causes double free
-	// Someone who understands this please deal with this
-	flipsprites.clear();
-    SDLVecClear(tele);
-    SDLMapClear(customtiles);
-	SDLMapClear(customsprites);
-#undef SDLVecClear
-#undef SDLMapClear
+    for(auto x : images){ SDL_FreeSurface(x); }
+    images.clear();
+    for(auto x : tiles){ SDL_FreeSurface(x); }
+    tiles.clear();
+    for(auto x : tiles2){ SDL_FreeSurface(x); }
+    tiles2.clear();
+    for(auto x : tiles3){ SDL_FreeSurface(x); }
+    tiles3.clear();
+    for(auto x : entcolours){ SDL_FreeSurface(x); }
+    entcolours.clear();
+    for(auto x : sprites){ SDL_FreeSurface(x); }
+    sprites.clear();
+
+    // Freeing flipsprites causes double free
+    flipsprites.clear();
+
+    for(auto x : tele){ SDL_FreeSurface(x); }
+    tele.clear();
+
+    for(auto x : customtiles){ for(auto y : x.second){ SDL_FreeSurface(y); } }
+    customtiles.clear();
+    for(auto x : customsprites){ for(auto y : x.second){ SDL_FreeSurface(y); } }
+    customsprites.clear();
 
     pre_fakepercent.store(91);
     MakeTileArray();
@@ -2998,7 +3004,7 @@ void Graphics::reloadresources(bool fast /*= false*/) {
     Makebfont();
     pre_fakepercent.store(95);
     makecustomtilearray();
-	makecustomspritearray();
+    makecustomspritearray();
     pre_fakepercent.store(96);
 
     images.push_back(grphx.im_image0);
