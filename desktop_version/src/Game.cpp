@@ -372,18 +372,6 @@ void Game::init(void)
         }
     }
 
-    //if (telecookie.data.savex == undefined) {
-    // telecookieexists = false; telesummary = "";
-    //} else {
-    // telecookieexists = true; telesummary = telecookie.data.summary;
-    //}
-
-    //if (quickcookie.data.savex == undefined) {
-    // quickcookieexists = false; quicksummary = "";
-    //} else {
-    // quickcookieexists = true; quicksummary = quickcookie.data.summary;
-    //}
-
     screenshake = flashlight = 0 ;
 
     stat_trinkets = 0;
@@ -4155,7 +4143,6 @@ void Game::unlocknum( int t )
 
 void Game::loadstats()
 {
-    // TODO loadstats
     TiXmlDocument doc;
     if (!FILESYSTEM_loadTiXmlDocument("saves/unlock.vvv", &doc))
     {
@@ -5653,36 +5640,8 @@ void Game::customloadquick(std::string savfile)
 
 }
 
-//TODO load summary
 void Game::loadsummary()
 {
-    //quickcookie = SharedObject.getLocal("dwvvvvvv_quick");
-    //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
-
-    //if (telecookie.data.savex == undefined) {
-    //	telecookieexists = false; telesummary = "";
-    //} else {
-    //	telecookieexists = true; telesummary = telecookie.data.summary;
-    //	tele_gametime = giventimestring(telecookie.data.hours, telecookie.data.minutes, telecookie.data.seconds, help);
-    //	tele_trinkets = telecookie.data.trinkets;
-    //	tele_currentarea = map.currentarea(map.area(telecookie.data.savex, telecookie.data.savey));
-
-    //	summary_crewstats = telecookie.data.crewstats.slice();
-    //	tele_crewstats = summary_crewstats.slice();
-    //}
-
-    //if (quickcookie.data.savex == undefined) {
-    //	quickcookieexists = false; quicksummary = "";
-    //} else {
-    //	quickcookieexists = true; quicksummary = quickcookie.data.summary;
-    //	quick_gametime = giventimestring(quickcookie.data.hours, quickcookie.data.minutes, quickcookie.data.seconds, help);
-    //	quick_trinkets = quickcookie.data.trinkets;
-    //	quick_currentarea = map.currentarea(map.area(quickcookie.data.savex, quickcookie.data.savey));
-
-    //	summary_crewstats = quickcookie.data.crewstats.slice();
-    //	quick_crewstats = summary_crewstats.slice();
-    //}
-
     TiXmlDocument docTele;
     if (!FILESYSTEM_loadTiXmlDocument("saves/tsave.vvv", &docTele))
     {
@@ -5884,9 +5843,6 @@ void Game::savetele()
 {
     //TODO make this code a bit cleaner.
 
-    //telecookie = SharedObject.getLocal("dwvvvvvv_tele");
-    //Save to the telesave cookie
-
     if (map.custommode)
     {
         //Don't trash save data!
@@ -5910,18 +5866,6 @@ void Game::savetele()
 
 
     //Flags, map and stats
-    //savestate[1].explored = map.explored.slice();
-    //savestate[1].flags = obj.flags.slice();
-    //savestate[1].crewstats = crewstats.slice();
-    //savestate[1].collect = obj.collect.slice();
-
-    //telecookie.data.worldmap = savestate[1].explored.slice();
-    //telecookie.data.flags = savestate[1].flags.slice();
-    //telecookie.data.crewstats = savestate[1].crewstats.slice();
-    //telecookie.data.collect = savestate[1].collect.slice();
-
-    //telecookie.data.finalmode = map.finalmode;
-    //telecookie.data.finalstretch = map.finalstretch;
 
     std::string mapExplored;
     for(size_t i = 0; i < map.explored.size(); i++ )
@@ -5968,11 +5912,7 @@ void Game::savetele()
     msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
     msgs->LinkEndChild( msg );
 
-    //telecookie.data.finalx = map.finalx;
-    //telecookie.data.finaly = map.finaly;
     //Position
-    //telecookie.data.savex = savex;
-    //telecookie.data.savey = savey;
 
     msg = new TiXmlElement( "finalx" );
     msg->LinkEndChild( new TiXmlText( help.String(map.finalx).c_str() ));
@@ -5998,13 +5938,6 @@ void Game::savetele()
     msg->LinkEndChild( new TiXmlText( help.String(savery).c_str() ));
     msgs->LinkEndChild( msg );
 
-    //telecookie.data.saverx = saverx;
-    //telecookie.data.savery = savery;
-    //telecookie.data.savegc = savegc;
-    //telecookie.data.savedir = savedir;
-    //telecookie.data.savepoint = savepoint;
-    //telecookie.data.trinkets = trinkets;
-
     msg = new TiXmlElement( "savegc" );
     msg->LinkEndChild( new TiXmlText( help.String(savegc).c_str() ));
     msgs->LinkEndChild( msg );
@@ -6026,19 +5959,7 @@ void Game::savetele()
     msgs->LinkEndChild( msg );
 
 
-    //if (music.nicechange != -1) {
-    //telecookie.data.currentsong = music.nicechange;
-    //}else{
-    //telecookie.data.currentsong = music.currentsong;
-    //}
-    //telecookie.data.teleportscript = teleportscript;
-
     //Special stats
-    //telecookie.data.companion = companion;
-    //telecookie.data.lastsaved = lastsaved;
-    //telecookie.data.supercrewmate = supercrewmate;
-    //telecookie.data.scmprogress = scmprogress;
-    //telecookie.data.scmmoveme = scmmoveme;
 
     if(music.nicefade==1)
     {
@@ -6073,18 +5994,6 @@ void Game::savetele()
     msg = new TiXmlElement( "scmmoveme" );
     msg->LinkEndChild( new TiXmlText( BoolToString(scmmoveme) ));
     msgs->LinkEndChild( msg );
-
-
-    //telecookie.data.frames = frames; telecookie.data.seconds = seconds;
-    //telecookie.data.minutes = minutes; telecookie.data.hours = hours;
-
-    //telecookie.data.deathcounts = deathcounts;
-    //telecookie.data.totalflips = totalflips;
-    //telecookie.data.hardestroom = hardestroom; telecookie.data.hardestroomdeaths = hardestroomdeaths;
-
-    //savearea = map.currentarea(map.area(roomx, roomy))
-    //telecookie.data.summary = savearea + ", " + timestring(help);
-    //telesummary = telecookie.data.summary;
 
 
     msg = new TiXmlElement( "frames" );
@@ -6129,8 +6038,6 @@ void Game::savetele()
     msgs->LinkEndChild( msg );
 
     telesummary = summary;
-    //telecookie.flush();
-    //telecookie.close();
 
     if(FILESYSTEM_saveTiXmlDocument("saves/tsave.vvv", &doc))
     {
@@ -6169,18 +6076,6 @@ void Game::savequick()
 
 
     //Flags, map and stats
-    //savestate[1].explored = map.explored.slice();
-    //savestate[1].flags = obj.flags.slice();
-    //savestate[1].crewstats = crewstats.slice();
-    //savestate[1].collect = obj.collect.slice();
-
-    //telecookie.data.worldmap = savestate[1].explored.slice();
-    //telecookie.data.flags = savestate[1].flags.slice();
-    //telecookie.data.crewstats = savestate[1].crewstats.slice();
-    //telecookie.data.collect = savestate[1].collect.slice();
-
-    //telecookie.data.finalmode = map.finalmode;
-    //telecookie.data.finalstretch = map.finalstretch;
 
     std::string mapExplored;
     for(size_t i = 0; i < map.explored.size(); i++ )
@@ -6227,11 +6122,7 @@ void Game::savequick()
     msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
     msgs->LinkEndChild( msg );
 
-    //telecookie.data.finalx = map.finalx;
-    //telecookie.data.finaly = map.finaly;
     //Position
-    //telecookie.data.savex = savex;
-    //telecookie.data.savey = savey;
 
     msg = new TiXmlElement( "finalx" );
     msg->LinkEndChild( new TiXmlText( help.String(map.finalx).c_str() ));
@@ -6257,13 +6148,6 @@ void Game::savequick()
     msg->LinkEndChild( new TiXmlText( help.String(savery).c_str() ));
     msgs->LinkEndChild( msg );
 
-    //telecookie.data.saverx = saverx;
-    //telecookie.data.savery = savery;
-    //telecookie.data.savegc = savegc;
-    //telecookie.data.savedir = savedir;
-    //telecookie.data.savepoint = savepoint;
-    //telecookie.data.trinkets = trinkets;
-
     msg = new TiXmlElement( "savegc" );
     msg->LinkEndChild( new TiXmlText( help.String(savegc).c_str() ));
     msgs->LinkEndChild( msg );
@@ -6285,19 +6169,8 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
 
-    //if (music.nicechange != -1) {
-    //telecookie.data.currentsong = music.nicechange;
-    //}else{
-    //telecookie.data.currentsong = music.currentsong;
-    //}
-    //telecookie.data.teleportscript = teleportscript;
-
     //Special stats
-    //telecookie.data.companion = companion;
-    //telecookie.data.lastsaved = lastsaved;
-    //telecookie.data.supercrewmate = supercrewmate;
-    //telecookie.data.scmprogress = scmprogress;
-    //telecookie.data.scmmoveme = scmmoveme;
+
     if(music.nicefade==1)
     {
         msg = new TiXmlElement( "currentsong" );
@@ -6333,27 +6206,12 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
 
-    //telecookie.data.finalmode = map.finalmode;
-    //telecookie.data.finalstretch = map.finalstretch;
-
     msg = new TiXmlElement( "finalmode" );
     msg->LinkEndChild( new TiXmlText( BoolToString(map.finalmode) ));
     msgs->LinkEndChild( msg );
     msg = new TiXmlElement( "finalstretch" );
     msg->LinkEndChild( new TiXmlText( BoolToString(map.finalstretch) ));
     msgs->LinkEndChild( msg );
-
-    //telecookie.data.frames = frames; telecookie.data.seconds = seconds;
-    //telecookie.data.minutes = minutes; telecookie.data.hours = hours;
-
-    //telecookie.data.deathcounts = deathcounts;
-    //telecookie.data.totalflips = totalflips;
-    //telecookie.data.hardestroom = hardestroom; telecookie.data.hardestroomdeaths = hardestroomdeaths;
-
-    //savearea = map.currentarea(map.area(roomx, roomy))
-    //telecookie.data.summary = savearea + ", " + timestring(help);
-    //telesummary = telecookie.data.summary;
-
 
     msg = new TiXmlElement( "frames" );
     msg->LinkEndChild( new TiXmlText( help.String(frames).c_str() ));
@@ -6389,8 +6247,6 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
     quicksummary = summary;
-    //telecookie.flush();
-    //telecookie.close();
 
     if(FILESYSTEM_saveTiXmlDocument("saves/qsave.vvv", &doc))
     {
@@ -6423,18 +6279,6 @@ void Game::customsavequick(std::string savfile)
 
 
     //Flags, map and stats
-    //savestate[1].explored = map.explored.slice();
-    //savestate[1].flags = obj.flags.slice();
-    //savestate[1].crewstats = crewstats.slice();
-    //savestate[1].collect = obj.collect.slice();
-
-    //telecookie.data.worldmap = savestate[1].explored.slice();
-    //telecookie.data.flags = savestate[1].flags.slice();
-    //telecookie.data.crewstats = savestate[1].crewstats.slice();
-    //telecookie.data.collect = savestate[1].collect.slice();
-
-    //telecookie.data.finalmode = map.finalmode;
-    //telecookie.data.finalstretch = map.finalstretch;
 
     std::string mapExplored;
     for(size_t i = 0; i < map.explored.size(); i++ )
@@ -6499,11 +6343,7 @@ void Game::customsavequick(std::string savfile)
     msg->LinkEndChild( new TiXmlText( customcollect.c_str() ));
     msgs->LinkEndChild( msg );
 
-    //telecookie.data.finalx = map.finalx;
-    //telecookie.data.finaly = map.finaly;
     //Position
-    //telecookie.data.savex = savex;
-    //telecookie.data.savey = savey;
 
     msg = new TiXmlElement( "finalx" );
     msg->LinkEndChild( new TiXmlText( help.String(map.finalx).c_str() ));
@@ -6528,13 +6368,6 @@ void Game::customsavequick(std::string savfile)
     msg = new TiXmlElement( "savery" );
     msg->LinkEndChild( new TiXmlText( help.String(savery).c_str() ));
     msgs->LinkEndChild( msg );
-
-    //telecookie.data.saverx = saverx;
-    //telecookie.data.savery = savery;
-    //telecookie.data.savegc = savegc;
-    //telecookie.data.savedir = savedir;
-    //telecookie.data.savepoint = savepoint;
-    //telecookie.data.trinkets = trinkets;
 
     msg = new TiXmlElement( "savegc" );
     msg->LinkEndChild( new TiXmlText( help.String(savegc).c_str() ));
@@ -6561,19 +6394,8 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
 
-    //if (music.nicechange != -1) {
-    //telecookie.data.currentsong = music.nicechange;
-    //}else{
-    //telecookie.data.currentsong = music.currentsong;
-    //}
-    //telecookie.data.teleportscript = teleportscript;
-
     //Special stats
-    //telecookie.data.companion = companion;
-    //telecookie.data.lastsaved = lastsaved;
-    //telecookie.data.supercrewmate = supercrewmate;
-    //telecookie.data.scmprogress = scmprogress;
-    //telecookie.data.scmmoveme = scmmoveme;
+
     if(music.nicefade==1)
     {
         msg = new TiXmlElement( "currentsong" );
@@ -6607,18 +6429,6 @@ void Game::customsavequick(std::string savfile)
     msg = new TiXmlElement( "scmmoveme" );
     msg->LinkEndChild( new TiXmlText( BoolToString(scmmoveme) ));
     msgs->LinkEndChild( msg );
-
-
-    //telecookie.data.frames = frames; telecookie.data.seconds = seconds;
-    //telecookie.data.minutes = minutes; telecookie.data.hours = hours;
-
-    //telecookie.data.deathcounts = deathcounts;
-    //telecookie.data.totalflips = totalflips;
-    //telecookie.data.hardestroom = hardestroom; telecookie.data.hardestroomdeaths = hardestroomdeaths;
-
-    //savearea = map.currentarea(map.area(roomx, roomy))
-    //telecookie.data.summary = savearea + ", " + timestring(help);
-    //telesummary = telecookie.data.summary;
 
 
     msg = new TiXmlElement( "frames" );
@@ -6764,8 +6574,6 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild(msg);
 
     customquicksummary = summary;
-    //telecookie.flush();
-    //telecookie.close();
 
     std::string levelfile = savfile.substr(7);
     if(FILESYSTEM_saveTiXmlDocument(("saves/"+levelfile+".vvv").c_str(), &doc))
