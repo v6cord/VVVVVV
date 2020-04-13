@@ -278,7 +278,6 @@ public:
     int mx, my = 0;
     int screenshake, flashlight = 0;
     bool test = false;
-    std::string tempstring;
     bool advancetext, pausescript = false;
 
     int deathseq, lifeseq = 0;

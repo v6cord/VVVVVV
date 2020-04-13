@@ -109,7 +109,6 @@ public:
     int globaltemp = 0;
     int temp = 0;
     int temp2 = 0;
-    std::string tempstring;
     growing_vector<int> splitseconds;
 };
 

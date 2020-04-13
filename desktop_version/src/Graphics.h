@@ -219,8 +219,6 @@ public:
 
 	colourTransform ct = {0};
 
-	std::string tempstring;
-
 	int bcol, bcol2, rcol = 0;
 
 
