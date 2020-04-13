@@ -342,17 +342,6 @@ void musicclass::fadeout()
     custom_file_paths.clear();
 }
 
-void musicclass::processmusicfade()
-{
-	//musicfade--;
-	//if (musicfade > 0) {
-	//	musicchannel.soundTransform = new SoundTransform(musicfade / 60);
-	//}else {
-	//	musicchannel.stop();
-	//	currentsong = -1;
-	//}
-}
-
 void musicclass::processmusicfadein()
 {
 	musicVolume += FadeVolAmountPerFrame;
