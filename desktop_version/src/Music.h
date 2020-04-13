@@ -28,14 +28,8 @@ public:
 
 	void changemusicarea(int x, int y);
 
-	// public var musicchan:Array = new Array();
-	// public var musicchannel:SoundChannel, musicchannel2:SoundChannel;
-	// public var currentmusicchan:int, musicchanlen:int, musicchancur:int, musicstopother:int, resumesong:int;
-	// public var currentsong:int, musicfade:int, musicfadein:int;
 	int currentsong, musicfade, musicfadein = 0;
 	int resumesong = false;
-
-	//public var nicefade:int, nicechange:int;
 
 	void playfile(const char* t, std::string track, int loops, bool internal = false);
 	void stopfile(std::string track);

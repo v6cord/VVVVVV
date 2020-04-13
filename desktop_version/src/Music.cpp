@@ -255,15 +255,6 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 	if (currentsong !=t)
 	{
             stopmusic();
-		if (currentsong != -1)
-		{
-			// Stop the old song first
-			// musicchannel.stop();
-			if (currentsong != 0)
-			{
-				// musicchannel.removeEventListener(Event.SOUND_COMPLETE, loopmusic);
-			}
-		}
 		if (t != -1)
 		{
 			// musicfade = 0;
@@ -271,8 +262,6 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 			if (currentsong == 0 || currentsong == 7 || currentsong == 16 || currentsong == 23)
 			{
 				// Level Complete theme, no fade in or repeat
-				// musicchannel = musicchan[currentsong].play(0);
-				// musicchannel.soundTransform = new SoundTransform(1.0);
 				if(Mix_FadeInMusic(musicTracks[t].m_music, 0, 0)==-1)
 				{
 					printf("Mix_PlayMusic: %s\n", Mix_GetError());
@@ -280,10 +269,6 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 			}
 			else
 			{
-				// musicfadein = 90;
-				// musicchannel = musicchan[currentsong].play(0);
-				// musicchannel.soundTransform = new SoundTransform(0);
-				// musicchannel.addEventListener(Event.SOUND_COMPLETE, loopmusic);
 				if (Mix_FadingMusic() == MIX_FADING_OUT) {
 					// We're already fading out
 					fadeoutqueuesong = t;
@@ -317,8 +302,6 @@ void musicclass::loopmusic()
 
 void musicclass::stopmusic()
 {
-	// musicchannel.removeEventListener(Event.SOUND_COMPLETE, stopmusic);
-	// musicchannel.stop();
     Mix_HaltMusic();
     currentsong = -1;
     for (auto&& [id, channel] : custom_file_channels) {
@@ -335,9 +318,6 @@ void musicclass::haltdasmusik()
 
 void musicclass::silencedasmusik()
 {
-	//if(currentsong>-1){
-	//	musicchannel.soundTransform = new SoundTransform(0);
-	//}
 	Mix_VolumeMusic(0) ;
 	musicVolume = 0;
     for (auto&& [id, channel] : custom_file_channels) {
@@ -353,13 +333,6 @@ void musicclass::fadeMusicVolumeIn(int ms)
 
 void musicclass::fadeout()
 {
-	//if(currentsong>-1){
-	//	if (musicfade == 0) {
-	//		musicchannel.removeEventListener(Event.SOUND_COMPLETE, stopmusic);
-	//		musicfade = 61;
-	//	}
-	//}
-
 	Mix_FadeOutMusic(2000);
 	currentsong = -1;
     for (auto&& [id, channel] : custom_file_channels) {
@@ -400,9 +373,6 @@ void musicclass::processmusic()
 		return;
 	}
 
-	//if (musicfade > 0) processmusicfade();
-	//if (musicfadein > 0) processmusicfadein();
-
 	if (fadeoutqueuesong != -1 && Mix_PlayingMusic() == 0) {
 		play(fadeoutqueuesong);
 		fadeoutqueuesong = -1;
@@ -429,28 +399,6 @@ void musicclass::processmusic()
 			++iter;
 		}
 	}
-
-	//musicstopother--;
-	//if (musicstopother == 1) {
-	//	musicstopother = 0;
-	//	if (currentmusicchan == 0) musicchannel2.stop();
-	//	if (currentmusicchan == 1) musicchannel.stop();
-	//}
-	//if (musicstopother < 0) musicstopother = 0;
-
-	//musicchancur--;
-	//if (musicchancur <= 0 && currentsong > -1 && musicchanlen > 0) {
-	//	musicchancur = musicchanlen;
-	//	if (currentmusicchan == 0) {
-	//		musicchannel2 = musicchan[currentsong].play();
-	//		musicstopother = 3;
-	//		currentmusicchan = 1;
-	//	}else {
-	//		musicchannel = musicchan[currentsong].play();
-	//		musicstopother = 3;
-	//		currentmusicchan = 0;
-	//	}
-	//}
 }
 
 
@@ -565,9 +513,6 @@ void musicclass::stopfile(std::string track) {
 
 void musicclass::playef(int t)
 {
-	// efchannel[currentefchan] = efchan[t].play(offset);
-	// currentefchan++;
-	// if (currentefchan > 15) currentefchan -= 16;
 	int channel;
 
 	channel = Mix_PlayChannel(-1, soundTracks[t].sound, 0);
