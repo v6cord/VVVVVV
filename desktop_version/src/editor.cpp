@@ -6174,26 +6174,6 @@ void editorinput()
                 ed.keydelay=6;
             }
             if(key.keymap[SDLK_F9]) {
-                //bool currentonefound = false;
-                //int currenttilesheet = ed.getcustomtiles();
-                //int firsttilesheet = 0;
-                //int nexttilesheet = 0;
-                //for (auto tilesheet : graphics.customtiles) {
-                //    if (firsttilesheet == 0)
-                //        firsttilesheet = tilesheet.first;
-
-                //   if (currentonefound) {
-                //        nexttilesheet = tilesheet.first;
-                //        break;
-                //    }
-
-                //    if (tilesheet.first == currenttilesheet)
-                //        currentonefound = true;
-                //}
-
-                //if (!currentonefound)
-                //    nexttilesheet = firsttilesheet;
-
 				int nexttilesheet = cycleThroughCustomResources(ed.getcustomtiles(), graphics.customtiles);
 
                 ed.level[ed.levx + ed.levy*ed.maxwidth].customtileset = nexttilesheet;
