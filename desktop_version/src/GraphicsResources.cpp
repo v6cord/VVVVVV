@@ -116,7 +116,6 @@ void GraphicsResources::init(void)
 
 	auto templist = FILESYSTEM_getGraphicsDirFileNames();
 	for (auto name : templist) {
-		printf("%s\n", name.c_str());
 		if (name.find("graphics/tiles") == 0) {
 			if (name.substr(name.length()-4, 4) != ".png") continue;
 
