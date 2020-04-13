@@ -2532,8 +2532,6 @@ void scriptclass::run() {
                         graphics.menuoffset =
                             240;  // actually this should count the roomname
                         if (map.extrarow) graphics.menuoffset -= 10;
-                        // graphics.menubuffer.copyPixels(graphics.screenbuffer,
-                        // graphics.screenbuffer.rect, graphics.tl, null, null, false);
 
                         graphics.resumegamemode = false;
 
@@ -3747,8 +3745,6 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
             graphics.showcutscenebars = true;
             graphics.cutscenebarspos = 320;
-            // game.starttest();
-            // music.play(4);
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
@@ -3773,8 +3769,6 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
             graphics.showcutscenebars = true;
             graphics.cutscenebarspos = 320;
-            // game.starttest();
-            // music.play(4);
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
@@ -4115,10 +4109,6 @@ void scriptclass::startgamemode(int t) {
             map.customx = 100;
             map.customy = 100;
 
-            // graphics.showcutscenebars = true;
-            // graphics.cutscenebarspos = 320;
-
-            // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
             if (obj.nentity == 0) {
@@ -4139,7 +4129,6 @@ void scriptclass::startgamemode(int t) {
             } else {
                 music.currentsong = -1;
             }
-            // call("intro");
             break;
         case 22: {  // play custom level (in game)
             // Initilise the level
@@ -4159,10 +4148,6 @@ void scriptclass::startgamemode(int t) {
             map.customx = 100;
             map.customy = 100;
 
-            // graphics.showcutscenebars = true;
-            // graphics.cutscenebarspos = 320;
-
-            // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
             if (obj.nentity == 0) {
@@ -4181,7 +4166,6 @@ void scriptclass::startgamemode(int t) {
                 music.currentsong = -1;
             }
             graphics.fademode = 4;
-            // call("intro");
             break;
         }
         case 23: {  // Continue in custom level
@@ -4204,10 +4188,6 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
             game.gravitycontrol = game.savegc;
 
-            // graphics.showcutscenebars = true;
-            // graphics.cutscenebarspos = 320;
-
-            // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
             if (obj.nentity == 0) {
@@ -4217,16 +4197,8 @@ void scriptclass::startgamemode(int t) {
                 map.resetplayer();
             }
             map.gotoroom(game.saverx, game.savery);
-            /* Handled by load
-            if(ed.levmusic>0){
-              music.play(ed.levmusic);
-            }else{
-              music.currentsong=-1;
-                }
-                */
             ed.generatecustomminimap();
             graphics.fademode = 4;
-            // call("intro");
             break;
         }
         case 24: {  // Custom level time trial!
@@ -4285,11 +4257,9 @@ void scriptclass::startgamemode(int t) {
                 map.resetplayer();
             }
             map.gotoroom(game.saverx, game.savery);
-            // music.play(-1);
             music.currentsong = -1;
             ed.generatecustomminimap();
             graphics.fademode = 4;
-            // call("intro");
             break;
         }
 
