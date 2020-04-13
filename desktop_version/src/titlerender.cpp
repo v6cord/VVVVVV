@@ -97,7 +97,7 @@ std::vector<std::string> changelog = {
     "  an invalid filename to a command",
     "- Added being able to use sprites2.png,",
     "  sprites3.png, sprites4.png, etc.",
-    "  and using Shift+F9 to switch between",
+    "  and using Ctrl+F9 to switch between",
     "  them in the editor, not yet showing",
     "  up in the editor",
     "",
