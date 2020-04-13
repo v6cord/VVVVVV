@@ -2688,12 +2688,21 @@ void Graphics::drawtowerentities()
         {
             if (obj.entities[i].size == 0)        // Sprites
             {
+                // Select what sprites we should use
+                std::vector <SDL_Surface*>* spriteptr = flipmode ? (&flipsprites) : (&sprites);
+                // Check for custom sprites
+                int customs = ed.getcustomsprites();
+                if((customs > 1) && (customsprites.find(customs) != customsprites.end()))
+                {
+                    spriteptr = &customsprites[customs];
+                }
+
                 trinketcolset = false;
                 tpoint.x = obj.entities[i].xp;
                 tpoint.y = obj.entities[i].yp-map.ypos;
                 setcol(obj.entities[i].colour);
                 setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
-                BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
+                BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
                 //screenwrapping!
                 if (!map.minitowermode)
                 {
@@ -2703,13 +2712,13 @@ void Graphics::drawtowerentities()
                         {
                             tpoint.x += 320;
                             setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
-                            BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
+                            BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
                         }
                         if (tpoint.x > 300)
                         {
                             tpoint.x -= 320;
                             setRect(trect,  tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
-                            BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
+                            BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
                         }
                     }
                 }
