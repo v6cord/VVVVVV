@@ -2060,94 +2060,38 @@ void scriptclass::run() {
                                             ss_toi(words[4]), ss_toi(words[5]));
                     if (words[6] != "") {
                         switch (ss_toi(words[6])) {
-                            case 0:
-                                obj.setenemyroom(k, 4 + 100, 0 + 100);
-                                break;
-                            case 1:
-                                obj.setenemyroom(k, 2 + 100, 0 + 100);
-                                break;
-                            case 2:
-                                obj.setenemyroom(k, 12 + 100, 3 + 100);
-                                break;
-                            case 3:
-                                obj.setenemyroom(k, 13 + 100, 12 + 100);
-                                break;
-                            case 4:
-                                obj.setenemyroom(k, 16 + 100, 9 + 100);
-                                break;
-                            case 5:
-                                obj.setenemyroom(k, 19 + 100, 1 + 100);
-                                break;
-                            case 6:
-                                obj.setenemyroom(k, 19 + 100, 2 + 100);
-                                break;
-                            case 7:
-                                obj.setenemyroom(k, 18 + 100, 3 + 100);
-                                break;
-                            case 8:
-                                obj.setenemyroom(k, 16 + 100, 0 + 100);
-                                break;
-                            case 9:
-                                obj.setenemyroom(k, 14 + 100, 2 + 100);
-                                break;
-                            case 10:
-                                obj.setenemyroom(k, 10 + 100, 7 + 100);
-                                break;
-                            case 11:
-                                obj.setenemyroom(k, 12 + 100, 5 + 100);
-                                break;  // yes man
-                            case 12:
-                                obj.setenemyroom(k, 15 + 100, 3 + 100);
-                                break;  // STOP
-                            case 13:
-                                obj.setenemyroom(k, 13 + 100, 3 + 100);
-                                break;  // wave duude
-                            case 14:
-                                obj.setenemyroom(k, 15 + 100, 2 + 100);
-                                break;  // numbers
-                            case 15:
-                                obj.setenemyroom(k, 16 + 100, 2 + 100);
-                                break;  // the dudes that walk
-                            case 16:
-                                obj.setenemyroom(k, 18 + 100, 2 + 100);
-                                break;  // boob
-                            case 17:
-                                obj.setenemyroom(k, 18 + 100, 0 + 100);
-                                break;  // OBEY
-                            case 18:
-                                obj.setenemyroom(k, 17 + 100, 3 + 100);
-                                break;  // edge games
-                            case 19:
-                                obj.setenemyroom(k, 13 + 100, 6 + 100);
-                                break;  // sent over the bottom gottem lmao
-                            case 20:
-                                obj.setenemyroom(k, 16 + 100, 7 + 100);
-                                break;  // ghos
-                            case 21:
-                                obj.setenemyroom(k, 17 + 100, 7 + 100);
-                                break;  // they b walkin 2.0
-                            case 22:
-                                obj.setenemyroom(k, 14 + 100, 8 + 100);
-                                break;  // what the fuck is this
-                            case 23:
-                                obj.setenemyroom(k, 11 + 100, 13 + 100);
-                                break;  // TRUTH
-                            case 24:
-                                obj.setenemyroom(k, 14 + 100, 13 + 100);
-                                break;  // DABBING SKELETON
-                            case 25:
-                                obj.setenemyroom(k, 44, 51);
-                                break;  // enemy in vertigo
+                            case 0: obj.entities[k].setenemyroom(4 + 100, 0 + 100); break;
+                            case 1: obj.entities[k].setenemyroom(2 + 100, 0 + 100); break;
+                            case 2: obj.entities[k].setenemyroom(12 + 100, 3 + 100); break;
+                            case 3: obj.entities[k].setenemyroom(13 + 100, 12 + 100); break;
+                            case 4: obj.entities[k].setenemyroom(16 + 100, 9 + 100); break;
+                            case 5: obj.entities[k].setenemyroom(19 + 100, 1 + 100); break;
+                            case 6: obj.entities[k].setenemyroom(19 + 100, 2 + 100); break;
+                            case 7: obj.entities[k].setenemyroom(18 + 100, 3 + 100); break;
+                            case 8: obj.entities[k].setenemyroom(16 + 100, 0 + 100); break;
+                            case 9: obj.entities[k].setenemyroom(14 + 100, 2 + 100); break;
+                            case 10: obj.entities[k].setenemyroom(10 + 100, 7 + 100); break;
+                            case 11: obj.entities[k].setenemyroom(12 + 100, 5 + 100); break;  // yes man
+                            case 12: obj.entities[k].setenemyroom(15 + 100, 3 + 100); break;  // STOP
+                            case 13: obj.entities[k].setenemyroom(13 + 100, 3 + 100); break;  // wave duude
+                            case 14: obj.entities[k].setenemyroom(15 + 100, 2 + 100); break;  // numbers
+                            case 15: obj.entities[k].setenemyroom(16 + 100, 2 + 100); break;  // the dudes that walk
+                            case 16: obj.entities[k].setenemyroom(18 + 100, 2 + 100); break;  // boob
+                            case 17: obj.entities[k].setenemyroom(18 + 100, 0 + 100); break;  // OBEY
+                            case 18: obj.entities[k].setenemyroom(17 + 100, 3 + 100); break;  // edge games
+                            case 19: obj.entities[k].setenemyroom(13 + 100, 6 + 100); break;  // sent over the bottom gottem lmao
+                            case 20: obj.entities[k].setenemyroom(16 + 100, 7 + 100); break;  // ghos
+                            case 21: obj.entities[k].setenemyroom(17 + 100, 7 + 100); break;  // they b walkin 2.0
+                            case 22: obj.entities[k].setenemyroom(14 + 100, 8 + 100); break;  // what the fuck is this
+                            case 23: obj.entities[k].setenemyroom(11 + 100, 13 + 100); break;  // TRUTH
+                            case 24: obj.entities[k].setenemyroom(14 + 100, 13 + 100); break;  // DABBING SKELETON
+                            case 25: obj.entities[k].setenemyroom(44, 51); break;  // enemy in vertigo
                             case 26:
                                 obj.entities[k].tile = 24;
                                 obj.entities[k].animate = 0;
                                 break;
-                            case 27:
-                                obj.setenemyroom(k, 13+100, 7+100);
-                                break;  // bus
-                            default:
-                                obj.setenemyroom(k, 4 + 100, 0 + 100);
-                                break;
+                            case 27: obj.entities[k].setenemyroom(13+100, 7+100); break;  // bus
+                            default: obj.entities[k].setenemyroom(4 + 100, 0 + 100); break;
                         }
                     }
                     setvar("return", std::to_string(k));
