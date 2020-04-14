@@ -258,7 +258,6 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
             stopmusic();
 		if (t != -1)
 		{
-			// musicfade = 0;
 			currentsong = t;
 			if (currentsong == 0 || currentsong == 7 || (!map.custommode && (currentsong == 16 || currentsong == 23)))
 			{
