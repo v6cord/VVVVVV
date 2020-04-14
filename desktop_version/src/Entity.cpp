@@ -2301,9 +2301,6 @@ void entityclass::updateentities( int i )
         switch(entities[i].type)
         {
         case 0:  //Player
-            if (entities[i].state == 0)
-            {
-            }
             break;
         case 1:  //Movement behaviors
             //Enemies can have a number of different behaviors:
