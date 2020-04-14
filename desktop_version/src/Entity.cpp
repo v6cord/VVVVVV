@@ -1118,7 +1118,7 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
         case 100: // Used by customactivityzone() with 1 color argument for predefined colors
             blocks[k].prompt = customprompt;
             blocks[k].script = "custom_"+customscript;
-            setblockcolour(k, customcolour);
+            blocks[k].setblockcolour(customcolour);
             trig=0;
             break;
         case 101: // Used by customactivityzone() with 3 color arguments for RGB
