@@ -2656,6 +2656,7 @@ void editorclass::load(std::string& _path)
                 edLevelClassElement->QueryIntAttribute("tileset", &level[i].tileset);
                 edLevelClassElement->QueryIntAttribute("tilecol", &level[i].tilecol);
                 edLevelClassElement->QueryIntAttribute("customtileset", &level[i].customtileset);
+                edLevelClassElement->QueryIntAttribute("customspritesheet", &level[i].customspritesheet);
                 edLevelClassElement->QueryIntAttribute("platx1", &level[i].platx1);
                 edLevelClassElement->QueryIntAttribute("platy1", &level[i].platy1);
                 edLevelClassElement->QueryIntAttribute("platx2", &level[i].platx2);
@@ -2980,6 +2981,7 @@ void editorclass::save(std::string& _path)
         edlevelclassElement->SetAttribute( "tileset", level[i].tileset);
         edlevelclassElement->SetAttribute(  "tilecol", level[i].tilecol);
         edlevelclassElement->SetAttribute(  "customtileset", level[i].customtileset);
+        edlevelclassElement->SetAttribute(  "customspritesheet", level[i].customspritesheet);
         edlevelclassElement->SetAttribute(  "platx1", level[i].platx1);
         edlevelclassElement->SetAttribute(  "platy1", level[i].platy1);
         edlevelclassElement->SetAttribute(  "platx2", level[i].platx2);
@@ -3247,6 +3249,37 @@ dmwidth(void)
     if (ed.level[ed.levx+(ed.levy*ed.maxwidth)].tileset == 5)
         return 30;
     return 40;
+}
+
+int cycle_through_custom_resources(int current, std::map <int, std::vector<SDL_Surface*>>& Map, bool forward)
+{
+    // The map is empty only the default value is valid
+    if(Map.size() == 0)
+        return 0;
+    // We have selected the default use the first (or last) custom
+    if(current == 0)
+        return forward ? Map.begin() -> first : (--Map.end())->first;
+    // Once we found the current on return the next
+    bool returnNext = 0;
+    if(forward){
+        for(auto it = Map.begin(); it != Map.end(); ++it){
+            if(returnNext)
+                return it->first;
+            if(current == it->first)
+              returnNext = true;
+        }
+    }else{
+        for(auto it = Map.end(); it != Map.begin(); ){
+            --it;
+            if(returnNext)
+                return it->first;
+            if(current == it->first)
+              returnNext = true;
+        }
+    }
+    // We have reached the end because the last one was the current one or that spritesheet
+    // no longer exist just go back to the default one
+    return 0;
 }
 
 void editorrender()
@@ -5789,6 +5822,20 @@ void editorinput()
                 ed.drawmode=-6;
                 ed.keydelay = 6;
             }
+            
+            if(key.keymap[SDLK_F9]) {
+                int nextspritesheet = cycle_through_custom_resources(ed.getcustomsprites(), graphics.customsprites, false);
+
+                ed.level[ed.levx + ed.levy*ed.maxwidth].customspritesheet = nextspritesheet;
+
+                if (nextspritesheet == 0)
+                    ed.note = "Now using default spritesheet";
+                else
+                    ed.note = "Now using sprites" + std::to_string(nextspritesheet) + ".png";
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.keydelay = 6;
+            }
         } else if (key.keymap[SDLK_LCTRL] || key.keymap[SDLK_RCTRL]) {
             // Ctrl modifiers
             if (key.keymap[SDLK_F1]) {
@@ -5862,6 +5909,20 @@ void editorinput()
                 if (ed.entspeed > speedcap) ed.entspeed = -speedcap;
             }
 
+            if(key.keymap[SDLK_F9]) {
+                int nextspritesheet = cycle_through_custom_resources(ed.getcustomsprites(), graphics.customsprites, true);
+
+                ed.level[ed.levx + ed.levy*ed.maxwidth].customspritesheet = nextspritesheet;
+
+                if (nextspritesheet == 0)
+                    ed.note = "Now using default spritesheet";
+                else
+                    ed.note = "Now using sprites" + std::to_string(nextspritesheet) + ".png";
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.keydelay = 6;
+            }
+
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
             // Shift modifiers
             if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
@@ -5912,6 +5973,21 @@ void editorinput()
             if (key.keymap[SDLK_1]) ed.drawmode=17;
             if (key.keymap[SDLK_2]) ed.drawmode=18;
             if (key.keymap[SDLK_3]) ed.drawmode=19;
+            
+            if(key.keymap[SDLK_F9]) {
+                int nexttilesheet = cycle_through_custom_resources(ed.getcustomtiles(), graphics.customtiles, false);
+
+                ed.level[ed.levx + ed.levy*ed.maxwidth].customtileset = nexttilesheet;
+
+                if (nexttilesheet == 0)
+                    ed.note = "Now using default tilesheet";
+                else
+                    ed.note = "Now using tiles" + std::to_string(nexttilesheet) + ".png";
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.keydelay = 6;
+            }
+
         } else {
             // No modifiers
             if (key.keymap[SDLK_COMMA] || key.keymap[SDLK_PERIOD] || key.isDown(SDL_CONTROLLER_BUTTON_X) || key.isDown(SDL_CONTROLLER_BUTTON_Y)) {
@@ -6060,25 +6136,7 @@ void editorinput()
                 ed.keydelay=6;
             }
             if(key.keymap[SDLK_F9]) {
-                bool currentonefound = false;
-                int currenttilesheet = ed.getcustomtiles();
-                int firsttilesheet = 0;
-                int nexttilesheet = 0;
-                for (auto tilesheet : graphics.customtiles) {
-                    if (firsttilesheet == 0)
-                        firsttilesheet = tilesheet.first;
-
-                    if (currentonefound) {
-                        nexttilesheet = tilesheet.first;
-                        break;
-                    }
-
-                    if (tilesheet.first == currenttilesheet)
-                        currentonefound = true;
-                }
-
-                if (!currentonefound)
-                    nexttilesheet = firsttilesheet;
+                int nexttilesheet = cycle_through_custom_resources(ed.getcustomtiles(), graphics.customtiles, true);
 
                 ed.level[ed.levx + ed.levy*ed.maxwidth].customtileset = nexttilesheet;
 
@@ -7503,6 +7561,11 @@ int editorclass::getcustomtiles(int rx, int ry)
     return level[rx + ry*maxwidth].customtileset;
 }
 
+int editorclass::getcustomsprites(int rx, int ry)
+{
+    return level[rx + ry*maxwidth].customspritesheet;
+}
+
 // This version detects the room automatically
 int editorclass::getcustomtiles()
 {
@@ -7510,6 +7573,16 @@ int editorclass::getcustomtiles()
         return getcustomtiles(ed.levx, ed.levy);
     else if (map.custommode)
         return getcustomtiles(game.roomx - 100, game.roomy - 100);
+
+    return 0;
+}
+
+int editorclass::getcustomsprites()
+{
+    if (game.gamestate == EDITORMODE)
+        return getcustomsprites(ed.levx, ed.levy);
+    else if (map.custommode)
+        return getcustomsprites(game.roomx - 100, game.roomy - 100);
 
     return 0;
 }

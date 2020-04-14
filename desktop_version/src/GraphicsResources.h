@@ -43,6 +43,7 @@ public:
     SDL_Surface* im_image12;
 
     std::map<int, SDL_Surface*> im_customtiles;
+    std::map<int, SDL_Surface*> im_customsprites;
 };
 
 #endif /* GRAPHICSRESOURCES_H */
