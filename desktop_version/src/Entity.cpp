@@ -42,8 +42,6 @@ bool entityclass::checktowerspikes(int t)
 
 void entityclass::init()
 {
-    nblocks = 0;
-
     skipblocks = false;
     skipdirblocks = false;
     platformtile = 0;
@@ -68,14 +66,10 @@ void entityclass::init()
     }
 
     flags.resize(1000);
-    blocks.resize(500);
     collect.resize(100);
     coincollect.clear();
     coincollect.resize(100);
     customcollect.resize(100);
-
-    resurrectblocks.resize(500);
-    nresurrectblocks = 0;
 }
 
 void entityclass::resetallflags()
@@ -789,45 +783,18 @@ void entityclass::generateswnwave( int t )
 
 void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*= 0*/ )
 {
-    if(nblocks == 0)
-    {
-        //If there are no active blocks, Z=0;
-        k = 0;
-        nblocks++;
-    }
-    else
-    {
-        int i = 0;
-        k = -1;
-        while (i < nblocks)
-        {
-            if (!blocks[i].active)
-            {
-                k = i;
-                i = nblocks;
-            }
-            i++;
-        }
-        if (k == -1)
-        {
-            k = nblocks;
-            nblocks++;
-        }
-    }
+    k = blocks.size();
 
-    blocks[k].clear();
-    blocks[k].active = true;
+    blockclass block;
     switch(t)
     {
     case BLOCK: //Block
-        blocks[k].type = BLOCK;
-        blocks[k].xp = xp;
-        blocks[k].yp = yp;
-        blocks[k].wp = w;
-        blocks[k].hp = h;
-        blocks[k].rectset(xp, yp, w, h);
-
-        nblocks++;
+        block.type = BLOCK;
+        block.xp = xp;
+        block.yp = yp;
+        block.wp = w;
+        block.hp = h;
+        block.rectset(xp, yp, w, h);
         break;
     case TRIGGER: //Trigger
         // Are we creating a script box with a one-time script?
@@ -836,283 +803,274 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
         if (kludgeonetimescript && trig >= 300)
             for (size_t i = 0; i < game.onetimescripts.size(); i++)
                 if (game.onetimescripts[i] == game.customscript[trig - 300]) {
-                    blocks[k].active = false;
                     kludgeonetimescript = false;
                     return;
                 }
 
-        blocks[k].type = TRIGGER;
-        blocks[k].x = xp;
-        blocks[k].y = yp;
-        blocks[k].wp = w;
-        blocks[k].hp = h;
-        blocks[k].rectset(xp, yp, w, h);
-        blocks[k].trigger = trig;
+        block.type = TRIGGER;
+        block.x = xp;
+        block.y = yp;
+        block.wp = w;
+        block.hp = h;
+        block.rectset(xp, yp, w, h);
+        block.trigger = trig;
 
         if (kludgeonetimescript) {
-            blocks[k].onetime = true;
+            block.onetime = true;
             kludgeonetimescript = false;
         }
-
-        nblocks++;
         break;
     case DAMAGE: //Damage
-        blocks[k].type = DAMAGE;
-        blocks[k].x = xp;
-        blocks[k].y = yp;
-        blocks[k].wp = w;
-        blocks[k].hp = h;
-        blocks[k].rectset(xp, yp, w, h);
-
-        nblocks++;
+        block.type = DAMAGE;
+        block.x = xp;
+        block.y = yp;
+        block.wp = w;
+        block.hp = h;
+        block.rectset(xp, yp, w, h);
         break;
     case DIRECTIONAL: //Directional
-        blocks[k].type = DIRECTIONAL;
-        blocks[k].x = xp;
-        blocks[k].y = yp;
-        blocks[k].wp = w;
-        blocks[k].hp = h;
-        blocks[k].rectset(xp, yp, w, h);
-        blocks[k].trigger = trig;
-
-        nblocks++;
+        block.type = DIRECTIONAL;
+        block.x = xp;
+        block.y = yp;
+        block.wp = w;
+        block.hp = h;
+        block.rectset(xp, yp, w, h);
+        block.trigger = trig;
         break;
     case SAFE: //Safe block
-        blocks[k].type = SAFE;
-        blocks[k].xp = xp;
-        blocks[k].yp = yp;
-        blocks[k].wp = w;
-        blocks[k].hp = h;
-        blocks[k].rectset(xp, yp, w, h);
-
-        nblocks++;
+        block.type = SAFE;
+        block.xp = xp;
+        block.yp = yp;
+        block.wp = w;
+        block.hp = h;
+        block.rectset(xp, yp, w, h);
         break;
     case ACTIVITY: //Activity Zone
-        blocks[k].type = ACTIVITY;
-        blocks[k].x = xp;
-        blocks[k].y = yp;
-        blocks[k].wp = w;
-        blocks[k].hp = h;
-        blocks[k].rectset(xp, yp, w, h);
+        block.type = ACTIVITY;
+        block.x = xp;
+        block.y = yp;
+        block.wp = w;
+        block.hp = h;
+        block.rectset(xp, yp, w, h);
 
         //Ok, each and every activity zone in the game is initilised here. "Trig" in this case is a variable that
         //assigns all the details.
         switch(trig)
         {
         case 0: //testing zone
-            blocks[k].prompt = "Press ENTER to explode";
-            blocks[k].script = "intro";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to explode";
+            block.script = "intro";
+            block.setblockcolour("orange");
             trig=1;
             break;
         case 1:
-            blocks[k].prompt = "Press ENTER to talk to Violet";
-            blocks[k].script = "talkpurple";
-            blocks[k].setblockcolour("purple");
+            block.prompt = "Press ENTER to talk to Violet";
+            block.script = "talkpurple";
+            block.setblockcolour("purple");
             trig=0;
             break;
         case 2:
-            blocks[k].prompt = "Press ENTER to talk to Vitellary";
-            blocks[k].script = "talkyellow";
-            blocks[k].setblockcolour("yellow");
+            block.prompt = "Press ENTER to talk to Vitellary";
+            block.script = "talkyellow";
+            block.setblockcolour("yellow");
             trig=0;
             break;
         case 3:
-            blocks[k].prompt = "Press ENTER to talk to Vermilion";
-            blocks[k].script = "talkred";
-            blocks[k].setblockcolour("red");
+            block.prompt = "Press ENTER to talk to Vermilion";
+            block.script = "talkred";
+            block.setblockcolour("red");
             trig=0;
             break;
         case 4:
-            blocks[k].prompt = "Press ENTER to talk to Verdigris";
-            blocks[k].script = "talkgreen";
-            blocks[k].setblockcolour("green");
+            block.prompt = "Press ENTER to talk to Verdigris";
+            block.script = "talkgreen";
+            block.setblockcolour("green");
             trig=0;
             break;
         case 5:
-            blocks[k].prompt = "Press ENTER to talk to Victoria";
-            blocks[k].script = "talkblue";
-            blocks[k].setblockcolour("blue");
+            block.prompt = "Press ENTER to talk to Victoria";
+            block.script = "talkblue";
+            block.setblockcolour("blue");
             trig=0;
             break;
         case 6:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_station_1";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_station_1";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 7:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_outside_1";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_outside_1";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 8:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_outside_2";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_outside_2";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 9:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_outside_3";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_outside_3";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 10:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_outside_4";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_outside_4";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 11:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_outside_5";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_outside_5";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 12:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_outside_6";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_outside_6";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 13:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_finallevel";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_finallevel";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 14:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_station_2";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_station_2";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 15:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_station_3";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_station_3";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 16:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_station_4";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_station_4";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 17:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_warp_1";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_warp_1";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 18:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_warp_2";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_warp_2";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 19:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_lab_1";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_lab_1";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 20:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_lab_2";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_lab_2";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 21:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_secretlab";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_secretlab";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 22:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_shipcomputer";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_shipcomputer";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 23:
-            blocks[k].prompt = "Press ENTER to activate terminals";
-            blocks[k].script = "terminal_radio";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminals";
+            block.script = "terminal_radio";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 24:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "terminal_jukebox";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "terminal_jukebox";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 25:
-            blocks[k].prompt = "Passion for Exploring";
-            blocks[k].script = "terminal_juke1";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Passion for Exploring";
+            block.script = "terminal_juke1";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 26:
-            blocks[k].prompt = "Pushing Onwards";
-            blocks[k].script = "terminal_juke2";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Pushing Onwards";
+            block.script = "terminal_juke2";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 27:
-            blocks[k].prompt = "Positive Force";
-            blocks[k].script = "terminal_juke3";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Positive Force";
+            block.script = "terminal_juke3";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 28:
-            blocks[k].prompt = "Presenting VVVVVV";
-            blocks[k].script = "terminal_juke4";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Presenting VVVVVV";
+            block.script = "terminal_juke4";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 29:
-            blocks[k].prompt = "Potential for Anything";
-            blocks[k].script = "terminal_juke5";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Potential for Anything";
+            block.script = "terminal_juke5";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 30:
-            blocks[k].prompt = "Predestined Fate";
-            blocks[k].script = "terminal_juke6";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Predestined Fate";
+            block.script = "terminal_juke6";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 31:
-            blocks[k].prompt = "Pipe Dream";
-            blocks[k].script = "terminal_juke7";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Pipe Dream";
+            block.script = "terminal_juke7";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 32:
-            blocks[k].prompt = "Popular Potpourri";
-            blocks[k].script = "terminal_juke8";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Popular Potpourri";
+            block.script = "terminal_juke8";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 33:
-            blocks[k].prompt = "Pressure Cooker";
-            blocks[k].script = "terminal_juke9";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Pressure Cooker";
+            block.script = "terminal_juke9";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 34:
-            blocks[k].prompt = "ecroF evitisoP";
-            blocks[k].script = "terminal_juke10";
-            blocks[k].setblockcolour("orange");
+            block.prompt = "ecroF evitisoP";
+            block.script = "terminal_juke10";
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 35:
-            blocks[k].prompt = "Press ENTER to activate terminal";
-            blocks[k].script = "custom_"+customscript;
-            blocks[k].setblockcolour("orange");
+            block.prompt = "Press ENTER to activate terminal";
+            block.script = "custom_"+customscript;
+            block.setblockcolour("orange");
             trig=0;
             break;
         case 100: // Used by customactivityzone() with 1 color argument for predefined colors
@@ -1130,11 +1088,11 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         }
-        nblocks++;
         break;
     }
 
     kludgeonetimescript = false;
+    blocks.push_back(block);
 }
 
 void entityclass::removeentity(int t)
@@ -1144,57 +1102,35 @@ void entityclass::removeentity(int t)
 
 void entityclass::removeallblocks()
 {
-    for(int i=0; i<nblocks; i++) blocks[i].clear();
-    nblocks=0;
+    blocks.clear();
 }
 
 void entityclass::removeallresurrectblocks()
 {
-    for(int i=0; i<nresurrectblocks; i++) resurrectblocks[i].clear();
-    nresurrectblocks=0;
+    resurrectblocks.clear();
 }
 
 void entityclass::removeblock( int t )
 {
-    if (!blocks[t].active)
-        // Don't remove it twice, that'll wreak havoc with resurrectblocks
-        return;
     if (blocks[t].type == TRIGGER || blocks[t].type == ACTIVITY) {
-        resurrectblocks[nresurrectblocks].active = true;
-        resurrectblocks[nresurrectblocks].type = blocks[t].type;
-        resurrectblocks[nresurrectblocks].x = blocks[t].x;
-        resurrectblocks[nresurrectblocks].y = blocks[t].y;
-        resurrectblocks[nresurrectblocks].wp = blocks[t].wp;
-        resurrectblocks[nresurrectblocks].hp = blocks[t].hp;
-        resurrectblocks[nresurrectblocks].r = blocks[t].r;
-        resurrectblocks[nresurrectblocks].g = blocks[t].g;
-        resurrectblocks[nresurrectblocks].b = blocks[t].b;
-        resurrectblocks[nresurrectblocks].trigger = blocks[t].trigger;
-        resurrectblocks[nresurrectblocks].prompt = blocks[t].prompt;
-        resurrectblocks[nresurrectblocks].script = blocks[t].script;
-        nresurrectblocks++;
+        resurrectblocks.push_back(blockclass(blocks[t]));
     }
-    blocks[t].clear();
-    int i = nblocks - 1;
-    while (i >= 0 && !(blocks[i].active))
-    {
-        nblocks--;
-        i--;
-    }
+
+    blocks.erase(blocks.begin() + t);
 }
 
 void entityclass::removeblockat( int x, int y )
 {
-    for (int i = 0; i < nblocks; i++)
+    for (size_t i = 0; i < blocks.size(); i++)
     {
-        if(blocks[i].xp == int(x) && blocks[i].yp == int(y)) removeblock(i);
+        if(blocks[i].xp == int(x) && blocks[i].yp == int(y)) removeblock_iter(i);
     }
 }
 
 void entityclass::removetrigger( int t )
 {
     bool actuallyonetime = false;
-    for(int i=0; i<nblocks; i++)
+    for(size_t i=0; i<blocks.size(); i++)
     {
         if(blocks[i].type == TRIGGER)
         {
@@ -1203,7 +1139,7 @@ void entityclass::removetrigger( int t )
                 if (blocks[i].onetime && t >= 300)
                     game.onetimescripts.push_back(game.customscript[t - 300]);
                 actuallyonetime = blocks[i].onetime;
-                removeblock(i);
+                removeblock_iter(i);
             }
         }
     }
@@ -1212,7 +1148,7 @@ void entityclass::removetrigger( int t )
     // remove all other script boxes in the room with the same script
     // that are also one-time
     if (kludgeonetimescript && actuallyonetime && t >= 300)
-        for (int i = 0; i < nblocks; i++)
+        for (size_t i = 0; i < blocks.size(); i++)
             if (blocks[i].type == TRIGGER && blocks[i].onetime
             && blocks[i].trigger >= 300
             && game.customscript[blocks[i].trigger - 300] == game.customscript[t - 300])
@@ -4085,9 +4021,9 @@ bool entityclass::checkdamage()
             temph = entities[i].h;
             rectset(tempx, tempy, tempw, temph);
 
-            for (int j=0; j<nblocks; j++)
+            for (size_t j=0; j<blocks.size(); j++)
             {
-                if (blocks[j].type == DAMAGE && blocks[j].active)
+                if (blocks[j].type == DAMAGE)
                 {
                     if(help.intersects(blocks[j].rect, temprect))
                     {
@@ -4113,9 +4049,9 @@ bool entityclass::scmcheckdamage()
             temph = entities[i].h;
             rectset(tempx, tempy, tempw, temph);
 
-            for (int j=0; j<nblocks; j++)
+            for (size_t j=0; j<blocks.size(); j++)
             {
-                if (blocks[j].type == DAMAGE && blocks[j].active)
+                if (blocks[j].type == DAMAGE)
                 {
                     if(help.intersects(blocks[j].rect, temprect))
                     {
@@ -4151,9 +4087,9 @@ int entityclass::checktrigger()
             temph = entities[i].h;
             rectset(tempx, tempy, tempw, temph);
 
-            for (int j=0; j<nblocks; j++)
+            for (size_t j=0; j<blocks.size(); j++)
             {
-                if (blocks[j].type == TRIGGER && blocks[j].active)
+                if (blocks[j].type == TRIGGER)
                 {
                     if (help.intersects(blocks[j].rect, temprect))
                     {
@@ -4180,9 +4116,9 @@ int entityclass::checkactivity()
             temph = entities[i].h;
             rectset(tempx, tempy, tempw, temph);
 
-            for (int j=0; j<nblocks; j++)
+            for (size_t j=0; j<blocks.size(); j++)
             {
-                if (blocks[j].type == ACTIVITY && blocks[j].active)
+                if (blocks[j].type == ACTIVITY)
                 {
                     if (help.intersects(blocks[j].rect, temprect))
                     {
@@ -4215,9 +4151,9 @@ bool entityclass::cblocks( int t )
 bool entityclass::checkplatform()
 {
     //Return true if rectset intersects a moving platform, setups px & py to the platform x & y
-    for (int i = 0; i < nblocks; i++)
+    for (size_t i = 0; i < blocks.size(); i++)
     {
-        if (blocks[i].active)
+        if (true) //FIXME: remove this later (no more 'active')
         {
             if (blocks[i].type == BLOCK)
             {
@@ -4235,9 +4171,9 @@ bool entityclass::checkplatform()
 
 bool entityclass::checkblocks()
 {
-    for (int i = 0; i < nblocks; i++)
+    for (size_t i = 0; i < blocks.size(); i++)
     {
-        if (blocks[i].active)
+        if (true) //FIXME: remove this later (no more 'active')
         {
             if(!skipdirblocks)
             {
@@ -4636,11 +4572,6 @@ void entityclass::applyfriction( int t, float xrate, float yrate, int speed )
 
 void entityclass::cleanupresurrectblocks()
 {
-    int i = nresurrectblocks - 1;
-    while (i >= 0 && !(resurrectblocks[i].active)) {
-        nresurrectblocks--;
-        i--;
-    }
 }
 
 void entityclass::updateentitylogic( int t )

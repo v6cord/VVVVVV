@@ -810,11 +810,11 @@ void mapclass::settile_special(int x, int y, int tile) {
 		if (obj.entities[eqi].type == 3 && obj.entities[eqi].xp/8 == x && obj.entities[eqi].yp/8 == y)
 			obj.removeentity(eqi);
 	// The rest of these removals are blocks, which I'll just put in one for-loop
-	for (int bi = 0; bi < obj.nblocks; bi++) {
+	for (size_t bi = 0; bi < obj.blocks.size(); bi++) {
 		// Remove the block part of a 1x1 quicksand
 		// We check that it's 8x8 in order to not remove 4-wide quicksand / platforms / conveyors
 		if (obj.blocks[bi].type == BLOCK && obj.blocks[bi].xp/8 == x && obj.blocks[bi].yp/8 == y && obj.blocks[bi].wp == 8 && obj.blocks[bi].hp == 8)
-			obj.blocks[bi].clear();
+			removeblock_iter(bi);
 
 		// The spiky part of a spike is a block, remove it
 		if (obj.blocks[bi].type == DAMAGE &&
@@ -824,20 +824,13 @@ void mapclass::settile_special(int x, int y, int tile) {
 			// is stored in their 'x'/'y' attributes instead of 'xp'/'yp' like the rest,
 			// and also, the 'x'/'y' attributes are floats instead of ints
 			(int) obj.blocks[bi].x/8 == x && (int) obj.blocks[bi].y/8 == y)
-				obj.blocks[bi].clear();
+				removeblock_iter(bi)
 
 		// The collision of a one-way tile is a block, also remove it
 		if (obj.blocks[bi].type == DIRECTIONAL &&
 		// Read comment about integer division from above conditional
 		obj.blocks[bi].x/8 == x && obj.blocks[bi].y/8 == y)
-			obj.blocks[bi].clear();
-	}
-
-	// Clean up before adding any entities/blocks
-	int n = obj.nblocks - 1;
-	while (n >= 0 && !obj.blocks[n].active) {
-		obj.nblocks--;
-		n--;
+			removeblock_iter(bi);
 	}
 
 	// Ok, now if we've added a tile that's an entity and/or block, actually add it now...

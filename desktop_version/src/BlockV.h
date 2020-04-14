@@ -20,7 +20,6 @@ public:
     void setblockcolour(std::string col);
 public:
     //Fundamentals
-    bool active = false;
     SDL_Rect rect = {0};
     int type = 0;
     int trigger = 0;

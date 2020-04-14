@@ -200,13 +200,12 @@ public:
     int activetrigger = 0;
 
 
-    growing_vector<blockclass> blocks;
+    std::vector<blockclass> blocks;
     growing_vector<int> flags;
     growing_vector<int> collect;
     growing_vector<int> coincollect;
     growing_vector<int> customcollect;
 
-    int nblocks = 0;
     bool skipblocks, skipdirblocks = false;
 
     int platformtile = 0;
@@ -236,8 +235,7 @@ public:
 
     std::unordered_map<std::string, int> named_crewmen;
 
-    growing_vector<blockclass> resurrectblocks;
-    int nresurrectblocks = 0;
+    std::vector<blockclass> resurrectblocks;
 
     // Very kludgey! Used for signaling when a script box is one-time-only in createblock(),
     // and used for signaling when a script box was removed by a player in removetrigger()

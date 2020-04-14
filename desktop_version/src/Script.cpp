@@ -515,10 +515,10 @@ void scriptclass::run() {
                     } else if (words[1] == "all" || words[1] == "everything") {
                         // Don't want to use obj.removeallblocks(), it'll remove all
                         // spikes and one-ways too
-                        for (int bl = 0; bl < obj.nblocks; bl++)
+                        for (size_t bl = 0; bl < obj.blocks.size(); bl++)
                             if (obj.blocks[bl].type != DAMAGE &&
                                 obj.blocks[bl].type != DIRECTIONAL)
-                                obj.removeblock(bl);
+                                removeblock_iter(bl);
 
                         // Too bad there's no obj.removeallentities()
                         // (Wouldn't want to use it anyway, we need to take care of
@@ -615,10 +615,10 @@ void scriptclass::run() {
                                 obj.entities[edc].behave != 9))
                                 continue;
 
-                            for (int ii = 0; ii < obj.nblocks; ii++)
+                            for (size_t ii = 0; ii < obj.blocks.size(); ii++)
                                 if (obj.blocks[ii].xp == obj.entities[edc].xp &&
                                     obj.blocks[ii].yp == obj.entities[edc].yp)
-                                    obj.blocks[ii].clear();
+                                    removeblock_iter(ii);
                             // Store a copy of the entity to check its attributes later
                             entclass deletedentity = entclass(obj.entities[edc]);
                             removeentity_iter(edc);
@@ -674,17 +674,19 @@ void scriptclass::run() {
                             if (obj.entities[eti].type == 13)
                                 removeentity_iter(eti);
 
-                        for (int bti = 0; bti < obj.nblocks; bti++)
+                        for (size_t bti = 0; bti < obj.blocks.size(); bti++)
                             if (obj.blocks[bti].type == ACTIVITY &&
                                 (obj.blocks[bti].prompt ==
                                     "Press ENTER to activate terminal" ||
                                 obj.blocks[bti].prompt ==
                                     "Press ENTER to activate terminals"))
-                                obj.blocks[bti].active = false;
+                                removeblock_iter(bti);
                     } else if (words[1] == "scriptboxes") {
-                        for (int bsi = 0; bsi < obj.nblocks; bsi++)
-                            if (obj.blocks[bsi].type == TRIGGER)
+                        for (size_t bsi = 0; bsi < obj.blocks.size(); bsi++)
+                            if (obj.blocks[bsi].type == TRIGGER) {
                                 obj.removetrigger(obj.blocks[bsi].trigger);
+                                bsi--;
+                            }
                     } else if (words[1] == "disappearingplatforms" ||
                             words[1] == "quicksand") {
                         for (size_t epi = 0; epi < obj.entities.size(); epi++)
@@ -730,15 +732,9 @@ void scriptclass::run() {
 
                         game.activetele = false;
                     } else if (words[1] == "activityzones") {
-                        for (int bai = 0; bai < obj.nblocks; bai++)
+                        for (size_t bai = 0; bai < obj.blocks.size(); bai++)
                             if (obj.blocks[bai].type == ACTIVITY)
-                                obj.removeblock(bai);
-                    }
-
-                    int n = obj.nblocks - 1;
-                    while (n >= 0 && !obj.blocks[n].active) {
-                        obj.nblocks--;
-                        n--;
+                                removeblock_iter(bai);
                     }
                 }
                 if (words[0] == "customiftrinkets") {
@@ -1423,16 +1419,11 @@ void scriptclass::run() {
                     game.onetimescripts.erase(std::remove(game.onetimescripts.begin(), game.onetimescripts.end(), words[1]), game.onetimescripts.end());
                 }
                 if (words[0] == "reloadscriptboxes") {
-                    for (int brs = 0; brs < obj.nresurrectblocks; brs++)
-                        if (obj.resurrectblocks[brs].active &&
-                            obj.resurrectblocks[brs].type == TRIGGER) {
-                            obj.createblock(obj.resurrectblocks[brs].type,
-                                            obj.resurrectblocks[brs].x,
-                                            obj.resurrectblocks[brs].y,
-                                            obj.resurrectblocks[brs].wp,
-                                            obj.resurrectblocks[brs].hp,
-                                            obj.resurrectblocks[brs].trigger);
-                            obj.resurrectblocks[brs].clear();
+                    for (size_t brs = 0; brs < obj.resurrectblocks.size(); brs++)
+                        if (obj.resurrectblocks[brs].type == TRIGGER) {
+                            obj.blocks.push_back(blockclass(obj.resurrectblocks[brs]));
+                            obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brs);
+                            brs--;
                         }
                     obj.cleanupresurrectblocks();
                 }
@@ -1440,9 +1431,8 @@ void scriptclass::run() {
                     // "Custom" here being defined as activity zones whose prompts
                     // are NOT terminals' prompts, e.g. "Press ENTER to activate
                     // terminal" or "Press ENTER to activate terminals"
-                    for (int brz = 0; brz < obj.nresurrectblocks; brz++)
-                        if (obj.resurrectblocks[brz].active &&
-                            obj.resurrectblocks[brz].type == ACTIVITY &&
+                    for (size_t brz = 0; brz < obj.resurrectblocks.size(); brz++)
+                        if (obj.resurrectblocks[brz].type == ACTIVITY &&
                             obj.resurrectblocks[brz].prompt !=
                                 "Press ENTER to activate terminal" &&
                             obj.resurrectblocks[brz].prompt !=
@@ -1453,7 +1443,8 @@ void scriptclass::run() {
                                     "custom_") {
                                 // It's a main game activity zone, we won't reload
                                 // it
-                                obj.resurrectblocks[brz].clear();
+                                obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brz);
+                                brz--;
                                 continue;
                             }
                             obj.customscript =
@@ -1468,7 +1459,8 @@ void scriptclass::run() {
                                             obj.resurrectblocks[brz].y,
                                             obj.resurrectblocks[brz].wp,
                                             obj.resurrectblocks[brz].hp, 101);
-                            obj.resurrectblocks[brz].clear();
+                            obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brz);
+                            brz--;
                         }
                     obj.cleanupresurrectblocks();
                 }
@@ -1477,9 +1469,8 @@ void scriptclass::run() {
                     // "Terminal" here being defined as activity zones whose prompts
                     // are terminals' prompts, e.g. "Press ENTER to activate
                     // terminal" or "Press ENTER to activate terminals"
-                    for (int brt = 0; brt < obj.nresurrectblocks; brt++)
-                        if (obj.resurrectblocks[brt].active &&
-                            obj.resurrectblocks[brt].type == ACTIVITY &&
+                    for (size_t brt = 0; brt < obj.resurrectblocks.size(); brt++)
+                        if (obj.resurrectblocks[brt].type == ACTIVITY &&
                             (obj.resurrectblocks[brt].prompt ==
                                 "Press ENTER to activate terminal" ||
                             obj.resurrectblocks[brt].prompt ==
@@ -1490,7 +1481,8 @@ void scriptclass::run() {
                                     "custom_") {
                                 // It's a main game activity zone, we won't reload
                                 // it
-                                obj.resurrectblocks[brt].clear();
+                                obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brt);
+                                brt--;
                                 continue;
                             }
                             obj.customscript =
@@ -1505,23 +1497,24 @@ void scriptclass::run() {
                                             obj.resurrectblocks[brt].y,
                                             obj.resurrectblocks[brt].wp,
                                             obj.resurrectblocks[brt].hp, 101);
-                            obj.resurrectblocks[brt].clear();
+                            obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brt);
+                            brt--;
                         }
                     obj.cleanupresurrectblocks();
                 }
                 if (words[0] == "reloadactivityzones") {
                     // Copied and pasted from the above, with some slight tweaks
                     // (again)
-                    for (int brz = 0; brz < obj.nresurrectblocks; brz++)
-                        if (obj.resurrectblocks[brz].active &&
-                            obj.resurrectblocks[brz].type == ACTIVITY) {
+                    for (size_t brz = 0; brz < obj.resurrectblocks.size(); brz++)
+                        if (obj.resurrectblocks[brz].type == ACTIVITY) {
                             obj.customprompt = obj.resurrectblocks[brz].prompt;
                             if (obj.resurrectblocks[brz].script.length() < 7 ||
                                 obj.resurrectblocks[brz].script.substr(0, 7) !=
                                     "custom_") {
                                 // It's a main game activity zone, we won't reload
                                 // it
-                                obj.resurrectblocks[brz].clear();
+                                obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brz);
+                                brz--;
                                 continue;
                             }
                             obj.customscript =
@@ -1536,7 +1529,8 @@ void scriptclass::run() {
                                             obj.resurrectblocks[brz].y,
                                             obj.resurrectblocks[brz].wp,
                                             obj.resurrectblocks[brz].hp, 101);
-                            obj.resurrectblocks[brz].clear();
+                            obj.resurrectblocks.erase(obj.resurrectblocks.begin() + brz);
+                            brz--;
                         }
                     obj.cleanupresurrectblocks();
                 }
@@ -2239,7 +2233,7 @@ void scriptclass::run() {
                 } else if (words[0] == "createscriptbox") {
                     // Ok, first figure out the first available script box slot
                     int lastslot = 0;
-                    for (int bsi = 0; bsi < obj.nblocks; bsi++)
+                    for (size_t bsi = 0; bsi < obj.blocks.size(); bsi++)
                         if (obj.blocks[bsi].trigger > lastslot)
                             lastslot = obj.blocks[bsi].trigger;
                     int usethisslot;
