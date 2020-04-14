@@ -15,7 +15,6 @@ public:
 	void init();
 
 	void play(int t, int fadeintime = 3000);
-	void loopmusic();
 	void stopmusic();
 	void haltdasmusik();
 	void silencedasmusik();
