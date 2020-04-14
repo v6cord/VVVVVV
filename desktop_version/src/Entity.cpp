@@ -1210,6 +1210,11 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
     kludgeonetimescript = false;
 }
 
+void entityclass::removeentity(int t)
+{
+    entities[t].active = false;
+}
+
 void entityclass::removeallblocks()
 {
     for(int i=0; i<nblocks; i++) blocks[i].clear();

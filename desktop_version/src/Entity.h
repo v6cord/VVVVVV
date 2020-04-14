@@ -66,6 +66,8 @@ public:
 
     void createblock(int t, int xp, int yp, int w, int h, int trig = 0);
 
+    void removeentity(int t);
+
     void removeallblocks();
 
     void removeallresurrectblocks();
