@@ -881,6 +881,7 @@ void titlerender()
             graphics.Print( -1, base + 115, "mothbeanie", tr, tg, tb, true);
             graphics.Print( -1, base + 130, "Allison Fleischer", tr, tg, tb, true);
             graphics.Print( -1, base + 145, "Dav999", tr, tg, tb, true);
+            graphics.Print( -1, base + 160, "Joshua", tr, tg, tb, true);
         }
         else if (game.currentmenuname == "credits2")
         {
