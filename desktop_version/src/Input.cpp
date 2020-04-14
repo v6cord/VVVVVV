@@ -1810,6 +1810,7 @@ void gameinput()
                 script.callstack.clear();
                 script.load(obj.blocks[game.activeactivity].script);
                 obj.removeblock(game.activeactivity);
+                game.activeactivity = -1;
             }
         } else if (game.activetele && game.readytotele > 20) {
             game.mapheld = false;
@@ -1920,6 +1921,7 @@ void gameinput()
                             script.callstack.clear();
                             script.load(obj.blocks[game.activeactivity].script);
                             obj.removeblock(game.activeactivity);
+                            game.activeactivity = -1;
                         }
                     }
                     else if (game.swnmode == 1 && game.swngame == 1)
@@ -2161,6 +2163,7 @@ void mapinput()
         FillRect(graphics.menubuffer, 0x000000);
         graphics.resumegamemode = true;
         obj.removeallblocks();
+        game.activeactivity = -1;
         game.menukludge = false;
         if (game.menupage >= 20)
         {
