@@ -167,6 +167,7 @@ void titleinput()
 
     if (graphics.flipmode)
     {
+        //GAMEPAD TODO
         if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_a) ||  key.isDown(KEYBOARD_s) || key.controllerWantsRight(true)) game.press_left = true;
         if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_UP)  || key.isDown(KEYBOARD_d) ||  key.isDown(KEYBOARD_w) || key.controllerWantsLeft(true)) game.press_right = true;
     }
@@ -195,6 +196,42 @@ void titleinput()
         {
             game.jumpheld = true;
         }
+
+        /*
+        if (game.press_left) {
+        game.mainmenu--;
+        }else if (game.press_right) {
+        game.mainmenu++;
+        }
+
+        if (game.mainmenu < 0) game.mainmenu = 2;
+        if (game.mainmenu > 2 ) game.mainmenu = 0;
+        */
+
+
+        /*
+        if (game.press_action) {
+        if (!game.menustart) {
+        game.menustart = true;
+        music.play(6);
+        music.playef(18);
+        game.screenshake = 10;
+        game.flashlight = 5;
+        }else{
+        if(game.mainmenu==0){
+        graphics.fademode = 2;
+        }else if (game.mainmenu == 1) {
+        if (game.telesummary != "") {
+        graphics.fademode = 2;
+        }
+        }else if (game.mainmenu == 2) {
+        if (game.quicksummary != "") {
+        graphics.fademode = 2;
+        }
+        }
+        }
+        }
+        */
 
         if (key.isDown(27) && game.currentmenuname != "youwannaquit" && game.menustart)
         {
@@ -623,6 +660,122 @@ void titleinput()
                       game.createmenu("mainmenu");
                       map.nexttowercolour();
                   }
+
+                  /* //Old stuff
+                    if (game.advanced_mode)
+                    {
+                        if (game.currentmenuoption == 0)
+                        {
+                            //toggle fullscreen
+                            graphics.screenbuffer->toggleFullScreen();
+                            music.playef(11);
+                            if (game.fullscreen)
+                            {
+                                game.fullscreen = false;
+                            }
+                            else
+                            {
+                                game.fullscreen = true;
+                            }
+                            updategraphicsmode();
+                            game.savestats();
+                            game.createmenu("graphicoptions");
+                        }
+                        else if (game.currentmenuoption == 1)
+                        {
+                            //enable acceleration: if in fullscreen, go back to window first
+                            music.playef(11);
+                            game.advanced_mode = false;
+                            if (game.fullscreen)
+                            {
+                                game.fullscreen = false;
+                                updategraphicsmode();
+                                game.fullscreen = true;
+                            }
+                            updategraphicsmode();
+
+                            game.savestats();
+                            game.createmenu("graphicoptions");
+                            game.currentmenuoption = 1;
+                        }
+                        else if (game.currentmenuoption == 2)
+                        {
+                            //change scaling mode
+                            music.playef(11);
+                            game.advanced_scaling = (game.advanced_scaling + 1) % 5;
+                            graphics.screenbuffer->ResizeScreen(320 *game.advanced_scaling,240*game.advanced_scaling );
+                            graphics.screenbuffer->SetScale(game.advanced_scaling);
+                            updategraphicsmode();
+
+                            game.savestats();
+                            game.createmenu("graphicoptions");
+                            game.currentmenuoption = 2;
+                        }
+                        else if (game.currentmenuoption == 3)
+                        {
+                            //change smoothing
+                            music.playef(11);
+                            game.advanced_smoothing = !game.advanced_smoothing;
+                            updategraphicsmode();
+
+                            game.savestats();
+                            game.createmenu("graphicoptions");
+                            game.currentmenuoption = 3;
+                        }
+                        else
+                        {
+                            //back
+                            music.playef(11);
+                            game.createmenu("mainmenu");
+                            map.nexttowercolour();
+                        }
+                    }
+                    else
+                    {
+                        if (game.currentmenuoption == 0)
+                        {
+                            graphics.screenbuffer->toggleFullScreen();
+                            //toggle fullscreen
+                            music.playef(11);
+                            if (game.fullscreen)
+                            {
+                                game.fullscreen = false;
+                            }
+                            else
+                            {
+                                game.fullscreen = true;
+                            }
+                            updategraphicsmode();
+
+                            game.savestats();
+                            game.createmenu("graphicoptions");
+                        }
+                        else if (game.currentmenuoption == 1)
+                        {
+                            //disable acceleration: if in fullscreen, go back to window first
+                            music.playef(11);
+                            game.advanced_mode = true;
+                            if (game.fullscreen)
+                            {
+                                game.fullscreen = false;
+                                updategraphicsmode();
+                                game.fullscreen = true;
+                            }
+                            updategraphicsmode();
+
+                            game.savestats();
+                            game.createmenu("graphicoptions");
+                            game.currentmenuoption = 1;
+                        }
+                        else
+                        {
+                            //back
+                            music.playef(11);
+                            game.createmenu("mainmenu");
+                            map.nexttowercolour();
+                        }
+                    }
+                    */
                 }
                 else if (game.currentmenuname == "youwannaquit")
                 {
@@ -660,6 +813,8 @@ void titleinput()
                     else
                     {
                         map.invincibility = !map.invincibility;
+                        //game.deletequick();
+                        //game.deletetele();
                         game.savestats();
                         music.playef(11);
                         game.createmenu("accessibility");
@@ -1739,26 +1894,97 @@ void titleinput()
 
 void gameinput()
 {
+    //TODO mouse input
+    //game.mx = (mouseX / 2);
+    //game.my = (mouseY / 2);
+
     if(!script.running || (script.running && script.passive))
     {
-        if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false))
+        game.press_left = false;
+        game.press_right = false;
+        game.press_action = false;
+        game.press_map = false;
+    }
+/*
+    if (game.recording == 2 && !game.playbackfinished)
+    {
+        //playback!
+        //record your input and add it to the record string
+        //Keys are:
+        //0 - nothing
+        //1 - left
+        //2 - right
+        //3 - left+right
+        //4 - flip
+        //5 - left+flip
+        //6 - right+flip
+        //7 - left+right+flip
+        //8 - Map/teleport
+        if (!game.recordinit)
         {
-            game.press_left = true;
+            //Init recording
+            game.recordinit = true;
+            game.combomode = false;
+            game.playmove = game.playback[game.playbackpos+1];
+            game.playcombo = game.playback[game.playbackpos];
         }
-        if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d) || key.controllerWantsRight(false))
+
+        if (game.playcombo <= 0)
         {
-            game.press_right = true;
+            //move on to the next action
+            game.playbackpos += 2;
+            game.playmove = game.playback[game.playbackpos + 1];
+            game.playcombo = game.playback[game.playbackpos];
+            if (game.playcombo > 1) game.playcombo--;
         }
-        if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
-                || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_w) || key.isDown(KEYBOARD_s)|| key.isDown(game.controllerButton_flip))
+
+        if (game.playcombo >= 1)
         {
-            game.press_action = true;
-        };
-        if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDLK_KP_ENTER) || key.isDown(game.controllerButton_map)  )
-        {
-            game.press_map = true;
+            game.playcombo--;
+            if (game.playmove == 1 || game.playmove == 3 || game.playmove == 5 || game.playmove == 7)
+            {
+                game.press_left = true;
+            }
+            if (game.playmove == 2 || game.playmove == 3 || game.playmove == 6 || game.playmove == 7)
+            {
+                game.press_right = true;
+            }
+            if (game.playmove == 4 || game.playmove == 5 || game.playmove == 6 || game.playmove == 7)
+            {
+                game.press_action = true;
+            }
+            if (game.playmove == 8)
+            {
+                game.press_map = true;
+                //game.playbackfinished = true;
+                //TODO WTF is trace
+                //trace("finished!");
+            }
         }
     }
+    else
+    { */
+        if(!script.running || (script.running && script.passive))
+        {
+            if (key.isDown(KEYBOARD_LEFT) || key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false))
+            {
+                game.press_left = true;
+            }
+            if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d) || key.controllerWantsRight(false))
+            {
+                game.press_right = true;
+            }
+            if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
+                    || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_w) || key.isDown(KEYBOARD_s)|| key.isDown(game.controllerButton_flip))
+            {
+                game.press_action = true;
+            };
+            if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDLK_KP_ENTER) || key.isDown(game.controllerButton_map)  )
+            {
+                game.press_map = true;
+            }
+        }
+    //}
 
     if (game.advancetext)
     {
@@ -1788,6 +2014,36 @@ void gameinput()
     }
 
     if (!game.press_map) game.mapheld = false;
+
+    /*
+    if (key.isDown("1".charCodeAt(0))) {
+    graphics.screen.width = 640;
+    graphics.screen.height = 480;
+    setstage(640,480);
+    }
+    if (key.isDown("2".charCodeAt(0))) {
+    graphics.screen.width = 960;
+    graphics.screen.height = 720;
+    setstage(960,720);
+    }
+    if (key.isDown("3".charCodeAt(0))) {
+    graphics.screen.width = 1280;
+    graphics.screen.height = 960;
+    setstage(1280,960);
+    }
+    */
+    /*game.test = true;
+    game.teststring = String(game.inertia);
+    if (key.isDown("1".charCodeAt(0))) game.inertia = 0.5;
+    if (key.isDown("2".charCodeAt(0))) game.inertia = 0.6;
+    if (key.isDown("3".charCodeAt(0))) game.inertia = 0.7;
+    if (key.isDown("4".charCodeAt(0))) game.inertia = 0.8;
+    if (key.isDown("5".charCodeAt(0))) game.inertia = 0.9;
+    if (key.isDown("6".charCodeAt(0))) game.inertia = 1;
+    if (key.isDown("7".charCodeAt(0))) game.inertia = 1.1;
+    if (key.isDown("8".charCodeAt(0))) game.inertia = 1.2;
+    if (key.isDown("9".charCodeAt(0))) game.inertia = 1.3;
+    if (key.isDown("0".charCodeAt(0))) game.inertia = 1.4;*/
 
     if (game.intimetrial && graphics.fademode == 1 && game.quickrestartkludge)
     {
@@ -1845,8 +2101,26 @@ void gameinput()
     {
         if (obj.entities[ie].rule == 0)
         {
+            //game.test = true;
+            //game.teststring = "player(" + String(int(obj.entities[i])) + "," + String(int(obj.entities[i].yp)) + ")"
+            //  + ", mouse(" + String(int(game.mx)) + "," + String(int(game.my)) + ")";
             if (game.hascontrol && game.deathseq == -1 && game.lifeseq <= 5)
             {
+                /*
+                if (key.isDown(8)) {
+                script.load("returntohub");
+                }
+                */
+                /*
+                if (key.isDown(27)) {
+                game.state = 0;
+                graphics.textboxremove();
+
+                map.tdrawback = true;
+                music.haltdasmusik();
+                game.gamestate = TITLEMODE;
+                }
+                */
 
                 if (game.press_map && !game.mapheld && !game.noenter)
                 {
@@ -1868,7 +2142,7 @@ void gameinput()
                                 //We're teleporting! Yey!
                                 game.activetele = false;
                                 game.hascontrol = false;
-                                music.fadeout();
+                                music.fadeout(); //Uncomment this when it's working!
 
                                 int player = obj.getplayer();
                                 obj.entities[player].colour = 102;
@@ -1886,7 +2160,10 @@ void gameinput()
                                 game.gamestate = 5;
                                 graphics.menuoffset = 240; //actually this should count the roomname
                                 if (map.extrarow) graphics.menuoffset -= 10;
+                                //graphics.menubuffer.copyPixels(graphics.screenbuffer, graphics.screenbuffer.rect, graphics.tl, null, null, false);
 
+                                //TODO TESTHIS
+                                //graphics.screenbuffer->UpdateScreen(graphics.menubuffer, NULL);
                                 BlitSurfaceStandard(graphics.menubuffer,NULL,graphics.backBuffer, NULL);
 
                                 graphics.resumegamemode = false;
@@ -1896,10 +2173,11 @@ void gameinput()
                             }
                             else
                             {
+                                //trace(game.recordstring);
                                 //We're teleporting! Yey!
                                 game.activetele = false;
                                 game.hascontrol = false;
-                                music.fadeout();
+                                music.fadeout(); //Uncomment this when it's working!
 
                                 int player = obj.getplayer();
                                 obj.entities[player].colour = 102;
@@ -1933,6 +2211,8 @@ void gameinput()
                         game.gamesaved = false;
                         graphics.resumegamemode = false;
                         game.menupage = 20; // The Map Page
+                        //graphics.menubuffer.copyPixels(graphics.screenbuffer, graphics.screenbuffer.rect, graphics.tl, null, null, false);
+                        //graphics.screenbuffer->UpdateScreen(graphics.menubuffer, NULL);
                         BlitSurfaceStandard(graphics.menubuffer,NULL,graphics.backBuffer, NULL);
                         graphics.menuoffset = 240; //actually this should count the roomname
                         if (map.extrarow) graphics.menuoffset -= 10;
@@ -1958,6 +2238,7 @@ void gameinput()
                         graphics.resumegamemode = false;
                         game.menupage = 0; // The Map Page
                         BlitSurfaceStandard(graphics.menubuffer,NULL,graphics.backBuffer, NULL);
+                        //graphics.screenbuffer->UpdateScreen(graphics.menubuffer, NULL);
                         graphics.menuoffset = 240; //actually this should count the roomname
                         if (map.extrarow) graphics.menuoffset -= 10;
                     }
@@ -1972,6 +2253,9 @@ void gameinput()
                     graphics.resumegamemode = false;
                     game.menupage = 10; // The Map Page
 
+                    //graphics.menubuffer.copyPixels(graphics.screenbuffer, graphics.screenbuffer.rect, graphics.tl, NULL, NULL, false);
+
+                    //graphics.screenbuffer->UpdateScreen(graphics.menubuffer, NULL);
                     BlitSurfaceStandard(graphics.menubuffer,NULL,graphics.backBuffer, NULL);
                     graphics.menuoffset = 240; //actually this should count the roomname
                     if (map.extrarow) graphics.menuoffset -= 10;
@@ -2016,11 +2300,13 @@ void gameinput()
 
                 if(game.press_left)
                 {
+                    //obj.entities[i].vx = -4;
                     obj.entities[ie].ax = -game.playerspeed;
                     obj.entities[ie].dir = 0;
                 }
                 else if (game.press_right)
                 {
+                    //obj.entities[i].vx = 4;
                     obj.entities[ie].ax = game.playerspeed;
                     obj.entities[ie].dir = 1;
                 }
@@ -2398,6 +2684,9 @@ void teleporterinput()
 
 void gamecompleteinput()
 {
+    //game.mx = (mouseX / 2);
+    //game.my = (mouseY / 2);
+
     game.press_left = false;
     game.press_right = false;
     game.press_action = false;
@@ -2422,6 +2711,7 @@ void gamecompleteinput()
         game.press_action = true;
     }
     if (key.isDown(KEYBOARD_ENTER)|| key.isDown(game.controllerButton_map)) game.press_map = true;
+    //if (key.isDown(27)) { game.mapheld = true;  game.menupage = 10; }
 
     if (!game.mapheld)
     {
@@ -2438,6 +2728,11 @@ void gamecompleteinput()
 
 void gamecompleteinput2()
 {
+    //TODO Mouse Input!
+    //game.mx = (mouseX / 2);
+    //game.my = (mouseY / 2);
+
+
     game.press_left = false;
     game.press_right = false;
     game.press_action = false;
@@ -2458,6 +2753,7 @@ void gamecompleteinput2()
         game.press_action = true;
     }
     if (key.isDown(KEYBOARD_ENTER) || key.isDown(game.controllerButton_map)) game.press_map = true;
+    //if (key.isDown(27)) { game.mapheld = true;  game.menupage = 10; }
 
     if (!game.mapheld)
     {
