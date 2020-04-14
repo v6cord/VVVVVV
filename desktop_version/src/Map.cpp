@@ -2237,25 +2237,22 @@ void mapclass::loadlevel(int rx, int ry)
 
 	for (size_t i = 0; i < obj.entities.size(); i++)
 	{
-		if (true) // FIXME: remove this later (no more 'active')
+		if (obj.entities[i].type == 1 && obj.entities[i].behave >= 8 && obj.entities[i].behave < 10)
 		{
-			if (obj.entities[i].type == 1 && obj.entities[i].behave >= 8 && obj.entities[i].behave < 10)
+			int thetile = towermode && minitowermode ? 12 : 1;
+			//put a block underneath
+			temp = obj.entities[i].xp / 8.0f;
+			temp2 = obj.entities[i].yp / 8.0f;
+			settile(temp, temp2, thetile);
+			settile(temp+1, temp2, thetile);
+			settile(temp+2, temp2, thetile);
+			settile(temp+3, temp2, thetile);
+			if (obj.entities[i].w == 64)
 			{
-				int thetile = towermode && minitowermode ? 12 : 1;
-				//put a block underneath
-				temp = obj.entities[i].xp / 8.0f;
-				temp2 = obj.entities[i].yp / 8.0f;
-				settile(temp, temp2, thetile);
-				settile(temp+1, temp2, thetile);
-				settile(temp+2, temp2, thetile);
-				settile(temp+3, temp2, thetile);
-				if (obj.entities[i].w == 64)
-				{
-					settile(temp+4, temp2, thetile);
-					settile(temp+5, temp2, thetile);
-					settile(temp+6, temp2, thetile);
-					settile(temp+7, temp2, thetile);
-				}
+				settile(temp+4, temp2, thetile);
+				settile(temp+5, temp2, thetile);
+				settile(temp+6, temp2, thetile);
+				settile(temp+7, temp2, thetile);
 			}
 		}
 	}
