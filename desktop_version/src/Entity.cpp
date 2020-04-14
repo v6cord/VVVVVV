@@ -1343,360 +1343,6 @@ int entityclass::crewcolour( int t )
     return 0;
 }
 
-void entityclass::setenemyroom( int t, int rx, int ry )
-{
-    //Simple function to initilise simple enemies
-    rx -= 100;
-    ry -= 100;
-    switch(rn(rx, ry))
-    {
-        //Space Station 1
-    case rn(12, 3):  //Security Drone
-        entities[t].tile = 36;
-        entities[t].colour = 8;
-        entities[t].animate = 1;
-        break;
-    case rn(13, 3):  //Wavelengths
-        entities[t].tile = 32;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 32;
-        break;
-    case rn(15, 3):  //Traffic
-        entities[t].tile = 28;
-        entities[t].colour = 6;
-        entities[t].animate = 1;
-        entities[t].w = 22;
-        entities[t].h = 32;
-        break;
-    case rn(12, 5):  //The Yes Men
-        entities[t].tile = 40;
-        entities[t].colour = 9;
-        entities[t].animate = 1;
-        entities[t].w = 20;
-        entities[t].h = 20;
-        break;
-    case rn(13, 6):  //Hunchbacked Guards
-        entities[t].tile = 44;
-        entities[t].colour = 8;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 20;
-        break;
-    case rn(13, 4):  //Communication Station
-        entities[t].harmful = false;
-        if (entities[t].xp == 256)
-        {
-            //transmittor
-            entities[t].tile = 104;
-            entities[t].colour = 4;
-            entities[t].animate = 7;
-            entities[t].w = 16;
-            entities[t].h = 16;
-            entities[t].xp -= 24;
-            entities[t].yp -= 16;
-        }
-        else
-        {
-            //radar dish
-            entities[t].tile =124;
-            entities[t].colour = 4;
-            entities[t].animate = 6;
-            entities[t].w = 32;
-            entities[t].h = 32;
-            entities[t].cx = 4;
-            entities[t].size = 9;
-            entities[t].xp -= 4;
-            entities[t].yp -= 32;
-        }
-
-        break;
-        //The Lab
-    case rn(4, 0):
-        entities[t].tile = 78;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(2, 0):
-        entities[t].tile = 88;
-        entities[t].colour = 11;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-        //Space Station 2
-    case rn(14, 11):
-        entities[t].colour = 17;
-        break; //Lies
-    case rn(16, 11):
-        entities[t].colour = 8;
-        break; //Lies
-    case rn(13, 10):
-        entities[t].colour = 11;
-        break; //Factory
-    case rn(13, 9):
-        entities[t].colour = 9;
-        break; //Factory
-    case rn(13, 8):
-        entities[t].colour = 8;
-        break; //Factory
-    case rn(11, 13): //Truth
-        entities[t].tile = 64;
-        entities[t].colour = 7;
-        entities[t].animate = 100;
-        entities[t].w = 44;
-        entities[t].h = 10;
-        entities[t].size = 10;
-        break;
-    case rn(17, 7): //Brass sent us under the top
-        entities[t].tile =82;
-        entities[t].colour = 8;
-        entities[t].animate = 5;
-        entities[t].w = 28;
-        entities[t].h = 32;
-        entities[t].cx = 4;
-        break;
-    case rn(10, 7): // (deception)
-        entities[t].tile = 92;
-        entities[t].colour = 6;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(14, 13): // (chose poorly)
-        entities[t].tile = 56;
-        entities[t].colour = 6;
-        entities[t].animate = 1;
-        entities[t].w = 15;
-        entities[t].h = 24;
-        break;
-    case rn(13, 12): // (backsliders)
-        entities[t].tile = 164;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(14, 8): // (wheel of fortune room)
-        entities[t].tile = 116;
-        entities[t].colour = 12;
-        entities[t].animate = 1;
-        entities[t].w = 32;
-        entities[t].h = 32;
-        break;
-    case rn(16, 9): // (seeing dollar signs)
-        entities[t].tile = 68;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(16, 7): // (tomb of mad carew)
-        entities[t].tile = 106;
-        entities[t].colour = 7;
-        entities[t].animate = 2;
-        entities[t].w = 24;
-        entities[t].h = 25;
-        break;
-        //Warp Zone
-    case rn(15, 2): // (numbers)
-        entities[t].tile = 100;
-        entities[t].colour = 6;
-        entities[t].animate = 1;
-        entities[t].w = 32;
-        entities[t].h = 14;
-        entities[t].yp += 1;
-        break;
-    case rn(16, 2): // (Manequins)
-        entities[t].tile = 52;
-        entities[t].colour = 7;
-        if (IS_VCE_LEVEL) {
-            entities[t].animate = 12;
-            entities[t].flippedsize = 24;
-        } else {
-            entities[t].animate = 5;
-        }
-        entities[t].w = 16;
-        entities[t].h = 25;
-        entities[t].yp -= 4;
-        break;
-    case rn(18, 0): // (Obey)
-        entities[t].tile = 51;
-        entities[t].colour = 11;
-        entities[t].animate = 100;
-        entities[t].w = 30;
-        entities[t].h = 14;
-        break;
-    case rn(19, 1): // Ascending and Descending
-        entities[t].tile = 48;
-        entities[t].colour = 9;
-        entities[t].animate = 5;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(19, 2): // Shockwave Rider
-        entities[t].tile = 176;
-        entities[t].colour = 6;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(18, 3): // Mind the gap
-        entities[t].tile = 168;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(17, 3): // Edge Games
-        if (IS_VCE_LEVEL) {
-            entities[t].tile = 160;
-            entities[t].colour = 8;
-            entities[t].animate = 8;
-            entities[t].w = 16;
-            entities[t].h = 16;
-        } else if (entities[t].yp == 96) {
-            entities[t].tile = 160;
-            entities[t].colour = 8;
-            entities[t].animate = 1;
-            entities[t].w = 16;
-            entities[t].h = 16;
-        } else {
-            entities[t].tile = 156;
-            entities[t].colour = 8;
-            entities[t].animate = 1;
-            entities[t].w = 16;
-            entities[t].h = 16;
-        }
-        break;
-    case rn(16, 0): // I love you
-        entities[t].tile = 112;
-        entities[t].colour = 8;
-        entities[t].animate = 5;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(14, 2): // That's why I have to kill you
-        entities[t].tile = 114;
-        entities[t].colour = 6;
-        entities[t].animate = 5;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(18, 2): // Thinking with Portals
-        //depends on direction
-        if (IS_VCE_LEVEL) {
-            entities[t].tile = 54;
-            entities[t].colour = 12;
-            entities[t].animate = 9;
-            entities[t].w = 60;
-            entities[t].h = 16;
-            entities[t].size = 10;
-        } else if (entities[t].xp == 88) {
-            entities[t].tile = 54+12;
-            entities[t].colour = 12;
-            entities[t].animate = 100;
-            entities[t].w = 60;
-            entities[t].h = 16;
-            entities[t].size = 10;
-        } else {
-            entities[t].tile = 54;
-            entities[t].colour = 12;
-            entities[t].animate = 100;
-            entities[t].w = 60;
-            entities[t].h = 16;
-            entities[t].size = 10;
-        }
-        break;
-        //Final level
-    case rn(50-100, 53-100):  //The Yes Men
-        entities[t].tile = 40;
-        entities[t].colour = 9;
-        entities[t].animate = 1;
-        entities[t].w = 20;
-        entities[t].h = 20;
-        break;
-    case rn(48-100, 51-100):  //Wavelengths
-        entities[t].tile = 32;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 32;
-        break;
-    case rn(43-100,52-100): // Ascending and Descending
-        entities[t].tile = 48;
-        entities[t].colour = 9;
-        entities[t].animate = 5;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(46-100,51-100): //kids his age
-        entities[t].tile = 88;
-        entities[t].colour = 11;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(43-100,51-100): // Mind the gap
-        entities[t].tile = 168;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(44-100,51-100): // vertigo?
-        entities[t].tile = 172;
-        entities[t].colour = 7;
-        entities[t].animate = 100;
-        entities[t].w = 32;
-        entities[t].h = 32;
-        break;
-    case rn(44-100,52-100): // (backsliders)
-        entities[t].tile = 164;
-        entities[t].colour = 7;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(43-100, 56-100): //Intermission 1
-        entities[t].tile = 88;
-        entities[t].colour = 21;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-    case rn(45-100, 56-100): //Intermission 1
-        entities[t].tile = 88;
-        entities[t].colour = 21;
-        entities[t].animate = 1;
-        entities[t].w = 16;
-        entities[t].h = 16;
-        break;
-        //The elephant
-    case rn(11, 9):
-    case rn(12, 9):
-    case rn(11, 8):
-    case rn(12, 8):
-        entities[t].tile = 0;
-        entities[t].colour = 102;
-        entities[t].animate = 0;
-        entities[t].w = 464;
-        entities[t].h = 320;
-        entities[t].size = 11;
-        entities[t].harmful = false;
-        break;
-    case rn(13, 7): // Bus
-        entities[t].tile = 120;
-        entities[t].colour = 6;
-        entities[t].size = 9;
-        entities[t].w = 64;
-        entities[t].h = 44;
-        entities[t].animate = 4;
-        break;
-    }
-}
-
 void entityclass::settreadmillcolour( int t, int rx, int ry )
 {
     rx -= 100;
@@ -1886,16 +1532,16 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         if  (game.roomy == 111 && (game.roomx >= 113 && game.roomx <= 117))
         {
             entities[k].setenemy(0);
-            setenemyroom(k, game.roomx, game.roomy); //For colour
+            entities[k].setenemyroom(game.roomx, game.roomy); //For colour
         }
         else if  (game.roomx == 113 && (game.roomy <= 110 && game.roomy >= 108))
         {
             entities[k].setenemy(1);
-            setenemyroom(k, game.roomx, game.roomy); //For colour
+            entities[k].setenemyroom(game.roomx, game.roomy); //For colour
         }
         else
         {
-            setenemyroom(k, game.roomx, game.roomy);
+            entities[k].setenemyroom(game.roomx, game.roomy);
         }
 
         //}else{*/
@@ -2726,39 +2372,39 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entities[k].harmful = true;
 
         switch(customenemy){
-          case 0: setenemyroom(k, 4+100, 0+100); break;
-          case 1: setenemyroom(k, 2+100, 0+100); break;
-          case 2: setenemyroom(k, 12+100, 3+100); break;
-          case 3: setenemyroom(k, 13+100, 12+100); break;
-          case 4: setenemyroom(k, 16+100, 9+100); break;
-          case 5: setenemyroom(k, 19+100, 1+100); break;
-          case 6: setenemyroom(k, 19+100, 2+100); break;
-          case 7: setenemyroom(k, 18+100, 3+100); break;
-          case 8: setenemyroom(k, 16+100, 0+100); break;
-          case 9: setenemyroom(k, 14+100, 2+100); break;
-          case 10: setenemyroom(k, 10+100, 7+100); break;
+          case 0: entities[k].setenemyroom(4+100, 0+100); break;
+          case 1: entities[k].setenemyroom(2+100, 0+100); break;
+          case 2: entities[k].setenemyroom(12+100, 3+100); break;
+          case 3: entities[k].setenemyroom(13+100, 12+100); break;
+          case 4: entities[k].setenemyroom(16+100, 9+100); break;
+          case 5: entities[k].setenemyroom(19+100, 1+100); break;
+          case 6: entities[k].setenemyroom(19+100, 2+100); break;
+          case 7: entities[k].setenemyroom(18+100, 3+100); break;
+          case 8: entities[k].setenemyroom(16+100, 0+100); break;
+          case 9: entities[k].setenemyroom(14+100, 2+100); break;
+          case 10: entities[k].setenemyroom(10+100, 7+100); break;
 
-          case 11: setenemyroom(k, 12+100, 5+100); break; // yes man
-          case 12: setenemyroom(k, 15+100, 3+100); break; // STOP
-          case 13: setenemyroom(k, 13+100, 3+100); break; // wave duude
-          case 14: setenemyroom(k, 15+100, 2+100); break; // numbers
-          case 15: setenemyroom(k, 16+100, 2+100); break; // the dudes that walk
-          case 16: setenemyroom(k, 18+100, 2+100); break; // boob
-          case 17: setenemyroom(k, 18+100, 0+100); break; // OBEY
-          case 18: setenemyroom(k, 17+100, 3+100); break; // edge games
-          case 19: setenemyroom(k, 13+100, 6+100); break; // sent over the bottom gottem lmao
-          case 20: setenemyroom(k, 16+100, 7+100); break; // ghos
-          case 21: setenemyroom(k, 17+100, 7+100); break; // they b walkin 2.0
-          case 22: setenemyroom(k, 14+100, 8+100); break; // what the fuck is this
-          case 23: setenemyroom(k, 11+100, 13+100); break; // TRUTH
-          case 24: setenemyroom(k, 14+100, 13+100); break; // DABBING SKELETON
-          case 25: setenemyroom(k, 44, 51); break; // enemy in vertigo
+          case 11: entities[k].setenemyroom(12+100, 5+100); break; // yes man
+          case 12: entities[k].setenemyroom(15+100, 3+100); break; // STOP
+          case 13: entities[k].setenemyroom(13+100, 3+100); break; // wave duude
+          case 14: entities[k].setenemyroom(15+100, 2+100); break; // numbers
+          case 15: entities[k].setenemyroom(16+100, 2+100); break; // the dudes that walk
+          case 16: entities[k].setenemyroom(18+100, 2+100); break; // boob
+          case 17: entities[k].setenemyroom(18+100, 0+100); break; // OBEY
+          case 18: entities[k].setenemyroom(17+100, 3+100); break; // edge games
+          case 19: entities[k].setenemyroom(13+100, 6+100); break; // sent over the bottom gottem lmao
+          case 20: entities[k].setenemyroom(16+100, 7+100); break; // ghos
+          case 21: entities[k].setenemyroom(17+100, 7+100); break; // they b walkin 2.0
+          case 22: entities[k].setenemyroom(14+100, 8+100); break; // what the fuck is this
+          case 23: entities[k].setenemyroom(11+100, 13+100); break; // TRUTH
+          case 24: entities[k].setenemyroom(14+100, 13+100); break; // DABBING SKELETON
+          case 25: entities[k].setenemyroom(44, 51); break; // enemy in vertigo
           case 26:
             entities[k].tile = 24;
             entities[k].animate = 0;
             break;
-          case 27: setenemyroom(k, 13+100, 7+100); break; // bus
-          default: setenemyroom(k, 4+100, 0+100); break;
+          case 27: entities[k].setenemyroom(13+100, 7+100); break; // bus
+          default: entities[k].setenemyroom(4+100, 0+100); break;
         }
 
         //Set colour based on room tile

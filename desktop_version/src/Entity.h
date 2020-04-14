@@ -10,8 +10,6 @@
 #include <string>
 #include <unordered_map>
 
-#define		rn( rx,  ry) ((rx) + ((ry) * 100))
-
 enum
 {
     BLOCK = 0,
@@ -85,8 +83,6 @@ public:
     bool gridmatch(int p1, int p2, int p3, int p4, int p11, int p21, int p31, int p41);
 
     int crewcolour(int t);
-
-    void setenemyroom(int t, int rx, int ry);
 
     void settreadmillcolour(int t, int rx, int ry);
 
