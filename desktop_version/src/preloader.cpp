@@ -49,12 +49,6 @@ void preloaderrender()
     printf("%i%%\n", last_percent);
   }
 #endif
-  //TODO
-  //graphics.backbuffer.lock();
-
-  //Draw grid
-
-  //pre_transition = -10;	pre_fakepercent = 100;
 
   if (pre_transition < 30) pre_transition--;
   if(pre_transition>=30){
@@ -154,7 +148,6 @@ void preloaderrender()
   {
     graphics.render();
   }
-  //graphics.backbuffer.unlock();
 }
 
 void preloaderloop() {
