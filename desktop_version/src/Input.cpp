@@ -1801,43 +1801,43 @@ void gameinput()
     //Returning to editor mode must always be possible
 #if !defined(NO_CUSTOM_LEVELS)
     if((map.custommode && !map.custommodeforreal) && !script.killedviridian){
-      if (((game.press_map && !game.noenter) || key.isDown(27)) && !game.mapheld){
-        game.mapheld = true;
-        //Return to level editor
-        if (game.activeactivity > -1 && game.press_map){
-           if((int(std::abs(obj.entities[obj.getplayer()].vx))<=1) && (int(obj.entities[obj.getplayer()].vy) == 0) )
-            {
-                script.callstack.clear();
-                script.load(obj.blocks[game.activeactivity].script);
-                obj.removeblock(game.activeactivity);
-                game.activeactivity = -1;
-            }
-        } else if (game.activetele && game.readytotele > 20) {
-            game.mapheld = false;
-        } else {
-          game.gamestate = EDITORMODE;
+        if (((game.press_map && !game.noenter) || key.isDown(27)) && !game.mapheld){
+            game.mapheld = true;
+            //Return to level editor
+            if (game.activeactivity > -1 && game.press_map){
+               if((int(std::abs(obj.entities[obj.getplayer()].vx))<=1) && (int(obj.entities[obj.getplayer()].vy) == 0) )
+                {
+                    script.callstack.clear();
+                    script.load(obj.blocks[game.activeactivity].script);
+                    obj.removeblock(game.activeactivity);
+                    game.activeactivity = -1;
+                }
+            } else if (game.activetele && game.readytotele > 20) {
+                game.mapheld = false;
+            } else {
+                game.gamestate = EDITORMODE;
 
-          graphics.fademode = 0;
-          graphics.textboxremove();
-          game.hascontrol = true;
-          game.advancetext = false;
-          game.completestop = false;
-          game.state = 0;
-          graphics.showcutscenebars = false;
-          graphics.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
+                graphics.fademode = 0;
+                graphics.textboxremove();
+                game.hascontrol = true;
+                game.advancetext = false;
+                game.completestop = false;
+                game.state = 0;
+                graphics.showcutscenebars = false;
+                graphics.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
-          graphics.backgrounddrawn=false;
-          music.fadeout();
-          //If warpdir() is used during playtesting, we need to set it back after!
-          for (int j = 0; j < ed.maxheight; j++)
-          {
-            for (int i = 0; i < ed.maxwidth; i++)
-            {
-              ed.level[i+(j*ed.maxwidth)].warpdir=ed.kludgewarpdir[i+(j*ed.maxwidth)];
+                graphics.backgrounddrawn=false;
+                music.fadeout();
+                //If warpdir() is used during playtesting, we need to set it back after!
+                for (int j = 0; j < ed.maxheight; j++)
+                {
+                    for (int i = 0; i < ed.maxwidth; i++)
+                    {
+                        ed.level[i+(j*ed.maxwidth)].warpdir=ed.kludgewarpdir[i+(j*ed.maxwidth)];
+                    }
+                }
             }
-          }
         }
-      }
     }
 #endif
 
