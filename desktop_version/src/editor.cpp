@@ -4780,7 +4780,7 @@ void editorlogic()
         map.colstate = 10;
         game.gamestate = 1;
         graphics.fademode = 4;
-        music.stopmusic();
+        music.haltdasmusik();
         music.play(6);
         map.nexttowercolour();
         ed.settingsmod=false;
@@ -6291,7 +6291,7 @@ void editorinput()
                         if (tower)
                             game.edsavey += ed.ypos * 8;
 
-                        music.stopmusic();
+                        music.haltdasmusik();
                         graphics.backgrounddrawn=false;
                         ed.returneditoralpha = 1000; // Let's start it higher than 255 since it gets clamped
                         script.startgamemode(21);

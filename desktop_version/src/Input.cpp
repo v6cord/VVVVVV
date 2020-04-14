@@ -789,7 +789,7 @@ void titleinput()
                         } else {
                             music.muted = true;
                             auto s = music.currentsong;
-                            music.stopmusic();
+                            music.haltdasmusik();
                             music.currentsong = s;
                         }
                         music.playef(11);

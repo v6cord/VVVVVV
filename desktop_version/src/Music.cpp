@@ -255,7 +255,7 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 	Mix_VolumeMusic(128);
 	if (currentsong !=t)
 	{
-            stopmusic();
+            haltdasmusik();
 		if (t != -1)
 		{
 			currentsong = t;
@@ -291,7 +291,7 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 	}
 }
 
-void musicclass::stopmusic()
+void musicclass::haltdasmusik()
 {
     Mix_HaltMusic();
     currentsong = -1;
@@ -300,11 +300,6 @@ void musicclass::stopmusic()
     }
     custom_file_channels.clear();
     custom_file_paths.clear();
-}
-
-void musicclass::haltdasmusik()
-{
-    stopmusic();
 }
 
 void musicclass::silencedasmusik()
