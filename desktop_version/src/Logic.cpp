@@ -2,7 +2,6 @@
 #include "Script.h"
 #include "Network.h"
 
-extern int temp;
 extern scriptclass script;
 
 void titlelogic()
@@ -788,7 +787,7 @@ void gamelogic()
                         if (map.final_colorframe == 1)
                         {
                             map.final_colorframedelay = 40;
-                            temp = 1+int(fRandom() * 6);
+                            int temp = 1+int(fRandom() * 6);
                             if (temp == map.final_mapcol) temp = (temp + 1) % 6;
                             if (temp == 0) temp = 6;
                             map.changefinalcol(temp);
@@ -796,7 +795,7 @@ void gamelogic()
                         else if (map.final_colorframe == 2)
                         {
                             map.final_colorframedelay = 15;
-                            temp = 1+int(fRandom() * 6);
+                            int temp = 1+int(fRandom() * 6);
                             if (temp == map.final_mapcol) temp = (temp + 1) % 6;
                             if (temp == 0) temp = 6;
                             map.changefinalcol(temp);
