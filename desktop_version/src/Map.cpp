@@ -834,7 +834,6 @@ void mapclass::settile_special(int x, int y, int tile) {
 	}
 
 	// Clean up before adding any entities/blocks
-	obj.cleanup();
 	int n = obj.nblocks - 1;
 	while (n >= 0 && !obj.blocks[n].active) {
 		obj.nblocks--;
@@ -1275,7 +1274,6 @@ void mapclass::gotoroom(int rx, int ry)
 			theplayer--; //just in case indice of player is not 0
 		}
 	}
-	obj.cleanup();
 
 	game.door_up = rx + ((ry - 1) * 100);
 	game.door_down = rx + ((ry + 1) * 100);

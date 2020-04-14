@@ -4779,10 +4779,6 @@ void entityclass::applyfriction( int t, float xrate, float yrate, int speed )
     if (std::abs(entities[t].vy) < yrate) entities[t].vy = 0.0f;
 }
 
-void entityclass::cleanup()
-{
-}
-
 void entityclass::cleanupresurrectblocks()
 {
     int i = nresurrectblocks - 1;

@@ -569,8 +569,6 @@ void towerlogic()
 
 
         }
-        //now! let's clean up removed entities
-        obj.cleanup();
 
         //Looping around, room change conditions!
 
@@ -1127,9 +1125,6 @@ void gamelogic()
 
             obj.entitycollisioncheck();         // Check ent v ent collisions, update states
         }
-
-        //now! let's clean up removed entities
-        obj.cleanup();
 
         // If we do a gotoroom because of a screen transition, set this to true
         bool kludgeroominitscript = false;

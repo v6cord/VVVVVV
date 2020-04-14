@@ -735,7 +735,6 @@ void scriptclass::run() {
                                 obj.removeblock(bai);
                     }
 
-                    obj.cleanup();
                     int n = obj.nblocks - 1;
                     while (n >= 0 && !obj.blocks[n].active) {
                         obj.nblocks--;
