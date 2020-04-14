@@ -185,12 +185,9 @@ public:
     void entitycollisioncheck();
 
 
-    growing_vector<entclass> entities;
+    std::vector<entclass> entities;
 
-    int nentity = 0;
-
-    growing_vector<entclass> linecrosskludge;
-    int nlinecrosskludge = 0;
+    std::vector<entclass> linecrosskludge;
 
     point colpoint1, colpoint2 = {0};
 

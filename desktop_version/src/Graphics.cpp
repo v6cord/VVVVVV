@@ -1637,9 +1637,9 @@ void Graphics::drawentities()
 
     trinketcolset = false;
 
-    for (int i = obj.nentity - 1; i >= 0; i--)
+    for (int i = obj.entities.size() - 1; i >= 0; i--)
     {
-        if (!obj.entities[i].invis && obj.entities[i].active)
+        if (!obj.entities[i].invis)
         {
             if (obj.entities[i].size == 0)
             {
@@ -2507,9 +2507,9 @@ void Graphics::drawtowerentities()
     SDL_Rect trect;
     SDL_Rect drawRect;
 
-    for (int i = obj.nentity - 1; i >= 0; i--)
+    for (int i = obj.entities.size() - 1; i >= 0; i--)
     {
-        if (!obj.entities[i].invis && obj.entities[i].active)
+        if (!obj.entities[i].invis)
         {
             if (obj.entities[i].size == 0)        // Sprites
             {

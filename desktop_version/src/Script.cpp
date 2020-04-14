@@ -446,25 +446,25 @@ void scriptclass::run() {
 #endif
                 if (words[0] == "destroy") {
                     if (words[1] == "gravitylines") {
-                        for (int edi = 0; edi < obj.nentity; edi++) {
+                        for (size_t edi = 0; edi < obj.entities.size(); edi++) {
                             if (obj.entities[edi].type == 9)
-                                obj.entities[edi].active = false;
+                                removeentity_iter(edi);
                             if (obj.entities[edi].type == 10)
-                                obj.entities[edi].active = false;
+                                removeentity_iter(edi);
                         }
                     } else if (words[1] == "warptokens") {
-                        for (int edi = 0; edi < obj.nentity; edi++) {
+                        for (size_t edi = 0; edi < obj.entities.size(); edi++) {
                             if (obj.entities[edi].type == 11)
-                                obj.entities[edi].active = false;
+                                removeentity_iter(edi);
                         }
                     } else if (words[1] == "platforms" ||
                             words[1] == "platformsreal") {
                         // destroy(platforms) is buggy, doesn't remove platforms'
                         // blocks
-                        for (int edi = 0; edi < obj.nentity; edi++)
+                        for (size_t edi = 0; edi < obj.entities.size(); edi++)
                             if (obj.entities[edi].rule == 2 &&
                                 obj.entities[edi].animate == 100) {
-                                obj.entities[edi].active = false;
+                                removeentity_iter(edi);
                                 // but destroy(platformsreal) is less buggy
                                 if (words[1] == "platformsreal")
                                     obj.removeblockat(obj.entities[edi].xp,
@@ -476,18 +476,18 @@ void scriptclass::run() {
                             obj.vertplatforms = false;
                         }
                     } else if (words[1] == "enemies") {
-                        for (int eni = 0; eni < obj.nentity; eni++)
+                        for (size_t eni = 0; eni < obj.entities.size(); eni++)
                             if (obj.entities[eni].rule == 1)
-                                obj.entities[eni].active = false;
+                                removeentity_iter(eni);
                     } else if (words[1] == "trinkets") {
-                        for (int eti = 0; eti < obj.nentity; eti++)
+                        for (size_t eti = 0; eti < obj.entities.size(); eti++)
                             if (obj.entities[eti].type == 7)
-                                obj.entities[eti].active = false;
+                                removeentity_iter(eti);
                     } else if (words[1] == "warplines") {
-                        for (int ewi = 0; ewi < obj.nentity; ewi++)
+                        for (size_t ewi = 0; ewi < obj.entities.size(); ewi++)
                             if (obj.entities[ewi].type >= 51 &&
                                 obj.entities[ewi].type <= 54)
-                                obj.entities[ewi].active = false;
+                                removeentity_iter(ewi);
 
                         obj.customwarpmode = false;
                         obj.customwarpmodevon = false;
@@ -509,9 +509,9 @@ void scriptclass::run() {
                                 break;
                         }
                     } else if (words[1] == "checkpoints") {
-                        for (int eci = 0; eci < obj.nentity; eci++)
+                        for (size_t eci = 0; eci < obj.entities.size(); eci++)
                             if (obj.entities[eci].type == 8)
-                                obj.entities[eci].active = false;
+                                removeentity_iter(eci);
                     } else if (words[1] == "all" || words[1] == "everything") {
                         // Don't want to use obj.removeallblocks(), it'll remove all
                         // spikes and one-ways too
@@ -523,12 +523,14 @@ void scriptclass::run() {
                         // Too bad there's no obj.removeallentities()
                         // (Wouldn't want to use it anyway, we need to take care of
                         // the conveyors' tile 1s)
-                        for (int ei = 0; ei < obj.nentity; ei++) {
+                        for (size_t ei = 0; ei < obj.entities.size(); ei++) {
                             if (obj.entities[ei].rule ==
                                 0)  // Destroy everything except the player
                                 continue;
 
-                            obj.entities[ei].active = false;
+                            // Store a copy of the entity to check its attributes later
+                            entclass deletedentity = entclass(obj.entities[ei]);
+                            removeentity_iter(ei);
 
                             // Actually hold up, maybe this is an edentity conveyor,
                             // we want to remove all the tile 1s under it before
@@ -536,35 +538,34 @@ void scriptclass::run() {
                             // createentity conveyor and someone placed tile 1s
                             // under it manually, but I don't care Also I don't care
                             // if there's not actually any tile 1s under it
-                            if (!obj.entities[ei].active ||
-                                obj.entities[ei].type != 1 ||
-                                (obj.entities[ei].behave != 8 &&
-                                obj.entities[ei].behave != 9))
+                            if (deletedentity.type != 1 ||
+                                (deletedentity.behave != 8 &&
+                                deletedentity.behave != 9))
                                 continue;
 
                             // Ok, we've found a conveyor, is it aligned with the
                             // grid?
-                            if (obj.entities[ei].xp % 8 != 0 ||
-                                obj.entities[ei].yp % 8 != 0)
+                            if (deletedentity.xp % 8 != 0 ||
+                                deletedentity.yp % 8 != 0)
                                 continue;
 
                             // Is its top-left corner outside the map?
-                            if (obj.entities[ei].xp < 0 ||
-                                obj.entities[ei].xp >= 320 ||
-                                obj.entities[ei].yp < 0 ||
-                                obj.entities[ei].yp >= 240)
+                            if (deletedentity.xp < 0 ||
+                                deletedentity.xp >= 320 ||
+                                deletedentity.yp < 0 ||
+                                deletedentity.yp >= 240)
                                 continue;
 
                             // Very well then, we might have an edentity conveyor...
 
-                            int thisxp = obj.entities[ei].xp / 8;
-                            int thisyp = obj.entities[ei].yp / 8;
+                            int thisxp = deletedentity.xp / 8;
+                            int thisyp = deletedentity.yp / 8;
 
                             int usethislength;
                             // Map.cpp uses this exact check to place 8 tiles down
                             // instead of 4, hope this conveyor's width didn't
                             // change in the meantime
-                            if (obj.entities[ei].w == 64)
+                            if (deletedentity.w == 64)
                                 usethislength = 8;
                             else
                                 usethislength = 4;
@@ -608,9 +609,8 @@ void scriptclass::run() {
                         map.roomtext.clear();
                     } else if (words[1] == "conveyors") {
                         // Copy-pasted from above
-                        for (int edc = 0; edc < obj.nentity; edc++) {
-                            if (!obj.entities[edc].active ||
-                                obj.entities[edc].type != 1 ||
+                        for (size_t edc = 0; edc < obj.entities.size(); edc++) {
+                            if (obj.entities[edc].type != 1 ||
                                 (obj.entities[edc].behave != 8 &&
                                 obj.entities[edc].behave != 9))
                                 continue;
@@ -619,12 +619,9 @@ void scriptclass::run() {
                                 if (obj.blocks[ii].xp == obj.entities[edc].xp &&
                                     obj.blocks[ii].yp == obj.entities[edc].yp)
                                     obj.blocks[ii].clear();
-                            obj.entities[edc].active = false;
-
-                            // Important: set width and height to 0, or there will
-                            // still be collision
-                            obj.entities[edc].w = 0;
-                            obj.entities[edc].h = 0;
+                            // Store a copy of the entity to check its attributes later
+                            entclass deletedentity = entclass(obj.entities[edc]);
+                            removeentity_iter(edc);
 
                             // Actually hold up, maybe this is an edentity conveyor,
                             // we want to remove all the tile 1s under it before
@@ -636,27 +633,27 @@ void scriptclass::run() {
                             // touched by the player
 
                             // Ok, is it aligned with the grid?
-                            if (obj.entities[edc].xp % 8 != 0 ||
-                                obj.entities[edc].yp % 8 != 0)
+                            if (deletedentity.xp % 8 != 0 ||
+                                deletedentity.yp % 8 != 0)
                                 continue;
 
                             // Is its top-left corner outside the map?
-                            if (obj.entities[edc].xp < 0 ||
-                                obj.entities[edc].xp >= 320 ||
-                                obj.entities[edc].yp < 0 ||
-                                obj.entities[edc].yp >= 240)
+                            if (deletedentity.xp < 0 ||
+                                deletedentity.xp >= 320 ||
+                                deletedentity.yp < 0 ||
+                                deletedentity.yp >= 240)
                                 continue;
 
                             // Very well then, we might have an edentity conveyor...
 
-                            int thisxp = obj.entities[edc].xp / 8;
-                            int thisyp = obj.entities[edc].yp / 8;
+                            int thisxp = deletedentity.xp / 8;
+                            int thisyp = deletedentity.yp / 8;
 
                             int usethislength;
                             // Map.cpp uses this exact check to place 8 tiles down
                             // instead of 4, hope this conveyor's width didn't
                             // change in the meantime
-                            if (obj.entities[edc].w == 64)
+                            if (deletedentity.w == 64)
                                 usethislength = 8;
                             else
                                 usethislength = 4;
@@ -673,9 +670,9 @@ void scriptclass::run() {
                             graphics.foregrounddrawn = false;
                         }
                     } else if (words[1] == "terminals") {
-                        for (int eti = 0; eti < obj.nentity; eti++)
+                        for (size_t eti = 0; eti < obj.entities.size(); eti++)
                             if (obj.entities[eti].type == 13)
-                                obj.entities[eti].active = false;
+                                removeentity_iter(eti);
 
                         for (int bti = 0; bti < obj.nblocks; bti++)
                             if (obj.blocks[bti].type == ACTIVITY &&
@@ -690,46 +687,46 @@ void scriptclass::run() {
                                 obj.removetrigger(obj.blocks[bsi].trigger);
                     } else if (words[1] == "disappearingplatforms" ||
                             words[1] == "quicksand") {
-                        for (int epi = 0; epi < obj.nentity; epi++)
+                        for (size_t epi = 0; epi < obj.entities.size(); epi++)
                             if (obj.entities[epi].type == 2) {
-                                obj.entities[epi].active = false;
                                 obj.removeblockat(obj.entities[epi].xp,
                                                 obj.entities[epi].yp);
+                                removeentity_iter(epi);
                             }
                     } else if (words[1] == "1x1quicksand" ||
                             words[1] == "1x1disappearingplatforms") {
-                        for (int eqi = 0; eqi < obj.nentity; eqi++)
+                        for (size_t eqi = 0; eqi < obj.entities.size(); eqi++)
                             if (obj.entities[eqi].type == 3) {
-                                obj.entities[eqi].active = false;
                                 obj.removeblockat(obj.entities[eqi].xp,
                                                 obj.entities[eqi].yp);
+                                removeentity_iter(eqi);
                             }
                     } else if (words[1] == "coins") {
-                        for (int eci = 0; eci < obj.nentity; eci++)
+                        for (size_t eci = 0; eci < obj.entities.size(); eci++)
                             if (obj.entities[eci].type == 6)
-                                obj.entities[eci].active = false;
+                                removeentity_iter(eci);
                     } else if (words[1] == "gravitytokens" ||
                             words[1] == "fliptokens") {
-                        for (int egi = 0; egi < obj.nentity; egi++)
+                        for (size_t egi = 0; egi < obj.entities.size(); egi++)
                             if (obj.entities[egi].type == 4)
-                                obj.entities[egi].active = false;
+                                removeentity_iter(egi);
                     } else if (words[1] == "roomtext") {
                         map.roomtexton = false;
                         map.roomtext.clear();
                     } else if (words[1] == "crewmates") {
-                        for (int eci = 0; eci < obj.nentity; eci++)
+                        for (size_t eci = 0; eci < obj.entities.size(); eci++)
                             if (obj.entities[eci].type == 12 ||
                                 obj.entities[eci].type == 14)
-                                obj.entities[eci].active = false;
+                                removeentity_iter(eci);
                     } else if (words[1] == "customcrewmates") {
-                        for (int eci = 0; eci < obj.nentity; eci++)
+                        for (size_t eci = 0; eci < obj.entities.size(); eci++)
                             if (obj.entities[eci].type == 55)
-                                obj.entities[eci].active = false;
+                                removeentity_iter(eci);
                     } else if (words[1] == "teleporter" ||
                             words[1] == "teleporters") {
-                        for (int eti = 0; eti < obj.nentity; eti++)
+                        for (size_t eti = 0; eti < obj.entities.size(); eti++)
                             if (obj.entities[eti].type == 100)
-                                obj.entities[eti].active = false;
+                                removeentity_iter(eti);
 
                         game.activetele = false;
                     } else if (words[1] == "activityzones") {
@@ -1268,8 +1265,7 @@ void scriptclass::run() {
                 }
                 if (words[0] == "bruh") {
                     int i = obj.getplayer();
-                    obj.entities[i].active = false;
-                    obj.entities[i].rule = -1;
+                    obj.removeentity(i);
                     game.hascontrol = false;
                     music.fadeout();
                     music.playfile("pop.wav", "", 0);
@@ -2108,7 +2104,6 @@ void scriptclass::run() {
                 } else if (words[0] == "supercrewmateroom") {
                     game.scmprogress = game.roomx - 41;
 #define ENTITYDATA \
-                    X(active); \
                     X(invis); \
                     X(type); \
                     X(size); \
@@ -2769,14 +2764,14 @@ void scriptclass::run() {
                         obj.entities[i].dir = 0;
                     }
                 } else if (words[0] == "jukebox") {
-                    for (j = 0; j < obj.nentity; j++) {
-                        if (obj.entities[j].type == 13 && obj.entities[j].active) {
+                    for (j = 0; j < (int) obj.entities.size(); j++) {
+                        if (obj.entities[j].type == 13) {
                             obj.entities[j].colour = 4;
                         }
                     }
                     if (ss_toi(words[1]) == 1) {
                         obj.createblock(5, 88 - 4, 80, 20, 16, 25);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 88 &&
                                 obj.entities[j].yp == 80) {
                                 obj.entities[j].colour = 5;
@@ -2784,7 +2779,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 2) {
                         obj.createblock(5, 128 - 4, 80, 20, 16, 26);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 128 &&
                                 obj.entities[j].yp == 80) {
                                 obj.entities[j].colour = 5;
@@ -2792,7 +2787,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 3) {
                         obj.createblock(5, 176 - 4, 80, 20, 16, 27);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 176 &&
                                 obj.entities[j].yp == 80) {
                                 obj.entities[j].colour = 5;
@@ -2800,7 +2795,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 4) {
                         obj.createblock(5, 216 - 4, 80, 20, 16, 28);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 216 &&
                                 obj.entities[j].yp == 80) {
                                 obj.entities[j].colour = 5;
@@ -2808,7 +2803,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 5) {
                         obj.createblock(5, 88 - 4, 128, 20, 16, 29);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 88 &&
                                 obj.entities[j].yp == 128) {
                                 obj.entities[j].colour = 5;
@@ -2816,7 +2811,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 6) {
                         obj.createblock(5, 176 - 4, 128, 20, 16, 30);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 176 &&
                                 obj.entities[j].yp == 128) {
                                 obj.entities[j].colour = 5;
@@ -2824,7 +2819,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 7) {
                         obj.createblock(5, 40 - 4, 40, 20, 16, 31);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 40 &&
                                 obj.entities[j].yp == 40) {
                                 obj.entities[j].colour = 5;
@@ -2832,7 +2827,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 8) {
                         obj.createblock(5, 216 - 4, 128, 20, 16, 32);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 216 &&
                                 obj.entities[j].yp == 128) {
                                 obj.entities[j].colour = 5;
@@ -2840,7 +2835,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 9) {
                         obj.createblock(5, 128 - 4, 128, 20, 16, 33);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 128 &&
                                 obj.entities[j].yp == 128) {
                                 obj.entities[j].colour = 5;
@@ -2848,7 +2843,7 @@ void scriptclass::run() {
                         }
                     } else if (ss_toi(words[1]) == 10) {
                         obj.createblock(5, 264 - 4, 40, 20, 16, 34);
-                        for (j = 0; j < obj.nentity; j++) {
+                        for (j = 0; j < (int) obj.entities.size(); j++) {
                             if (obj.entities[j].xp == 264 &&
                                 obj.entities[j].yp == 40) {
                                 obj.entities[j].colour = 5;
@@ -3010,7 +3005,7 @@ void scriptclass::run() {
                     }
                     game.backgroundtext = false;
                 } else if (words[0] == "everybodysad") {
-                    for (i = 0; i < obj.nentity; i++) {
+                    for (i = 0; i < (int) obj.entities.size(); i++) {
                         if (obj.entities[i].rule == 6 ||
                             obj.entities[i].rule == 0) {
                             obj.entities[i].tile = 144;
@@ -3438,7 +3433,6 @@ void scriptclass::resetgametomenu() {
     game.gamestate = TITLEMODE;
     FILESYSTEM_unmountassets();
     graphics.flipmode = false;
-    obj.nentity = 0;
     graphics.fademode = 4;
     game.createmenu("gameover");
 }
@@ -3460,7 +3454,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3481,7 +3475,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3501,7 +3495,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3538,7 +3532,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3564,7 +3558,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3590,7 +3584,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3616,7 +3610,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3642,7 +3636,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3674,7 +3668,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3695,7 +3689,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3719,7 +3713,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3749,7 +3743,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3782,7 +3776,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3815,7 +3809,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3848,7 +3842,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3881,7 +3875,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3911,7 +3905,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3941,7 +3935,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -3971,7 +3965,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -4001,7 +3995,7 @@ void scriptclass::startgamemode(int t) {
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -4023,7 +4017,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
 
             if (graphics.setflipmode) graphics.flipmode = true;  // set flipmode
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -4057,7 +4051,7 @@ void scriptclass::startgamemode(int t) {
 
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -4096,7 +4090,7 @@ void scriptclass::startgamemode(int t) {
 
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -4136,7 +4130,7 @@ void scriptclass::startgamemode(int t) {
 
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {
@@ -4196,7 +4190,7 @@ void scriptclass::startgamemode(int t) {
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
 
-            if (obj.nentity == 0) {
+            if (obj.entities.empty()) {
                 obj.createentity(game.savex, game.savey, 0,
                                  0);  // In this game, constant, never destroyed
             } else {

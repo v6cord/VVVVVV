@@ -261,7 +261,7 @@ void towerlogic()
 
     if (game.deathseq != -1)
     {
-        for (int i = 0; i < obj.nentity; i++)
+        for (size_t i = 0; i < obj.entities.size(); i++)
         {
             if (obj.entities[i].type == 2 && obj.entities[i].state == 3)
             {
@@ -395,7 +395,7 @@ void towerlogic()
         {
             if(obj.vertplatforms)
             {
-                for (int i = obj.nentity - 1; i >= 0;  i--)
+                for (int i = obj.entities.size() - 1; i >= 0;  i--)
                 {
                     if (obj.entities[i].isplatform)
                     {
@@ -424,7 +424,7 @@ void towerlogic()
 
             if(obj.horplatforms)
             {
-                for (int ie = obj.nentity - 1; ie >= 0;  ie--)
+                for (int ie = obj.entities.size() - 1; ie >= 0;  ie--)
                 {
                     if (obj.entities[ie].isplatform)
                     {
@@ -459,7 +459,7 @@ void towerlogic()
                 }
             }
 
-            for (int i = obj.nentity - 1; i >= 0;  i--)
+            for (int i = obj.entities.size() - 1; i >= 0;  i--)
             {
                 if (!obj.entities[i].isplatform)
                 {
@@ -507,7 +507,7 @@ void towerlogic()
             }
 
             if (dowrap) {
-                for (int i = 0; i < obj.nentity; i++) {
+                for (size_t i = 0; i < obj.entities.size(); i++) {
                     if (obj.entities[i].xp <= -10)
                         obj.entities[i].xp += 320;
                     else if (obj.entities[i].xp > 310)
@@ -646,7 +646,7 @@ void gamelogic()
 
     if (game.deathseq != -1)
     {
-        for (int i = 0; i < obj.nentity; i++)
+        for (size_t i = 0; i < obj.entities.size(); i++)
         {
             if (game.roomx == 111 && game.roomy == 107 && !map.custommode)
             {
@@ -959,7 +959,7 @@ void gamelogic()
                 obj.entities[obj.getlineat(148 + 32)].xp += 24;
                 if (obj.entities[obj.getlineat(148 + 32)].xp > 320)
                 {
-                    obj.entities[obj.getlineat(148 + 32)].active = false;
+                    obj.removeentity(obj.getlineat(148 + 32));
                     game.swnmode = false;
                     game.swngame = 6;
                 }
@@ -1051,7 +1051,7 @@ void gamelogic()
         {
             if(obj.vertplatforms)
             {
-                for (int i = obj.nentity - 1; i >= 0;  i--)
+                for (int i = obj.entities.size() - 1; i >= 0;  i--)
                 {
                     if (obj.entities[i].isplatform)
                     {
@@ -1080,7 +1080,7 @@ void gamelogic()
 
             if(obj.horplatforms)
             {
-                for (int ie = obj.nentity - 1; ie >= 0;  ie--)
+                for (int ie = obj.entities.size() - 1; ie >= 0;  ie--)
                 {
                     if (obj.entities[ie].isplatform)
                     {
@@ -1115,7 +1115,7 @@ void gamelogic()
                 }
             }
 
-            for (int ie = obj.nentity - 1; ie >= 0;  ie--)
+            for (int ie = obj.entities.size() - 1; ie >= 0;  ie--)
             {
                 if (!obj.entities[ie].isplatform)
                 {
@@ -1157,7 +1157,7 @@ void gamelogic()
         //Finally: Are we changing room?
         if (map.warpx && map.warpy)
         {
-            for (int i = 0; i < obj.nentity;  i++)
+            for (size_t i = 0; i < obj.entities.size();  i++)
             {
                 if(obj.entities[i].type<50){ //Don't warp warp lines
                   if (obj.entities[i].size < 12)   //Don't wrap SWN enemies
@@ -1177,7 +1177,7 @@ void gamelogic()
                 }
             }
 
-            for (int i = 0; i < obj.nentity;  i++)
+            for (size_t i = 0; i < obj.entities.size();  i++)
             {
 
                 if(obj.entities[i].type<50){ //Don't warp warp lines
@@ -1200,7 +1200,7 @@ void gamelogic()
         }
         else if (map.warpx)
         {
-            for (int i = 0; i < obj.nentity;  i++)
+            for (size_t i = 0; i < obj.entities.size();  i++)
             {
                 if(obj.entities[i].type<50){ //Don't warp warp lines
                   if (obj.entities[i].size < 12)   //Don't wrap SWN enemies
@@ -1254,7 +1254,7 @@ void gamelogic()
         }
         else if (map.warpy)
         {
-            for (int i = 0; i < obj.nentity;  i++)
+            for (size_t i = 0; i < obj.entities.size();  i++)
             {
                 if(obj.entities[i].type<50){ //Don't warp warp lines
                   if (obj.entities[i].yp <= -12)
@@ -1271,7 +1271,7 @@ void gamelogic()
                 }
             }
 
-            for (int i = 0; i < obj.nentity;  i++)
+            for (size_t i = 0; i < obj.entities.size();  i++)
             {
 
                 if(obj.entities[i].type<50){ //Don't warp warp lines
