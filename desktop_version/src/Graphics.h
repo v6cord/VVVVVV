@@ -54,6 +54,8 @@ public:
 
 	void makecustomspritearray();
 
+    std::vector<SDL_Surface*>* selectspritesheet();
+
 	void drawcoloredtile(int x, int y, int t, int r, int g, int b);
 
 	void drawmenu(int cr, int cg, int cb, int division = 30);

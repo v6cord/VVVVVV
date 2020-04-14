@@ -56,7 +56,7 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - The game no longer crashes if you give an invalid filename to a command
 
-- Added being able to use `sprites2.png`, `sprites3.png`, `sprites4.png`, etc. and using Ctrl+F9 to switch between them in the editor, not yet showing up in the editor
+- Added being able to use `sprites2.png`, `sprites3.png`, `sprites4.png`, etc. and using Ctrl+F9 to switch between them in the editor
 
 ## Version c1.0-pre1
 
