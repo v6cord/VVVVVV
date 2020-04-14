@@ -134,6 +134,8 @@ static std::string get_specialvar(const T&& ref, int offset) {
 }
 
 void scriptclass::setvar(std::string n, std::string c) {
+    if (c == "true") c = "1";
+    if (c == "false") c = "0";
     variables[n] = c;
 
 #define X(t, k, v, i, s)                  \
