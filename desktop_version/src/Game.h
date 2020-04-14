@@ -319,22 +319,6 @@ public:
     int stretchMode = 0;
     int controllerSensitivity = 0;
 
-    //Screenrecording stuff, for beta/trailer
-    int recording = 0;
-    std::string recordstring;
-    bool combomode = false;
-    int combolen = 0;
-    std::string comboaction;
-    std::string currentaction;
-    bool recordinit = false;
-
-    growing_vector<int> playback;
-    int playbackpos = 0;
-    int playbacksize = 0;
-    int playmove = 0;
-    int playcombo = 0;
-    bool playbackfinished = false;
-
     bool menukludge = false;
     bool quickrestartkludge = false;
 

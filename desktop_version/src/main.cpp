@@ -525,8 +525,31 @@ int main(int argc, char *argv[])
                     else
                     {
 
-                        if (game.recording == 1)
+                        if (script.running)
                         {
+                            script.run();
+                        }
+
+                        for (int i = 0; i < (int)script.active_scripts.size(); i++) {
+                            script.active_scripts[i].update();
+                        }
+
+                        gameinput();
+                        gamerender();
+                        gamelogic();
+
+
+                        break;
+                    case MAPMODE:
+                        maprender();
+                        mapinput();
+                        maplogic();
+                        break;
+                    case TELEPORTERMODE:
+                        teleporterrender();
+                        if(game.useteleporter)
+                        {
+                            teleporterinput();
                         }
                         else
                         {
@@ -534,50 +557,7 @@ int main(int argc, char *argv[])
                             {
                                 script.run();
                             }
-
-                            for (int i = 0; i < (int)script.active_scripts.size(); i++) {
-                                script.active_scripts[i].update();
-                            }
-
                             gameinput();
-                            //}
-                            gamerender();
-                            gamelogic();
-
-
-                        }
-                        break;
-                    case MAPMODE:
-                        maprender();
-                        if (game.recording == 1)
-                        {
-                            //recordinput(); //will implement this later if it's actually needed
-                        }
-                        else
-                        {
-                            mapinput();
-                        }
-                        maplogic();
-                        break;
-                    case TELEPORTERMODE:
-                        teleporterrender();
-                        if (game.recording == 1)
-                        {
-                        }
-                        else
-                        {
-                            if(game.useteleporter)
-                            {
-                                teleporterinput();
-                            }
-                            else
-                            {
-                                if (script.running)
-                                {
-                                    script.run();
-                                }
-                                gameinput();
-                            }
                         }
                         maplogic();
                         break;
