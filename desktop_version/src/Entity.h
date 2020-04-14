@@ -10,6 +10,8 @@
 #include <string>
 #include <unordered_map>
 
+#define removeentity_iter(index) { obj.removeentity(index); index--; }
+
 enum
 {
     BLOCK = 0,
