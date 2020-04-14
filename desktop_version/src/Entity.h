@@ -95,8 +95,6 @@ public:
 
     void animateentities(int i);
 
-    bool gettype(int t);
-
     int getcompanion();
 
     int getplayer();
