@@ -88,8 +88,6 @@ public:
 
     void setenemyroom(int t, int rx, int ry);
 
-    void setenemy(int t, int r);
-
     void settreadmillcolour(int t, int rx, int ry);
 
     int createentity(float xp, float yp, int t, float vx = 0, float vy = 0,
