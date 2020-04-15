@@ -60,7 +60,7 @@ public:
     //Script contents
     std::vector<std::string> commands;
     growing_vector<std::string> words;
-    growing_vector<std::string> txt;
+    std::vector<std::string> txt;
     std::string scriptname;
     int position = 0;
     int looppoint, loopcount = 0;
@@ -77,7 +77,6 @@ public:
     int texty = 0;
     int textcenterline = 0;
     int r,g,b = 0;
-    int txtnumlines = 0;
 
     //Misc
     int i, j, k = 0;

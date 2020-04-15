@@ -42,7 +42,6 @@ scriptclass::scriptclass() {
     textx = 0;
     texty = 0;
     textcenterline = 0;
-    txtnumlines = 0;
 
     labels.clear();
     variables.clear();
@@ -1625,14 +1624,16 @@ void scriptclass::run() {
                     texty = ss_toi(words[++a]);
 
                     // Number of lines for the textbox!
+                    int n;
                     if (!words[++a].empty())
-                        txtnumlines = ss_toi(words[a]);
+                        n = ss_toi(words[a]);
                     else
-                        txtnumlines = 1;
+                        n = 1;
 
-                    for (int i = 0; i < txtnumlines; i++) {
+                    txt.clear();
+                    for (int i = 0; i < n; i++) {
                         position++;
-                        txt[i] = processvars(commands[position]);
+                        txt.push_back(processvars(commands[position]));
                     }
                 } else if (words[0] == "position") {
                     // are we facing left or right? for some objects we don't care,
@@ -1675,11 +1676,11 @@ void scriptclass::run() {
                             textx = obj.entities[i].xp -
                                     10000;  // tells the box to be oriented
                                             // correctly later
-                            texty = obj.entities[i].yp - 16 - (txtnumlines * 8);
+                            texty = obj.entities[i].yp - 16 - (txt.size() * 8);
                         } else if (j == 0)  // Right
                         {
                             textx = obj.entities[i].xp - 16;
-                            texty = obj.entities[i].yp - 18 - (txtnumlines * 8);
+                            texty = obj.entities[i].yp - 18 - (txt.size() * 8);
                         }
                     } else {
                         if (j == 1)  // left
@@ -1751,11 +1752,11 @@ void scriptclass::run() {
                             textx = obj.entities[i].xp -
                                     10000;  // tells the box to be oriented
                                             // correctly later
-                            texty = obj.entities[i].yp - 16 - (txtnumlines * 8);
+                            texty = obj.entities[i].yp - 16 - (txt.size() * 8);
                         } else if (j == 0)  // Right
                         {
                             textx = obj.entities[i].xp - 16;
-                            texty = obj.entities[i].yp - 18 - (txtnumlines * 8);
+                            texty = obj.entities[i].yp - 18 - (txt.size() * 8);
                         }
                     } else {
                         if (j == 1)  // left
@@ -1774,12 +1775,12 @@ void scriptclass::run() {
                     game.backgroundtext = true;
                 } else if (words[0] == "flipme") {
                     if (graphics.flipmode)
-                        texty += 2 * (120 - texty) - 8 * (txtnumlines + 2);
+                        texty += 2 * (120 - texty) - 8 * (txt.size() + 2);
                 } else if (words[0] == "speak_active") {
                     // Ok, actually display the textbox we've initilised now!
                     graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if (txtnumlines > 1) {
-                        for (i = 1; i < txtnumlines; i++) {
+                    if ((int) txt.size() > 1) {
+                        for (i = 1; i < (int) txt.size(); i++) {
                             graphics.addline(txt[i]);
                         }
                     }
@@ -1831,8 +1832,8 @@ void scriptclass::run() {
                     // Exactly as above, except don't make the textbox active (so we
                     // can use multiple textboxes)
                     graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if (txtnumlines > 1) {
-                        for (i = 1; i < txtnumlines; i++) {
+                    if ((int) txt.size() > 1) {
+                        for (i = 1; i < (int) txt.size(); i++) {
                             graphics.addline(txt[i]);
                         }
                     }
@@ -1884,8 +1885,8 @@ void scriptclass::run() {
                     // Copied and pasted from the above
                     // Ok, actually display the textbox we've initilised now!
                     graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if (txtnumlines > 1) {
-                        for (i = 1; i < txtnumlines; i++) {
+                    if ((int) txt.size() > 1) {
+                        for (i = 1; i < (int) txt.size(); i++) {
                             graphics.addline(txt[i]);
                         }
                     }
@@ -1939,8 +1940,8 @@ void scriptclass::run() {
                     // Exactly as above, except don't make the textbox active (so we
                     // can use multiple textboxes)
                     graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if (txtnumlines > 1) {
-                        for (i = 1; i < txtnumlines; i++) {
+                    if ((int) txt.size() > 1) {
+                        for (i = 1; i < (int) txt.size(); i++) {
                             graphics.addline(txt[i]);
                         }
                     }
@@ -3046,19 +3047,19 @@ void scriptclass::run() {
                 } else if (words[0] == "specialline") {
                     switch (ss_toi(words[1])) {
                         case 1:
-                            txtnumlines = 1;
+                            txt.resize(1);
 
                             txt[0] = "I'm worried about " + game.unrescued() +
                                     ", Doctor!";
                             break;
                         case 2:
-                            txtnumlines = 3;
+                            txt.resize(3);
 
                             if (game.crewrescued() < 5) {
                                 txt[1] = "to helping you find the";
                                 txt[2] = "rest of the crew!";
                             } else {
-                                txtnumlines = 2;
+                                txt.resize(2);
                                 txt[1] =
                                     "to helping you find " + game.unrescued() + "!";
                             }
