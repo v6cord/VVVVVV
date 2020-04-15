@@ -4987,7 +4987,7 @@ void Game::loadquick()
                 obj.coincollect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
-                    obj.coincollect.push_back(atoi(values[i].c_str()));
+                    obj.coincollect.push_back((bool) atoi(values[i].c_str()));
                 }
             }
         }
@@ -5340,7 +5340,7 @@ void Game::customloadquick(std::string savfile)
                 obj.coincollect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
-                    obj.coincollect.push_back(atoi(values[i].c_str()));
+                    obj.coincollect.push_back((bool) atoi(values[i].c_str()));
                 }
             }
         }
@@ -5886,7 +5886,7 @@ void Game::savetele()
     std::string coincollect;
     for(size_t i = 0; i < obj.coincollect.size(); i++ )
     {
-        coincollect += help.String(obj.coincollect[i]) + ",";
+        coincollect += help.String((int) obj.coincollect[i]) + ",";
     }
     msg = new TiXmlElement( "coincollect" );
     msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
@@ -6096,7 +6096,7 @@ void Game::savequick()
     std::string coincollect;
     for(size_t i = 0; i < obj.coincollect.size(); i++ )
     {
-        coincollect += help.String(obj.coincollect[i]) + ",";
+        coincollect += help.String((int) obj.coincollect[i]) + ",";
     }
     msg = new TiXmlElement( "coincollect" );
     msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
@@ -6308,7 +6308,7 @@ void Game::customsavequick(std::string savfile)
     std::string coincollect;
     for(size_t i = 0; i < obj.coincollect.size(); i++ )
     {
-        coincollect += help.String(obj.coincollect[i]) + ",";
+        coincollect += help.String((int) obj.coincollect[i]) + ",";
     }
     msg = new TiXmlElement( "coincollect" );
     msg->LinkEndChild( new TiXmlText( coincollect.c_str() ));
@@ -6673,7 +6673,7 @@ void Game::loadtele()
                 obj.coincollect.clear();
                 for(size_t i = 0; i < values.size(); i++)
                 {
-                    obj.coincollect.push_back(atoi(values[i].c_str()));
+                    obj.coincollect.push_back((bool) atoi(values[i].c_str()));
                 }
             }
         }

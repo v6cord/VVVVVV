@@ -1429,7 +1429,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             //Check if it's already been collected
             entity.para = vx;
             entity.behave = vy;
-            if (coincollect[vx] == 1) return -1;
+            if (coincollect[vx]) return -1;
         }
         break;
     case 9: //Something Shiny
@@ -2612,7 +2612,7 @@ void entityclass::updateentities( int i )
                 if (entities[i].behave == 3) game.coins += 50;
                 if (entities[i].behave == 4) game.coins += 100;
                 music.playef(4);
-                coincollect[entities[i].para] = 1;
+                coincollect[entities[i].para] = true;
 
                 removeentity(i);
             }
