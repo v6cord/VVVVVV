@@ -38,8 +38,6 @@ public:
 
     void changecustomcollect(int t, int s);
 
-    void changeflag(int t, bool s);
-
     void fatal_top()
     {
         createblock(DAMAGE, -8, -8, 384, 16);

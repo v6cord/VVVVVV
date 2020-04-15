@@ -107,11 +107,6 @@ void entityclass::changecustomcollect( int t, int s )
     collect[t] = s;
 }
 
-void entityclass::changeflag( int t, bool s )
-{
-    flags[t] = s;
-}
-
 int entityclass::swncolour( int t )
 {
     //given colour t, return colour in setcol
