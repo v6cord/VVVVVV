@@ -291,7 +291,6 @@ void editorclass::reset()
     entframe=0;
     entframedelay=0;
 
-    numtrinkets=0;
     numcoins=0;
     numcrewmates=0;
     edentity.clear();
@@ -1937,12 +1936,10 @@ std::string editorclass::warptokendest(int t) {
 
 void editorclass::countstuff()
 {
-    numtrinkets=0;
     numcoins=0;
     numcrewmates=0;
     for(size_t i=0; i<edentity.size(); i++)
     {
-        if(edentity[i].t==9) numtrinkets++;
         if(edentity[i].t==8) numcoins++;
         if(edentity[i].t==15) numcrewmates++;
     }
@@ -6740,11 +6737,10 @@ void editorinput()
                         {
                             if(ed.drawmode==3)
                             {
-                                if(ed.numtrinkets<100)
+                                if(ed.numtrinkets()<100)
                                 {
                                     addedentity(tx, ty, 9);
                                     ed.lclickdelay=1;
-                                    ed.numtrinkets++;
                                 }
                                 else
                                 {
@@ -7012,7 +7008,6 @@ void editorinput()
                         if (edentity[i].x==tx && edentity[i].y==ty &&
                             edentity[i].state==ed.levaltstate &&
                             edentity[i].intower==tower) {
-                            if (edentity[i].t==9) ed.numtrinkets--;
                             if (edentity[i].t==8) ed.numcoins--;
                             if (edentity[i].t==15) ed.numcrewmates--;
                             if (edentity[i].t==14) {
@@ -7258,9 +7253,8 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                 && edentity[i].state == 0 && edentity[i].intower == 0) {
                     if (edentity[i].t == 9) {
                         // TODO: If removing the 100 trinkets limit, update this
-                        if (numtrinkets >= 100)
+                        if (numtrinkets() >= 100)
                             continue;
-                        numtrinkets++;
                     } else if (edentity[i].t == 15) {
                         // TODO: If removing the 100 crewmates limit, update this
                         if (numcrewmates >= 100)
@@ -7295,9 +7289,7 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
         && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
         && edentity[i].state == state && edentity[i].intower == 0) {
             removeedentity(i);
-            if (edentity[i].t == 9)
-                numtrinkets--;
-            else if (edentity[i].t == 15)
+            if (edentity[i].t == 15)
                 numcrewmates--;
         }
 
@@ -7585,6 +7577,19 @@ int editorclass::getcustomsprites()
         return getcustomsprites(game.roomx - 100, game.roomy - 100);
 
     return 0;
+}
+
+int editorclass::numtrinkets()
+{
+    int temp = 0;
+    for (size_t i = 0; i < edentity.size(); i++)
+    {
+        if (edentity[i].t == 9)
+        {
+            temp++;
+        }
+    }
+    return temp;
 }
 
 #define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }

@@ -281,7 +281,7 @@ public:
     growing_vector <int> swapmap;
     growing_vector <int> contents;
     growing_vector <int> vmult;
-    int numtrinkets = 0;
+    int numtrinkets();
     int numcoins = 0;
     int numcrewmates = 0;
     growing_vector<edlevelclass> level;

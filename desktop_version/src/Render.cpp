@@ -3028,7 +3028,7 @@ void maprender()
           if (graphics.flipmode)
           {
               graphics.Print(0, 164, "[Trinkets found]", 196, 196, 255 - help.glow, true);
-              graphics.Print(0, 152, help.number(game.trinkets()) + " out of " + help.number(ed.numtrinkets), 96,96,96, true);
+              graphics.Print(0, 152, help.number(game.trinkets()) + " out of " + help.number(ed.numtrinkets()), 96,96,96, true);
 
               graphics.Print(0, 114, "[Number of Deaths]", 196, 196, 255 - help.glow, true);
               graphics.Print(0, 102,help.String(game.deathcounts),  96,96,96, true);
@@ -3039,7 +3039,7 @@ void maprender()
           else
           {
               graphics.Print(0, 52, "[Trinkets found]", 196, 196, 255 - help.glow, true);
-              graphics.Print(0, 64, help.number(game.trinkets()) + " out of "+help.number(ed.numtrinkets), 96,96,96, true);
+              graphics.Print(0, 64, help.number(game.trinkets()) + " out of "+help.number(ed.numtrinkets()), 96,96,96, true);
 
               graphics.Print(0, 102, "[Number of Deaths]", 196, 196, 255 - help.glow, true);
               graphics.Print(0, 114,help.String(game.deathcounts),  96,96,96, true);
