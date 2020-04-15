@@ -1150,42 +1150,7 @@ void gamelogic()
         }
 
         //Finally: Are we changing room?
-        if (map.warpx && map.warpy)
-        {
-            for (size_t i = 0; i < obj.entities.size();  i++)
-            {
-                if(obj.entities[i].type<50 //Don't warp warp lines
-                && obj.entities[i].size < 12)   //Don't wrap SWN enemies
-                {
-                    if (obj.entities[i].xp <= -10)
-                    {
-                        obj.entities[i].xp += 320;
-                    }
-                    else if (obj.entities[i].xp > 310)
-                    {
-                        obj.entities[i].xp -= 320;
-                    }
-                }
-            }
-
-            for (size_t i = 0; i < obj.entities.size();  i++)
-            {
-
-                if(obj.entities[i].type<50 //Don't warp warp lines
-                && obj.entities[i].size < 12)   //Don't wrap SWN enemies
-                {
-                    if (obj.entities[i].yp <= -12)
-                    {
-                        obj.entities[i].yp += 232;
-                    }
-                    else if (obj.entities[i].yp > 226)
-                    {
-                        obj.entities[i].yp -= 232;
-                    }
-                }
-            }
-        }
-        else if (map.warpx)
+        if (map.warpx)
         {
             for (size_t i = 0; i < obj.entities.size();  i++)
             {
@@ -1217,22 +1182,9 @@ void gamelogic()
                     }
                 }
             }
-
-            int player = obj.getplayer();
-            if (game.door_down > -2 && obj.entities[player].yp >= 238)
-            {
-                obj.entities[player].yp -= 240;
-                map.gotoroom(game.roomx, game.roomy + 1);
-                kludgeroominitscript = true;
-            }
-            if (game.door_up > -2 && obj.entities[player].yp < -2)
-            {
-                obj.entities[player].yp += 240;
-                map.gotoroom(game.roomx, game.roomy - 1);
-                kludgeroominitscript = true;
-            }
         }
-        else if (map.warpy)
+
+        if (map.warpy)
         {
             for (size_t i = 0; i < obj.entities.size();  i++)
             {
@@ -1247,7 +1199,10 @@ void gamelogic()
                     }
                 }
             }
+        }
 
+        if (map.warpy && !map.warpx)
+        {
             for (size_t i = 0; i < obj.entities.size();  i++)
             {
 
@@ -1264,22 +1219,9 @@ void gamelogic()
                     }
                 }
             }
-
-            int player = obj.getplayer();
-            if (game.door_left > -2 && obj.entities[player].xp < -14)
-            {
-                obj.entities[player].xp += 320;
-                map.gotoroom(game.roomx - 1, game.roomy);
-                kludgeroominitscript = true;
-            }
-            if (game.door_right > -2 && obj.entities[player].xp >= 308)
-            {
-                obj.entities[player].xp -= 320;
-                map.gotoroom(game.roomx + 1, game.roomy);
-                kludgeroominitscript = true;
-            }
         }
-        else
+
+        if (!map.warpy)
         {
             //Normal! Just change room
             int player = obj.getplayer();
@@ -1295,6 +1237,12 @@ void gamelogic()
                 map.gotoroom(game.roomx, game.roomy - 1);
                 kludgeroominitscript = true;
             }
+        }
+
+        if (!map.warpx)
+        {
+            //Normal! Just change room
+            int player = obj.getplayer();
             if (game.door_left > -2 && obj.entities[player].xp < -14)
             {
                 obj.entities[player].xp += 320;
