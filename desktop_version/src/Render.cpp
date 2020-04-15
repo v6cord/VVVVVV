@@ -2801,7 +2801,7 @@ void maprender()
 
             if (map.showtrinkets)
             {
-                for (int i = 0; i < map.numshinytrinkets; i++)
+                for (size_t i = 0; i < map.shinytrinkets.size(); i++)
                 {
                     if (!obj.collect[i])
                     {
@@ -3728,7 +3728,7 @@ void teleporterrender()
 
     if (map.showtrinkets)
     {
-        for (int i = 0; i < map.numshinytrinkets; i++)
+        for (size_t i = 0; i < map.shinytrinkets.size(); i++)
         {
             if (!obj.collect[i])
             {

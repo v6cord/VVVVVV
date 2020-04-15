@@ -33,7 +33,7 @@ public:
 
     void remteleporter(int x, int y);
 
-    void settrinket(int t, int x, int y);
+    void settrinket(int x, int y);
 
     void resetmap();
 
@@ -177,7 +177,6 @@ public:
     growing_vector<point> teleporters;
     growing_vector<point> shinytrinkets;
 
-    int numshinytrinkets = 0;
     bool showteleporters, showtargets, showtrinkets = false;
 
     //Roomtext
