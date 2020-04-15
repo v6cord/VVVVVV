@@ -9,7 +9,7 @@
 #include "Game.h"
 #include "Graphics.h"
 #include "KeyPoll.h"
-#include "titlerender.h"
+#include "Render.h"
 
 #include "Tower.h"
 #include "WarpClass.h"
