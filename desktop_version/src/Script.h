@@ -114,7 +114,7 @@ public:
     X(INT_SPECIALVAR, "gravitycontrol", game.gravitycontrol, 0, 0) \
     X(INT_SPECIALVAR, "room_x", game.roomx, 100, 0) \
     X(INT_SPECIALVAR, "room_y", game.roomy, 100, 0) \
-    X(INT_SPECIALVAR, "trinkets", game.trinkets, 0, 0) \
+    X(INT_SPECIALVAR, "trinkets", game.trinkets(), 0, 0) \
     X(INT_SPECIALVAR, "crewmates", game.crewmates, 0, 0) \
     X(INT_SPECIALVAR, "coins", game.coins, 0, 0) \
     X(INT_SPECIALVAR, "battery_level", battery_level(), 0, 1) \

@@ -1299,7 +1299,7 @@ void titlerender()
             tempstring = "You rescued " + help.number(game.crewrescued()) + " crewmates";
             graphics.Print(0, 100, tempstring, tr, tg, tb, true);
 
-            tempstring = "and found " + help.number(game.trinkets) + " trinkets.";
+            tempstring = "and found " + help.number(game.trinkets()) + " trinkets.";
             graphics.Print(0, 110, tempstring, tr, tg, tb, true);
 
             tempstring = "You managed to reach:";
@@ -1350,7 +1350,7 @@ void titlerender()
             std::string tempstring = "You rescued all the crewmates!";
             graphics.Print(0, 100, tempstring, tr, tg, tb, true);
 
-            tempstring = "And you found " + help.number(game.trinkets) + " trinkets.";
+            tempstring = "And you found " + help.number(game.trinkets()) + " trinkets.";
             graphics.Print(0, 110, tempstring, tr, tg, tb, true);
 
             graphics.Print(0, 160, "A new trophy has been awarded and", tr, tg, tb, true);
@@ -1381,11 +1381,11 @@ void titlerender()
                 graphics.Print(220, 85+20, "+1 Rank!", 255, 255, 255);
             }
 
-            tempstring = help.String(game.trinkets) + " of " + help.String(game.timetrialshinytarget);
+            tempstring = help.String(game.trinkets()) + " of " + help.String(game.timetrialshinytarget);
             graphics.drawspritesetcol(30, 80+55, 22, 22);
             graphics.Print(65, 80+55, "SHINY TRINKETS:", 255, 255, 255);
             graphics.Print(65, 90+55, tempstring, tr, tg, tb);
-            if (game.trinkets >= game.timetrialshinytarget)
+            if (game.trinkets() >= game.timetrialshinytarget)
             {
                 graphics.Print(220, 85+55, "+1 Rank!", 255, 255, 255);
             }
@@ -2416,13 +2416,13 @@ void gamerender()
             {
                 graphics.bprint(56, 30,help.String(game.deathcounts),  196, 196, 196);
             }
-            if(game.trinkets<game.timetrialshinytarget)
+            if(game.trinkets()<game.timetrialshinytarget)
             {
-                graphics.bprint(56, 42,help.String(game.trinkets) + " of " +help.String(game.timetrialshinytarget),  196, 80, 80);
+                graphics.bprint(56, 42,help.String(game.trinkets()) + " of " +help.String(game.timetrialshinytarget),  196, 80, 80);
             }
             else
             {
-                graphics.bprint(56, 42,help.String(game.trinkets) + " of " +help.String(game.timetrialshinytarget),  196, 196, 196);
+                graphics.bprint(56, 42,help.String(game.trinkets()) + " of " +help.String(game.timetrialshinytarget),  196, 196, 196);
             }
 
             if(game.timetrialparlost)
@@ -3026,7 +3026,7 @@ void maprender()
           if (graphics.flipmode)
           {
               graphics.Print(0, 164, "[Trinkets found]", 196, 196, 255 - help.glow, true);
-              graphics.Print(0, 152, help.number(game.trinkets) + " out of " + help.number(map.customtrinkets), 96,96,96, true);
+              graphics.Print(0, 152, help.number(game.trinkets()) + " out of " + help.number(map.customtrinkets), 96,96,96, true);
 
               graphics.Print(0, 114, "[Number of Deaths]", 196, 196, 255 - help.glow, true);
               graphics.Print(0, 102,help.String(game.deathcounts),  96,96,96, true);
@@ -3037,7 +3037,7 @@ void maprender()
           else
           {
               graphics.Print(0, 52, "[Trinkets found]", 196, 196, 255 - help.glow, true);
-              graphics.Print(0, 64, help.number(game.trinkets) + " out of "+help.number(map.customtrinkets), 96,96,96, true);
+              graphics.Print(0, 64, help.number(game.trinkets()) + " out of "+help.number(map.customtrinkets), 96,96,96, true);
 
               graphics.Print(0, 102, "[Number of Deaths]", 196, 196, 255 - help.glow, true);
               graphics.Print(0, 114,help.String(game.deathcounts),  96,96,96, true);
@@ -3049,7 +3049,7 @@ void maprender()
           if (graphics.flipmode)
           {
               graphics.Print(0, 164, "[Trinkets found]", 196, 196, 255 - help.glow, true);
-              graphics.Print(0, 152, help.number(game.trinkets) + " out of Twenty", 96,96,96, true);
+              graphics.Print(0, 152, help.number(game.trinkets()) + " out of Twenty", 96,96,96, true);
 
               graphics.Print(0, 114, "[Number of Deaths]", 196, 196, 255 - help.glow, true);
               graphics.Print(0, 102,help.String(game.deathcounts),  96,96,96, true);
@@ -3060,7 +3060,7 @@ void maprender()
           else
           {
               graphics.Print(0, 52, "[Trinkets found]", 196, 196, 255 - help.glow, true);
-              graphics.Print(0, 64, help.number(game.trinkets) + " out of Twenty", 96,96,96, true);
+              graphics.Print(0, 64, help.number(game.trinkets()) + " out of Twenty", 96,96,96, true);
 
               graphics.Print(0, 102, "[Number of Deaths]", 196, 196, 255 - help.glow, true);
               graphics.Print(0, 114,help.String(game.deathcounts),  96,96,96, true);
@@ -3512,13 +3512,13 @@ void towerrender()
             {
                 graphics.bprint(56, 30,help.String(game.deathcounts),  196, 196, 196);
             }
-            if(game.trinkets<game.timetrialshinytarget)
+            if(game.trinkets()<game.timetrialshinytarget)
             {
-                graphics.bprint(56, 42,help.String(game.trinkets) + " of " +help.String(game.timetrialshinytarget),  196, 80, 80);
+                graphics.bprint(56, 42,help.String(game.trinkets()) + " of " +help.String(game.timetrialshinytarget),  196, 80, 80);
             }
             else
             {
-                graphics.bprint(56, 42,help.String(game.trinkets) + " of " +help.String(game.timetrialshinytarget),  196, 196, 196);
+                graphics.bprint(56, 42,help.String(game.trinkets()) + " of " +help.String(game.timetrialshinytarget),  196, 196, 196);
             }
 
             if(game.timetrialparlost)

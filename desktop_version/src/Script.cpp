@@ -737,13 +737,13 @@ void scriptclass::run() {
                     }
                 }
                 if (words[0] == "customiftrinkets") {
-                    if (game.trinkets >= ss_toi(words[1])) {
+                    if (game.trinkets() >= ss_toi(words[1])) {
                         call("custom_" + words[2]);
                         position--;
                     }
                 }
                 if (words[0] == "customiftrinketsless") {
-                    if (game.trinkets < ss_toi(words[1])) {
+                    if (game.trinkets() < ss_toi(words[1])) {
                         call("custom_" + words[2]);
                         position--;
                     }
@@ -2507,7 +2507,7 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "iftrinkets") {
-                    if (game.trinkets >= ss_toi(words[1])) {
+                    if (game.trinkets() >= ss_toi(words[1])) {
                         call(words[2]);
                         position--;
                     }
@@ -2659,7 +2659,6 @@ void scriptclass::run() {
                     i = obj.getplayer();
                     obj.entities[i].tile = 0;
 
-                    game.trinkets = 0;
                     game.crewmates = 0;
                     for (i = 0; i < 100; i++) {
                         obj.collect[i] = 0;
@@ -2925,7 +2924,6 @@ void scriptclass::run() {
                     music.haltdasmusik();
                     music.playef(3);
 
-                    game.trinkets++;
                     obj.collect[ss_toi(words[1])] = 1;
 
                     graphics.textboxremovefast();
@@ -2942,7 +2940,7 @@ void scriptclass::run() {
                     } else {
                         usethisnum = "Twenty";
                     }
-                    graphics.createtextbox(" " + help.number(game.trinkets) +
+                    graphics.createtextbox(" " + help.number(game.trinkets()) +
                                             " out of " + usethisnum + " ",
                                         50, 135, 174, 174, 174);
                     graphics.textboxcenterx();
@@ -3066,10 +3064,10 @@ void scriptclass::run() {
                             break;
                     }
                 } else if (words[0] == "trinketbluecontrol") {
-                    if (game.trinkets == 20 && obj.flags[67] == 1) {
+                    if (game.trinkets() == 20 && obj.flags[67] == 1) {
                         call("talkblue_trinket6");
                         position--;
-                    } else if (game.trinkets >= 19 && obj.flags[67] == 0) {
+                    } else if (game.trinkets() >= 19 && obj.flags[67] == 0) {
                         call("talkblue_trinket5");
                         position--;
                     } else {
@@ -3077,7 +3075,7 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "trinketyellowcontrol") {
-                    if (game.trinkets >= 19) {
+                    if (game.trinkets() >= 19) {
                         call("talkyellow_trinket3");
                         position--;
                     } else {
@@ -3213,7 +3211,7 @@ void scriptclass::run() {
                         } else {
                             // Ok, we've already dealt with the trinket thing; so
                             // either you have them all, or you don't. If you do:
-                            if (game.trinkets >= 20) {
+                            if (game.trinkets() >= 20) {
                                 call("startepilogue");
                                 position--;
                             } else {
@@ -3730,7 +3728,6 @@ void scriptclass::startgamemode(int t) {
                     map.explored[i + (j * ed.maxwidth)] = 1;
 
             for (int j = 0; j < 20; j++) obj.collect[j] = true;
-            game.trinkets = 20;
             game.insecretlab = true;
             map.showteleporters = true;
 
@@ -4175,7 +4172,6 @@ void scriptclass::startgamemode(int t) {
             game.savepoint = 0;
             game.gravitycontrol = ed.customtrials[game.currenttrial].startf;
             game.coins = 0;
-            game.trinkets = 0;
             game.crewmates = 0;
             game.state = 0;
             game.deathseq = -1;

@@ -2653,7 +2653,6 @@ void entityclass::updateentities( int i )
             //wait for collision
             if (entities[i].state == 1)
             {
-                game.trinkets++;
                 if (game.intimetrial)
                 {
                     collect[entities[i].para] = 1;
@@ -2665,9 +2664,9 @@ void entityclass::updateentities( int i )
                     music.silencedasmusik();
                     music.playef(3);
                     collect[entities[i].para] = 1;
-                    if (game.trinkets > game.stat_trinkets && !map.custommode)
+                    if (game.trinkets() > game.stat_trinkets && !map.custommode)
                     {
-                        game.stat_trinkets = game.trinkets;
+                        game.stat_trinkets = game.trinkets();
                     }
                 }
 
