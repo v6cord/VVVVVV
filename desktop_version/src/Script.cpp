@@ -442,7 +442,6 @@ void scriptclass::run() {
                         position--;
                     }
                 }
-#endif
                 if (words[0] == "destroy") {
                     if (words[1] == "gravitylines") {
                         for (size_t edi = 0; edi < obj.entities.size(); edi++) {
@@ -740,6 +739,7 @@ void scriptclass::run() {
                                 removeblock_iter(bai);
                     }
                 }
+#endif
                 if (words[0] == "customiftrinkets") {
                     if (game.trinkets() >= ss_toi(words[1])) {
                         call("custom_" + words[2]);
