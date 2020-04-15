@@ -533,10 +533,12 @@ void scriptclass::run() {
 
                             // Actually hold up, maybe this is an edentity conveyor,
                             // we want to remove all the tile 1s under it before
-                            // deactivating it Of course this could be a
-                            // createentity conveyor and someone placed tile 1s
-                            // under it manually, but I don't care Also I don't care
-                            // if there's not actually any tile 1s under it
+                            // deactivating it
+                            // Of course this could be a createentity conveyor
+                            // and someone placed tile 1s under it manually,
+                            // but I don't care
+                            // Also I don't care if there's not actually any
+                            // tile 1s under it
                             if (deletedentity.type != 1 ||
                                 (deletedentity.behave != 8 &&
                                 deletedentity.behave != 9))
@@ -622,14 +624,16 @@ void scriptclass::run() {
                             entclass deletedentity = entclass(obj.entities[edc]);
                             removeentity_iter(edc);
 
-                            // Actually hold up, maybe this is an edentity conveyor,
-                            // we want to remove all the tile 1s under it before
-                            // deactivating it Of course this could be a
-                            // createentity conveyor and someone placed tile 1s
-                            // under it manually, but I don't care Also I don't care
-                            // if there's not actually any tile 1s under it, even if
-                            // it's a spike/one-way that's now invisible and can be
-                            // touched by the player
+                            // Actually hold up, maybe this is an edentity
+                            // conveyor, we want to remove all the tile 1s
+                            // under it before deactivating it
+                            // Of course this could be a createentity conveyor
+                            // and someone placed tile 1s under it manually,
+                            // but I don't care
+                            // Also I don't care if there's not actually any
+                            // tile 1s under it, even if it's a spike/one-way
+                            // that's now invisible and can be touched by the
+                            // player
 
                             // Ok, is it aligned with the grid?
                             if (deletedentity.xp % 8 != 0 ||
