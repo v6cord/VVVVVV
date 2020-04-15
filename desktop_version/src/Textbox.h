@@ -15,10 +15,6 @@ class textboxclass
 public:
     textboxclass();
 
-    void firstcreate();
-
-    void clear();
-
     void centerx(int centerline = 160);
 
     void centery(int centerline = 120);
