@@ -1162,10 +1162,12 @@ void gamelogic()
                         //ascii snakes
                         if (obj.entities[i].xp <= -80)
                         {
+                            if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                             obj.entities[i].xp += 400;
                         }
                         else if (obj.entities[i].xp > 320)
                         {
+                            if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                             obj.entities[i].xp -= 400;
                         }
                     }
@@ -1173,10 +1175,12 @@ void gamelogic()
                     {
                         if (obj.entities[i].xp <= -10)
                         {
+                            if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                             obj.entities[i].xp += 320;
                         }
                         else if (obj.entities[i].xp > 310)
                         {
+                            if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                             obj.entities[i].xp -= 320;
                         }
                     }
@@ -1191,10 +1195,12 @@ void gamelogic()
                 if(obj.entities[i].type<50){ //Don't warp warp lines
                     if (obj.entities[i].yp <= -12)
                     {
+                        if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                         obj.entities[i].yp += 232;
                     }
                     else if (obj.entities[i].yp > 226)
                     {
+                        if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                         obj.entities[i].yp -= 232;
                     }
                 }
@@ -1211,10 +1217,12 @@ void gamelogic()
                 {
                     if (obj.entities[i].xp <= -30)
                     {
+                        if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                         obj.entities[i].xp += 350;
                     }
                     else if (obj.entities[i].xp > 320)
                     {
+                        if (obj.entities[i].isplatform) obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
                         obj.entities[i].xp -= 350;
                     }
                 }
