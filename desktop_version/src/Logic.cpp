@@ -1161,12 +1161,9 @@ void gamelogic()
                     {
                         obj.entities[i].xp += 320;
                     }
-                    else
+                    else if (obj.entities[i].xp > 310)
                     {
-                        if (obj.entities[i].xp > 310)
-                        {
-                            obj.entities[i].xp -= 320;
-                        }
+                        obj.entities[i].xp -= 320;
                     }
                 }
             }
@@ -1181,12 +1178,9 @@ void gamelogic()
                     {
                         obj.entities[i].yp += 232;
                     }
-                    else
+                    else if (obj.entities[i].yp > 226)
                     {
-                        if (obj.entities[i].yp > 226)
-                        {
-                            obj.entities[i].yp -= 232;
-                        }
+                        obj.entities[i].yp -= 232;
                     }
                 }
             }
@@ -1205,12 +1199,9 @@ void gamelogic()
                         {
                             obj.entities[i].xp += 400;
                         }
-                        else
+                        else if (obj.entities[i].xp > 320)
                         {
-                            if (obj.entities[i].xp > 320)
-                            {
-                                obj.entities[i].xp -= 400;
-                            }
+                            obj.entities[i].xp -= 400;
                         }
                     }
                     else
@@ -1219,12 +1210,9 @@ void gamelogic()
                         {
                             obj.entities[i].xp += 320;
                         }
-                        else
+                        else if (obj.entities[i].xp > 310)
                         {
-                            if (obj.entities[i].xp > 310)
-                            {
-                                obj.entities[i].xp -= 320;
-                            }
+                            obj.entities[i].xp -= 320;
                         }
                     }
                 }
@@ -1253,12 +1241,9 @@ void gamelogic()
                     {
                         obj.entities[i].yp += 232;
                     }
-                    else
+                    else if (obj.entities[i].yp > 226)
                     {
-                        if (obj.entities[i].yp > 226)
-                        {
-                            obj.entities[i].yp -= 232;
-                        }
+                        obj.entities[i].yp -= 232;
                     }
                 }
             }
@@ -1273,12 +1258,9 @@ void gamelogic()
                     {
                         obj.entities[i].xp += 350;
                     }
-                    else
+                    else if (obj.entities[i].xp > 320)
                     {
-                        if (obj.entities[i].xp > 320)
-                        {
-                            obj.entities[i].xp -= 350;
-                        }
+                        obj.entities[i].xp -= 350;
                     }
                 }
             }
