@@ -2661,7 +2661,7 @@ void scriptclass::run() {
 
                     for (i = 0; i < 100; i++) {
                         obj.collect[i] = false;
-                        obj.customcollect[i] = 0;
+                        obj.customcollect[i] = false;
                     }
 
                     obj.coincollect.clear();
@@ -4460,7 +4460,7 @@ void scriptclass::hardreset() {
 
     for (i = 0; i < 100; i++) {
         obj.collect[i] = false;
-        obj.customcollect[i] = 0;
+        obj.customcollect[i] = false;
     }
 
     obj.coincollect.clear();
