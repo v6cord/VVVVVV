@@ -43,7 +43,7 @@ public:
 public:
     //Fundamentals
     std::vector<std::string> line;
-    int xp, yp, lw, w, h, numlines = 0;
+    int xp, yp, lw, w, h = 0;
     int x,y = 0;
     int r,g,b = 0;
     int tr,tg,tb = 0;

@@ -10,17 +10,10 @@ textboxclass::textboxclass()
 void textboxclass::firstcreate()
 {
     //Like clear, only it creates the actual arrays, etc
-    for (int iter = 0; iter < 10; iter++)
-    {
-        std::string t;
-        t = "";
-        line.push_back(t);
-    }
     x = 0;
     y = 0;
     w = 0;
     h = 0;
-    numlines = 0;
     lw = 0;
     tl = 0;
     tm = 0;
@@ -30,15 +23,11 @@ void textboxclass::firstcreate()
 void textboxclass::clear()
 {
     //Set all values to a default, required for creating a new entity
-    for (size_t iter = 0; iter < line.size(); iter++)
-    {
-        line[iter]="";
-    }
+    line.resize(1);
     xp = 0;
     yp = 0;
     w = 0;
     h = 0;
-    numlines = 1;
     lw = 0;
     tl = 0;
     tm = 0;
@@ -131,7 +120,7 @@ void textboxclass::resize()
 {
     //Set the width and height to the correct sizes
     max = 0;
-    for (int iter = 0; iter < numlines; iter++)
+    for (size_t iter = 0; iter < line.size(); iter++)
     {
         auto utf = line[iter].begin();
         unsigned int len = 0;
@@ -144,7 +133,7 @@ void textboxclass::resize()
 
     lw = max / 8;
     w = max + 16;
-    h = (numlines + 2) * 8;
+    h = (lines.size() + 2) * 8;
     textrect.x = xp;
     textrect.y = yp;
     textrect.w = w;
@@ -161,10 +150,9 @@ void textboxclass::addline(std::string t)
         if (len > max) max = len;
     }
 
-    line[numlines] = t;
-    numlines += max / 8;
+    line.push_back(t);
     resize();
-    if (numlines >= 12) numlines = 0;
+    if ((int) line.size() >= 12) line.clear();
 }
 
 void textboxclass::createfast()
