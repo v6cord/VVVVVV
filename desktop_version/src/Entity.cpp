@@ -3801,7 +3801,6 @@ void entityclass::animateentities( int _i )
         //entities[_i].statedelay--;
         if (entities[_i].statedelay < 0) entities[_i].statedelay = 0;
     }
-    
 }
 
 int entityclass::getcompanion()
@@ -4874,7 +4873,6 @@ void entityclass::entitycollisioncheck()
                 }
             }
         }
-        
     }
 
     //can't have the player being stuck...
