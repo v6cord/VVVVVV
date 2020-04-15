@@ -1447,7 +1447,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (collect[vx] == 1) return -1;
+        if (collect[vx]) return -1;
         break;
     case 10: //Savepoint
         entity.rule = 3;
@@ -1673,7 +1673,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (collect[ (vx)] == 0) return -1;
+        if (!collect[ (vx)]) return -1;
         break;
     case 23: //SWN Enemies
         //Given a different behavior, these enemies are especially for SWN mode and disappear outside the screen.
@@ -2623,7 +2623,7 @@ void entityclass::updateentities( int i )
             {
                 if (game.intimetrial)
                 {
-                    collect[entities[i].para] = 1;
+                    collect[entities[i].para] = true;
                     music.playef(25);
                 }
                 else
@@ -2631,7 +2631,7 @@ void entityclass::updateentities( int i )
                     game.state = 1000;
                     music.silencedasmusik();
                     music.playef(3);
-                    collect[entities[i].para] = 1;
+                    collect[entities[i].para] = true;
                     if (game.trinkets() > game.stat_trinkets && !map.custommode)
                     {
                         game.stat_trinkets = game.trinkets();
