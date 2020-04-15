@@ -1981,7 +1981,7 @@ growing_vector<std::string> spacestation2class::loadlevel(int rx, int ry)
 			{
 				if (game.nocutscenes)
 				{
-					obj.changeflag(7, true);
+					obj.flags[7] = true;
 					game.teleportscript = "levelonecomplete";
 				}
 				else
