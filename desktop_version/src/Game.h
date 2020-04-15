@@ -256,13 +256,6 @@ public:
     bool fullscreen = false;
     int bestgamedeaths = 0;
 
-    bool stat_screenshakes = false;
-    bool stat_backgrounds = false;
-    bool stat_flipmode = false;
-    bool stat_invincibility = false;
-    int stat_slowdown = 0;
-
-
     growing_vector<int>besttimes;
     growing_vector<int>besttrinkets;
     growing_vector<int>bestlives;
