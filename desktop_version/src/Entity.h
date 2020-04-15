@@ -191,10 +191,10 @@ public:
 
 
     std::vector<blockclass> blocks;
-    growing_vector<bool> flags;
-    growing_vector<bool> collect;
-    growing_vector<bool> coincollect;
-    growing_vector<bool> customcollect;
+    std::vector<bool> flags;
+    std::vector<bool> collect;
+    std::vector<bool> coincollect;
+    std::vector<bool> customcollect;
 
     bool skipblocks, skipdirblocks = false;
 
