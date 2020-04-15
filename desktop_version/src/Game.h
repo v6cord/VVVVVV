@@ -276,7 +276,8 @@ public:
     int coins = 0;
     int trinkets();
     int crewmates();
-    int savepoint, teleport, teleportxpos = 0;
+    int savepoint, teleportxpos = 0;
+    bool teleport = false;
     int edteleportent = 0;
     bool completestop = false;
 
