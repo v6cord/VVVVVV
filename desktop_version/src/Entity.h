@@ -30,8 +30,6 @@ public:
 
     void resetallflags();
 
-    void confirmflags();
-
     void fatal_top()
     {
         createblock(DAMAGE, -8, -8, 384, 16);
