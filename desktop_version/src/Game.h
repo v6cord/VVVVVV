@@ -250,8 +250,6 @@ public:
 
     growing_vector<int> unlock;
     growing_vector<int> unlocknotify;
-    growing_vector<int> temp_unlock;
-    growing_vector<int> temp_unlocknotify;
     int stat_trinkets = 0;
     bool fullscreen = false;
     int bestgamedeaths = 0;
