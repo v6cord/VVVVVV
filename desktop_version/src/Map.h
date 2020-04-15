@@ -158,7 +158,6 @@ public:
     int customwidth, customheight = 0;
     int custommmstartx, custommmstarty = 0;
     int customcoins=0;
-    int customcrewmates = 0;
     int custommmxoff, custommmyoff, custommmxsize, custommmysize = 0;
     int customzoom = 0;
     bool customshowmm = false;

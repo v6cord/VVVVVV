@@ -2126,7 +2126,6 @@ void mapclass::loadlevel(int rx, int ry)
 			}
 	    }
 		//customcoins=ed.numcoins;
-		customcrewmates=ed.numcrewmates;
 
 		//do the appear/remove roomname here
 		break;
