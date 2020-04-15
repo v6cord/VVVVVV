@@ -42,13 +42,12 @@ public:
     void createfast();
 public:
     //Fundamentals
-    growing_vector<std::string> line;
+    std::vector<std::string> line;
     int xp, yp, lw, w, h, numlines = 0;
     int x,y = 0;
     int r,g,b = 0;
     int tr,tg,tb = 0;
     SDL_Rect textrect = {0};
-    bool active = false;
     int timer = 0;
 
     float tl = 0.0;
