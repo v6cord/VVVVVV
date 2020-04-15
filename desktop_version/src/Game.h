@@ -167,7 +167,6 @@ public:
     //public var crewstats:Array = new Array();
     int lastsaved = 0;
     int deathcounts = 0;
-    int timerStartTime = 0;
 
     int frames, seconds, minutes, hours = 0;
     bool gamesaved = false;
