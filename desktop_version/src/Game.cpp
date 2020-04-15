@@ -4617,7 +4617,7 @@ void Game::savestats()
     dataNode->LinkEndChild(msg);
 
     msg = new TiXmlElement("muted");
-    msg->LinkEndChild(new TiXmlText(tu.String((int) music.muted).c_str()));
+    msg->LinkEndChild(new TiXmlText(help.String((int) music.muted).c_str()));
     dataNode->LinkEndChild(msg);
 
     msg = new TiXmlElement("notextoutline");
@@ -4656,7 +4656,7 @@ void Game::savestats()
     dataNode->LinkEndChild( msg );
 
     msg = new TiXmlElement( "touchMode" );
-    msg->LinkEndChild( new TiXmlText( tu.String(key.type).c_str()));
+    msg->LinkEndChild( new TiXmlText( help.String(key.type).c_str()));
     dataNode->LinkEndChild( msg );
 
     FILESYSTEM_saveTiXmlDocument("saves/unlock.vvv", &doc);
