@@ -2389,25 +2389,25 @@ void mapclass::updatetowerentcol(int col)
 				obj.entities[i].tile = 4 + plattile*12;
 				if (obj.entities[i].animate == 10)
 					obj.entities[i].tile += 4;
-		} else if (obj.entities[i].isplatform) { // Moving platform
-			obj.entities[i].tile = plattile*12;
-		} else { // Just an enemy
-			if (obj.entities[i].colour == 102)
-				; // If flashy, do nothing!
+			} else if (obj.entities[i].isplatform) { // Moving platform
+				obj.entities[i].tile = plattile*12;
+			} else { // Just an enemy
+				if (obj.entities[i].colour == 102)
+					; // If flashy, do nothing!
+				else
+					obj.entities[i].colour = entcol;
+			}
+		} else if (obj.entities[i].type == 2) { // Disappearing platform
+			if (obj.entities[i].state == 3)
+				// It's disappeared, so its tile is offset, so we have to correct for that offset
+				obj.entities[i].tile = 4 + plattile*12;
 			else
-				obj.entities[i].colour = entcol;
-		}
-	} else if (obj.entities[i].type == 2) { // Disappearing platform
-		if (obj.entities[i].state == 3)
-			// It's disappeared, so its tile is offset, so we have to correct for that offset
-			obj.entities[i].tile = 4 + plattile*12;
-		else
-			// Normal
-			obj.entities[i].tile = plattile * 12;
+				// Normal
+				obj.entities[i].tile = plattile * 12;
 
-		if (obj.entities[i].state == 5)
-			// Extra kludge for when it respawns
-			obj.entities[i].tile += 3 - obj.entities[i].life/3;
+			if (obj.entities[i].state == 5)
+				// Extra kludge for when it respawns
+				obj.entities[i].tile += 3 - obj.entities[i].life/3;
 		}
 	}
 }
