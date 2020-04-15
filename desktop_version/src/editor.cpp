@@ -292,7 +292,6 @@ void editorclass::reset()
     entframedelay=0;
 
     numcoins=0;
-    numcrewmates=0;
     edentity.clear();
     levmusic=0;
 
@@ -1937,11 +1936,9 @@ std::string editorclass::warptokendest(int t) {
 void editorclass::countstuff()
 {
     numcoins=0;
-    numcrewmates=0;
     for(size_t i=0; i<edentity.size(); i++)
     {
         if(edentity[i].t==8) numcoins++;
-        if(edentity[i].t==15) numcrewmates++;
     }
 }
 
@@ -6821,12 +6818,11 @@ void editorinput()
                             }
                             else if(ed.drawmode==15)  //Crewmate
                             {
-                                if(ed.numcrewmates<100)
+                                if(ed.numcrewmates()<100)
                                 {
                                     addedentity(tx, ty, 15,
                                                 1 + int(fRandom() * 5));
                                     ed.lclickdelay=1;
-                                    ed.numcrewmates++;
                                 } else {
                                     ed.note="ERROR: Max number of crewmates is 100";
                                     ed.notedelay=45;
@@ -7009,7 +7005,6 @@ void editorinput()
                             edentity[i].state==ed.levaltstate &&
                             edentity[i].intower==tower) {
                             if (edentity[i].t==8) ed.numcoins--;
-                            if (edentity[i].t==15) ed.numcrewmates--;
                             if (edentity[i].t==14) {
                                 map.remteleporter(ed.levx, ed.levy);
                             }
@@ -7257,9 +7252,8 @@ void editorclass::addaltstate(int rxi, int ryi, int state)
                             continue;
                     } else if (edentity[i].t == 15) {
                         // TODO: If removing the 100 crewmates limit, update this
-                        if (numcrewmates >= 100)
+                        if (numcrewmates() >= 100)
                             continue;
-                        numcrewmates++;
                     } else if (edentity[i].t == 16) {
                         // Don't copy the start point
                         continue;
@@ -7289,8 +7283,6 @@ void editorclass::removealtstate(int rxi, int ryi, int state)
         && edentity[i].y >= ryi*30 && edentity[i].y < (ryi+1)*30
         && edentity[i].state == state && edentity[i].intower == 0) {
             removeedentity(i);
-            if (edentity[i].t == 15)
-                numcrewmates--;
         }
 
     // Ok, now update the rest
@@ -7585,6 +7577,19 @@ int editorclass::numtrinkets()
     for (size_t i = 0; i < edentity.size(); i++)
     {
         if (edentity[i].t == 9)
+        {
+            temp++;
+        }
+    }
+    return temp;
+}
+
+int editorclass::numcrewmates()
+{
+    int temp = 0;
+    for (size_t i = 0; i < edentity.size(); i++)
+    {
+        if (edentity[i].t == 15)
         {
             temp++;
         }
