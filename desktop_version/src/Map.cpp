@@ -42,7 +42,6 @@ mapclass::mapclass()
 
 	custommode=false;
 	custommodeforreal=false;
-	customtrinkets=0;
 	customcoins=0;
 	customx=0; customy=0;
 	customwidth=20; customheight=20;
@@ -2115,8 +2114,6 @@ void mapclass::loadlevel(int rx, int ry)
 		}
 		if (ed.grayenemieskludge)
 			ed.grayenemieskludge = false;
-
-		customtrinkets=ed.numtrinkets;
 
 		customcoins = 0;
 	    for(size_t i=0; i<edentity.size(); i++) {

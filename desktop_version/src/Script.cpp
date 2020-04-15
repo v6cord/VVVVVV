@@ -2935,7 +2935,7 @@ void scriptclass::run() {
 
                     std::string usethisnum;
                     if (map.custommode) {
-                        usethisnum = help.number(map.customtrinkets);
+                        usethisnum = help.number(ed.numtrinkets);
                     } else {
                         usethisnum = "Twenty";
                     }
