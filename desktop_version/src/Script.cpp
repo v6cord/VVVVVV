@@ -2512,7 +2512,7 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "ifcrewmates") {
-                    if (game.crewmates >= ss_toi(words[1])) {
+                    if (game.crewmates() >= ss_toi(words[1])) {
                         call("custom_" + words[2]);
                         continue;
                     }
@@ -2527,7 +2527,7 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "ifcrewmatesless") {
-                    if (game.crewmates < ss_toi(words[1])) {
+                    if (game.crewmates() < ss_toi(words[1])) {
                         call("custom_" + words[2]);
                         continue;
                     }
@@ -2659,7 +2659,6 @@ void scriptclass::run() {
                     i = obj.getplayer();
                     obj.entities[i].tile = 0;
 
-                    game.crewmates = 0;
                     for (i = 0; i < 100; i++) {
                         obj.collect[i] = 0;
                         obj.customcollect[i] = 0;
@@ -4172,7 +4171,6 @@ void scriptclass::startgamemode(int t) {
             game.savepoint = 0;
             game.gravitycontrol = ed.customtrials[game.currenttrial].startf;
             game.coins = 0;
-            game.crewmates = 0;
             game.state = 0;
             game.deathseq = -1;
             game.lifeseq = 0;
@@ -4381,8 +4379,6 @@ void scriptclass::hardreset() {
 
     game.inintermission = false;
     game.insecretlab = false;
-
-    game.crewmates = 0;
 
     game.state = 0;
     game.statedelay = 0;

@@ -282,8 +282,9 @@ public:
 
     int deathseq, lifeseq = 0;
 
-    int coins, crewmates, trinkencollect = 0;
+    int coins, trinkencollect = 0;
     int trinkets();
+    int crewmates();
     int savepoint, teleport, teleportxpos = 0;
     int edteleportent = 0;
     bool completestop = false;
