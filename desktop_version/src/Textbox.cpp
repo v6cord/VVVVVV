@@ -113,7 +113,7 @@ void textboxclass::resize()
 
     lw = max / 8;
     w = max + 16;
-    h = (lines.size() + 2) * 8;
+    h = (line.size() + 2) * 8;
     textrect.x = xp;
     textrect.y = yp;
     textrect.w = w;

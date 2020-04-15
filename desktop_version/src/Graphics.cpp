@@ -1228,7 +1228,7 @@ void Graphics::createtextbox( std::string t, int xp, int yp, int r/*= 255*/, int
         textboxclass text;
         text.line.push_back(t);
         text.xp = xp;
-        int length = utf8::unchecked::distance(t.begin(), t.end());
+        int length = utf8::distance(t.begin(), t.end());
         if (xp == -1) text.xp = 160 - (((length / 2) + 1) * 8);
         text.yp = yp;
         text.initcol(r, g, b);
