@@ -76,7 +76,7 @@ void entityclass::resetallflags()
 {
     for (int i = 0; i < 1000; i++)
     {
-        flags[i] = 0;
+        flags[i] = false;
     }
 }
 
@@ -107,7 +107,7 @@ void entityclass::changecustomcollect( int t, int s )
     collect[t] = s;
 }
 
-void entityclass::changeflag( int t, int s )
+void entityclass::changeflag( int t, bool s )
 {
     flags[t] = s;
 }

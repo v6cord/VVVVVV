@@ -38,7 +38,7 @@ public:
 
     void changecustomcollect(int t, int s);
 
-    void changeflag(int t, int s);
+    void changeflag(int t, bool s);
 
     void fatal_top()
     {
@@ -201,7 +201,7 @@ public:
 
 
     std::vector<blockclass> blocks;
-    growing_vector<int> flags;
+    growing_vector<bool> flags;
     growing_vector<int> collect;
     growing_vector<int> coincollect;
     growing_vector<int> customcollect;

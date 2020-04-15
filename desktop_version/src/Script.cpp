@@ -748,7 +748,7 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "customifflag") {
-                    if (obj.flags[ss_toi(words[1])] == 1) {
+                    if (obj.flags[ss_toi(words[1])]) {
                         call("custom_" + words[2]);
                         position--;
                     }
@@ -2492,12 +2492,12 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "ifflag") {
-                    if (obj.flags[ss_toi(words[1])] == 1) {
+                    if (obj.flags[ss_toi(words[1])]) {
                         call(words[2]);
                         position--;
                     }
                 } else if (words[0] == "ifnotflag") {
-                    if (obj.flags[ss_toi(words[1])] != 1) {
+                    if (!obj.flags[ss_toi(words[1])]) {
                         call("custom_" + words[2]);
                         continue;
                     }
@@ -3063,10 +3063,10 @@ void scriptclass::run() {
                             break;
                     }
                 } else if (words[0] == "trinketbluecontrol") {
-                    if (game.trinkets() == 20 && obj.flags[67] == 1) {
+                    if (game.trinkets() == 20 && obj.flags[67]) {
                         call("talkblue_trinket6");
                         position--;
-                    } else if (game.trinkets() >= 19 && obj.flags[67] == 0) {
+                    } else if (game.trinkets() >= 19 && !obj.flags[67]) {
                         call("talkblue_trinket5");
                         position--;
                     } else {
@@ -3096,51 +3096,51 @@ void scriptclass::run() {
                             call("talkred_12");
                             position--;
                         }
-                    } else if (obj.flags[67] == 1) {
+                    } else if (obj.flags[67]) {
                         // game complete
                         call("talkred_13");
                         position--;
-                    } else if (obj.flags[35] == 1 && obj.flags[52] == 0) {
+                    } else if (obj.flags[35] && !obj.flags[52]) {
                         // Intermission level
-                        obj.flags[52] = 1;
+                        obj.flags[52] = true;
                         call("talkred_9");
                         position--;
-                    } else if (obj.flags[51] == 0) {
+                    } else if (!obj.flags[51]) {
                         // We're back home!
-                        obj.flags[51] = 1;
+                        obj.flags[51] = true;
                         call("talkred_5");
                         position--;
-                    } else if (obj.flags[48] == 0 && game.crewstats[5]) {
+                    } else if (!obj.flags[48] && game.crewstats[5]) {
                         // Victoria's back
-                        obj.flags[48] = 1;
+                        obj.flags[48] = true;
                         call("talkred_6");
                         position--;
-                    } else if (obj.flags[49] == 0 && game.crewstats[4]) {
+                    } else if (!obj.flags[49] && game.crewstats[4]) {
                         // Verdigris' back
-                        obj.flags[49] = 1;
+                        obj.flags[49] = true;
                         call("talkred_7");
                         position--;
-                    } else if (obj.flags[50] == 0 && game.crewstats[2]) {
+                    } else if (!obj.flags[50] && game.crewstats[2]) {
                         // Vitellary's back
-                        obj.flags[50] = 1;
+                        obj.flags[50] = true;
                         call("talkred_8");
                         position--;
-                    } else if (obj.flags[45] == 0 && !game.crewstats[5]) {
-                        obj.flags[45] = 1;
+                    } else if (!obj.flags[45] && !game.crewstats[5]) {
+                        obj.flags[45] = true;
                         call("talkred_2");
                         position--;
-                    } else if (obj.flags[46] == 0 && !game.crewstats[4]) {
-                        obj.flags[46] = 1;
+                    } else if (!obj.flags[46] && !game.crewstats[4]) {
+                        obj.flags[46] = true;
                         call("talkred_3");
                         position--;
-                    } else if (obj.flags[47] == 0 && !game.crewstats[2]) {
-                        obj.flags[47] = 1;
+                    } else if (!obj.flags[47] && !game.crewstats[2]) {
+                        obj.flags[47] = true;
                         call("talkred_4");
                         position--;
                     } else {
-                        obj.flags[45] = 0;
-                        obj.flags[46] = 0;
-                        obj.flags[47] = 0;
+                        obj.flags[45] = false;
+                        obj.flags[46] = false;
+                        obj.flags[47] = false;
                         call("talkred_1");
                         position--;
                     }
@@ -3157,34 +3157,34 @@ void scriptclass::run() {
                     } else if (game.roomx == 101 && game.roomy == 109) {
                         call("talkgreen_9");
                         position--;
-                    } else if (obj.flags[67] == 1) {
+                    } else if (obj.flags[67]) {
                         // game complete
                         call("talkgreen_10");
                         position--;
-                    } else if (obj.flags[34] == 1 && obj.flags[57] == 0) {
+                    } else if (obj.flags[34] && !obj.flags[57]) {
                         // Intermission level
-                        obj.flags[57] = 1;
+                        obj.flags[57] = true;
                         call("talkgreen_7");
                         position--;
-                    } else if (obj.flags[53] == 0) {
+                    } else if (!obj.flags[53]) {
                         // Home!
-                        obj.flags[53] = 1;
+                        obj.flags[53] = true;
                         call("talkgreen_6");
                         position--;
-                    } else if (obj.flags[54] == 0 && game.crewstats[2]) {
-                        obj.flags[54] = 1;
+                    } else if (!obj.flags[54] && game.crewstats[2]) {
+                        obj.flags[54] = true;
                         call("talkgreen_5");
                         position--;
-                    } else if (obj.flags[55] == 0 && game.crewstats[3]) {
-                        obj.flags[55] = 1;
+                    } else if (!obj.flags[55] && game.crewstats[3]) {
+                        obj.flags[55] = true;
                         call("talkgreen_4");
                         position--;
-                    } else if (obj.flags[56] == 0 && game.crewstats[5]) {
-                        obj.flags[56] = 1;
+                    } else if (!obj.flags[56] && game.crewstats[5]) {
+                        obj.flags[56] = true;
                         call("talkgreen_3");
                         position--;
-                    } else if (obj.flags[58] == 0) {
-                        obj.flags[58] = 1;
+                    } else if (!obj.flags[58]) {
+                        obj.flags[58] = true;
                         call("talkgreen_2");
                         position--;
                     } else {
@@ -3195,16 +3195,16 @@ void scriptclass::run() {
                     if (game.insecretlab) {
                         call("talkblue_9");
                         position--;
-                    } else if (obj.flags[67] == 1) {
+                    } else if (obj.flags[67]) {
                         // game complete, everything changes for victoria
-                        if (obj.flags[41] == 1 && obj.flags[42] == 0) {
+                        if (obj.flags[41] && !obj.flags[42]) {
                             // second trinket conversation
-                            obj.flags[42] = 1;
+                            obj.flags[42] = true;
                             call("talkblue_trinket2");
                             position--;
-                        } else if (obj.flags[41] == 0 && obj.flags[42] == 0) {
+                        } else if (!obj.flags[41] && !obj.flags[42]) {
                             // Third trinket conversation
-                            obj.flags[42] = 1;
+                            obj.flags[42] = true;
                             call("talkblue_trinket3");
                             position--;
                         } else {
@@ -3218,43 +3218,43 @@ void scriptclass::run() {
                                 position--;
                             }
                         }
-                    } else if (obj.flags[33] == 1 && obj.flags[40] == 0) {
+                    } else if (obj.flags[33] && !obj.flags[40]) {
                         // Intermission level
-                        obj.flags[40] = 1;
+                        obj.flags[40] = true;
                         call("talkblue_7");
                         position--;
-                    } else if (obj.flags[36] == 0 && game.crewstats[5]) {
+                    } else if (!obj.flags[36] && game.crewstats[5]) {
                         // Back on the ship!
-                        obj.flags[36] = 1;
+                        obj.flags[36] = true;
                         call("talkblue_3");
                         position--;
-                    } else if (obj.flags[41] == 0 && game.crewrescued() <= 4) {
+                    } else if (!obj.flags[41] && game.crewrescued() <= 4) {
                         // First trinket conversation
-                        obj.flags[41] = 1;
+                        obj.flags[41] = true;
                         call("talkblue_trinket1");
                         position--;
-                    } else if (obj.flags[41] == 1 && obj.flags[42] == 0 &&
+                    } else if (obj.flags[41] && !obj.flags[42] &&
                             game.crewrescued() == 5) {
                         // second trinket conversation
-                        obj.flags[42] = 1;
+                        obj.flags[42] = true;
                         call("talkblue_trinket2");
                         position--;
-                    } else if (obj.flags[41] == 0 && obj.flags[42] == 0 &&
+                    } else if (!obj.flags[41] && !obj.flags[42] &&
                             game.crewrescued() == 5) {
                         // Third trinket conversation
-                        obj.flags[42] = 1;
+                        obj.flags[42] = true;
                         call("talkblue_trinket3");
                         position--;
-                    } else if (obj.flags[37] == 0 && game.crewstats[2]) {
-                        obj.flags[37] = 1;
+                    } else if (!obj.flags[37] && game.crewstats[2]) {
+                        obj.flags[37] = true;
                         call("talkblue_4");
                         position--;
-                    } else if (obj.flags[38] == 0 && game.crewstats[3]) {
-                        obj.flags[38] = 1;
+                    } else if (!obj.flags[38] && game.crewstats[3]) {
+                        obj.flags[38] = true;
                         call("talkblue_5");
                         position--;
-                    } else if (obj.flags[39] == 0 && game.crewstats[4]) {
-                        obj.flags[39] = 1;
+                    } else if (!obj.flags[39] && game.crewstats[4]) {
+                        obj.flags[39] = true;
                         call("talkblue_6");
                         position--;
                     } else {
@@ -3272,62 +3272,62 @@ void scriptclass::run() {
                     if (game.insecretlab) {
                         call("talkyellow_12");
                         position--;
-                    } else if (obj.flags[67] == 1) {
+                    } else if (obj.flags[67]) {
                         // game complete
                         call("talkyellow_11");
                         position--;
-                    } else if (obj.flags[32] == 1 && obj.flags[31] == 0) {
+                    } else if (obj.flags[32] && !obj.flags[31]) {
                         // Intermission level
-                        obj.flags[31] = 1;
+                        obj.flags[31] = true;
                         call("talkyellow_6");
                         position--;
-                    } else if (obj.flags[27] == 0 && game.crewstats[2]) {
+                    } else if (!obj.flags[27] && game.crewstats[2]) {
                         // Back on the ship!
-                        obj.flags[27] = 1;
+                        obj.flags[27] = true;
                         call("talkyellow_10");
                         position--;
-                    } else if (obj.flags[43] == 0 && game.crewrescued() == 5 &&
+                    } else if (!obj.flags[43] && game.crewrescued() == 5 &&
                             !game.crewstats[5]) {
                         // If by chance we've rescued everyone except Victoria by
                         // the end, Vitellary provides you with the trinket
                         // information instead.
-                        obj.flags[43] = 1;
-                        obj.flags[42] = 1;
-                        obj.flags[41] = 1;
+                        obj.flags[43] = true;
+                        obj.flags[42] = true;
+                        obj.flags[41] = true;
                         call("talkyellow_trinket1");
                         position--;
-                    } else if (obj.flags[24] == 0 && game.crewstats[5]) {
-                        obj.flags[24] = 1;
+                    } else if (!obj.flags[24] && game.crewstats[5]) {
+                        obj.flags[24] = true;
                         call("talkyellow_8");
                         position--;
-                    } else if (obj.flags[26] == 0 && game.crewstats[4]) {
-                        obj.flags[26] = 1;
+                    } else if (!obj.flags[26] && game.crewstats[4]) {
+                        obj.flags[26] = true;
                         call("talkyellow_7");
                         position--;
-                    } else if (obj.flags[25] == 0 && game.crewstats[3]) {
-                        obj.flags[25] = 1;
+                    } else if (!obj.flags[25] && game.crewstats[3]) {
+                        obj.flags[25] = true;
                         call("talkyellow_9");
                         position--;
-                    } else if (obj.flags[28] == 0) {
-                        obj.flags[28] = 1;
+                    } else if (!obj.flags[28]) {
+                        obj.flags[28] = true;
                         call("talkyellow_3");
                         position--;
-                    } else if (obj.flags[29] == 0) {
-                        obj.flags[29] = 1;
+                    } else if (!obj.flags[29]) {
+                        obj.flags[29] = true;
                         call("talkyellow_4");
                         position--;
-                    } else if (obj.flags[30] == 0) {
-                        obj.flags[30] = 1;
+                    } else if (!obj.flags[30]) {
+                        obj.flags[30] = true;
                         call("talkyellow_5");
                         position--;
-                    } else if (obj.flags[23] == 0) {
-                        obj.flags[23] = 1;
+                    } else if (!obj.flags[23]) {
+                        obj.flags[23] = true;
                         call("talkyellow_2");
                         position--;
                     } else {
                         call("talkyellow_1");
                         position--;
-                        obj.flags[23] = 0;
+                        obj.flags[23] = false;
                     }
                 } else if (words[0] == "purplecontrol") {
                     // Controls Purple's conversion
@@ -3335,56 +3335,56 @@ void scriptclass::run() {
                     if (game.insecretlab) {
                         call("talkpurple_9");
                         position--;
-                    } else if (obj.flags[67] == 1) {
+                    } else if (obj.flags[67]) {
                         // game complete
                         call("talkpurple_8");
                         position--;
-                    } else if (obj.flags[17] == 0 && game.crewstats[4]) {
-                        obj.flags[17] = 1;
+                    } else if (!obj.flags[17] && game.crewstats[4]) {
+                        obj.flags[17] = true;
                         call("talkpurple_6");
                         position--;
-                    } else if (obj.flags[15] == 0 && game.crewstats[5]) {
-                        obj.flags[15] = 1;
+                    } else if (!obj.flags[15] && game.crewstats[5]) {
+                        obj.flags[15] = true;
                         call("talkpurple_4");
                         position--;
-                    } else if (obj.flags[16] == 0 && game.crewstats[3]) {
-                        obj.flags[16] = 1;
+                    } else if (!obj.flags[16] && game.crewstats[3]) {
+                        obj.flags[16] = true;
                         call("talkpurple_5");
                         position--;
-                    } else if (obj.flags[18] == 0 && game.crewstats[2]) {
-                        obj.flags[18] = 1;
+                    } else if (!obj.flags[18] && game.crewstats[2]) {
+                        obj.flags[18] = true;
                         call("talkpurple_7");
                         position--;
-                    } else if (obj.flags[19] == 1 && obj.flags[20] == 0 &&
-                            obj.flags[21] == 0) {
+                    } else if (obj.flags[19] && !obj.flags[20] &&
+                            !obj.flags[21]) {
                         // intermission one: if played one / not had first
                         // conversation / not played two [conversation one]
-                        obj.flags[21] = 1;
+                        obj.flags[21] = true;
                         call("talkpurple_intermission1");
                         position--;
-                    } else if (obj.flags[20] == 1 && obj.flags[21] == 1 &&
-                            obj.flags[22] == 0) {
+                    } else if (!obj.flags[20] && obj.flags[21] &&
+                            !obj.flags[22]) {
                         // intermission two: if played two / had first conversation
                         // / not had second conversation [conversation two]
-                        obj.flags[22] = 1;
+                        obj.flags[22] = true;
                         call("talkpurple_intermission2");
                         position--;
-                    } else if (obj.flags[20] == 1 && obj.flags[21] == 0 &&
-                            obj.flags[22] == 0) {
+                    } else if (obj.flags[20] && !obj.flags[21] &&
+                            !obj.flags[22]) {
                         // intermission two: if played two / not had first
                         // conversation / not had second conversation [conversation
                         // three]
-                        obj.flags[22] = 1;
+                        obj.flags[22] = true;
                         call("talkpurple_intermission3");
                         position--;
-                    } else if (obj.flags[12] == 0) {
+                    } else if (!obj.flags[12]) {
                         // Intro conversation
-                        obj.flags[12] = 1;
+                        obj.flags[12] = true;
                         call("talkpurple_intro");
                         position--;
-                    } else if (obj.flags[14] == 0) {
+                    } else if (!obj.flags[14]) {
                         // Shorter intro conversation
-                        obj.flags[14] = 1;
+                        obj.flags[14] = true;
                         call("talkpurple_3");
                         position--;
                     } else {
