@@ -42,7 +42,6 @@ mapclass::mapclass()
 
 	custommode=false;
 	custommodeforreal=false;
-	customcoins=0;
 	customx=0; customy=0;
 	customwidth=20; customheight=20;
 	custommmxoff=0; custommmyoff=0; custommmxsize=0; custommmysize=0;
@@ -2114,18 +2113,6 @@ void mapclass::loadlevel(int rx, int ry)
 		}
 		if (ed.grayenemieskludge)
 			ed.grayenemieskludge = false;
-
-		customcoins = 0;
-	    for(size_t i=0; i<edentity.size(); i++) {
-    	    if(edentity[i].t==8) {
-				if (edentity[i].p1 == 0) customcoins++;
-				else if (edentity[i].p1 == 1) customcoins += 10;
-				else if (edentity[i].p1 == 2) customcoins += 20;
-				else if (edentity[i].p1 == 3) customcoins += 50;
-				else if (edentity[i].p1 == 4) customcoins += 100;
-			}
-	    }
-		//customcoins=ed.numcoins;
 
 		//do the appear/remove roomname here
 		break;

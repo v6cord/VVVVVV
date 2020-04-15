@@ -291,7 +291,6 @@ void editorclass::reset()
     entframe=0;
     entframedelay=0;
 
-    numcoins=0;
     edentity.clear();
     levmusic=0;
 
@@ -1935,11 +1934,6 @@ std::string editorclass::warptokendest(int t) {
 
 void editorclass::countstuff()
 {
-    numcoins=0;
-    for(size_t i=0; i<edentity.size(); i++)
-    {
-        if(edentity[i].t==8) numcoins++;
-    }
 }
 
 // Switches tileset
@@ -6859,7 +6853,6 @@ void editorinput()
                                 else if (ed.cmod) addedentity(tx, ty, 8, 3);
                                 else if (ed.vmod) addedentity(tx, ty, 8, 4);
                                 else              addedentity(tx, ty, 8, 0);
-                                ed.numcoins++;
                                 //ed.lclickdelay=1;
                             }
                             else if(ed.drawmode==19)  // Teleporter
@@ -7004,7 +6997,6 @@ void editorinput()
                         if (edentity[i].x==tx && edentity[i].y==ty &&
                             edentity[i].state==ed.levaltstate &&
                             edentity[i].intower==tower) {
-                            if (edentity[i].t==8) ed.numcoins--;
                             if (edentity[i].t==14) {
                                 map.remteleporter(ed.levx, ed.levy);
                             }
@@ -7592,6 +7584,22 @@ int editorclass::numcrewmates()
         if (edentity[i].t == 15)
         {
             temp++;
+        }
+    }
+    return temp;
+}
+
+int editorclass::numcoins()
+{
+    int temp = 0;
+    for (size_t i = 0; i < edentity.size(); i++)
+    {
+        if (edentity[i].t == 8) {
+            if (edentity[i].p1 == 0) temp++;
+            else if (edentity[i].p1 == 1) temp += 10;
+            else if (edentity[i].p1 == 2) temp += 20;
+            else if (edentity[i].p1 == 3) temp += 50;
+            else if (edentity[i].p1 == 4) temp += 100;
         }
     }
     return temp;

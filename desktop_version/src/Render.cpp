@@ -2146,8 +2146,6 @@ void gamerender()
         }else{
 
             graphics.bprint(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
-            //graphics.Print(304 - (map.customcoins / 10) * 8, 231, std::to_string(map.customcoins), 255, 255, 255);
-            //graphics.drawhuetile(312, 231, 48, 8);
         }
     }
 
@@ -2160,9 +2158,9 @@ void gamerender()
         }
     }
 
-    if (map.customcoins > 0 && !game.nocoincounter) {
+    if (ed.numcoins() > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
-        if (game.coins >= map.customcoins) {
+        if (game.coins >= ed.numcoins()) {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
         } else {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);
@@ -3461,9 +3459,9 @@ void towerrender()
         }
     }
 
-    if (map.customcoins > 0 && !game.nocoincounter) {
+    if (ed.numcoins() > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
-        if (game.coins == map.customcoins) {
+        if (game.coins == ed.numcoins()) {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
         } else {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);

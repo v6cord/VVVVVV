@@ -282,8 +282,8 @@ public:
     growing_vector <int> contents;
     growing_vector <int> vmult;
     int numtrinkets();
-    int numcoins = 0;
     int numcrewmates();
+    int numcoins();
     growing_vector<edlevelclass> level;
     growing_vector<int> kludgewarpdir;
 
