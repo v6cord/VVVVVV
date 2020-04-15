@@ -1932,10 +1932,6 @@ std::string editorclass::warptokendest(int t) {
     return "("+help.String(rx)+","+help.String(ry)+")"+towerstr;
 }
 
-void editorclass::countstuff()
-{
-}
-
 // Switches tileset
 void editorclass::switch_tileset(bool reversed) {
     std::string tilesets[6] =
@@ -2693,7 +2689,6 @@ void editorclass::load(std::string& _path)
     }
 
     gethooks();
-    countstuff();
     version=2;
 }
 
