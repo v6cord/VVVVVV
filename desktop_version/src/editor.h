@@ -314,6 +314,8 @@ public:
     bool zmod = false;
     bool cmod = false;
     bool vmod = false;
+    bool bmod = false;
+    bool hmod = false;
     bool spacemod = false;
     bool warpmod = false;
     bool textentry = false;
