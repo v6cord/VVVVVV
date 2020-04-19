@@ -3853,11 +3853,11 @@ void editorrender()
             }
             else if(ed.hmod && ed.drawmode<2)
             {
-                fillboxabs(0,(ed.tiley*8)-32,320,24+48,graphics.getRGB(200,32,32));
+                fillboxabs(0,(ed.tiley*8)-32,320,24,graphics.getRGB(200,32,32));
             }
             else if(ed.bmod && ed.drawmode<2)
             {
-                fillboxabs((ed.tilex*8)-32,0,24+48,240,graphics.getRGB(200,32,32));
+                fillboxabs((ed.tilex*8)-32,0,24,240,graphics.getRGB(200,32,32));
             }
 
         }
@@ -6575,7 +6575,7 @@ void editorinput()
                                 {
                                     for(int i=0; i<30; i++)
                                     {
-                                        ed.placetilelocal(ed.tiley, i, ed.dmtile);
+                                        ed.placetilelocal(ed.tilex, i, ed.dmtile);
                                     }
                                 }
                                 else if(ed.hmod)
@@ -6636,7 +6636,7 @@ void editorinput()
                                 {
                                     for(int i=0; i<30; i++)
                                     {
-                                        ed.placetilelocal(ed.tiley, i, 80);
+                                        ed.placetilelocal(ed.tilex, i, 80);
                                     }
                                 }
                                 else if(ed.hmod)
@@ -6699,7 +6699,7 @@ void editorinput()
                             {
                                 for(int i=0; i<30; i++)
                                 {
-                                    ed.placetilelocal(ed.tiley, i, 2);
+                                    ed.placetilelocal(ed.tilex, i, 2);
                                 }
                             }
                             else if(ed.hmod)
@@ -7016,7 +7016,7 @@ void editorinput()
                     {
                         for(int i=0; i<30; i++)
                         {
-                            ed.placetilelocal(ed.tiley, i, 0);
+                            ed.placetilelocal(ed.tilex, i, 0);
                         }
                     }
                     else if(ed.hmod)
