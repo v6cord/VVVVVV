@@ -3853,11 +3853,11 @@ void editorrender()
             }
             else if(ed.hmod && ed.drawmode<2)
             {
-                fillboxabs(0,(ed.tiley*8)-32,320,24,graphics.getRGB(200,32,32));
+                fillboxabs(0,(ed.tiley*8),320,8,graphics.getRGB(200,32,32));
             }
             else if(ed.bmod && ed.drawmode<2)
             {
-                fillboxabs((ed.tilex*8)-32,0,24,240,graphics.getRGB(200,32,32));
+                fillboxabs((ed.tilex*8),0,8,240,graphics.getRGB(200,32,32));
             }
 
         }
