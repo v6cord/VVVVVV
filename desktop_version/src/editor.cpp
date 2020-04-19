@@ -6573,14 +6573,14 @@ void editorinput()
                             {
                                 if(ed.bmod)
                                 {
-                                    for(int i=0; i<30; j++)
+                                    for(int i=0; i<30; i++)
                                     {
                                         ed.placetilelocal(ed.tiley, i, ed.dmtile);
                                     }
                                 }
                                 else if(ed.hmod)
                                 {
-                                    for(int i=0; i<40; j++)
+                                    for(int i=0; i<40; i++)
                                     {
                                         ed.placetilelocal(i, ed.tiley, ed.dmtile);
                                     }
@@ -6634,14 +6634,14 @@ void editorinput()
                             {
                                 if(ed.bmod)
                                 {
-                                    for(int i=0; i<30; j++)
+                                    for(int i=0; i<30; i++)
                                     {
                                         ed.placetilelocal(ed.tiley, i, 80);
                                     }
                                 }
                                 else if(ed.hmod)
                                 {
-                                    for(int i=0; i<40; j++)
+                                    for(int i=0; i<40; i++)
                                     {
                                         ed.placetilelocal(i, ed.tiley, 80);
                                     }
@@ -6697,14 +6697,14 @@ void editorinput()
                             //place background tiles
                             if(ed.bmod)
                             {
-                                for(int i=0; i<30; j++)
+                                for(int i=0; i<30; i++)
                                 {
                                     ed.placetilelocal(ed.tiley, i, 2);
                                 }
                             }
                             else if(ed.hmod)
                             {
-                                for(int i=0; i<40; j++)
+                                for(int i=0; i<40; i++)
                                 {
                                     ed.placetilelocal(i, ed.tiley, 2);
                                 }
@@ -7014,14 +7014,14 @@ void editorinput()
                     //place tiles
                     if(ed.bmod)
                     {
-                        for(int i=0; i<30; j++)
+                        for(int i=0; i<30; i++)
                         {
                             ed.placetilelocal(ed.tiley, i, 0);
                         }
                     }
                     else if(ed.hmod)
                     {
-                        for(int i=0; i<40; j++)
+                        for(int i=0; i<40; i++)
                         {
                             ed.placetilelocal(i, ed.tiley, 0);
                         }
