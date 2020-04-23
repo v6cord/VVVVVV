@@ -1945,14 +1945,24 @@ void mapclass::loadlevel(int rx, int ry)
 		int tempcheckpoints=0;
 		int tempscriptbox=0;
 		for(size_t edi=0; edi<edentity.size(); edi++){
-			if (obj.altstates != edentity[edi].state ||
-				newtower != edentity[edi].intower)
-				continue;
-
 			// If entity is in this room, create it
 			int bx1, by1, bx2, by2;
 			int tsx = (edentity[edi].x-(edentity[edi].x%40))/40;
 			int tsy = (edentity[edi].y-(edentity[edi].y%30))/30;
+
+			int thestate = -1;
+			if (obj.altstates != 0)
+				thestate = ed.getedaltstatenum(tsx, tsy, obj.altstates);
+			int usethisaltstate;
+			if (thestate == -1)
+				usethisaltstate = 0;
+			else
+				usethisaltstate = ed.altstates[thestate].state;
+
+			if (usethisaltstate != edentity[edi].state ||
+				newtower != edentity[edi].intower)
+				continue;
+
 			int ex = edentity[edi].x * 8;
 			int ey = edentity[edi].y * 8;
 			if (!newtower) {
