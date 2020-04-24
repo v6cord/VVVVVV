@@ -2182,7 +2182,7 @@ void gamerender()
         } else if (current.type == 1) {
             auto pixels = (uint8_t*) graphics.backBuffer->pixels;
             auto row = pixels + graphics.backBuffer->pitch * current.y;
-            auto pixel = (uint32_t*) (row + current.x);
+            auto pixel = ((uint32_t*) row) + current.x;
             *pixel = graphics.getRGB(current.r, current.g, current.b);
         } else if (current.type == 2) {
             SDL_Rect temprect;
