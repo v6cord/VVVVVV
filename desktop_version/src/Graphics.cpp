@@ -747,7 +747,7 @@ void Graphics::drawtowertile3( int x, int y, int t, int off )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     int customts = ed.getcustomtiles();
-    if (customts <= 3 || customtiles.find(customts) == customtiles.end())
+    if ((game.gamestate == EDITORMODE && ed.settingsmod) || customts <= 3 || customtiles.find(customts) == customtiles.end())
         BlitSurfaceStandard(tiles3[t+(off*30)], NULL, towerbuffer, &rect);
     else
         BlitSurfaceStandard(customtiles[customts][t+(off*30)], NULL, towerbuffer, &rect);
