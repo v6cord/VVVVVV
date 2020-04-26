@@ -5816,7 +5816,7 @@ void editorinput()
                 ed.drawmode=-6;
                 ed.keydelay = 6;
             }
-            
+
             if(key.keymap[SDLK_F9]) {
                 int nextspritesheet = cycle_through_custom_resources(ed.getcustomsprites(), graphics.customsprites, false);
 
@@ -5967,7 +5967,7 @@ void editorinput()
             if (key.keymap[SDLK_1]) ed.drawmode=17;
             if (key.keymap[SDLK_2]) ed.drawmode=18;
             if (key.keymap[SDLK_3]) ed.drawmode=19;
-            
+
             if(key.keymap[SDLK_F9]) {
                 int nexttilesheet = cycle_through_custom_resources(ed.getcustomtiles(), graphics.customtiles, false);
 
