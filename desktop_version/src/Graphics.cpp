@@ -3326,6 +3326,7 @@ void Graphics::drawtele(int x, int y, int t, int c)
 	if (t > 9) t = 8;
 	if (t < 0) t = 0;
 
+	setRect(telerect, x , y, tele_rect.w, tele_rect.h );
 	BlitSurfaceColoured(tele[t], NULL, backBuffer, &telerect, ct);
 }
 
@@ -3343,6 +3344,7 @@ void Graphics::drawtelepart(int x, int y, int t, int c)
 	if (t > 9) t = 8;
 	if (t < 0) t = 0;
 
+	setRect(telerect2, 40, 40, 16, 16 );
 	BlitSurfaceColoured(tele[t], &telerect2, backBuffer, &telerect, ct);
 }
 
