@@ -735,14 +735,22 @@ void Graphics::drawentcolours( int x, int y, int t)
 void Graphics::drawtowertile( int x, int y, int t )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles2[t], NULL, towerbuffer, &rect);
+    int customts = ed.getcustomtiles();
+    if (customts <= 3 || customtiles.find(customts) == customtiles.end())
+        BlitSurfaceStandard(tiles2[t], NULL, towerbuffer, &rect);
+    else
+        BlitSurfaceStandard(customtiles[customts][t], NULL, towerbuffer, &rect);
 }
 
 
 void Graphics::drawtowertile3( int x, int y, int t, int off )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles3[t+(off*30)], NULL, towerbuffer, &rect);
+    int customts = ed.getcustomtiles();
+    if (customts <= 3 || customtiles.find(customts) == customtiles.end())
+        BlitSurfaceStandard(tiles3[t+(off*30)], NULL, towerbuffer, &rect);
+    else
+        BlitSurfaceStandard(customtiles[customts][t+(off*30)], NULL, towerbuffer, &rect);
 }
 
 void Graphics::drawgui()

@@ -5980,6 +5980,7 @@ void editorinput()
                 ed.notedelay = 45;
                 ed.updatetiles = true;
                 ed.keydelay = 6;
+                graphics.backgrounddrawn = false;
             }
 
         } else {
@@ -6141,6 +6142,7 @@ void editorinput()
                 ed.notedelay = 45;
                 ed.updatetiles = true;
                 ed.keydelay = 6;
+                graphics.backgrounddrawn = false;
             }
             if(key.keymap[SDLK_F10])
             {
