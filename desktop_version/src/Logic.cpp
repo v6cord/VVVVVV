@@ -4,6 +4,8 @@
 
 extern scriptclass script;
 
+int last_gravity = -1;
+
 void titlelogic()
 {
     //Misc
@@ -318,6 +320,7 @@ void towerlogic()
                 }
 
                 game.gravitycontrol = game.savegc;
+                last_gravity = -1;
                 graphics.textboxremove();
                 map.resetplayer();
             }
@@ -579,6 +582,11 @@ void towerlogic()
     }
 
     if (game.teleport_to_new_area) script.teleport();
+
+    if (last_gravity != -1 && last_gravity != game.gravitycontrol) {
+        script.callback("on_flip");
+    }
+    last_gravity = game.gravitycontrol;
 }
 
 void gamelogic()
@@ -765,6 +773,7 @@ void gamelogic()
 
 
                 game.gravitycontrol = game.savegc;
+                last_gravity = -1;
                 graphics.textboxremove();
                 map.resetplayer();
             }
@@ -1575,4 +1584,9 @@ void gamelogic()
         script.teleport();
 
     game.nofriction = false;
+
+    if (last_gravity != -1 && last_gravity != game.gravitycontrol) {
+        script.callback("on_flip");
+    }
+    last_gravity = game.gravitycontrol;
 }
