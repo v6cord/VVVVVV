@@ -3622,16 +3622,24 @@ void editorrender()
                 graphics.Print(ex, ey, edentity[i].scriptname,
                             196, 196, 255 - help.glow);
                 break;
-            case 18: // Terminals
+            case 18: { // Terminals
                 ty = ey;
-                if (!edentity[i].p1) // Unflipped
-                    ty += 8;
 
-                graphics.drawsprite(ex, ty, 16 + !edentity[i].p1, 96, 96, 96);
+                int usethistile = edentity[i].p1;
+
+                if (usethistile == 0) {
+                    usethistile = 1; // Unflipped
+                } else if (usethistile == 1) {
+                    usethistile = 0; // Flipped
+                    ty -= 8;
+                }
+
+                graphics.drawsprite(ex, ty+8, 16 + usethistile, 96, 96, 96);
                 fillboxabs(ex, ey, 16, 24, graphics.getRGB(164,164,164));
                 if(ed.temp==i)
                     graphics.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
                 break;
+            }
             case 19: // Script Triggers
                 fillboxabs(ex, ey, edentity[i].p1*8 + edentity[i].p3, edentity[i].p2*8 + edentity[i].p4,
                            edentity[i].onetime ? graphics.getRGB(255,255,164) : graphics.getRGB(255,164,255));

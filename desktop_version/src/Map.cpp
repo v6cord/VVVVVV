@@ -2065,10 +2065,17 @@ void mapclass::loadlevel(int rx, int ry)
 			case 18: { // Terminals
 				obj.customscript = edentity[edi].scriptname;
 
-				if (!edentity[edi].p1) // Unflipped
-					ey += 8;
+				int usethistile = edentity[edi].p1;
+				int usethisy = edentity[edi].y;
 
-				obj.createentity(ex, ey, 20, !edentity[edi].p1);
+				if (usethistile == 0) {
+					usethistile = 1; // Unflipped
+				} else if (usethistile == 1) {
+					usethistile = 0; // Flipped
+					usethisy--;
+				}
+
+				obj.createentity(ex, (usethisy+1)*8, 20, usethistile);
 				int ew = 16;
 				if (!IS_VCE_LEVEL) {
 					// Misalign the activity zone exactly like it's misaligned in vanilla
