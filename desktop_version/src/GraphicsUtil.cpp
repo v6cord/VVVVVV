@@ -456,7 +456,6 @@ void EraseSurface(
     }
 }
 
-bool alreadydone = false; // TEMP DEBUG
 void BlitSurfaceTint(
     SDL_Surface* _src,
     SDL_Rect* _srcRect,
