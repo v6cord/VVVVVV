@@ -54,10 +54,18 @@ std::string find_website(std::string_view buf);
 
 class edentities{
 public:
-    int x, y, t = 0;
-    int subx, suby = 0;
+    int x = 0;
+    int y = 0;
+    int t = 0;
+    int subx = 0;
+    int suby = 0;
     //parameters
-    int p1, p2, p3, p4, p5, p6 = 0;
+    int p1 = 0;
+    int p2 = 0;
+    int p3 = 0;
+    int p4 = 0;
+    int p5 = 0;
+    int p6 = 0;
     int state = 0;
     int intower = 0;
     std::string scriptname;
@@ -70,7 +78,10 @@ public:
 class edlevelclass{
 public:
     edlevelclass();
-    int tileset, tilecol, customtileset, customspritesheet = 0;
+    int tileset = 0;
+    int tilecol = 0;
+    int customtileset = 0;
+    int customspritesheet = 0;
     std::string roomname;
     int warpdir = 0;
     int platx1 = 0;
@@ -79,7 +90,11 @@ public:
     int platy2 = 0;
     int platv = 0;
     int enemyv = 0;
-    int enemyx1, enemyy1, enemyx2, enemyy2, enemytype = 0;
+    int enemyx1 = 0;
+    int enemyy1 = 0;
+    int enemyx2 = 0;
+    int enemyy2 = 0;
+    int enemytype = 0;
     int directmode = 0;
     int tower = 0;
     int tower_row = 0;
@@ -88,7 +103,8 @@ public:
 class edaltstate {
 public:
     edaltstate();
-    int x, y = -1; // -1 means not set
+    int x = -1;
+    int y = -1; // -1 means not set
     int state = -1;
     growing_vector<int> tiles;
 
@@ -293,12 +309,16 @@ public:
     std::string filename;
 
     int drawmode = 0;
-    int tilex, tiley = 0;
-    int keydelay, lclickdelay = 0;
+    int tilex = 0;
+    int tiley = 0;
+    int keydelay = 0;
+    int lclickdelay = 0;
     bool savekey, loadkey = false;
-    int levx, levy = 0;
+    int levx = 0;
+    int levy = 0;
     int levaltstate = 0;
-    int entframe, entframedelay = 0;
+    int entframe = 0;
+    int entframedelay = 0;
 
     enum textmode textmod; // In text entry
     std::string *textptr; // Pointer to text we're changing
@@ -333,19 +353,27 @@ public:
 
     int roomnamehide = 0;
     bool saveandquit = false;
-    bool shiftmenu, shiftkey = false;
+    bool shiftmenu = false;
+    bool shiftkey = false;
     int spacemenu = 0;
-    bool settingsmod, settingskey = false;
+    bool settingsmod = false;
+    bool settingskey = false;
     bool trialmod = false;
     int warpent = 0;
-    bool updatetiles, changeroom = false;
+    bool updatetiles = false;
+    bool changeroom = false;
     int deletekeyheld = 0;
 
-    int boundarymod, boundarytype = 0;
-    int boundx1, boundx2, boundy1, boundy2 = 0;
+    int boundarymod = 0;
+    int boundarytype = 0;
+    int boundx1 = 0;
+    int boundx2 = 0;
+    int boundy1 = 0;
+    int boundy2 = 0;
 
     int levmusic = 0;
-    int mapwidth, mapheight = 0; //Actual width and height of stage
+    int mapwidth = 0;
+    int mapheight = 0; //Actual width and height of stage
 
     //Special; the physical max the engine allows
     int maxwidth = 100;
@@ -359,10 +387,12 @@ public:
     void insertline(int t);
 
     bool scripteditmod = false;
-    int scripthelppage, scripthelppagedelay = 0;
+    int scripthelppage = 0;
+    int scripthelppagedelay = 0;
     std::vector<std::string> sb;
     std::string sbscript;
-    int sbx, sby = 0;
+    int sbx = 0;
+    int sby = 0;
     int pagey = 0;
 
     std::string author;
@@ -380,7 +410,8 @@ public:
     bool checkhook(std::string t);
     std::vector<std::string> hooklist;
 
-    int hookmenupage, hookmenu = 0;
+    int hookmenupage = 0;
+    int hookmenu = 0;
 
     //Direct Mode variables
     int dmtile = 0;
