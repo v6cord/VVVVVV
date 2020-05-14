@@ -458,11 +458,11 @@ void musicclass::playfile(const char* t, std::string track, int loops, bool inte
     }
 
     if (track != "") {
-	if (custom_file_paths[track] != t) {
-	    stopfile(track);
-	    if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, loops);
-	    custom_file_paths[track] = t;
-	}
+        if (custom_file_paths[track] != t) {
+            stopfile(track);
+            if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, loops);
+            custom_file_paths[track] = t;
+        }
     } else {
         channel = Mix_PlayChannel(-1, pair->second.sound, loops);
     }
