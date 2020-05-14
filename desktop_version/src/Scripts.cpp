@@ -396,6 +396,8 @@ void scriptclass::load(std::string t)
 
         if (!thelabel.empty() && labels.find(thelabel) != labels.end())
           position = labels[thelabel];
+        else
+          running = false;
       }
 
       return;
