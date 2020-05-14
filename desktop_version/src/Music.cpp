@@ -15,10 +15,10 @@ extern scriptclass script;
 
 void musicclass::init()
 {
-        if (!loaded) soundSystem.init();
+	if (!loaded) soundSystem.init();
 
-        soundTracks.clear();
-        musicTracks.clear();
+	soundTracks.clear();
+	musicTracks.clear();
 
 	soundTracks.push_back(std::move(SoundTrack( "sounds/jump.wav" )));
 	soundTracks.push_back(std::move(SoundTrack( "sounds/jump2.wav" )));
@@ -72,7 +72,7 @@ void musicclass::init()
 #endif
 
 	binaryBlob musicReadBlob;
-        if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
+	if (!musicReadBlob.unPackBinary("mmmmmm.vvv"))
 	{
 		mmmmmm = false;
 		if (!loaded) usingmmmmmm=false;
@@ -232,7 +232,7 @@ void musicclass::init()
 	fadeoutqueuesong = -1;
 	dontquickfade = false;
 
-        loaded = true;
+	loaded = true;
 }
 
 void musicclass::play(int t, int fadeintime /* = 3000*/)
@@ -246,16 +246,16 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 			t += 16;
 		}
 	}
-    if (muted)
-    {
-        currentsong = t;
-        return;
-    }
+	if (muted)
+	{
+		currentsong = t;
+		return;
+	}
 	safeToProcessMusic = true;
 	Mix_VolumeMusic(128);
 	if (currentsong !=t)
 	{
-            haltdasmusik();
+		haltdasmusik();
 		if (t != -1)
 		{
 			currentsong = t;
@@ -293,22 +293,22 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 
 void musicclass::haltdasmusik()
 {
-    Mix_HaltMusic();
-    currentsong = -1;
-    for (auto&& [id, channel] : custom_file_channels) {
-        Mix_HaltChannel(channel);
-    }
-    custom_file_channels.clear();
-    custom_file_paths.clear();
+	Mix_HaltMusic();
+	currentsong = -1;
+	for (auto&& [id, channel] : custom_file_channels) {
+		Mix_HaltChannel(channel);
+	}
+	custom_file_channels.clear();
+	custom_file_paths.clear();
 }
 
 void musicclass::silencedasmusik()
 {
 	Mix_VolumeMusic(0) ;
 	musicVolume = 0;
-    for (auto&& [id, channel] : custom_file_channels) {
-        Mix_Volume(channel, 0);
-    }
+	for (auto&& [id, channel] : custom_file_channels) {
+		Mix_Volume(channel, 0);
+	}
 }
 
 void musicclass::fadeMusicVolumeIn(int ms)
@@ -321,20 +321,20 @@ void musicclass::fadeout()
 {
 	Mix_FadeOutMusic(2000);
 	currentsong = -1;
-    for (auto&& [id, channel] : custom_file_channels) {
-        Mix_FadeOutChannel(channel, 2000);
-    }
-    custom_file_channels.clear();
-    custom_file_paths.clear();
+	for (auto&& [id, channel] : custom_file_channels) {
+		Mix_FadeOutChannel(channel, 2000);
+	}
+	custom_file_channels.clear();
+	custom_file_paths.clear();
 }
 
 void musicclass::processmusicfadein()
 {
 	musicVolume += FadeVolAmountPerFrame;
 	Mix_VolumeMusic(musicVolume);
-        for (auto&& [id, channel] : custom_file_channels) {
-            Mix_Volume(channel, musicVolume);
-        }
+	for (auto&& [id, channel] : custom_file_channels) {
+		Mix_Volume(channel, musicVolume);
+	}
 	if (musicVolume >= MIX_MAX_VOLUME)
 	{
 		m_doFadeInVol = false;
@@ -430,62 +430,62 @@ void musicclass::changemusicarea(int x, int y)
 
 void musicclass::playfile(const char* t, std::string track, int loops, bool internal /*= false*/)
 {
-    std::string temp;
-    if (internal) {
-        --t; // weird pointer bug?
-        temp = t;
-        temp += ".ogg";
-        t = temp.c_str();
-        if (PHYSFS_getRealDir(t) != PHYSFS_getRealDir("VVVVVV.png")) return;
-    }
+	std::string temp;
+	if (internal) {
+		--t; // weird pointer bug?
+		temp = t;
+		temp += ".ogg";
+		t = temp.c_str();
+		if (PHYSFS_getRealDir(t) != PHYSFS_getRealDir("VVVVVV.png")) return;
+	}
 
-    int channel = 0;
+	int channel = 0;
 
-    auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
-    if (inserted) {
-        SoundTrack track(t);
-        pair->second.sound = track.sound;
-        pair->second.isValid = track.isValid;
-        track.isValid = false;
-    }
+	auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
+	if (inserted) {
+		SoundTrack track(t);
+		pair->second.sound = track.sound;
+		pair->second.isValid = track.isValid;
+		track.isValid = false;
+	}
 
-    if (track != "") {
-        custom_file_loops[track] = loops;
-    }
+	if (track != "") {
+		custom_file_loops[track] = loops;
+	}
 
-    if (loops != -1) {
-        --loops;
-    }
+	if (loops != -1) {
+		--loops;
+	}
 
-    if (track != "") {
-        if (custom_file_paths[track] != t) {
-            stopfile(track);
-            if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, loops);
-            custom_file_paths[track] = t;
-        }
-    } else {
-        channel = Mix_PlayChannel(-1, pair->second.sound, loops);
-    }
+	if (track != "") {
+		if (custom_file_paths[track] != t) {
+			stopfile(track);
+			if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, loops);
+			custom_file_paths[track] = t;
+		}
+	} else {
+		channel = Mix_PlayChannel(-1, pair->second.sound, loops);
+	}
 
-    if (channel == -1) {
-        fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
-        return;
-    } else if (track != "") {
-        custom_file_channels[track] = channel;
-    }
+	if (channel == -1) {
+		fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+		return;
+	} else if (track != "") {
+		custom_file_channels[track] = channel;
+	}
 
-    if (track == "" || loops >= 0) {
-        custom_channel_paths[channel] = t;
-    }
+	if (track == "" || loops >= 0) {
+		custom_channel_paths[channel] = t;
+	}
 }
 
 void musicclass::stopfile(std::string track) {
-    auto iter = custom_file_channels.find(track);
-    if (iter != custom_file_channels.end()) {
-        Mix_FadeOutChannel(iter->second, 100);
-        custom_file_channels.erase(iter);
-    }
-    custom_file_paths.erase(track);
+	auto iter = custom_file_channels.find(track);
+	if (iter != custom_file_channels.end()) {
+		Mix_FadeOutChannel(iter->second, 100);
+		custom_file_channels.erase(iter);
+	}
+	custom_file_paths.erase(track);
 }
 
 void musicclass::playef(int t)
