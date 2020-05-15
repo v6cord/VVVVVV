@@ -394,10 +394,12 @@ void scriptclass::load(std::string t)
           add("untilbars()");
         }
 
-        if (!thelabel.empty() && labels.find(thelabel) != labels.end())
-          position = labels[thelabel];
-        else
-          running = false;
+        if (!thelabel.empty()) {
+          if (labels.find(thelabel) != labels.end())
+            position = labels[thelabel];
+          else
+            running = false;
+        }
       }
 
       return;
