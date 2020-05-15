@@ -1315,6 +1315,7 @@ void scriptclass::run() {
                         map.finalstretch = true;
                         map.final_colormode = true;
                         map.final_colorframe = 1;
+                        map.final_colorframedelay = 0;
                         map.colsuperstate = 1;
                     } else {
                         map.finalstretch = false;
