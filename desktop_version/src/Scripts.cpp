@@ -354,8 +354,7 @@ void scriptclass::load(std::string t)
             || words[0] == "drawtext"
             || words[0] == "createroomtext"
             || words[0] == "customactivityzone"
-            || ((words[0] == "addvar" || words[0] == "setvar" || words[0] == "getvar") && words[2] == "")
-            || ((words[0] == "ifvar" || words[0] == "if") && words[4] == "")) {
+            || ((words[0] == "addvar" || words[0] == "setvar" || words[0] == "getvar") && words[2] == "")) {
               // Don't parse the next line if it is a textbox-like line
               add(script.customscript[i]);
               i++;
