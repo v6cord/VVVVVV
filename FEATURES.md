@@ -1,6 +1,6 @@
 A list of all the new features added to VVVVVV: Community Edition.
 
-VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60228, FIQ, Stelpjo, mothbeanie, Allison Fleischer, Dav999, and Joshua.
+VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60228, FIQ, Fußmatte, mothbeanie, Allison Fleischer, Dav999, and Joshua.
 
 ## Version c1.0-pre2 (upcoming)
 
