@@ -877,7 +877,7 @@ void titlerender()
             graphics.Print( -1, base + 55,  "AllyTally",  tr, tg, tb, true);
             graphics.Print( -1, base + 70,  "leo60228",   tr, tg, tb, true);
             graphics.Print( -1, base + 85,  "FIQ",        tr, tg, tb, true);
-            graphics.Print( -1, base + 100, "Stelpjo",    tr, tg, tb, true);
+            graphics.Print( -1, base + 100, "Fußmatte",    tr, tg, tb, true);
             graphics.Print( -1, base + 115, "mothbeanie", tr, tg, tb, true);
             graphics.Print( -1, base + 130, "Allison Fleischer", tr, tg, tb, true);
             graphics.Print( -1, base + 145, "Dav999", tr, tg, tb, true);
