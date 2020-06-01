@@ -2066,23 +2066,24 @@ void mapclass::loadlevel(int rx, int ry)
 				obj.customscript = edentity[edi].scriptname;
 
 				int usethistile = edentity[edi].p1;
-				int usethisy = edentity[edi].y;
+				int usethisy = ey;
 
+				// This isn't a boolean: we just swap 0 and 1 around and leave the rest alone
 				if (usethistile == 0) {
 					usethistile = 1; // Unflipped
 				} else if (usethistile == 1) {
 					usethistile = 0; // Flipped
-					usethisy--;
+					usethisy -= 8;
 				}
 
-				obj.createentity(ex, (usethisy+1)*8, 20, usethistile);
+				obj.createentity(ex, usethisy+8, 20, usethistile);
 				int ew = 16;
 				if (!IS_VCE_LEVEL) {
 					// Misalign the activity zone exactly like it's misaligned in vanilla
 					ex -= 8; // only modify ex here because it's also used in the createentity above
 					ew += 4;
 				}
-				obj.createblock(5, ex, ey, ew, 16, 35);
+				obj.createblock(5, ex, usethisy+8, ew, 16, 35);
 				break;
 			}
 			case 19: // Script Box
