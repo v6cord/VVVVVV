@@ -4850,7 +4850,7 @@ void editormenuactionpress()
         else if (game.currentmenuoption == (int)ed.customtrials.size()+1)
         {
             music.playef(11);
-            game.createmenu(Menu::ed_settings);
+            game.returnmenu();
             map.nexttowercolour();
         }
         else
@@ -4942,7 +4942,7 @@ void editormenuactionpress()
             break;
         case 4:
             music.playef(11);
-            game.createmenu(Menu::ed_settings);
+            game.returnmenu();
             map.nexttowercolour();
             break;
         }
