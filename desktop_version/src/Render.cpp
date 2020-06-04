@@ -680,7 +680,6 @@ void menurender()
     else if (game.currentmenuname == "options")
     {
 
-#if defined(MAKEANDPLAY)
     if (game.currentmenuoption == 0)
     {
         graphics.bigprint( -1, 30, "Accessibility", tr, tg, tb, true);
@@ -689,12 +688,11 @@ void menurender()
     }
     else if (game.currentmenuoption == 1)
     {
-        graphics.bigprint( -1, 30, "Game Pad Options", tr, tg, tb, true);
-        graphics.Print( -1, 65, "Rebind your controller's buttons", tr, tg, tb, true);
-        graphics.Print( -1, 75, "and adjust sensitivity", tr, tg, tb, true);
-    }
-    else if (game.currentmenuoption == 2)
-    {
+#if !defined(MAKEANDPLAY)
+        graphics.bigprint( -1, 30, "Unlock Play Modes", tr, tg, tb, true);
+        graphics.Print( -1, 65, "Unlock parts of the game normally", tr, tg, tb, true);
+        graphics.Print( -1, 75, "unlocked as you progress", tr, tg, tb, true);
+#else
         graphics.bigprint( -1, 30, "Flip Mode", tr, tg, tb, true);
         graphics.Print( -1, 65, "Flip the entire game vertically.", tr, tg, tb, true);
         if (graphics.setflipmode)
@@ -705,35 +703,7 @@ void menurender()
         {
             graphics.Print( -1, 105, "Currently Disabled.", tr/2, tg/2, tb/2, true);
         }
-    }
-    else if (game.currentmenuoption == 3)
-    {
-        graphics.bigprint( -1, 30, "Clear Data", tr, tg, tb, true);
-        graphics.Print( -1, 65, "Delete your save data", tr, tg, tb, true);
-        graphics.Print( -1, 75, "and unlocked play modes", tr, tg, tb, true);
-    }else if (game.currentmenuoption == 4){
-        if(music.mmmmmm){
-            graphics.bigprint( -1, 30, "Soundtrack", tr, tg, tb, true);
-            graphics.Print( -1, 65, "Toggle between MMMMMM and PPPPPP", tr, tg, tb, true);
-            if(music.usingmmmmmm){
-                graphics.Print( -1, 85, "Current soundtrack: MMMMMM", tr, tg, tb, true);
-            }else{
-                graphics.Print( -1, 85, "Current soundtrack: PPPPPP", tr, tg, tb, true);
-            }
-        }
-    }
-#elif !defined(MAKEANDPLAY)
-    if (game.currentmenuoption == 0)
-    {
-        graphics.bigprint( -1, 30, "Accessibility", tr, tg, tb, true);
-        graphics.Print( -1, 65, "Disable screen effects, enable", tr, tg, tb, true);
-        graphics.Print( -1, 75, "slowdown modes or invincibility", tr, tg, tb, true);
-    }
-    else if (game.currentmenuoption == 1)
-    {
-        graphics.bigprint( -1, 30, "Unlock Play Modes", tr, tg, tb, true);
-        graphics.Print( -1, 65, "Unlock parts of the game normally", tr, tg, tb, true);
-        graphics.Print( -1, 75, "unlocked as you progress", tr, tg, tb, true);
+#endif
     }
     else if (game.currentmenuoption == 2)
     {
@@ -758,7 +728,6 @@ void menurender()
             }
         }
     }
-#endif
     }
     else if (game.currentmenuname == "graphicoptions")
     {
