@@ -387,7 +387,6 @@ void menuactionpress()
             graphics.screenbuffer->toggleFullScreen();
             game.fullscreen = !game.fullscreen;
             game.savestats();
-            game.createmenu(Menu::graphicoptions);
             game.currentmenuoption = 0;
             break;
         case 1:
@@ -395,7 +394,6 @@ void menuactionpress()
             graphics.screenbuffer->toggleStretchMode();
             game.stretchMode = (game.stretchMode + 1) % 7;
             game.savestats();
-            game.createmenu(Menu::graphicoptions);
             game.currentmenuoption = 1;
             break;
         case 2:
@@ -403,7 +401,6 @@ void menuactionpress()
             graphics.screenbuffer->toggleLinearFilter();
             game.useLinearFilter = !game.useLinearFilter;
             game.savestats();
-            game.createmenu(Menu::graphicoptions);
             game.currentmenuoption = 2;
             break;
         case 3:
@@ -412,7 +409,6 @@ void menuactionpress()
             game.fullScreenEffect_badSignal = !game.fullScreenEffect_badSignal;
             graphics.screenbuffer->badSignalEffect= !graphics.screenbuffer->badSignalEffect;
             game.savestats();
-            game.createmenu(Menu::graphicoptions);
             game.currentmenuoption = 3;
             break;
         case 4:
