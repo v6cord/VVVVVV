@@ -733,7 +733,7 @@ const char* open_cmd = "open";
 extern "C" char** environ;
 
 bool FILESYSTEM_openDirectoryEnabled() {
-    return true;
+    return std::getenv("SteamTenfoot") == NULL;
 }
 
 bool FILESYSTEM_openDirectory(const char *dname) {

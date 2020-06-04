@@ -364,16 +364,19 @@ void menuactionpress()
             break;
  #endif
         case OFFSET+2:
-            if (FILESYSTEM_openDirectory(FILESYSTEM_getUserLevelDirectory())) {
+            if (FILESYSTEM_openDirectoryEnabled()
+            && FILESYSTEM_openDirectory(FILESYSTEM_getUserLevelDirectory())) {
                 music.playef(11);
             } else {
                 music.playef(2);
             }
+            break;
         case OFFSET+3:
             //back
             music.playef(11);
             game.returnmenu();
             map.nexttowercolour();
+            break;
         }
  #undef OFFSET
         break;
