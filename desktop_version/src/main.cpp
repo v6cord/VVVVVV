@@ -633,7 +633,7 @@ int main(int argc, char *argv[])
             {
                 Mix_Volume(-1,MIX_MAX_VOLUME);
 
-                if (game.musicmuted)
+                if (game.musicmuted || game.completestop)
                 {
                     Mix_VolumeMusic(0);
                 }
