@@ -250,7 +250,7 @@ void menuactionpress()
             }else{
                 game.levelpage++;
             }
-            game.createmenu(Menu::levellist);
+            game.createmenu(Menu::levellist, true);
             game.currentmenuoption=game.menuoptions.size()-2;
             map.nexttowercolour();
         }else if(game.currentmenuoption==(int)game.menuoptions.size()-3){
@@ -656,7 +656,7 @@ void menuactionpress()
             game.unlocknotify[9] = true;
             music.playef(11);
             game.savestats();
-            game.createmenu(Menu::unlockmenutrials);
+            game.createmenu(Menu::unlockmenutrials, true);
             game.currentmenuoption = 0;
             break;
         case 1:   	//unlock 2
@@ -664,7 +664,7 @@ void menuactionpress()
             game.unlocknotify[10] = true;
             music.playef(11);
             game.savestats();
-            game.createmenu(Menu::unlockmenutrials);
+            game.createmenu(Menu::unlockmenutrials, true);
             game.currentmenuoption = 1;
             break;
         case 2:   	//unlock 3
@@ -672,7 +672,7 @@ void menuactionpress()
             game.unlocknotify[11] = true;
             music.playef(11);
             game.savestats();
-            game.createmenu(Menu::unlockmenutrials);
+            game.createmenu(Menu::unlockmenutrials, true);
             game.currentmenuoption = 2;
             break;
         case 3:   	//unlock 4
@@ -680,7 +680,7 @@ void menuactionpress()
             game.unlocknotify[12] = true;
             music.playef(11);
             game.savestats();
-            game.createmenu(Menu::unlockmenutrials);
+            game.createmenu(Menu::unlockmenutrials, true);
             game.currentmenuoption = 3;
             break;
         case 4:   	//unlock 5
@@ -688,7 +688,7 @@ void menuactionpress()
             game.unlocknotify[13] = true;
             music.playef(11);
             game.savestats();
-            game.createmenu(Menu::unlockmenutrials);
+            game.createmenu(Menu::unlockmenutrials, true);
             game.currentmenuoption = 4;
             break;
         case 5:   	//unlock 6
@@ -696,7 +696,7 @@ void menuactionpress()
             game.unlocknotify[14] = true;
             music.playef(11);
             game.savestats();
-            game.createmenu(Menu::unlockmenutrials);
+            game.createmenu(Menu::unlockmenutrials, true);
             game.currentmenuoption = 5;
             break;
         case 6:   	//back
@@ -724,7 +724,7 @@ void menuactionpress()
             game.unlock[6] = true;
             game.unlock[7] = true;
             game.savestats();
-            game.createmenu(Menu::unlockmenu);
+            game.createmenu(Menu::unlockmenu, true);
             game.currentmenuoption = 1;
             break;
         case 2:
@@ -733,7 +733,7 @@ void menuactionpress()
             game.unlock[17] = true;
             game.unlocknotify[17] = true;
             game.savestats();
-            game.createmenu(Menu::unlockmenu);
+            game.createmenu(Menu::unlockmenu, true);
             game.currentmenuoption = 2;
             break;
         case 3:
@@ -742,7 +742,7 @@ void menuactionpress()
             game.unlock[18] = true;
             game.unlocknotify[18] = true;
             game.savestats();
-            game.createmenu(Menu::unlockmenu);
+            game.createmenu(Menu::unlockmenu, true);
             game.currentmenuoption = 3;
             break;
         case 4:
@@ -750,7 +750,7 @@ void menuactionpress()
             music.playef(11);
             game.stat_trinkets = 20;
             game.savestats();
-            game.createmenu(Menu::unlockmenu);
+            game.createmenu(Menu::unlockmenu, true);
             game.currentmenuoption = 4;
             break;
         case 5:
@@ -759,7 +759,7 @@ void menuactionpress()
             game.unlock[8] = true;
             game.unlocknotify[8] = true;
             game.savestats();
-            game.createmenu(Menu::unlockmenu);
+            game.createmenu(Menu::unlockmenu, true);
             game.currentmenuoption = 5;
             break;
         default:
@@ -781,7 +781,7 @@ void menuactionpress()
         case 0:
             //next page
             music.playef(11);
-            game.createmenu(Menu::credits_ce);
+            game.createmenu(Menu::credits_ce, true);
             map.nexttowercolour();
             break;
         case 1:
@@ -798,7 +798,7 @@ void menuactionpress()
         case 0:
             //next page
             music.playef(11);
-            game.createmenu(Menu::credits2);
+            game.createmenu(Menu::credits2, true);
             map.nexttowercolour();
             break;
         default:
@@ -816,7 +816,7 @@ void menuactionpress()
 #if defined(MAKEANDPLAY)
             //first page
             music.playef(11);
-            game.createmenu(Menu::credits);
+            game.createmenu(Menu::credits, true);
             map.nexttowercolour();
 #elif !defined(MAKEANDPLAY)
             //next page
@@ -827,12 +827,12 @@ void menuactionpress()
             {
                 // No more patrons. Move to the next credits section
                 game.current_credits_list_index = 0;
-                game.createmenu(Menu::credits5);
+                game.createmenu(Menu::credits5, true);
             }
             else
             {
                 // There are more patrons. Refresh the menu with the next ones
-                game.createmenu(Menu::credits4);
+                game.createmenu(Menu::credits4, true);
             }
 
             map.nexttowercolour();
@@ -859,12 +859,12 @@ void menuactionpress()
             {
                 // No more GitHub contributors. Move to the next credits section
                 game.current_credits_list_index = 0;
-                game.createmenu(Menu::credits6);
+                game.createmenu(Menu::credits6, true);
             }
             else
             {
                 // There are more GitHub contributors. Refresh the menu with the next ones
-                game.createmenu(Menu::credits5);
+                game.createmenu(Menu::credits5, true);
             }
 
             map.nexttowercolour();
@@ -884,7 +884,7 @@ void menuactionpress()
         case 0:
             //first page
             music.playef(11);
-            game.createmenu(Menu::credits);
+            game.createmenu(Menu::credits, true);
             map.nexttowercolour();
             break;
         default:
@@ -1206,7 +1206,7 @@ void menuactionpress()
     case Menu::unlockflipmode:
         //back
         music.playef(11);
-        game.createmenu(Menu::play);
+        game.createmenu(Menu::play, true);
         map.nexttowercolour();
         break;
     case Menu::timetrials:

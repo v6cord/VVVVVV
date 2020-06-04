@@ -5005,7 +5005,7 @@ void editormenuactionpress()
             break;
         case 6:
             music.playef(11);
-            game.createmenu(Menu::ed_settings2);
+            game.createmenu(Menu::ed_settings2, true);
             map.nexttowercolour();
             break;
         case 7:
@@ -5111,7 +5111,7 @@ void editormenuactionpress()
         }
         if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
             music.playef(11);
-            game.createmenu(Menu::ed_settings3);
+            game.createmenu(Menu::ed_settings3, true);
             map.nexttowercolour();
         }
         break;
@@ -5131,7 +5131,7 @@ void editormenuactionpress()
             ed.updatetiles=true;
             ed.keydelay=6;
 
-            game.createmenu(Menu::ed_settings3);
+            game.createmenu(Menu::ed_settings3, true);
             break;
         case 1:
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
@@ -5235,7 +5235,7 @@ void editormenuactionpress()
         }
         if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
             music.playef(11);
-            game.createmenu(Menu::ed_settings);
+            game.createmenu(Menu::ed_settings, true);
             map.nexttowercolour();
         }
         break;
