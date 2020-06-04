@@ -277,15 +277,13 @@ void preloaderloop() {
         {
             //if (game.globalsound == 1)
             //{
-                game.globalsound = 0;
                 Mix_VolumeMusic(0) ;
                 Mix_Volume(-1,0);
             //}
         }
 
-        if (!game.muted && game.globalsound == 0)
+        if (!game.muted)
         {
-            game.globalsound = 1;
             Mix_VolumeMusic(MIX_MAX_VOLUME) ;
             Mix_Volume(-1,MIX_MAX_VOLUME);
         }
