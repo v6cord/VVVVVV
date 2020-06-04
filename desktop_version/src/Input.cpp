@@ -658,35 +658,26 @@ void menuactionpress()
             map.nexttowercolour();
         }
 
-        if(music.mmmmmm){
-            if (game.currentmenuoption == 4)
-            {
-                //**** TOGGLE MMMMMM
-                if(game.usingmmmmmm > 0){
-                    game.usingmmmmmm=0;
-                }else{
-                    game.usingmmmmmm=1;
-                }
-                music.usingmmmmmm = !music.usingmmmmmm;
-                music.playef(11);
-                music.play(6);
-                game.savestats();
+        int mmmmmm_offset = music.mmmmmm ? 0 : -1;
+        if (game.currentmenuoption == 4+mmmmmm_offset)
+        {
+            //**** TOGGLE MMMMMM
+            if(game.usingmmmmmm > 0){
+                game.usingmmmmmm=0;
+            }else{
+                game.usingmmmmmm=1;
             }
-            if (game.currentmenuoption == 5)
-            {
-                //back
-                music.playef(11);
-                game.createmenu("mainmenu");
-                map.nexttowercolour();
-            }
-        }else{
-            if (game.currentmenuoption == 4)
-            {
-                //back
-                music.playef(11);
-                game.createmenu("mainmenu");
-                map.nexttowercolour();
-            }
+            music.usingmmmmmm = !music.usingmmmmmm;
+            music.playef(11);
+            music.play(6);
+            game.savestats();
+        }
+        else if (game.currentmenuoption == 5+mmmmmm_offset)
+        {
+            //back
+            music.playef(11);
+            game.createmenu("mainmenu");
+            map.nexttowercolour();
         }
     }
     else if (game.currentmenuname == "unlockmenutrials")
