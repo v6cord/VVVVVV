@@ -346,6 +346,7 @@ int main(int argc, char *argv[])
                     if(game.bestrank[4]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
                     if(game.bestrank[5]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
 
+#if !defined(NO_CUSTOM_LEVELS)
         if (startinplaytest) {
             game.levelpage = 0;
             game.playcustomlevel = 0;
@@ -386,6 +387,7 @@ int main(int argc, char *argv[])
             graphics.fademode = 0;
 
         }
+#endif
 
         volatile Uint32 time, timePrev = 0;
 
