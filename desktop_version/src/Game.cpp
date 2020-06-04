@@ -7653,7 +7653,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
 void Game::deletequick()
 {
     if( remove( "qsave.vvv" ) != 0 )
-        printf("Error deleting file\n");
+        puts("Error deleting qsave.vvv");
     else
         quicksummary = "";
 }
@@ -7661,7 +7661,7 @@ void Game::deletequick()
 void Game::deletetele()
 {
     if( remove( "tsave.vvv" ) != 0 )
-        printf("Error deleting file\n");
+        puts("Error deleting tsave.vvv");
     else
         telesummary = "";
 }
