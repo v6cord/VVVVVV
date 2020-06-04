@@ -274,6 +274,7 @@ public:
     enum Menu::MenuName currentmenuname, previousmenuname;
     int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
+    std::vector<MenuStackFrame> menustack;
 
     void inline option(std::string text, bool active = true)
     {
