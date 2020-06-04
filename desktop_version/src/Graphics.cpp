@@ -1626,6 +1626,16 @@ void Graphics::drawentities()
 
     SDL_Rect drawRect;
 
+    std::vector<SDL_Surface*> *tilesvec;
+    if (map.custommode)
+    {
+        tilesvec = &entcolours;
+    }
+    else
+    {
+        tilesvec = &tiles;
+    }
+
     trinketcolset = false;
 
     for (int i = obj.entities.size() - 1; i >= 0; i--)
@@ -1704,23 +1714,13 @@ void Graphics::drawentities()
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
-                if(map.custommode){
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                }else{
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                }
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
@@ -1782,39 +1782,21 @@ void Graphics::drawentities()
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
 
-                 if(map.custommode){
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(entcolours[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                }else{
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                  drawRect.x += 8;
-                  BlitSurfaceStandard(tiles[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                }
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                drawRect.x += 8;
+                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
             }
             else if (obj.entities[i].size == 9)         // Really Big Sprite! (2x2)
             {
