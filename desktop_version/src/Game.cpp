@@ -7434,7 +7434,7 @@ void Game::createmenu( std::string t )
                 //ok, secret lab! no notification, but test:
                 if (unlock[8])
                 {
-                    option("secret lab");
+                    option("secret lab", !map.invincibility && game.slowdown == 30);
                 }
                 option("play modes");
                 option("new game");
@@ -7471,9 +7471,9 @@ void Game::createmenu( std::string t )
     }
     else if (t == "playmodes")
     {
-        option("time trials");
+        option("time trials", !map.invincibility && game.slowdown == 30);
         option("intermissions", unlock[16]);
-        option("no death mode", unlock[17]);
+        option("no death mode", unlock[17] && !map.invincibility && game.slowdown == 30);
         option("flip mode", unlock[18]);
         option("return to play menu");
         menuxoff = -70;
