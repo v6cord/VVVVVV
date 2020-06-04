@@ -7308,6 +7308,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         break;
     case Menu::credits:
         option("next page");
+        option("previous page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
@@ -7318,12 +7319,14 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
 #elif !defined(MAKEANDPLAY)
         option("next page");
 #endif
+        option("previous page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
         break;
     case Menu::credits_ce:
         option("next page");
+        option("previous page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
@@ -7332,6 +7335,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
     case Menu::credits4:
     case Menu::credits5:
         option("next page");
+        option("previous page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
@@ -7339,6 +7343,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
     case Menu::credits3:
     case Menu::credits6:
         option("first page");
+        option("previous page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
