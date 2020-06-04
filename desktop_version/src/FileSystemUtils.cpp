@@ -44,7 +44,7 @@ int mkdir(char* path, int mode)
 	return CreateDirectoryW(utf16_path, NULL);
 }
 #define VNEEDS_MIGRATION (mkdirResult != 0)
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__DragonFly__) || defined(__SWITCH__)
 #include <sys/stat.h>
 #include <limits.h>
 #define VNEEDS_MIGRATION (mkdirResult == 0)
@@ -507,7 +507,7 @@ void PLATFORM_migrateSaveData(char* output)
 	char oldDirectory[MAX_PATH];
 #endif
 
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__DragonFly__)
 	DIR *dir = NULL;
 	struct dirent *de = NULL;
 	DIR *subDir = NULL;
@@ -520,7 +520,7 @@ void PLATFORM_migrateSaveData(char* output)
 		return;
 	}
 	strcpy_safe(oldDirectory, homeDir);
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__DragonFly__)
 	strcat(oldDirectory, "/.vvvvvv/");
 #elif defined(__APPLE__)
 	strcat(oldDirectory, "/Documents/VVVVVV/");
