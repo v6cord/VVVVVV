@@ -4908,52 +4908,50 @@ void editormenuactionpress()
     }
     else if (game.currentmenuname == "ed_desc")
     {
-        if (game.currentmenuoption == 0)
+        switch (game.currentmenuoption)
         {
+        case 0:
             ed.textentry=true;
             ed.titlemod=true;
             key.enabletextentry();
             key.keybuffer=EditorData::GetInstance().title;
-        }
-        else if (game.currentmenuoption == 1)
-        {
+            break;
+        case 1:
             ed.textentry=true;
             ed.creatormod=true;
             key.enabletextentry();
             key.keybuffer=EditorData::GetInstance().creator;
-        }
-        else if (game.currentmenuoption == 2)
-        {
+            break;
+        case 2:
             ed.textentry=true;
             ed.desc1mod=true;
             key.enabletextentry();
             key.keybuffer=ed.Desc1;
-        }
-        else if (game.currentmenuoption == 3)
-        {
+            break;
+        case 3:
             ed.textentry=true;
             ed.websitemod=true;
             key.enabletextentry();
             key.keybuffer=ed.website;
-        }
-        else if (game.currentmenuoption == 4)
-        {
+            break;
+        case 4:
             music.playef(11);
             game.createmenu("ed_settings");
             map.nexttowercolour();
+            break;
         }
     }
     else if (game.currentmenuname == "ed_settings")
     {
-        if (game.currentmenuoption == 0)
+        switch (game.currentmenuoption)
         {
+        case 0:
             //Change level description stuff
             music.playef(11);
             game.createmenu("ed_desc");
             map.nexttowercolour();
-        }
-        else if (game.currentmenuoption == 1)
-        {
+            break;
+        case 1:
             //Enter script editormode
             music.playef(11);
             ed.scripteditmod=true;
@@ -4966,22 +4964,19 @@ void editormenuactionpress()
             ed.scripthelppagedelay=0;
             ed.sby=0;
             ed.sbx=0, ed.pagey=0;
-        }
-        else if (game.currentmenuoption == 2)
-        {
+            break;
+        case 2:
             music.playef(11);
             game.createmenu("ed_trials");
             map.nexttowercolour();
-        }
-        else if (game.currentmenuoption == 3)
-        {
+            break;
+        case 3:
             music.playef(11);
             game.createmenu("ed_music");
             map.nexttowercolour();
             if(ed.levmusic>0) music.play(ed.levmusic);
-        }
-        else if (game.currentmenuoption == 4)
-        {
+            break;
+        case 4:
             //Load level
             ed.settingsmod=false;
             map.nexttowercolour();
@@ -4991,9 +4986,8 @@ void editormenuactionpress()
                       "to load:", &(ed.filename));
             game.mapheld=true;
             graphics.backgrounddrawn=false;
-        }
-        else if (game.currentmenuoption == 5)
-        {
+            break;
+        case 5:
             //Save level
             ed.settingsmod=false;
             map.nexttowercolour();
@@ -5003,22 +4997,22 @@ void editormenuactionpress()
                       "to save map as:", &(ed.filename));
             game.mapheld=true;
             graphics.backgrounddrawn=false;
-        }
-        else if (game.currentmenuoption == 6)
-        {
+            break;
+        case 6:
             music.playef(11);
             game.createmenu("ed_settings2");
             map.nexttowercolour();
-        }
-        else if (game.currentmenuoption == 7)
-        {
+            break;
+        case 7:
             music.playef(11);
             game.createmenu("ed_quit");
             map.nexttowercolour();
+            break;
         }
     }
     else if (game.currentmenuname == "ed_settings2") {
-        if (game.currentmenuoption == 0) {
+        switch (game.currentmenuoption) {
+        case 0: {
             int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 // Change Scroll Direction
@@ -5034,23 +5028,29 @@ void editormenuactionpress()
                 ed.switch_tileset(true);
                 graphics.backgrounddrawn=false;
             }
-        } else if (game.currentmenuoption == 1) {
+            break;
+        }
+        case 1:
             key.fakekey = SDLK_F2;
             key.fakekeytimer = 6;
             ed.settingsmod = false;
-        } else if (game.currentmenuoption == 2) {
+            break;
+        case 2:
             key.fakekey = SDLK_F3;
             key.fakekeytimer = 6;
             ed.settingsmod = false;
-        } else if (game.currentmenuoption == 3) {
+            break;
+        case 3:
             key.fakekey = SDLK_F4;
             key.fakekeytimer = 6;
             ed.settingsmod = false;
-        } else if (game.currentmenuoption == 4) {
+            break;
+        case 4:
             key.fakekey = SDLK_F5;
             key.fakekeytimer = 6;
             ed.settingsmod = false;
-        } else if (game.currentmenuoption == 5) {
+            break;
+        case 5: {
             int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < ed.maxwidth * ed.maxheight) {
@@ -5076,7 +5076,9 @@ void editormenuactionpress()
                     ed.levaltstate = newaltstate;
                 }
             }
-        } else if (game.currentmenuoption == 6) {
+            break;
+        }
+        case 6: {
             int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1) {
@@ -5099,7 +5101,10 @@ void editormenuactionpress()
                 ed.keydelay = 6;
                 ed.notedelay = 45;
             }
-        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
+            break;
+        }
+        }
+        if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
             music.playef(11);
             game.createmenu("ed_settings3");
             map.nexttowercolour();
@@ -5107,7 +5112,8 @@ void editormenuactionpress()
     }
     else if (game.currentmenuname == "ed_settings3")
     {
-        if (game.currentmenuoption == 0) {
+        switch (game.currentmenuoption) {
+        case 0:
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower) {
                 ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=0;
                 ed.note="Tower Mode Disabled";
@@ -5122,7 +5128,8 @@ void editormenuactionpress()
             ed.keydelay=6;
 
             game.createmenu("ed_settings3");
-        } else if (game.currentmenuoption == 1) {
+            break;
+        case 1:
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
             {
                 ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode=0;
@@ -5137,7 +5144,8 @@ void editormenuactionpress()
 
             ed.notedelay=45;
             ed.updatetiles=true;
-        } else if (game.currentmenuoption == 2) {
+            break;
+        case 2: {
             int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 music.playef(2);
@@ -5153,7 +5161,9 @@ void editormenuactionpress()
                 }
                 ed.notedelay = 45;
             }
-        } else if (game.currentmenuoption == 3) {
+            break;
+        }
+        case 3: {
             int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 music.playef(2);
@@ -5208,13 +5218,18 @@ void editormenuactionpress()
                 }
                 ed.keydelay=6;
             }
-        } else if (game.currentmenuoption == 4) {
+            break;
+        }
+        case 4:
             ed.getlin(TEXT_ROOMNAME, "Enter new room name:",
                 &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
             ed.settingsmod = 0;
-        } else if (game.currentmenuoption == 5) {
+            break;
+        case 5:
             game.createmenu("ed_dimensions");
-        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
+            break;
+        }
+        if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
             music.playef(11);
             game.createmenu("ed_settings");
             map.nexttowercolour();
@@ -5222,8 +5237,9 @@ void editormenuactionpress()
     }
     else if (game.currentmenuname == "ed_music")
     {
-        if (game.currentmenuoption == 0)
+        switch (game.currentmenuoption)
         {
+        case 0:
             ed.levmusic++;
             //if(ed.levmusic==5) ed.levmusic=6;
             //if(ed.levmusic==7) ed.levmusic=8;
@@ -5239,19 +5255,20 @@ void editormenuactionpress()
                 music.haltdasmusik();
             }
             music.playef(11);
-        }
-        else if (game.currentmenuoption == 1)
-        {
+            break;
+        case 1:
             music.playef(11);
             music.fadeout();
             game.createmenu("ed_settings");
             map.nexttowercolour();
+            break;
         }
     }
     else if (game.currentmenuname == "ed_quit")
     {
-        if (game.currentmenuoption == 0)
+        switch (game.currentmenuoption)
         {
+        case 0:
             //Saving and quit
             ed.saveandquit=true;
             ed.settingsmod=false;
@@ -5262,20 +5279,19 @@ void editormenuactionpress()
                       "to save map as:", &(ed.filename));
             game.mapheld=true;
             graphics.backgrounddrawn=false;
-        }
-        else if (game.currentmenuoption == 1)
-        {
+            break;
+        case 1:
             //Quit without saving
             music.playef(11);
             music.fadeout();
             graphics.fademode = 2;
-        }
-        else if (game.currentmenuoption == 2)
-        {
+            break;
+        case 2:
             //Go back to editor
             music.playef(11);
             game.createmenu("ed_settings");
             map.nexttowercolour();
+            break;
         }
     }
 }
