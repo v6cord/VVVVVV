@@ -276,6 +276,8 @@ ELSEIF(CUSTOM_LEVEL_SUPPORT STREQUAL "DISABLED")
 	ADD_DEFINITIONS(-DNO_CUSTOM_LEVELS -DNO_EDITOR)
 ENDIF()
 
+TARGET_COMPILE_OPTIONS(VVVVVV PRIVATE -Werror=implicit-fallthrough)
+
 # Library information
 ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 target_include_directories(tinyxml-static PUBLIC ../third_party/tinyxml)
