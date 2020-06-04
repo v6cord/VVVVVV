@@ -3309,7 +3309,6 @@ void editormenurender(int tr, int tg, int tb)
             fillboxabs(x_, y_, w_, h_,
                        graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
         }
-        bool stoploop = false;
         for (int y = 0; y < map.customheight; y++) {
             for (int x = 0; x < map.customwidth; x++) {
                 int x_ = 40 + (x * xmult) + map.custommmxoff;
@@ -3318,13 +3317,12 @@ void editormenurender(int tr, int tg, int tb)
                     if ((game.my > y_) && ((game.my - 1) < (y_ + ymult))) {
                         ed.cursor_x = x;
                         ed.cursor_y = y;
-                        stoploop = true;
-                        break;
+                        goto dimensions_break;
                     }
                 }
             }
-            if (stoploop) break;
         }
+dimensions_break:
         int color = (lastcolor + 1) % 6;
         int display_x = 40 + (ed.cursor_x * xmult) + map.custommmxoff;
         int display_y = 21 + (ed.cursor_y * ymult) + map.custommmyoff;
