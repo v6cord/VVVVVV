@@ -468,10 +468,6 @@ int main(int argc, char *argv[])
             {
                 Mix_Pause(-1);
                 Mix_PauseMusic();
-                if(game.getGlobalSoundVol()> 0)
-                {
-                    game.setGlobalSoundVol(0);
-                }
                 FillRect(graphics.backBuffer, 0x00000000);
                 graphics.bprint(5, 110, "Game paused", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
                 graphics.bprint(5, 120, "[click to resume]", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
