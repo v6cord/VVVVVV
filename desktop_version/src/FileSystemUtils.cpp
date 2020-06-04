@@ -758,3 +758,8 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     return WIFEXITED(status) && WEXITSTATUS(status) == 0;
 }
 #endif
+
+bool FILESYSTEM_delete(const char *name)
+{
+    return PHYSFS_delete(name) != 0;
+}

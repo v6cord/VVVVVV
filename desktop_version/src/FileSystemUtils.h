@@ -34,4 +34,6 @@ std::vector<std::string> FILESYSTEM_getGraphicsDirFileNames();
 bool FILESYSTEM_openDirectoryEnabled();
 bool FILESYSTEM_openDirectory(const char *dname);
 
+bool FILESYSTEM_delete(const char *name);
+
 #endif /* FILESYSTEMUTILS_H */
