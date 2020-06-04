@@ -4828,7 +4828,10 @@ void editorlogic()
         ed.settingsmod=false;
         ed.trialmod=false;
         graphics.backgrounddrawn=false;
-        game.createmenu(Menu::mainmenu);
+        //Do returnmenu twice because we have two menus:
+        //the main editor menu and the confirm save&quit menu
+        game.returnmenu();
+        game.returnmenu();
     }
 }
 

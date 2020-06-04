@@ -1341,7 +1341,13 @@ void Game::updatestate()
             graphics.backgrounddrawn = false;
             map.tdrawback = true;
             graphics.flipmode = false;
-            createmenu(Menu::mainmenu);
+            //Don't be stuck on the summary screen,
+            //or "who do you want to play the level with?"
+            //or "do you want cutscenes?"
+            if (!intimetrial)
+            {
+                returnmenu();
+            }
             state = 0;
             break;
 
@@ -2019,7 +2025,6 @@ void Game::updatestate()
                 }
             }
 #endif
-            createmenu(Menu::levellist);
             state = 0;
             break;
 
@@ -2921,6 +2926,7 @@ void Game::updatestate()
             {
                 graphics.fademode = 2;
                 companion = 0;
+                returnmenu();
                 state=3100;
             }
             else
@@ -2951,6 +2957,7 @@ void Game::updatestate()
                 state++;
                 graphics.fademode = 2;
                 music.fadeout();
+                returnmenu();
                 state=3100;
             }
             else
@@ -2981,7 +2988,6 @@ void Game::updatestate()
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;
-            createmenu(Menu::play);
             music.play(6);
             state = 0;
             break;
