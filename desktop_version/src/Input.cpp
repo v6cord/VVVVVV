@@ -471,7 +471,7 @@ void menuactionpress()
             break;
         }
         break;
-    case Menu::setslowdown2:
+    case Menu::setslowdown:
         switch (game.currentmenuoption)
         {
         case 0:
@@ -557,7 +557,7 @@ void menuactionpress()
             break;
         case 4:
             //change game speed
-            game.createmenu(Menu::setslowdown2);
+            game.createmenu(Menu::setslowdown);
             map.nexttowercolour();
             music.playef(11);
         case 5:
