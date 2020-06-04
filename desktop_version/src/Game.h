@@ -396,7 +396,6 @@ public:
     bool quickrestartkludge = false;
 
     bool paused = false;
-    int globalsound = 0;
 
     //Custom stuff
     std::string customscript[50];
