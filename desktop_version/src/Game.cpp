@@ -7428,19 +7428,27 @@ void Game::createmenu( std::string t )
                 createmenu("unlockintermission");
                 savemystats = true;
             }
-            //ok, secret lab! no notification, but test:
-            else if (unlock[8])
-            {
-                createmenu("playsecretlab");
-            }
             else
             {
                 option("continue");
+                //ok, secret lab! no notification, but test:
+                if (unlock[8])
+                {
+                    option("secret lab");
+                }
                 option("play modes");
                 option("new game");
                 option("return");
-                menuxoff = -20;
-                menuyoff = -40;
+                if (unlock[8])
+                {
+                    menuxoff = -40;
+                    menuyoff = -30;
+                }
+                else
+                {
+                    menuxoff = -20;
+                    menuyoff = -40;
+                }
             }
         }
     }
@@ -7453,16 +7461,6 @@ void Game::createmenu( std::string t )
         option("continue");
         menuxoff = 20;
         menuyoff = 70;
-    }
-    else if (t == "playsecretlab")
-    {
-        option("continue");
-        option("secret lab");
-        option("play modes");
-        option("new game");
-        option("return");
-        menuxoff = -40;
-        menuyoff = -30;
     }
     else if (t == "newgamewarning")
     {
