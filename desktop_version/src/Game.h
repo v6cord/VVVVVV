@@ -196,9 +196,8 @@ public:
     int teleport_to_teleporter = 0;
 
     //Main Menu Variables
-    growing_vector<std::string> menuoptions;
-    growing_vector<int> menuoptionsactive;
-    int nummenuoptions, currentmenuoption = 0;
+    std::vector<MenuOption> menuoptions;
+    int currentmenuoption = 0;
     std::string menuselection, currentmenuname, previousmenuname;
     int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;

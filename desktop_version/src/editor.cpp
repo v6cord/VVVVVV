@@ -5301,8 +5301,8 @@ void editorinput()
                 }
 
                 if (game.currentmenuname != "ed_trials") {
-                    if (game.currentmenuoption < 0) game.currentmenuoption = game.nummenuoptions-1;
-                    if (game.currentmenuoption >= game.nummenuoptions ) game.currentmenuoption = 0;
+                    if (game.currentmenuoption < 0) game.currentmenuoption = game.menuoptions.size()-1;
+                    if (game.currentmenuoption >= (int) game.menuoptions.size() ) game.currentmenuoption = 0;
                 } else {
                     if (game.currentmenuoption < 0) game.currentmenuoption = (int)ed.customtrials.size()+1;
                     if (game.currentmenuoption > (int)ed.customtrials.size()+1) game.currentmenuoption = 0;
@@ -5597,7 +5597,7 @@ void editorinput()
                                 ed.keydelay = 6;
                                 ed.notedelay = 45;
                             }
-                        } else if (game.currentmenuoption == game.nummenuoptions - 1) {
+                        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
                             music.playef(11);
                             game.createmenu("ed_settings3");
                             map.nexttowercolour();
@@ -5712,7 +5712,7 @@ void editorinput()
                             ed.settingsmod = 0;
                         } else if (game.currentmenuoption == 5) {
                             game.createmenu("ed_dimensions");
-                        } else if (game.currentmenuoption == game.nummenuoptions - 1) {
+                        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
                             music.playef(11);
                             game.createmenu("ed_settings");
                             map.nexttowercolour();

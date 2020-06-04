@@ -692,7 +692,7 @@ void titlerender()
           int tmp=game.currentmenuoption+(game.levelpage*8);
           if(tmp>=0 && tmp < (int) ed.ListOfMetaData.size()){ // FIXME: size_t/int! -flibit
             //Don't show next page or return to menu options here!
-            if(game.nummenuoptions - game.currentmenuoption<=3){
+            if(game.menuoptions.size() - game.currentmenuoption<=3){
 
             }else{
               graphics.bigprint( -1, 15, ed.ListOfMetaData[tmp].title, tr, tg, tb, true);
