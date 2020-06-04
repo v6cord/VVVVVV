@@ -3269,11 +3269,14 @@ int cycle_through_custom_resources(int current, std::map <int, std::vector<SDL_S
 
 void editormenurender(int tr, int tg, int tb)
 {
-    if (game.currentmenuname == Menu::ed_settings || game.currentmenuname == Menu::ed_settings2 || game.currentmenuname == Menu::ed_settings3)
+    switch (game.currentmenuname)
     {
+    case Menu::ed_settings:
+    case Menu::ed_settings2:
+    case Menu::ed_settings3:
         graphics.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
-    }
-    else if (game.currentmenuname == Menu::ed_dimensions) {
+        break;
+    case Menu::ed_dimensions: {
         int colors[6][3] = {
             {255, 0,   0  },
             {0,   255, 0  },
@@ -3328,8 +3331,9 @@ dimensions_break:
         int display_y = 21 + (ed.cursor_y * ymult) + map.custommmyoff;
         fillboxabs(display_x, display_y, xmult, ymult,
             graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
+        break;
     }
-    else if (game.currentmenuname == Menu::ed_edit_trial) {
+    case Menu::ed_edit_trial: {
         customtrial ctrial = ed.customtrials[ed.edtrial];
 
         if(ed.trialnamemod)
@@ -3355,12 +3359,12 @@ dimensions_break:
             graphics.Print( 16, 85,  "TIME       < " + game.partimestring() + " >", tr, tg, tb);
         else
             graphics.Print( 16, 85,  "TIME       " + game.partimestring(), tr, tg, tb);
+        break;
     }
-    else if (game.currentmenuname == Menu::ed_remove_trial) {
+    case Menu::ed_remove_trial:
         graphics.bigprint( -1, 35, "Are you sure?", tr, tg, tb, true);
-    }
-    else if (game.currentmenuname == Menu::ed_trials)
-    {
+        break;
+    case Menu::ed_trials:
         graphics.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
         for (int i = 0; i < (int)ed.customtrials.size(); i++) {
             std::string sl = ed.customtrials[i].name;
@@ -3383,9 +3387,8 @@ dimensions_break:
         } else {
             graphics.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
         }
-    }
-    else if (game.currentmenuname==Menu::ed_desc)
-    {
+        break;
+    case Menu::ed_desc:
         if(ed.titlemod)
         {
             if(ed.entframe<2)
@@ -3476,9 +3479,8 @@ dimensions_break:
         {
             graphics.Print( -1, 110, ed.Desc3, tr, tg, tb, true);
         }
-    }
-    else if (game.currentmenuname == Menu::ed_music)
-    {
+        break;
+    case Menu::ed_music:
         graphics.bigprint( -1, 65, "Map Music", tr, tg, tb, true);
 
         graphics.Print( -1, 85, "Current map music:", tr, tg, tb, true);
@@ -3536,11 +3538,13 @@ dimensions_break:
             graphics.Print( -1, 120, "?: something else", tr, tg, tb, true);
             break;
         }
-    }
-    else if (game.currentmenuname == Menu::ed_quit)
-    {
+        break;
+    case Menu::ed_quit:
         graphics.bigprint( -1, 90, "Save before", tr, tg, tb, true);
         graphics.bigprint( -1, 110, "quitting?", tr, tg, tb, true);
+        break;
+    default:
+        break;
     }
 }
 
@@ -4831,8 +4835,9 @@ void editorlogic()
 
 void editormenuactionpress()
 {
-    if (game.currentmenuname == Menu::ed_trials)
+    switch (game.currentmenuname)
     {
+    case Menu::ed_trials:
         if (game.currentmenuoption == (int)ed.customtrials.size())
         {
             customtrial temp;
@@ -4854,60 +4859,61 @@ void editormenuactionpress()
             music.playef(11);
             game.createmenu(Menu::ed_edit_trial);
         }
-    }
-    else if (game.currentmenuname == Menu::ed_edit_trial)
-    {
-        if (game.currentmenuoption == 0)
-        {
+        break;
+    case Menu::ed_edit_trial:
+        switch (game.currentmenuoption) {
+        case 0:
             ed.textentry=true;
             ed.trialnamemod=true;
             key.enabletextentry();
             key.keybuffer=ed.customtrials[ed.edtrial].name;
-        }
-        if (game.currentmenuoption == 1) {
+            break;
+        case 1:
             ed.trialstartpoint = true;
             ed.settingsmod = false;
             music.playef(11);
-        }
-        if (game.currentmenuoption == 2) {
+            break;
+        case 2:
             music.playef(11);
             ed.customtrials[ed.edtrial].music++;
             if (ed.customtrials[ed.edtrial].music > 15) ed.customtrials[ed.edtrial].music = 0;
-        }
-        if (game.currentmenuoption == 3) {
+            break;
+        case 3:
             music.playef(11);
             ed.trialmod = true;
-        }
-        if (game.currentmenuoption == 4) {
+            break;
+        case 4:
             music.playef(11);
             ed.trialmod = true;
-        }
-        if (game.currentmenuoption == 5) {
+            break;
+        case 5:
             music.playef(11);
             game.createmenu(Menu::ed_remove_trial);
             map.nexttowercolour();
-        }
-        if (game.currentmenuoption == 6) {
+            break;
+        case 6:
             music.playef(11);
             game.createmenu(Menu::ed_trials);
             map.nexttowercolour();
+            break;
         }
-    }
-    else if (game.currentmenuname == Menu::ed_remove_trial)
-    {
-        if (game.currentmenuoption == 0) {
+        break;
+    case Menu::ed_remove_trial:
+        switch (game.currentmenuoption) {
+        case 0:
             ed.customtrials.erase(ed.customtrials.begin() + ed.edtrial);
             music.playef(11);
             game.createmenu(Menu::ed_trials);
             map.nexttowercolour();
-        } else {
+            break;
+        default:
             music.playef(11);
             game.createmenu(Menu::ed_edit_trial);
             map.nexttowercolour();
+            break;
         }
-    }
-    else if (game.currentmenuname == Menu::ed_desc)
-    {
+        break;
+    case Menu::ed_desc:
         switch (game.currentmenuoption)
         {
         case 0:
@@ -4940,9 +4946,8 @@ void editormenuactionpress()
             map.nexttowercolour();
             break;
         }
-    }
-    else if (game.currentmenuname == Menu::ed_settings)
-    {
+        break;
+    case Menu::ed_settings:
         switch (game.currentmenuoption)
         {
         case 0:
@@ -5009,8 +5014,8 @@ void editormenuactionpress()
             map.nexttowercolour();
             break;
         }
-    }
-    else if (game.currentmenuname == Menu::ed_settings2) {
+        break;
+    case Menu::ed_settings2:
         switch (game.currentmenuoption) {
         case 0: {
             int tower = ed.get_tower(ed.levx, ed.levy);
@@ -5109,9 +5114,8 @@ void editormenuactionpress()
             game.createmenu(Menu::ed_settings3);
             map.nexttowercolour();
         }
-    }
-    else if (game.currentmenuname == Menu::ed_settings3)
-    {
+        break;
+    case Menu::ed_settings3:
         switch (game.currentmenuoption) {
         case 0:
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower) {
@@ -5234,9 +5238,8 @@ void editormenuactionpress()
             game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
         }
-    }
-    else if (game.currentmenuname == Menu::ed_music)
-    {
+        break;
+    case Menu::ed_music:
         switch (game.currentmenuoption)
         {
         case 0:
@@ -5263,9 +5266,8 @@ void editormenuactionpress()
             map.nexttowercolour();
             break;
         }
-    }
-    else if (game.currentmenuname == Menu::ed_quit)
-    {
+        break;
+    case Menu::ed_quit:
         switch (game.currentmenuoption)
         {
         case 0:
@@ -5293,6 +5295,9 @@ void editormenuactionpress()
             map.nexttowercolour();
             break;
         }
+        break;
+    default:
+        break;
     }
 }
 

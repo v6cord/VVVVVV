@@ -6938,8 +6938,9 @@ void Game::createmenu( enum Menu::MenuName t )
     menucountdown = 0;
     menuoptions.clear();
 
-    if (t == Menu::mainmenu)
+    switch (t)
     {
+    case Menu::mainmenu:
 #if !defined(MAKEANDPLAY)
         option("start game");
 #endif
@@ -6952,10 +6953,9 @@ void Game::createmenu( enum Menu::MenuName t )
         option("quit game");
         menuxoff = -16;
         menuyoff = -10;
-    }
+        break;
 #if !defined(NO_CUSTOM_LEVELS)
-    else if (t == Menu::playerworlds)
-    {
+    case Menu::playerworlds:
         option("play a level");
  #if !defined(NO_EDITOR)
         option("level editor");
@@ -6964,30 +6964,26 @@ void Game::createmenu( enum Menu::MenuName t )
         option("back to menu");
         menuxoff = -30;
         menuyoff = -40;
-    }
-    else if (t == Menu::quickloadlevel)
-    {
+        break;
+    case Menu::quickloadlevel:
         option("continue from save");
         option("start from beginning");
         option("play time trials");
         option("back to levels");
         menuxoff = -40;
         menuyoff = -30;
-    }
-    else if (t == Menu::loadcustomtrial)
-    {
+        break;
+    case Menu::loadcustomtrial:
         menuxoff = -40;
         menuyoff = 0;
-    }
-    else if (t == Menu::youwannaquit)
-    {
+        break;
+    case Menu::youwannaquit:
         option("yes, quit");
         option("no, return");
         menuxoff = 0;
         menuyoff = -20;
-    }
-    else if (t == Menu::levellist)
-    {
+        break;
+    case Menu::levellist:
         if(ed.ListOfMetaData.size()==0)
         {
             option("ok");
@@ -7054,31 +7050,14 @@ void Game::createmenu( enum Menu::MenuName t )
             menuxoff = -90;
             menuyoff = 70-(menuoptions.size()*10);
         }
-    }
+        break;
 #endif
-    else if (t == Menu::quickloadlevel)
-    {
-        option("continue from save");
-        option("start from beginning");
-        option("back to levels");
-        menuxoff = -40;
-        menuyoff = -30;
-    }
-    else if (t == Menu::youwannaquit)
-    {
-        option("yes, quit");
-        option("no, return");
-        menuxoff = 0;
-        menuyoff = -20;
-    }
-    else if (t == Menu::errornostart)
-    {
+    case Menu::errornostart:
         option("ok");
         menuxoff = 0;
         menuyoff = -20;
-    }
-    else if (t == Menu::graphicoptions)
-    {
+        break;
+    case Menu::graphicoptions:
         option("toggle fullscreen");
         option("toggle letterbox");
         option("toggle filter");
@@ -7087,9 +7066,8 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -50;
         menuyoff = 8;
-    }
-    else if (t == Menu::ed_settings)
-    {
+        break;
+    case Menu::ed_settings:
         option("change description");
         option("edit scripts");
         option("time trials");
@@ -7101,9 +7079,8 @@ void Game::createmenu( enum Menu::MenuName t )
 
         menuxoff = -50;
         menuyoff = -20;
-    }
-    else if (t == Menu::ed_settings2)
-    {
+        break;
+    case Menu::ed_settings2: {
         int tower = ed.get_tower(ed.levx, ed.levy);
 
         if (tower) {
@@ -7127,9 +7104,9 @@ void Game::createmenu( enum Menu::MenuName t )
 
         menuxoff = -50;
         menuyoff = -20;
+        break;
     }
-    else if (t == Menu::ed_settings3)
-    {
+    case Menu::ed_settings3: {
         int tower = ed.get_tower(ed.levx, ed.levy);
 
         option("toggle tower");
@@ -7142,18 +7119,17 @@ void Game::createmenu( enum Menu::MenuName t )
 
         menuxoff = -50;
         menuyoff = -20;
+        break;
     }
-    else if (t == Menu::ed_dimensions) {
+    case Menu::ed_dimensions:
         option("add new dimension");
         option("return to settings");
         menuxoff = -20;
         menuyoff = 74;
-    }
-    else if (t == Menu::ed_trials)
-    {
-    }
-    else if (t == Menu::ed_edit_trial)
-    {
+        break;
+    case Menu::ed_trials:
+        break;
+    case Menu::ed_edit_trial:
         option("trial name");
         option("starting position");
         option("trial music");
@@ -7164,17 +7140,15 @@ void Game::createmenu( enum Menu::MenuName t )
 
         menuxoff = -50;
         menuyoff = -20;
-    }
-    else if (t == Menu::ed_remove_trial)
-    {
+        break;
+    case Menu::ed_remove_trial:
         option("yes");
         option("no");
 
         menuxoff = -50;
         menuyoff = -20;
-    }
-    else if (t == Menu::ed_desc)
-    {
+        break;
+    case Menu::ed_desc:
         option("change name");
         option("change author");
         option("change description");
@@ -7183,24 +7157,21 @@ void Game::createmenu( enum Menu::MenuName t )
 
         menuxoff = -40;
         menuyoff = 6;
-    }
-    else if (t == Menu::ed_music)
-    {
+        break;
+    case Menu::ed_music:
         option("next song");
         option("back");
         menuxoff = -10;
         menuyoff = 16;
-    }
-    else if (t == Menu::ed_quit)
-    {
+        break;
+    case Menu::ed_quit:
         option("yes, save and quit");
         option("no, quit without saving");
         option("return to editor");
         menuxoff = -50;
         menuyoff = 8;
-    }
-    else if (t == Menu::options)
-    {
+        break;
+    case Menu::options:
         option("accessibility options");
 #if !defined(MAKEANDPLAY)
         option("unlock play modes");
@@ -7217,9 +7188,8 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -40;
         menuyoff = 0;
-    }
-    else if (t == Menu::accessibility)
-    {
+        break;
+    case Menu::accessibility:
         option("animated backgrounds");
         option("screen effects");
         option("text outline");
@@ -7230,9 +7200,8 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -85;
         menuyoff = -10;
-    }
-    else if(t == Menu::controller)
-    {
+        break;
+    case Menu::controller:
         option("analog stick sensitivity");
         option("bind flip");
         option("bind enter");
@@ -7245,39 +7214,34 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -60;
         menuyoff = 10;
-    }
-    else if (t == Menu::cleardatamenu)
-    {
+        break;
+    case Menu::cleardatamenu:
         option("no! don't delete");
         option("yes, delete everything");
         menuxoff = -30;
         menuyoff = 64;
-    }
-    else if (t == Menu::setinvincibility)
-    {
+        break;
+    case Menu::setinvincibility:
         option("no, return to options");
         option("yes, enable");
         menuxoff = -30;
         menuyoff = 64;
-    }
-    else if (t == Menu::setslowdown1)
-    {
+        break;
+    case Menu::setslowdown1:
         option("no, return to options");
         option("yes, delete saves");
         menuxoff = -30;
         menuyoff = 64;
-    }
-    else if (t == Menu::setslowdown2)
-    {
+        break;
+    case Menu::setslowdown2:
         option("normal speed");
         option("80% speed");
         option("60% speed");
         option("40% speed");
         menuxoff = -40;
         menuyoff = 16;
-    }
-    else if (t == Menu::unlockmenu)
-    {
+        break;
+    case Menu::unlockmenu:
         option("unlock time trials");
         option("unlock intermissions", !unlock[16]);
         option("unlock no death mode", !unlock[17]);
@@ -7287,22 +7251,19 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -70;
         menuyoff = -20;
-    }
-    else if (t == Menu::changelog)
-    {
+        break;
+    case Menu::changelog:
         option("return");
         menuxoff = 26;
         menuyoff = 64;
-    }
-    else if (t == Menu::credits)
-    {
+        break;
+    case Menu::credits:
         option("next page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
-    }
-    else if (t == Menu::credits2)
-    {
+        break;
+    case Menu::credits2:
 #if defined(MAKEANDPLAY)
         option("first page");
 #elif !defined(MAKEANDPLAY)
@@ -7311,30 +7272,29 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = 20;
         menuyoff = 64;
-    }
-    else if (t == Menu::credits_ce)
-    {
+        break;
+    case Menu::credits_ce:
         option("next page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
-    }
-    else if (t == Menu::credits25)
-    {
+        break;
+    case Menu::credits25:
+    case Menu::credits4:
+    case Menu::credits5:
         option("next page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
-    }
-    else if (t == Menu::credits3)
-    {
+        break;
+    case Menu::credits3:
+    case Menu::credits6:
         option("first page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
-    }
-    else if (t == Menu::play)
-    {
+        break;
+    case Menu::play:
         //Ok, here's where the unlock stuff comes into it:
         //First up, time trials:
         temp = 0;
@@ -7446,26 +7406,23 @@ void Game::createmenu( enum Menu::MenuName t )
                 }
             }
         }
-    }
-    else if (t == Menu::unlocktimetrial
-    || t == Menu::unlocktimetrials
-    || t == Menu::unlocknodeathmode
-    || t == Menu::unlockintermission
-    || t == Menu::unlockflipmode)
-    {
+        break;
+    case Menu::unlocktimetrial:
+    case Menu::unlocktimetrials:
+    case Menu::unlocknodeathmode:
+    case Menu::unlockintermission:
+    case Menu::unlockflipmode:
         option("continue");
         menuxoff = 20;
         menuyoff = 70;
-    }
-    else if (t == Menu::newgamewarning)
-    {
+        break;
+    case Menu::newgamewarning:
         option("start new game");
         option("return to menu");
         menuxoff = -30;
         menuyoff = 64;
-    }
-    else if (t == Menu::playmodes)
-    {
+        break;
+    case Menu::playmodes:
         option("time trials", !map.invincibility && game.slowdown == 30);
         option("intermissions", unlock[16]);
         option("no death mode", unlock[17] && !map.invincibility && game.slowdown == 30);
@@ -7473,17 +7430,15 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return to play menu");
         menuxoff = -70;
         menuyoff = 8;
-    }
-    else if (t == Menu::intermissionmenu)
-    {
+        break;
+    case Menu::intermissionmenu:
         option("play intermission 1");
         option("play intermission 2");
         option("return to play menu");
         menuxoff = -50;
         menuyoff = -35;
-    }
-    else if (t == Menu::playint1)
-    {
+        break;
+    case Menu::playint1:
         option("Vitellary");
         option("Vermilion");
         option("Verdigris");
@@ -7491,9 +7446,8 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -60;
         menuyoff = 10;
-    }
-    else if (t == Menu::playint2)
-    {
+        break;
+    case Menu::playint2:
         option("Vitellary");
         option("Vermilion");
         option("Verdigris");
@@ -7501,36 +7455,31 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return");
         menuxoff = -60;
         menuyoff = 10;
-    }
-    else if (t == Menu::continuemenu)
-    {
+        break;
+    case Menu::continuemenu:
         option("continue from teleporter");
         option("continue from quicksave");
         option("return to play menu");
         menuxoff = -60;
         menuyoff = 20;
-    }
-    else if (t == Menu::startnodeathmode)
-    {
+        break;
+    case Menu::startnodeathmode:
         option("disable cutscenes");
         option("enable cutscenes");
         option("return to play menu");
         menuxoff = -60;
         menuyoff = 40;
-    }
-    else if (t == Menu::gameover)
-    {
+        break;
+    case Menu::gameover:
         menucountdown = 120;
         menudest=Menu::gameover2;
-    }
-    else if (t == Menu::gameover2)
-    {
+        break;
+    case Menu::gameover2:
         option("return to play menu");
         menuxoff = -25;
         menuyoff = 80;
-    }
-    else if (t == Menu::unlockmenutrials)
-    {
+        break;
+    case Menu::unlockmenutrials:
         option("space station 1", !unlock[9]);
         option("the laboratory", !unlock[10]);
         option("the tower", !unlock[11]);
@@ -7541,9 +7490,8 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return to unlock menu");
         menuxoff = -80;
         menuyoff = 0;
-    }
-    else if (t == Menu::timetrials)
-    {
+        break;
+    case Menu::timetrials:
         option(unlock[9] ? "space station 1" : "???", unlock[9]);
         option(unlock[10] ? "the laboratory" : "???", unlock[10]);
         option(unlock[11] ? "the tower" : "???", unlock[11]);
@@ -7554,40 +7502,35 @@ void Game::createmenu( enum Menu::MenuName t )
         option("return to play menu");
         menuxoff = -80;
         menuyoff = 0;
-    }
-    else if (t == Menu::nodeathmodecomplete)
-    {
+        break;
+    case Menu::nodeathmodecomplete:
         menucountdown = 90;
         menudest = Menu::nodeathmodecomplete2;
-    }
-    else if (t == Menu::nodeathmodecomplete2)
-    {
+        break;
+    case Menu::nodeathmodecomplete2:
         option("return to play menu");
         menuxoff = -25;
         menuyoff = 70;
-    }
-    else if (t == Menu::timetrialcomplete)
-    {
+        break;
+    case Menu::timetrialcomplete:
         menucountdown = 90;
         menudest=Menu::timetrialcomplete2;
-    }
-    else if (t == Menu::timetrialcomplete2)
-    {
+        break;
+    case Menu::timetrialcomplete2:
         menucountdown = 60;
         menudest=Menu::timetrialcomplete3;
-    }
-    else if (t == Menu::timetrialcomplete3)
-    {
+        break;
+    case Menu::timetrialcomplete3:
         option("return to play menu");
         option("try again");
         menuxoff = -25;
         menuyoff = 70;
-    }
-    else if (t == Menu::gamecompletecontinue)
-    {
+        break;
+    case Menu::gamecompletecontinue:
         option("return to play menu");
         menuxoff = -25;
         menuyoff = 70;
+        break;
     }
 }
 
