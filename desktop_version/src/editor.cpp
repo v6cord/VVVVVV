@@ -7559,6 +7559,7 @@ Uint32 editorclass::getonewaycol(int rx, int ry)
         case 31:
             return graphics.getRGB(207, 131, 235);
         }
+        break;
 
     case 1: // Outside
         switch (room.tilecol) {
@@ -7579,6 +7580,7 @@ Uint32 editorclass::getonewaycol(int rx, int ry)
         case 7:
             return graphics.getRGB(255, 142, 87);
         }
+        break;
 
     case 2: // Lab
         switch (room.tilecol) {
@@ -7597,6 +7599,7 @@ Uint32 editorclass::getonewaycol(int rx, int ry)
         case 6:
             return graphics.getRGB(0, 165, 206);
         }
+        break;
 
     case 3: // Warp Zone
         switch (room.tilecol) {
@@ -7615,6 +7618,7 @@ Uint32 editorclass::getonewaycol(int rx, int ry)
         case 6:
             return graphics.getRGB(109, 109, 109);
         }
+        break;
 
     case 4: // Ship
         switch (room.tilecol) {
@@ -7631,6 +7635,7 @@ Uint32 editorclass::getonewaycol(int rx, int ry)
         case 5:
             return graphics.getRGB(206, 5, 0);
         }
+        break;
 
     // Towers WOULD be case 5, but tiles3.png doesn't have one-ways...
     // TODO: If tiles3.png ends up having one-ways, update this

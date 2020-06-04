@@ -555,6 +555,7 @@ void menuactionpress()
             game.createmenu(Menu::setslowdown);
             map.nexttowercolour();
             music.playef(11);
+            break;
         case 5:
             // mute
             if (music.muted) {
@@ -597,6 +598,7 @@ void menuactionpress()
             music.playef(11);
             game.createmenu(Menu::accessibility);
             map.nexttowercolour();
+            break;
         case 1:
 #if !defined(MAKEANDPLAY)
             //unlock play options
@@ -647,6 +649,7 @@ void menuactionpress()
             game.returnmenu();
             map.nexttowercolour();
         }
+        break;
     }
     case Menu::unlockmenutrials:
         switch (game.currentmenuoption)
