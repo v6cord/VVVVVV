@@ -707,12 +707,19 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 
 #ifdef _WIN32
 #include <shellapi.h>
+bool FILESYSTEM_openDirectoryEnabled() {
+    return true;
+}
 
 bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
 #elif defined(__SWITCH__) || defined(__ANDROID__)
+bool FILESYSTEM_openDirectoryEnabled() {
+    return false;
+}
+
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
@@ -724,6 +731,10 @@ const char* open_cmd = "open";
 #endif
 
 extern "C" char** environ;
+
+bool FILESYSTEM_openDirectoryEnabled() {
+    return true;
+}
 
 bool FILESYSTEM_openDirectory(const char *dname) {
     pid_t child;

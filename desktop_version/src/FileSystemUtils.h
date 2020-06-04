@@ -31,4 +31,7 @@ bool FILESYSTEM_openDirectory(const char *dname);
 
 std::vector<std::string> FILESYSTEM_getGraphicsDirFileNames();
 
+bool FILESYSTEM_openDirectoryEnabled();
+bool FILESYSTEM_openDirectory(const char *dname);
+
 #endif /* FILESYSTEMUTILS_H */
