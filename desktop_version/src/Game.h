@@ -38,6 +38,12 @@ struct customtrialrecord {
     int attempted = false;
 };
 
+struct MenuOption
+{
+    std::string text;
+    bool active;
+};
+
 class Game
 {
 public:
