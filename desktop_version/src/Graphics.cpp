@@ -1714,13 +1714,11 @@ void Graphics::drawentities()
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                for (int ii = 0; ii < 4; ii++)
+                {
+                    BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                    drawRect.x += 8;
+                }
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
@@ -1782,21 +1780,11 @@ void Graphics::drawentities()
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
 
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
-                drawRect.x += 8;
-                BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                for (int ii = 0; ii < 8; ii++)
+                {
+                    BlitSurfaceStandard((*tilesvec)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect);
+                    drawRect.x += 8;
+                }
             }
             else if (obj.entities[i].size == 9)         // Really Big Sprite! (2x2)
             {
