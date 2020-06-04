@@ -1059,7 +1059,7 @@ void menurender()
         case 5:
             graphics.bigprint( -1, 40, "Music", tr, tg, tb, true);
             graphics.Print( -1, 75, "Disables music.", tr, tg, tb, true);
-            if (!music.muted)
+            if (!game.musicmuted)
             {
                 graphics.Print( -1, 85, "Music is ON.", tr, tg, tb, true);
             }

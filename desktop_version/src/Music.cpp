@@ -246,11 +246,6 @@ void musicclass::play(int t, int fadeintime /* = 3000*/)
 			t += 16;
 		}
 	}
-	if (muted)
-	{
-		currentsong = t;
-		return;
-	}
 	safeToProcessMusic = true;
 	Mix_VolumeMusic(128);
 	if (currentsong !=t)
@@ -460,7 +455,6 @@ void musicclass::playfile(const char* t, std::string track, int loops, bool inte
 	if (track != "") {
 		if (custom_file_paths[track] != t) {
 			stopfile(track);
-			if (!muted) channel = Mix_PlayChannel(-1, pair->second.sound, loops);
 			custom_file_paths[track] = t;
 		}
 	} else {

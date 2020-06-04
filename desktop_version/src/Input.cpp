@@ -558,17 +558,7 @@ void menuactionpress()
             break;
         case 5:
             // mute
-            if (music.muted) {
-                music.muted = false;
-                auto prev = music.currentsong;
-                music.currentsong = -1;
-                music.play(prev);
-            } else {
-                music.muted = true;
-                auto s = music.currentsong;
-                music.haltdasmusik();
-                music.currentsong = s;
-            }
+            game.musicmuted = !game.musicmuted;
             music.playef(11);
             break;
         case 6:

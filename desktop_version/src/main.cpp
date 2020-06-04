@@ -617,6 +617,16 @@ int main(int argc, char *argv[])
                 game.mutebutton--;
             }
 
+            if (key.isDown(KEYBOARD_n) && game.musicmutebutton <= 0 && !inEditor)
+            {
+                game.musicmutebutton = 8;
+                game.musicmuted = !game.musicmuted;
+            }
+            if (game.musicmutebutton > 0)
+            {
+                game.musicmutebutton--;
+            }
+
             if (game.muted)
             {
                 game.globalsound = 0;
@@ -627,19 +637,16 @@ int main(int argc, char *argv[])
             if (!game.muted && game.globalsound == 0)
             {
                 game.globalsound = 1;
-                Mix_VolumeMusic(MIX_MAX_VOLUME) ;
                 Mix_Volume(-1,MIX_MAX_VOLUME);
-            }
 
-            music.processmusic();
-            graphics.processfade();
-            game.gameclock();
-            gameScreen.FlipScreen();
-
-            if (key.resetWindow)
-            {
-                key.resetWindow = false;
-                gameScreen.ResizeScreen(-1, -1);
+                if (game.musicmuted)
+                {
+                    Mix_VolumeMusic(0);
+                }
+                else
+                {
+                    Mix_VolumeMusic(MIX_MAX_VOLUME);
+                }
             }
 
 

@@ -234,6 +234,8 @@ public:
     bool infocus = false;
     bool muted = false;
     int mutebutton = 0;
+    bool musicmuted = false;
+    int musicmutebutton = 0;
 private:
     float m_globalVol = 0.0;
 

@@ -57,8 +57,6 @@ public:
 	bool usingmmmmmm = false;
         bool loaded = false;
 
-        bool muted = false;
-
         std::unordered_map<std::string, SoundTrack> custom_files;
         std::unordered_map<std::string, int> custom_file_channels;
         std::unordered_map<int, std::string> custom_channel_paths;

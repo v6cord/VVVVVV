@@ -123,6 +123,8 @@ void Game::init(void)
     infocus = true;
     paused = false;
     muted = false;
+    musicmuted = false;
+    musicmutebutton = 0;
     globalsound = 128;
     m_globalVol = 1.0f;
 
@@ -4396,7 +4398,7 @@ void Game::loadstats()
 
         if (pKey == "muted")
         {
-            music.muted = atoi(pText);
+            game.musicmuted = atoi(pText);
         }
 
         if (pKey == "notextoutline")
@@ -4633,7 +4635,7 @@ void Game::savestats()
     dataNode->LinkEndChild(msg);
 
     msg = new TiXmlElement("muted");
-    msg->LinkEndChild(new TiXmlText(help.String((int) music.muted).c_str()));
+    msg->LinkEndChild(new TiXmlText(help.String((int) game.musicmuted).c_str()));
     dataNode->LinkEndChild(msg);
 
     msg = new TiXmlElement("notextoutline");
