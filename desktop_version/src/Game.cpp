@@ -7248,7 +7248,7 @@ void Game::createmenu( std::string t )
             option("touch input (swipe)");
         }
         option("return");
-        menuxoff = -40;
+        menuxoff = -60;
         menuyoff = 10;
     }
     else if (t == "cleardatamenu")
