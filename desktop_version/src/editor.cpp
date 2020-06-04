@@ -3267,6 +3267,285 @@ int cycle_through_custom_resources(int current, std::map <int, std::vector<SDL_S
     return 0;
 }
 
+void editormenurender(int tr, int tg, int tb)
+{
+    if (game.currentmenuname == "ed_settings" || game.currentmenuname == "ed_settings2" || game.currentmenuname == "ed_settings3")
+    {
+        graphics.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
+    }
+    else if (game.currentmenuname == "ed_dimensions") {
+        int colors[6][3] = {
+            {255, 0,   0  },
+            {0,   255, 0  },
+            {0,   0,   255},
+            {255, 255, 0  },
+            {255, 0,   255},
+            {0,   255, 255}
+        };
+
+        ed.generatecustomminimap();
+        graphics.drawcustompixeltextbox(35+map.custommmxoff, 16+map.custommmyoff, map.custommmxsize+10, map.custommmysize+10, (map.custommmxsize+10)/8, (map.custommmysize+10)/8, tr, tg, tb,4,0);
+        graphics.drawpartimage(12, 40+map.custommmxoff, 21+map.custommmyoff, map.custommmxsize,map.custommmysize);
+        int xmult = 12;
+        int ymult = 9;
+        if (map.customzoom == 4) {
+            xmult = 48;
+            ymult = 36;
+        } else if (map.customzoom == 2) {
+            xmult = 24;
+            ymult = 18;
+        }
+        int lastcolor = -1;
+        for (int i = 0; i < (int)ed.dimensions.size(); i++) {
+            // game.mx
+            // game.my
+            Dimension dim = ed.dimensions[i];
+            int color = i % 6;
+            lastcolor = color;
+            int x_ = 40 + (dim.x * xmult) + map.custommmxoff;
+            int y_ = 21 + (dim.y * ymult) + map.custommmyoff;
+            int w_ = (dim.w * xmult);
+            int h_ = (dim.h * ymult);
+            fillboxabs(x_, y_, w_, h_,
+                       graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
+        }
+        bool stoploop = false;
+        for (int y = 0; y < map.customheight; y++) {
+            for (int x = 0; x < map.customwidth; x++) {
+                int x_ = 40 + (x * xmult) + map.custommmxoff;
+                int y_ = 21 + (y * ymult) + map.custommmyoff;
+                if ((game.mx > x_) && ((game.mx - 1) < (x_ + xmult))) {
+                    if ((game.my > y_) && ((game.my - 1) < (y_ + ymult))) {
+                        ed.cursor_x = x;
+                        ed.cursor_y = y;
+                        stoploop = true;
+                        break;
+                    }
+                }
+            }
+            if (stoploop) break;
+        }
+        int color = (lastcolor + 1) % 6;
+        int display_x = 40 + (ed.cursor_x * xmult) + map.custommmxoff;
+        int display_y = 21 + (ed.cursor_y * ymult) + map.custommmyoff;
+        fillboxabs(display_x, display_y, xmult, ymult,
+            graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
+    }
+    else if (game.currentmenuname == "ed_edit_trial") {
+        customtrial ctrial = ed.customtrials[ed.edtrial];
+
+        if(ed.trialnamemod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.bigprint( -1, 35, key.keybuffer+"_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.bigprint( -1, 35, key.keybuffer+" ", tr, tg, tb, true);
+            }
+        } else {
+            graphics.bigprint( -1, 35, ctrial.name, tr, tg, tb, true);
+        }
+        game.timetrialpar = ctrial.par;
+        graphics.Print( 16, 65,  "MUSIC      " + help.getmusicname(ctrial.music), tr, tg, tb);
+        if (ed.trialmod && (game.currentmenuoption == 3))
+            graphics.Print( 16, 75,  "TRINKETS   < " + help.number(ctrial.trinkets) + " >", tr, tg, tb);
+        else
+            graphics.Print( 16, 75,  "TRINKETS   " + help.number(ctrial.trinkets), tr, tg, tb);
+        if (ed.trialmod && (game.currentmenuoption == 4))
+            graphics.Print( 16, 85,  "TIME       < " + game.partimestring() + " >", tr, tg, tb);
+        else
+            graphics.Print( 16, 85,  "TIME       " + game.partimestring(), tr, tg, tb);
+    }
+    else if (game.currentmenuname == "ed_remove_trial") {
+        graphics.bigprint( -1, 35, "Are you sure?", tr, tg, tb, true);
+    }
+    else if (game.currentmenuname == "ed_trials")
+    {
+        graphics.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
+        for (int i = 0; i < (int)ed.customtrials.size(); i++) {
+            std::string sl = ed.customtrials[i].name;
+            if (game.currentmenuoption == i) {
+                std::transform(sl.begin(), sl.end(), sl.begin(), ::toupper);
+                sl = "[ " + sl + " ]";
+            } else {
+                std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);
+                sl = "  " + sl + "  ";
+            }
+            graphics.Print(-1, 75 + (i * 16), sl, tr,tg,tb,true);
+        }
+        if (game.currentmenuoption == (int)ed.customtrials.size()) {
+            graphics.Print(-1, 75 + ((int)ed.customtrials.size() * 16), "[ ADD NEW TRIAL ]", tr,tg,tb,true);
+        } else {
+            graphics.Print(-1, 75 + ((int)ed.customtrials.size() * 16), "  add new trial  ", tr,tg,tb,true);
+        }
+        if (game.currentmenuoption == (int)ed.customtrials.size() + 1) {
+            graphics.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "[ BACK TO MENU ]", tr,tg,tb,true);
+        } else {
+            graphics.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
+        }
+    }
+    else if (game.currentmenuname=="ed_desc")
+    {
+        if(ed.titlemod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.bigprint( -1, 35, key.keybuffer+"_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.bigprint( -1, 35, key.keybuffer+" ", tr, tg, tb, true);
+            }
+        }
+        else
+        {
+            graphics.bigprint( -1, 35, EditorData::GetInstance().title, tr, tg, tb, true);
+        }
+        if(ed.creatormod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.Print( -1, 60, "by " + key.keybuffer+ "_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.Print( -1, 60, "by " + key.keybuffer+ " ", tr, tg, tb, true);
+            }
+        }
+        else
+        {
+            graphics.Print( -1, 60, "by " + EditorData::GetInstance().creator, tr, tg, tb, true);
+        }
+        if(ed.websitemod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.Print( -1, 70, key.keybuffer+"_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.Print( -1, 70, key.keybuffer+" ", tr, tg, tb, true);
+            }
+        }
+        else
+        {
+            graphics.Print( -1, 70, ed.website, tr, tg, tb, true);
+        }
+        if(ed.desc1mod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.Print( -1, 90, key.keybuffer+"_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.Print( -1, 90, key.keybuffer+" ", tr, tg, tb, true);
+            }
+        }
+        else
+        {
+            graphics.Print( -1, 90, ed.Desc1, tr, tg, tb, true);
+        }
+        if(ed.desc2mod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.Print( -1, 100, key.keybuffer+"_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.Print( -1, 100, key.keybuffer+" ", tr, tg, tb, true);
+            }
+        }
+        else
+        {
+            graphics.Print( -1, 100, ed.Desc2, tr, tg, tb, true);
+        }
+        if(ed.desc3mod)
+        {
+            if(ed.entframe<2)
+            {
+                graphics.Print( -1, 110, key.keybuffer+"_", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.Print( -1, 110, key.keybuffer+" ", tr, tg, tb, true);
+            }
+        }
+        else
+        {
+            graphics.Print( -1, 110, ed.Desc3, tr, tg, tb, true);
+        }
+    }
+    else if (game.currentmenuname == "ed_music")
+    {
+        graphics.bigprint( -1, 65, "Map Music", tr, tg, tb, true);
+
+        graphics.Print( -1, 85, "Current map music:", tr, tg, tb, true);
+        switch(ed.levmusic)
+        {
+        case 0:
+            graphics.Print( -1, 120, "No background music", tr, tg, tb, true);
+            break;
+        case 1:
+            graphics.Print( -1, 120, "1: Pushing Onwards", tr, tg, tb, true);
+            break;
+        case 2:
+            graphics.Print( -1, 120, "2: Positive Force", tr, tg, tb, true);
+            break;
+        case 3:
+            graphics.Print( -1, 120, "3: Potential for Anything", tr, tg, tb, true);
+            break;
+        case 4:
+            graphics.Print( -1, 120, "4: Passion for Exploring", tr, tg, tb, true);
+            break;
+        case 5:
+            graphics.Print( -1, 120, "N/A: Pause", tr, tg, tb, true);
+            break;
+        case 6:
+            graphics.Print( -1, 120, "5: Presenting VVVVVV", tr, tg, tb, true);
+            break;
+        case 7:
+            graphics.Print( -1, 120, "N/A: Plenary", tr, tg, tb, true);
+            break;
+        case 8:
+            graphics.Print( -1, 120, "6: Predestined Fate", tr, tg, tb, true);
+            break;
+        case 9:
+            graphics.Print( -1, 120, "N/A: Positive Force Reversed", tr, tg, tb, true);
+            break;
+        case 10:
+            graphics.Print( -1, 120, "7: Popular Potpourri", tr, tg, tb, true);
+            break;
+        case 11:
+            graphics.Print( -1, 120, "8: Pipe Dream", tr, tg, tb, true);
+            break;
+        case 12:
+            graphics.Print( -1, 120, "9: Pressure Cooker", tr, tg, tb, true);
+            break;
+        case 13:
+            graphics.Print( -1, 120, "10: Paced Energy", tr, tg, tb, true);
+            break;
+        case 14:
+            graphics.Print( -1, 120, "11: Piercing the Sky", tr, tg, tb, true);
+            break;
+        case 15:
+            graphics.Print( -1, 120, "N/A: Predestined Fate Remix", tr, tg, tb, true);
+            break;
+        default:
+            graphics.Print( -1, 120, "?: something else", tr, tg, tb, true);
+            break;
+        }
+    }
+    else if (game.currentmenuname == "ed_quit")
+    {
+        graphics.bigprint( -1, 90, "Save before", tr, tg, tb, true);
+        graphics.bigprint( -1, 110, "quitting?", tr, tg, tb, true);
+    }
+}
+
 void editorrender()
 {
     //Draw grid
@@ -4108,281 +4387,7 @@ void editorrender()
         if(tg>255) tg=255;
         if (tb < 0) tb = 0;
         if(tb>255) tb=255;
-        if (game.currentmenuname == "ed_settings" || game.currentmenuname == "ed_settings2" || game.currentmenuname == "ed_settings3")
-        {
-            graphics.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
-        }
-        else if (game.currentmenuname == "ed_dimensions") {
-            int colors[6][3] = {
-                {255, 0,   0  },
-                {0,   255, 0  },
-                {0,   0,   255},
-                {255, 255, 0  },
-                {255, 0,   255},
-                {0,   255, 255}
-            };
-
-            ed.generatecustomminimap();
-            graphics.drawcustompixeltextbox(35+map.custommmxoff, 16+map.custommmyoff, map.custommmxsize+10, map.custommmysize+10, (map.custommmxsize+10)/8, (map.custommmysize+10)/8, tr, tg, tb,4,0);
-            graphics.drawpartimage(12, 40+map.custommmxoff, 21+map.custommmyoff, map.custommmxsize,map.custommmysize);
-            int xmult = 12;
-            int ymult = 9;
-            if (map.customzoom == 4) {
-                xmult = 48;
-                ymult = 36;
-            } else if (map.customzoom == 2) {
-                xmult = 24;
-                ymult = 18;
-            }
-            int lastcolor = -1;
-            for (int i = 0; i < (int)ed.dimensions.size(); i++) {
-                // game.mx
-                // game.my
-                Dimension dim = ed.dimensions[i];
-                int color = i % 6;
-                lastcolor = color;
-                int x_ = 40 + (dim.x * xmult) + map.custommmxoff;
-                int y_ = 21 + (dim.y * ymult) + map.custommmyoff;
-                int w_ = (dim.w * xmult);
-                int h_ = (dim.h * ymult);
-                fillboxabs(x_, y_, w_, h_,
-                           graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
-            }
-            bool stoploop = false;
-            for (int y = 0; y < map.customheight; y++) {
-                for (int x = 0; x < map.customwidth; x++) {
-                    int x_ = 40 + (x * xmult) + map.custommmxoff;
-                    int y_ = 21 + (y * ymult) + map.custommmyoff;
-                    if ((game.mx > x_) && ((game.mx - 1) < (x_ + xmult))) {
-                        if ((game.my > y_) && ((game.my - 1) < (y_ + ymult))) {
-                            ed.cursor_x = x;
-                            ed.cursor_y = y;
-                            stoploop = true;
-                            break;
-                        }
-                    }
-                }
-                if (stoploop) break;
-            }
-            int color = (lastcolor + 1) % 6;
-            int display_x = 40 + (ed.cursor_x * xmult) + map.custommmxoff;
-            int display_y = 21 + (ed.cursor_y * ymult) + map.custommmyoff;
-            fillboxabs(display_x, display_y, xmult, ymult,
-                graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
-        }
-        else if (game.currentmenuname == "ed_edit_trial") {
-            customtrial ctrial = ed.customtrials[ed.edtrial];
-
-            if(ed.trialnamemod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.bigprint( -1, 35, key.keybuffer+"_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.bigprint( -1, 35, key.keybuffer+" ", tr, tg, tb, true);
-                }
-            } else {
-                graphics.bigprint( -1, 35, ctrial.name, tr, tg, tb, true);
-            }
-            game.timetrialpar = ctrial.par;
-            graphics.Print( 16, 65,  "MUSIC      " + help.getmusicname(ctrial.music), tr, tg, tb);
-            if (ed.trialmod && (game.currentmenuoption == 3))
-                graphics.Print( 16, 75,  "TRINKETS   < " + help.number(ctrial.trinkets) + " >", tr, tg, tb);
-            else
-                graphics.Print( 16, 75,  "TRINKETS   " + help.number(ctrial.trinkets), tr, tg, tb);
-            if (ed.trialmod && (game.currentmenuoption == 4))
-                graphics.Print( 16, 85,  "TIME       < " + game.partimestring() + " >", tr, tg, tb);
-            else
-                graphics.Print( 16, 85,  "TIME       " + game.partimestring(), tr, tg, tb);
-        }
-        else if (game.currentmenuname == "ed_remove_trial") {
-            graphics.bigprint( -1, 35, "Are you sure?", tr, tg, tb, true);
-        }
-        else if (game.currentmenuname == "ed_trials")
-        {
-            graphics.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
-            for (int i = 0; i < (int)ed.customtrials.size(); i++) {
-                std::string sl = ed.customtrials[i].name;
-                if (game.currentmenuoption == i) {
-                    std::transform(sl.begin(), sl.end(), sl.begin(), ::toupper);
-                    sl = "[ " + sl + " ]";
-                } else {
-                    std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);
-                    sl = "  " + sl + "  ";
-                }
-                graphics.Print(-1, 75 + (i * 16), sl, tr,tg,tb,true);
-            }
-            if (game.currentmenuoption == (int)ed.customtrials.size()) {
-                graphics.Print(-1, 75 + ((int)ed.customtrials.size() * 16), "[ ADD NEW TRIAL ]", tr,tg,tb,true);
-            } else {
-                graphics.Print(-1, 75 + ((int)ed.customtrials.size() * 16), "  add new trial  ", tr,tg,tb,true);
-            }
-            if (game.currentmenuoption == (int)ed.customtrials.size() + 1) {
-                graphics.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "[ BACK TO MENU ]", tr,tg,tb,true);
-            } else {
-                graphics.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
-            }
-        }
-        else if (game.currentmenuname=="ed_desc")
-        {
-            if(ed.titlemod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.bigprint( -1, 35, key.keybuffer+"_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.bigprint( -1, 35, key.keybuffer+" ", tr, tg, tb, true);
-                }
-            }
-            else
-            {
-                graphics.bigprint( -1, 35, EditorData::GetInstance().title, tr, tg, tb, true);
-            }
-            if(ed.creatormod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.Print( -1, 60, "by " + key.keybuffer+ "_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.Print( -1, 60, "by " + key.keybuffer+ " ", tr, tg, tb, true);
-                }
-            }
-            else
-            {
-                graphics.Print( -1, 60, "by " + EditorData::GetInstance().creator, tr, tg, tb, true);
-            }
-            if(ed.websitemod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.Print( -1, 70, key.keybuffer+"_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.Print( -1, 70, key.keybuffer+" ", tr, tg, tb, true);
-                }
-            }
-            else
-            {
-                graphics.Print( -1, 70, ed.website, tr, tg, tb, true);
-            }
-            if(ed.desc1mod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.Print( -1, 90, key.keybuffer+"_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.Print( -1, 90, key.keybuffer+" ", tr, tg, tb, true);
-                }
-            }
-            else
-            {
-                graphics.Print( -1, 90, ed.Desc1, tr, tg, tb, true);
-            }
-            if(ed.desc2mod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.Print( -1, 100, key.keybuffer+"_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.Print( -1, 100, key.keybuffer+" ", tr, tg, tb, true);
-                }
-            }
-            else
-            {
-                graphics.Print( -1, 100, ed.Desc2, tr, tg, tb, true);
-            }
-            if(ed.desc3mod)
-            {
-                if(ed.entframe<2)
-                {
-                    graphics.Print( -1, 110, key.keybuffer+"_", tr, tg, tb, true);
-                }
-                else
-                {
-                    graphics.Print( -1, 110, key.keybuffer+" ", tr, tg, tb, true);
-                }
-            }
-            else
-            {
-                graphics.Print( -1, 110, ed.Desc3, tr, tg, tb, true);
-            }
-        }
-        else if (game.currentmenuname == "ed_music")
-        {
-            graphics.bigprint( -1, 65, "Map Music", tr, tg, tb, true);
-
-            graphics.Print( -1, 85, "Current map music:", tr, tg, tb, true);
-            switch(ed.levmusic)
-            {
-            case 0:
-                graphics.Print( -1, 120, "No background music", tr, tg, tb, true);
-                break;
-            case 1:
-                graphics.Print( -1, 120, "1: Pushing Onwards", tr, tg, tb, true);
-                break;
-            case 2:
-                graphics.Print( -1, 120, "2: Positive Force", tr, tg, tb, true);
-                break;
-            case 3:
-                graphics.Print( -1, 120, "3: Potential for Anything", tr, tg, tb, true);
-                break;
-            case 4:
-                graphics.Print( -1, 120, "4: Passion for Exploring", tr, tg, tb, true);
-                break;
-            case 5:
-                graphics.Print( -1, 120, "N/A: Pause", tr, tg, tb, true);
-                break;
-            case 6:
-                graphics.Print( -1, 120, "5: Presenting VVVVVV", tr, tg, tb, true);
-                break;
-            case 7:
-                graphics.Print( -1, 120, "N/A: Plenary", tr, tg, tb, true);
-                break;
-            case 8:
-                graphics.Print( -1, 120, "6: Predestined Fate", tr, tg, tb, true);
-                break;
-            case 9:
-                graphics.Print( -1, 120, "N/A: Positive Force Reversed", tr, tg, tb, true);
-                break;
-            case 10:
-                graphics.Print( -1, 120, "7: Popular Potpourri", tr, tg, tb, true);
-                break;
-            case 11:
-                graphics.Print( -1, 120, "8: Pipe Dream", tr, tg, tb, true);
-                break;
-            case 12:
-                graphics.Print( -1, 120, "9: Pressure Cooker", tr, tg, tb, true);
-                break;
-            case 13:
-                graphics.Print( -1, 120, "10: Paced Energy", tr, tg, tb, true);
-                break;
-            case 14:
-                graphics.Print( -1, 120, "11: Piercing the Sky", tr, tg, tb, true);
-                break;
-            case 15:
-                graphics.Print( -1, 120, "N/A: Predestined Fate Remix", tr, tg, tb, true);
-                break;
-            default:
-                graphics.Print( -1, 120, "?: something else", tr, tg, tb, true);
-                break;
-            }
-        }
-        else if (game.currentmenuname == "ed_quit")
-        {
-            graphics.bigprint( -1, 90, "Save before", tr, tg, tb, true);
-            graphics.bigprint( -1, 110, "quitting?", tr, tg, tb, true);
-        }
+        editormenurender(tr, tg, tb);
 
         graphics.drawmenu(tr, tg, tb, 15);
     } else if (ed.textmod) {
