@@ -321,8 +321,7 @@ void menuactionpress()
         }
         case 3:
             music.playef(11);
-            game.levelpage=0;
-            game.createmenu(Menu::levellist);
+            game.returnmenu();
             map.nexttowercolour();
             break;
         }
