@@ -1335,7 +1335,7 @@ void Game::updatestate()
             if(graphics.fademode == 1)	state++;
             break;
         case 81:
-            gamestate = 1;
+            gamestate = TITLEMODE;
             graphics.fademode = 4;
             music.play(6);
             graphics.backgrounddrawn = false;
@@ -1423,7 +1423,7 @@ void Game::updatestate()
             break;
         case 84:
             graphics.flipmode = false;
-            gamestate = 1;
+            gamestate = TITLEMODE;
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;
@@ -1503,7 +1503,7 @@ void Game::updatestate()
             if(graphics.fademode == 1)	state++;
             break;
         case 97:
-            gamestate = 0;
+            gamestate = GAMEMODE;
             graphics.fademode = 4;
             startscript = true;
             newscript="returntolab";
@@ -2977,7 +2977,7 @@ void Game::updatestate()
             break;
         case 3101:
             graphics.flipmode = false;
-            gamestate = 1;
+            gamestate = TITLEMODE;
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;
@@ -3304,7 +3304,7 @@ void Game::updatestate()
             break;
         case 3522:
             graphics.flipmode = false;
-            gamestate = 1;
+            gamestate = TITLEMODE;
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;

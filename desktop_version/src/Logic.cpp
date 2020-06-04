@@ -71,7 +71,7 @@ void gamecompletelogic()
         graphics.showcutscenebars = false;
         graphics.cutscenebarspos = 0;
         //Return to game
-        game.gamestate = 7;
+        game.gamestate = GAMECOMPLETE2;
         graphics.fademode = 4;
     }
 }
@@ -108,7 +108,7 @@ void gamecompletelogic2()
         music.currentsong=tmp;
         //Return to game
         map.colstate = 10;
-        game.gamestate = 1;
+        game.gamestate = TITLEMODE;
         graphics.fademode = 4;
         music.playef(18);
         game.createmenu(Menu::gamecompletecontinue);
