@@ -1360,7 +1360,7 @@ void Game::updatestate()
             {
                 returntomenu(Menu::levellist);
             }
-            else if (game.telesummary != "" || game.quicksummary != "")
+            else if (game.telesummary != "" || game.quicksummary != "" || anything_unlocked())
             {
                 returntomenu(Menu::play);
             }
@@ -7489,14 +7489,24 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
             }
             else
             {
-                option("continue");
+                if (telesummary != "" || quicksummary != "")
+                {
+                    option("continue");
+                }
+                else
+                {
+                    option("start");
+                }
                 //ok, secret lab! no notification, but test:
                 if (unlock[8])
                 {
                     option("secret lab", !map.invincibility && game.slowdown == 30);
                 }
                 option("play modes");
-                option("new game");
+                if (telesummary != "" || quicksummary != "")
+                {
+                    option("new game");
+                }
                 option("return");
                 if (unlock[8])
                 {
