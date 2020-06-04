@@ -5048,6 +5048,7 @@ void editormenuactionpress()
             key.fakekeytimer = 6;
             ed.settingsmod = false;
         } else if (game.currentmenuoption == 5) {
+            int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < ed.maxwidth * ed.maxheight) {
                     ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
@@ -5073,6 +5074,7 @@ void editormenuactionpress()
                 }
             }
         } else if (game.currentmenuoption == 6) {
+            int tower = ed.get_tower(ed.levx, ed.levy);
             if (tower) {
                 if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1) {
                     ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
