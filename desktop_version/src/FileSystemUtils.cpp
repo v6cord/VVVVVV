@@ -705,6 +705,15 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 	printf("Copied:\n\tOld: %s\n\tNew: %s\n", oldLocation, newLocation);
 }
 
+bool FILESYSTEM_openDirectoryEnabled()
+{
+    /* This is just a check to see if we're on a desktop or tenfoot setup.
+     * If you're working on a tenfoot-only build, add a def that always
+     * returns false!
+     */
+    return !SDL_GetHintBoolean("SteamTenfoot", SDL_TRUE);
+}
+
 #ifdef _WIN32
 #include <shellapi.h>
 bool FILESYSTEM_openDirectoryEnabled() {
@@ -731,10 +740,6 @@ const char* open_cmd = "open";
 #endif
 
 extern "C" char** environ;
-
-bool FILESYSTEM_openDirectoryEnabled() {
-    return std::getenv("SteamTenfoot") == NULL;
-}
 
 bool FILESYSTEM_openDirectory(const char *dname) {
     pid_t child;
