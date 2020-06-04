@@ -3269,11 +3269,11 @@ int cycle_through_custom_resources(int current, std::map <int, std::vector<SDL_S
 
 void editormenurender(int tr, int tg, int tb)
 {
-    if (game.currentmenuname == "ed_settings" || game.currentmenuname == "ed_settings2" || game.currentmenuname == "ed_settings3")
+    if (game.currentmenuname == Menu::ed_settings || game.currentmenuname == Menu::ed_settings2 || game.currentmenuname == Menu::ed_settings3)
     {
         graphics.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
     }
-    else if (game.currentmenuname == "ed_dimensions") {
+    else if (game.currentmenuname == Menu::ed_dimensions) {
         int colors[6][3] = {
             {255, 0,   0  },
             {0,   255, 0  },
@@ -3329,7 +3329,7 @@ dimensions_break:
         fillboxabs(display_x, display_y, xmult, ymult,
             graphics.getRGB(colors[color][2],colors[color][1],colors[color][0]));
     }
-    else if (game.currentmenuname == "ed_edit_trial") {
+    else if (game.currentmenuname == Menu::ed_edit_trial) {
         customtrial ctrial = ed.customtrials[ed.edtrial];
 
         if(ed.trialnamemod)
@@ -3356,10 +3356,10 @@ dimensions_break:
         else
             graphics.Print( 16, 85,  "TIME       " + game.partimestring(), tr, tg, tb);
     }
-    else if (game.currentmenuname == "ed_remove_trial") {
+    else if (game.currentmenuname == Menu::ed_remove_trial) {
         graphics.bigprint( -1, 35, "Are you sure?", tr, tg, tb, true);
     }
-    else if (game.currentmenuname == "ed_trials")
+    else if (game.currentmenuname == Menu::ed_trials)
     {
         graphics.bigprint( -1, 35, "Time Trials", tr, tg, tb, true);
         for (int i = 0; i < (int)ed.customtrials.size(); i++) {
@@ -3384,7 +3384,7 @@ dimensions_break:
             graphics.Print(-1, 75 + (((int)ed.customtrials.size() + 1) * 16), "  back to menu  ", tr,tg,tb,true);
         }
     }
-    else if (game.currentmenuname=="ed_desc")
+    else if (game.currentmenuname==Menu::ed_desc)
     {
         if(ed.titlemod)
         {
@@ -3477,7 +3477,7 @@ dimensions_break:
             graphics.Print( -1, 110, ed.Desc3, tr, tg, tb, true);
         }
     }
-    else if (game.currentmenuname == "ed_music")
+    else if (game.currentmenuname == Menu::ed_music)
     {
         graphics.bigprint( -1, 65, "Map Music", tr, tg, tb, true);
 
@@ -3537,7 +3537,7 @@ dimensions_break:
             break;
         }
     }
-    else if (game.currentmenuname == "ed_quit")
+    else if (game.currentmenuname == Menu::ed_quit)
     {
         graphics.bigprint( -1, 90, "Save before", tr, tg, tb, true);
         graphics.bigprint( -1, 110, "quitting?", tr, tg, tb, true);
@@ -4824,14 +4824,14 @@ void editorlogic()
         ed.settingsmod=false;
         ed.trialmod=false;
         graphics.backgrounddrawn=false;
-        game.createmenu("mainmenu");
+        game.createmenu(Menu::mainmenu);
     }
 }
 
 
 void editormenuactionpress()
 {
-    if (game.currentmenuname == "ed_trials")
+    if (game.currentmenuname == Menu::ed_trials)
     {
         if (game.currentmenuoption == (int)ed.customtrials.size())
         {
@@ -4840,22 +4840,22 @@ void editormenuactionpress()
             ed.customtrials.push_back(temp);
             ed.edtrial = (int)ed.customtrials.size() - 1;
             music.playef(11);
-            game.createmenu("ed_edit_trial");
+            game.createmenu(Menu::ed_edit_trial);
         }
         else if (game.currentmenuoption == (int)ed.customtrials.size()+1)
         {
             music.playef(11);
-            game.createmenu("ed_settings");
+            game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
         }
         else
         {
             ed.edtrial = game.currentmenuoption;
             music.playef(11);
-            game.createmenu("ed_edit_trial");
+            game.createmenu(Menu::ed_edit_trial);
         }
     }
-    else if (game.currentmenuname == "ed_edit_trial")
+    else if (game.currentmenuname == Menu::ed_edit_trial)
     {
         if (game.currentmenuoption == 0)
         {
@@ -4884,29 +4884,29 @@ void editormenuactionpress()
         }
         if (game.currentmenuoption == 5) {
             music.playef(11);
-            game.createmenu("ed_remove_trial");
+            game.createmenu(Menu::ed_remove_trial);
             map.nexttowercolour();
         }
         if (game.currentmenuoption == 6) {
             music.playef(11);
-            game.createmenu("ed_trials");
+            game.createmenu(Menu::ed_trials);
             map.nexttowercolour();
         }
     }
-    else if (game.currentmenuname == "ed_remove_trial")
+    else if (game.currentmenuname == Menu::ed_remove_trial)
     {
         if (game.currentmenuoption == 0) {
             ed.customtrials.erase(ed.customtrials.begin() + ed.edtrial);
             music.playef(11);
-            game.createmenu("ed_trials");
+            game.createmenu(Menu::ed_trials);
             map.nexttowercolour();
         } else {
             music.playef(11);
-            game.createmenu("ed_edit_trial");
+            game.createmenu(Menu::ed_edit_trial);
             map.nexttowercolour();
         }
     }
-    else if (game.currentmenuname == "ed_desc")
+    else if (game.currentmenuname == Menu::ed_desc)
     {
         switch (game.currentmenuoption)
         {
@@ -4936,19 +4936,19 @@ void editormenuactionpress()
             break;
         case 4:
             music.playef(11);
-            game.createmenu("ed_settings");
+            game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
             break;
         }
     }
-    else if (game.currentmenuname == "ed_settings")
+    else if (game.currentmenuname == Menu::ed_settings)
     {
         switch (game.currentmenuoption)
         {
         case 0:
             //Change level description stuff
             music.playef(11);
-            game.createmenu("ed_desc");
+            game.createmenu(Menu::ed_desc);
             map.nexttowercolour();
             break;
         case 1:
@@ -4967,12 +4967,12 @@ void editormenuactionpress()
             break;
         case 2:
             music.playef(11);
-            game.createmenu("ed_trials");
+            game.createmenu(Menu::ed_trials);
             map.nexttowercolour();
             break;
         case 3:
             music.playef(11);
-            game.createmenu("ed_music");
+            game.createmenu(Menu::ed_music);
             map.nexttowercolour();
             if(ed.levmusic>0) music.play(ed.levmusic);
             break;
@@ -5000,17 +5000,17 @@ void editormenuactionpress()
             break;
         case 6:
             music.playef(11);
-            game.createmenu("ed_settings2");
+            game.createmenu(Menu::ed_settings2);
             map.nexttowercolour();
             break;
         case 7:
             music.playef(11);
-            game.createmenu("ed_quit");
+            game.createmenu(Menu::ed_quit);
             map.nexttowercolour();
             break;
         }
     }
-    else if (game.currentmenuname == "ed_settings2") {
+    else if (game.currentmenuname == Menu::ed_settings2) {
         switch (game.currentmenuoption) {
         case 0: {
             int tower = ed.get_tower(ed.levx, ed.levy);
@@ -5106,11 +5106,11 @@ void editormenuactionpress()
         }
         if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
             music.playef(11);
-            game.createmenu("ed_settings3");
+            game.createmenu(Menu::ed_settings3);
             map.nexttowercolour();
         }
     }
-    else if (game.currentmenuname == "ed_settings3")
+    else if (game.currentmenuname == Menu::ed_settings3)
     {
         switch (game.currentmenuoption) {
         case 0:
@@ -5127,7 +5127,7 @@ void editormenuactionpress()
             ed.updatetiles=true;
             ed.keydelay=6;
 
-            game.createmenu("ed_settings3");
+            game.createmenu(Menu::ed_settings3);
             break;
         case 1:
             if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
@@ -5226,16 +5226,16 @@ void editormenuactionpress()
             ed.settingsmod = 0;
             break;
         case 5:
-            game.createmenu("ed_dimensions");
+            game.createmenu(Menu::ed_dimensions);
             break;
         }
         if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
             music.playef(11);
-            game.createmenu("ed_settings");
+            game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
         }
     }
-    else if (game.currentmenuname == "ed_music")
+    else if (game.currentmenuname == Menu::ed_music)
     {
         switch (game.currentmenuoption)
         {
@@ -5259,12 +5259,12 @@ void editormenuactionpress()
         case 1:
             music.playef(11);
             music.fadeout();
-            game.createmenu("ed_settings");
+            game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
             break;
         }
     }
-    else if (game.currentmenuname == "ed_quit")
+    else if (game.currentmenuname == Menu::ed_quit)
     {
         switch (game.currentmenuoption)
         {
@@ -5289,7 +5289,7 @@ void editormenuactionpress()
         case 2:
             //Go back to editor
             music.playef(11);
-            game.createmenu("ed_settings");
+            game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
             break;
         }
@@ -5381,7 +5381,7 @@ void editorinput()
             ed.trialmod = false;
             graphics.backgrounddrawn=false;
 
-            game.createmenu("ed_settings");
+            game.createmenu(Menu::ed_settings);
             map.nexttowercolour();
         }
     }
@@ -5770,7 +5770,7 @@ void editorinput()
                     }
                 }
 
-                if (game.currentmenuname != "ed_trials") {
+                if (game.currentmenuname != Menu::ed_trials) {
                     if (game.currentmenuoption < 0) game.currentmenuoption = game.menuoptions.size()-1;
                     if (game.currentmenuoption >= (int) game.menuoptions.size() ) game.currentmenuoption = 0;
                 } else {

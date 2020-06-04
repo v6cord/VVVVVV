@@ -20,15 +20,15 @@ void titlelogic()
         game.menucountdown--;
         if (game.menucountdown == 0)
         {
-            if (game.menudest == "mainmenu")
+            if (game.menudest == Menu::mainmenu)
             {
                 music.play(6);
             }
-            else if (game.menudest == "gameover2")
+            else if (game.menudest == Menu::gameover2)
             {
                 music.playef(11);
             }
-            else if (game.menudest == "timetrialcomplete3")
+            else if (game.menudest == Menu::timetrialcomplete3)
             {
                 music.playef(3);
             }
@@ -111,7 +111,7 @@ void gamecompletelogic2()
         game.gamestate = 1;
         graphics.fademode = 4;
         music.playef(18);
-        game.createmenu("gamecompletecontinue");
+        game.createmenu(Menu::gamecompletecontinue);
         map.nexttowercolour();
     }
 }

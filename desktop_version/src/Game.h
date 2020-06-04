@@ -44,6 +44,74 @@ struct MenuOption
     bool active;
 };
 
+//Menu IDs
+namespace Menu
+{
+    enum MenuName
+    {
+        mainmenu,
+        playerworlds,
+        levellist,
+        quickloadlevel,
+        youwannaquit,
+        errornostart,
+        graphicoptions,
+        ed_settings,
+        ed_desc,
+        ed_music,
+        ed_quit,
+        options,
+        accessibility,
+        controller,
+        cleardatamenu,
+        setinvincibility,
+        setslowdown1,
+        setslowdown2,
+        unlockmenu,
+        credits,
+        credits2,
+        credits25,
+        credits3,
+        credits4,
+        credits5,
+        credits6,
+        play,
+        unlocktimetrial,
+        unlocktimetrials,
+        unlocknodeathmode,
+        unlockintermission,
+        unlockflipmode,
+        newgamewarning,
+        playmodes,
+        intermissionmenu,
+        playint1,
+        playint2,
+        continuemenu,
+        startnodeathmode,
+        gameover,
+        gameover2,
+        unlockmenutrials,
+        timetrials,
+        nodeathmodecomplete,
+        nodeathmodecomplete2,
+        timetrialcomplete,
+        timetrialcomplete2,
+        timetrialcomplete3,
+        gamecompletecontinue,
+
+        loadcustomtrial,
+        ed_settings2,
+        ed_settings3,
+        ed_dimensions,
+        ed_trials,
+        ed_edit_trial,
+        ed_remove_trial,
+        changelog,
+        credits_ce,
+    };
+};
+
+
 class Game
 {
 public:
@@ -82,7 +150,7 @@ public:
 
     std::string timetstring(int t);
 
-    void  createmenu(std::string t);
+    void  createmenu(enum Menu::MenuName t);
 
     void lifesequence();
 
@@ -198,7 +266,7 @@ public:
     //Main Menu Variables
     std::vector<MenuOption> menuoptions;
     int currentmenuoption = 0;
-    std::string menuselection, currentmenuname, previousmenuname;
+    enum Menu::MenuName menuselection, currentmenuname, previousmenuname;
     int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
 
@@ -211,7 +279,7 @@ public:
     }
 
     int menucountdown = 0;
-    std::string menudest;
+    enum Menu::MenuName menudest;
 
     int creditposx, creditposy, creditposdelay = 0;
 

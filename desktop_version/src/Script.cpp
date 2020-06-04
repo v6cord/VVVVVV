@@ -291,7 +291,7 @@ void quit() {
         music.niceplay(6);
         graphics.backgrounddrawn = true;
         map.tdrawback = true;
-        game.createmenu("levellist");
+        game.createmenu(Menu::levellist);
         game.state = 0;
     } else {
         game.gamestate = EDITORMODE;
@@ -3430,7 +3430,7 @@ void scriptclass::resetgametomenu() {
     FILESYSTEM_unmountassets();
     graphics.flipmode = false;
     graphics.fademode = 4;
-    game.createmenu("gameover");
+    game.createmenu(Menu::gameover);
 }
 
 void scriptclass::startgamemode(int t) {

@@ -227,17 +227,14 @@ void Game::init(void)
     unlocknotify.resize(25);
 
     currentmenuoption = 0;
-    menuselection = "null";
-    currentmenuname = "null";
     current_credits_list_index = 0;
     menuxoff = 0;
     menuyoff = 0;
     menucountdown = 0;
-    menudest="null";
     levelpage=0;
     playcustomlevel=0;
     customleveltitle="";
-    createmenu("mainmenu");
+    createmenu(Menu::mainmenu);
 
     deathcounts = 0;
     gameoverdelay = 0;
@@ -1344,7 +1341,7 @@ void Game::updatestate()
             graphics.backgrounddrawn = false;
             map.tdrawback = true;
             graphics.flipmode = false;
-            createmenu("mainmenu");
+            createmenu(Menu::mainmenu);
             state = 0;
             break;
 
@@ -1430,7 +1427,7 @@ void Game::updatestate()
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;
-            createmenu("timetrialcomplete");
+            createmenu(Menu::timetrialcomplete);
             state = 0;
             break;
 
@@ -2022,7 +2019,7 @@ void Game::updatestate()
                 }
             }
 #endif
-            createmenu("levellist");
+            createmenu(Menu::levellist);
             state = 0;
             break;
 
@@ -2974,7 +2971,7 @@ void Game::updatestate()
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;
-            createmenu("play");
+            createmenu(Menu::play);
             music.play(6);
             state = 0;
             break;
@@ -3301,7 +3298,7 @@ void Game::updatestate()
             graphics.fademode = 4;
             graphics.backgrounddrawn = true;
             map.tdrawback = true;
-            createmenu("nodeathmodecomplete");
+            createmenu(Menu::nodeathmodecomplete);
             state = 0;
             break;
 
@@ -6932,18 +6929,16 @@ std::string Game::timetstring( int t )
     return tempstring;
 }
 
-void Game::createmenu( std::string t )
+void Game::createmenu( enum Menu::MenuName t )
 {
     currentmenuoption = 0;
-    menuselection = "null";
     currentmenuname = t;
     menuxoff = 0;
     menuyoff = 0;
     menucountdown = 0;
-    menudest="null";
     menuoptions.clear();
 
-    if (t == "mainmenu")
+    if (t == Menu::mainmenu)
     {
 #if !defined(MAKEANDPLAY)
         option("start game");
@@ -6959,7 +6954,7 @@ void Game::createmenu( std::string t )
         menuyoff = -10;
     }
 #if !defined(NO_CUSTOM_LEVELS)
-    else if (t == "playerworlds")
+    else if (t == Menu::playerworlds)
     {
         option("play a level");
  #if !defined(NO_EDITOR)
@@ -6970,7 +6965,7 @@ void Game::createmenu( std::string t )
         menuxoff = -30;
         menuyoff = -40;
     }
-    else if (t == "quickloadlevel")
+    else if (t == Menu::quickloadlevel)
     {
         option("continue from save");
         option("start from beginning");
@@ -6979,19 +6974,19 @@ void Game::createmenu( std::string t )
         menuxoff = -40;
         menuyoff = -30;
     }
-    else if (t == "loadcustomtrial")
+    else if (t == Menu::loadcustomtrial)
     {
         menuxoff = -40;
         menuyoff = 0;
     }
-    else if (t == "youwannaquit")
+    else if (t == Menu::youwannaquit)
     {
         option("yes, quit");
         option("no, return");
         menuxoff = 0;
         menuyoff = -20;
     }
-    else if (t == "levellist")
+    else if (t == Menu::levellist)
     {
         if(ed.ListOfMetaData.size()==0)
         {
@@ -7061,7 +7056,7 @@ void Game::createmenu( std::string t )
         }
     }
 #endif
-    else if (t == "quickloadlevel")
+    else if (t == Menu::quickloadlevel)
     {
         option("continue from save");
         option("start from beginning");
@@ -7069,20 +7064,20 @@ void Game::createmenu( std::string t )
         menuxoff = -40;
         menuyoff = -30;
     }
-    else if (t == "youwannaquit")
+    else if (t == Menu::youwannaquit)
     {
         option("yes, quit");
         option("no, return");
         menuxoff = 0;
         menuyoff = -20;
     }
-    else if (t == "errornostart")
+    else if (t == Menu::errornostart)
     {
         option("ok");
         menuxoff = 0;
         menuyoff = -20;
     }
-    else if (t == "graphicoptions")
+    else if (t == Menu::graphicoptions)
     {
         option("toggle fullscreen");
         option("toggle letterbox");
@@ -7093,7 +7088,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = 8;
     }
-    else if (t == "ed_settings")
+    else if (t == Menu::ed_settings)
     {
         option("change description");
         option("edit scripts");
@@ -7107,7 +7102,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = -20;
     }
-    else if (t == "ed_settings2")
+    else if (t == Menu::ed_settings2)
     {
         int tower = ed.get_tower(ed.levx, ed.levy);
 
@@ -7133,7 +7128,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = -20;
     }
-    else if (t == "ed_settings3")
+    else if (t == Menu::ed_settings3)
     {
         int tower = ed.get_tower(ed.levx, ed.levy);
 
@@ -7148,16 +7143,16 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = -20;
     }
-    else if (t == "ed_dimensions") {
+    else if (t == Menu::ed_dimensions) {
         option("add new dimension");
         option("return to settings");
         menuxoff = -20;
         menuyoff = 74;
     }
-    else if (t == "ed_trials")
+    else if (t == Menu::ed_trials)
     {
     }
-    else if (t == "ed_edit_trial")
+    else if (t == Menu::ed_edit_trial)
     {
         option("trial name");
         option("starting position");
@@ -7170,7 +7165,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = -20;
     }
-    else if (t == "ed_remove_trial")
+    else if (t == Menu::ed_remove_trial)
     {
         option("yes");
         option("no");
@@ -7178,7 +7173,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = -20;
     }
-    else if (t == "ed_desc")
+    else if (t == Menu::ed_desc)
     {
         option("change name");
         option("change author");
@@ -7189,14 +7184,14 @@ void Game::createmenu( std::string t )
         menuxoff = -40;
         menuyoff = 6;
     }
-    else if (t == "ed_music")
+    else if (t == Menu::ed_music)
     {
         option("next song");
         option("back");
         menuxoff = -10;
         menuyoff = 16;
     }
-    else if (t == "ed_quit")
+    else if (t == Menu::ed_quit)
     {
         option("yes, save and quit");
         option("no, quit without saving");
@@ -7204,7 +7199,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = 8;
     }
-    else if (t == "options")
+    else if (t == Menu::options)
     {
         option("accessibility options");
 #if !defined(MAKEANDPLAY)
@@ -7223,7 +7218,7 @@ void Game::createmenu( std::string t )
         menuxoff = -40;
         menuyoff = 0;
     }
-    else if (t == "accessibility")
+    else if (t == Menu::accessibility)
     {
         option("animated backgrounds");
         option("screen effects");
@@ -7236,7 +7231,7 @@ void Game::createmenu( std::string t )
         menuxoff = -85;
         menuyoff = -10;
     }
-    else if(t == "controller")
+    else if(t == Menu::controller)
     {
         option("analog stick sensitivity");
         option("bind flip");
@@ -7251,28 +7246,28 @@ void Game::createmenu( std::string t )
         menuxoff = -60;
         menuyoff = 10;
     }
-    else if (t == "cleardatamenu")
+    else if (t == Menu::cleardatamenu)
     {
         option("no! don't delete");
         option("yes, delete everything");
         menuxoff = -30;
         menuyoff = 64;
     }
-    else if (t == "setinvincibility")
+    else if (t == Menu::setinvincibility)
     {
         option("no, return to options");
         option("yes, enable");
         menuxoff = -30;
         menuyoff = 64;
     }
-    else if (t == "setslowdown1")
+    else if (t == Menu::setslowdown1)
     {
         option("no, return to options");
         option("yes, delete saves");
         menuxoff = -30;
         menuyoff = 64;
     }
-    else if (t == "setslowdown2")
+    else if (t == Menu::setslowdown2)
     {
         option("normal speed");
         option("80% speed");
@@ -7281,7 +7276,7 @@ void Game::createmenu( std::string t )
         menuxoff = -40;
         menuyoff = 16;
     }
-    else if (t == "unlockmenu")
+    else if (t == Menu::unlockmenu)
     {
         option("unlock time trials");
         option("unlock intermissions", !unlock[16]);
@@ -7293,20 +7288,20 @@ void Game::createmenu( std::string t )
         menuxoff = -70;
         menuyoff = -20;
     }
-    else if (t == "changelog")
+    else if (t == Menu::changelog)
     {
         option("return");
         menuxoff = 26;
         menuyoff = 64;
     }
-    else if (t == "credits")
+    else if (t == Menu::credits)
     {
         option("next page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
     }
-    else if (t == "credits2")
+    else if (t == Menu::credits2)
     {
 #if defined(MAKEANDPLAY)
         option("first page");
@@ -7317,28 +7312,28 @@ void Game::createmenu( std::string t )
         menuxoff = 20;
         menuyoff = 64;
     }
-    else if (t == "credits_ce")
+    else if (t == Menu::credits_ce)
     {
         option("next page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
     }
-    else if (t == "credits25")
+    else if (t == Menu::credits25)
     {
         option("next page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
     }
-    else if (t == "credits3")
+    else if (t == Menu::credits3)
     {
         option("first page");
         option("return");
         menuxoff = 20;
         menuyoff = 64;
     }
-    else if (t == "play")
+    else if (t == Menu::play)
     {
         //Ok, here's where the unlock stuff comes into it:
         //First up, time trials:
@@ -7385,12 +7380,12 @@ void Game::createmenu( std::string t )
 
             if (temp == 1)
             {
-                createmenu("unlocktimetrial");
+                createmenu(Menu::unlocktimetrial);
                 savemystats = true;
             }
             else if (temp > 1)
             {
-                createmenu("unlocktimetrials");
+                createmenu(Menu::unlocktimetrials);
                 savemystats = true;
             }
         }
@@ -7409,7 +7404,7 @@ void Game::createmenu( std::string t )
                 //Unlock No Death Mode
                 unlocknotify[17] = true;
                 unlock[17] = true;
-                createmenu("unlocknodeathmode");
+                createmenu(Menu::unlocknodeathmode);
                 savemystats = true;
             }
             //Alright then! Flip mode?
@@ -7417,7 +7412,7 @@ void Game::createmenu( std::string t )
             {
                 unlock[18] = true;
                 unlocknotify[18] = true;
-                createmenu("unlockflipmode");
+                createmenu(Menu::unlockflipmode);
                 savemystats = true;
             }
             //What about the intermission levels?
@@ -7425,7 +7420,7 @@ void Game::createmenu( std::string t )
             {
                 unlock[16] = true;
                 unlocknotify[16] = true;
-                createmenu("unlockintermission");
+                createmenu(Menu::unlockintermission);
                 savemystats = true;
             }
             else
@@ -7452,24 +7447,24 @@ void Game::createmenu( std::string t )
             }
         }
     }
-    else if (t == "unlocktimetrial"
-    || t == "unlocktimetrials"
-    || t == "unlocknodeathmode"
-    || t == "unlockintermission"
-    || t == "unlockflipmode")
+    else if (t == Menu::unlocktimetrial
+    || t == Menu::unlocktimetrials
+    || t == Menu::unlocknodeathmode
+    || t == Menu::unlockintermission
+    || t == Menu::unlockflipmode)
     {
         option("continue");
         menuxoff = 20;
         menuyoff = 70;
     }
-    else if (t == "newgamewarning")
+    else if (t == Menu::newgamewarning)
     {
         option("start new game");
         option("return to menu");
         menuxoff = -30;
         menuyoff = 64;
     }
-    else if (t == "playmodes")
+    else if (t == Menu::playmodes)
     {
         option("time trials", !map.invincibility && game.slowdown == 30);
         option("intermissions", unlock[16]);
@@ -7479,7 +7474,7 @@ void Game::createmenu( std::string t )
         menuxoff = -70;
         menuyoff = 8;
     }
-    else if (t == "intermissionmenu")
+    else if (t == Menu::intermissionmenu)
     {
         option("play intermission 1");
         option("play intermission 2");
@@ -7487,7 +7482,7 @@ void Game::createmenu( std::string t )
         menuxoff = -50;
         menuyoff = -35;
     }
-    else if (t == "playint1")
+    else if (t == Menu::playint1)
     {
         option("Vitellary");
         option("Vermilion");
@@ -7497,7 +7492,7 @@ void Game::createmenu( std::string t )
         menuxoff = -60;
         menuyoff = 10;
     }
-    else if (t == "playint2")
+    else if (t == Menu::playint2)
     {
         option("Vitellary");
         option("Vermilion");
@@ -7507,7 +7502,7 @@ void Game::createmenu( std::string t )
         menuxoff = -60;
         menuyoff = 10;
     }
-    else if (t == "continue")
+    else if (t == Menu::continuemenu)
     {
         option("continue from teleporter");
         option("continue from quicksave");
@@ -7515,7 +7510,7 @@ void Game::createmenu( std::string t )
         menuxoff = -60;
         menuyoff = 20;
     }
-    else if (t == "startnodeathmode")
+    else if (t == Menu::startnodeathmode)
     {
         option("disable cutscenes");
         option("enable cutscenes");
@@ -7523,18 +7518,18 @@ void Game::createmenu( std::string t )
         menuxoff = -60;
         menuyoff = 40;
     }
-    else if (t == "gameover")
+    else if (t == Menu::gameover)
     {
         menucountdown = 120;
-        menudest="gameover2";
+        menudest=Menu::gameover2;
     }
-    else if (t == "gameover2")
+    else if (t == Menu::gameover2)
     {
         option("return to play menu");
         menuxoff = -25;
         menuyoff = 80;
     }
-    else if (t == "unlockmenutrials")
+    else if (t == Menu::unlockmenutrials)
     {
         option("space station 1", !unlock[9]);
         option("the laboratory", !unlock[10]);
@@ -7547,7 +7542,7 @@ void Game::createmenu( std::string t )
         menuxoff = -80;
         menuyoff = 0;
     }
-    else if (t == "timetrials")
+    else if (t == Menu::timetrials)
     {
         option(unlock[9] ? "space station 1" : "???", unlock[9]);
         option(unlock[10] ? "the laboratory" : "???", unlock[10]);
@@ -7560,35 +7555,35 @@ void Game::createmenu( std::string t )
         menuxoff = -80;
         menuyoff = 0;
     }
-    else if (t == "nodeathmodecomplete")
+    else if (t == Menu::nodeathmodecomplete)
     {
         menucountdown = 90;
-        menudest = "nodeathmodecomplete2";
+        menudest = Menu::nodeathmodecomplete2;
     }
-    else if (t == "nodeathmodecomplete2")
+    else if (t == Menu::nodeathmodecomplete2)
     {
         option("return to play menu");
         menuxoff = -25;
         menuyoff = 70;
     }
-    else if (t == "timetrialcomplete")
+    else if (t == Menu::timetrialcomplete)
     {
         menucountdown = 90;
-        menudest="timetrialcomplete2";
+        menudest=Menu::timetrialcomplete2;
     }
-    else if (t == "timetrialcomplete2")
+    else if (t == Menu::timetrialcomplete2)
     {
         menucountdown = 60;
-        menudest="timetrialcomplete3";
+        menudest=Menu::timetrialcomplete3;
     }
-    else if (t == "timetrialcomplete3")
+    else if (t == Menu::timetrialcomplete3)
     {
         option("return to play menu");
         option("try again");
         menuxoff = -25;
         menuyoff = 70;
     }
-    else if (t == "gamecompletecontinue")
+    else if (t == Menu::gamecompletecontinue)
     {
         option("return to play menu");
         menuxoff = -25;
