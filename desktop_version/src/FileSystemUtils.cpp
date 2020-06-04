@@ -707,11 +707,11 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 
 bool FILESYSTEM_openDirectoryEnabled()
 {
-    /* This is just a check to see if we're on a desktop or tenfoot setup.
-     * If you're working on a tenfoot-only build, add a def that always
-     * returns false!
-     */
-    return !SDL_GetHintBoolean("SteamTenfoot", SDL_TRUE);
+	/* This is just a check to see if we're on a desktop or tenfoot setup.
+	 * If you're working on a tenfoot-only build, add a def that always
+	 * returns false!
+	 */
+	return !SDL_GetHintBoolean("SteamTenfoot", SDL_FALSE);
 }
 
 #ifdef _WIN32
