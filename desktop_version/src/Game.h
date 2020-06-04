@@ -290,6 +290,10 @@ public:
 
     int creditposx, creditposy, creditposdelay = 0;
 
+    //Menu kludge...
+    bool wasintimetrial;
+    bool wasincustommode;
+
 
     //Sine Wave Ninja Minigame
     bool swnmode = false;
