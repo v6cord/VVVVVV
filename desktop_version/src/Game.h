@@ -272,7 +272,7 @@ public:
     //Main Menu Variables
     std::vector<MenuOption> menuoptions;
     int currentmenuoption = 0;
-    enum Menu::MenuName currentmenuname, previousmenuname;
+    enum Menu::MenuName currentmenuname;
     int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
     std::vector<MenuStackFrame> menustack;
