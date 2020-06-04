@@ -4826,6 +4826,455 @@ void editorlogic()
 }
 
 
+void editormenuactionpress()
+{
+    if (game.currentmenuname == "ed_trials")
+    {
+        if (game.currentmenuoption == (int)ed.customtrials.size())
+        {
+            customtrial temp;
+            temp.name = "Trial " + std::to_string(ed.customtrials.size() + 1);
+            ed.customtrials.push_back(temp);
+            ed.edtrial = (int)ed.customtrials.size() - 1;
+            music.playef(11);
+            game.createmenu("ed_edit_trial");
+        }
+        else if (game.currentmenuoption == (int)ed.customtrials.size()+1)
+        {
+            music.playef(11);
+            game.createmenu("ed_settings");
+            map.nexttowercolour();
+        }
+        else
+        {
+            ed.edtrial = game.currentmenuoption;
+            music.playef(11);
+            game.createmenu("ed_edit_trial");
+        }
+    }
+    else if (game.currentmenuname == "ed_edit_trial")
+    {
+        if (game.currentmenuoption == 0)
+        {
+            ed.textentry=true;
+            ed.trialnamemod=true;
+            key.enabletextentry();
+            key.keybuffer=ed.customtrials[ed.edtrial].name;
+        }
+        if (game.currentmenuoption == 1) {
+            ed.trialstartpoint = true;
+            ed.settingsmod = false;
+            music.playef(11);
+        }
+        if (game.currentmenuoption == 2) {
+            music.playef(11);
+            ed.customtrials[ed.edtrial].music++;
+            if (ed.customtrials[ed.edtrial].music > 15) ed.customtrials[ed.edtrial].music = 0;
+        }
+        if (game.currentmenuoption == 3) {
+            music.playef(11);
+            ed.trialmod = true;
+        }
+        if (game.currentmenuoption == 4) {
+            music.playef(11);
+            ed.trialmod = true;
+        }
+        if (game.currentmenuoption == 5) {
+            music.playef(11);
+            game.createmenu("ed_remove_trial");
+            map.nexttowercolour();
+        }
+        if (game.currentmenuoption == 6) {
+            music.playef(11);
+            game.createmenu("ed_trials");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_remove_trial")
+    {
+        if (game.currentmenuoption == 0) {
+            ed.customtrials.erase(ed.customtrials.begin() + ed.edtrial);
+            music.playef(11);
+            game.createmenu("ed_trials");
+            map.nexttowercolour();
+        } else {
+            music.playef(11);
+            game.createmenu("ed_edit_trial");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_desc")
+    {
+        if (game.currentmenuoption == 0)
+        {
+            ed.textentry=true;
+            ed.titlemod=true;
+            key.enabletextentry();
+            key.keybuffer=EditorData::GetInstance().title;
+        }
+        else if (game.currentmenuoption == 1)
+        {
+            ed.textentry=true;
+            ed.creatormod=true;
+            key.enabletextentry();
+            key.keybuffer=EditorData::GetInstance().creator;
+        }
+        else if (game.currentmenuoption == 2)
+        {
+            ed.textentry=true;
+            ed.desc1mod=true;
+            key.enabletextentry();
+            key.keybuffer=ed.Desc1;
+        }
+        else if (game.currentmenuoption == 3)
+        {
+            ed.textentry=true;
+            ed.websitemod=true;
+            key.enabletextentry();
+            key.keybuffer=ed.website;
+        }
+        else if (game.currentmenuoption == 4)
+        {
+            music.playef(11);
+            game.createmenu("ed_settings");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_settings")
+    {
+        if (game.currentmenuoption == 0)
+        {
+            //Change level description stuff
+            music.playef(11);
+            game.createmenu("ed_desc");
+            map.nexttowercolour();
+        }
+        else if (game.currentmenuoption == 1)
+        {
+            //Enter script editormode
+            music.playef(11);
+            ed.scripteditmod=true;
+            ed.clearscriptbuffer();
+            key.enabletextentry();
+            key.keybuffer="";
+            ed.hookmenupage=0;
+            ed.hookmenu=0;
+            ed.scripthelppage=0;
+            ed.scripthelppagedelay=0;
+            ed.sby=0;
+            ed.sbx=0, ed.pagey=0;
+        }
+        else if (game.currentmenuoption == 2)
+        {
+            music.playef(11);
+            game.createmenu("ed_trials");
+            map.nexttowercolour();
+        }
+        else if (game.currentmenuoption == 3)
+        {
+            music.playef(11);
+            game.createmenu("ed_music");
+            map.nexttowercolour();
+            if(ed.levmusic>0) music.play(ed.levmusic);
+        }
+        else if (game.currentmenuoption == 4)
+        {
+            //Load level
+            ed.settingsmod=false;
+            map.nexttowercolour();
+
+            ed.keydelay = 6;
+            ed.getlin(TEXT_LOAD, "Enter map filename "
+                      "to load:", &(ed.filename));
+            game.mapheld=true;
+            graphics.backgrounddrawn=false;
+        }
+        else if (game.currentmenuoption == 5)
+        {
+            //Save level
+            ed.settingsmod=false;
+            map.nexttowercolour();
+
+            ed.keydelay = 6;
+            ed.getlin(TEXT_SAVE, "Enter map filename "
+                      "to save map as:", &(ed.filename));
+            game.mapheld=true;
+            graphics.backgrounddrawn=false;
+        }
+        else if (game.currentmenuoption == 6)
+        {
+            music.playef(11);
+            game.createmenu("ed_settings2");
+            map.nexttowercolour();
+        }
+        else if (game.currentmenuoption == 7)
+        {
+            music.playef(11);
+            game.createmenu("ed_quit");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_settings2") {
+        if (game.currentmenuoption == 0) {
+            int tower = ed.get_tower(ed.levx, ed.levy);
+            if (tower) {
+                // Change Scroll Direction
+                ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
+                ed.notedelay=45;
+                if (ed.towers[tower-1].scroll)
+                    ed.note="Tower now Descending";
+                else
+                    ed.note="Tower now Ascending";
+                ed.updatetiles=true;
+                ed.keydelay=6;
+            } else {
+                ed.switch_tileset(true);
+                graphics.backgrounddrawn=false;
+            }
+        } else if (game.currentmenuoption == 1) {
+            key.fakekey = SDLK_F2;
+            key.fakekeytimer = 6;
+            ed.settingsmod = false;
+        } else if (game.currentmenuoption == 2) {
+            key.fakekey = SDLK_F3;
+            key.fakekeytimer = 6;
+            ed.settingsmod = false;
+        } else if (game.currentmenuoption == 3) {
+            key.fakekey = SDLK_F4;
+            key.fakekeytimer = 6;
+            ed.settingsmod = false;
+        } else if (game.currentmenuoption == 4) {
+            key.fakekey = SDLK_F5;
+            key.fakekeytimer = 6;
+            ed.settingsmod = false;
+        } else if (game.currentmenuoption == 5) {
+            if (tower) {
+                if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < ed.maxwidth * ed.maxheight) {
+                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
+                }
+
+                ed.note = "Tower Changed";
+                ed.keydelay = 6;
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.snap_tower_entry(ed.levx, ed.levy);
+            } else {
+                int newaltstate = ed.getnumaltstates(ed.levx, ed.levy) + 1;
+                ed.addaltstate(ed.levx, ed.levy, newaltstate);
+                ed.keydelay = 6;
+                ed.notedelay = 45;
+                // But did we get a new alt state?
+                if (ed.getedaltstatenum(ed.levx, ed.levy, newaltstate) == -1) {
+                    // Don't switch to the new alt state, or we'll segfault!
+                    ed.note = "ERROR: Couldn't add new alt state";
+                } else {
+                    ed.note = "Added new alt state " + help.String(newaltstate);
+                    ed.levaltstate = newaltstate;
+                }
+            }
+        } else if (game.currentmenuoption == 6) {
+            if (tower) {
+                if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1) {
+                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
+                }
+
+                ed.note = "Tower Changed";
+                ed.keydelay = 6;
+                ed.notedelay = 45;
+                ed.updatetiles = true;
+                ed.snap_tower_entry(ed.levx, ed.levy);
+            } else {
+                if (ed.levaltstate == 0) {
+                    ed.note = "Cannot remove main state";
+                } else {
+                    ed.removealtstate(ed.levx, ed.levy, ed.levaltstate);
+                    ed.note = "Removed alt state " + help.String(ed.levaltstate);
+                    ed.levaltstate--;
+                }
+                ed.keydelay = 6;
+                ed.notedelay = 45;
+            }
+        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
+            music.playef(11);
+            game.createmenu("ed_settings3");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_settings3")
+    {
+        if (game.currentmenuoption == 0) {
+            if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower) {
+                ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=0;
+                ed.note="Tower Mode Disabled";
+            } else {
+                ed.enable_tower();
+                ed.note="Tower Mode Enabled";
+            }
+            graphics.backgrounddrawn=false;
+
+            ed.notedelay=45;
+            ed.updatetiles=true;
+            ed.keydelay=6;
+
+            game.createmenu("ed_settings3");
+        } else if (game.currentmenuoption == 1) {
+            if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
+            {
+                ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode=0;
+                ed.note="Direct Mode Disabled";
+            }
+            else
+            {
+                ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode=1;
+                ed.note="Direct Mode Enabled";
+            }
+            graphics.backgrounddrawn=false;
+
+            ed.notedelay=45;
+            ed.updatetiles=true;
+        } else if (game.currentmenuoption == 2) {
+            int tower = ed.get_tower(ed.levx, ed.levy);
+            if (tower) {
+                music.playef(2);
+            } else {
+                if (ed.getedaltstatenum(ed.levx, ed.levy, ed.levaltstate + 1) != -1) {
+                    ed.levaltstate++;
+                    ed.note = "Switched to alt state " + help.String(ed.levaltstate);
+                } else if (ed.levaltstate == 0) {
+                    ed.note = "No alt states in this room";
+                } else {
+                    ed.levaltstate = 0;
+                    ed.note = "Switched to main state";
+                }
+                ed.notedelay = 45;
+            }
+        } else if (game.currentmenuoption == 3) {
+            int tower = ed.get_tower(ed.levx, ed.levy);
+            if (tower) {
+                music.playef(2);
+            } else {
+                int j=0, tx=0, ty=0;
+                for(size_t i=0; i<edentity.size(); i++)
+                {
+                    if(edentity[i].t==50)
+                    {
+                        tx=(edentity[i].p1-(edentity[i].p1%40))/40;
+                        ty=(edentity[i].p2-(edentity[i].p2%30))/30;
+                        if(tx==ed.levx && ty==ed.levy &&
+                        edentity[i].state==ed.levaltstate &&
+                        edentity[i].intower==tower)
+                        {
+                            j++;
+                        }
+                    }
+                }
+                if(j>0)
+                {
+                    ed.note="ERROR: Cannot have both warp types";
+                    ed.notedelay=45;
+                }
+                else
+                {
+                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir+1)%4;
+                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==0)
+                    {
+                        ed.note="Room warping disabled";
+                        ed.notedelay=45;
+                        graphics.backgrounddrawn=false;
+                    }
+                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==1)
+                    {
+                        ed.note="Room warps horizontally";
+                        ed.notedelay=45;
+                        graphics.backgrounddrawn=false;
+                    }
+                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==2)
+                    {
+                        ed.note="Room warps vertically";
+                        ed.notedelay=45;
+                        graphics.backgrounddrawn=false;
+                    }
+                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==3)
+                    {
+                        ed.note="Room warps in all directions";
+                        ed.notedelay=45;
+                        graphics.backgrounddrawn=false;
+                    }
+                }
+                ed.keydelay=6;
+            }
+        } else if (game.currentmenuoption == 4) {
+            ed.getlin(TEXT_ROOMNAME, "Enter new room name:",
+                &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
+            ed.settingsmod = 0;
+        } else if (game.currentmenuoption == 5) {
+            game.createmenu("ed_dimensions");
+        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
+            music.playef(11);
+            game.createmenu("ed_settings");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_music")
+    {
+        if (game.currentmenuoption == 0)
+        {
+            ed.levmusic++;
+            //if(ed.levmusic==5) ed.levmusic=6;
+            //if(ed.levmusic==7) ed.levmusic=8;
+            //if(ed.levmusic==9) ed.levmusic=10;
+            //if(ed.levmusic==15) ed.levmusic=0;
+            if(ed.levmusic==16) ed.levmusic=0;
+            if(ed.levmusic>0)
+            {
+                music.play(ed.levmusic);
+            }
+            else
+            {
+                music.haltdasmusik();
+            }
+            music.playef(11);
+        }
+        else if (game.currentmenuoption == 1)
+        {
+            music.playef(11);
+            music.fadeout();
+            game.createmenu("ed_settings");
+            map.nexttowercolour();
+        }
+    }
+    else if (game.currentmenuname == "ed_quit")
+    {
+        if (game.currentmenuoption == 0)
+        {
+            //Saving and quit
+            ed.saveandquit=true;
+            ed.settingsmod=false;
+            map.nexttowercolour();
+
+            ed.keydelay = 6;
+            ed.getlin(TEXT_SAVE, "Enter map filename "
+                      "to save map as:", &(ed.filename));
+            game.mapheld=true;
+            graphics.backgrounddrawn=false;
+        }
+        else if (game.currentmenuoption == 1)
+        {
+            //Quit without saving
+            music.playef(11);
+            music.fadeout();
+            graphics.fademode = 2;
+        }
+        else if (game.currentmenuoption == 2)
+        {
+            //Go back to editor
+            music.playef(11);
+            game.createmenu("ed_settings");
+            map.nexttowercolour();
+        }
+    }
+}
+
 void editorinput()
 {
     game.mx = (float) key.mx;
@@ -5331,451 +5780,7 @@ void editorinput()
                 }
                 else if (game.press_action)
                 {
-                    if (game.currentmenuname == "ed_trials")
-                    {
-                        if (game.currentmenuoption == (int)ed.customtrials.size())
-                        {
-                            customtrial temp;
-                            temp.name = "Trial " + std::to_string(ed.customtrials.size() + 1);
-                            ed.customtrials.push_back(temp);
-                            ed.edtrial = (int)ed.customtrials.size() - 1;
-                            music.playef(11);
-                            game.createmenu("ed_edit_trial");
-                        }
-                        else if (game.currentmenuoption == (int)ed.customtrials.size()+1)
-                        {
-                            music.playef(11);
-                            game.createmenu("ed_settings");
-                            map.nexttowercolour();
-                        }
-                        else
-                        {
-                            ed.edtrial = game.currentmenuoption;
-                            music.playef(11);
-                            game.createmenu("ed_edit_trial");
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_edit_trial")
-                    {
-                        if (game.currentmenuoption == 0)
-                        {
-                            ed.textentry=true;
-                            ed.trialnamemod=true;
-                            key.enabletextentry();
-                            key.keybuffer=ed.customtrials[ed.edtrial].name;
-                        }
-                        if (game.currentmenuoption == 1) {
-                            ed.trialstartpoint = true;
-                            ed.settingsmod = false;
-                            music.playef(11);
-                        }
-                        if (game.currentmenuoption == 2) {
-                            music.playef(11);
-                            ed.customtrials[ed.edtrial].music++;
-                            if (ed.customtrials[ed.edtrial].music > 15) ed.customtrials[ed.edtrial].music = 0;
-                        }
-                        if (game.currentmenuoption == 3) {
-                            music.playef(11);
-                            ed.trialmod = true;
-                        }
-                        if (game.currentmenuoption == 4) {
-                            music.playef(11);
-                            ed.trialmod = true;
-                        }
-                        if (game.currentmenuoption == 5) {
-                            music.playef(11);
-                            game.createmenu("ed_remove_trial");
-                            map.nexttowercolour();
-                        }
-                        if (game.currentmenuoption == 6) {
-                            music.playef(11);
-                            game.createmenu("ed_trials");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_remove_trial")
-                    {
-                        if (game.currentmenuoption == 0) {
-                            ed.customtrials.erase(ed.customtrials.begin() + ed.edtrial);
-                            music.playef(11);
-                            game.createmenu("ed_trials");
-                            map.nexttowercolour();
-                        } else {
-                            music.playef(11);
-                            game.createmenu("ed_edit_trial");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_desc")
-                    {
-                        if (game.currentmenuoption == 0)
-                        {
-                            ed.textentry=true;
-                            ed.titlemod=true;
-                            key.enabletextentry();
-                            key.keybuffer=EditorData::GetInstance().title;
-                        }
-                        else if (game.currentmenuoption == 1)
-                        {
-                            ed.textentry=true;
-                            ed.creatormod=true;
-                            key.enabletextentry();
-                            key.keybuffer=EditorData::GetInstance().creator;
-                        }
-                        else if (game.currentmenuoption == 2)
-                        {
-                            ed.textentry=true;
-                            ed.desc1mod=true;
-                            key.enabletextentry();
-                            key.keybuffer=ed.Desc1;
-                        }
-                        else if (game.currentmenuoption == 3)
-                        {
-                            ed.textentry=true;
-                            ed.websitemod=true;
-                            key.enabletextentry();
-                            key.keybuffer=ed.website;
-                        }
-                        else if (game.currentmenuoption == 4)
-                        {
-                            music.playef(11);
-                            game.createmenu("ed_settings");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_settings")
-                    {
-                        if (game.currentmenuoption == 0)
-                        {
-                            //Change level description stuff
-                            music.playef(11);
-                            game.createmenu("ed_desc");
-                            map.nexttowercolour();
-                        }
-                        else if (game.currentmenuoption == 1)
-                        {
-                            //Enter script editormode
-                            music.playef(11);
-                            ed.scripteditmod=true;
-                            ed.clearscriptbuffer();
-                            key.enabletextentry();
-                            key.keybuffer="";
-                            ed.hookmenupage=0;
-                            ed.hookmenu=0;
-                            ed.scripthelppage=0;
-                            ed.scripthelppagedelay=0;
-                            ed.sby=0;
-                            ed.sbx=0, ed.pagey=0;
-                        }
-                        else if (game.currentmenuoption == 2)
-                        {
-                            music.playef(11);
-                            game.createmenu("ed_trials");
-                            map.nexttowercolour();
-                        }
-                        else if (game.currentmenuoption == 3)
-                        {
-                            music.playef(11);
-                            game.createmenu("ed_music");
-                            map.nexttowercolour();
-                            if(ed.levmusic>0) music.play(ed.levmusic);
-                        }
-                        else if (game.currentmenuoption == 4)
-                        {
-                            //Load level
-                            ed.settingsmod=false;
-                            map.nexttowercolour();
-
-                            ed.keydelay = 6;
-                            ed.getlin(TEXT_LOAD, "Enter map filename "
-                                      "to load:", &(ed.filename));
-                            game.mapheld=true;
-                            graphics.backgrounddrawn=false;
-                        }
-                        else if (game.currentmenuoption == 5)
-                        {
-                            //Save level
-                            ed.settingsmod=false;
-                            map.nexttowercolour();
-
-                            ed.keydelay = 6;
-                            ed.getlin(TEXT_SAVE, "Enter map filename "
-                                      "to save map as:", &(ed.filename));
-                            game.mapheld=true;
-                            graphics.backgrounddrawn=false;
-                        }
-                        else if (game.currentmenuoption == 6)
-                        {
-                            music.playef(11);
-                            game.createmenu("ed_settings2");
-                            map.nexttowercolour();
-                        }
-                        else if (game.currentmenuoption == 7)
-                        {
-                            music.playef(11);
-                            game.createmenu("ed_quit");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_settings2") {
-                        if (game.currentmenuoption == 0) {
-                            int tower = ed.get_tower(ed.levx, ed.levy);
-                            if (tower) {
-                                // Change Scroll Direction
-                                ed.towers[tower-1].scroll = !ed.towers[tower-1].scroll;
-                                ed.notedelay=45;
-                                if (ed.towers[tower-1].scroll)
-                                    ed.note="Tower now Descending";
-                                else
-                                    ed.note="Tower now Ascending";
-                                ed.updatetiles=true;
-                                ed.keydelay=6;
-                            } else {
-                                ed.switch_tileset(true);
-                                graphics.backgrounddrawn=false;
-                            }
-                        } else if (game.currentmenuoption == 1) {
-                            key.fakekey = SDLK_F2;
-                            key.fakekeytimer = 6;
-                            ed.settingsmod = false;
-                        } else if (game.currentmenuoption == 2) {
-                            key.fakekey = SDLK_F3;
-                            key.fakekeytimer = 6;
-                            ed.settingsmod = false;
-                        } else if (game.currentmenuoption == 3) {
-                            key.fakekey = SDLK_F4;
-                            key.fakekeytimer = 6;
-                            ed.settingsmod = false;
-                        } else if (game.currentmenuoption == 4) {
-                            key.fakekey = SDLK_F5;
-                            key.fakekeytimer = 6;
-                            ed.settingsmod = false;
-                        } else if (game.currentmenuoption == 5) {
-                            if (tower) {
-                                if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower < ed.maxwidth * ed.maxheight) {
-                                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower++;
-                                }
-
-                                ed.note = "Tower Changed";
-                                ed.keydelay = 6;
-                                ed.notedelay = 45;
-                                ed.updatetiles = true;
-                                ed.snap_tower_entry(ed.levx, ed.levy);
-                            } else {
-                                int newaltstate = ed.getnumaltstates(ed.levx, ed.levy) + 1;
-                                ed.addaltstate(ed.levx, ed.levy, newaltstate);
-                                ed.keydelay = 6;
-                                ed.notedelay = 45;
-                                // But did we get a new alt state?
-                                if (ed.getedaltstatenum(ed.levx, ed.levy, newaltstate) == -1) {
-                                    // Don't switch to the new alt state, or we'll segfault!
-                                    ed.note = "ERROR: Couldn't add new alt state";
-                                } else {
-                                    ed.note = "Added new alt state " + help.String(newaltstate);
-                                    ed.levaltstate = newaltstate;
-                                }
-                            }
-                        } else if (game.currentmenuoption == 6) {
-                            if (tower) {
-                                if (ed.level[ed.levx + ed.levy*ed.maxwidth].tower > 1) {
-                                    ed.level[ed.levx + ed.levy*ed.maxwidth].tower--;
-                                }
-
-                                ed.note = "Tower Changed";
-                                ed.keydelay = 6;
-                                ed.notedelay = 45;
-                                ed.updatetiles = true;
-                                ed.snap_tower_entry(ed.levx, ed.levy);
-                            } else {
-                                if (ed.levaltstate == 0) {
-                                    ed.note = "Cannot remove main state";
-                                } else {
-                                    ed.removealtstate(ed.levx, ed.levy, ed.levaltstate);
-                                    ed.note = "Removed alt state " + help.String(ed.levaltstate);
-                                    ed.levaltstate--;
-                                }
-                                ed.keydelay = 6;
-                                ed.notedelay = 45;
-                            }
-                        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
-                            music.playef(11);
-                            game.createmenu("ed_settings3");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_settings3")
-                    {
-                        if (game.currentmenuoption == 0) {
-                            if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower) {
-                                ed.level[ed.levx+(ed.levy*ed.maxwidth)].tower=0;
-                                ed.note="Tower Mode Disabled";
-                            } else {
-                                ed.enable_tower();
-                                ed.note="Tower Mode Enabled";
-                            }
-                            graphics.backgrounddrawn=false;
-
-                            ed.notedelay=45;
-                            ed.updatetiles=true;
-                            ed.keydelay=6;
-
-                            game.createmenu("ed_settings3");
-                        } else if (game.currentmenuoption == 1) {
-                            if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode==1)
-                            {
-                                ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode=0;
-                                ed.note="Direct Mode Disabled";
-                            }
-                            else
-                            {
-                                ed.level[ed.levx+(ed.levy*ed.maxwidth)].directmode=1;
-                                ed.note="Direct Mode Enabled";
-                            }
-                            graphics.backgrounddrawn=false;
-
-                            ed.notedelay=45;
-                            ed.updatetiles=true;
-                        } else if (game.currentmenuoption == 2) {
-                            int tower = ed.get_tower(ed.levx, ed.levy);
-                            if (tower) {
-                                music.playef(2);
-                            } else {
-                                if (ed.getedaltstatenum(ed.levx, ed.levy, ed.levaltstate + 1) != -1) {
-                                    ed.levaltstate++;
-                                    ed.note = "Switched to alt state " + help.String(ed.levaltstate);
-                                } else if (ed.levaltstate == 0) {
-                                    ed.note = "No alt states in this room";
-                                } else {
-                                    ed.levaltstate = 0;
-                                    ed.note = "Switched to main state";
-                                }
-                                ed.notedelay = 45;
-                            }
-                        } else if (game.currentmenuoption == 3) {
-                            int tower = ed.get_tower(ed.levx, ed.levy);
-                            if (tower) {
-                                music.playef(2);
-                            } else {
-                                int j=0, tx=0, ty=0;
-                                for(size_t i=0; i<edentity.size(); i++)
-                                {
-                                    if(edentity[i].t==50)
-                                    {
-                                        tx=(edentity[i].p1-(edentity[i].p1%40))/40;
-                                        ty=(edentity[i].p2-(edentity[i].p2%30))/30;
-                                        if(tx==ed.levx && ty==ed.levy &&
-                                        edentity[i].state==ed.levaltstate &&
-                                        edentity[i].intower==tower)
-                                        {
-                                            j++;
-                                        }
-                                    }
-                                }
-                                if(j>0)
-                                {
-                                    ed.note="ERROR: Cannot have both warp types";
-                                    ed.notedelay=45;
-                                }
-                                else
-                                {
-                                    ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir+1)%4;
-                                    if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==0)
-                                    {
-                                        ed.note="Room warping disabled";
-                                        ed.notedelay=45;
-                                        graphics.backgrounddrawn=false;
-                                    }
-                                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==1)
-                                    {
-                                        ed.note="Room warps horizontally";
-                                        ed.notedelay=45;
-                                        graphics.backgrounddrawn=false;
-                                    }
-                                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==2)
-                                    {
-                                        ed.note="Room warps vertically";
-                                        ed.notedelay=45;
-                                        graphics.backgrounddrawn=false;
-                                    }
-                                    else if(ed.level[ed.levx+(ed.levy*ed.maxwidth)].warpdir==3)
-                                    {
-                                        ed.note="Room warps in all directions";
-                                        ed.notedelay=45;
-                                        graphics.backgrounddrawn=false;
-                                    }
-                                }
-                                ed.keydelay=6;
-                            }
-                        } else if (game.currentmenuoption == 4) {
-                            ed.getlin(TEXT_ROOMNAME, "Enter new room name:",
-                                &(ed.level[ed.levx+(ed.levy*ed.maxwidth)].roomname));
-                            ed.settingsmod = 0;
-                        } else if (game.currentmenuoption == 5) {
-                            game.createmenu("ed_dimensions");
-                        } else if (game.currentmenuoption == (int) game.menuoptions.size() - 1) {
-                            music.playef(11);
-                            game.createmenu("ed_settings");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_music")
-                    {
-                        if (game.currentmenuoption == 0)
-                        {
-                            ed.levmusic++;
-                            //if(ed.levmusic==5) ed.levmusic=6;
-                            //if(ed.levmusic==7) ed.levmusic=8;
-                            //if(ed.levmusic==9) ed.levmusic=10;
-                            //if(ed.levmusic==15) ed.levmusic=0;
-                            if(ed.levmusic==16) ed.levmusic=0;
-                            if(ed.levmusic>0)
-                            {
-                                music.play(ed.levmusic);
-                            }
-                            else
-                            {
-                                music.haltdasmusik();
-                            }
-                            music.playef(11);
-                        }
-                        else if (game.currentmenuoption == 1)
-                        {
-                            music.playef(11);
-                            music.fadeout();
-                            game.createmenu("ed_settings");
-                            map.nexttowercolour();
-                        }
-                    }
-                    else if (game.currentmenuname == "ed_quit")
-                    {
-                        if (game.currentmenuoption == 0)
-                        {
-                            //Saving and quit
-                            ed.saveandquit=true;
-                            ed.settingsmod=false;
-                            map.nexttowercolour();
-
-                            ed.keydelay = 6;
-                            ed.getlin(TEXT_SAVE, "Enter map filename "
-                                      "to save map as:", &(ed.filename));
-                            game.mapheld=true;
-                            graphics.backgrounddrawn=false;
-                        }
-                        else if (game.currentmenuoption == 1)
-                        {
-                            //Quit without saving
-                            music.playef(11);
-                            music.fadeout();
-                            graphics.fademode = 2;
-                        }
-                        else if (game.currentmenuoption == 2)
-                        {
-                            //Go back to editor
-                            music.playef(11);
-                            game.createmenu("ed_settings");
-                            map.nexttowercolour();
-                        }
-                    }
+                    editormenuactionpress();
                 }
             }
         } else if (ed.keydelay) {
