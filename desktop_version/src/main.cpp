@@ -517,7 +517,7 @@ int main(int argc, char *argv[])
                         }
                         gameinput();
 
-                        towerrender();
+                        gamerender();
                         gamelogic();
 
                     }

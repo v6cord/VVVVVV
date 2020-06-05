@@ -1999,23 +1999,38 @@ void gamerender()
     if(!game.blackout)
     {
 
-        if (!graphics.noclear) {
-            if(!game.colourblindmode)
+        if (map.towermode)
+        {
+            if (!game.colourblindmode)
             {
-                graphics.drawbackground(map.background);
+                if (!graphics.noclear) graphics.drawtowerbackground();
+                graphics.drawtowermap();
             }
             else
             {
-                FillRect(graphics.backBuffer,0x00000);
+                graphics.drawtowermap_nobackground();
             }
-        }
-        if (map.final_colormode)
-        {
-            graphics.drawfinalmap();
         }
         else
         {
-            graphics.drawmap();
+            if (!graphics.noclear) {
+                if(!game.colourblindmode)
+                {
+                    graphics.drawbackground(map.background);
+                }
+                else
+                {
+                    FillRect(graphics.backBuffer,0x00000);
+                }
+            }
+            if (map.final_colormode)
+            {
+                graphics.drawfinalmap();
+            }
+            else
+            {
+                graphics.drawmap();
+            }
         }
 
         for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
@@ -2054,6 +2069,10 @@ void gamerender()
         }
 
         graphics.drawentities();
+        if (map.towermode)
+        {
+            graphics.drawtowerspikes();
+        }
 
         if (map.custommode && !map.custommodeforreal) {
             if (game.gametimer % 3 == 0) {
@@ -3312,193 +3331,6 @@ void maprender()
         {
             graphics.render();
         }
-    }
-}
-
-void towerrender()
-{
-
-    FillRect(graphics.backBuffer, 0x000000);
-
-    if (!game.colourblindmode)
-    {
-        graphics.drawtowerbackground();
-        graphics.drawtowermap();
-    }
-    else
-    {
-        graphics.drawtowermap_nobackground();
-    }
-
-    if(!game.completestop)
-    {
-        for (size_t i = 0; i < obj.entities.size(); i++)
-        {
-            //Is this entity on the ground? (needed for jumping)
-            if (obj.entitycollidefloor(i))
-            {
-                obj.entities[i].onground = 2;
-            }
-            else
-            {
-                obj.entities[i].onground--;
-            }
-
-            if (obj.entitycollideroof(i))
-            {
-                obj.entities[i].onroof = 2;
-            }
-            else
-            {
-                obj.entities[i].onroof--;
-            }
-
-            //Animate the entities
-            obj.animateentities(i);
-        }
-    }
-
-    graphics.drawentities();
-
-    graphics.drawtowerspikes();
-
-
-    if(map.custommode && !map.custommodeforreal && !game.advancetext){
-        //Return to level editor
-        graphics.bprintalpha(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), ed.returneditoralpha, false);
-        if (ed.returneditoralpha > 0) {
-            ed.returneditoralpha -= 15;
-        }
-    }
-
-    graphics.cutscenebars();
-    BlitSurfaceStandard(graphics.backBuffer, NULL, graphics.tempBuffer, NULL);
-
-    graphics.drawgui();
-    if (graphics.flipmode)
-    {
-        if (game.advancetext) graphics.bprint(5, 228, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
-    }
-    else
-    {
-        if (game.advancetext) graphics.bprint(5, 5, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
-    }
-
-
-    graphics.footerrect.y = 230;
-    if (graphics.translucentroomname)
-    {
-        SDL_BlitSurface(graphics.footerbuffer, NULL, graphics.backBuffer, &graphics.footerrect);
-    }
-    else
-    {
-        FillRect(graphics.backBuffer, graphics.footerrect, 0);
-    }
-    graphics.bprint(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
-
-    if (map.roomtexton)
-    {
-        //Draw room text!
-        for (size_t i = 0; i < map.roomtext.size(); i++)
-        {
-            graphics.Print(map.roomtext[i].x*8 + map.roomtext[i].subx, (map.roomtext[i].y*8) + map.roomtext[i].suby - map.ypos, map.roomtext[i].text, 196, 196, 255 - help.glow);
-        }
-    }
-
-    if (ed.numcoins() > 0 && !game.nocoincounter) {
-        std::string coinstring = std::to_string(game.coins);
-        if (game.coins == ed.numcoins()) {
-            graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 96);
-        } else {
-            graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);
-        }
-        graphics.drawhuetile(311, 230, 48, 1);
-    }
-
-    if (game.intimetrial && graphics.fademode==0)
-    {
-        //Draw countdown!
-        if (game.timetrialcountdown > 0)
-        {
-            if (game.timetrialcountdown < 30)
-            {
-                game.resetgameclock();
-                if (int(game.timetrialcountdown / 4) % 2 == 0) graphics.bigprint( -1, 100, "Go!", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
-            }
-            else if (game.timetrialcountdown < 60)
-            {
-                graphics.bigprint( -1, 100, "1", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
-            }
-            else if (game.timetrialcountdown < 90)
-            {
-                graphics.bigprint( -1, 100, "2", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
-            }
-            else if (game.timetrialcountdown < 120)
-            {
-                graphics.bigprint( -1, 100, "3", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
-            }
-        }
-        else
-        {
-            //Draw OSD stuff
-            graphics.bprint(6, 18, "TIME :",  255,255,255);
-            graphics.bprint(6, 30, "DEATH:",  255, 255, 255);
-            graphics.bprint(6, 42, "SHINY:",  255,255,255);
-
-            if(game.timetrialparlost)
-            {
-                graphics.bprint(56, 18, game.timestring(),  196, 80, 80);
-            }
-            else
-            {
-                graphics.bprint(56, 18, game.timestring(),  196, 196, 196);
-            }
-            if(game.deathcounts>0)
-            {
-                graphics.bprint(56, 30,help.String(game.deathcounts),  196, 80, 80);
-            }
-            else
-            {
-                graphics.bprint(56, 30,help.String(game.deathcounts),  196, 196, 196);
-            }
-            if(game.trinkets()<game.timetrialshinytarget)
-            {
-                graphics.bprint(56, 42,help.String(game.trinkets()) + " of " +help.String(game.timetrialshinytarget),  196, 80, 80);
-            }
-            else
-            {
-                graphics.bprint(56, 42,help.String(game.trinkets()) + " of " +help.String(game.timetrialshinytarget),  196, 196, 196);
-            }
-
-            if(game.timetrialparlost)
-            {
-                graphics.bprint(195, 214, "PAR TIME:",  80, 80, 80);
-                graphics.bprint(275, 214, game.partimestring(),  80, 80, 80);
-            }
-            else
-            {
-                graphics.bprint(195, 214, "PAR TIME:",  255, 255, 255);
-                graphics.bprint(275, 214, game.partimestring(),  196, 196, 196);
-            }
-        }
-    }
-
-    graphics.drawfade();
-
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        game.flashlight--;
-        graphics.flashlight();
-    }
-
-    if (game.screenshake > 0 && !game.noflashingmode)
-    {
-        game.screenshake--;
-        graphics.screenshake();
-    }
-    else
-    {
-        graphics.render();
     }
 }
 
