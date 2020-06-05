@@ -2335,7 +2335,7 @@ void Graphics::drawmap()
         FillRect(foregroundBuffer, 0x00000000);
         if(map.tileset==0)
         {
-            for (j = 0; j < 29+map.extrarow; j++)
+            for (j = 0; j < 30; j++)
             {
                 for (int i = 0; i < 40; i++)
                 {
@@ -2345,7 +2345,7 @@ void Graphics::drawmap()
         }
         else if (map.tileset == 1)
         {
-            for (int jt = 0; jt < 29+map.extrarow; jt++)
+            for (int jt = 0; jt < 30; jt++)
             {
                 for (int it = 0; it < 40; it++)
                 {
@@ -2355,7 +2355,7 @@ void Graphics::drawmap()
         }
         else if (map.tileset == 2)
         {
-            for (j = 0; j < 29+map.extrarow; j++)
+            for (j = 0; j < 30; j++)
             {
                 for (int i = 0; i < 40; i++)
                 {
@@ -2390,14 +2390,14 @@ void Graphics::drawfinalmap()
     if (!foregrounddrawn) {
         FillRect(foregroundBuffer, 0x00000000);
         if(map.tileset==0){
-            for (int j = 0; j < 29+map.extrarow; j++) {
+            for (int j = 0; j < 30; j++) {
                 for (int i = 0; i < 40; i++) {
                     if((map.contents[i + map.vmult[j]])>0)
                         drawforetile(i * 8, j * 8, map.finalat(i,j));
                 }
             }
         }else if (map.tileset == 1) {
-            for (int j = 0; j < 29+map.extrarow; j++) {
+            for (int j = 0; j < 30; j++) {
                 for (int i = 0; i < 40; i++) {
                     if((map.contents[i + map.vmult[j]])>0)
                         drawforetile2(i * 8, j * 8, map.finalat(i,j));
@@ -2413,7 +2413,7 @@ void Graphics::drawfinalmap()
 void Graphics::drawtowermap()
 {
     int temp;
-    for (int j = 0; j < 30; j++)
+    for (int j = 0; j < 31; j++)
     {
         for (int i = 0; i < 40; i++)
         {
@@ -2426,7 +2426,7 @@ void Graphics::drawtowermap()
 void Graphics::drawtowermap_nobackground()
 {
     int temp;
-    for (j = 0; j < 30; j++)
+    for (j = 0; j < 31; j++)
     {
         for (int i = 0; i < 40; i++)
         {
