@@ -1032,9 +1032,9 @@ void gamelogic()
             }
         }
 
-        if (map.towermode)
+        //Right so! Screenwraping for tower:
+        if (map.towermode && map.minitowermode)
         {
-            //Right so! Screenwraping for tower:
             int player = obj.getplayer();
             bool dowrap = false;
             if (map.warpy)
