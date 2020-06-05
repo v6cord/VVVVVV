@@ -711,24 +711,20 @@ bool FILESYSTEM_openDirectoryEnabled()
 	 * If you're working on a tenfoot-only build, add a def that always
 	 * returns false!
 	 */
+#if defined(__SWITCH) || defined(__ANDROID__)
+	return false;
+#else
 	return !SDL_GetHintBoolean("SteamTenfoot", SDL_FALSE);
+#endif
 }
 
 #ifdef _WIN32
 #include <shellapi.h>
-bool FILESYSTEM_openDirectoryEnabled() {
-    return true;
-}
-
 bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
 #elif defined(__SWITCH__) || defined(__ANDROID__)
-bool FILESYSTEM_openDirectoryEnabled() {
-    return false;
-}
-
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
