@@ -8,6 +8,8 @@
 #include "ScriptX.h"
 #include "Enums.h"
 
+#define filllines(lines) commands.insert(commands.end(), lines, lines + sizeof(lines)/sizeof(lines[0]))
+
 
 struct stackframe {
     std::string script;
