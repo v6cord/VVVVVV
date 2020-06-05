@@ -6933,7 +6933,7 @@ void editorinput()
                                 if(ed.numcrewmates()<100)
                                 {
                                     addedentity(tx, ty, 15,
-                                                1 + int(fRandom() * 5));
+                                                int(fRandom() * 6));
                                     ed.lclickdelay=1;
                                 } else {
                                     ed.note="ERROR: Max number of crewmates is 100";
