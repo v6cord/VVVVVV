@@ -336,6 +336,7 @@ void menuactionpress()
             map.nexttowercolour();
         } else {
             game.currenttrial = game.currentmenuoption;
+            music.playef(11);
             game.mainmenu = 24;
             graphics.fademode = 2;
         }
