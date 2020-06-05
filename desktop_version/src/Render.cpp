@@ -3225,7 +3225,10 @@ void maprender()
 
 
 
-    graphics.drawfade();
+    if (graphics.fademode == 3 || graphics.fademode == 5)
+    {
+        graphics.drawfade();
+    }
 
     if (graphics.resumegamemode)
     {
