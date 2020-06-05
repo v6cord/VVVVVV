@@ -3358,7 +3358,7 @@ void towerrender()
         }
     }
 
-    graphics.drawtowerentities();
+    graphics.drawentities();
 
     graphics.drawtowerspikes();
 

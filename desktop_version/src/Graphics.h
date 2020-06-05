@@ -203,8 +203,6 @@ public:
 
 	void drawtowerspikes();
 
-	void drawtowerentities();
-
 	bool onscreen(int t);
 
 	void drawtowerbackgroundsolo();
