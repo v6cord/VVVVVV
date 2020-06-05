@@ -733,10 +733,10 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }
 #else
-#ifdef __linux__
-const char* open_cmd = "xdg-open";
-#else
+#if defined(__APPLE__) || defined(__HAIKU__)
 const char* open_cmd = "open";
+#else
+const char* open_cmd = "xdg-open";
 #endif
 
 extern "C" char** environ;
