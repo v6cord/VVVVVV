@@ -3260,7 +3260,7 @@ void maprender()
     }
     else
     {
-        graphics.render();
+        graphics.renderwithscreeneffects();
     }
 }
 
