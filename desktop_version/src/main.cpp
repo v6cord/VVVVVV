@@ -509,34 +509,18 @@ int main(int argc, char *argv[])
                     titlelogic();
                     break;
                 case GAMEMODE:
-                    if (map.towermode)
+                    if (script.running)
                     {
-                        if (script.running)
-                        {
-                            script.run();
-                        }
-                        gameinput();
-
-                        gamerender();
-                        gamelogic();
-
+                        script.run();
                     }
-                    else
-                    {
 
-                        if (script.running)
-                        {
-                            script.run();
-                        }
-
-                        for (int i = 0; i < (int)script.active_scripts.size(); i++) {
-                            script.active_scripts[i].update();
-                        }
-
-                        gameinput();
-                        gamerender();
-                        gamelogic();
+                    for (int i = 0; i < (int)script.active_scripts.size(); i++) {
+                        script.active_scripts[i].update();
                     }
+
+                    gameinput();
+                    gamerender();
+                    gamelogic();
                     break;
                 case MAPMODE:
                     maprender();
