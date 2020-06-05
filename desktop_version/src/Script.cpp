@@ -77,7 +77,7 @@ std::string scriptclass::evalvar(std::string expr) {
         CPARSE_INITIALIZED = true;
     }
     TokenMap vars;
-    for (auto variable : script.variables) {
+    for (auto variable : variables) {
         if (variable.first == "") continue;
         try {
             auto contents = std::stod(variable.second);
@@ -4401,12 +4401,12 @@ void scriptclass::loadcustom(std::string t)
   for(size_t i=0; i<customscript.size(); i++){
     if(scriptstart==-1){
       //Find start of the script
-      if(script.customscript[i]==cscriptname+":"){
+      if(customscript[i]==cscriptname+":"){
         scriptstart=i+1;
       }
     }else if(scriptend==-1){
       //Find the end
-      tstring=script.customscript[i];
+      tstring=customscript[i];
       if (tstring.size() > 0) {
         tstring=tstring[tstring.size()-1];
       } else {
@@ -4425,7 +4425,7 @@ void scriptclass::loadcustom(std::string t)
     //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!
     int customcutscenemode=0;
     for(int i=scriptstart; i<scriptend; i++){
-      tokenize(script.customscript[i]);
+      tokenize(customscript[i]);
       if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay" || words[0] == "csayquiet"){
         customcutscenemode=1;
       }else if(words[0] == "reply" || words[0] == "replyquiet"){
@@ -4447,7 +4447,7 @@ void scriptclass::loadcustom(std::string t)
     for(int i=scriptstart; i<scriptend; i++){
       words[0]="nothing"; //Default!
       words[1]="unused"; //Default!
-      tokenize(script.customscript[i]);
+      tokenize(customscript[i]);
       std::transform(words[0].begin(), words[0].end(), words[0].begin(), ::tolower);
       if (words[0] != "flash" && words[1] == "unused") {
         words[1] = "1";
@@ -4564,35 +4564,35 @@ void scriptclass::loadcustom(std::string t)
         }else if(words[1]=="off"){
           squeakmode=1;
         }else{
-          add(script.customscript[i]);
+          add(customscript[i]);
         }
       }else if(words[0] == "delay"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(script.customscript[i]);
+        add(customscript[i]);
       }else if(words[0] == "flag"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(script.customscript[i]);
+        add(customscript[i]);
       }else if(words[0] == "map"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+script.customscript[i]);
+        add("custom"+customscript[i]);
       }else if(words[0] == "warpdir"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(script.customscript[i]);
+        add(customscript[i]);
       }else if(words[0] == "ifwarp"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(script.customscript[i]);
+        add(customscript[i]);
       }else if(words[0] == "iftrinkets"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+script.customscript[i]);
+        add("custom"+customscript[i]);
       }else if(words[0] == "ifflag"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+script.customscript[i]);
+        add("custom"+customscript[i]);
       }else if(words[0] == "iftrinketsless"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+script.customscript[i]);
+        add("custom"+customscript[i]);
       }else if(words[0] == "destroy"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(script.customscript[i]);
+        add(customscript[i]);
       }else if(words[0] == "speaker"){
         speakermode=0;
         if(words[1]=="gray" || words[1]=="grey" || words[1]=="terminal" || words[1]=="0") speakermode=0;
@@ -4647,10 +4647,10 @@ void scriptclass::loadcustom(std::string t)
         }
         if(ti>=0 && ti<=50){
           for(int ti2=0; ti2<ti; ti2++){
-            i++; add(script.customscript[i]);
+            i++; add(customscript[i]);
           }
         }else{
-          i++; add(script.customscript[i]);
+          i++; add(customscript[i]);
         }
 
         std::string addthis;
@@ -4681,10 +4681,10 @@ void scriptclass::loadcustom(std::string t)
         }
         if(ti>=0 && ti<=50){
           for(int ti2=0; ti2<ti; ti2++){
-            i++; add(script.customscript[i]);
+            i++; add(customscript[i]);
           }
         }else{
-          i++; add(script.customscript[i]);
+          i++; add(customscript[i]);
         }
         add("position(player,above)");
         add("speak_active");
@@ -4697,7 +4697,7 @@ void scriptclass::loadcustom(std::string t)
         || words[0] == "customactivityzone"
         || ((words[0] == "addvar" || words[0] == "setvar" || words[0] == "getvar") && words[2] == "")) {
           // Don't parse the next line if it is a textbox-like line
-          add(script.customscript[i]);
+          add(customscript[i]);
           i++;
         } else if (words[0] == "text") {
           // Ok, it's actually a text box with potentially more than one line
@@ -4709,12 +4709,12 @@ void scriptclass::loadcustom(std::string t)
             // Predefined color version, 1 color arg, 4 args
             lines = ss_toi(words[4]);
           for (int c = 0; c < lines; c++) {
-            add(script.customscript[i]);
+            add(customscript[i]);
             i++;
           }
         }
         if (IS_VCE_LEVEL) // Don't call one-command internal scripts twice in vanilla levels
-            add(script.customscript[i]);
+            add(customscript[i]);
 
         // Is this a label?
         if (words[0].length() > 1 && words[0].substr(0, 1) == ".") {
