@@ -103,14 +103,6 @@ int towerclass::miniat(int xp, int yp, int yoff)
     return 0;
 }
 
-void towerclass::loadcustomtower(growing_vector <int> tmap, int ymax)
-{
-    minitower.resize(ymax * 40);
-    for (int y = 0; y < ymax; y++)
-        for (int x = 0; x < 40; x++)
-            minitower[x + y*40] = tmap[x + y*40];
-}
-
 void towerclass::loadminitower1()
 {
 	//Loads the first minitower into the array.

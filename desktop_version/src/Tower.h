@@ -16,8 +16,6 @@ public:
 
     int miniat(int xp, int yp, int yoff);
 
-    void loadcustomtower(growing_vector <int> tmap, int ymax);
-
     void loadminitower1();
 
     void loadminitower2();

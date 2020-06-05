@@ -1853,17 +1853,10 @@ void mapclass::loadlevel(int rx, int ry)
 			extrarow = 1;
 		}
 
-		contents = ed.loadlevel(rx, ry, obj.altstates);
-		int ymax = 30;
 		if (newtower) {
-			ymax = minitowersize;
-			tower.loadcustomtower(ed.swapmap, ymax);
+			tower.minitower = ed.loadlevel(rx, ry, obj.altstates);
 		} else {
-			for (int edj = 0; edj < ymax; edj++) {
-				for (int edi = 0; edi < 40; edi++) {
-					contents[edi + vmult[edj]] = ed.swapmap[edi + vmult[edj]];
-				}
-			}
+			contents = ed.loadlevel(rx, ry, obj.altstates);
 		}
 
 		//If screen warping, then override all that:
