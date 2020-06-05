@@ -1765,19 +1765,7 @@ void titlerender()
 
     graphics.drawfade();
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
-    if (game.screenshake > 0  && !game.noflashingmode)
-    {
-        graphics.screenshake();
-    }
-    else
-    {
-        graphics.render();
-    }
+    graphics.renderwithscreeneffects();
 }
 
 void gamecompleterender()
@@ -1928,19 +1916,7 @@ void gamecompleterender()
 
     graphics.drawfade();
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
-    if (game.screenshake > 0 && !game.noflashingmode)
-    {
-        graphics.screenshake();
-    }
-    else
-    {
-        graphics.render();
-    }
+    graphics.renderwithscreeneffects();
 }
 
 void gamecompleterender2()
@@ -1970,19 +1946,7 @@ void gamecompleterender2()
 
     graphics.drawfade();
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
-    if (game.screenshake > 0 && !game.noflashingmode)
-    {
-        graphics.screenshake();
-    }
-    else
-    {
-        graphics.render();
-    }
+    graphics.renderwithscreeneffects();
 }
 
 void gamerender()
@@ -2426,20 +2390,6 @@ void gamerender()
     }
 
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
-    if (game.screenshake > 0 && !game.noflashingmode)
-    {
-        graphics.screenshake();
-    }
-    else
-    {
-        graphics.render();
-    }
-
     if (script.getpixelx != -1) {
         auto x = script.getpixelx;
         auto y = script.getpixely;
@@ -2457,6 +2407,8 @@ void gamerender()
         script.getpixelx = -1;
         script.getpixely = -1;
     }
+
+    graphics.renderwithscreeneffects();
 }
 
 void maprender()
@@ -3275,11 +3227,6 @@ void maprender()
 
     graphics.drawfade();
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
     if (graphics.resumegamemode)
     {
         graphics.menuoffset += 25;
@@ -3313,14 +3260,7 @@ void maprender()
     }
     else
     {
-        if (game.screenshake > 0 && !game.noflashingmode)
-        {
-            graphics.screenshake();
-        }
-        else
-        {
-            graphics.render();
-        }
+        graphics.renderwithscreeneffects();
     }
 }
 
@@ -3546,11 +3486,6 @@ void teleporterrender()
     }
 
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
     if (graphics.resumegamemode)
     {
         graphics.menuoffset += 25;
@@ -3584,13 +3519,6 @@ void teleporterrender()
     }
     else
     {
-        if (game.screenshake > 0 && !game.noflashingmode)
-        {
-            graphics.screenshake();
-        }
-        else
-        {
-            graphics.render();
-        }
+        graphics.renderwithscreeneffects();
     }
 }

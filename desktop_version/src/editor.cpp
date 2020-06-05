@@ -4778,19 +4778,7 @@ void editorrender()
 
     graphics.drawfade();
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        graphics.flashlight();
-    }
-
-    if (game.screenshake > 0  && !game.noflashingmode)
-    {
-        graphics.screenshake();
-    }
-    else
-    {
-        graphics.render();
-    }
+    graphics.renderwithscreeneffects();
 }
 
 void editorlogic()

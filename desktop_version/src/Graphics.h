@@ -149,6 +149,7 @@ public:
 	void screenshake();
 
 	void render();
+	void renderwithscreeneffects();
 
 	bool Hitest(SDL_Surface* surface1, point p1, SDL_Surface* surface2, point p2);
 
