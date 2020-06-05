@@ -289,12 +289,8 @@ ELSE()
 ENDIF()
 
 
-IF(SUPPORTS_IMPLICIT_FALLTHROUGH)
-	if(ANDROID)
-		TARGET_COMPILE_OPTIONS(main PRIVATE -Werror=implicit-fallthrough)
-	else()
-		TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE -Werror=implicit-fallthrough)
-	endif()
+IF(SUPPORTS_IMPLICIT_FALLTHROUGH AND NOT ANDROID)
+	TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE -Werror=implicit-fallthrough)
 ENDIF()
 
 # Library information
