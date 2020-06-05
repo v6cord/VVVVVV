@@ -1566,7 +1566,7 @@ void gameinput()
             } else if (game.activetele && game.readytotele > 20) {
                 game.mapheld = false;
             } else {
-                game.returntoeditor();
+                game.shouldreturntoeditor = true;
             }
         }
     }

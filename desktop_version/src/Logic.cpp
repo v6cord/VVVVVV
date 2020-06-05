@@ -1399,4 +1399,12 @@ void gamelogic()
         script.callback("on_flip");
     }
     last_gravity = game.gravitycontrol;
+
+#if !defined(NO_CUSTOM_LEVELS)
+    if (game.shouldreturntoeditor)
+    {
+        game.shouldreturntoeditor = false;
+        game.returntoeditor();
+    }
+#endif
 }
