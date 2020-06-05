@@ -2156,12 +2156,13 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
     return k;
 }
 
-void entityclass::updateentities( int i )
+//Returns true if entity is removed
+bool entityclass::updateentities( int i )
 {
     if (i < 0 || i >= (int) entities.size())
     {
         puts("updateentities() out-of-bounds!");
-        return;
+        return true;
     }
 
     if(entities[i].statedelay<=0)
@@ -2178,7 +2179,8 @@ void entityclass::updateentities( int i )
                 if (entities[i].state == 0)   //Init
                 {
                     entities[i].state = 3;
-                    updateentities(i);
+                    bool entitygone = updateentities(i);
+                    if (entitygone) return true;
                 }
                 else if (entities[i].state == 1)
                 {
@@ -2201,7 +2203,8 @@ void entityclass::updateentities( int i )
                 if (entities[i].state == 0)   //Init
                 {
                     entities[i].state = 2;
-                    updateentities(i);
+                    bool entitygone = updateentities(i);
+                    if (entitygone) return true;
                 }
                 else if (entities[i].state == 1)
                 {
@@ -2224,7 +2227,8 @@ void entityclass::updateentities( int i )
                 if (entities[i].state == 0)   //Init
                 {
                     entities[i].state = 3;
-                    updateentities(i);
+                    bool entitygone = updateentities(i);
+                    if (entitygone) return true;
                 }
                 else if (entities[i].state == 1)
                 {
@@ -2247,7 +2251,8 @@ void entityclass::updateentities( int i )
                 if (entities[i].state == 0)   //Init
                 {
                     entities[i].state = 3;
-                    updateentities(i);
+                    bool entitygone = updateentities(i);
+                    if (entitygone) return true;
                 }
                 else if (entities[i].state == 1)
                 {
@@ -2342,10 +2347,18 @@ void entityclass::updateentities( int i )
                 }
                 else if (entities[i].state == 1)
                 {
-                    if (entities[i].xp >= 335) removeentity(i);
+                    if (entities[i].xp >= 335)
+                    {
+                        removeentity(i);
+                        return true;
+                    }
                     if (game.roomx == 117)
                     {
-                        if (entities[i].xp >= (33*8)-32) removeentity(i);
+                        if (entities[i].xp >= (33*8)-32)
+                        {
+                            removeentity(i);
+                            return true;
+                        }
                         //collector for LIES
                     }
                 }
@@ -2371,10 +2384,18 @@ void entityclass::updateentities( int i )
                 }
                 else if (entities[i].state == 1)
                 {
-                    if (entities[i].yp <= -60) removeentity(i);
+                    if (entities[i].yp <= -60)
+                    {
+                        removeentity(i);
+                        return true;
+                    }
                     if (game.roomy == 108)
                     {
-                        if (entities[i].yp <= 60) removeentity(i);
+                        if (entities[i].yp <= 60)
+                        {
+                            removeentity(i);
+                            return true;
+                        }
                         //collector for factory
                     }
                 }
@@ -2387,7 +2408,8 @@ void entityclass::updateentities( int i )
                         if (entities[j].type == 2 && entities[j].state== 3 && entities[j].xp == (entities[i].xp-32) )
                         {
                             entities[i].state = 3;
-                            updateentities(i);
+                            bool entitygone = updateentities(i);
+                            if (entitygone) return true;
                         }
                     }
                 }
@@ -2416,7 +2438,8 @@ void entityclass::updateentities( int i )
                         if (entities[j].type == 2 && entities[j].state==3 && entities[j].xp==entities[i].xp+32)
                         {
                             entities[i].state = 3;
-                            updateentities(i);
+                            bool entitygone = updateentities(i);
+                            if (entitygone) return true;
                         }
                     }
                 }
@@ -2457,14 +2480,16 @@ void entityclass::updateentities( int i )
                         //approach from the left
                         entities[i].xp = -64;
                         entities[i].state = 2;
-                        updateentities(i); //right
+                        bool entitygone = updateentities(i); //right
+                        if (entitygone) return true;
                     }
                     else
                     {
                         //approach from the left
                         entities[i].xp = 320;
                         entities[i].state = 3;
-                        updateentities(i); //left
+                        bool entitygone = updateentities(i); //left
+                        if (entitygone) return true;
                     }
 
                 }
@@ -2569,6 +2594,7 @@ void entityclass::updateentities( int i )
                         entities[i].invis = true;
                     } else {
                         removeentity(i);
+                        return true;
                     }
                 }
             }
@@ -2611,6 +2637,7 @@ void entityclass::updateentities( int i )
                     entities[i].onentity = 0;
                 } else {
                     removeentity(i);
+                    return true;
                 }
             }
             else if (entities[i].state == 2)
@@ -2631,7 +2658,11 @@ void entityclass::updateentities( int i )
             if (entities[i].state == 0)
             {
                 entities[i].life--;
-                if (entities[i].life < 0) removeentity(i);
+                if (entities[i].life < 0)
+                {
+                    removeentity(i);
+                    return true;
+                }
             }
             break;
         case 6: //Small pickup
@@ -2647,6 +2678,7 @@ void entityclass::updateentities( int i )
                 coincollect[entities[i].para] = true;
 
                 removeentity(i);
+                return true;
             }
             break;
         case 7: //Found a trinket
@@ -2671,6 +2703,7 @@ void entityclass::updateentities( int i )
                 }
 
                 removeentity(i);
+                return true;
             }
             break;
         case 8: //Savepoints
@@ -3177,6 +3210,7 @@ void entityclass::updateentities( int i )
                 {
                     game.scmprogress++;
                     removeentity(i);
+                    return true;
                 }
             }
             break;
@@ -3199,14 +3233,22 @@ void entityclass::updateentities( int i )
                 if (entities[i].state == 0)   //Init
                 {
                     entities[i].vx = 7;
-                    if (entities[i].xp > 320) removeentity(i);
+                    if (entities[i].xp > 320)
+                    {
+                        removeentity(i);
+                        return true;
+                    }
                 }
                 break;
             case 1:
                 if (entities[i].state == 0)   //Init
                 {
                     entities[i].vx = -7;
-                    if (entities[i].xp <-20) removeentity(i);
+                    if (entities[i].xp <-20)
+                    {
+                        removeentity(i);
+                        return true;
+                    }
                 }
                 break;
             }
@@ -3298,6 +3340,7 @@ void entityclass::updateentities( int i )
                 }
 
                 removeentity(i);
+                return true;
             }
             break;
         case 100: //The teleporter
@@ -3372,6 +3415,8 @@ void entityclass::updateentities( int i )
             entities[i].statedelay = 0;
         }
     }
+
+    return false;
 }
 
 void entityclass::animateentities( int _i )
