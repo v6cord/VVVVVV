@@ -5655,7 +5655,7 @@ void editorinput()
                     break;
                 }
 
-                // fallthrough
+                [[fallthrough]];
             case TEXT_SCRIPT:
                 ed.clearscriptbuffer();
                 if (!ed.checkhook(key.keybuffer))
