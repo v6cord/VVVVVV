@@ -59,7 +59,7 @@ using namespace std::literals::chrono_literals;
 
 scriptclass script;
 #if !defined(NO_CUSTOM_LEVELS)
-growing_vector<edentities> edentity;
+std::vector<edentities> edentity;
 editorclass ed;
 #endif
 
