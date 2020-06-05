@@ -16,10 +16,6 @@ public:
 
     int miniat(int xp, int yp, int yoff);
 
-    void fillbackground(growing_vector<std::string>& tmap);
-
-    void fillminitower(growing_vector<std::string>& tmap);
-
     void loadcustomtower(growing_vector <int> tmap, int ymax);
 
     void loadminitower1();
@@ -27,8 +23,6 @@ public:
     void loadminitower2();
 
     void loadbackground();
-
-    void fillcontents(growing_vector<std::string>& tmap);
 
     void loadmap();
 

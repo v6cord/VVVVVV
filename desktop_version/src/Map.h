@@ -63,13 +63,9 @@ public:
 
     bool collide(int x, int y);
 
-    void fillareamap(growing_vector<std::string>& tmap);
-
     void settile(int xp, int yp, int t);
     void settile_special(int x, int y, int tile);
 
-
-    void fillcontent(growing_vector<std::string>& tmap);
 
 
     int area(int _rx, int _ry);

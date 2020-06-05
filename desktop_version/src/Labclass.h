@@ -11,7 +11,7 @@
 class labclass
 {
 public:
-    growing_vector<std::string>  loadlevel(int rx, int ry);
+    std::vector<int>  loadlevel(int rx, int ry);
 
     std::string roomname;
     int coin, rcol = 0;

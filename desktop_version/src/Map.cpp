@@ -82,28 +82,30 @@ mapclass::mapclass()
 	resetnames();
 
 	//Areamap starts at 100,100 and extends 20x20
-	growing_vector<std::string> tmap;
-	tmap.push_back("1,2,2,2,2,2,2,2,0,3,0,0,0,4,4,4,4,4,4,4");
-	tmap.push_back("1,2,2,2,2,2,2,0,0,3,0,0,0,0,4,4,4,4,4,4");
-	tmap.push_back("0,1,0,0,2,0,0,0,0,3,0,0,0,0,4,4,4,4,4,4");
-	tmap.push_back("0,0,0,0,2,0,0,0,0,3,0,0,5,5,5,5,4,4,4,4");
-	tmap.push_back("0,0,2,2,2,0,0,0,0,3,11,11,5,5,5,5,0,0,0,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,5,5,5,5,5,5,0,0,0,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,5,5,5,5,5,5,5,0,0,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,5,5,5,5,5,5,5,5,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,0,0,0,5,5,5,5,5,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,11,3,0,0,0,5,5,5,5,5,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,0,0,0,5,5,5,5,5,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,0,5,5,5,5,5,5,5,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,0,5,5,5,5,5,5,0,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,0,5,5,5,5,5,5,0,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,0,0,3,0,5,5,0,0,0,0,0,5,0");
-	tmap.push_back("0,0,0,0,0,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0");
-	tmap.push_back("0,0,2,2,2,2,2,2,0,3,0,0,0,0,0,0,0,0,0,0");
-	tmap.push_back("0,2,2,2,2,2,2,2,0,3,0,0,0,0,0,0,0,0,0,0");
-	tmap.push_back("2,2,2,2,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0");
-	tmap.push_back("2,2,2,2,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0");
-	fillareamap(tmap);
+	const int tmap[] = {
+	1,2,2,2,2,2,2,2,0,3,0,0,0,4,4,4,4,4,4,4,
+	1,2,2,2,2,2,2,0,0,3,0,0,0,0,4,4,4,4,4,4,
+	0,1,0,0,2,0,0,0,0,3,0,0,0,0,4,4,4,4,4,4,
+	0,0,0,0,2,0,0,0,0,3,0,0,5,5,5,5,4,4,4,4,
+	0,0,2,2,2,0,0,0,0,3,11,11,5,5,5,5,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,3,5,5,5,5,5,5,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,3,5,5,5,5,5,5,5,0,0,0,
+	0,0,0,0,0,0,0,0,0,3,5,5,5,5,5,5,5,5,5,0,
+	0,0,0,0,0,0,0,0,0,3,0,0,0,5,5,5,5,5,5,0,
+	0,0,0,0,0,0,0,0,11,3,0,0,0,5,5,5,5,5,5,0,
+	0,0,0,0,0,0,0,0,0,3,0,0,0,5,5,5,5,5,5,0,
+	0,0,0,0,0,0,0,0,0,3,0,5,5,5,5,5,5,5,5,0,
+	0,0,0,0,0,0,0,0,0,3,0,5,5,5,5,5,5,0,5,0,
+	0,0,0,0,0,0,0,0,0,3,0,5,5,5,5,5,5,0,5,0,
+	0,0,0,0,0,0,0,0,0,3,0,5,5,0,0,0,0,0,5,0,
+	0,0,0,0,0,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,
+	0,0,2,2,2,2,2,2,0,3,0,0,0,0,0,0,0,0,0,0,
+	0,2,2,2,2,2,2,2,0,3,0,0,0,0,0,0,0,0,0,0,
+	2,2,2,2,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,
+	2,2,2,2,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,
+	};
+	areamap.clear();
+	areamap.insert(areamap.end(), tmap, tmap+400);
 }
 
 int mapclass::RGB(int red,int green,int blue)
@@ -762,19 +764,6 @@ bool mapclass::collide(int x, int y)
 	return false;
 }
 
-void mapclass::fillareamap(growing_vector<std::string>& tmap)
-{
-
-	for (j = 0; j < 20; j++)
-	{
-		growing_vector<std::string> maprow = split(tmap[j], ',');
-		for (int i = 0; i < 20; i++)
-		{
-			areamap[i + (j * 20)] = atoi(maprow[i].c_str());
-		}
-	}
-}
-
 void mapclass::settile(int xp, int yp, int t)
 {
 	if (towermode && minitowermode) {
@@ -885,20 +874,6 @@ void mapclass::settile_special(int x, int y, int tile) {
 	// One-way tiles
 	if (tileset != 2 && tile >= 14 && tile <= 17)
 		obj.createblock(DIRECTIONAL, 8*x, 8*y, 8, 8, tile-14);
-}
-
-void mapclass::fillcontent(growing_vector<std::string>& tmap)
-{
-
-	for (j = 0; j < 29+extrarow; j++)
-	{
-		growing_vector<std::string> maprow = split(tmap[j], ',');
-
-		for(int i = 0; i < 40; i++)
-		{
-			contents[i + vmult[j]] = atoi(maprow[i].c_str());
-		}
-	}
 }
 
 
@@ -1677,8 +1652,7 @@ void mapclass::loadlevel(int rx, int ry)
 	case 1: //World Map
 		tileset = 1;
 		extrarow = 1;
-		tmap = otherlevel.loadlevel(rx, ry);
-		fillcontent(tmap);
+		contents = otherlevel.loadlevel(rx, ry);
 		roomname = otherlevel.roomname;
 		tileset = otherlevel.roomtileset;
 		//do the appear/remove roomname here
@@ -1690,8 +1664,7 @@ void mapclass::loadlevel(int rx, int ry)
 		}
 		break;
 	case 2: //The Lab
-		tmap = lablevel.loadlevel(rx, ry);
-		fillcontent(tmap);
+		contents = lablevel.loadlevel(rx, ry);
 		roomname = lablevel.roomname;
 		tileset = 1;
 		background = 2;
@@ -1726,8 +1699,7 @@ void mapclass::loadlevel(int rx, int ry)
 		obj.createentity(280, 3216, 9, 8); // (shiny trinket)
 		break;
 	case 4: //The Warpzone
-		tmap = warplevel.loadlevel(rx, ry);
-		fillcontent(tmap);
+		contents = warplevel.loadlevel(rx, ry);
 		roomname = warplevel.roomname;
 		tileset = 1;
 		background = 3;
@@ -1742,14 +1714,12 @@ void mapclass::loadlevel(int rx, int ry)
 		if (warpx && warpy) background = 5;
 		break;
 	case 5: //Space station
-		tmap = spacestation2.loadlevel(rx, ry);
-		fillcontent(tmap);
+		contents = spacestation2.loadlevel(rx, ry);
 		roomname = spacestation2.roomname;
 		tileset = 0;
 		break;
 	case 6: //final level
-		tmap = finallevel.loadlevel(finalx, finaly);
-		fillcontent(tmap);
+		contents = finallevel.loadlevel(finalx, finaly);
 		roomname = finallevel.roomname;
 		tileset = 1;
 		background = 3;
@@ -1806,8 +1776,7 @@ void mapclass::loadlevel(int rx, int ry)
 		break;
 	case 11: //Tower Hallways //Content is held in final level routine
 	{
-		tmap = finallevel.loadlevel(rx, ry);
-		fillcontent(tmap);
+		contents = finallevel.loadlevel(rx, ry);
 		roomname = finallevel.roomname;
 		tileset = 2;
 		if (rx == 108)
