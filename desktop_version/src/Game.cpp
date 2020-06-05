@@ -5,7 +5,6 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Script.h"
-
 #include "KeyPoll.h"
 
 #include <stdio.h>
