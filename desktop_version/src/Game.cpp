@@ -7509,7 +7509,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
                 }
                 else
                 {
-                    option("start");
+                    option("new game");
                 }
                 //ok, secret lab! no notification, but test:
                 if (unlock[8])
