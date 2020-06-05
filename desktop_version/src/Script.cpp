@@ -1781,61 +1781,10 @@ void scriptclass::run() {
                 } else if (words[0] == "flipme") {
                     if (graphics.flipmode)
                         texty += 2 * (120 - texty) - 8 * (txt.size() + 2);
-                } else if (words[0] == "speak_active") {
+                } else if (words[0] == "speak" || words[0] == "speak_active" || words[0] == "speak_fast" || words[0] == "speak_active_fast") {
                     // Ok, actually display the textbox we've initilised now!
-                    graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if ((int) txt.size() > 1) {
-                        for (i = 1; i < (int) txt.size(); i++) {
-                            graphics.addline(txt[i]);
-                        }
-                    }
-
-                    // the textbox cannot be outside the screen. Fix if it is.
-                    if (textx <= -1000) {
-                        // position to the left of the player
-                        textx += 10000;
-                        textx -= graphics.textboxwidth();
-                        textx += 16;
-                        graphics.textboxmoveto(textx);
-                    }
-
-                    if (textx == -500 || textx == -1) {
-                        if (textcenterline != 0)
-                            graphics.textboxcenterx(textcenterline);
-                        else
-                            graphics.textboxcenterx(160);
-
-                        // So it doesn't use the same line but Y instead of X for
-                        // texty=-500
-                        textcenterline = 0;
-                    }
-
-                    if (texty == -500) {
-                        if (textcenterline != 0)
-                            graphics.textboxcentery(textcenterline);
-                        else
-                            graphics.textboxcentery(120);
-
-                        textcenterline = 0;
-                    }
-
-                    textcenterline = 0;
-
-                    graphics.textboxadjust();
-                    graphics.textboxactive();
-
-                    if (!game.backgroundtext) {
-                        game.advancetext = true;
-                        game.hascontrol = false;
-                        game.pausescript = true;
-                        if (key.isDown(90) || key.isDown(32) || key.isDown(86) ||
-                            key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN))
-                            game.jumpheld = true;
-                    }
-                    game.backgroundtext = false;
-                } else if (words[0] == "speak") {
-                    // Exactly as above, except don't make the textbox active (so we
-                    // can use multiple textboxes)
+                    // If using "speak", don't make the textbox active (so we can use multiple textboxes)
+                    // If using "speak_fast" or "speak_active_fast", create the textbox immediately
                     graphics.createtextbox(txt[0], textx, texty, r, g, b);
                     if ((int) txt.size() > 1) {
                         for (i = 1; i < (int) txt.size(); i++) {
@@ -1875,116 +1824,12 @@ void scriptclass::run() {
                     textcenterline = 0;
 
                     graphics.textboxadjust();
-                    // graphics.textboxactive();
-
-                    if (!game.backgroundtext) {
-                        game.advancetext = true;
-                        game.hascontrol = false;
-                        game.pausescript = true;
-                        if (key.isDown(90) || key.isDown(32) || key.isDown(86) ||
-                            key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN))
-                            game.jumpheld = true;
+                    if (words[0] == "speak_active") {
+                        graphics.textboxactive();
                     }
-                    game.backgroundtext = false;
-                } else if (words[0] == "speak_active_fast") {
-                    // Copied and pasted from the above
-                    // Ok, actually display the textbox we've initilised now!
-                    graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if ((int) txt.size() > 1) {
-                        for (i = 1; i < (int) txt.size(); i++) {
-                            graphics.addline(txt[i]);
-                        }
+                    if (words[0] == "speak_fast" || words[0] == "speak_active_fast") {
+                        graphics.textboxcreatefast();
                     }
-
-                    // the textbox cannot be outside the screen. Fix if it is.
-                    if (textx <= -1000) {
-                        // position to the left of the player
-                        textx += 10000;
-                        textx -= graphics.textboxwidth();
-                        textx += 16;
-                        graphics.textboxmoveto(textx);
-                    }
-
-                    if (textx == -500 || textx == -1) {
-                        if (textcenterline != 0)
-                            graphics.textboxcenterx(textcenterline);
-                        else
-                            graphics.textboxcenterx(160);
-
-                        // So it doesn't use the same line but Y instead of X for
-                        // texty=-500
-                        textcenterline = 0;
-                    }
-
-                    if (texty == -500) {
-                        if (textcenterline != 0)
-                            graphics.textboxcentery(textcenterline);
-                        else
-                            graphics.textboxcentery(120);
-
-                        textcenterline = 0;
-                    }
-
-                    textcenterline = 0;
-
-                    graphics.textboxadjust();
-                    graphics.textboxactive();
-                    graphics.textboxcreatefast();
-
-                    if (!game.backgroundtext) {
-                        game.advancetext = true;
-                        game.hascontrol = false;
-                        game.pausescript = true;
-                        if (key.isDown(90) || key.isDown(32) || key.isDown(86) ||
-                            key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN))
-                            game.jumpheld = true;
-                    }
-                    game.backgroundtext = false;
-                } else if (words[0] == "speak_fast") {
-                    // Copied and pasted from the above, again
-                    // Exactly as above, except don't make the textbox active (so we
-                    // can use multiple textboxes)
-                    graphics.createtextbox(txt[0], textx, texty, r, g, b);
-                    if ((int) txt.size() > 1) {
-                        for (i = 1; i < (int) txt.size(); i++) {
-                            graphics.addline(txt[i]);
-                        }
-                    }
-
-                    // the textbox cannot be outside the screen. Fix if it is.
-                    if (textx <= -1000) {
-                        // position to the left of the player
-                        textx += 10000;
-                        textx -= graphics.textboxwidth();
-                        textx += 16;
-                        graphics.textboxmoveto(textx);
-                    }
-
-                    if (textx == -500 || textx == -1) {
-                        if (textcenterline != 0)
-                            graphics.textboxcenterx(textcenterline);
-                        else
-                            graphics.textboxcenterx();
-
-                        // So it doesn't use the same line but Y instead of X for
-                        // texty=-500
-                        textcenterline = 0;
-                    }
-
-                    if (texty == -500) {
-                        if (textcenterline != 0)
-                            graphics.textboxcentery(textcenterline);
-                        else
-                            graphics.textboxcentery();
-
-                        textcenterline = 0;
-                    }
-
-                    textcenterline = 0;
-
-                    graphics.textboxadjust();
-                    // graphics.textboxactive();
-                    graphics.textboxcreatefast();
 
                     if (!game.backgroundtext) {
                         game.advancetext = true;
