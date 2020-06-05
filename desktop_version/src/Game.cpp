@@ -5095,7 +5095,7 @@ void Game::loadquick()
         }
         else if (pKey == "hardestroom")
         {
-            hardestroom = atoi(pText);
+            hardestroom = pText;
         }
         else if (pKey == "hardestroomdeaths")
         {
@@ -5481,7 +5481,7 @@ void Game::customloadquick(std::string savfile)
         }
         else if (pKey == "hardestroom")
         {
-            hardestroom = atoi(pText);
+            hardestroom = pText;
         }
         else if (pKey == "hardestroomdeaths")
         {
