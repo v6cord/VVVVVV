@@ -89,14 +89,6 @@ editorclass::editorclass()
         }
     }
 
-    for (int j = 0; j < 30; j++)
-    {
-        for (int i = 0; i < 40; i++)
-        {
-            swapmap.push_back(0);
-        }
-    }
-
     for (int i = 0; i < 30 * maxheight; i++)
     {
         vmult.push_back(int(i * 40 * maxwidth));
@@ -553,7 +545,7 @@ void editorclass::getlin(enum textmode mode, std::string prompt, std::string *pt
     ed.oldenttext = key.keybuffer;
 }
 
-void editorclass::loadlevel( int rxi, int ryi, int altstate )
+std::vector<int> editorclass::loadlevel( int rxi, int ryi )
 {
     //Set up our buffer array to be picked up by mapclass
     rxi -= 100;
@@ -562,16 +554,14 @@ void editorclass::loadlevel( int rxi, int ryi, int altstate )
     if (ryi < 0) ryi += mapheight;
     if (rxi >= mapwidth) rxi -= mapwidth;
     if (ryi >= mapheight) ryi -= mapheight;
+    std::vector<int> result;
 
     int tower = get_tower(rxi, ryi);
 
     if (tower) {
-        int ymax = tower_size(tower);
-        for (int y = 0; y < ymax; y++)
-            for (int x = 0; x < 40; x++)
-                swapmap[x + y*40] = towers[tower-1].tiles[x + y*40];
+        result = towers[tower-1].tiles;
 
-        return;
+        return result;
     }
 
     int thisstate = -1;
@@ -581,12 +571,12 @@ void editorclass::loadlevel( int rxi, int ryi, int altstate )
     if (thisstate == -1) { // Didn't find the alt state, or not using one
         for (int j = 0; j < 30; j++)
             for (int i = 0; i < 40; i++)
-                swapmap[i+(j*40)]=contents[i+(rxi*40)+vmult[j+(ryi*30)]];
+                result.push_back(contents[i+(rxi*40)+vmult[j+(ryi*30)]]);
     } else {
-        for (int j = 0; j < 30; j++)
-            for (int i = 0; i < 40; i++)
-                swapmap[i + j*40] = altstates[thisstate].tiles[i + j*40];
+        result = altstates[thisstate].tiles;
     }
+
+    return result;
 }
 
 int editorclass::getlevelcol(int t)

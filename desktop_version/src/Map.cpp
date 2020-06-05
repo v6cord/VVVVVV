@@ -1857,7 +1857,7 @@ void mapclass::loadlevel(int rx, int ry)
 			extrarow = 1;
 		}
 
-		ed.loadlevel(rx, ry, obj.altstates);
+		contents = ed.loadlevel(rx, ry, obj.altstates);
 		int ymax = 30;
 		if (newtower) {
 			ymax = minitowersize;

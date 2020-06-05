@@ -207,7 +207,7 @@ public:
     void saveconvertor();
     void reset();
     void getlin(enum textmode mode, std::string prompt, std::string *ptr);
-    void loadlevel(int rxi, int ryi, int altstate);
+  std::vector<int> loadlevel(int rxi, int ryi, int altstate);
 
     void placetile(int x, int y, int t);
 
@@ -292,10 +292,9 @@ public:
     //Colouring stuff
     int getwarpbackground(int rx, int ry);
 
-    growing_vector<std::string> getLevelDirFileNames( );
-    growing_vector <int> swapmap;
-    growing_vector <int> contents;
-    growing_vector <int> vmult;
+  std::vector<std::string> getLevelDirFileNames( );
+  std::vector <int> contents;
+  std::vector <int> vmult;
     int numtrinkets();
     int numcrewmates();
     int numcoins();
