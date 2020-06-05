@@ -462,6 +462,10 @@ public:
     int fadetomenudelay;
     bool fadetolab;
     int fadetolabdelay;
+
+#if !defined(NO_CUSTOM_LEVELS)
+    void returntoeditor();
+#endif
 };
 
 extern Game game;
