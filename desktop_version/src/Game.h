@@ -462,6 +462,8 @@ public:
     bool cutemode = false;
     bool allymode = false;
     bool misamode = false;
+
+    void quittomenu();
 };
 
 extern Game game;
