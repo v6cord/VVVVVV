@@ -2413,8 +2413,6 @@ void gamerender()
 
 void maprender()
 {
-    graphics.drawgui();
-
     //draw screen alliteration
     //Roomname:
     int temp = map.area(game.roomx, game.roomy);
