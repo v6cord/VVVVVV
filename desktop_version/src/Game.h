@@ -400,8 +400,6 @@ public:
     bool menukludge = false;
     bool quickrestartkludge = false;
 
-    bool paused = false;
-
     //Custom stuff
     std::string customscript[50];
     int customcol = 0;
