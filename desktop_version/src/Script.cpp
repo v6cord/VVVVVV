@@ -1785,6 +1785,9 @@ void scriptclass::run() {
                     // Ok, actually display the textbox we've initilised now!
                     // If using "speak", don't make the textbox active (so we can use multiple textboxes)
                     // If using "speak_fast" or "speak_active_fast", create the textbox immediately
+                    if (txt.empty()) {
+                        txt.resize(1);
+                    }
                     graphics.createtextbox(txt[0], textx, texty, r, g, b);
                     if ((int) txt.size() > 1) {
                         for (i = 1; i < (int) txt.size(); i++) {
