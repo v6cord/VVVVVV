@@ -117,481 +117,13 @@ void gamecompletelogic2()
 }
 
 
-void towerlogic()
-{
-    //Logic for the tower level
-    map.updatetowerglow();
-    help.updateglow();
-
-    if(!game.completestop)
-    {
-        if (map.cameramode == 0)
-        {
-            //do nothing!
-            //a trigger will set this off in the game
-            map.cameramode = 1;
-            map.bscroll = 0;
-        }
-        else if (map.cameramode == 1)
-        {
-            //move normally
-            if(map.scrolldir==0)
-            {
-                map.ypos -= 2;
-                map.bypos -= 1;
-                map.bscroll = -1;
-            }
-            else
-            {
-                map.ypos += 2;
-                map.bypos += 1;
-                map.bscroll = 1;
-            }
-        }
-        else if (map.cameramode == 2)
-        {
-            //do nothing, but cycle colours (for taking damage)
-            map.bscroll = 0;
-        }
-        else if (map.cameramode == 4)
-        {
-            // Reset player position from checkpoint
-            int i = obj.getplayer();
-            obj.entities[i].yp = game.savey;
-            map.cameraseek = map.ypos - (obj.entities[i].yp - 120);
-
-            map.cameraseek = map.cameraseek / 10;
-            map.cameraseekframe = 10;
-
-            map.cameramode = 5;
-
-            map.bscroll = map.cameraseek/2;
-        }
-        else if (map.cameramode == 5)
-        {
-            // Reset player position from checkpoint
-            int i = obj.getplayer();
-            obj.entities[i].yp = game.savey;
-
-            // Realign tower
-            if (map.spikeleveltop > 0) map.spikeleveltop-=2;
-            if (map.spikelevelbottom > 0) map.spikelevelbottom-=2;
-            if (map.cameraseekframe > 0)
-            {
-                map.ypos -= map.cameraseek;
-                if (map.cameraseek > 0)
-                {
-                    if (map.ypos < obj.entities[i].yp - 120)
-                    {
-                        map.ypos = obj.entities[i].yp - 120;
-                    }
-                }
-                else
-                {
-                    if (map.ypos > obj.entities[i].yp - 120)
-                    {
-                        map.ypos = obj.entities[i].yp - 120;
-                    }
-                }
-                map.cameraseekframe--;
-                map.bypos = map.ypos / 2;
-            }
-            else
-            {
-                int i = obj.getplayer();
-                map.ypos = obj.entities[i].yp - 120;
-                map.bypos = map.ypos / 2;
-                map.cameramode = 0;
-                map.colsuperstate = 0;
-            }
-        }
-    }
-    else
-    {
-        map.bscroll = 0;
-    }
-
-    if (map.ypos <= 0)
-    {
-        map.ypos = 0;
-        map.bypos = 0;
-        map.bscroll = 0;
-    }
-    if (map.minitowermode)
-    {
-        if (map.ypos >= map.minitowersize * 8 - 232)
-        {
-            map.ypos = map.minitowersize * 8 - 232;
-            map.bypos = map.ypos / 2;
-            map.bscroll = 0;
-        } //100-29 * 8 = 568
-    }
-    else
-    {
-        if (map.ypos >= 5368)
-        {
-            map.ypos = 5368;    //700-29 * 8 = 5368
-            map.bypos = map.ypos / 2.0;
-        }
-    }
-
-    if (game.lifeseq > 0)
-    {
-        if (map.cameramode == 2)
-        {
-            map.cameraseekframe = 20;
-            map.cameramode = 4;
-            map.resumedelay = 4;
-        }
-
-        if (map.cameraseekframe <= 0)
-        {
-            if (map.resumedelay <= 0)
-            {
-                game.lifesequence();
-                if (game.lifeseq == 0) map.cameramode = 1;
-            }
-            else
-            {
-                // Reset player position from checkpoint
-                int i = obj.getplayer();
-                obj.entities[i].yp = game.savey;
-                map.resumedelay--;
-            }
-        }
-    }
-
-    if (game.deathseq != -1)
-    {
-        for (size_t i = 0; i < obj.entities.size(); i++)
-        {
-            if (obj.entities[i].type == 2 && obj.entities[i].state == 3)
-            {
-                obj.entities[i].state = 4;
-            }
-            else if (obj.entities[i].type == 2 && obj.entities[i].state == 2)
-            {
-                //ok, unfortunate case where the disappearing platform hasn't fully disappeared. Accept a little
-                //graphical uglyness to avoid breaking the room!
-                while (obj.entities[i].state == 2) obj.updateentities(i);
-                obj.entities[i].state = 4;
-            }
-            else if (obj.entities[i].type == 3 && obj.entities[i].state == 3)
-            {
-                // Restart the 1x1 quicksand
-                obj.entities[i].state = 4;
-            }
-            else if (obj.entities[i].type == 3 && obj.entities[i].state == 2)
-            {
-                // Ok, unfortunate case where the 1x1 quicksand hasn't fully disappeared.
-                // Accept a little graphical ugliness to avoid breaking the room!
-                while (obj.entities[i].state == 2)
-                    obj.updateentities(i);
-
-                obj.entities[i].state = 4;
-            }
-            else if (obj.entities[i].type == 4 && obj.entities[i].state == 2)
-            {
-                // Flip token: Give a signal to respawn
-                obj.entities[i].state = 3;
-            }
-        }
-        map.colsuperstate = 1;
-        map.cameramode = 2;
-        game.deathsequence();
-        game.deathseq--;
-        if (game.deathseq <= 0)
-        {
-            script.callback("on_death_end");
-            if (game.nodeathmode)
-            {
-                game.deathseq = 1;
-                game.gethardestroom();
-                //start depressing sequence here...
-                if (game.gameoverdelay <= -10 && graphics.fademode==0) graphics.fademode = 2;
-                if (graphics.fademode == 1) script.resetgametomenu();
-            }
-            else
-            {
-                if (game.currentroomdeaths > game.hardestroomdeaths)
-                {
-                    game.hardestroomdeaths = game.currentroomdeaths;
-                    game.hardestroom = map.roomname;
-                }
-
-                game.gravitycontrol = game.savegc;
-                last_gravity = -1;
-                graphics.textboxremove();
-                map.resetplayer();
-            }
-        }
-    }
-    else
-    {
-        //State machine for game logic
-        game.updatestate();
-
-
-        //Time trial stuff
-        if (game.intimetrial)
-        {
-            if (game.timetrialcountdown > 0)
-            {
-                game.hascontrol = true;
-                game.timetrialcountdown--;
-                if (game.timetrialcountdown > 30)
-                {
-                    game.hascontrol = false;
-                }
-                if(game.timetrialcountdown == 120) music.playef(21);
-                if(game.timetrialcountdown == 90) music.playef(21);
-                if(game.timetrialcountdown == 60) music.playef(21);
-                if (game.timetrialcountdown == 30)
-                {
-                    switch(game.timetriallevel)
-                    {
-                    case 0:
-                        music.play(1);
-                        break;
-                    case 1:
-                        music.play(3);
-                        break;
-                    case 2:
-                        music.play(2);
-                        break;
-                    case 3:
-                        music.play(1);
-                        break;
-                    case 4:
-                        music.play(12);
-                        break;
-                    case 5:
-                        music.play(15);
-                        break;
-                    case 21:
-                        music.play(ed.customtrials[game.currenttrial].music);
-                        break;
-                    }
-                    music.playef(22);
-                }
-            }
-
-            //Have we lost the par?
-            if (!game.timetrialparlost)
-            {
-                if ((game.minutes * 60) + game.seconds > game.timetrialpar)
-                {
-                    game.timetrialparlost = true;
-                    int i = obj.getplayer();
-                    if (i > -1)
-                    {
-                        obj.entities[i].tile = 144;
-                    }
-                    music.playef(2);
-                }
-            }
-        }
-        //Update entities
-
-        //Ok, moving platform fuckers
-        if(!game.completestop)
-        {
-            if(obj.vertplatforms)
-            {
-                for (int i = obj.entities.size() - 1; i >= 0;  i--)
-                {
-                    if (obj.entities[i].isplatform)
-                    {
-                        if(abs(obj.entities[i].vx) < 0.000001f)
-                        {
-                            obj.removeblockat(obj.entities[i].xp, obj.entities[i].yp);
-
-                            obj.updateentities(i);                // Behavioral logic
-                            obj.updateentitylogic(i);             // Basic Physics
-                            obj.entitymapcollision(i);            // Collisions with walls
-
-                            obj.createblock(0, obj.entities[i].xp, obj.entities[i].yp, obj.entities[i].w, obj.entities[i].h);
-                            if (game.supercrewmate)
-                            {
-                                obj.movingplatformfix(i);
-                                obj.scmmovingplatformfix(i);
-                            }
-                            else
-                            {
-                                obj.movingplatformfix(i);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if(obj.horplatforms)
-            {
-                for (int ie = obj.entities.size() - 1; ie >= 0;  ie--)
-                {
-                    if (obj.entities[ie].isplatform)
-                    {
-                        if(abs(obj.entities[ie].vy) < 0.000001f)
-                        {
-                            obj.removeblockat(obj.entities[ie].xp, obj.entities[ie].yp);
-
-                            obj.updateentities(ie);                // Behavioral logic
-                            obj.updateentitylogic(ie);             // Basic Physics
-                            obj.entitymapcollision(ie);            // Collisions with walls
-
-                            obj.hormovingplatformfix(ie);
-                        }
-                    }
-                }
-                //is the player standing on a moving platform?
-                int i = obj.getplayer();
-                float j = obj.entitycollideplatformfloor(i);
-                if (j > -1000)
-                {
-                    obj.entities[i].newxp = obj.entities[i].xp + j;
-                    obj.entitymapcollision(i);
-                }
-                else
-                {
-                    j = obj.entitycollideplatformroof(i);
-                    if (j > -1000)
-                    {
-                        obj.entities[i].newxp = obj.entities[i].xp + j;
-                        obj.entitymapcollision(i);
-                    }
-                }
-            }
-
-            for (int i = obj.entities.size() - 1; i >= 0;  i--)
-            {
-                if (!obj.entities[i].isplatform)
-                {
-                    obj.updateentities(i);                // Behavioral logic
-                    obj.updateentitylogic(i);             // Basic Physics
-                    obj.entitymapcollision(i);            // Collisions with walls
-                }
-            }
-
-            obj.entitycollisioncheck();         // Check ent v ent collisions, update states
-            //special for tower: is the player touching any spike blocks?
-            int player = obj.getplayer();
-
-            if(obj.checktowerspikes(player) && graphics.fademode==0)
-            {
-                game.deathseq = 30;
-            }
-
-            // Check for vertical (not horizontal!) warp lines
-            if (obj.customwarpmode) {
-                obj.customwarpmodehon = false;
-                obj.customwarpmodevon = false;
-                if ((game.door_left > -2 && obj.entities[player].xp < -14+16) ||
-                    (game.door_right > -2 && obj.entities[player].xp >= 308-16))
-                    obj.customwarplinecheck(player);
-
-                map.warpy = obj.customwarpmodehon;
-            }
-
-            //Right so! Screenwraping for tower:
-            bool dowrap = false;
-            if (map.warpy)
-                dowrap = true;
-            else if ((game.door_left > -2 &&
-                      obj.entities[player].xp < -14) ||
-                     (game.door_right > -2 &&
-                      obj.entities[player].xp >= 308)) {
-                if (map.leaving_tower(&game.roomx, &game.roomy, obj)) {
-                    map.gotodimroom(game.roomx, game.roomy);
-                    map.gotoroom(game.roomx, game.roomy);
-                    twoframedelayfix();
-                } else {
-                    dowrap = true;
-                }
-            }
-
-            if (dowrap) {
-                for (size_t i = 0; i < obj.entities.size(); i++) {
-                    if (obj.entities[i].xp <= -10)
-                        obj.entities[i].xp += 320;
-                    else if (obj.entities[i].xp > 310)
-                        obj.entities[i].xp -= 320;
-                }
-            }
-
-            if(game.lifeseq==0)
-            {
-                int player = obj.getplayer();
-                if(!map.invincibility)
-                {
-                    if (obj.entities[player].yp-map.ypos <= 0)
-                    {
-                        game.deathseq = 30;
-                    }
-                    else if (obj.entities[player].yp-map.ypos >= 208)
-                    {
-                        game.deathseq = 30;
-                    }
-                }
-                else
-                {
-                    if (obj.entities[player].yp-map.ypos <= 0)
-                    {
-                        map.ypos-=10;
-                        map.bypos = map.ypos / 2;
-                        map.bscroll = 0;
-                    }
-                    else if (obj.entities[player].yp-map.ypos >= 208)
-                    {
-                        map.ypos+=2;
-                        map.bypos = map.ypos / 2;
-                        map.bscroll = 0;
-                    }
-                }
-
-                if (obj.entities[player].yp - map.ypos <= 40)
-                {
-                    map.spikeleveltop++;
-                    if (map.spikeleveltop >= 8) map.spikeleveltop = 8;
-                }
-                else
-                {
-                    if (map.spikeleveltop > 0) map.spikeleveltop--;
-                }
-
-                if (obj.entities[player].yp - map.ypos >= 164)
-                {
-                    map.spikelevelbottom++;
-                    if (map.spikelevelbottom >= 8) map.spikelevelbottom = 8;
-                }
-                else
-                {
-                    if (map.spikelevelbottom > 0) map.spikelevelbottom--;
-                }
-
-            }
-
-
-        }
-
-        //Looping around, room change conditions!
-
-        //Warp tokens
-        if (map.custommode && game.teleport) {
-            map.custom_warpto(game.edteleportent);
-        }
-    }
-
-    if (game.teleport_to_new_area) script.teleport();
-
-    if (last_gravity != -1 && last_gravity != game.gravitycontrol) {
-        script.callback("on_flip");
-    }
-    last_gravity = game.gravitycontrol;
-}
-
 void gamelogic()
 {
     //Misc
+    if (map.towermode)
+    {
+        map.updatetowerglow();
+    }
     help.updateglow();
 
     if (game.alarmon)
@@ -647,11 +179,160 @@ void gamelogic()
         obj.upset = 0;
     }
 
-    game.lifesequence();
+    if (map.towermode)
+    {
+        if(!game.completestop)
+        {
+            if (map.cameramode == 0)
+            {
+                //do nothing!
+                //a trigger will set this off in the game
+                map.cameramode = 1;
+                map.bscroll = 0;
+            }
+            else if (map.cameramode == 1)
+            {
+                //move normally
+                if(map.scrolldir==0)
+                {
+                    map.ypos -= 2;
+                    map.bypos -= 1;
+                    map.bscroll = -1;
+                }
+                else
+                {
+                    map.ypos += 2;
+                    map.bypos += 1;
+                    map.bscroll = 1;
+                }
+            }
+            else if (map.cameramode == 2)
+            {
+                //do nothing, but cycle colours (for taking damage)
+                map.bscroll = 0;
+            }
+            else if (map.cameramode == 4)
+            {
+                // Reset player position from checkpoint
+                int i = obj.getplayer();
+                obj.entities[i].yp = game.savey;
+                map.cameraseek = map.ypos - (obj.entities[i].yp - 120);
+
+                map.cameraseek = map.cameraseek / 10;
+                map.cameraseekframe = 10;
+
+                map.cameramode = 5;
+
+                map.bscroll = map.cameraseek/2;
+            }
+            else if (map.cameramode == 5)
+            {
+                // Reset player position from checkpoint
+                int i = obj.getplayer();
+                obj.entities[i].yp = game.savey;
+
+                // Realign tower
+                if (map.spikeleveltop > 0) map.spikeleveltop-=2;
+                if (map.spikelevelbottom > 0) map.spikelevelbottom-=2;
+                if (map.cameraseekframe > 0)
+                {
+                    map.ypos -= map.cameraseek;
+                    if (map.cameraseek > 0)
+                    {
+                        if (map.ypos < obj.entities[i].yp - 120)
+                        {
+                            map.ypos = obj.entities[i].yp - 120;
+                        }
+                    }
+                    else
+                    {
+                        if (map.ypos > obj.entities[i].yp - 120)
+                        {
+                            map.ypos = obj.entities[i].yp - 120;
+                        }
+                    }
+                    map.cameraseekframe--;
+                    map.bypos = map.ypos / 2;
+                }
+                else
+                {
+                    int i = obj.getplayer();
+                    map.ypos = obj.entities[i].yp - 120;
+                    map.bypos = map.ypos / 2;
+                    map.cameramode = 0;
+                    map.colsuperstate = 0;
+                }
+            }
+        }
+        else
+        {
+            map.bscroll = 0;
+        }
+
+        if (map.ypos <= 0)
+        {
+            map.ypos = 0;
+            map.bypos = 0;
+            map.bscroll = 0;
+        }
+        if (map.towermode && map.minitowermode)
+        {
+            if (map.ypos >= map.minitowersize * 8 - 232)
+            {
+                map.ypos = map.minitowersize * 8 - 232;
+                map.bypos = map.ypos / 2;
+                map.bscroll = 0;
+            } //100-29 * 8 = 568
+        }
+        else
+        {
+            if (map.ypos >= 5368)
+            {
+                map.ypos = 5368;    //700-29 * 8 = 5368
+                map.bypos = map.ypos / 2.0;
+            }
+        }
+
+        if (game.lifeseq > 0)
+        {
+            if (map.cameramode == 2)
+            {
+                map.cameraseekframe = 20;
+                map.cameramode = 4;
+                map.resumedelay = 4;
+            }
+
+            if (map.cameraseekframe <= 0)
+            {
+                if (map.resumedelay <= 0)
+                {
+                    game.lifesequence();
+                    if (game.lifeseq == 0) map.cameramode = 1;
+                }
+                else
+                {
+                    // Reset player position from checkpoint
+                    int i = obj.getplayer();
+                    obj.entities[i].yp = game.savey;
+                    map.resumedelay--;
+                }
+            }
+        }
+    }
+    else
+    {
+        game.lifesequence();
+    }
 
 
     if (game.deathseq != -1)
     {
+        if (map.towermode)
+        {
+            map.colsuperstate = 1;
+            map.cameramode = 2;
+        }
+
         for (size_t i = 0; i < obj.entities.size(); i++)
         {
             if (game.roomx == 111 && game.roomy == 107 && !map.custommode)
@@ -1133,13 +814,75 @@ void gamelogic()
             }
 
             obj.entitycollisioncheck();         // Check ent v ent collisions, update states
+
+            if (map.towermode)
+            {
+                //special for tower: is the player touching any spike blocks?
+                int player = obj.getplayer();
+
+                if(obj.checktowerspikes(player) && graphics.fademode==0)
+                {
+                    game.deathseq = 30;
+                }
+            }
+
+            if (map.towermode && game.lifeseq==0)
+            {
+                int player = obj.getplayer();
+                if(!map.invincibility)
+                {
+                    if (obj.entities[player].yp-map.ypos <= 0)
+                    {
+                        game.deathseq = 30;
+                    }
+                    else if (obj.entities[player].yp-map.ypos >= 208)
+                    {
+                        game.deathseq = 30;
+                    }
+                }
+                else
+                {
+                    if (obj.entities[player].yp-map.ypos <= 0)
+                    {
+                        map.ypos-=10;
+                        map.bypos = map.ypos / 2;
+                        map.bscroll = 0;
+                    }
+                    else if (obj.entities[player].yp-map.ypos >= 208)
+                    {
+                        map.ypos+=2;
+                        map.bypos = map.ypos / 2;
+                        map.bscroll = 0;
+                    }
+                }
+
+                if (obj.entities[player].yp - map.ypos <= 40)
+                {
+                    map.spikeleveltop++;
+                    if (map.spikeleveltop >= 8) map.spikeleveltop = 8;
+                }
+                else
+                {
+                    if (map.spikeleveltop > 0) map.spikeleveltop--;
+                }
+
+                if (obj.entities[player].yp - map.ypos >= 164)
+                {
+                    map.spikelevelbottom++;
+                    if (map.spikelevelbottom >= 8) map.spikelevelbottom = 8;
+                }
+                else
+                {
+                    if (map.spikelevelbottom > 0) map.spikelevelbottom--;
+                }
+            }
         }
 
         // If we do a gotoroom because of a screen transition, set this to true
         bool kludgeroominitscript = false;
 
         //Using warplines?
-        if (obj.customwarpmode) {
+        if (obj.customwarpmode && !map.towermode) {
             //Rewritten system for mobile update: basically, the new logic is to
             //check if the player is leaving the map, and if so do a special check against
             //warp lines for collision
@@ -1158,8 +901,22 @@ void gamelogic()
             }else{ map.warpx=false; }
         }
 
+        if (map.towermode) {
+            // Check for vertical (not horizontal!) warp lines
+            if (obj.customwarpmode) {
+                obj.customwarpmodehon = false;
+                obj.customwarpmodevon = false;
+                int player = obj.getplayer();
+                if ((game.door_left > -2 && obj.entities[player].xp < -14+16) ||
+                    (game.door_right > -2 && obj.entities[player].xp >= 308-16))
+                    obj.customwarplinecheck(player);
+
+                map.warpy = obj.customwarpmodehon;
+            }
+        }
+
         //Finally: Are we changing room?
-        if (map.warpx)
+        if (map.warpx && !map.towermode)
         {
             for (size_t i = 0; i < obj.entities.size();  i++)
             {
@@ -1197,7 +954,7 @@ void gamelogic()
             }
         }
 
-        if (map.warpy)
+        if (map.warpy && !map.towermode)
         {
             for (size_t i = 0; i < obj.entities.size();  i++)
             {
@@ -1216,7 +973,7 @@ void gamelogic()
             }
         }
 
-        if (map.warpy && !map.warpx)
+        if (map.warpy && !map.warpx && !map.towermode)
         {
             for (size_t i = 0; i < obj.entities.size();  i++)
             {
@@ -1238,7 +995,7 @@ void gamelogic()
             }
         }
 
-        if (!map.warpy)
+        if (!map.warpy && !map.towermode)
         {
             //Normal! Just change room
             int player = obj.getplayer();
@@ -1256,7 +1013,7 @@ void gamelogic()
             }
         }
 
-        if (!map.warpx)
+        if (!map.warpx && !map.towermode)
         {
             //Normal! Just change room
             int player = obj.getplayer();
@@ -1271,6 +1028,36 @@ void gamelogic()
                 obj.entities[player].xp -= 320;
                 map.gotoroom(game.roomx + 1, game.roomy);
                 kludgeroominitscript = true;
+            }
+        }
+
+        if (map.towermode)
+        {
+            //Right so! Screenwraping for tower:
+            int player = obj.getplayer();
+            bool dowrap = false;
+            if (map.warpy)
+                dowrap = true;
+            else if ((game.door_left > -2 &&
+                      obj.entities[player].xp < -14) ||
+                     (game.door_right > -2 &&
+                      obj.entities[player].xp >= 308)) {
+                if (map.leaving_tower(&game.roomx, &game.roomy, obj)) {
+                    map.gotodimroom(game.roomx, game.roomy);
+                    map.gotoroom(game.roomx, game.roomy);
+                    twoframedelayfix();
+                } else {
+                    dowrap = true;
+                }
+            }
+
+            if (dowrap) {
+                for (size_t i = 0; i < obj.entities.size(); i++) {
+                    if (obj.entities[i].xp <= -10)
+                        obj.entities[i].xp += 320;
+                    else if (obj.entities[i].xp > 310)
+                        obj.entities[i].xp -= 320;
+                }
             }
         }
 

@@ -515,10 +515,10 @@ int main(int argc, char *argv[])
                         {
                             script.run();
                         }
-                                            gameinput();
+                        gameinput();
 
                         towerrender();
-                        towerlogic();
+                        gamelogic();
 
                     }
                     else
