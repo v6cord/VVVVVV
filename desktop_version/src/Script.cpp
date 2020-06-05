@@ -4445,16 +4445,13 @@ void scriptclass::hardreset() {
     map.customshowmm = true;
     map.dimension = -1;
 
-    for (j = 0; j < ed.maxheight; j++)
-        for (i = 0; i < ed.maxwidth; i++) {
-            map.roomdeaths[i + j * ed.maxwidth] = 0;
-            map.explored[i + j * ed.maxwidth] = 0;
-        }
-
-    for (j = 0; j < 20; j++)
-        for (i = 0; i < 20; i++) map.roomdeathsfinal[i + j * 20] = 0;
-
-    // entityclass
+	map.roomdeaths.clear();
+	map.roomdeaths.resize(ed.maxwidth * ed.maxheight);
+	map.roomdeathsfinal.clear();
+	map.roomdeathsfinal.resize(20 * 20);
+	map.explored.clear();
+	map.explored.resize(ed.maxwidth * ed.maxheight);
+	//entityclass
     obj.nearelephant = false;
     obj.upsetmode = false;
     obj.upset = 0;
@@ -4463,18 +4460,18 @@ void scriptclass::hardreset() {
     obj.trophytype = 0;
     obj.altstates = 0;
 
-    for (size_t i = 0; i < obj.flags.size(); i++) {
-        obj.flags[i] = false;
-    }
+	obj.flags.clear();
+	obj.flags.resize(1000);
 
     for (i = 0; i < 6; i++) {
         obj.customcrewmoods[i] = 1;
     }
 
-    for (i = 0; i < 100; i++) {
-        obj.collect[i] = false;
-        obj.customcollect[i] = false;
-    }
+	obj.collect.clear();
+	obj.collect.resize(100);
+	obj.customcollect.clear();
+	obj.customcollect.resize(100);
+	i = 100; //previously a for-loop iterating over collect/customcollect set this to 100
 
     obj.coincollect.clear();
     obj.coincollect.resize(100);

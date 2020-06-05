@@ -59,26 +59,17 @@ mapclass::mapclass()
 		vmult.push_back(int(i * 40));
 	}
 	//We create a blank map
-	for (int j = 0; j < 30; j++)
-	{
-		for (int i = 0; i < 40; i++)
-		{
-			contents.push_back(0);
-		}
-	}
+	contents.resize(40 * 30);
 
 	areamap.resize(20 * 20);
 	roomdeaths.resize(ed.maxwidth * ed.maxheight);
-	roomdeathsfinal.push_back(20 * 20);
-	explored.push_back(ed.maxwidth * ed.maxheight);
+	roomdeathsfinal.resize(20 * 20);
+	explored.resize(ed.maxwidth * ed.maxheight);
 
 	tileset = 0;
 	initmapdata();
 
-	for (int i = 0; i < 8; i++)
-	{
-		specialnames.push_back(std::string());
-	}
+	specialnames.resize(8);
 	resetnames();
 
 	//Areamap starts at 100,100 and extends 20x20
@@ -104,7 +95,6 @@ mapclass::mapclass()
 	2,2,2,2,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,
 	2,2,2,2,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,
 	};
-	areamap.clear();
 	areamap.insert(areamap.end(), tmap, tmap+400);
 }
 
@@ -147,13 +137,8 @@ void mapclass::settrinket(int x, int y)
 void mapclass::resetmap()
 {
 	//clear the explored area of the map
-	for (int j = 0; j < ed.maxheight; j++)
-	{
-		for (int i = 0; i < ed.maxwidth; i++)
-		{
-			explored[i + (j * ed.maxwidth)] = 0;
-		}
-	}
+	explored.clear();
+	explored.resize(ed.maxwidth * ed.maxheight);
 }
 
 void mapclass::resetnames()

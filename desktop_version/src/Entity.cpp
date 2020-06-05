@@ -80,10 +80,8 @@ void entityclass::init()
 
 void entityclass::resetallflags()
 {
-    for (int i = 0; i < 1000; i++)
-    {
-        flags[i] = false;
-    }
+    flags.clear();
+    flags.resize(1000);
 }
 
 int entityclass::swncolour( int t )
