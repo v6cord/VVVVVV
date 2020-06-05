@@ -24,6 +24,7 @@ public:
     void load(std::string t);
     void call(std::string t);
     void loadother(std::string t);
+    void loadcustom(std::string t);
 
 
     void inline add(std::string t)

@@ -4511,3 +4511,386 @@ void scriptclass::callback(std::string name) {
     callstack.clear();
     load("custom_" + callbacks[name]);
 }
+
+void scriptclass::loadcustom(std::string t)
+{
+      //this magic function breaks down the custom script and turns into real scripting!
+      std::string cscriptname="";
+      for(size_t i=0; i<t.length(); i++){
+        if(i>=7) cscriptname+=t[i];
+      }
+
+      std::string thelabel;
+      // Is the script name a label, or a script name + label?
+      if (cscriptname.substr(0, 1) == ".") {
+        // It's fully a label
+        thelabel = cscriptname.substr(1, cscriptname.length()-1);
+
+        cscriptname = scriptname.substr(7, std::string::npos);
+        t = "custom_" + cscriptname;
+      } else if (cscriptname.find(".") != std::string::npos) {
+        // It's a script name concatenated with a label
+        int period = cscriptname.find(".");
+        thelabel = cscriptname.substr(period+1, std::string::npos);
+
+        // Remove the label from the script name!
+        t = t.substr(0, t.find("."));
+        cscriptname = cscriptname.substr(0, period);
+      }
+
+      labels.clear();
+      scriptname = t;
+      commands.clear();
+      position = 0;
+      running = true;
+      if (passive)
+        scriptdelay = 0;
+
+      int scriptstart=-1;
+      int scriptend=-1;
+      std::string tstring;
+
+      for(size_t i=0; i<customscript.size(); i++){
+        if(scriptstart==-1){
+          //Find start of the script
+          if(script.customscript[i]==cscriptname+":"){
+            scriptstart=i+1;
+          }
+        }else if(scriptend==-1){
+          //Find the end
+          tstring=script.customscript[i];
+          if (tstring.size() > 0) {
+            tstring=tstring[tstring.size()-1];
+          } else {
+            tstring="";
+          }
+          if(tstring==":"){
+            scriptend=i;
+          }
+        }
+      }
+      if(scriptstart>-1){
+        if(scriptend==-1){
+          scriptend=customscript.size();
+        }
+
+        //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!
+        int customcutscenemode=0;
+        for(int i=scriptstart; i<scriptend; i++){
+          tokenize(script.customscript[i]);
+          if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay" || words[0] == "csayquiet"){
+            customcutscenemode=1;
+          }else if(words[0] == "reply" || words[0] == "replyquiet"){
+            customcutscenemode=1;
+          }else if(words[0] == "noautobars"){
+            customcutscenemode=0;
+            break;
+          }
+        }
+
+        if(customcutscenemode==1){
+          add("cutscene()");
+          add("untilbars()");
+        }
+        int customtextmode=0;
+        int speakermode=0; //0, terminal, numbers for crew
+        int squeakmode=0;//default on
+        //Now run the script
+        for(int i=scriptstart; i<scriptend; i++){
+          words[0]="nothing"; //Default!
+          words[1]="unused"; //Default!
+          tokenize(script.customscript[i]);
+          std::transform(words[0].begin(), words[0].end(), words[0].begin(), ::tolower);
+          if (words[0] != "flash" && words[1] == "unused") {
+            words[1] = "1";
+          }
+          if (words[0] == "music"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if(words[1]=="0"){
+              tstring="stopmusic()";
+            }else{
+              if(words[1]=="11"){ tstring="play(14)";
+              }else if(words[1]=="10"){ tstring="play(13)";
+              }else if(words[1]=="9"){ tstring="play(12)";
+              }else if(words[1]=="8"){ tstring="play(11)";
+              }else if(words[1]=="7"){ tstring="play(10)";
+              }else if(words[1]=="6"){ tstring="play(8)";
+              }else if(words[1]=="5"){ tstring="play(6)";
+              }else { tstring="play("+words[1]+")"; }
+            }
+            add(tstring);
+          }else if(words[0] == "playremix"){
+            add("play(15)");
+          }else if(words[0] == "flash"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if (words[1] != "unused" && words[1] != "" && words[1] != "0") {
+              add("flash("+words[1]+")");
+            } else {
+              add("flash(5)");
+              add("shake(20)");
+              add("playef(9)");
+            }
+          }else if(words[0] == "sad" || words[0] == "cry"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if(words[1]=="player"){
+              add("changemood(player,1)");
+            }else if(words[1]=="cyan" || words[1]=="viridian" || words[1]=="1"){
+              add("changecustommood(customcyan,1)");
+            }else if(words[1]=="purple" || words[1]=="violet" || words[1]=="pink" || words[1]=="2"){
+              add("changecustommood(purple,1)");
+            }else if(words[1]=="yellow" || words[1]=="vitellary" || words[1]=="3"){
+              add("changecustommood(yellow,1)");
+            }else if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4"){
+              add("changecustommood(red,1)");
+            }else if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5"){
+              add("changecustommood(green,1)");
+            }else if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6"){
+              add("changecustommood(blue,1)");
+            }else if(words[1]=="all" || words[1]=="everybody" || words[1]=="everyone"){
+              add("changemood(player,1)");
+              add("changecustommood(customcyan,1)");
+              add("changecustommood(purple,1)");
+              add("changecustommood(yellow,1)");
+              add("changecustommood(red,1)");
+              add("changecustommood(green,1)");
+              add("changecustommood(blue,1)");
+            }else{
+              add("changemood(player,1)");
+            }
+            if(squeakmode==0) add("squeak(cry)");
+          }else if(words[0] == "happy"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if(words[1]=="player"){
+              add("changemood(player,0)");
+              if(squeakmode==0) add("squeak(player)");
+            }else if(words[1]=="cyan" || words[1]=="viridian" || words[1]=="1"){
+              add("changecustommood(customcyan,0)");
+              if(squeakmode==0) add("squeak(player)");
+            }else if(words[1]=="purple" || words[1]=="violet" || words[1]=="pink" || words[1]=="2"){
+              add("changecustommood(purple,0)");
+              if(squeakmode==0) add("squeak(purple)");
+            }else if(words[1]=="yellow" || words[1]=="vitellary" || words[1]=="3"){
+              add("changecustommood(yellow,0)");
+              if(squeakmode==0) add("squeak(yellow)");
+            }else if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4"){
+              add("changecustommood(red,0)");
+              if(squeakmode==0) add("squeak(red)");
+            }else if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5"){
+              add("changecustommood(green,0)");
+              if(squeakmode==0) add("squeak(green)");
+            }else if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6"){
+              add("changecustommood(blue,0)");
+              if(squeakmode==0) add("squeak(blue)");
+            }else if(words[1]=="all" || words[1]=="everybody" || words[1]=="everyone"){
+              add("changemood(player,0)");
+              add("changecustommood(customcyan,0)");
+              add("changecustommood(purple,0)");
+              add("changecustommood(yellow,0)");
+              add("changecustommood(red,0)");
+              add("changecustommood(green,0)");
+              add("changecustommood(blue,0)");
+            }else{
+              add("changemood(player,0)");
+              if(squeakmode==0) add("squeak(player)");
+            }
+          }else if(words[0] == "squeak"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if(words[1]=="player"){
+              add("squeak(player)");
+            }else if(words[1]=="cyan" || words[1]=="viridian" || words[1]=="1"){
+              add("squeak(player)");
+            }else if(words[1]=="purple" || words[1]=="violet" || words[1]=="pink" || words[1]=="2"){
+              add("squeak(purple)");
+            }else if(words[1]=="yellow" || words[1]=="vitellary" || words[1]=="3"){
+              add("squeak(yellow)");
+            }else if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4"){
+              add("squeak(red)");
+            }else if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5"){
+              add("squeak(green)");
+            }else if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6"){
+              add("squeak(blue)");
+            }else if(words[1]=="cry" || words[1]=="sad"){
+              add("squeak(cry)");
+            }else if(words[1]=="on"){
+              squeakmode=0;
+            }else if(words[1]=="off"){
+              squeakmode=1;
+            }else{
+              add(script.customscript[i]);
+            }
+          }else if(words[0] == "delay"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add(script.customscript[i]);
+          }else if(words[0] == "flag"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add(script.customscript[i]);
+          }else if(words[0] == "map"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
+          }else if(words[0] == "warpdir"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add(script.customscript[i]);
+          }else if(words[0] == "ifwarp"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add(script.customscript[i]);
+          }else if(words[0] == "iftrinkets"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
+          }else if(words[0] == "ifflag"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
+          }else if(words[0] == "iftrinketsless"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add("custom"+script.customscript[i]);
+          }else if(words[0] == "destroy"){
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            add(script.customscript[i]);
+          }else if(words[0] == "speaker"){
+            speakermode=0;
+            if(words[1]=="gray" || words[1]=="grey" || words[1]=="terminal" || words[1]=="0") speakermode=0;
+            if(words[1]=="cyan" || words[1]=="viridian" || words[1]=="player" || words[1]=="1") speakermode=1;
+            if(words[1]=="purple" || words[1]=="violet" || words[1]=="pink" || words[1]=="2") speakermode=2;
+            if(words[1]=="yellow" || words[1]=="vitellary" || words[1]=="3") speakermode=3;
+            if(words[1]=="red" || words[1]=="vermilion" || words[1]=="4") speakermode=4;
+            if(words[1]=="green" || words[1]=="verdigris" || words[1]=="5") speakermode=5;
+            if(words[1]=="blue" || words[1]=="victoria" || words[1]=="6") speakermode=6;
+          }else if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay" || words[0] == "csayquiet"){
+            //Speakers!
+            if(words[2]=="terminal" || words[2]=="gray" || words[2]=="grey" || words[2]=="0") speakermode=0;
+            if(words[2]=="cyan" || words[2]=="viridian" || words[2]=="player" || words[2]=="1") speakermode=1;
+            if(words[2]=="purple" || words[2]=="violet" || words[2]=="pink" || words[2]=="2") speakermode=2;
+            if(words[2]=="yellow" || words[2]=="vitellary" || words[2]=="3") speakermode=3;
+            if(words[2]=="red" || words[2]=="vermilion" || words[2]=="4") speakermode=4;
+            if(words[2]=="green" || words[2]=="verdigris" || words[2]=="5") speakermode=5;
+            if(words[2]=="blue" || words[2]=="victoria" || words[2]=="6") speakermode=6;
+            switch(speakermode){
+              case 0:
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(terminal)");
+                add("text(gray,0,114,"+words[1]+")");
+              break;
+              case 1: //NOT THE PLAYER
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(cyan)");
+                add("text(cyan,0,0,"+words[1]+")");
+              break;
+              case 2:
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(purple)");
+                add("text(purple,0,0,"+words[1]+")");
+              break;
+              case 3:
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(yellow)");
+                add("text(yellow,0,0,"+words[1]+")");
+              break;
+              case 4:
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(red)");
+                add("text(red,0,0,"+words[1]+")");
+              break;
+              case 5:
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(green)");
+                add("text(green,0,0,"+words[1]+")");
+              break;
+              case 6:
+                if(squeakmode==0 && words[0] != "sayquiet" && words[0] != "csayquiet") add("squeak(blue)");
+                add("text(blue,0,0,"+words[1]+")");
+              break;
+            }
+            int ti = 1;
+            if (!words[1].empty()) {
+                ti = atoi(words[1].c_str());
+            }
+            if(ti>=0 && ti<=50){
+              for(int ti2=0; ti2<ti; ti2++){
+                i++; add(script.customscript[i]);
+              }
+            }else{
+              i++; add(script.customscript[i]);
+            }
+
+            std::string addthis;
+            if (words[0] != "csay" && words[0] != "csayquiet")
+              addthis += "custom";
+            addthis += "position(";
+            switch(speakermode){
+              case 0: addthis += "center"; break;
+              case 1: addthis += "cyan,above"; break;
+              case 2: addthis += "purple,above"; break;
+              case 3: addthis += "yellow,above"; break;
+              case 4: addthis += "red,above"; break;
+              case 5: addthis += "green,above"; break;
+              case 6: addthis += "blue,above"; break;
+            }
+            addthis += ")";
+            add(addthis);
+            add("speak_active");
+            customtextmode=1;
+          }else if(words[0] == "reply" || words[0] == "replyquiet"){
+            //For this version, terminal only
+            if(squeakmode==0  && words[0] != "replyquiet") add("squeak(player)");
+            add("text(cyan,0,0,"+words[1]+")");
+
+            int ti = 1;
+            if (!words[1].empty()) {
+                ti = atoi(words[1].c_str());
+            }
+            if(ti>=0 && ti<=50){
+              for(int ti2=0; ti2<ti; ti2++){
+                i++; add(script.customscript[i]);
+              }
+            }else{
+              i++; add(script.customscript[i]);
+            }
+            add("position(player,above)");
+            add("speak_active");
+            customtextmode=1;
+          }else{
+            if(customtextmode==1){ add("endtext"); customtextmode=0;}
+            if (words[0] == "setroomname"
+            || words[0] == "drawtext"
+            || words[0] == "createroomtext"
+            || words[0] == "customactivityzone"
+            || ((words[0] == "addvar" || words[0] == "setvar" || words[0] == "getvar") && words[2] == "")) {
+              // Don't parse the next line if it is a textbox-like line
+              add(script.customscript[i]);
+              i++;
+            } else if (words[0] == "text") {
+              // Ok, it's actually a text box with potentially more than one line
+              int lines;
+              if (words[5] != "" && words[6] != "")
+                // RGB version, 3 color args, 6 args
+                lines = ss_toi(words[6]);
+              else
+                // Predefined color version, 1 color arg, 4 args
+                lines = ss_toi(words[4]);
+              for (int c = 0; c < lines; c++) {
+                add(script.customscript[i]);
+                i++;
+              }
+            }
+            if (IS_VCE_LEVEL) // Don't call one-command internal scripts twice in vanilla levels
+                add(script.customscript[i]);
+
+            // Is this a label?
+            if (words[0].length() > 1 && words[0].substr(0, 1) == ".") {
+              std::string thislabel = words[0].substr(1, words[0].length()-1);
+
+              // Important - use `commands.size()` instead of `i`
+              // The former is the internal script's position which is what we want,
+              // and the latter is the simplified script's position
+              labels[thislabel] = commands.size();
+            }
+          }
+        }
+
+        if(customtextmode==1){ add("endtext"); customtextmode=0;}
+        if(customcutscenemode==1){
+          add("endcutscene()");
+          add("untilbars()");
+        }
+
+        if (!thelabel.empty()) {
+          if (labels.find(thelabel) != labels.end())
+            position = labels[thelabel];
+          else
+            running = false;
+        }
+      }
+}
