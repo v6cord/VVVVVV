@@ -829,7 +829,8 @@ void scriptclass::run() {
                 if (words[0] == "setroomname") {
                     // setroomname()
                     position++;
-                    map.roomname = processvars(commands[position]);
+                    if (position < (int) commands.size())
+                        map.roomname = processvars(commands[position]);
                 }
                 if (words[0] == "ifkey") {
                     bool up = false;
@@ -1064,7 +1065,8 @@ void scriptclass::run() {
                     temp.center = parsebool(words[6]);
                     temp.bord = ss_toi(words[7]);
                     position++;
-                    temp.text = processvars(commands[position]);
+                    if (position < (int) commands.size())
+                        temp.text = processvars(commands[position]);
                     scriptrender.push_back(temp);
                 }
                 if (words[0] == "drawrect") {
@@ -1638,7 +1640,9 @@ void scriptclass::run() {
                     txt.clear();
                     for (int i = 0; i < n; i++) {
                         position++;
-                        txt.push_back(processvars(commands[position]));
+                        if (position < (int) commands.size()) {
+                            txt.push_back(processvars(commands[position]));
+                        }
                     }
                 } else if (words[0] == "position") {
                     // are we facing left or right? for some objects we don't care,
@@ -2077,13 +2081,14 @@ void scriptclass::run() {
                 } else if (words[0] == "createroomtext") {
                     map.roomtexton = true;
                     position++;
-                    map.roomtext.push_back(Roomtext{
-                        .x = ss_toi(words[1]) / 8,
-                        .y = ss_toi(words[2]) / 8,
-                        .subx = ss_toi(words[1]) % 8,
-                        .suby = ss_toi(words[2]) % 8,
-                        .text = commands[position],
-                    });
+                    if (position < (int) commands.size())
+                        map.roomtext.push_back(Roomtext{
+                            .x = ss_toi(words[1]) / 8,
+                            .y = ss_toi(words[2]) / 8,
+                            .subx = ss_toi(words[1]) % 8,
+                            .suby = ss_toi(words[2]) % 8,
+                            .text = commands[position],
+                        });
                 } else if (words[0] == "createscriptbox") {
                     // Ok, first figure out the first available script box slot
                     int lastslot = 0;
@@ -2104,7 +2109,8 @@ void scriptclass::run() {
                     if (words[7] != "" && words[8] != "") {
                         // RGB color, 3 color arguments
                         position++;
-                        obj.customprompt = processvars(commands[position]);
+                        if (position < (int) commands.size())
+                            obj.customprompt = processvars(commands[position]);
                         obj.customscript = words[8];
                         obj.customr = ss_toi(words[5]);
                         obj.customg = ss_toi(words[6]);
@@ -2116,7 +2122,8 @@ void scriptclass::run() {
                     } else {
                         // predefined color, 1 color argument
                         position++;
-                        obj.customprompt = processvars(commands[position]);
+                        if (position < (int) commands.size())
+                            obj.customprompt = processvars(commands[position]);
                         obj.customscript = words[6];
                         obj.customcolour = words[5];
 
@@ -4647,7 +4654,10 @@ void scriptclass::loadcustom(std::string t)
         }
         int nti = ti>=0 && ti<=50 ? ti : 1;
         for(int ti2=0; ti2<nti; ti2++){
-          i++; add(customscript[i]);
+          i++;
+          if(i < (int) customscript.size()){
+            add(customscript[i]);
+          }
         }
 
         std::string addthis;
@@ -4678,7 +4688,10 @@ void scriptclass::loadcustom(std::string t)
         }
         int nti = ti>=0 && ti<=50 ? ti : 1;
         for(int ti2=0; ti2<nti; ti2++){
-          i++; add(customscript[i]);
+          i++;
+          if(i < (int) customscript.size()){
+            add(customscript[i]);
+          }
         }
         add("position(player,above)");
         add("speak_active");
@@ -4707,7 +4720,7 @@ void scriptclass::loadcustom(std::string t)
             i++;
           }
         }
-        if (IS_VCE_LEVEL) // Don't call one-command internal scripts twice in vanilla levels
+        if (IS_VCE_LEVEL && i < (int) customscript.size()) // Don't call one-command internal scripts twice in vanilla levels
             add(customscript[i]);
 
         // Is this a label?
