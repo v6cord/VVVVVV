@@ -282,6 +282,7 @@ public:
     //Menu kludge...
     bool wasintimetrial;
     bool wasinintermission;
+    bool wasinnodeathmode;
     bool wasincustommode;
 
 
