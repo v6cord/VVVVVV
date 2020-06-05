@@ -135,13 +135,11 @@ void preloaderrender()
 
   if (game.flashlight > 0 && !game.noflashingmode)
   {
-    game.flashlight--;
     graphics.flashlight();
   }
 
   if (game.screenshake > 0  && !game.noflashingmode)
   {
-    game.screenshake--;
     graphics.screenshake();
   }
   else
