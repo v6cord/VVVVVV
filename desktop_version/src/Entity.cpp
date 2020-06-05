@@ -4662,6 +4662,7 @@ void entityclass::updateentitylogic( int t )
 {
     if (t < 0 || t >= (int) entities.size())
     {
+        puts("updateentitylogic() out-of-bounds!");
         return;
     }
 
@@ -4704,6 +4705,7 @@ void entityclass::entitymapcollision( int t )
 {
     if (t < 0 || t >= (int) entities.size())
     {
+        puts("entitymapcollision() out-of-bounds!");
         return;
     }
 
