@@ -155,8 +155,7 @@ struct Dimension {
     int h = 0;
 };
 
-extern growing_vector<edentities> edentity;
-extern scriptclass script;
+extern std::vector<edentities> edentity;
 
 class EditorData
 {

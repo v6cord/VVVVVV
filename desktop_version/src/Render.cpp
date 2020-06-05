@@ -12,8 +12,6 @@
 #include <cstring>
 #include <stdio.h>
 
-extern scriptclass script;
-
 int tr;
 int tg;
 int tb;

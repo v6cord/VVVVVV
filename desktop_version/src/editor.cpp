@@ -3065,8 +3065,6 @@ void fillboxabs( int x, int y, int x2, int y2, int c )
 extern editorclass ed;
 extern growing_vector<edentities> edentity;
 
-extern scriptclass script;
-
 void editorclass::generatecustomminimap()
 {
     map.customwidth=mapwidth;

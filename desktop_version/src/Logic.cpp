@@ -2,8 +2,6 @@
 #include "Script.h"
 #include "Network.h"
 
-extern scriptclass script;
-
 int last_gravity = -1;
 
 void titlelogic()

@@ -124,4 +124,6 @@ public:
     X(STR_SPECIALVAR, "hhmmss_time", hhmmss_time(), 0, 0) \
     X(INT_SPECIALVAR, "entities", obj.entities.size(), 0, 0)
 
+extern scriptclass script;
+
 #endif /* SCRIPT_H */

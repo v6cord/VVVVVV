@@ -10,8 +10,6 @@
 
 #include <algorithm>
 
-extern scriptclass script;
-
 void scriptclass::load(std::string t)
 {
     int maxlength = (std::min(int(t.length()),7));
