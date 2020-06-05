@@ -279,12 +279,6 @@ public:
 
     int creditposx, creditposy, creditposdelay = 0;
 
-    //Menu kludge...
-    bool wasintimetrial;
-    bool wasinintermission;
-    bool wasinnodeathmode;
-    bool wasincustommode;
-
 
     //Sine Wave Ninja Minigame
     bool swnmode = false;
@@ -397,7 +391,6 @@ public:
     int stretchMode = 0;
     int controllerSensitivity = 0;
 
-    bool menukludge = false;
     bool quickrestartkludge = false;
 
     //Custom stuff

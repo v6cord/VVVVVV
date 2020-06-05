@@ -139,7 +139,6 @@ void Game::init(void)
 
     teleportscript = "";
     savemystats = false;
-    menukludge = false;
     quickrestartkludge = false;
 
     tapleft = 0;
@@ -234,11 +233,6 @@ void Game::init(void)
     playcustomlevel=0;
     customleveltitle="";
     createmenu(Menu::mainmenu);
-
-    wasintimetrial = false;
-    wasinintermission = false;
-    wasinnodeathmode = false;
-    wasincustommode = false;
 
     deathcounts = 0;
     gameoverdelay = 0;
@@ -7782,19 +7776,19 @@ void Game::quittomenu()
     //or "who do you want to play the level with?"
     //or "do you want cutscenes?"
     //or the confirm-load-quicksave menu
-    if (wasintimetrial)
+    if (intimetrial)
     {
         returntomenu(Menu::timetrials);
     }
-    else if (wasinintermission)
+    else if (inintermission)
     {
         returntomenu(Menu::intermissionmenu);
     }
-    else if (wasinnodeathmode)
+    else if (nodeathmode)
     {
         returntomenu(Menu::playmodes);
     }
-    else if (wasincustommode)
+    else if (map.custommode)
     {
         returntomenu(Menu::levellist);
     }
@@ -7806,8 +7800,5 @@ void Game::quittomenu()
     {
         createmenu(Menu::mainmenu);
     }
-    wasintimetrial = false;
-    wasinintermission = false;
-    wasinnodeathmode = false;
-    wasincustommode = false;
+    script.hardreset();
 }
