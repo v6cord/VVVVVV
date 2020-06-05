@@ -1650,52 +1650,50 @@ void Graphics::drawentities()
             int flipped = obj.entities[i].flipped;
             std::vector <SDL_Surface*>* spriteptr = selectspritesheet();
 
+            tpoint.x = obj.entities[i].xp;
+            tpoint.y = obj.entities[i].yp;
+            setcol(obj.entities[i].colour);
+            drawRect = sprites_rect;
+            drawRect.x += tpoint.x;
+            drawRect.y += tpoint.y;
+            BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
+            if (map.warpx)
             {
-                tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp;
-                setcol(obj.entities[i].colour);
-                drawRect = sprites_rect;
-                drawRect.x += tpoint.x;
-                drawRect.y += tpoint.y;
-                BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
-                if (map.warpx)
+                //screenwrapping!
+                if (tpoint.x < 0)
                 {
-                    //screenwrapping!
-                    if (tpoint.x < 0)
-                    {
-                        tpoint.x += 320;
-                        drawRect = sprites_rect;
-                        drawRect.x += tpoint.x;
-                        drawRect.y += tpoint.y;
-                        BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
-                    }
-                    if (tpoint.x > 300)
-                    {
-                        tpoint.x -= 320;
-                        drawRect = sprites_rect;
-                        drawRect.x += tpoint.x;
-                        drawRect.y += tpoint.y;
-                        BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
-                    }
+                    tpoint.x += 320;
+                    drawRect = sprites_rect;
+                    drawRect.x += tpoint.x;
+                    drawRect.y += tpoint.y;
+                    BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
                 }
-                else if (map.warpy)
+                if (tpoint.x > 300)
                 {
-                    if (tpoint.y < 0)
-                    {
-                        tpoint.y += 230;
-                        drawRect = sprites_rect;
-                        drawRect.x += tpoint.x;
-                        drawRect.y += tpoint.y;
-                        BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
-                    }
-                    if (tpoint.y > 210)
-                    {
-                        tpoint.y -= 230;
-                        drawRect = sprites_rect;
-                        drawRect.x += tpoint.x;
-                        drawRect.y += tpoint.y;
-                        BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
-                    }
+                    tpoint.x -= 320;
+                    drawRect = sprites_rect;
+                    drawRect.x += tpoint.x;
+                    drawRect.y += tpoint.y;
+                    BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
+                }
+            }
+            else if (map.warpy)
+            {
+                if (tpoint.y < 0)
+                {
+                    tpoint.y += 230;
+                    drawRect = sprites_rect;
+                    drawRect.x += tpoint.x;
+                    drawRect.y += tpoint.y;
+                    BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
+                }
+                if (tpoint.y > 210)
+                {
+                    tpoint.y -= 230;
+                    drawRect = sprites_rect;
+                    drawRect.x += tpoint.x;
+                    drawRect.y += tpoint.y;
+                    BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct, flipped);
                 }
             }
         }
