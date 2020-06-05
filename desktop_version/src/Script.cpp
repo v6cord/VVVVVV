@@ -4393,6 +4393,9 @@ void scriptclass::hardreset() {
 
     game.pausescript = false;
 
+    game.flashlight = 0;
+    game.screenshake = 0;
+
     game.activeactivity = -1;
     game.act_fade = 5;
 
