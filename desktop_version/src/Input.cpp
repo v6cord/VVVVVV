@@ -601,10 +601,17 @@ void menuactionpress()
             map.nexttowercolour();
 #else
             //enable/disable flip mode
-            music.playef(18);
-            game.screenshake = 10;
-            game.flashlight = 5;
             graphics.setflipmode = !graphics.setflipmode;
+            if (graphics.setflipmode)
+            {
+                music.playef(18);
+                game.screenshake = 10;
+                game.flashlight = 5;
+            }
+            else
+            {
+                music.playef(11);
+            }
             game.savemystats = true;
 #endif
             break;
