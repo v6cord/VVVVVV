@@ -554,7 +554,7 @@ void editorclass::getlin(enum textmode mode, std::string prompt, std::string *pt
     ed.oldenttext = key.keybuffer;
 }
 
-std::vector<int> editorclass::loadlevel( int rxi, int ryi )
+std::vector<int> editorclass::loadlevel( int rxi, int ryi, int altstate )
 {
     //Set up our buffer array to be picked up by mapclass
     rxi -= 100;
