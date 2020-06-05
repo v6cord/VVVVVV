@@ -1862,6 +1862,19 @@ void mapinput()
         }
     }
 
+    if (game.fadetolab)
+    {
+        if (game.fadetolabdelay > 0)
+        {
+            game.fadetolabdelay--;
+        }
+        else
+        {
+            game.returntolab();
+            game.fadetolab = false;
+        }
+    }
+
     if(graphics.menuoffset==0)
     {
         if (graphics.flipmode)
@@ -2039,6 +2052,8 @@ void mapinput()
                 game.swnmode = false;
                 graphics.fademode = 2;
                 music.fadeout();
+                game.fadetolab = true;
+                game.fadetolabdelay = 15;
             }
         }
 

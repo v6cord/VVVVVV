@@ -460,6 +460,8 @@ public:
     void returntolab();
     bool fadetomenu;
     int fadetomenudelay;
+    bool fadetolab;
+    int fadetolabdelay;
 };
 
 extern Game game;
