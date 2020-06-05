@@ -1901,12 +1901,12 @@ void Graphics::drawentities()
             {
                  //Special for epilogue: huge hero!
 
-                    tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp;
-                    setcol(obj.entities[i].colour);
-                    SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp), Sint16(sprites_rect.x * 6), Sint16(sprites_rect.y * 6 ) };
-                    SDL_Surface* TempSurface = ScaleSurface( (*selectspritesheet())[obj.entities[i].drawframe], 6 * sprites_rect.w,6* sprites_rect.h );
-                    BlitSurfaceColoured(TempSurface, NULL , backBuffer,  &drawRect, ct );
-                    SDL_FreeSurface(TempSurface);
+                tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp;
+                setcol(obj.entities[i].colour);
+                SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp), Sint16(sprites_rect.x * 6), Sint16(sprites_rect.y * 6 ) };
+                SDL_Surface* TempSurface = ScaleSurface( (*selectspritesheet())[obj.entities[i].drawframe], 6 * sprites_rect.w,6* sprites_rect.h );
+                BlitSurfaceColoured(TempSurface, NULL , backBuffer,  &drawRect, ct );
+                SDL_FreeSurface(TempSurface);
 
 
 
