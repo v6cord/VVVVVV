@@ -1711,7 +1711,7 @@ void titlerender()
     }
     else
     {
-        if(!game.colourblindmode) graphics.drawtowerbackgroundsolo();
+        if(!game.colourblindmode) graphics.drawtowerbackground();
         graphics.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
         tr = map.r - (help.glow / 4) - int(fRandom() * 4);
@@ -1772,7 +1772,7 @@ void gamecompleterender()
 {
     FillRect(graphics.backBuffer, 0x000000);
 
-    if(!game.colourblindmode) graphics.drawtowerbackgroundsolo();
+    if(!game.colourblindmode) graphics.drawtowerbackground();
 
     tr = map.r - (help.glow / 4) - fRandom() * 4;
     tg = map.g - (help.glow / 4) - fRandom() * 4;

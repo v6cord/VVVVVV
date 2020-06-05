@@ -4440,6 +4440,7 @@ void scriptclass::hardreset() {
     map.towermode = false;
     map.cameraseekframe = 0;
     map.resumedelay = 0;
+    map.scrolldir = 0;
     map.customshowmm = true;
     map.dimension = -1;
 

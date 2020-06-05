@@ -1587,6 +1587,7 @@ void gameinput()
                         ed.level[i+(j*ed.maxwidth)].warpdir=ed.kludgewarpdir[i+(j*ed.maxwidth)];
                     }
                 }
+                map.scrolldir = 0;
             }
         }
     }
