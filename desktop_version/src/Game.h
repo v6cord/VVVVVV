@@ -457,6 +457,7 @@ public:
     bool misamode = false;
 
     void quittomenu();
+    void returntolab();
 };
 
 extern Game game;

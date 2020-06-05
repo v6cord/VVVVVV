@@ -1495,10 +1495,7 @@ void Game::updatestate()
             if(graphics.fademode == 1)	state++;
             break;
         case 97:
-            gamestate = GAMEMODE;
-            graphics.fademode = 4;
-            startscript = true;
-            newscript="returntolab";
+            returntolab();
             state = 0;
             break;
 
@@ -7801,4 +7798,12 @@ void Game::quittomenu()
         createmenu(Menu::mainmenu);
     }
     script.hardreset();
+}
+
+void Game::returntolab()
+{
+    gamestate = GAMEMODE;
+    graphics.fademode = 4;
+    startscript = true;
+    newscript="returntolab";
 }
