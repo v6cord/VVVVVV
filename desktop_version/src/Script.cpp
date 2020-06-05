@@ -3430,6 +3430,7 @@ void scriptclass::resetgametomenu() {
     FILESYSTEM_unmountassets();
     graphics.flipmode = false;
     graphics.fademode = 4;
+    map.tdrawback = true;
     game.createmenu(Menu::gameover);
 }
 
