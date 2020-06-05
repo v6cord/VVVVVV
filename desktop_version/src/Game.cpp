@@ -373,6 +373,9 @@ void Game::init(void)
 
     nosuicide = false;
 
+    fadetomenu = false;
+    fadetomenudelay = 0;
+
     /* Terry's Patrons... */
     superpatrons.push_back("Anders Ekermo");
     superpatrons.push_back("Andreas K|mper");

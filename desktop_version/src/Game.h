@@ -458,6 +458,8 @@ public:
 
     void quittomenu();
     void returntolab();
+    bool fadetomenu;
+    int fadetomenudelay;
 };
 
 extern Game game;
