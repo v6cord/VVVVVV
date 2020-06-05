@@ -329,7 +329,7 @@ void menuactionpress()
         break;
     case Menu::loadcustomtrial:
         if (ed.customtrials.size() == 0 || (game.currentmenuoption + 1 == (int) game.menuoptions.size())) {
-            game.createmenu(Menu::quickloadlevel);
+            game.returnmenu();
             music.playef(11);
             map.nexttowercolour();
         } else {
