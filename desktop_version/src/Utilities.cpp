@@ -12,8 +12,6 @@ extern scriptclass script;
 
 #ifdef __SWITCH__
 #include <switch.h>
-#elif __ANDROID__
-#include <SDL2/SDL.h>
 #else
 #include <SDL.h>
 #endif

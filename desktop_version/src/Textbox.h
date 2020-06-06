@@ -1,11 +1,7 @@
 #ifndef TEXTBOX_H
 #define TEXTBOX_H
 
-#if defined(__SWITCH__) || defined(__ANDROID__)
-    #include <SDL2/SDL.h>
-#else
-    #include <SDL.h>
-#endif
+#include <SDL.h>
 #include <string>
 #include <vector>
 #include "Game.h"
