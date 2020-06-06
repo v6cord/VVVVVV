@@ -58,6 +58,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added being able to use `sprites2.png`, `sprites3.png`, `sprites4.png`, etc. and using Ctrl+F9 to switch between them in the editor
 
+- Added the built-in variable `%altstate%`
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting

@@ -95,6 +95,7 @@ std::vector<std::string> changelog = {
     "  sprites3.png, sprites4.png, etc.",
     "  and using Ctrl+F9 to switch between",
     "  them in the editor",
+    "- Added the built-in variable %altstate%",
     "",
     "Version c1.0-pre1",
     "[line]",
