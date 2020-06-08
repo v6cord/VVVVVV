@@ -7049,6 +7049,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         option("graphic options");
         option("game options");
         option("view credits");
+        option("changelog");
         option("quit game");
         menuxoff = -16;
         menuyoff = -10;
