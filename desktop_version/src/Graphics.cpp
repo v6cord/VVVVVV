@@ -681,7 +681,7 @@ void Graphics::drawtile( int x, int y, int t )
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     if (t >= 14 && t <= 17 && customts <= 3) {
-        colourTransform thect = {.colour = ed.getonewaycol()};
+        colourTransform thect = {ed.getonewaycol()};
         BlitSurfaceTint(tiles[t], NULL, backBuffer, &rect, thect);
     } else if (customtiles.find(customts) != customtiles.end()) {
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
@@ -696,7 +696,7 @@ void Graphics::drawtile2( int x, int y, int t )
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     if (t >= 14 && t <= 17 && customts <= 3) {
-        colourTransform thect = {.colour = ed.getonewaycol()};
+        colourTransform thect = {ed.getonewaycol()};
         BlitSurfaceTint(tiles2[t], NULL, backBuffer, &rect, thect);
     } else if (customtiles.find(customts) != customtiles.end()) {
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
@@ -2504,7 +2504,7 @@ void Graphics::drawforetile(int x, int y, int t)
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
         if (tile >= 14 && tile <= 17 && customts <= 3) {
-            colourTransform thect = {.colour = ed.getonewaycol()};
+            colourTransform thect = {ed.getonewaycol()};
             BlitSurfaceTint(tiles[t], NULL, foregroundBuffer, &rect, thect);
         } else if (customtiles.find(customts) != customtiles.end()) {
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
@@ -2523,7 +2523,7 @@ void Graphics::drawforetile2(int x, int y, int t)
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
         if (tile >= 14 && tile <= 17 && customts <= 3) {
-            colourTransform thect = {.colour = ed.getonewaycol()};
+            colourTransform thect = {ed.getonewaycol()};
             BlitSurfaceTint(tiles2[t], NULL, foregroundBuffer, &rect, thect);
         } else if (customtiles.find(customts) != customtiles.end()) {
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
@@ -2819,7 +2819,7 @@ void Graphics::setcol( int t )
 		break;
 	case 200: //HSV glow
 		{ // C++ *please*
-			HsvColor hsv = { .h = (unsigned char)(help.glow * 4), .s = 255, .v = 255};
+			HsvColor hsv = { (unsigned char)(help.glow * 4), 255, 255};
 			auto rgb = HsvToRgb(hsv);
 			ct.colour = getRGB(rgb.r, rgb.g, rgb.b);
 		}

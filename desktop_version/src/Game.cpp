@@ -5529,9 +5529,9 @@ void Game::customloadquick(std::string savfile)
                 for(auto iter = values.begin(); iter < values.end(); iter += 3)
                 {
                     scriptmarkers.push_back(scriptmarker {
-                        .x = std::stoi(iter[0]),
-                        .y = std::stoi(iter[1]),
-                        .tile = std::stoi(iter[2]),
+                        std::stoi(iter[0]),
+                        std::stoi(iter[1]),
+                        std::stoi(iter[2]),
                     });
                 }
             }

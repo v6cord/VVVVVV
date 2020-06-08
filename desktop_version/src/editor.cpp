@@ -2801,7 +2801,7 @@ void editorclass::save(std::string& _path)
     // Iterate through all the altstates. Nonexistent altstates are ones at -1,-1
     TiXmlElement* alt;
     for (size_t a = 0; a < altstates.size(); a++) {
-        if (altstates[a].x == -1 or altstates[a].y == -1)
+        if (altstates[a].x == -1 || altstates[a].y == -1)
             continue;
 
         std::string tiles = "";

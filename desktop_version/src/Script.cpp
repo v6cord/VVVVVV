@@ -59,7 +59,7 @@ void scriptclass::call(std::string script) {
     } else if (script[0] == '@') {
         script = script.substr(1);
     } else {
-        callstack.push_back(stackframe{.script = scriptname, .line = position});
+        callstack.push_back(stackframe{scriptname, position});
     }
     load(script);
 }
@@ -1278,9 +1278,9 @@ void scriptclass::run() {
                 }
                 if (words[0] == "markmap") {
                     game.scriptmarkers.push_back(scriptmarker{
-                        .x = ss_toi(words[1]),
-                        .y = ss_toi(words[2]),
-                        .tile = ss_toi(words[3]),
+                        ss_toi(words[1]),
+                        ss_toi(words[2]),
+                        ss_toi(words[3]),
                     });
                 }
                 if (words[0] == "unmarkmap") {
@@ -2083,11 +2083,11 @@ void scriptclass::run() {
                     position++;
                     if (position < (int) commands.size())
                         map.roomtext.push_back(Roomtext{
-                            .x = ss_toi(words[1]) / 8,
-                            .y = ss_toi(words[2]) / 8,
-                            .subx = ss_toi(words[1]) % 8,
-                            .suby = ss_toi(words[2]) % 8,
-                            .text = commands[position],
+                            ss_toi(words[1]) / 8,
+                            ss_toi(words[2]) / 8,
+                            ss_toi(words[1]) % 8,
+                            ss_toi(words[2]) % 8,
+                            commands[position],
                         });
                 } else if (words[0] == "createscriptbox") {
                     // Ok, first figure out the first available script box slot
@@ -2881,7 +2881,8 @@ void scriptclass::run() {
                     if (!game.intimetrial && !game.nodeathmode &&
                         !game.inintermission)
                         game.savetele();
-                } else if (words[0] == "customquicksave") {
+                }
+                if (words[0] == "customquicksave") {
                     if (!map.custommode || map.custommodeforreal)
                         if (!game.intimetrial && !game.nodeathmode)
                             game.customsavequick(ed.ListOfMetaData[game.playcustomlevel].filename);
