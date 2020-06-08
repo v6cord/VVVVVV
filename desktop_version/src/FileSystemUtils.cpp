@@ -2,6 +2,7 @@
 #include <vector>
 #include "Game.h"
 #include "Utilities.h"
+#include "Rwops.h"
 #include "preloader.h"
 #include <string>
 
@@ -125,7 +126,9 @@ static bool cached_data_zip_load(const char* path) {
     }
     return true;
 #else
-    return PHYSFS_mount(path, NULL, 1);
+    SDL_RWops* file = SDL_RWFromFile(path, "rb");
+    PHYSFS_Io* io = make_rwopsio(file);
+    return PHYSFS_mountIo(io, "data.zip", NULL, 1);
 #endif
 }
 
