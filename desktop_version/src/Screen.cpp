@@ -44,7 +44,7 @@ void Screen::init() {
 		&m_window,
 		&m_renderer
 	);
-	SDL_SetWindowTitle(m_window, "VVVVVV-CE");
+	SDL_SetWindowTitle(m_window, "VVVVVV: Community Edition");
 
 	SDL_Surface *icon = LoadImage("VVVVVV.png");
 	SDL_SetWindowIcon(m_window, icon);
