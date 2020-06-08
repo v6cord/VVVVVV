@@ -340,6 +340,15 @@ if (NOT ANDROID)
     find_library(FRIBIDI_LIBRARY NAMES fribidi)
 
     target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${FRIBIDI_INCLUDE_DIR}>")
+    target_link_libraries(VVVVVV-CE "$<BUILD_INTERFACE:${FRIBIDI_LIBRARY}>")
+endif()
+
+if(NOT ANDROID)
+    find_library(SDL2_MIXER_LIBRARY NAMES SDL2_mixer)
+    if(SDL2_MIXER_LIBRARY)
+        message(STATUS "Found SDL2_mixer")
+        target_link_libraries(VVVVVV-CE "$<BUILD_INTERFACE:${SDL2_MIXER_LIBRARY}>")
+    endif()
 endif()
 
 # libpng
@@ -420,7 +429,7 @@ if(ANDROID)
     TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static fribidi PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
 endif()
 
 # data.zip path
@@ -465,6 +474,13 @@ elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
             target_include_directories(VVVVVV-CE PUBLIC "$<BUILD_INTERFACE:${SDL2_INCLUDE_DIRS}>")
             target_link_libraries(VVVVVV-CE ${SDL2_LIBRARIES})
         endif()
+	if(MSVC)
+		find_library(SDL2_MAIN_LIBRARY NAMES SDL2main)
+		if(SDL2_MAIN_LIBRARY)
+			message(STATUS "Found SDLmain")
+			target_link_libraries(VVVVVV-CE "$<BUILD_INTERFACE:${SDL2_MAIN_LIBRARY}>")
+		endif()
+	endif()
 else()
 	# Only try to autodetect if both SDL2 variables aren't explicitly set
 	find_package(SDL2 CONFIG)
