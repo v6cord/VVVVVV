@@ -2,7 +2,6 @@
 #include <vector>
 #include "Game.h"
 #include "Utilities.h"
-#include "Rwops.h"
 #include "preloader.h"
 #include <string>
 
@@ -72,16 +71,6 @@ extern "C" {
 #endif
 }
 
-PHYSFS_Io* make_physfsio_from_path(const char* path, const int mode) {
-    char mode_str[2] = {static_cast<char>(mode), '\0'};
-    SDL_RWops* rwops = SDL_RWFromFile(path, mode_str);
-    return make_rwopsio(rwops);
-}
-
-extern "C" {
-    PHYSFS_Io* (*__PHYSFS_createNativeIo)(const char *path, const int mode) = make_physfsio_from_path;
-}
-
 static bool cached_data_zip_load(const char* path) {
 #ifdef __SWITCH__
     FILE* file = fopen(path, "rb");
@@ -136,9 +125,7 @@ static bool cached_data_zip_load(const char* path) {
     }
     return true;
 #else
-    SDL_RWops* file = SDL_RWFromFile(path, "rb");
-    PHYSFS_Io* io = make_rwopsio(file);
-    return PHYSFS_mountIo(io, "data.zip", NULL, 1);
+    return PHYSFS_mount(path, NULL, 1);
 #endif
 }
 
@@ -682,32 +669,32 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 	long int length;
 
 	/* Read data */
-	SDL_RWops *file = SDL_RWFromFile(oldLocation, "rb");
+	FILE *file = fopen(oldLocation, "rb");
 	if (!file)
 	{
 		printf("Cannot open/copy %s\n", oldLocation);
 		return;
 	}
-	SDL_RWseek(file, 0, SEEK_END);
-	length = SDL_RWtell(file);
-	SDL_RWseek(file, 0, SEEK_SET);
+	fseek(file, 0, SEEK_END);
+	length = ftell(file);
+	fseek(file, 0, SEEK_SET);
 	data = (char*) malloc(length);
-	if (SDL_RWread(file, data, 1, length) <= 0) {
+	if (fread(data, 1, length, file) <= 0) {
             printf("it broke!!!\n");
             exit(1);
         }
-	SDL_RWclose(file);
+	fclose(file);
 
 	/* Write data */
-	file = SDL_RWFromFile(newLocation, "wb");
+	file = fopen(newLocation, "wb");
 	if (!file)
 	{
 		printf("Could not write to %s\n", newLocation);
 		free(data);
 		return;
 	}
-	SDL_RWwrite(file, data, 1, length);
-	SDL_RWclose(file);
+	fwrite(data, 1, length, file);
+	fclose(file);
 	free(data);
 
 	/* WTF did we just do */

@@ -328,7 +328,7 @@ extern PHYSFS_Allocator __PHYSFS_AllocatorHooks;
  *  This path is in platform-dependent notation. (mode) must be 'r', 'w', or
  *  'a' for Read, Write, or Append.
  */
-extern PHYSFS_Io* (*__PHYSFS_createNativeIo)(const char *path, const int mode);
+PHYSFS_Io *__PHYSFS_createNativeIo(const char *path, const int mode);
 
 /*
  * Create a PHYSFS_Io for a buffer of memory (READ-ONLY). If you already

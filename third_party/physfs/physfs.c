@@ -195,7 +195,7 @@ static const PHYSFS_Io __PHYSFS_nativeIoInterface =
     nativeIo_destroy
 };
 
-PHYSFS_Io *__PHYSFS_REAL_createNativeIo(const char *path, const int mode)
+PHYSFS_Io *__PHYSFS_createNativeIo(const char *path, const int mode)
 {
     PHYSFS_Io *io = NULL;
     NativeIoInfo *info = NULL;
@@ -236,13 +236,6 @@ createNativeIo_failed:
     return NULL;
 } /* __PHYSFS_createNativeIo */
 
-#ifdef _MSC_VER
-extern PHYSFS_Io* (*__PHYSFS_createNativeIo)(const char *path, const int mode);
-extern PHYSFS_Io* (*__PHYSFS_createNativeIo_default)(const char *path, const int mode) = __PHYSFS_REAL_createNativeIo;
-#pragma comment(linker, "/alternatename:___PHYSFS_createNativeIo=___PHYSFS_createNativeIo_default")
-#else
-__attribute__((weak)) PHYSFS_Io* (*__PHYSFS_createNativeIo)(const char *path, const int mode) = __PHYSFS_REAL_createNativeIo;
-#endif
 
 /* PHYSFS_Io implementation for i/o to a memory buffer... */
 

@@ -181,7 +181,6 @@ SET(VVV_SRC
 	src/main.cpp
 	src/Network.c
 	src/Utilities.cpp
-        src/Rwops.cpp
         ${GITREV_FILE}
         ${VCE_ZIP_OBJ}
 )
