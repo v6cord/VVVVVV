@@ -216,7 +216,9 @@ void Graphics::load_font(const char* path, SDL_Surface* img, int char_w, int cha
 }
 
 int Graphics::bfontlen(uint32_t ch) {
-    auto real = bfont[font_idx(ch)]->w;
+    auto idx = font_idx(ch);
+    if (idx < 0 || idx >= (int) bfont.size()) return 8;
+    auto real = bfont[idx]->w;
     if (ch < 32 && real == 8) return 6;
     return real;
 }
@@ -404,20 +406,16 @@ bool Graphics::PrintAlpha( int _x, int _y, std::string _s, int r, int g, int b, 
         fontRect.x = tpoint.x ;
         fontRect.y = tpoint.y ;
 
-        if (bfont[font_idx(curr)]->h > 8) {
+        auto idx = font_idx(curr);
+        if (idx >= 0 && idx < (int) bfont.size() && bfont[idx]->h > 8) {
             tallline = true;
         } else if (tallline) {
             fontRect.y += 4;
         }
 
-        if (flipmode)
-        {
-            BlitSurfaceColoured( flipbfont[font_idx(curr)], NULL, backBuffer, &fontRect , ct);
-        }
-        else
-        {
-            BlitSurfaceColoured( bfont[font_idx(curr)], NULL, backBuffer, &fontRect , ct);
-        }
+        auto fontvec = flipmode ? &flipbfont : &bfont;
+        if (idx >= 0 && idx < (int) (*fontvec).size())
+            BlitSurfaceColoured( (*fontvec)[idx], NULL, backBuffer, &fontRect , ct);
         bfontpos+=bfontlen(curr) ;
     }
     return tallline;
