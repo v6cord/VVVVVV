@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-cd "$(dirname "$0")"
+if [ -z "$VVVVVV_CE_OUT_OF_TREE_BUILD" ]; then
+    cd "$(dirname "$0")"
+fi
+
 if [ ! -z "$VVVVVV_CE_ANDROID_BUILD" ]; then
     exec ./android-build.sh
 fi
