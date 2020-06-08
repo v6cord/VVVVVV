@@ -781,17 +781,32 @@ void menuactionpress()
         switch (game.currentmenuoption)
         {
         case 0:
+#if defined(MAKEANDPLAY)
             //next page
             music.playef(11);
             game.createmenu(Menu::credits_ce, true);
             map.nexttowercolour();
+#elif !defined(MAKEANDPLAY)
+            //next page
+            music.playef(11);
+            game.createmenu(Menu::credits2, true);
+            map.nexttowercolour();
+#endif
             break;
         case 1:
+#if defined(MAKEANDPLAY)
+            //last page
+            music.playef(11);
+            game.createmenu(Menu::credits2, true);
+            game.currentmenuoption = 1;
+            map.nexttowercolour();
+#elif !defined(MAKEANDPLAY)
             //previous page
             music.playef(11);
             game.createmenu(Menu::credits, true);
             game.currentmenuoption = 1;
             map.nexttowercolour();
+#endif
             break;
         case 2:
             //back
@@ -813,7 +828,7 @@ void menuactionpress()
         case 1:
             //previous page
             music.playef(11);
-            game.createmenu(Menu::credits2, true);
+            game.createmenu(Menu::credits, true);
             game.currentmenuoption = 1;
             map.nexttowercolour();
             break;
@@ -855,6 +870,13 @@ void menuactionpress()
 #endif
             break;
         case 1:
+#if defined(MAKEANDPLAY)
+            //previous page
+            music.playef(11);
+            game.createmenu(Menu::credits_ce, true);
+            game.currentmenuoption = 1;
+            map.nexttowercolour();
+#elif !defined(MAKEANDPLAY)
             //previous page
             music.playef(11);
             game.current_credits_list_index -= 14;
@@ -873,6 +895,7 @@ void menuactionpress()
             game.currentmenuoption = 1;
 
             map.nexttowercolour();
+#endif
             break;
         default:
             //back

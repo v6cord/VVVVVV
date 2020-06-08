@@ -7353,7 +7353,11 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         break;
     case Menu::credits:
         option("next page");
+#if defined(MAKEANDPLAY)
+        option("last page");
+#elif !defined(MAKEANDPLAY)
         option("previous page");
+#endif
         option("return");
         menuxoff = 20;
         menuyoff = 64;
