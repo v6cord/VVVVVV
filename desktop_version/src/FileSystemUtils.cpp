@@ -72,6 +72,16 @@ extern "C" {
 #endif
 }
 
+PHYSFS_Io* make_physfsio_from_path(const char* path, const int mode) {
+    char mode_str[2] = {static_cast<char>(mode), '\0'};
+    SDL_RWops* rwops = SDL_RWFromFile(path, mode_str);
+    return make_rwopsio(rwops);
+}
+
+extern "C" {
+    PHYSFS_Io* (*__PHYSFS_createNativeIo)(const char *path, const int mode) = make_physfsio_from_path;
+}
+
 static bool cached_data_zip_load(const char* path) {
 #ifdef __SWITCH__
     FILE* file = fopen(path, "rb");
