@@ -672,32 +672,32 @@ void PLATFORM_copyFile(const char *oldLocation, const char *newLocation)
 	long int length;
 
 	/* Read data */
-	FILE *file = fopen(oldLocation, "rb");
+	SDL_RWops *file = SDL_RWFromFile(oldLocation, "rb");
 	if (!file)
 	{
 		printf("Cannot open/copy %s\n", oldLocation);
 		return;
 	}
-	fseek(file, 0, SEEK_END);
-	length = ftell(file);
-	fseek(file, 0, SEEK_SET);
+	SDL_RWseek(file, 0, SEEK_END);
+	length = SDL_RWtell(file);
+	SDL_RWseek(file, 0, SEEK_SET);
 	data = (char*) malloc(length);
-	if (fread(data, 1, length, file) <= 0) {
+	if (SDL_RWread(file, data, 1, length) <= 0) {
             printf("it broke!!!\n");
             exit(1);
         }
-	fclose(file);
+	SDL_RWclose(file);
 
 	/* Write data */
-	file = fopen(newLocation, "wb");
+	file = SDL_RWFromFile(newLocation, "wb");
 	if (!file)
 	{
 		printf("Could not write to %s\n", newLocation);
 		free(data);
 		return;
 	}
-	fwrite(data, 1, length, file);
-	fclose(file);
+	SDL_RWwrite(file, data, 1, length);
+	SDL_RWclose(file);
 	free(data);
 
 	/* WTF did we just do */
