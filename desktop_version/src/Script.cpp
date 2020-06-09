@@ -2750,10 +2750,13 @@ void scriptclass::run() {
                         obj.createentity(i, 153, 18, 16, 0, 17, 0);
                         i += 25;
                     }
+                } else if (words[0] == "keepcolor") {
+                    keepcolor = parsebool(words[1]);
                 } else if (words[0] == "restoreplayercolour" ||
                         words[0] == "restoreplayercolor") {
                     i = obj.getplayer();
                     obj.entities[i].colour = 0;
+                    game.playercolour = 0;
                 } else if (words[0] == "changeplayercolour" ||
                         words[0] == "changeplayercolor") {
                     i = obj.getplayer();
@@ -2773,6 +2776,8 @@ void scriptclass::run() {
                     } else if (words[1] == "teleporter") {
                         obj.entities[i].colour = 102;
                     }
+
+                    if (keepcolor) game.playercolour = obj.entities[i].colour;
                 } else if (words[0] == "altstates") {
                     obj.altstates = ss_toi(words[1]);
                 } else if (words[0] == "activeteleporter") {
@@ -4355,6 +4360,8 @@ void scriptclass::hardreset() {
     game.script_image_names.clear();
 
     active_scripts.clear();
+
+    keepcolor = false;
 
     // WARNING: Don't reset teleporter locations, at this point we've already
     // loaded the level!

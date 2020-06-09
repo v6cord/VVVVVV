@@ -4702,6 +4702,8 @@ void Game::customstart()
 
     hidemarkers = false;
 
+    playercolour = 0;
+
     //let's teleport in!
     //state = 2500;
     //if (!nocutscenes) music.play(5);
@@ -4727,6 +4729,8 @@ void Game::start()
     state = 0;
     deathseq = -1;
     lifeseq = 0;
+
+    playercolour = 0;
 
     //let's teleport in!
     //state = 2500;
@@ -5567,6 +5571,10 @@ void Game::customloadquick(std::string savfile)
         else if (pKey == "altstates")
         {
             obj.altstates = atoi(pText);
+        }
+        else if (pKey == "keepcolor")
+        {
+            script.keepcolor = atoi(pText);
         }
         else if (pKey == "variables")
         {
@@ -6523,6 +6531,10 @@ void Game::customsavequick(std::string savfile)
 
     msg = new TiXmlElement( "altstates" );
     msg->LinkEndChild( new TiXmlText( help.String(obj.altstates).c_str() ));
+    msgs->LinkEndChild( msg );
+
+    msg = new TiXmlElement( "keepcolor" );
+    msg->LinkEndChild( new TiXmlText( help.String(script.keepcolor).c_str() ));
     msgs->LinkEndChild( msg );
 
     msg = new TiXmlElement( "variables" );

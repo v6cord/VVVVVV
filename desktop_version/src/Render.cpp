@@ -96,6 +96,8 @@ std::vector<std::string> changelog = {
     "  and using Ctrl+F9 to switch between",
     "  them in the editor",
     "- Added the built-in variable %altstate%",
+    "- keepcolor(on/off) - preserves",
+    "  changeplayercolor after deaths",
     "",
     "Version c1.0-pre1",
     "[line]",

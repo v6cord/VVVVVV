@@ -463,6 +463,8 @@ public:
     void returntoeditor();
     bool shouldreturntoeditor;
 #endif
+
+    int playercolour = 0;
 };
 
 extern Game game;

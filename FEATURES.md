@@ -60,6 +60,8 @@ VVVVVV: Community Edition has accepted contributions from Misa, AllyTally, leo60
 
 - Added the built-in variable `%altstate%`
 
+- `keepcolor(on/off)` - preserves `changeplayercolor` after deaths
+
 ## Version c1.0-pre1
 
 - Removed having to use a load script to use internal scripting

@@ -951,7 +951,7 @@ void mapclass::resetplayer() {
 		obj.entities[i].xp = game.savex;
 		obj.entities[i].yp = game.savey;
 		obj.entities[i].dir = game.savedir;
-		obj.entities[i].colour = 0;
+		obj.entities[i].colour = game.playercolour;
 		game.lifeseq = 10;
 		obj.entities[i].invis = true;
 		obj.entities[i].size = 0;

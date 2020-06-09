@@ -104,6 +104,8 @@ public:
 
     bool killedviridian = false;
     int killtimer = 0;
+
+    bool keepcolor = false;
 };
 
 // Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)
