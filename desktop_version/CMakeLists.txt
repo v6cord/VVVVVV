@@ -327,6 +327,12 @@ if (SWITCH)
     target_compile_options(cparse-static PUBLIC -fexceptions)
 endif()
 
+if(APPLE)
+    target_compile_definitions(lua-static PUBLIC LUA_USE_MACOSX)
+elseif(NOT WIN32)
+    target_compile_definitions(lua-static PUBLIC LUA_USE_POSIX)
+endif()
+
 if(ANDROID)
     set_target_properties(tinyxml-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(physfs-static PROPERTIES LINKER_LANGUAGE CXX)
