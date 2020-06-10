@@ -304,6 +304,14 @@ void quit() {
 
 void scriptclass::run() {
     try {
+        for (auto it = lua_scripts.begin(); it != lua_scripts.end();) {
+            if (it->run()) {
+                ++it;
+            } else {
+                it = lua_scripts.erase(it);
+            }
+        }
+
         if (scriptdelay == 0) {
             passive = false;
         }
@@ -4760,4 +4768,8 @@ void scriptclass::loadcustom(std::string t)
         running = false;
     }
   }
+}
+
+bool scriptclass::is_running() {
+    return !lua_scripts.empty() || running;
 }

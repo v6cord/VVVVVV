@@ -10,7 +10,7 @@ class lua_script {
 
 public:
     lua_script(std::string name, size_t start, size_t end);
-    void run();
+    bool run();
     static void load(std::string name, size_t start, size_t end);
 };
 

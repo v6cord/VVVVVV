@@ -534,7 +534,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        if (script.running)
+                        if (script.is_running())
                         {
                             script.run();
                         }

@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "ScriptX.h"
 #include "Enums.h"
+#include "LuaScript.h"
 
 #define filllines(lines) commands.insert(commands.end(), lines, lines + sizeof(lines)/sizeof(lines[0]))
 
@@ -106,6 +107,10 @@ public:
     int killtimer = 0;
 
     bool keepcolor = false;
+
+    std::vector<lua_script> lua_scripts;
+
+    bool is_running();
 };
 
 // Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)
