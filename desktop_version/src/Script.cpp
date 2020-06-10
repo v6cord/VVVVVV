@@ -4437,7 +4437,7 @@ void scriptclass::loadcustom(std::string t)
     }
 
     if (customscript[scriptstart] == "#lua") {
-        lua_script::load(t);
+        lua_script::load(t, scriptstart + 1, scriptend);
         return;
     }
 

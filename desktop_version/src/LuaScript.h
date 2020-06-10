@@ -5,10 +5,13 @@
 #include <sol.hpp>
 
 class lua_script {
-    sol::state state;
+    sol::state lua;
+    std::string text;
 
 public:
-    static void load(std::string script);
+    lua_script(std::string name, size_t start, size_t end);
+    void run();
+    static void load(std::string name, size_t start, size_t end);
 };
 
 #endif
