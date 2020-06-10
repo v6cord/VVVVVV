@@ -2776,8 +2776,6 @@ void scriptclass::run() {
                     } else if (words[1] == "teleporter") {
                         obj.entities[i].colour = 102;
                     }
-
-                    if (keepcolor) game.playercolour = obj.entities[i].colour;
                 } else if (words[0] == "altstates") {
                     obj.altstates = ss_toi(words[1]);
                 } else if (words[0] == "activeteleporter") {

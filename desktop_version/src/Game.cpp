@@ -4748,6 +4748,10 @@ void Game::deathsequence()
     {
         i = obj.getplayer();
     }
+
+    int oldcolour = obj.entities[i].colour;
+    if (oldcolour != 1 && script.keepcolor) playercolour = oldcolour;
+
     obj.entities[i].colour = 1;
 
     obj.entities[i].invis = false;
