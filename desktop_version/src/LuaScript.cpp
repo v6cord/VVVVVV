@@ -17,8 +17,8 @@ lua_script::lua_script(std::string name, size_t start, size_t end) {
 }
 
 bool lua_script::run() {
-    coroutine();
-    return false;
+    sol::protected_function_result res = coroutine();
+    return res.status() == sol::call_status::yielded;
 }
 
 void lua_script::load(std::string name, size_t start, size_t end) {
