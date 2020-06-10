@@ -2086,7 +2086,7 @@ void Game::updatestate()
             statedelay = 5;
 
             i = obj.getplayer();
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
 
             obj.entities[i].xp = obj.entities[obj.getteleporter()].xp+44;
@@ -2230,7 +2230,7 @@ void Game::updatestate()
             }
 
             i = obj.getplayer();
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = true;
 
             i = obj.getcompanion();
@@ -3258,7 +3258,7 @@ void Game::updatestate()
             screenshake = 0;
 
             i = obj.getplayer();
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = true;
 
             //we're done here!
@@ -3345,7 +3345,7 @@ void Game::updatestate()
             //state = 3040; //Lab
 
             i = obj.getplayer();
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = true;
 
             i = obj.getteleporter();
@@ -3391,7 +3391,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 1;
 
@@ -3481,7 +3481,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 1;
 
@@ -3557,7 +3557,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 0;
 
@@ -3633,7 +3633,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 1;
 
@@ -3714,7 +3714,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 1;
 
@@ -3795,7 +3795,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 0;
 
@@ -3950,7 +3950,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 1;
 
@@ -4026,7 +4026,7 @@ void Game::updatestate()
                 obj.entities[j].tile = 2;
                 obj.entities[j].colour = 101;
             }
-            obj.entities[i].colour = 0;
+            obj.entities[i].colour = playercolour;
             obj.entities[i].invis = false;
             obj.entities[i].dir = 1;
 
