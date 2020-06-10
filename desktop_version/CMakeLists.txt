@@ -181,6 +181,7 @@ SET(VVV_SRC
 	src/main.cpp
 	src/Network.c
 	src/Utilities.cpp
+    src/LuaScript.cpp
         ${GITREV_FILE}
         ${VCE_ZIP_OBJ}
 )
@@ -307,6 +308,8 @@ IF(SUPPORTS_IMPLICIT_FALLTHROUGH AND NOT ANDROID)
 	TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE -Werror=implicit-fallthrough)
 ENDIF()
 
+file(GLOB LUA_SRC "../third_party/lua-5.3.5/src/*.c")
+
 # Library information
 ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 target_include_directories(tinyxml-static PUBLIC ../third_party/tinyxml)
@@ -314,6 +317,11 @@ ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 target_include_directories(physfs-static PUBLIC ../third_party/physfs)
 ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
 target_include_directories(cparse-static PUBLIC ../third_party/cparse)
+ADD_LIBRARY(lua-static STATIC ${LUA_SRC})
+target_include_directories(lua-static PUBLIC ../third_party/lua-5.3.5/src)
+ADD_LIBRARY(sol2-static INTERFACE)
+target_include_directories(sol2-static INTERFACE ../third_party/sol2)
+target_link_libraries(sol2-static INTERFACE lua-static)
 
 if (SWITCH)
     target_compile_options(cparse-static PUBLIC -fexceptions)
@@ -323,6 +331,7 @@ if(ANDROID)
     set_target_properties(tinyxml-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(physfs-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(cparse-static PROPERTIES LINKER_LANGUAGE CXX)
+    set_target_properties(lua-static PROPERTIES LINKER_LANGUAGE CXX)
 endif()
 
 # FriBidi (Detection pulled from HHVM)
@@ -426,10 +435,10 @@ find_package(Threads)
 
 # Static Dependencies
 if(ANDROID)
-    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
 endif()
 
 # data.zip path

@@ -18,6 +18,7 @@
 #include "Music.h"
 #include "Utilities.h"
 #include "Maths.h"
+#include "LuaScript.h"
 
 extern bool headless;
 
@@ -4433,6 +4434,11 @@ void scriptclass::loadcustom(std::string t)
   if(scriptstart>-1){
     if(scriptend==-1){
       scriptend=customscript.size();
+    }
+
+    if (customscript[scriptstart] == "#lua") {
+        lua_script::load(t);
+        return;
     }
 
     //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!
