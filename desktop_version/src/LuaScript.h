@@ -6,6 +6,8 @@
 
 class lua_script {
     sol::state lua;
+    sol::thread thread;
+    sol::coroutine coroutine;
     std::string text;
 
 public:
