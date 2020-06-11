@@ -1,6 +1,8 @@
 #ifndef LUASCRIPT_H
 #define LUASCRIPT_H
 
+#define SOL_ALL_SAFETIES_ON 1
+
 #include <string>
 #include <sol.hpp>
 

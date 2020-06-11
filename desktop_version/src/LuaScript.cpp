@@ -20,7 +20,7 @@ lua_script::lua_script(std::string name, size_t start, size_t end) {
     sol::protected_function::set_default_handler(lua["error_handler"]);
 
     thread = sol::thread::create(lua);
-    sol::function func = lua.load(text).get<sol::function>();
+    sol::protected_function func = lua.load(text).get<sol::protected_function>();
     sol::state_view thread_state = thread.state();
     coroutine = sol::coroutine(thread_state, func);
 }
@@ -75,7 +75,7 @@ bool lua_script::run() {
         endtext = false;
     }
 
-    auto res = coroutine();
+    sol::protected_function_result res = coroutine();
     return res.status() == sol::call_status::yielded;
 }
 

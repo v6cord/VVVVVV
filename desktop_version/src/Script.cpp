@@ -283,9 +283,9 @@ std::string stringify<bool>(bool val) {
     return val ? "true" : "false";
 }
 
-void quit() {
-    script.lua_scripts.clear();
-    if(map.custommodeforreal) {
+void scriptclass::quit() {
+    stop();
+    if(!map.custommode || map.custommodeforreal) {
         graphics.flipmode = false;
         game.gamestate = TITLEMODE;
         FILESYSTEM_unmountassets();
@@ -303,10 +303,18 @@ void quit() {
     }
 }
 
+void scriptclass::stop() {
+    lua_scripts.clear();
+    running = false;
+}
+
 void scriptclass::run() {
     try {
         for (auto it = lua_scripts.begin(); it != lua_scripts.end();) {
-            if (it->run()) {
+            bool cont = it->run();
+            if (lua_scripts.empty()) {
+                return;
+            } else if (cont) {
                 ++it;
             } else {
                 it = lua_scripts.erase(it);
@@ -3285,12 +3293,8 @@ void scriptclass::run() {
         if (scriptdelay > 0) {
             scriptdelay--;
         }
-    } catch (const script_exception& ex) {
-        handle_exception(ex);
-        quit();
     } catch (const std::exception& ex) {
-        handle_exception(script_exception(ex));
-        quit();
+        handle_exception(ex);
     }
 }
 
@@ -4447,7 +4451,11 @@ void scriptclass::loadcustom(std::string t)
     }
 
     if (customscript[scriptstart] == "#lua") {
-        lua_script::load(t, scriptstart + 1, scriptend);
+        try {
+            lua_script::load(t, scriptstart + 1, scriptend);
+        } catch (const std::exception& ex) {
+            handle_exception(ex);
+        }
         return;
     }
 

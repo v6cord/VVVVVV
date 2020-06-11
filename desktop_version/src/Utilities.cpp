@@ -217,7 +217,38 @@ void log_close() {
 }
 
 void handle_exception(const std::exception& ex) {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", ex.what(), nullptr);
+    SDL_MessageBoxData msg = {};
+    msg.flags = SDL_MESSAGEBOX_ERROR;
+    msg.title = "Error";
+    msg.message = ex.what();
+    msg.numbuttons = 3;
+    SDL_MessageBoxButtonData quit_game = {};
+    quit_game.buttonid = 0;
+    quit_game.text = "Quit game";
+    SDL_MessageBoxButtonData stop_script = {};
+    stop_script.flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+    stop_script.buttonid = 1;
+    stop_script.text = "Stop script";
+    SDL_MessageBoxButtonData exit_level = {};
+    exit_level.flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+    exit_level.buttonid = 2;
+    exit_level.text = "Exit level";
+    SDL_MessageBoxButtonData buttons[3] = {quit_game, stop_script, exit_level};
+    msg.buttons = buttons;
+    int pressed = 0;
+    SDL_ShowMessageBox(&msg, &pressed);
+    switch (pressed) {
+        case 0:
+        default:
+            std::terminate();
+            break;
+        case 1:
+            script.stop();
+            break;
+        case 2:
+            script.quit();
+            break;
+    }
 }
 
 const char* script_exception::what() const noexcept {
