@@ -329,7 +329,7 @@ endif()
 
 if(APPLE)
     target_compile_definitions(lua-static PUBLIC LUA_USE_MACOSX)
-elseif(NOT WIN32)
+elseif(NOT WIN32 AND NOT SWITCH)
     target_compile_definitions(lua-static PUBLIC LUA_USE_POSIX)
 endif()
 
