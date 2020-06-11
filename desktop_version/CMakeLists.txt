@@ -323,6 +323,9 @@ ADD_LIBRARY(sol2-static INTERFACE)
 target_include_directories(sol2-static INTERFACE ../third_party/sol2)
 target_link_libraries(sol2-static INTERFACE lua-static)
 
+set_source_files_properties(${LUA_SRC} PROPERTIES LANGUAGE CXX)
+target_compile_definitions(sol2-static INTERFACE SOL_USING_CXX_LUA)
+
 if (SWITCH)
     target_compile_options(cparse-static PUBLIC -fexceptions)
 endif()
