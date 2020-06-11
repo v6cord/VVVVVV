@@ -19,6 +19,8 @@ public:
     lua_script(std::string name, size_t start, size_t end);
     bool run();
     static void load(std::string name, size_t start, size_t end);
+
+    lua_script(lua_script&& x) = delete;
 };
 
 #endif
