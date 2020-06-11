@@ -8,31 +8,6 @@
 #include <utility>
 #include <stdexcept>
 
-class lua_yielding {
-public:
-    virtual void handle(lua_script& s) = 0;
-};
-
-class lua_delay : public lua_yielding {
-    unsigned int delay;
-
-public:
-    lua_delay(unsigned int time) : delay(time) {}
-
-    void handle(lua_script& s) override {
-        s.delay = delay;
-    }
-};
-
-class lua_say : public lua_yielding {
-public:
-    lua_say() {}
-
-    void handle(lua_script& s) override {
-        s.endtext = true;
-    }
-};
-
 lua_script::lua_script(std::string name, size_t start, size_t end) {
     for (size_t i = start; i < end; ++i) {
         text += script.customscript[i];
@@ -57,11 +32,11 @@ void lua_script::add_functions() {
         throw ex;
     });
 
-    lua["delay"] = sol::yielding([](unsigned int delay) {
-        return lua_delay(delay);
+    lua["delay"] = sol::yielding([this](unsigned int time) {
+        delay = time;
     });
 
-    lua["say"] = sol::yielding([](int x, int y, std::string text) {
+    lua["say"] = sol::yielding([this](int x, int y, std::string text) {
         std::stringstream ss(text);
         std::string line;
         std::getline(ss, line, '\n');
@@ -81,7 +56,7 @@ void lua_script::add_functions() {
             game.jumpheld = true;
         }
 
-        return lua_say();
+        endtext = true;
     });
 }
 
@@ -101,16 +76,9 @@ bool lua_script::run() {
     }
 
     auto res = coroutine();
-    if (res.status() == sol::call_status::yielded) {
-        lua_yielding& command = res.get<lua_yielding&>();
-        command.handle(*this);
-        return true;
-    } else {
-        return false;
-    }
+    return res.status() == sol::call_status::yielded;
 }
 
 void lua_script::load(std::string name, size_t start, size_t end) {
-    lua_script scr(name, start, end);
-    script.lua_scripts.push_back(std::move(scr));
+    script.lua_scripts.emplace_back(name, start, end);
 }

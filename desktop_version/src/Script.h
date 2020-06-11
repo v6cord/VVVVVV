@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <unordered_map>
 #include "Game.h"
 #include "ScriptX.h"
@@ -108,7 +109,7 @@ public:
 
     bool keepcolor = false;
 
-    std::vector<lua_script> lua_scripts;
+    std::list<lua_script> lua_scripts;
 
     bool is_running();
 };
