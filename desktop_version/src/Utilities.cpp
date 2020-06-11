@@ -224,15 +224,28 @@ const char* script_exception::what() const noexcept {
     return message.c_str();
 }
 
-script_exception::script_exception(const char* msg) {
-    message = "Script error on line ";
-    message += script.scriptname;
-    message += ":";
-    message += std::to_string(script.position);
-    message += " (`";
-    message += script.commands[script.position];
-    message += "`): ";
-    message += msg;
+script_exception::script_exception(const char* msg, bool raw/* = false*/) : script_exception(std::string(msg), raw) {}
+
+script_exception::script_exception(std::string msg, bool raw/* = false*/) {
+    if (raw) {
+        message = msg;
+    } else {
+        message = "Script error ";
+        if (script.position < static_cast<int>(script.commands.size())) {
+            message += "on line ";
+            message += script.scriptname;
+            message += ":";
+            message += std::to_string(script.position);
+            message += " (`";
+            message += script.commands[script.position];
+            message += "`): ";
+        } else {
+            message += "in ";
+            message += script.scriptname;
+            message += ": ";
+        }
+        message += msg;
+    }
 }
 
 script_exception::script_exception(const std::exception& ex) : script_exception(ex.what()) {}

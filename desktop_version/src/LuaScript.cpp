@@ -1,5 +1,6 @@
 #include "LuaScript.h"
 #include "Script.h"
+#include "Utilities.h"
 #include <iostream>
 #include <utility>
 
