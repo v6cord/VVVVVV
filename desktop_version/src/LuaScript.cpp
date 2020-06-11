@@ -24,6 +24,15 @@ public:
     }
 };
 
+class lua_say : public lua_yielding {
+public:
+    lua_say() {}
+
+    void handle(lua_script& s) override {
+        s.endtext = true;
+    }
+};
+
 lua_script::lua_script(std::string name, size_t start, size_t end) {
     for (size_t i = start; i < end; ++i) {
         text += script.customscript[i];
@@ -52,7 +61,7 @@ void lua_script::add_functions() {
         return lua_delay(delay);
     });
 
-    lua.set_function("say", [](int x, int y, std::string text) {
+    lua["say"] = sol::yielding([](int x, int y, std::string text) {
         std::stringstream ss(text);
         std::string line;
         std::getline(ss, line, '\n');
@@ -64,15 +73,15 @@ void lua_script::add_functions() {
         graphics.textboxadjust();
         graphics.textboxactive();
 
-        if (!game.backgroundtext) {
-            game.advancetext = true;
-            game.hascontrol = false;
-            game.pausescript = true;
-            if (key.isDown(90) || key.isDown(32) || key.isDown(86) ||
-                key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN))
-                game.jumpheld = true;
+        game.advancetext = true;
+        game.hascontrol = false;
+        game.pausescript = true;
+        if (key.isDown(90) || key.isDown(32) || key.isDown(86) ||
+            key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) {
+            game.jumpheld = true;
         }
-        game.backgroundtext = false;
+
+        return lua_say();
     });
 }
 
@@ -80,6 +89,15 @@ bool lua_script::run() {
     if (delay > 0) {
         --delay;
         return true;
+    } else if (game.pausescript) {
+        return true;
+    }
+
+    if (endtext) {
+        graphics.textboxremove();
+        game.hascontrol = true;
+        game.advancetext = false;
+        endtext = false;
     }
 
     auto res = coroutine();

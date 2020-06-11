@@ -14,6 +14,7 @@ class lua_script {
 
 public:
     unsigned int delay = 0;
+    bool endtext = false;
 
     lua_script(std::string name, size_t start, size_t end);
     bool run();
