@@ -284,6 +284,7 @@ std::string stringify<bool>(bool val) {
 }
 
 void quit() {
+    script.lua_scripts.clear();
     if(map.custommodeforreal) {
         graphics.flipmode = false;
         game.gamestate = TITLEMODE;
@@ -4367,6 +4368,7 @@ void scriptclass::hardreset() {
     game.script_image_names.clear();
 
     active_scripts.clear();
+    lua_scripts.clear();
 
     keepcolor = false;
 
