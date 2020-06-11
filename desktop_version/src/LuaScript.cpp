@@ -1,3 +1,6 @@
+#include "Graphics.h"
+#include "KeyPoll.h"
+#include "Game.h"
 #include "LuaScript.h"
 #include "Script.h"
 #include "Utilities.h"
@@ -47,6 +50,29 @@ void lua_script::add_functions() {
 
     lua["delay"] = sol::yielding([](unsigned int delay) {
         return lua_delay(delay);
+    });
+
+    lua.set_function("say", [](int x, int y, std::string text) {
+        std::stringstream ss(text);
+        std::string line;
+        std::getline(ss, line, '\n');
+        graphics.createtextbox(line, x, y, 174, 174, 174);
+        while (std::getline(ss, line, '\n')) {
+            graphics.addline(line);
+        }
+
+        graphics.textboxadjust();
+        graphics.textboxactive();
+
+        if (!game.backgroundtext) {
+            game.advancetext = true;
+            game.hascontrol = false;
+            game.pausescript = true;
+            if (key.isDown(90) || key.isDown(32) || key.isDown(86) ||
+                key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN))
+                game.jumpheld = true;
+        }
+        game.backgroundtext = false;
     });
 }
 
