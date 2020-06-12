@@ -51,7 +51,7 @@ scriptclass::scriptclass() {
     // I really hate this file, by the way
 }
 
-void scriptclass::clearcustom() { customscript.clear(); }
+void scriptclass::clearcustom() { customscripts.clear(); }
 
 void scriptclass::call(std::string script) {
     if (script.rfind("custom_@", 0) == 0) {
@@ -4407,38 +4407,22 @@ void scriptclass::loadcustom(std::string t)
   if (passive)
     scriptdelay = 0;
 
-  int scriptstart=-1;
-  int scriptend=-1;
   std::string tstring;
 
-  for(size_t i=0; i<customscript.size(); i++){
-    if(scriptstart==-1){
-      //Find start of the script
-      if(customscript[i]==cscriptname+":"){
-        scriptstart=i+1;
+  // can't use `auto` here :(
+  std::vector<std::string>* contents;
+  for (auto& script_ : customscripts)
+      if (script_.name == cscriptname) {
+          contents = &script_.contents;
+          break;
       }
-    }else if(scriptend==-1){
-      //Find the end
-      tstring=customscript[i];
-      if (tstring.size() > 0) {
-        tstring=tstring[tstring.size()-1];
-      } else {
-        tstring="";
-      }
-      if(tstring==":"){
-        scriptend=i;
-      }
-    }
-  }
-  if(scriptstart>-1){
-    if(scriptend==-1){
-      scriptend=customscript.size();
-    }
+  if(contents != nullptr){
+    auto& lines = *contents;
 
     //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!
     int customcutscenemode=0;
-    for(int i=scriptstart; i<scriptend; i++){
-      tokenize(customscript[i]);
+    for(auto& line : lines){
+      tokenize(line);
       if(words[0] == "say" || words[0] == "sayquiet" || words[0] == "csay" || words[0] == "csayquiet"){
         customcutscenemode=1;
       }else if(words[0] == "reply" || words[0] == "replyquiet"){
@@ -4457,10 +4441,10 @@ void scriptclass::loadcustom(std::string t)
     int speakermode=0; //0, terminal, numbers for crew
     int squeakmode=0;//default on
     //Now run the script
-    for(int i=scriptstart; i<scriptend; i++){
+    for(size_t i=0; i<lines.size(); i++){
       words[0]="nothing"; //Default!
       words[1]="unused"; //Default!
-      tokenize(customscript[i]);
+      tokenize(lines[i]);
       std::transform(words[0].begin(), words[0].end(), words[0].begin(), ::tolower);
       if (words[0] != "flash" && words[1] == "unused") {
         words[1] = "1";
@@ -4577,35 +4561,35 @@ void scriptclass::loadcustom(std::string t)
         }else if(words[1]=="off"){
           squeakmode=1;
         }else{
-          add(customscript[i]);
+          add(lines[i]);
         }
       }else if(words[0] == "delay"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(customscript[i]);
+        add(lines[i]);
       }else if(words[0] == "flag"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(customscript[i]);
+        add(lines[i]);
       }else if(words[0] == "map"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+customscript[i]);
+        add("custom"+lines[i]);
       }else if(words[0] == "warpdir"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(customscript[i]);
+        add(lines[i]);
       }else if(words[0] == "ifwarp"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(customscript[i]);
+        add(lines[i]);
       }else if(words[0] == "iftrinkets"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+customscript[i]);
+        add("custom"+lines[i]);
       }else if(words[0] == "ifflag"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+customscript[i]);
+        add("custom"+lines[i]);
       }else if(words[0] == "iftrinketsless"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add("custom"+customscript[i]);
+        add("custom"+lines[i]);
       }else if(words[0] == "destroy"){
         if(customtextmode==1){ add("endtext"); customtextmode=0;}
-        add(customscript[i]);
+        add(lines[i]);
       }else if(words[0] == "speaker"){
         speakermode=0;
         if(words[1]=="gray" || words[1]=="grey" || words[1]=="terminal" || words[1]=="0") speakermode=0;
@@ -4661,8 +4645,8 @@ void scriptclass::loadcustom(std::string t)
         int nti = ti>=0 && ti<=50 ? ti : 1;
         for(int ti2=0; ti2<nti; ti2++){
           i++;
-          if(i < (int) customscript.size()){
-            add(customscript[i]);
+          if(i < lines.size()){
+            add(lines[i]);
           }
         }
 
@@ -4695,8 +4679,8 @@ void scriptclass::loadcustom(std::string t)
         int nti = ti>=0 && ti<=50 ? ti : 1;
         for(int ti2=0; ti2<nti; ti2++){
           i++;
-          if(i < (int) customscript.size()){
-            add(customscript[i]);
+          if(i < lines.size()){
+            add(lines[i]);
           }
         }
         add("position(player,above)");
@@ -4710,25 +4694,25 @@ void scriptclass::loadcustom(std::string t)
         || words[0] == "customactivityzone"
         || ((words[0] == "addvar" || words[0] == "setvar" || words[0] == "getvar") && words[2] == "")) {
           // Don't parse the next line if it is a textbox-like line
-          add(customscript[i]);
+          add(lines[i]);
           i++;
         } else if (words[0] == "text") {
           // Ok, it's actually a text box with potentially more than one line
-          int lines;
+          int lines_;
           if (words[5] != "" && words[6] != "")
             // RGB version, 3 color args, 6 args
-            lines = ss_toi(words[6]);
+            lines_ = ss_toi(words[6]);
           else
             // Predefined color version, 1 color arg, 4 args
-            lines = ss_toi(words[4]);
-          for (int c = 0; c < lines; c++) {
-            if (i < (int) customscript.size())
-              add(customscript[i]);
+            lines_ = ss_toi(words[4]);
+          for (int c = 0; c < lines_; c++) {
+            if (i < lines.size())
+              add(lines[i]);
             i++;
           }
         }
-        if (IS_VCE_LEVEL && i < (int) customscript.size()) // Don't call one-command internal scripts twice in vanilla levels
-            add(customscript[i]);
+        if (IS_VCE_LEVEL && i < lines.size()) // Don't call one-command internal scripts twice in vanilla levels
+            add(lines[i]);
 
         // Is this a label?
         if (words[0].length() > 1 && words[0].substr(0, 1) == ".") {

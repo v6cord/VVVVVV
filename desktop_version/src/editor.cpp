@@ -346,7 +346,7 @@ void editorclass::reset()
 
     hookmenupage=0;
     hookmenu=0;
-    script.customscript.clear();
+    script.customscripts.clear();
 
     grayenemieskludge = false;
 
@@ -368,30 +368,8 @@ void editorclass::gethooks()
 {
     //Scan through the script and create a hooks list based on it
     hooklist.clear();
-    std::string tstring;
-    std::string tstring2;
-    for(size_t i=0; i<script.customscript.size(); i++)
-    {
-        tstring=script.customscript[i];
-        if((int) tstring.length() - 1 >= 0) // FIXME: This is sketchy. -flibit
-        {
-            tstring=tstring[tstring.length()-1];
-        }
-        else
-        {
-            tstring="";
-        }
-        if(tstring==":")
-        {
-            tstring2="";
-            tstring=script.customscript[i];
-            for(size_t j=0; j<tstring.length()-1; j++)
-            {
-                tstring2+=tstring[j];
-            }
-            hooklist.push_back(tstring2);
-        }
-    }
+    for (auto& script_ : script.customscripts)
+        hooklist.push_back(script_.name);
 }
 
 void editorclass::loadhookineditor(std::string t)
@@ -399,34 +377,11 @@ void editorclass::loadhookineditor(std::string t)
     //Find hook t in the scriptclass, then load it into the editor
     clearscriptbuffer();
 
-    std::string tstring;
-
-    bool removemode=false;
-    for(size_t i=0; i<script.customscript.size(); i++)
-    {
-        if(script.customscript[i]==t+":")
-        {
-            removemode=true;
+    for (auto& script_ : script.customscripts)
+        if (script_.name == t) {
+            sb = script_.contents;
+            break;
         }
-        else if(removemode)
-        {
-            tstring=script.customscript[i];
-            if(tstring != "")
-            {
-                tstring = tstring[tstring.length()-1];
-            }
-            if(tstring==":")
-            {
-                //this is a hook
-                removemode=false;
-            }
-            else
-            {
-                //load in this line
-                sb.push_back(script.customscript[i]);
-            }
-        }
-    }
     if(sb.empty())
     {
         //Always have one line or we'll have problems
@@ -438,59 +393,13 @@ void editorclass::addhooktoscript(std::string t)
 {
     //Adds hook+the scriptbuffer to the end of the scriptclass
     removehookfromscript(t);
-    script.customscript.push_back(t+":");
-    for(size_t i=0; i<sb.size(); i++)
-    {
-        script.customscript.push_back(sb[i]);
-    }
+    script.customscripts.push_back(Script{t, sb});
 }
 
 void editorclass::removehookfromscript(std::string t)
 {
     //Find hook t in the scriptclass, then removes it (and any other code with it)
-    std::string tstring;
-    bool removemode=false;
-    for(size_t i=0; i<script.customscript.size(); i++)
-    {
-        if(script.customscript[i]==t+":")
-        {
-            removemode=true;
-            //Remove this line
-            for(size_t j=i; j<script.customscript.size()-1; j++)
-            {
-                script.customscript[j]=script.customscript[j+1];
-            }
-            script.customscript.pop_back();
-
-            i--;
-        }
-        else if(removemode)
-        {
-            //If this line is not the start of a new hook, remove it!
-            tstring=script.customscript[i];
-            if (tstring.length() > 0) {
-                tstring=tstring[tstring.length()-1];
-            } else {
-                tstring="";
-            }
-            if(tstring==":")
-            {
-                //this is a hook
-                removemode=false;
-            }
-            else
-            {
-                //Remove this line
-                for(size_t j=i; j<script.customscript.size()-1; j++)
-                {
-                    script.customscript[j]=script.customscript[j+1];
-                }
-                script.customscript.pop_back();
-
-                i--;
-            }
-        }
-    }
+    script.customscripts.erase(std::remove_if(script.customscripts.begin(), script.customscripts.end(), [&](auto& x){return x.name == t;}), script.customscripts.end());
 }
 
 void editorclass::removehook(std::string t)
@@ -2681,12 +2590,30 @@ void editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-                growing_vector<std::string> values = split(TextString,'|');
+                std::vector<std::string> values = split(TextString,'|');
                 script.clearcustom();
-                for(size_t i = 0; i < values.size(); i++)
+                Script script_;
+                bool headerfound = false;
+                for (auto& line : values)
                 {
-                    script.customscript.push_back(values[i]);
+                    if (endsWith(line, ":")) {
+                        if (headerfound)
+                            // Add the script if we have a preceding header
+                            script.customscripts.push_back(script_);
+
+                        script_.name = line.substr(0, line.length()-1);
+                        script_.contents.clear();
+                        headerfound = true;
+                        continue;
+                    }
+
+                    if (headerfound)
+                        script_.contents.push_back(line);
                 }
+                // Add the last script
+                if (headerfound)
+                    // Add the script if we have a preceding header
+                    script.customscripts.push_back(script_);
 
             }
         }
@@ -3001,9 +2928,11 @@ void editorclass::save(std::string& _path)
     data->LinkEndChild( msg );
 
     std::string scriptString;
-    for(size_t i = 0; i < script.customscript.size(); i++ )
+    for(auto& script_ : script.customscripts)
     {
-        scriptString += script.customscript[i] + "|";
+        scriptString += script_.name + ":|";
+        for (auto& line : script_.contents)
+            scriptString += line + "|";
     }
     msg = new TiXmlElement( "script" );
     msg->LinkEndChild( new TiXmlText( scriptString.c_str() ));
