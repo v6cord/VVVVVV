@@ -4746,7 +4746,8 @@ void scriptclass::loadcustom(std::string t)
             // Predefined color version, 1 color arg, 4 args
             lines = ss_toi(words[4]);
           for (int c = 0; c < lines; c++) {
-            add(customscript[i]);
+            if (i < (int) customscript.size())
+              add(customscript[i]);
             i++;
           }
         }
