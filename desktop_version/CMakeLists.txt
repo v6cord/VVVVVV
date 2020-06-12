@@ -328,6 +328,7 @@ target_compile_definitions(sol2-static INTERFACE SOL_USING_CXX_LUA)
 
 if (SWITCH)
     target_compile_options(cparse-static PUBLIC -fexceptions)
+    target_compile_options(lua-static PUBLIC -fexceptions)
 endif()
 
 if(APPLE)
