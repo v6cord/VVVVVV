@@ -18,6 +18,11 @@ struct stackframe {
     int line;
 };
 
+struct Script {
+    std::string name;
+    std::vector<std::string> contents;
+};
+
 class scriptclass
 {
 public:
@@ -87,7 +92,7 @@ public:
     int i, j, k = 0;
 
     //Custom level stuff
-     growing_vector <std::string>  customscript;
+    std::vector<Script> customscripts;
 
     growing_vector<scriptimage> scriptrender;
 
