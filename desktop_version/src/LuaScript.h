@@ -18,9 +18,9 @@ public:
     unsigned int delay = 0;
     bool endtext = false;
 
-    lua_script(std::string name, size_t start, size_t end);
+    lua_script(std::string name, std::vector<std::string> contents);
     bool run();
-    static void load(std::string name, size_t start, size_t end);
+    static void load(std::string name, std::vector<std::string> contents);
 
     lua_script(lua_script&& x) = delete;
 };

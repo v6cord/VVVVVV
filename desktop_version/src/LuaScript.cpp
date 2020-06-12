@@ -8,9 +8,9 @@
 #include <utility>
 #include <stdexcept>
 
-lua_script::lua_script(std::string name, size_t start, size_t end) {
-    for (size_t i = start; i < end; ++i) {
-        text += script.customscript[i];
+lua_script::lua_script(std::string name, std::vector<std::string> contents) {
+    for (auto& line : contents) {
+        text += line;
         text += "\n";
     }
 
@@ -79,6 +79,6 @@ bool lua_script::run() {
     return res.status() == sol::call_status::yielded;
 }
 
-void lua_script::load(std::string name, size_t start, size_t end) {
-    script.lua_scripts.emplace_back(name, start, end);
+void lua_script::load(std::string name, std::vector<std::string> contents) {
+    script.lua_scripts.emplace_back(name, contents);
 }

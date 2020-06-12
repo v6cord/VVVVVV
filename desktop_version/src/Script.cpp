@@ -4425,18 +4425,19 @@ void scriptclass::loadcustom(std::string t)
   std::string tstring;
 
   // can't use `auto` here :(
-  std::vector<std::string>* contents;
-  for (auto& script_ : customscripts)
-      if (script_.name == cscriptname) {
-          contents = &script_.contents;
+  Script* scriptptr;
+  for (auto& scriptelem : customscripts)
+      if (scriptelem.name == cscriptname) {
+          scriptptr = &scriptelem;
           break;
       }
-  if(contents != nullptr){
-    auto& lines = *contents;
+  if(scriptptr != nullptr){
+    auto& script_ = *scriptptr;
+    auto& lines = script_.contents;
 
-    if (customscript[scriptstart] == "#lua") {
+    if (script_.lua) {
         try {
-            lua_script::load(t, scriptstart + 1, scriptend);
+            lua_script::load(t, lines);
         } catch (const std::exception& ex) {
             handle_exception(ex);
         }

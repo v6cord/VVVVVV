@@ -21,6 +21,7 @@ struct stackframe {
 struct Script {
     std::string name;
     std::vector<std::string> contents;
+    bool lua;
 };
 
 class scriptclass
