@@ -4410,7 +4410,7 @@ void scriptclass::loadcustom(std::string t)
   std::string tstring;
 
   // can't use `auto` here :(
-  std::vector<std::string>* contents;
+  std::vector<std::string>* contents = nullptr;
   for (auto& script_ : customscripts)
       if (script_.name == cscriptname) {
           contents = &script_.contents;
