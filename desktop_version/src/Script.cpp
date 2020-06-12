@@ -4425,7 +4425,7 @@ void scriptclass::loadcustom(std::string t)
   std::string tstring;
 
   // can't use `auto` here :(
-  Script* scriptptr;
+  Script* scriptptr = nullptr;
   for (auto& scriptelem : customscripts)
       if (scriptelem.name == cscriptname) {
           scriptptr = &scriptelem;
