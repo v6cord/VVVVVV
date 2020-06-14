@@ -2175,7 +2175,7 @@ int editorclass::tower_row(int rx, int ry) {
     return level[room].tower_row;
 }
 
-void editorclass::load(std::string& _path)
+bool editorclass::load(std::string& _path)
 {
     reset();
     map.teleporters.clear();
@@ -2241,7 +2241,7 @@ void editorclass::load(std::string& _path)
     if (!FILESYSTEM_loadTiXmlDocument(_path.c_str(), &doc))
     {
         printf("No level %s to load :(\n", _path.c_str());
-        return;
+        return false;
     }
 
 
@@ -2622,9 +2622,11 @@ void editorclass::load(std::string& _path)
 
     gethooks();
     version=2;
+
+    return true;
 }
 
-void editorclass::save(std::string& _path)
+bool editorclass::save(std::string& _path)
 {
     TiXmlDocument doc;
     TiXmlElement* msg;
@@ -2938,7 +2940,7 @@ void editorclass::save(std::string& _path)
     msg->LinkEndChild( new TiXmlText( scriptString.c_str() ));
     data->LinkEndChild( msg );
 
-    FILESYSTEM_saveTiXmlDocument(("levels/" + _path).c_str(), &doc);
+    return FILESYSTEM_saveTiXmlDocument(("levels/" + _path).c_str(), &doc);
 }
 
 
@@ -5554,14 +5556,18 @@ void editorinput()
                 }
                 break;
             case TEXT_LOAD:
-                ed.load(filename);
-                // don't use filename, it has the full path
-                ed.note = "[ Loaded map: "+ed.filename+".vvvvvv ]";
+                if (ed.load(filename))
+                    // don't use filename, it has the full path
+                    ed.note = "[ Loaded map: "+ed.filename+".vvvvvv ]";
+                else
+                    ed.note = "[ ERROR: Could not load level! ]";
                 ed.notedelay = 45;
                 break;
             case TEXT_SAVE:
-                ed.save(filename);
-                ed.note="[ Saved map: " + ed.filename+".vvvvvv ]";
+                if (ed.save(filename))
+                    ed.note="[ Saved map: " + ed.filename+".vvvvvv ]";
+                else
+                    ed.note="[ ERROR: Could not save level! ]";
                 ed.notedelay=45;
 
                 if(ed.saveandquit)

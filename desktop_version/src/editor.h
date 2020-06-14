@@ -264,8 +264,8 @@ public:
     bool intower(void);
     int tower_row(int rx, int ry);
 
-    void load(std::string& _path);
-    void save(std::string& _path);
+    bool load(std::string& _path);
+    bool save(std::string& _path);
     void generatecustomminimap();
     int toweredgetile(int x, int y);
     int edgetile(int x, int y);
