@@ -1,6 +1,5 @@
 #include "Script.h"
 #include <shunting-yard.h>
-#include <algorithm>
 #include <builtin-features.inc>
 #include <cstdlib>
 #include <cstring>
@@ -4377,8 +4376,8 @@ void scriptclass::loadcustom(std::string t)
 {
   //this magic function breaks down the custom script and turns into real scripting!
   std::string cscriptname="";
-  for(size_t i=0; i<t.length(); i++){
-    if(i>=7) cscriptname+=t[i];
+  if(t.length()>7){
+    cscriptname=t.substr(7, std::string::npos);
   }
 
   std::string thelabel;
