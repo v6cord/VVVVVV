@@ -1,21 +1,16 @@
-#ifndef SCRIPTS_H
-#define SCRIPTS_H
-
-#ifdef __SWITCH__
-#pragma GCC optimize ("O0")
-#endif
-
 #include "Script.h"
 #include "Map.h"
 
-#include <algorithm>
-
 void scriptclass::load(std::string t)
 {
-    int maxlength = (std::min(int(t.length()),7));
+    //loads script name t into the array
+    position = 0;
+    commands.clear();
+    running = true;
+
     std::string customstring="";
-    for(int i=0; i<maxlength; i++){
-      customstring+=t[i];
+    if(t.length()){
+        customstring=t.substr(0, 7);
     }
 
     if (customstring == "custom_"){
@@ -6767,4 +6762,3 @@ void scriptclass::load(std::string t)
     }
 
 }
-#endif /* SCRIPTS_H */
