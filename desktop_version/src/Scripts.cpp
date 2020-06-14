@@ -1,7 +1,3 @@
-#ifdef __SWITCH__
-#pragma GCC optimize ("O0")
-#endif
-
 #include "Script.h"
 #include "Map.h"
 
