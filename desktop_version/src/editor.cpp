@@ -5566,8 +5566,10 @@ void editorinput()
             case TEXT_SAVE:
                 if (ed.save(filename))
                     ed.note="[ Saved map: " + ed.filename+".vvvvvv ]";
-                else
+                else {
                     ed.note="[ ERROR: Could not save level! ]";
+                    ed.saveandquit = false;
+                }
                 ed.notedelay=45;
 
                 if(ed.saveandquit)
