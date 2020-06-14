@@ -4416,7 +4416,9 @@ void scriptclass::loadcustom(std::string t)
           contents = &script_.contents;
           break;
       }
-  if(contents != nullptr){
+  if(contents == nullptr)
+    return;
+
     auto& lines = *contents;
 
     //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!
@@ -4738,5 +4740,4 @@ void scriptclass::loadcustom(std::string t)
       else
         running = false;
     }
-  }
 }
