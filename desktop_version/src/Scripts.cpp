@@ -1,6 +1,3 @@
-#ifndef SCRIPTS_H
-#define SCRIPTS_H
-
 #ifdef __SWITCH__
 #pragma GCC optimize ("O0")
 #endif
@@ -6769,4 +6766,3 @@ void scriptclass::load(std::string t)
     }
 
 }
-#endif /* SCRIPTS_H */
