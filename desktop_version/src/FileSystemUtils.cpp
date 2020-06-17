@@ -25,6 +25,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+/* These are needed for PLATFORM_* crap */
 #if defined(_WIN32)
 #include <windows.h>
 #include <shlobj.h>
@@ -33,20 +34,11 @@
 #include <shellapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
-int mkdir(char* path, int mode)
-{
-	WCHAR utf16_path[MAX_PATH];
-	MultiByteToWideChar(CP_UTF8, 0, path, -1, utf16_path, MAX_PATH);
-	return CreateDirectoryW(utf16_path, NULL);
-}
-#define VNEEDS_MIGRATION (mkdirResult != 0)
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__DragonFly__) || defined(__SWITCH__)
-#include <sys/stat.h>
-#include <limits.h>
-#define VNEEDS_MIGRATION (mkdirResult == 0)
-/* These are needed for PLATFORM_* crap */
 #include <unistd.h>
 #include <dirent.h>
+#include <limits.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <spawn.h>
@@ -186,7 +178,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	}
 
 	/* Create base user directory, mount */
-	mkdirResult = mkdir(output, 0777);
+	mkdirResult = PHYSFS_mkdir(output);
 
 	/* Mount our base user directory */
         PHYSFS_unmount(output);
@@ -200,7 +192,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	strcpy_safe(saveDir, output);
 	strcat(saveDir, "saves");
 	strcat(saveDir, PHYSFS_getDirSeparator());
-	mkdir(saveDir, 0777);
+	PHYSFS_mkdir(saveDir);
 	if (!game.quiet) printf("Save directory: %s\n", saveDir);
 
         pre_fakepercent.store(10);
@@ -209,11 +201,11 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	strcpy_safe(levelDir, output);
 	strcat(levelDir, "levels");
 	strcat(levelDir, PHYSFS_getDirSeparator());
-	mkdirResult |= mkdir(levelDir, 0777);
+	mkdirResult |= PHYSFS_mkdir(levelDir);
 	if (!game.quiet) printf("Level directory: %s\n", levelDir);
 
 	/* We didn't exist until now, migrate files! */
-	if (VNEEDS_MIGRATION)
+	if (mkdirResult != 0)
 	{
 		PLATFORM_migrateSaveData(output);
 	}
