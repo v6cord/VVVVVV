@@ -19,7 +19,7 @@
 #include <SDL.h>
 #include <physfs.h>
 
-#include "tinyxml.h"
+#include "tinyxml2.h"
 
 #ifdef __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
@@ -404,31 +404,31 @@ void FILESYSTEM_freeMemory(unsigned char **mem)
 	*mem = NULL;
 }
 
-bool FILESYSTEM_saveTiXmlDocument(const char *name, TiXmlDocument *doc)
+bool FILESYSTEM_saveTiXml2Document(const char *name, tinyxml2::XMLDocument& doc)
 {
-	/* TiXmlDocument.SaveFile doesn't account for Unicode paths, PHYSFS does */
-	TiXmlPrinter printer;
-	doc->Accept(&printer);
+	/* XMLDocument.SaveFile doesn't account for Unicode paths, PHYSFS does */
+	tinyxml2::XMLPrinter printer;
+	doc.Print(&printer);
 	PHYSFS_File* handle = PHYSFS_openWrite(name);
 	if (handle == NULL)
 	{
 		return false;
 	}
-	PHYSFS_writeBytes(handle, printer.CStr(), printer.Size());
+	PHYSFS_writeBytes(handle, printer.CStr(), printer.CStrSize() - 1); // subtract one because CStrSize includes terminating null
 	PHYSFS_close(handle);
 	return true;
 }
 
-bool FILESYSTEM_loadTiXmlDocument(const char *name, TiXmlDocument *doc)
+bool FILESYSTEM_loadTiXml2Document(const char *name, tinyxml2::XMLDocument& doc)
 {
-	/* TiXmlDocument.SaveFile doesn't account for Unicode paths, PHYSFS does */
+	/* XMLDocument.LoadFile doesn't account for Unicode paths, PHYSFS does */
 	unsigned char *mem = NULL;
 	FILESYSTEM_loadFileToMemory(name, &mem, NULL, true);
 	if (mem == NULL)
 	{
 		return false;
 	}
-	doc->Parse((const char*)mem, NULL, TIXML_ENCODING_UTF8);
+	doc.Parse((const char*) mem);
 	FILESYSTEM_freeMemory(&mem);
 	return true;
 }
