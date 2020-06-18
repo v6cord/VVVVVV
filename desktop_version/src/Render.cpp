@@ -2033,22 +2033,27 @@ void gamerender()
             graphics.drawtowerspikes();
         }
 
-        if (map.custommode && !map.custommodeforreal) {
-            if (game.gametimer % 3 == 0) {
-                int i = obj.getplayer();
-                GhostInfo ghost;
-                ghost.rx = game.roomx-100;
-                ghost.ry = game.roomy-100;
-                ghost.x = obj.entities[i].xp;
-                ghost.y = obj.entities[i].yp;
-                ghost.col = obj.entities[i].colour;
-                ghost.frame = obj.entities[i].drawframe;
-                ed.ghosts.push_back(ghost);
-            }
-            if (ed.ghosts.size() > 100) {
-                ed.ghosts.erase(ed.ghosts.begin());
+#if !defined(NO_CUSTOM_LEVELS)
+        // Editor ghosts!
+        if (game.ghostsenabled) {
+            if (map.custommode && !map.custommodeforreal) {
+                if (game.gametimer % 3 == 0) {
+                    int i = obj.getplayer();
+                    GhostInfo ghost;
+                    ghost.rx = game.roomx-100;
+                    ghost.ry = game.roomy-100;
+                    ghost.x = obj.entities[i].xp;
+                    ghost.y = obj.entities[i].yp;
+                    ghost.col = obj.entities[i].colour;
+                    ghost.frame = obj.entities[i].drawframe;
+                    ed.ghosts.push_back(ghost);
+                }
+                if (ed.ghosts.size() > 100) {
+                    ed.ghosts.erase(ed.ghosts.begin());
+                }
             }
         }
+#endif
     }
 
     if(map.extrarow==0 || (map.custommode && map.roomname!=""))

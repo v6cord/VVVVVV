@@ -415,6 +415,7 @@ public:
 
     bool hidemarkers = false;
     bool skipfakeload = false;
+    bool ghostsenabled = false;
 
     int playerspeed = 3;
     bool nofriction = false;

@@ -3200,6 +3200,13 @@ void editormenurender(int tr, int tg, int tb)
     switch (game.currentmenuname)
     {
     case Menu::ed_settings:
+        if (game.currentmenuoption == 4) {
+            if (!game.ghostsenabled)
+                graphics.Print(2, 230, "Editor ghost trail is OFF", tr/2, tg/2, tb/2);
+            else
+                graphics.Print(2, 230, "Editor ghost trail is ON", tr, tg, tb);
+        }
+        [[fallthrough]];
     case Menu::ed_settings2:
     case Menu::ed_settings3:
         graphics.bigprint( -1, 75, "Map Settings", tr, tg, tb, true);
@@ -3969,32 +3976,34 @@ void editorrender()
 
     //Draw ghosts (spooky!)
     SDL_FillRect(graphics.ghostbuffer, NULL, SDL_MapRGBA(graphics.ghostbuffer->format, 0, 0, 0, 0));
-    for (int i = 0; i < (int)ed.ghosts.size(); i++) {
-        if (i <= ed.currentghosts) { // We don't want all of them to show up at once :)
-            if (ed.ghosts[i].rx != ed.levx || ed.ghosts[i].ry != ed.levy)
-                continue;
+    if (game.ghostsenabled) {
+        for (int i = 0; i < (int)ed.ghosts.size(); i++) {
+            if (i <= ed.currentghosts) { // We don't want all of them to show up at once :)
+                if (ed.ghosts[i].rx != ed.levx || ed.ghosts[i].ry != ed.levy)
+                    continue;
 
-            point tpoint;
-            tpoint.x = ed.ghosts[i].x;
-            tpoint.y = ed.ghosts[i].y;
-            graphics.setcol(ed.ghosts[i].col);
-            Uint32 alpha = graphics.ct.colour & graphics.backBuffer->format->Amask;
-            Uint32 therest = graphics.ct.colour & 0x00FFFFFF;
-            alpha = (3 * (alpha >> 24) / 4) << 24;
-            graphics.ct.colour = therest | alpha;
-            SDL_Rect drawRect = graphics.sprites_rect;
-            drawRect.x += tpoint.x;
-            drawRect.y += tpoint.y;
-            BlitSurfaceColoured(graphics.sprites[ed.ghosts[i].frame],NULL, graphics.ghostbuffer, &drawRect, graphics.ct);
+                point tpoint;
+                tpoint.x = ed.ghosts[i].x;
+                tpoint.y = ed.ghosts[i].y;
+                graphics.setcol(ed.ghosts[i].col);
+                Uint32 alpha = graphics.ct.colour & graphics.backBuffer->format->Amask;
+                Uint32 therest = graphics.ct.colour & 0x00FFFFFF;
+                alpha = (3 * (alpha >> 24) / 4) << 24;
+                graphics.ct.colour = therest | alpha;
+                SDL_Rect drawRect = graphics.sprites_rect;
+                drawRect.x += tpoint.x;
+                drawRect.y += tpoint.y;
+                BlitSurfaceColoured(graphics.sprites[ed.ghosts[i].frame],NULL, graphics.ghostbuffer, &drawRect, graphics.ct);
+            }
         }
+        if (ed.currentghosts + 1 < (int)ed.ghosts.size()) {
+            ed.currentghosts++;
+            if (ed.zmod) ed.currentghosts++;
+        } else {
+            ed.currentghosts = (int)ed.ghosts.size() - 1;
+        }
+        SDL_BlitSurface(graphics.ghostbuffer, NULL, graphics.backBuffer, &graphics.bg_rect);
     }
-    if (ed.currentghosts + 1 < (int)ed.ghosts.size()) {
-        ed.currentghosts++;
-        if (ed.zmod) ed.currentghosts++;
-    } else {
-        ed.currentghosts = (int)ed.ghosts.size() - 1;
-    }
-    SDL_BlitSurface(graphics.ghostbuffer, NULL, graphics.backBuffer, &graphics.bg_rect);
 
     //Draw Cursor
     if (!ed.trialstartpoint) {
@@ -4904,6 +4913,10 @@ void editormenuactionpress()
             if(ed.levmusic>0) music.play(ed.levmusic);
             break;
         case 4:
+            music.playef(11);
+            game.ghostsenabled = !game.ghostsenabled;
+            break;
+        case 5:
             //Load level
             ed.settingsmod=false;
             map.nexttowercolour();
@@ -4914,7 +4927,7 @@ void editormenuactionpress()
             game.mapheld=true;
             graphics.backgrounddrawn=false;
             break;
-        case 5:
+        case 6:
             //Save level
             ed.settingsmod=false;
             map.nexttowercolour();
@@ -4925,12 +4938,12 @@ void editormenuactionpress()
             game.mapheld=true;
             graphics.backgrounddrawn=false;
             break;
-        case 6:
+        case 7:
             music.playef(11);
             game.createmenu(Menu::ed_settings2, true);
             map.nexttowercolour();
             break;
-        case 7:
+        case 8:
             music.playef(11);
             game.createmenu(Menu::ed_quit);
             map.nexttowercolour();

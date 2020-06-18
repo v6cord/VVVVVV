@@ -4403,6 +4403,11 @@ void Game::loadstats()
             }
         }
 
+        if (pKey == "ghostsenabled")
+        {
+            ghostsenabled = atoi(pText);
+        }
+
         if (pKey == "skipfakeload")
         {
             skipfakeload = atoi(pText);
@@ -4640,6 +4645,10 @@ void Game::savestats()
     msg = doc.NewElement( "usingmmmmmm" );
     msg->LinkEndChild( doc.NewText( help.String(usingmmmmmm).c_str()));
     dataNode->LinkEndChild( msg );
+
+    msg = doc.NewElement("ghostsenabled");
+    msg->LinkEndChild(doc.NewText(help.String((int) ghostsenabled).c_str()));
+    dataNode->LinkEndChild(msg);
 
     msg = doc.NewElement("skipfakeload");
     msg->LinkEndChild(doc.NewText(help.String((int) skipfakeload).c_str()));
@@ -7197,6 +7206,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         option("edit scripts");
         option("time trials");
         option("change music");
+        option("editor ghosts");
         option("load level");
         option("save level");
         option("next page");
