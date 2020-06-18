@@ -8,7 +8,7 @@
 #include <cstring>
 #include <physfs.h>
 
-Screen::Screen()
+void Screen::init()
 {
 	m_window = NULL;
 	m_renderer = NULL;

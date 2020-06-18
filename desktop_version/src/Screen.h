@@ -6,7 +6,7 @@
 class Screen
 {
 public:
-	Screen();
+	void init();
 
 	void init();
 
@@ -37,6 +37,6 @@ public:
 	SDL_Rect filterSubrect;
 };
 
-
+extern Screen gameScreen;
 
 #endif /* SCREEN_H */
