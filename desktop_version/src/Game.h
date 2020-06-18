@@ -466,6 +466,11 @@ public:
 #endif
 
     int playercolour = 0;
+
+    bool inline inspecial()
+    {
+        return inintermission || insecretlab || intimetrial || nodeathmode;
+    }
 };
 
 extern Game game;
