@@ -397,12 +397,15 @@ void scriptclass::run() {
                     int temprx = ss_toi(words[1]) - 1;
                     int tempry = ss_toi(words[2]) - 1;
                     int curlevel = temprx + (ed.maxwidth * (tempry));
-                    ed.level[curlevel].warpdir = ss_toi(words[3]);
+                    bool inbounds = curlevel >= 0 && curlevel < (int) ed.level.size();
+                    if (inbounds) {
+                        ed.level[curlevel].warpdir = ss_toi(words[3]);
+                    }
                     // If screen warping, then override all that:
                     graphics.backgrounddrawn = false;
 
                     // Do we update our own room?
-                    if (game.roomx - 100 == temprx && game.roomy - 100 == tempry) {
+                    if (inbounds && game.roomx - 100 == temprx && game.roomy - 100 == tempry) {
                         map.warpx = false;
                         map.warpy = false;
                         if (ed.level[curlevel].warpdir == 0) {
@@ -437,9 +440,8 @@ void scriptclass::run() {
                     }
                 }
                 if (words[0] == "ifwarp") {
-                    if (ed.level[ss_toi(words[1]) - 1 +
-                                (ed.maxwidth * (ss_toi(words[2]) - 1))]
-                            .warpdir == ss_toi(words[3])) {
+                    int room = ss_toi(words[1]) - 1 + (ed.maxwidth * (ss_toi(words[2]) - 1));
+                    if (room >= 0 && room < (int) ed.level.size() && ed.level[room].warpdir == ss_toi(words[3])) {
                         call("custom_" + words[4]);
                         position--;
                     }
@@ -754,7 +756,8 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "customifflag") {
-                    if (obj.flags[ss_toi(words[1])]) {
+                    int flag = ss_toi(words[1]);
+                    if (flag >= 0 && flag < (int) obj.flags.size() && obj.flags[flag]) {
                         call("custom_" + words[2]);
                         position--;
                     }
@@ -2356,8 +2359,8 @@ void scriptclass::run() {
                         graphics.resumegamemode = true;
                     }
                 } else if (words[0] == "ifexplored") {
-                    if (map.explored[ss_toi(words[1]) +
-                                    (ed.maxwidth * ss_toi(words[2]))] == 1) {
+                    int room = ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]));
+                    if (room >= 0 && room < (int) map.explored.size() && map.explored[room] == 1) {
                         call(words[3]);
                         position--;
                     }
@@ -2372,17 +2375,20 @@ void scriptclass::run() {
                         position--;
                     }
                 } else if (words[0] == "ifflag") {
-                    if (obj.flags[ss_toi(words[1])]) {
+                    int flag = ss_toi(words[1]);
+                    if (flag >= 0 && flag < (int) obj.flags.size() && obj.flags[flag]) {
                         call(words[2]);
                         position--;
                     }
                 } else if (words[0] == "ifnotflag") {
-                    if (!obj.flags[ss_toi(words[1])]) {
+                    int flag = ss_toi(words[1]);
+                    if (flag >= 0 && flag < (int) obj.flags.size() && !obj.flags[flag]) {
                         call("custom_" + words[2]);
                         continue;
                     }
                 } else if (words[0] == "ifcrewlost") {
-                    if (game.crewstats[ss_toi(words[1])] == false) {
+                    int crewmate = ss_toi(words[1]);
+                    if (crewmate >= 0 && crewmate < (int) game.crewstats.size() && game.crewstats[crewmate] == false) {
                         call(words[2]);
                         position--;
                     }
@@ -2445,11 +2451,15 @@ void scriptclass::run() {
                         continue;
                     }
                 } else if (words[0] == "hidecoordinates") {
-                    map.explored[ss_toi(words[1]) +
-                                (ed.maxwidth * ss_toi(words[2]))] = 0;
+                    int room = ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]));
+                    if (room >= 0 && room < (int) map.explored.size()) {
+                        map.explored[room] = 0;
+                    }
                 } else if (words[0] == "showcoordinates") {
-                    map.explored[ss_toi(words[1]) +
-                                (ed.maxwidth * ss_toi(words[2]))] = 1;
+                    int room = ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]));
+                    if (room >= 0 && room < (int) map.explored.size()) {
+                        map.explored[room] = 1;
+                    }
                 } else if (words[0] == "hideship") {
                     map.hideship();
                 } else if (words[0] == "showship") {
@@ -2820,7 +2830,11 @@ void scriptclass::run() {
                     music.haltdasmusik();
                     music.playef(3);
 
-                    obj.collect[ss_toi(words[1])] = true;
+				int trinket = ss_toi(words[1]);
+				if (trinket >= 0 && trinket < (int) obj.collect.size())
+				{
+					obj.collect[trinket] = true;
+				}
 
                     graphics.textboxremovefast();
 
