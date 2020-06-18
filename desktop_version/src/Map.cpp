@@ -912,7 +912,8 @@ void mapclass::showship()
 // Centers the tower camera on the player position
 void mapclass::realign_tower() {
 	int i = obj.getplayer();
-	ypos = obj.entities[i].yp - 120;
+	if (i > -1)
+		ypos = obj.entities[i].yp - 120;
 
 	if (ypos < 0)
 		ypos = 0;
@@ -1094,6 +1095,8 @@ int mapclass::entering_tower(int rx, int ry, int *entry) {
 // Moves player y appropriate and possibly change destination screen.
 bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
 	int i = obj.getplayer();
+	if (i <= -1)
+		return false;
 
 	// Check if we're inside a valid exit boundary
 	int yp = tower_connection(rx, ry, obj.entities[i].yp);
@@ -1143,8 +1146,11 @@ void mapclass::warpto(int rx, int ry , int t, int tx, int ty)
 {
 	gotoroom(rx, ry);
 	game.teleport = false;
-	obj.entities[t].xp = tx * 8;
-	obj.entities[t].yp = (ty * 8) - obj.entities[t].h;
+	if (t >= 0 && t < (int) obj.entities.size())
+	{
+		obj.entities[t].xp = tx * 8;
+		obj.entities[t].yp = (ty * 8) - obj.entities[t].h;
+	}
 	game.gravitycontrol = 0;
 	if (towermode)
 		realign_tower();
@@ -1549,7 +1555,8 @@ void mapclass::loadlevel(int rx, int ry)
 		colsuperstate = 0;
 
 		int i = obj.getplayer();
-		obj.entities[i].yp += tower_entry;
+		if (i > -1)
+			obj.entities[i].yp += tower_entry;
 
 		ypos = tower_entry;
 		bypos = ypos/2;
@@ -2320,11 +2327,11 @@ void mapclass::loadlevel(int rx, int ry)
 			{
 				//face the player
 				j = obj.getplayer();
-				if (obj.entities[j].xp > obj.entities[i].xp + 5)
+				if (j > -1 && obj.entities[j].xp > obj.entities[i].xp + 5)
 				{
 					obj.entities[i].dir = 1;
 				}
-				else if (obj.entities[j].xp < obj.entities[i].xp - 5)
+				else if (j > -1 && obj.entities[j].xp < obj.entities[i].xp - 5)
 				{
 					obj.entities[i].dir = 0;
 				}

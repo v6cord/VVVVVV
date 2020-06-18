@@ -323,70 +323,73 @@ void scriptclass::run() {
                 if (words[0] == "moveplayer") {
                     // USAGE: moveplayer(x offset, y offset)
                     int player = obj.getplayer();
-                    obj.entities[player].xp += ss_toi(words[1]);
-                    obj.entities[player].yp += ss_toi(words[2]);
+                    if (player > -1) {
+                        obj.entities[player].xp += ss_toi(words[1]);
+                        obj.entities[player].yp += ss_toi(words[2]);
+                    }
                     if (!IS_VCE_LEVEL) scriptdelay = 1;
                 }
                 if (words[0] == "moveplayersafe") {
                     // USAGE: moveplayersafe(x offset, y offset)
                     int player = obj.getplayer();
+                    if (player > -1) {
+                        int px;
+                        double dpy;
 
-                    int px;
-                    double dpy;
-
-                    int tx = ss_toi(words[1]);
-                    double ty = ss_toi(words[2]);
-                    bool swapped = std::abs(tx) < std::abs(ty);
-                    if (swapped) {
-                        tx = ss_toi(words[2]);
-                        ty = ss_toi(words[1]);
-                        px = obj.entities[player].yp;
-                        dpy = obj.entities[player].xp;
-                    } else {
-                        px = obj.entities[player].xp;
-                        dpy = obj.entities[player].yp;
-                    }
-
-                    int target;
-                    int offset;
-                    if (tx < 0) {
-                        target = -tx;
-                        offset = -1;
-                    } else {
-                        target = tx;
-                        offset = 1;
-                    }
-
-                    double slope = ty / std::abs(tx);
-
-                    int py = dpy;
-
-                    int cx = obj.entities[player].cx;
-                    int cy = obj.entities[player].cy;
-                    int w = obj.entities[player].w;
-                    int h = obj.entities[player].h;
-
-                    for (int i = 0; i < target; ++i) {
-                        int npx = px + offset;
-                        double ndpy = dpy + slope;
-                        int npy = std::lround(ndpy);
+                        int tx = ss_toi(words[1]);
+                        double ty = ss_toi(words[2]);
+                        bool swapped = std::abs(tx) < std::abs(ty);
                         if (swapped) {
-                            obj.rectset(npy + cx, npx + cy, w, h);
+                            tx = ss_toi(words[2]);
+                            ty = ss_toi(words[1]);
+                            px = obj.entities[player].yp;
+                            dpy = obj.entities[player].xp;
                         } else {
-                            obj.rectset(npx + cx, npy + cy, w, h);
+                            px = obj.entities[player].xp;
+                            dpy = obj.entities[player].yp;
                         }
-                        if (obj.checkwall()) break;
-                        px = npx;
-                        dpy = ndpy;
-                        py = npy;
-                    }
 
-                    if (swapped) {
-                        obj.entities[player].xp = py;
-                        obj.entities[player].yp = px;
-                    } else {
-                        obj.entities[player].xp = px;
-                        obj.entities[player].yp = py;
+                        int target;
+                        int offset;
+                        if (tx < 0) {
+                            target = -tx;
+                            offset = -1;
+                        } else {
+                            target = tx;
+                            offset = 1;
+                        }
+
+                        double slope = ty / std::abs(tx);
+
+                        int py = dpy;
+
+                        int cx = obj.entities[player].cx;
+                        int cy = obj.entities[player].cy;
+                        int w = obj.entities[player].w;
+                        int h = obj.entities[player].h;
+
+                        for (int i = 0; i < target; ++i) {
+                            int npx = px + offset;
+                            double ndpy = dpy + slope;
+                            int npy = std::lround(ndpy);
+                            if (swapped) {
+                                obj.rectset(npy + cx, npx + cy, w, h);
+                            } else {
+                                obj.rectset(npx + cx, npy + cy, w, h);
+                            }
+                            if (obj.checkwall()) break;
+                            px = npx;
+                            dpy = ndpy;
+                            py = npy;
+                        }
+
+                        if (swapped) {
+                            obj.entities[player].xp = py;
+                            obj.entities[player].yp = px;
+                        } else {
+                            obj.entities[player].xp = px;
+                            obj.entities[player].yp = py;
+                        }
                     }
                 }
 #if !defined(NO_CUSTOM_LEVELS)
@@ -1236,13 +1239,15 @@ void scriptclass::run() {
                     scriptdelay = 1;
                 }
                 if (words[0] == "tofloor") {
-                    if (obj.entities[obj.getplayer()].onroof > 0) {
+                    int player = obj.getplayer();
+                    if (player > -1 && obj.entities[player].onroof > 0) {
                         game.press_action = true;
                         scriptdelay = 1;
                     }
                 }
                 if (words[0] == "toceil") {
-                    if (obj.entities[obj.getplayer()].onground > 0) {
+                    int player = obj.getplayer();
+                    if (player > -1 && obj.entities[player].onground > 0) {
                         game.press_action = true;
                         scriptdelay = 1;
                     }
@@ -1264,16 +1269,18 @@ void scriptclass::run() {
                 }
                 if (words[0] == "bruh") {
                     int i = obj.getplayer();
-                    obj.removeentity(i);
-                    game.hascontrol = false;
-                    music.fadeout();
-                    music.playfile("pop.wav", "", 0);
-                    SDL_SetWindowTitle(graphics.screenbuffer->m_window, "");
-                    graphics.showcutscenebars = false;
-                    running = false;
-                    nointerrupt = false;
-                    killedviridian = true;
-                    killtimer = 120;
+                    if (i > -1) {
+                        obj.removeentity(i);
+                        game.hascontrol = false;
+                        music.fadeout();
+                        music.playfile("pop.wav", "", 0);
+                        SDL_SetWindowTitle(graphics.screenbuffer->m_window, "");
+                        graphics.showcutscenebars = false;
+                        running = false;
+                        nointerrupt = false;
+                        killedviridian = true;
+                        killtimer = 120;
+                    }
                 }
                 if (words[0] == "markmap") {
                     game.scriptmarkers.push_back(scriptmarker{
@@ -1343,7 +1350,10 @@ void scriptclass::run() {
                 }
                 if (words[0] == "setvelocity") {
                     game.nofriction = true;
-                    obj.entities[obj.getplayer()].ax = std::stoi(words[1]);
+                    int player = obj.getplayer();
+                    if (player > -1) {
+                        obj.entities[player].ax = std::stoi(words[1]);
+                    }
                 }
                 if (words[0] == "playef") {
                     music.playef(ss_toi(words[1]));
@@ -1399,8 +1409,10 @@ void scriptclass::run() {
                 if (words[0] == "gotoposition") {
                     // USAGE: gotoposition(x position, y position, gravity position)
                     int player = obj.getplayer();
-                    relativepos(&obj.entities[player].xp, words[1]);
-                    relativepos(&obj.entities[player].yp, words[2]);
+                    if (player > -1) {
+                        relativepos(&obj.entities[player].xp, words[1]);
+                        relativepos(&obj.entities[player].yp, words[2]);
+                    }
                     if (words[3] != "") {
                         relativebool((bool*) &game.gravitycontrol, words[3]);
                     } else {
@@ -1884,22 +1896,26 @@ void scriptclass::run() {
                 } else if (words[0] == "vvvvvvman") {
                     // Create the super VVVVVV combo!
                     i = obj.getplayer();
-                    obj.entities[i].xp = 30;
-                    obj.entities[i].yp = 46;
-                    obj.entities[i].size = 13;
-                    obj.entities[i].colour = 23;
-                    obj.entities[i].cx = 36;       // 6;
-                    obj.entities[i].cy = 12 + 80;  // 2;
-                    obj.entities[i].h = 126 - 80;  // 21;
+                    if (i > -1) {
+                        obj.entities[i].xp = 30;
+                        obj.entities[i].yp = 46;
+                        obj.entities[i].size = 13;
+                        obj.entities[i].colour = 23;
+                        obj.entities[i].cx = 36;       // 6;
+                        obj.entities[i].cy = 12 + 80;  // 2;
+                        obj.entities[i].h = 126 - 80;  // 21;
+                    }
                 } else if (words[0] == "undovvvvvvman") {
                     // Create the super VVVVVV combo!
                     i = obj.getplayer();
-                    obj.entities[i].xp = 100;
-                    obj.entities[i].size = 0;
-                    obj.entities[i].colour = 0;
-                    obj.entities[i].cx = 6;
-                    obj.entities[i].cy = 2;
-                    obj.entities[i].h = 21;
+                    if (i > -1) {
+                        obj.entities[i].xp = 100;
+                        obj.entities[i].size = 0;
+                        obj.entities[i].colour = 0;
+                        obj.entities[i].cx = 6;
+                        obj.entities[i].cy = 2;
+                        obj.entities[i].h = 21;
+                    }
                 } else if (words[0] == "createentity") {
                     auto k = obj.createentity(ss_toi(words[1]),
                                             ss_toi(words[2]), ss_toi(words[3]),
@@ -2286,11 +2302,11 @@ void scriptclass::run() {
                     game.savepoint = 0;
                     if (words[3] != "")
                         relativepos(&game.savex, words[3]);
-                    else
+                    else if (i > -1)
                         game.savex = obj.entities[i].xp;
                     if (words[4] != "")
                         relativepos(&game.savey, words[4]);
-                    else
+                    else if (i > -1)
                         game.savey = obj.entities[i].yp;
                     if (words[5] != "")
                         relativebool((bool*) &game.savegc, words[5]);
@@ -2304,11 +2320,14 @@ void scriptclass::run() {
                         relativepos(&game.savery, words[2]);
                     else
                         game.savery = game.roomy;
-                    game.savedir = obj.entities[i].dir;
+                    if (i > -1)
+                        game.savedir = obj.entities[i].dir;
                 } else if (words[0] == "gotocheckpoint") {
                     i = obj.getplayer();
-                    obj.entities[i].xp = game.savex;
-                    obj.entities[i].yp = game.savey;
+                    if (i > -1) {
+                        obj.entities[i].xp = game.savex;
+                        obj.entities[i].yp = game.savey;
+                    }
                     game.gravitycontrol = game.savegc;
                     game.roomx = game.saverx;
                     game.roomy = game.savery;
@@ -2466,9 +2485,15 @@ void scriptclass::run() {
                 } else if (words[0] == "hidetrinkets") {
                     map.showtrinkets = false;
                 } else if (words[0] == "hideplayer") {
-                    obj.entities[obj.getplayer()].invis = true;
+                    int player = obj.getplayer();
+                    if (player > -1) {
+                        obj.entities[player].invis = true;
+                    }
                 } else if (words[0] == "showplayer") {
-                    obj.entities[obj.getplayer()].invis = false;
+                    int player = obj.getplayer();
+                    if (player > -1) {
+                        obj.entities[player].invis = false;
+                    }
                 } else if (words[0] == "killplayer") {
                     if (!map.invincibility && game.deathseq <= 0)
                         game.deathseq = 30;
@@ -2518,7 +2543,9 @@ void scriptclass::run() {
 
                     obj.resetallflags();
                     i = obj.getplayer();
-                    obj.entities[i].tile = 0;
+                    if (i > -1) {
+                        obj.entities[i].tile = 0;
+                    }
 
                     for (i = 0; i < 100; i++) {
                         obj.collect[i] = false;
@@ -2756,26 +2783,30 @@ void scriptclass::run() {
                 } else if (words[0] == "restoreplayercolour" ||
                         words[0] == "restoreplayercolor") {
                     i = obj.getplayer();
-                    obj.entities[i].colour = 0;
+                    if (i > -1) {
+                        obj.entities[i].colour = 0;
+                    }
                     game.playercolour = 0;
                 } else if (words[0] == "changeplayercolour" ||
                         words[0] == "changeplayercolor") {
                     i = obj.getplayer();
 
-                    if (words[1] == "cyan") {
-                        obj.entities[i].colour = 0;
-                    } else if (words[1] == "red") {
-                        obj.entities[i].colour = 15;
-                    } else if (words[1] == "green") {
-                        obj.entities[i].colour = 13;
-                    } else if (words[1] == "yellow") {
-                        obj.entities[i].colour = 14;
-                    } else if (words[1] == "blue") {
-                        obj.entities[i].colour = 16;
-                    } else if (words[1] == "purple") {
-                        obj.entities[i].colour = 20;
-                    } else if (words[1] == "teleporter") {
-                        obj.entities[i].colour = 102;
+                    if (i > -1) {
+                        if (words[1] == "cyan") {
+                            obj.entities[i].colour = 0;
+                        } else if (words[1] == "red") {
+                            obj.entities[i].colour = 15;
+                        } else if (words[1] == "green") {
+                            obj.entities[i].colour = 13;
+                        } else if (words[1] == "yellow") {
+                            obj.entities[i].colour = 14;
+                        } else if (words[1] == "blue") {
+                            obj.entities[i].colour = 16;
+                        } else if (words[1] == "purple") {
+                            obj.entities[i].colour = 20;
+                        } else if (words[1] == "teleporter") {
+                            obj.entities[i].colour = 102;
+                        }
                     }
                 } else if (words[0] == "altstates") {
                     obj.altstates = ss_toi(words[1]);
@@ -3367,7 +3398,9 @@ void scriptclass::startgamemode(int t) {
                 map.resetplayer();
 
                 i = obj.getplayer();
-                map.ypos = obj.entities[i].yp - 120;
+                if (i > -1) {
+                    map.ypos = obj.entities[i].yp - 120;
+                }
                 map.bypos = map.ypos / 2;
                 map.cameramode = 0;
                 map.colsuperstate = 0;
@@ -4077,11 +4110,13 @@ void scriptclass::teleport() {
 
     i = obj.getplayer();  // less likely to have a serious collision error if
                           // the player is centered
-    obj.entities[i].xp = 150;
-    obj.entities[i].yp = 110;
-    if (!map.custommode)
-        if (game.teleport_to_x == 17 && game.teleport_to_y == 17)
-            obj.entities[i].xp = 88;  // prevent falling!
+    if (i > -1) {
+        obj.entities[i].xp = 150;
+        obj.entities[i].yp = 110;
+        if (!map.custommode)
+            if (game.teleport_to_x == 17 && game.teleport_to_y == 17)
+                obj.entities[i].xp = 88;  // prevent falling!
+    }
 
     if (game.teleportscript == "levelonecomplete") {
         game.teleport_to_x = 2;
@@ -4106,7 +4141,10 @@ void scriptclass::teleport() {
 
     game.saverx = game.roomx;
     game.savery = game.roomy;
-    game.savedir = obj.entities[obj.getplayer()].dir;
+    int player = obj.getplayer();
+    if (player > -1) {
+        game.savedir = obj.entities[player].dir;
+    }
 
     if (!map.custommode) {
         if (game.teleport_to_x == 0 && game.teleport_to_y == 0) {
