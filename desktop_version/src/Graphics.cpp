@@ -1978,6 +1978,7 @@ void Graphics::drawentities()
 
 
         }
+        }
     }
 
     ct.nocolor = false;
