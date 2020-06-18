@@ -413,15 +413,14 @@ bool Graphics::PrintAlpha( int _x, int _y, std::string _s, int r, int g, int b, 
         fontRect.y = tpoint.y ;
 
         auto idx = font_idx(curr);
-        if (idx >= 0 && idx < (int) bfont.size() && bfont[idx]->h > 8) {
+        if (idx >= 0 && idx < (int) font.size() && font[idx]->h > 8) {
             tallline = true;
         } else if (tallline) {
             fontRect.y += 4;
         }
 
-        auto fontvec = flipmode ? &flipbfont : &bfont;
-        if (idx >= 0 && idx < (int) (*fontvec).size())
-            BlitSurfaceColoured( (*fontvec)[idx], NULL, backBuffer, &fontRect , ct);
+        if (idx >= 0 && idx < (int) font.size())
+            BlitSurfaceColoured( font[idx], NULL, backBuffer, &fontRect , ct);
         bfontpos+=bfontlen(curr) ;
     }
     return tallline;
