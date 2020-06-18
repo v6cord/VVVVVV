@@ -1901,8 +1901,9 @@ void Graphics::drawentities()
             setcol(obj.entities[i].colour);
             drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp - yoff);
             break;
-        case 12:         // Regular sprites that don't wrap
-            if (!INBOUNDS(obj.entities[i].drawframe, (*spritesvec)))
+        case 12: {         // Regular sprites that don't wrap
+            auto spriteptr = selectspritesheet();
+            if (!INBOUNDS(obj.entities[i].drawframe, (*spriteptr)))
             {
                 continue;
             }
@@ -1913,7 +1914,7 @@ void Graphics::drawentities()
             drawRect = sprites_rect;
             drawRect.x += tpoint.x;
             drawRect.y += tpoint.y;
-            BlitSurfaceColoured((*selectspritesheet())[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
+            BlitSurfaceColoured((*spriteptr)[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
 
             //if we're outside the screen, we need to draw indicators
             if (obj.entities[i].xp < -20 && obj.entities[i].vx > 0)
@@ -1956,6 +1957,7 @@ void Graphics::drawentities()
                 BlitSurfaceColoured(tiles[1166],NULL, backBuffer, &drawRect, ct);
             }
             break;
+        }
         case 13:
         {
             auto* spriteptr = selectspritesheet();
