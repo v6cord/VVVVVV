@@ -74,6 +74,8 @@ growing_vector<std::string> split(const std::string &s, char delim, growing_vect
 
 growing_vector<std::string> split(const std::string &s, char delim);
 
+#define INBOUNDS(index, vector) ((int) index >= 0 && (int) index < (int) vector.size())
+
 
 //helperClass
 class UtilityClass
