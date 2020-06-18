@@ -35,8 +35,6 @@ public:
     growing_vector<int> vmult;
 
     bool minitowermode = false;
-    int i = 0;
-    int k = 0;
 };
 
 

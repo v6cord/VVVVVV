@@ -694,7 +694,7 @@ void Game::savecustomlevelstats()
 
 void Game::updatestate()
 {
-    int i;
+    int i, j;
     statedelay--;
     if(statedelay<=0){
         statedelay=0;

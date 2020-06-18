@@ -197,7 +197,6 @@ public:
     int door_down = 0;
     int roomx, roomy, roomchangedir, roomchangevdir = 0;
     int prevroomx, prevroomy = 0;
-    int j, k = 0;
 
     int savex, savey, saverx, savery = 0;
     int savegc, savedir = 0;
