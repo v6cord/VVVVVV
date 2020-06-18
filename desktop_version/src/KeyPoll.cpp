@@ -104,7 +104,7 @@ static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
     }
 }
 
-void KeyPoll::Poll(Screen *screen)
+void KeyPoll::Poll()
 {
         if (fakekeytimer == 0) {
             keymap[fakekey] = 0;
@@ -443,7 +443,7 @@ void KeyPoll::Poll(Screen *screen)
 				{
 					if (wasFullscreen)
 					{
-						screen->isWindowed = false;
+						gameScreen.isWindowed = false;
 						SDL_SetWindowFullscreen(
 							SDL_GetWindowFromID(evt.window.windowID),
 							SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -457,8 +457,8 @@ void KeyPoll::Poll(Screen *screen)
 				isActive = false;
 				if (!useFullscreenSpaces)
 				{
-					wasFullscreen = !screen->isWindowed;
-					screen->isWindowed = true;
+					wasFullscreen = !gameScreen.isWindowed;
+					gameScreen.isWindowed = true;
 					SDL_SetWindowFullscreen(
 						SDL_GetWindowFromID(evt.window.windowID),
 						0
