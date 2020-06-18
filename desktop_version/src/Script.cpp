@@ -2232,8 +2232,10 @@ void scriptclass::run() {
                     game.alarmon = false;
                 } else if (words[0] == "activateteleporter") {
                     i = obj.getteleporter();
-                    obj.entities[i].tile = 6;
-                    obj.entities[i].colour = 102;
+                    if (i > -1) {
+                        obj.entities[i].tile = 6;
+                        obj.entities[i].colour = 102;
+                    }
                 } else if (words[0] == "changecolour" ||
                         words[0] == "changecolor") {
                     i = obj.getcrewman(words[1]);
@@ -2779,7 +2781,9 @@ void scriptclass::run() {
                     obj.altstates = ss_toi(words[1]);
                 } else if (words[0] == "activeteleporter") {
                     i = obj.getteleporter();
-                    obj.entities[i].colour = 101;
+                    if (i > -1) {
+                        obj.entities[i].colour = 101;
+                    }
                 } else if (words[0] == "foundtrinket") {
                     // music.silencedasmusik();
                     music.haltdasmusik();
@@ -4090,7 +4094,9 @@ void scriptclass::teleport() {
     game.gravitycontrol = 0;
     map.gotoroom(100 + game.teleport_to_x, 100 + game.teleport_to_y);
     j = obj.getteleporter();
-    obj.entities[j].state = 2;
+    if (j > -1) {
+        obj.entities[j].state = 2;
+    }
     game.teleport_to_new_area = false;
 
     game.savepoint = obj.entities[j].para;
