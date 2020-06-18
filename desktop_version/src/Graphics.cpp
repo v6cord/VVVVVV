@@ -397,6 +397,7 @@ bool Graphics::PrintAlpha( int _x, int _y, std::string _s, int r, int g, int b, 
     int bfontpos = 0;
     bool tallline = false;
     auto utf32 = utf8to32(_s);
+    int idx;
     std::vector<uint32_t> bidi(utf32.size());
     FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
     if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
@@ -412,14 +413,14 @@ bool Graphics::PrintAlpha( int _x, int _y, std::string _s, int r, int g, int b, 
         fontRect.x = tpoint.x ;
         fontRect.y = tpoint.y ;
 
-        auto idx = font_idx(curr);
-        if (idx >= 0 && idx < (int) font.size() && font[idx]->h > 8) {
+        idx = font_idx(curr);
+        if (INBOUNDS(idx, font) && font[idx]->h > 8) {
             tallline = true;
         } else if (tallline) {
             fontRect.y += 4;
         }
 
-        if (idx >= 0 && idx < (int) font.size())
+        if (INBOUNDS(idx, font))
             BlitSurfaceColoured( font[idx], NULL, backBuffer, &fontRect , ct);
         bfontpos+=bfontlen(curr) ;
     }
@@ -444,6 +445,7 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
 
     int bfontpos = 0;
     auto utf32 = utf8to32(_s);
+    int idx;
     std::vector<uint32_t> bidi(utf32.size());
     FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
     if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
@@ -462,10 +464,14 @@ void Graphics::bigprint(  int _x, int _y, std::string _s, int r, int g, int b, b
         fontRect.y = tpoint.y ;
         */
 
-        SDL_Surface* tempPrint = ScaleSurfaceSlow(font[font_idx(curr)], font[font_idx(curr)]->w *sc,font[font_idx(curr)]->h *sc);
-        SDL_Rect printrect = { static_cast<Sint16>((_x) + bfontpos), static_cast<Sint16>(_y) , static_cast<Sint16>((bfont_rect.w*sc)+1), static_cast<Sint16>((bfont_rect.h * sc)+1)};
-        BlitSurfaceColoured(tempPrint, NULL, backBuffer, &printrect, ct);
-        SDL_FreeSurface(tempPrint);
+        idx = font_idx(curr);
+        if (INBOUNDS(idx, font))
+        {
+            SDL_Surface* tempPrint = ScaleSurfaceSlow(font[idx], font[idx]->w *sc,font[idx]->h *sc);
+            SDL_Rect printrect = { static_cast<Sint16>((_x) + bfontpos), static_cast<Sint16>(_y) , static_cast<Sint16>((bfont_rect.w*sc)+1), static_cast<Sint16>((bfont_rect.h * sc)+1)};
+            BlitSurfaceColoured(tempPrint, NULL, backBuffer, &printrect, ct);
+            SDL_FreeSurface(tempPrint);
+        }
         bfontpos+=bfontlen(curr) *sc;
     }
 }
@@ -499,6 +505,7 @@ void Graphics::PrintOffAlpha( int _x, int _y, std::string _s, int r, int g, int 
     if (cen)
         _x = ((160) - (len(_s) / 2))+_x;
     int bfontpos = 0;
+    int idx;
     auto utf32 = utf8to32(_s);
     std::vector<uint32_t> bidi(utf32.size());
     FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
@@ -515,7 +522,11 @@ void Graphics::PrintOffAlpha( int _x, int _y, std::string _s, int r, int g, int 
         fontRect.x = tpoint.x ;
         fontRect.y = tpoint.y ;
 
-        BlitSurfaceColoured( font[font_idx(curr)], NULL, backBuffer, &fontRect , ct);
+        idx = font_idx(curr);
+        if (INBOUNDS(idx, font))
+        {
+            BlitSurfaceColoured( font[idx], NULL, backBuffer, &fontRect , ct);
+        }
         bfontpos+=bfontlen(curr) ;
     }
 }
@@ -557,6 +568,7 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
     if (cen)
         _x = ((308) - (_s.length() / 2));
     int bfontpos = 0;
+    int idx;
     auto utf32 = utf8to32(_s);
     std::vector<uint32_t> bidi(utf32.size());
     FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
@@ -573,7 +585,11 @@ void Graphics::RPrint( int _x, int _y, std::string _s, int r, int g, int b, bool
         fontRect.x = tpoint.x ;
         fontRect.y = tpoint.y ;
 
-        BlitSurfaceColoured( font[font_idx(curr)], NULL, backBuffer, &fontRect , ct);
+        idx = font_idx(curr);
+        if (INBOUNDS(idx, font))
+        {
+            BlitSurfaceColoured( font[idx], NULL, backBuffer, &fontRect , ct);
+        }
         bfontpos+=bfontlen(curr) ;
     }
 }
