@@ -3127,18 +3127,18 @@ void Graphics::bigrprint(int x, int y, std::string& t, int r, int g, int b, bool
 	}
 
 	int bfontpos = 0;
-        auto utf32 = utf8to32(t);
-        std::vector<uint32_t> bidi(utf32.size());
-        FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
-        if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
-            printf("fribidi error\n");
-            exit(1);
-        }
-        for (auto cur : bidi) {
-		    SDL_Surface* tempPrint = ScaleSurfaceSlow(font[font_idx(cur)], font[font_idx(cur)]->w *sc,font[font_idx(cur)]->h *sc);
-		    SDL_Rect printrect = { Sint16((x) + bfontpos), Sint16(y) , Sint16(bfont_rect.w*sc), Sint16(bfont_rect.h * sc)};
-		    BlitSurfaceColoured(tempPrint, NULL, backBuffer, &printrect, ct);
-		    SDL_FreeSurface(tempPrint);
+	auto utf32 = utf8to32(t);
+	std::vector<uint32_t> bidi(utf32.size());
+	FriBidiParType bidi_type = FRIBIDI_TYPE_ON;
+	if (!fribidi_log2vis(utf32.data(), utf32.size(), &bidi_type, bidi.data(), nullptr, nullptr, nullptr)) {
+		printf("fribidi error\n");
+		exit(1);
+	}
+	for (auto cur : bidi) {
+		SDL_Surface* tempPrint = ScaleSurfaceSlow(font[font_idx(cur)], font[font_idx(cur)]->w *sc,font[font_idx(cur)]->h *sc);
+		SDL_Rect printrect = { Sint16((x) + bfontpos), Sint16(y) , Sint16(bfont_rect.w*sc), Sint16(bfont_rect.h * sc)};
+		BlitSurfaceColoured(tempPrint, NULL, backBuffer, &printrect, ct);
+		SDL_FreeSurface(tempPrint);
 		bfontpos+=bfontlen(cur)* sc;
 	}
 }
