@@ -446,7 +446,6 @@ void KeyPoll::Poll()
 					SDL_SetWindowFullscreen(window, 0);
 				}
 				SDL_DisableScreenSaver();
-				resetWindow = true;
 			}
 			else if (evt.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
 			{
@@ -459,19 +458,16 @@ void KeyPoll::Poll()
 					);
 				}
 				SDL_EnableScreenSaver();
-				resetWindow = true;
 			}
 
 			/* Mouse Focus */
 			else if (evt.window.event == SDL_WINDOWEVENT_ENTER)
 			{
 				SDL_DisableScreenSaver();
-				resetWindow = true;
 			}
 			else if (evt.window.event == SDL_WINDOWEVENT_LEAVE)
 			{
 				SDL_EnableScreenSaver();
-				resetWindow = true;
 			}
 		}
 
