@@ -1273,7 +1273,7 @@ void scriptclass::run() {
                 if (words[0] == "bruh") {
                     int i = obj.getplayer();
                     if (i > -1) {
-                        obj.removeentity(i);
+                        obj.entities.erase(obj.entities.start() + i);
                         game.hascontrol = false;
                         music.fadeout();
                         music.playfile("pop.wav", "", 0);

@@ -1067,14 +1067,21 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
     blocks.push_back(block);
 }
 
-void entityclass::removeentity(int t)
+// Remove entity, and return true if entity was successfully removed
+bool entityclass::removeentity(int t)
 {
     if (t < 0 || t > (int) entities.size())
     {
         puts("removeentity() out-of-bounds!");
-        return;
+        return true;
+    }
+    if (entities[t].rule == 0 && t == getplayer())
+    {
+        // Don't remove the player entity!
+        return false;
     }
     entities.erase(entities.begin() + t);
+    return true;
 }
 
 void entityclass::removeallblocks()
@@ -2347,15 +2354,13 @@ bool entityclass::updateentities( int i )
                 {
                     if (entities[i].xp >= 335)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                     if (game.roomx == 117)
                     {
                         if (entities[i].xp >= (33*8)-32)
                         {
-                            removeentity(i);
-                            return true;
+                            return removeentity(i);
                         }
                         //collector for LIES
                     }
@@ -2384,15 +2389,13 @@ bool entityclass::updateentities( int i )
                 {
                     if (entities[i].yp <= -60)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                     if (game.roomy == 108)
                     {
                         if (entities[i].yp <= 60)
                         {
-                            removeentity(i);
-                            return true;
+                            return removeentity(i);
                         }
                         //collector for factory
                     }
@@ -2592,8 +2595,7 @@ bool entityclass::updateentities( int i )
                         entities[i].state = 3;
                         entities[i].invis = true;
                     } else {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                 }
             }
@@ -2635,8 +2637,7 @@ bool entityclass::updateentities( int i )
                     // Removes collision
                     entities[i].onentity = 0;
                 } else {
-                    removeentity(i);
-                    return true;
+                    return removeentity(i);
                 }
             }
             else if (entities[i].state == 2)
@@ -2659,8 +2660,7 @@ bool entityclass::updateentities( int i )
                 entities[i].life--;
                 if (entities[i].life < 0)
                 {
-                    removeentity(i);
-                    return true;
+                    return removeentity(i);
                 }
             }
             break;
@@ -2676,8 +2676,7 @@ bool entityclass::updateentities( int i )
                 music.playef(4);
                 coincollect[entities[i].para] = true;
 
-                removeentity(i);
-                return true;
+                return removeentity(i);
             }
             break;
         case 7: //Found a trinket
@@ -2701,8 +2700,7 @@ bool entityclass::updateentities( int i )
                     }
                 }
 
-                removeentity(i);
-                return true;
+                return removeentity(i);
             }
             break;
         case 8: //Savepoints
@@ -3212,8 +3210,7 @@ bool entityclass::updateentities( int i )
                 if (entities[i].xp >= 310)
                 {
                     game.scmprogress++;
-                    removeentity(i);
-                    return true;
+                    return removeentity(i);
                 }
             }
             break;
@@ -3238,8 +3235,7 @@ bool entityclass::updateentities( int i )
                     entities[i].vx = 7;
                     if (entities[i].xp > 320)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                 }
                 break;
@@ -3249,8 +3245,7 @@ bool entityclass::updateentities( int i )
                     entities[i].vx = -7;
                     if (entities[i].xp <-20)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                 }
                 break;
@@ -3342,8 +3337,7 @@ bool entityclass::updateentities( int i )
                     customcollect[entities[i].para] = true;
                 }
 
-                removeentity(i);
-                return true;
+                return removeentity(i);
             }
             break;
         case 100: //The teleporter
