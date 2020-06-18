@@ -158,6 +158,10 @@ std::vector<SDL_Surface*>* Graphics::selectspritesheet()
 
 void Graphics::drawspritesetcol(int x, int y, int t, int c, int flipped /*= 0*/)
 {
+    if (!INBOUNDS(t, sprites))
+    {
+        return;
+    }
     SDL_Rect rect;
     setRect(rect,x,y,sprites_rect.w,sprites_rect.h);
     setcol(c);
@@ -1658,6 +1662,10 @@ void Graphics::drawentities()
         case 0: {
             int flipped = obj.entities[i].flipped;
             std::vector <SDL_Surface*>* spriteptr = selectspritesheet();
+            if (!INBOUNDS(obj.entities[i].drawframe, (*spriteptr)))
+            {
+                continue;
+            }
 
             tpoint.x = obj.entities[i].xp;
             tpoint.y = obj.entities[i].yp - yoff;
@@ -1711,6 +1719,10 @@ void Graphics::drawentities()
         }
         case 1:
             // Tiles
+            if (!INBOUNDS(obj.entities[i].drawframe, tiles))
+            {
+                continue;
+            }
             tpoint.x = obj.entities[i].xp;
             tpoint.y = obj.entities[i].yp - yoff;
             drawRect = tiles_rect;
@@ -1721,6 +1733,10 @@ void Graphics::drawentities()
         case 2:
         case 8: {
             // Special: Moving platform, 4 tiles or 8 tiles
+            if (!INBOUNDS(obj.entities[i].drawframe, (*tilesvec)))
+            {
+                continue;
+            }
             tpoint.x = obj.entities[i].xp;
             tpoint.y = obj.entities[i].yp - yoff;
             int thiswidth = 4;
@@ -1790,6 +1806,10 @@ void Graphics::drawentities()
             break;
         case 9: {         // Really Big Sprite! (2x2)
             std::vector <SDL_Surface*>* spriteptr = selectspritesheet();
+            if (!INBOUNDS(obj.entities[i].drawframe, (*spriteptr)))
+            {
+                continue;
+            }
 
             setcol(obj.entities[i].colour);
 
@@ -1828,6 +1848,10 @@ void Graphics::drawentities()
         }
         case 10: {         // 2x1 Sprite
             std::vector <SDL_Surface*>* spriteptr = selectspritesheet();
+            if (!INBOUNDS(obj.entities[i].drawframe, (*spriteptr)))
+            {
+                continue;
+            }
             setcol(obj.entities[i].colour);
 
             tpoint.x = obj.entities[i].xp;
@@ -1852,6 +1876,10 @@ void Graphics::drawentities()
             drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp - yoff);
             break;
         case 12:         // Regular sprites that don't wrap
+            if (!INBOUNDS(obj.entities[i].drawframe, (*spritesvec)))
+            {
+                continue;
+            }
             tpoint.x = obj.entities[i].xp;
             tpoint.y = obj.entities[i].yp - yoff;
             setcol(obj.entities[i].colour);
@@ -1903,12 +1931,18 @@ void Graphics::drawentities()
             }
             break;
         case 13:
-             //Special for epilogue: huge hero!
+        {
+            auto* spriteptr = selectspritesheet();
+            //Special for epilogue: huge hero!
+            if (!INBOUNDS(obj.entities[i].drawframe, (*spriteptr)))
+            {
+                continue;
+            }
 
             tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp - yoff;
             setcol(obj.entities[i].colour);
             SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp - yoff), Sint16(sprites_rect.x * 6), Sint16(sprites_rect.y * 6 ) };
-            SDL_Surface* TempSurface = ScaleSurface( (*selectspritesheet())[obj.entities[i].drawframe], 6 * sprites_rect.w,6* sprites_rect.h );
+            SDL_Surface* TempSurface = ScaleSurface( (*spriteptr)[obj.entities[i].drawframe], 6 * sprites_rect.w,6* sprites_rect.h );
             BlitSurfaceColoured(TempSurface, NULL , backBuffer,  &drawRect, ct );
             SDL_FreeSurface(TempSurface);
             break;

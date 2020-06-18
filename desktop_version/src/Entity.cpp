@@ -4877,8 +4877,11 @@ void entityclass::entitycollisioncheck()
                             colpoint1.y = entities[i].yp;
                             colpoint2.x = entities[j].xp;
                             colpoint2.y = entities[j].yp;
-                            if (graphics.Hitest(spritesvec[entities[i].drawframe],
-                                             colpoint1, spritesvec[entities[j].drawframe], colpoint2))
+                            int drawframe1 = entities[i].drawframe;
+                            int drawframe2 = entities[j].drawframe;
+                            if (INBOUNDS(drawframe1, spritesvec) && INBOUNDS(drawframe2, spritesvec)
+                            && graphics.Hitest(spritesvec[drawframe1],
+                                             colpoint1, spritesvec[drawframe2], colpoint2))
                             {
                                 //Do the collision stuff
                                 game.deathseq = 30;
@@ -4977,8 +4980,11 @@ void entityclass::entitycollisioncheck()
                                     colpoint1.y = entities[i].yp;
                                     colpoint2.x = entities[j].xp;
                                     colpoint2.y = entities[j].yp;
-                                    if (graphics.Hitest(spritesvec[entities[i].drawframe],
-                                                     colpoint1, spritesvec[entities[j].drawframe], colpoint2))
+                                    int drawframe1 = entities[i].drawframe;
+                                    int drawframe2 = entities[j].drawframe;
+                                    if (INBOUNDS(drawframe1, spritesvec) && INBOUNDS(drawframe2, spritesvec)
+                                    && graphics.Hitest(spritesvec[drawframe1],
+                                                     colpoint1, spritesvec[drawframe2], colpoint2))
                                     {
                                         //Do the collision stuff
                                         game.deathseq = 30;
