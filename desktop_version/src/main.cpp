@@ -429,7 +429,7 @@ int main(int argc, char *argv[])
             }
 
 
-            key.Poll();
+            key.Poll(&gameScreen);
             if(key.toggleFullscreen)
             {
                 if(!gameScreen.isWindowed)

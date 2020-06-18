@@ -104,7 +104,7 @@ static void ctrl_click(KeyPoll* key, SDL_Event* evt, bool* was) {
     }
 }
 
-void KeyPoll::Poll()
+void KeyPoll::Poll(Screen *screen)
 {
         if (fakekeytimer == 0) {
             keymap[fakekey] = 0;
@@ -441,9 +441,14 @@ void KeyPoll::Poll()
 				isActive = true;
 				if (!useFullscreenSpaces)
 				{
-					SDL_Window *window = SDL_GetWindowFromID(evt.window.windowID);
-					wasFullscreen = SDL_GetWindowFlags(window);
-					SDL_SetWindowFullscreen(window, 0);
+					if (wasFullscreen)
+					{
+						screen->isWindowed = false;
+						SDL_SetWindowFullscreen(
+							SDL_GetWindowFromID(evt.window.windowID),
+							SDL_WINDOW_FULLSCREEN_DESKTOP
+						);
+					}
 				}
 				SDL_DisableScreenSaver();
 			}
@@ -452,9 +457,11 @@ void KeyPoll::Poll()
 				isActive = false;
 				if (!useFullscreenSpaces)
 				{
+					wasFullscreen = !screen->isWindowed;
+					screen->isWindowed = true;
 					SDL_SetWindowFullscreen(
 						SDL_GetWindowFromID(evt.window.windowID),
-						wasFullscreen
+						0
 					);
 				}
 				SDL_EnableScreenSaver();
