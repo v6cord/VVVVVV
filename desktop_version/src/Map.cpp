@@ -1093,7 +1093,7 @@ int mapclass::entering_tower(int rx, int ry, int *entry) {
 }
 
 // Moves player y appropriate and possibly change destination screen.
-bool mapclass::leaving_tower(int *rx, int *ry, entityclass &obj) {
+bool mapclass::leaving_tower(int *rx, int *ry) {
 	int i = obj.getplayer();
 	if (i <= -1)
 		return false;

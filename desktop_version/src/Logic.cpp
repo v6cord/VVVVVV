@@ -1076,7 +1076,7 @@ void gamelogic()
                       obj.entities[player].xp < -14) ||
                      (game.door_right > -2 &&
                       obj.entities[player].xp >= 308))) {
-                if (map.leaving_tower(&game.roomx, &game.roomy, obj)) {
+                if (map.leaving_tower(&game.roomx, &game.roomy)) {
                     map.gotodimroom(game.roomx, game.roomy);
                     map.gotoroom(game.roomx, game.roomy);
                     twoframedelayfix();

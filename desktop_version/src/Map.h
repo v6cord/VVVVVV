@@ -81,7 +81,7 @@ public:
     int tower_connection(int *rx, int *ry, int ypos);
     int get_tower(int rx, int ry);
     int entering_tower(int rx, int ry, int *entry);
-    bool leaving_tower(int *rx, int *ry, entityclass &obj);
+    bool leaving_tower(int *rx, int *ry);
     void custom_warpto(int ent);
     void warpto(int rx, int ry , int t, int tx, int ty);
 
