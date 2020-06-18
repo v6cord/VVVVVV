@@ -684,12 +684,12 @@ void Graphics::drawtile( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (t >= 14 && t <= 17 && customts <= 3) {
+    if (INBOUNDS(t, tiles) && t >= 14 && t <= 17 && customts <= 3) {
         colourTransform thect = {ed.getonewaycol()};
         BlitSurfaceTint(tiles[t], NULL, backBuffer, &rect, thect);
-    } else if (customtiles.find(customts) != customtiles.end()) {
+    } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts])) {
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
-    } else {
+    } else if (INBOUNDS(t, tiles)) {
         BlitSurfaceStandard(tiles[t], NULL, backBuffer, &rect);
     }
 }
@@ -699,12 +699,12 @@ void Graphics::drawtile2( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (t >= 14 && t <= 17 && customts <= 3) {
+    if (INBOUNDS(t, tiles2) && t >= 14 && t <= 17 && customts <= 3) {
         colourTransform thect = {ed.getonewaycol()};
         BlitSurfaceTint(tiles2[t], NULL, backBuffer, &rect, thect);
-    } else if (customtiles.find(customts) != customtiles.end()) {
+    } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts])) {
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
-    } else {
+    } else if (INBOUNDS(t, tiles2)) {
         BlitSurfaceStandard(tiles2[t], NULL, backBuffer, &rect);
     }
 }
@@ -714,9 +714,9 @@ void Graphics::drawtile3( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (customtiles.find(customts) != customtiles.end())
+    if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts]))
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
-    else
+    else if (INBOUNDS(t, tiles3))
         BlitSurfaceStandard(tiles3[t], NULL, backBuffer, &rect);
 }
 
@@ -724,12 +724,21 @@ void Graphics::drawtile3( int x, int y, int t )
 
 void Graphics::drawtile3( int x, int y, int t, int off )
 {
+    t += off*30;
+    if (!INBOUNDS(t, tiles3))
+    {
+        return;
+    }
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    BlitSurfaceStandard(tiles3[t+(off*30)], NULL, backBuffer, &rect);
+    BlitSurfaceStandard(tiles3[t], NULL, backBuffer, &rect);
 }
 
 void Graphics::drawentcolours( int x, int y, int t)
 {
+    if (!INBOUNDS(t, entcolours))
+    {
+        return;
+    }
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     BlitSurfaceStandard(entcolours[t], NULL, backBuffer, &rect);
 }
@@ -738,21 +747,22 @@ void Graphics::drawtowertile( int x, int y, int t )
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     int customts = ed.getcustomtiles();
-    if (customts <= 3 || customtiles.find(customts) == customtiles.end())
+    if (INBOUNDS(t, tiles2) && customts <= 3)
         BlitSurfaceStandard(tiles2[t], NULL, towerbuffer, &rect);
-    else
+    else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts]))
         BlitSurfaceStandard(customtiles[customts][t], NULL, towerbuffer, &rect);
 }
 
 
 void Graphics::drawtowertile3( int x, int y, int t, int off )
 {
+    t += off*30;
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     int customts = ed.getcustomtiles();
-    if ((game.gamestate == EDITORMODE && ed.settingsmod) || customts <= 3 || customtiles.find(customts) == customtiles.end())
-        BlitSurfaceStandard(tiles3[t+(off*30)], NULL, towerbuffer, &rect);
-    else
-        BlitSurfaceStandard(customtiles[customts][t+(off*30)], NULL, towerbuffer, &rect);
+    if (INBOUNDS(t, tiles3) && ((game.gamestate == EDITORMODE && ed.settingsmod) || customts <= 3))
+        BlitSurfaceStandard(tiles3[t], NULL, towerbuffer, &rect);
+    else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts]))
+        BlitSurfaceStandard(customtiles[customts][t], NULL, towerbuffer, &rect);
 }
 
 void Graphics::drawgui()
@@ -1423,6 +1433,10 @@ void Graphics::drawlevelmenu( int cr, int cg, int cb, int division /*= 30*/ )
 
 void Graphics::drawcoloredtile( int x, int y, int t, int r, int g, int b )
 {
+    if (!INBOUNDS(t, tiles))
+    {
+        return;
+    }
     setcolreal(getRGB(r,g,b));
 
     SDL_Rect rect;
@@ -2912,6 +2926,10 @@ void Graphics::menuoffrender()
 
 void Graphics::drawhuetile( int x, int y, int t, int c )
 {
+	if (!INBOUNDS(t, tiles))
+	{
+		return;
+	}
 	point tpoint;
 	tpoint.x = x;
 	tpoint.y = y;
