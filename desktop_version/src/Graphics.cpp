@@ -1896,7 +1896,14 @@ void Graphics::drawentities()
             break;
         }
         case 11:    //The fucking elephant
-            setcol(obj.entities[i].colour);
+            if (game.noflashingmode)
+            {
+                setcol(22);
+            }
+            else
+            {
+                setcol(obj.entities[i].colour);
+            }
             drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp - yoff);
             break;
         case 12: {         // Regular sprites that don't wrap
