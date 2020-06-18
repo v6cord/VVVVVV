@@ -8,8 +8,6 @@ class Screen
 public:
 	void init();
 
-	void init();
-
 	void ResizeScreen(int x, int y);
 	void GetWindowSize(int* x, int* y);
 
