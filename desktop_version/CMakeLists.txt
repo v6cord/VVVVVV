@@ -200,11 +200,8 @@ IF(GOG)
 	ADD_DEFINITIONS(-DGOG_NETWORK)
 ENDIF()
 
-SET(XML_SRC
-	../third_party/tinyxml/tinystr.cpp
-	../third_party/tinyxml/tinyxml.cpp
-	../third_party/tinyxml/tinyxmlerror.cpp
-	../third_party/tinyxml/tinyxmlparser.cpp
+SET(XML2_SRC
+	../third_party/tinyxml2/tinyxml2.cpp
 )
 SET(PFS_SRC
 	../third_party/physfs/physfs.c
@@ -311,8 +308,8 @@ ENDIF()
 file(GLOB LUA_SRC "../third_party/lua-5.3.5/src/*.c")
 
 # Library information
-ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
-target_include_directories(tinyxml-static PUBLIC ../third_party/tinyxml)
+ADD_LIBRARY(tinyxml2-static STATIC ${XML2_SRC})
+target_include_directories(tinyxml2-static PUBLIC ../third_party/tinyxml2)
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 target_include_directories(physfs-static PUBLIC ../third_party/physfs)
 ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
@@ -340,7 +337,7 @@ elseif(NOT WIN32)
 endif()
 
 if(ANDROID)
-    set_target_properties(tinyxml-static PROPERTIES LINKER_LANGUAGE CXX)
+    set_target_properties(tinyxml2-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(physfs-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(cparse-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(lua-static PROPERTIES LINKER_LANGUAGE CXX)
@@ -447,10 +444,10 @@ find_package(Threads)
 
 # Static Dependencies
 if(ANDROID)
-    TARGET_LINK_LIBRARIES(main physfs-static tinyxml-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(main physfs-static tinyxml2-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 else()
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml2-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
 endif()
 
 # data.zip path

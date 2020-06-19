@@ -197,7 +197,6 @@ public:
     int door_down = 0;
     int roomx, roomy, roomchangedir, roomchangevdir = 0;
     int prevroomx, prevroomy = 0;
-    int j, k = 0;
 
     int savex, savey, saverx, savery = 0;
     int savegc, savedir = 0;
@@ -415,6 +414,7 @@ public:
 
     bool hidemarkers = false;
     bool skipfakeload = false;
+    bool ghostsenabled = false;
 
     int playerspeed = 3;
     bool nofriction = false;
@@ -465,6 +465,11 @@ public:
 #endif
 
     int playercolour = 0;
+
+    bool inline inspecial()
+    {
+        return inintermission || insecretlab || intimetrial || nodeathmode;
+    }
 };
 
 extern Game game;

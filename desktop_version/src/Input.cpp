@@ -4,7 +4,7 @@
 
 #include "MakeAndPlay.h"
 
-#include "tinyxml.h"
+#include "tinyxml2.h"
 
 #include "FileSystemUtils.h"
 #include <cstdlib>
@@ -277,8 +277,8 @@ void menuactionpress()
             game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
 
             std::string name = "saves/" + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
-            TiXmlDocument doc;
-            if (!FILESYSTEM_loadTiXmlDocument(name.c_str(), &doc)){
+            tinyxml2::XMLDocument doc;
+            if (!FILESYSTEM_loadTiXml2Document(name.c_str(), doc)){
                 game.mainmenu = 22;
                 graphics.fademode = 2;
             }else{
@@ -1663,11 +1663,17 @@ void gameinput()
                                 music.fadeout();
 
                                 int player = obj.getplayer();
-                                obj.entities[player].colour = 102;
+                                if (player > -1)
+                                {
+                                    obj.entities[player].colour = 102;
+                                }
 
                                 int teleporter = obj.getteleporter();
-                                obj.entities[teleporter].tile = 6;
-                                obj.entities[teleporter].colour = 102;
+                                if (teleporter > -1)
+                                {
+                                    obj.entities[teleporter].tile = 6;
+                                    obj.entities[teleporter].colour = 102;
+                                }
                                 //which teleporter script do we use? it depends on the companion!
                                 game.state = 4000;
                                 game.statedelay = 0;
@@ -1694,13 +1700,19 @@ void gameinput()
                                 music.fadeout();
 
                                 int player = obj.getplayer();
-                                obj.entities[player].colour = 102;
+                                if (player > -1)
+                                {
+                                    obj.entities[player].colour = 102;
+                                }
                                 int companion = obj.getcompanion();
                                 if(companion>-1) obj.entities[companion].colour = 102;
 
                                 int teleporter = obj.getteleporter();
-                                obj.entities[teleporter].tile = 6;
-                                obj.entities[teleporter].colour = 102;
+                                if (teleporter > -1)
+                                {
+                                    obj.entities[teleporter].tile = 6;
+                                    obj.entities[teleporter].colour = 102;
+                                }
                                 //which teleporter script do we use? it depends on the companion!
                                 game.state = 3000;
                                 game.statedelay = 0;
@@ -2007,7 +2019,10 @@ void mapinput()
             game.hascontrol = false;
 
             int i = obj.getplayer();
-            obj.entities[i].colour = 102;
+            if (i > -1)
+            {
+                obj.entities[i].colour = 102;
+            }
 
             //which teleporter script do we use? it depends on the companion!
             game.state = 4000;
@@ -2171,11 +2186,17 @@ void teleporterinput()
                 game.hascontrol = false;
 
                 int i = obj.getplayer();
-                obj.entities[i].colour = 102;
+                if (i > -1)
+                {
+                    obj.entities[i].colour = 102;
+                }
 
                 i = obj.getteleporter();
-                obj.entities[i].tile = 6;
-                obj.entities[i].colour = 102;
+                if (i > -1)
+                {
+                    obj.entities[i].tile = 6;
+                    obj.entities[i].colour = 102;
+                }
                 //which teleporter script do we use? it depends on the companion!
                 game.state = 4000;
                 game.statedelay = 0;

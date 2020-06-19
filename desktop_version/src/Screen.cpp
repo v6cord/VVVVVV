@@ -8,7 +8,7 @@
 #include <cstring>
 #include <physfs.h>
 
-Screen::Screen()
+void Screen::init()
 {
 	m_window = NULL;
 	m_renderer = NULL;
@@ -21,9 +21,7 @@ Screen::Screen()
 	filterSubrect.y = 1;
 	filterSubrect.w = 318;
 	filterSubrect.h = 238;
-}
 
-void Screen::init() {
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
 #if defined(__SWITCH__) || defined(__ANDROID__)

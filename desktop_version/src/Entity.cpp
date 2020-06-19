@@ -1067,14 +1067,21 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
     blocks.push_back(block);
 }
 
-void entityclass::removeentity(int t)
+// Remove entity, and return true if entity was successfully removed
+bool entityclass::removeentity(int t)
 {
     if (t < 0 || t > (int) entities.size())
     {
         puts("removeentity() out-of-bounds!");
-        return;
+        return true;
+    }
+    if (entities[t].rule == 0 && t == getplayer())
+    {
+        // Don't remove the player entity!
+        return false;
     }
     entities.erase(entities.begin() + t);
+    return true;
 }
 
 void entityclass::removeallblocks()
@@ -2347,15 +2354,13 @@ bool entityclass::updateentities( int i )
                 {
                     if (entities[i].xp >= 335)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                     if (game.roomx == 117)
                     {
                         if (entities[i].xp >= (33*8)-32)
                         {
-                            removeentity(i);
-                            return true;
+                            return removeentity(i);
                         }
                         //collector for LIES
                     }
@@ -2384,15 +2389,13 @@ bool entityclass::updateentities( int i )
                 {
                     if (entities[i].yp <= -60)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                     if (game.roomy == 108)
                     {
                         if (entities[i].yp <= 60)
                         {
-                            removeentity(i);
-                            return true;
+                            return removeentity(i);
                         }
                         //collector for factory
                     }
@@ -2461,8 +2464,9 @@ bool entityclass::updateentities( int i )
             case 16: //MAVERICK BUS FOLLOWS HIS OWN RULES
                 if (entities[i].state == 0)   //Init
                 {
+                    int player = getplayer();
                     //first, y position
-                    if (entities[getplayer()].yp > 14 * 8)
+                    if (player > -1 && entities[player].yp > 14 * 8)
                     {
                         entities[i].tile = 120;
                         entities[i].yp = (28*8)-62;
@@ -2473,7 +2477,7 @@ bool entityclass::updateentities( int i )
                         entities[i].yp = 24;
                     }
                     //now, x position
-                    if (entities[getplayer()].xp > 20 * 8)
+                    if (player > -1 && entities[player].xp > 20 * 8)
                     {
                         //approach from the left
                         entities[i].xp = -64;
@@ -2591,8 +2595,7 @@ bool entityclass::updateentities( int i )
                         entities[i].state = 3;
                         entities[i].invis = true;
                     } else {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                 }
             }
@@ -2634,8 +2637,7 @@ bool entityclass::updateentities( int i )
                     // Removes collision
                     entities[i].onentity = 0;
                 } else {
-                    removeentity(i);
-                    return true;
+                    return removeentity(i);
                 }
             }
             else if (entities[i].state == 2)
@@ -2658,8 +2660,7 @@ bool entityclass::updateentities( int i )
                 entities[i].life--;
                 if (entities[i].life < 0)
                 {
-                    removeentity(i);
-                    return true;
+                    return removeentity(i);
                 }
             }
             break;
@@ -2675,8 +2676,7 @@ bool entityclass::updateentities( int i )
                 music.playef(4);
                 coincollect[entities[i].para] = true;
 
-                removeentity(i);
-                return true;
+                return removeentity(i);
             }
             break;
         case 7: //Found a trinket
@@ -2700,8 +2700,7 @@ bool entityclass::updateentities( int i )
                     }
                 }
 
-                removeentity(i);
-                return true;
+                return removeentity(i);
             }
             break;
         case 8: //Savepoints
@@ -2747,7 +2746,11 @@ bool entityclass::updateentities( int i )
 
                 game.saverx = game.roomx;
                 game.savery = game.roomy;
-                game.savedir = entities[getplayer()].dir;
+                int player = getplayer();
+                if (player > -1)
+                {
+                    game.savedir = entities[player].dir;
+                }
                 entities[i].state = 0;
             }
             break;
@@ -2777,11 +2780,11 @@ bool entityclass::updateentities( int i )
                 temp = getplayer();
                 if (game.gravitycontrol == 0)
                 {
-                    if (entities[temp].vy < 3) entities[temp].vy = 3;
+                    if (temp > -1 && entities[temp].vy < 3) entities[temp].vy = 3;
                 }
                 else
                 {
-                    if (entities[temp].vy > -3) entities[temp].vy = -3;
+                    if (temp > -1 && entities[temp].vy > -3) entities[temp].vy = -3;
                 }
             }
             else if (entities[i].state == 2)
@@ -2834,20 +2837,20 @@ bool entityclass::updateentities( int i )
                 if (entities[k].rule == 7)	entities[k].tile = 6;
                 //Stay close to the hero!
                 int j = getplayer();
-                if (entities[j].xp > entities[i].xp + 5)
+                if (j > -1 && entities[j].xp > entities[i].xp + 5)
                 {
                     entities[i].dir = 1;
                 }
-                else if (entities[j].xp < entities[i].xp - 5)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 5)
                 {
                     entities[i].dir = 0;
                 }
 
-                if (entities[j].xp > entities[i].xp + 45)
+                if (j > -1 && entities[j].xp > entities[i].xp + 45)
                 {
                     entities[i].ax = 3;
                 }
-                else if (entities[j].xp < entities[i].xp - 45)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 45)
                 {
                     entities[i].ax = -3;
                 }
@@ -2865,20 +2868,20 @@ bool entityclass::updateentities( int i )
             {
                 //Basic rules, don't change expression
                 int j = getplayer();
-                if (entities[j].xp > entities[i].xp + 5)
+                if (j > -1 && entities[j].xp > entities[i].xp + 5)
                 {
                     entities[i].dir = 1;
                 }
-                else if (entities[j].xp < entities[i].xp - 5)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 5)
                 {
                     entities[i].dir = 0;
                 }
 
-                if (entities[j].xp > entities[i].xp + 45)
+                if (j > -1 && entities[j].xp > entities[i].xp + 45)
                 {
                     entities[i].ax = 3;
                 }
-                else if (entities[j].xp < entities[i].xp - 45)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 45)
                 {
                     entities[i].ax = -3;
                 }
@@ -2888,20 +2891,20 @@ bool entityclass::updateentities( int i )
                 //Everything from 10 on is for cutscenes
                 //Basic rules, don't change expression
                 int j = getplayer();
-                if (entities[j].xp > entities[i].xp + 5)
+                if (j > -1 && entities[j].xp > entities[i].xp + 5)
                 {
                     entities[i].dir = 1;
                 }
-                else if (entities[j].xp < entities[i].xp - 5)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 5)
                 {
                     entities[i].dir = 0;
                 }
 
-                if (entities[j].xp > entities[i].xp + 45)
+                if (j > -1 && entities[j].xp > entities[i].xp + 45)
                 {
                     entities[i].ax = 3;
                 }
-                else if (entities[j].xp < entities[i].xp - 45)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 45)
                 {
                     entities[i].ax = -3;
                 }
@@ -3045,11 +3048,11 @@ bool entityclass::updateentities( int i )
             {
                 //Stand still and face the player
                 int j = getplayer();
-                if (entities[j].xp > entities[i].xp + 5)
+                if (j > -1 && entities[j].xp > entities[i].xp + 5)
                 {
                     entities[i].dir = 1;
                 }
-                else if (entities[j].xp < entities[i].xp - 5)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 5)
                 {
                     entities[i].dir = 0;
                 }
@@ -3161,7 +3164,7 @@ bool entityclass::updateentities( int i )
             {
                 //follow player, but only if he's on the floor!
                 int j = getplayer();
-                if(entities[j].onground>0)
+                if(j > -1 && entities[j].onground>0)
                 {
                     if (entities[j].xp > entities[i].xp + 5)
                     {
@@ -3187,11 +3190,11 @@ bool entityclass::updateentities( int i )
                 }
                 else
                 {
-                    if (entities[j].xp > entities[i].xp + 5)
+                    if (j > -1 && entities[j].xp > entities[i].xp + 5)
                     {
                         entities[i].dir = 1;
                     }
-                    else if (entities[j].xp < entities[i].xp - 5)
+                    else if (j > -1 && entities[j].xp < entities[i].xp - 5)
                     {
                         entities[i].dir = 0;
                     }
@@ -3207,8 +3210,7 @@ bool entityclass::updateentities( int i )
                 if (entities[i].xp >= 310)
                 {
                     game.scmprogress++;
-                    removeentity(i);
-                    return true;
+                    return removeentity(i);
                 }
             }
             break;
@@ -3233,8 +3235,7 @@ bool entityclass::updateentities( int i )
                     entities[i].vx = 7;
                     if (entities[i].xp > 320)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                 }
                 break;
@@ -3244,8 +3245,7 @@ bool entityclass::updateentities( int i )
                     entities[i].vx = -7;
                     if (entities[i].xp <-20)
                     {
-                        removeentity(i);
-                        return true;
+                        return removeentity(i);
                     }
                 }
                 break;
@@ -3255,7 +3255,7 @@ bool entityclass::updateentities( int i )
         case 51: //Vertical warp line
             if (entities[i].state == 2){
               int j=getplayer();
-              if(entities[j].xp<=307){
+              if(j > -1 && entities[j].xp<=307){
                 customwarpmodevon=false;
                 entities[i].state = 0;
               }
@@ -3270,7 +3270,7 @@ bool entityclass::updateentities( int i )
         case 52: //Vertical warp line
             if (entities[i].state == 2){
               int j=getplayer();
-              if(entities[j].xp<=307){
+              if(j > -1 && entities[j].xp<=307){
                 customwarpmodevon=false;
                 entities[i].state = 0;
               }
@@ -3312,11 +3312,11 @@ bool entityclass::updateentities( int i )
             {
                 //Basic rules, don't change expression
                 int j = getplayer();
-                if (entities[j].xp > entities[i].xp + 5)
+                if (j > -1 && entities[j].xp > entities[i].xp + 5)
                 {
                     entities[i].dir = 1;
                 }
-                else if (entities[j].xp < entities[i].xp - 5)
+                else if (j > -1 && entities[j].xp < entities[i].xp - 5)
                 {
                     entities[i].dir = 0;
                 }
@@ -3337,8 +3337,7 @@ bool entityclass::updateentities( int i )
                     customcollect[entities[i].para] = true;
                 }
 
-                removeentity(i);
-                return true;
+                return removeentity(i);
             }
             break;
         case 100: //The teleporter
@@ -3381,7 +3380,11 @@ bool entityclass::updateentities( int i )
 
                     game.saverx = game.roomx;
                     game.savery = game.roomy;
-                    game.savedir = entities[getplayer()].dir;
+                    int player = getplayer();
+                    if (player > -1)
+                    {
+                        game.savedir = entities[player].dir;
+                    }
                     entities[i].state = 0;
                 }
 
@@ -4738,7 +4741,7 @@ void entityclass::movingplatformfix( int t )
 
     //If this intersects the player, then we move the player along it
     int j = getplayer();
-    if (entitycollide(t, j))
+    if (j > -1 && entitycollide(t, j))
     {
         //ok, bollox, let's make sure
         entities[j].yp = entities[j].yp + int(entities[j].vy);
@@ -4853,6 +4856,8 @@ void entityclass::customwarplinecheck(int i) {
 
 void entityclass::entitycollisioncheck()
 {
+    std::vector<SDL_Surface*>& spritesvec = graphics.flipmode ? graphics.flipsprites : graphics.sprites;
+
     for (size_t i = 0; i < entities.size(); i++)
     {
         //We test entity to entity
@@ -4872,23 +4877,14 @@ void entityclass::entitycollisioncheck()
                             colpoint1.y = entities[i].yp;
                             colpoint2.x = entities[j].xp;
                             colpoint2.y = entities[j].yp;
-                            if (graphics.flipmode)
+                            int drawframe1 = entities[i].drawframe;
+                            int drawframe2 = entities[j].drawframe;
+                            if (INBOUNDS(drawframe1, spritesvec) && INBOUNDS(drawframe2, spritesvec)
+                            && graphics.Hitest(spritesvec[drawframe1],
+                                             colpoint1, spritesvec[drawframe2], colpoint2))
                             {
-                                if (graphics.Hitest(graphics.flipsprites[entities[i].drawframe],
-                                                 colpoint1, graphics.flipsprites[entities[j].drawframe], colpoint2))
-                                {
-                                    //Do the collision stuff
-                                    game.deathseq = 30;
-                                }
-                            }
-                            else
-                            {
-                                if (graphics.Hitest(graphics.sprites[entities[i].drawframe],
-                                                 colpoint1, graphics.sprites[entities[j].drawframe], colpoint2) )
-                                {
-                                    //Do the collision stuff
-                                    game.deathseq = 30;
-                                }
+                                //Do the collision stuff
+                                game.deathseq = 30;
                             }
                         }
                         else
@@ -4984,25 +4980,15 @@ void entityclass::entitycollisioncheck()
                                     colpoint1.y = entities[i].yp;
                                     colpoint2.x = entities[j].xp;
                                     colpoint2.y = entities[j].yp;
-                                    if (graphics.flipmode)
+                                    int drawframe1 = entities[i].drawframe;
+                                    int drawframe2 = entities[j].drawframe;
+                                    if (INBOUNDS(drawframe1, spritesvec) && INBOUNDS(drawframe2, spritesvec)
+                                    && graphics.Hitest(spritesvec[drawframe1],
+                                                     colpoint1, spritesvec[drawframe2], colpoint2))
                                     {
-                                        if (graphics.Hitest(graphics.flipsprites[entities[i].drawframe],
-                                                         colpoint1, graphics.flipsprites[entities[j].drawframe], colpoint2))
-                                        {
-                                            //Do the collision stuff
-                                            game.deathseq = 30;
-                                            game.scmhurt = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (graphics.Hitest(graphics.sprites[entities[i].drawframe],
-                                                         colpoint1, graphics.sprites[entities[j].drawframe], colpoint2))
-                                        {
-                                            //Do the collision stuff
-                                            game.deathseq = 30;
-                                            game.scmhurt = true;
-                                        }
+                                        //Do the collision stuff
+                                        game.deathseq = 30;
+                                        game.scmhurt = true;
                                     }
                                 }
                                 else
@@ -5033,7 +5019,7 @@ void entityclass::entitycollisioncheck()
     //can't have the player being stuck...
     int j = getplayer();
     skipdirblocks = true;
-    if (!testwallsx(j, entities[j].xp, entities[j].yp))
+    if (j > -1 && !testwallsx(j, entities[j].xp, entities[j].yp))
     {
         //Let's try to get out...
         if (entities[j].rule == 0)

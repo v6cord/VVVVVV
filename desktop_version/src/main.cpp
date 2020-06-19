@@ -77,6 +77,7 @@ Game game;
 KeyPoll key;
 mapclass map;
 entityclass obj;
+Screen gameScreen;
 
 #ifdef __SWITCH__
 FILE* logger;
@@ -210,7 +211,7 @@ int main(int argc, char *argv[])
 
     game.init();
     graphics.init();
-    Screen gameScreen;
+    gameScreen.init();
     graphics.screenbuffer = &gameScreen;
 
     game.loadstats();
