@@ -5,30 +5,6 @@
 #include <vector>
 #include <string>
 
-// Script drawing stuff
-struct scriptimage {
-    int type = 0; // 0 for text, 1 for image, 2 for rect
-    int x = 0;
-    int y = 0;
-    int w = 0;
-    int h = 0;
-    int r = 0;
-    int g = 0;
-    int b = 0;
-    int index = 0;
-    int mask_index = 0;
-    int mask_x = 0;
-    int mask_y = 0;
-    std::string text;
-    bool center = false;
-    int bord = false;
-    int sc = 2;
-    bool persistent = false;
-    int alpha = 0;
-    std::string layer = "top";
-    SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
-};
-
 template<typename T>
 class growing_vector : public std::vector<T> {
     public:
