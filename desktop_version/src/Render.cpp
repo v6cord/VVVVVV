@@ -98,6 +98,11 @@ std::vector<std::string> changelog = {
     "- Added the built-in variable %altstate%",
     "- keepcolor(on/off) - preserves",
     "  changeplayercolor after deaths",
+    "- The background argument in drawimage",
+    "  has been replaced with layers. Usable",
+    "  layers are belowtiles, belowentities,",
+    "  belowroomname, belowroomtext,",
+    "  belowcoincounter and top."
     "",
     "Version c1.0-pre1",
     "[line]",
