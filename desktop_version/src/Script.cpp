@@ -303,19 +303,28 @@ void quit() {
 void scriptclass::renderimages(enum Layer::LayerName layer) {
     for (auto& current : scriptrender) {
         if (layer != current.layer) continue;
-        if (current.type == 0) {
-            if (current.bord == 0)
+        switch (current.type) {
+        case 0:
+            switch (current.bord) {
+            case 0:
                 graphics.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
-            else if (current.bord == 1)
+                break;
+            case 1:
                 graphics.bprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
-            else if (current.bord == 2)
+                break;
+            case 2:
                 graphics.bigprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center, current.sc);
-        } else if (current.type == 1) {
+                break;
+            }
+            break;
+        case 1: {
             auto pixels = (uint8_t*) graphics.backBuffer->pixels;
             auto row = pixels + graphics.backBuffer->pitch * current.y;
             auto pixel = ((uint32_t*) row) + current.x;
             *pixel = graphics.getRGB(current.r, current.g, current.b);
-        } else if (current.type == 2) {
+            break;
+        }
+        case 2: {
             SDL_Rect temprect;
             temprect.x = current.x;
             temprect.y = current.y;
@@ -336,10 +345,14 @@ void scriptclass::renderimages(enum Layer::LayerName layer) {
             SDL_FillRect(s, nullptr, SDL_MapRGBA(s->format, current.r, current.b, current.g, current.alpha));
             SDL_BlitSurface(s, nullptr, graphics.backBuffer, &temprect);
             SDL_FreeSurface(s);
-        } else if (current.type == 3) {
+            break;
+        }
+        case 3:
             graphics.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
-        } else if (current.type == 4) {
+            break;
+        case 4:
             graphics.drawscriptimagemasked( game, current.index, current.x, current.y, current.mask_index, current.mask_x, current.mask_y );
+            break;
         }
     }
 }
