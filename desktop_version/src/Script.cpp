@@ -301,8 +301,7 @@ void quit() {
 }
 
 void scriptclass::renderimages(enum Layer::LayerName layer) {
-    for(int i = 0; i < (int) scriptrender.size(); i++) {
-        scriptimage current = scriptrender[i];
+    for (auto& current : scriptrender) {
         if (layer != current.layer) continue;
         if (current.type == 0) {
             if (current.bord == 0)
