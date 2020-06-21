@@ -25,7 +25,7 @@ struct scriptimage {
     int sc = 2;
     bool persistent = false;
     int alpha = 0;
-    int background = false;
+    std::string layer = "top";
     SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
 };
 

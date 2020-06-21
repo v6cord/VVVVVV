@@ -300,6 +300,51 @@ void quit() {
     }
 }
 
+void scriptclass::renderimages(std::string layer) {
+    for(int i = 0; i < (int) scriptrender.size(); i++) {
+        scriptimage current = scriptrender[i];
+        if (layer != current.layer) continue;
+        if (current.type == 0) {
+            if (current.bord == 0)
+                graphics.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+            else if (current.bord == 1)
+                graphics.bprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+            else if (current.bord == 2)
+                graphics.bigprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center, current.sc);
+        } else if (current.type == 1) {
+            auto pixels = (uint8_t*) graphics.backBuffer->pixels;
+            auto row = pixels + graphics.backBuffer->pitch * current.y;
+            auto pixel = ((uint32_t*) row) + current.x;
+            *pixel = graphics.getRGB(current.r, current.g, current.b);
+        } else if (current.type == 2) {
+            SDL_Rect temprect;
+            temprect.x = current.x;
+            temprect.y = current.y;
+            temprect.w = current.w;
+            temprect.h = current.h;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+            auto rmask = 0xff000000;
+            auto gmask = 0x00ff0000;
+            auto bmask = 0x0000ff00;
+            auto amask = 0x000000ff;
+#else
+            auto rmask = 0x000000ff;
+            auto gmask = 0x0000ff00;
+            auto bmask = 0x00ff0000;
+            auto amask = 0xff000000;
+#endif
+            auto s = SDL_CreateRGBSurface(0, current.w, current.h, 32, rmask, gmask, bmask, amask);
+            SDL_FillRect(s, nullptr, SDL_MapRGBA(s->format, current.r, current.b, current.g, current.alpha));
+            SDL_BlitSurface(s, nullptr, graphics.backBuffer, &temprect);
+            SDL_FreeSurface(s);
+        } else if (current.type == 3) {
+            graphics.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
+        } else if (current.type == 4) {
+            graphics.drawscriptimagemasked( game, current.index, current.x, current.y, current.mask_index, current.mask_x, current.mask_y );
+        }
+    }
+}
+
 void scriptclass::run() {
     try {
         if (scriptdelay == 0) {
@@ -1137,7 +1182,7 @@ void scriptclass::run() {
                         temp.center = parsebool(words[4]);
                         if (words[5] != "") {
                             temp.alpha = ss_toi(words[5]);
-                            temp.background = parsebool(words[6]);
+                            temp.layer = words[6];
                         } else {
                             temp.alpha = 255;
                         }

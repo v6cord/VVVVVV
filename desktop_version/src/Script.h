@@ -53,6 +53,7 @@ public:
 
     void tokenize(std::string t);
 
+    void renderimages(std::string layer);
     void run();
 
     void resetgametomenu();
