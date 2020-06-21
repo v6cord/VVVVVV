@@ -300,7 +300,7 @@ void quit() {
     }
 }
 
-void scriptclass::renderimages(std::string layer) {
+void scriptclass::renderimages(enum Layer::LayerName layer) {
     for(int i = 0; i < (int) scriptrender.size(); i++) {
         scriptimage current = scriptrender[i];
         if (layer != current.layer) continue;
@@ -1182,7 +1182,10 @@ void scriptclass::run() {
                         temp.center = parsebool(words[4]);
                         if (words[5] != "") {
                             temp.alpha = ss_toi(words[5]);
-                            temp.layer = words[6];
+                            if (layername_to_enum.find(words[6]) != layername_to_enum.end())
+                                temp.layer = layername_to_enum.at(words[6]);
+                            else
+                                temp.layer = Layer::top;
                         } else {
                             temp.alpha = 255;
                         }

@@ -21,6 +21,22 @@ struct Script {
     std::vector<std::string> contents;
 };
 
+#define LAYERNAMES \
+    X(belowtiles) \
+    X(belowentities) \
+    X(belowroomname) \
+    X(belowroomtext) \
+    X(belowcoincounter) \
+    X(top)
+
+namespace Layer {
+    enum LayerName {
+#define X(name) name,
+        LAYERNAMES
+#undef X
+    };
+};
+
 // Script drawing stuff
 struct scriptimage {
     int type = 0; // 0 for text, 1 for image, 2 for rect
@@ -41,7 +57,7 @@ struct scriptimage {
     int sc = 2;
     bool persistent = false;
     int alpha = 0;
-    std::string layer = "top";
+    enum Layer::LayerName layer = Layer::top;
     SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
 };
 
@@ -77,7 +93,7 @@ public:
 
     void tokenize(std::string t);
 
-    void renderimages(std::string layer);
+    void renderimages(enum Layer::LayerName layer);
     void run();
 
     void resetgametomenu();
@@ -136,6 +152,12 @@ public:
     int killtimer = 0;
 
     bool keepcolor = false;
+
+    const std::unordered_map<std::string, Layer::LayerName> layername_to_enum = {
+#define X(name) {#name, Layer::name},
+        LAYERNAMES
+#undef X
+    };
 };
 
 // Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)

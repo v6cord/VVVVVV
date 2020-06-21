@@ -1987,7 +1987,7 @@ void gamerender()
                     FillRect(graphics.backBuffer,0x00000);
                 }
             }
-            script.renderimages("belowtiles");
+            script.renderimages(Layer::belowtiles);
             if (map.final_colormode)
             {
                 graphics.drawfinalmap();
@@ -1998,7 +1998,7 @@ void gamerender()
             }
         }
 
-        script.renderimages("belowentities");
+        script.renderimages(Layer::belowentities);
 
         if(!game.completestop)
         {
@@ -2060,7 +2060,7 @@ void gamerender()
 #endif
     }
 
-    script.renderimages("belowroomname");
+    script.renderimages(Layer::belowroomname);
 
     if(map.extrarow==0 || (map.custommode && map.roomname!=""))
     {
@@ -2084,7 +2084,7 @@ void gamerender()
         }
     }
 
-    script.renderimages("belowroomtext");
+    script.renderimages(Layer::belowroomtext);
 
     if (map.roomtexton)
     {
@@ -2095,7 +2095,7 @@ void gamerender()
         }
     }
 
-    script.renderimages("belowcoincounter");
+    script.renderimages(Layer::belowcoincounter);
 
     if (ed.numcoins() > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
@@ -2109,7 +2109,7 @@ void gamerender()
 
     // scriptrender
 
-    script.renderimages("top");
+    script.renderimages(Layer::top);
 
     // Now we have to clear the vector
     if (script.scriptrender.size() > 0) {
