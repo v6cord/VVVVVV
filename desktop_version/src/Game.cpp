@@ -8093,6 +8093,7 @@ void Game::quittomenu()
 {
     gamestate = TITLEMODE;
     graphics.fademode = 4;
+    FILESYSTEM_unmountassets(); // should be before music.play(6)
     music.play(6);
     graphics.backgrounddrawn = false;
     map.tdrawback = true;
