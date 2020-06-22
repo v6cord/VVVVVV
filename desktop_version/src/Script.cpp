@@ -307,6 +307,63 @@ void scriptclass::stop() {
     running = false;
 }
 
+void scriptclass::renderimages(enum Layer::LayerName layer) {
+    for (auto& current : scriptrender) {
+        if (layer != current.layer) continue;
+        switch (current.type) {
+        case 0:
+            switch (current.bord) {
+            case 0:
+                graphics.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+                break;
+            case 1:
+                graphics.bprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
+                break;
+            case 2:
+                graphics.bigprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center, current.sc);
+                break;
+            }
+            break;
+        case 1: {
+            auto pixels = (uint8_t*) graphics.backBuffer->pixels;
+            auto row = pixels + graphics.backBuffer->pitch * current.y;
+            auto pixel = ((uint32_t*) row) + current.x;
+            *pixel = graphics.getRGB(current.r, current.g, current.b);
+            break;
+        }
+        case 2: {
+            SDL_Rect temprect;
+            temprect.x = current.x;
+            temprect.y = current.y;
+            temprect.w = current.w;
+            temprect.h = current.h;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+            auto rmask = 0xff000000;
+            auto gmask = 0x00ff0000;
+            auto bmask = 0x0000ff00;
+            auto amask = 0x000000ff;
+#else
+            auto rmask = 0x000000ff;
+            auto gmask = 0x0000ff00;
+            auto bmask = 0x00ff0000;
+            auto amask = 0xff000000;
+#endif
+            auto s = SDL_CreateRGBSurface(0, current.w, current.h, 32, rmask, gmask, bmask, amask);
+            SDL_FillRect(s, nullptr, SDL_MapRGBA(s->format, current.r, current.b, current.g, current.alpha));
+            SDL_BlitSurface(s, nullptr, graphics.backBuffer, &temprect);
+            SDL_FreeSurface(s);
+            break;
+        }
+        case 3:
+            graphics.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
+            break;
+        case 4:
+            graphics.drawscriptimagemasked( game, current.index, current.x, current.y, current.mask_index, current.mask_x, current.mask_y );
+            break;
+        }
+    }
+}
+
 void scriptclass::run() {
     try {
         for (auto it = lua_scripts.begin(); it != lua_scripts.end();) {
@@ -1155,7 +1212,10 @@ void scriptclass::run() {
                         temp.center = parsebool(words[4]);
                         if (words[5] != "") {
                             temp.alpha = ss_toi(words[5]);
-                            temp.background = parsebool(words[6]);
+                            if (layername_to_enum.find(words[6]) != layername_to_enum.end())
+                                temp.layer = layername_to_enum.at(words[6]);
+                            else
+                                temp.layer = Layer::top;
                         } else {
                             temp.alpha = 255;
                         }

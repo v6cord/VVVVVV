@@ -98,6 +98,11 @@ std::vector<std::string> changelog = {
     "- Added the built-in variable %altstate%",
     "- keepcolor(on/off) - preserves",
     "  changeplayercolor after deaths",
+    "- The background argument in drawimage",
+    "  has been replaced with layers. Usable",
+    "  layers are belowtiles, belowentities,",
+    "  belowroomname, belowroomtext,",
+    "  belowcoincounter and top."
     "",
     "Version c1.0-pre1",
     "[line]",
@@ -1982,6 +1987,7 @@ void gamerender()
                     FillRect(graphics.backBuffer,0x00000);
                 }
             }
+            script.renderimages(Layer::belowtiles);
             if (map.final_colormode)
             {
                 graphics.drawfinalmap();
@@ -1992,12 +1998,7 @@ void gamerender()
             }
         }
 
-        for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
-            scriptimage current = script.scriptrender[i];
-            if (current.type == 3 && current.background) {
-                graphics.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
-            }
-        }
+        script.renderimages(Layer::belowentities);
 
         if(!game.completestop)
         {
@@ -2059,6 +2060,8 @@ void gamerender()
 #endif
     }
 
+    script.renderimages(Layer::belowroomname);
+
     if(map.extrarow==0 || (map.custommode && map.roomname!=""))
     {
         graphics.footerrect.y = 230;
@@ -2081,6 +2084,8 @@ void gamerender()
         }
     }
 
+    script.renderimages(Layer::belowroomtext);
+
     if (map.roomtexton)
     {
         //Draw room text!
@@ -2089,6 +2094,8 @@ void gamerender()
             graphics.Print(map.roomtext[i].x*8 + map.roomtext[i].subx, (map.roomtext[i].y*8) + map.roomtext[i].suby, map.roomtext[i].text, 196, 196, 255 - help.glow);
         }
     }
+
+    script.renderimages(Layer::belowcoincounter);
 
     if (ed.numcoins() > 0 && !game.nocoincounter) {
         std::string coinstring = std::to_string(game.coins);
@@ -2102,47 +2109,7 @@ void gamerender()
 
     // scriptrender
 
-    for(growing_vector<std::string>::size_type i = 0; i < script.scriptrender.size(); i++) {
-        scriptimage current = script.scriptrender[i];
-        if (current.type == 0) {
-            if (current.bord == 0)
-                graphics.Print(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
-            else if (current.bord == 1)
-                graphics.bprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center);
-            else if (current.bord == 2)
-                graphics.bigprint(current.x,current.y,current.text,current.r,current.g,current.b, current.center, current.sc);
-        } else if (current.type == 1) {
-            auto pixels = (uint8_t*) graphics.backBuffer->pixels;
-            auto row = pixels + graphics.backBuffer->pitch * current.y;
-            auto pixel = ((uint32_t*) row) + current.x;
-            *pixel = graphics.getRGB(current.r, current.g, current.b);
-        } else if (current.type == 2) {
-            SDL_Rect temprect;
-            temprect.x = current.x;
-            temprect.y = current.y;
-            temprect.w = current.w;
-            temprect.h = current.h;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-            auto rmask = 0xff000000;
-            auto gmask = 0x00ff0000;
-            auto bmask = 0x0000ff00;
-            auto amask = 0x000000ff;
-#else
-            auto rmask = 0x000000ff;
-            auto gmask = 0x0000ff00;
-            auto bmask = 0x00ff0000;
-            auto amask = 0xff000000;
-#endif
-            auto s = SDL_CreateRGBSurface(0, current.w, current.h, 32, rmask, gmask, bmask, amask);
-            SDL_FillRect(s, nullptr, SDL_MapRGBA(s->format, current.r, current.b, current.g, current.alpha));
-            SDL_BlitSurface(s, nullptr, graphics.backBuffer, &temprect);
-            SDL_FreeSurface(s);
-        } else if (current.type == 3 && !current.background) {
-            graphics.drawscriptimage( game, current.index, current.x, current.y, current.center, current.alpha, current.blend );
-        } else if (current.type == 4) {
-            graphics.drawscriptimagemasked( game, current.index, current.x, current.y, current.mask_index, current.mask_x, current.mask_y );
-        }
-    }
+    script.renderimages(Layer::top);
 
     // Now we have to clear the vector
     if (script.scriptrender.size() > 0) {

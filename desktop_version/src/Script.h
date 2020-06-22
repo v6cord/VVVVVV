@@ -24,6 +24,46 @@ struct Script {
     bool lua;
 };
 
+#define LAYERNAMES \
+    X(belowtiles) \
+    X(belowentities) \
+    X(belowroomname) \
+    X(belowroomtext) \
+    X(belowcoincounter) \
+    X(top)
+
+namespace Layer {
+    enum LayerName {
+#define X(name) name,
+        LAYERNAMES
+#undef X
+    };
+};
+
+// Script drawing stuff
+struct scriptimage {
+    int type = 0; // 0 for text, 1 for image, 2 for rect
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+    int r = 0;
+    int g = 0;
+    int b = 0;
+    int index = 0;
+    int mask_index = 0;
+    int mask_x = 0;
+    int mask_y = 0;
+    std::string text;
+    bool center = false;
+    int bord = false;
+    int sc = 2;
+    bool persistent = false;
+    int alpha = 0;
+    enum Layer::LayerName layer = Layer::top;
+    SDL_BlendMode blend = SDL_BLENDMODE_BLEND;
+};
+
 class scriptclass
 {
 public:
@@ -56,6 +96,7 @@ public:
 
     void tokenize(std::string t);
 
+    void renderimages(enum Layer::LayerName layer);
     void run();
 
     void resetgametomenu();
@@ -114,6 +155,12 @@ public:
     int killtimer = 0;
 
     bool keepcolor = false;
+
+    const std::unordered_map<std::string, Layer::LayerName> layername_to_enum = {
+#define X(name) {#name, Layer::name},
+        LAYERNAMES
+#undef X
+    };
 
     std::list<lua_script> lua_scripts;
 
