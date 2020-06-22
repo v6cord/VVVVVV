@@ -4453,9 +4453,20 @@ void scriptclass::hardreset() {
     obj.coincollect.resize(100);
     game.nocoincounter = false;
 
-    if (obj.getplayer() > -1) {
-        obj.entities[obj.getplayer()].tile = 0;
-    }
+	int theplayer = obj.getplayer();
+	if (theplayer > -1){
+		obj.entities[theplayer].tile = 0;
+	}
+
+	// Remove duplicate player entities
+	for (int i = 0; i < (int) obj.entities.size(); i++)
+	{
+		if (i != theplayer)
+		{
+			removeentity_iter(i);
+			theplayer--; // just in case indice of player is not 0
+		}
+	}
 
     obj.kludgeonetimescript = false;
 
