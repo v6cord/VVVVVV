@@ -1460,7 +1460,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             //Check if it's already been collected
             entity.para = vx;
             entity.behave = vy;
-            if (coincollect[vx]) return -1;
+            if (!INBOUNDS(vx, coincollect) || coincollect[vx]) return -1;
         }
         break;
     case 9: //Something Shiny
@@ -1704,7 +1704,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (!collect[ (vx)]) return -1;
+        if (INBOUNDS(vx, collect) && !collect[ (vx)]) return -1;
         break;
     case 23: //SWN Enemies
         //Given a different behavior, these enemies are especially for SWN mode and disappear outside the screen.
@@ -2055,7 +2055,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (customcollect[vx]) return -1;
+        if (!INBOUNDS(vx, customcollect) || customcollect[vx]) return -1;
         break;
       case 56: //Custom enemy
         entity.rule = 1;
@@ -2683,9 +2683,13 @@ bool entityclass::updateentities( int i )
             //wait for collision
             if (entities[i].state == 1)
             {
-                if (game.intimetrial)
+                if (INBOUNDS(entities[i].para, collect))
                 {
                     collect[entities[i].para] = true;
+                }
+
+                if (game.intimetrial)
+                {
                     music.playef(25);
                 }
                 else
@@ -2693,7 +2697,6 @@ bool entityclass::updateentities( int i )
                     game.state = 1000;
                     music.silencedasmusik();
                     music.playef(3);
-                    collect[entities[i].para] = true;
                     if (game.trinkets() > game.stat_trinkets && !map.custommode)
                     {
                         game.stat_trinkets = game.trinkets();
@@ -3323,9 +3326,13 @@ bool entityclass::updateentities( int i )
             }
             else if (entities[i].state == 1)
             {
-                if (game.intimetrial)
+                if (INBOUNDS(entities[i].para, customcollect))
                 {
                     customcollect[entities[i].para] = true;
+                }
+
+                if (game.intimetrial)
+                {
                     music.playef(27);
                 }
                 else
@@ -3334,7 +3341,6 @@ bool entityclass::updateentities( int i )
                     //music.haltdasmusik();
                     if(music.currentsong!=-1) music.silencedasmusik();
                     music.playef(27);
-                    customcollect[entities[i].para] = true;
                 }
 
                 return removeentity(i);
