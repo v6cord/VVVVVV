@@ -29,6 +29,9 @@
 #include <iterator>
 #include <iostream>
 
+#include <inttypes.h>
+#include <cstdio>
+
 edlevelclass::edlevelclass()
 {
     tileset=0;
@@ -155,6 +158,100 @@ void editorclass::loadZips()
     if (needsReload) directoryList = FILESYSTEM_getLevelDirFileNames();
 }
 
+void replace_all(std::string& str, const std::string& from, const std::string& to)
+{
+    if (from.empty())
+    {
+        return;
+    }
+
+    size_t start_pos = 0;
+
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos)
+    {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); //In case `to` contains `from`, like replacing 'x' with 'yx'
+    }
+}
+
+std::string find_tag(const std::string& buf, const std::string& start, const std::string& end)
+{
+    size_t tag = buf.find(start);
+
+    if (tag == std::string::npos)
+    {
+        //No start tag
+        return "";
+    }
+
+    size_t tag_start = tag + start.size();
+    size_t tag_close = buf.find(end, tag_start);
+
+    if (tag_close == std::string::npos)
+    {
+        //No close tag
+        return "";
+    }
+
+    size_t tag_len = tag_close - tag_start;
+    std::string value(buf.substr(tag_start, tag_len));
+
+    //Encode special XML entities
+    replace_all(value, "&quot;", "\"");
+    replace_all(value, "&amp;", "&");
+    replace_all(value, "&apos;", "'");
+    replace_all(value, "&lt;", "<");
+    replace_all(value, "&gt;", ">");
+
+    //Encode general XML entities
+    size_t start_pos = 0;
+    while ((start_pos = value.find("&#", start_pos)) != std::string::npos)
+    {
+        bool hex = value[start_pos + 2] == 'x';
+        size_t end = value.find(';', start_pos);
+        size_t real_start = start_pos + 2 + ((int) hex);
+        std::string number(value.substr(real_start, end - real_start));
+
+        if (!is_positive_num(number, hex))
+        {
+            return "";
+        }
+
+        uint32_t character = 0;
+        if (hex)
+        {
+            sscanf(number.c_str(), "%" SCNx32, &character);
+        }
+        else
+        {
+            sscanf(number.c_str(), "%" SCNu32, &character);
+        }
+        uint32_t utf32[] = {character, 0};
+        std::string utf8;
+        utf8::utf32to8(utf32, utf32 + 1, std::back_inserter(utf8));
+        value.replace(start_pos, end - start_pos + 1, utf8);
+    }
+
+    return value;
+}
+
+#define TAG_FINDER(NAME, TAG) \
+std::string NAME(const std::string& buf) \
+{ \
+    return find_tag(buf, "<" TAG ">", "</" TAG ">"); \
+}
+
+TAG_FINDER(find_metadata, "MetaData"); //only for checking that it exists
+
+TAG_FINDER(find_creator, "Creator");
+TAG_FINDER(find_title, "Title");
+TAG_FINDER(find_desc1, "Desc1");
+TAG_FINDER(find_desc2, "Desc2");
+TAG_FINDER(find_desc3, "Desc3");
+TAG_FINDER(find_website, "website");
+
+#undef TAG_FINDER
+
 void editorclass::getDirectoryData()
 {
 
@@ -200,19 +297,23 @@ bool editorclass::getLevelMetaData(std::string& _path, LevelMetaData& _data )
 
     std::unique_ptr<char[], free_delete> mem((char*) uMem);
 
-    try {
-        _data.creator = find_creator(mem.get());
-        _data.title = find_title(mem.get());
-        _data.Desc1 = find_desc1(mem.get());
-        _data.Desc2 = find_desc2(mem.get());
-        _data.Desc3 = find_desc3(mem.get());
-        _data.website = find_website(mem.get());
-        _data.filename = _path;
-        return true;
-    } catch (const std::out_of_range& ex) {
-        std::cout << "Couldn't load metadata for " << _path << "!" << std::endl;
+    std::string buf((char*) uMem);
+
+    if (find_metadata(buf) == "")
+    {
+        printf("Couldn't load metadata for %s\n", _path.c_str());
         return false;
     }
+
+    _data.creator = find_creator(buf);
+    _data.title = find_title(buf);
+    _data.Desc1 = find_desc1(buf);
+    _data.Desc2 = find_desc2(buf);
+    _data.Desc3 = find_desc3(buf);
+    _data.website = find_website(buf);
+
+    _data.filename = _path;
+    return true;
 }
 
 void editorclass::reset()
@@ -7254,41 +7355,6 @@ void editorinput()
     }
 }
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to) {
-    if(from.empty())
-        return;
-    size_t start_pos = 0;
-    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
-}
-
-std::string find_tag(std::string_view buf, std::string_view start, std::string_view end) {
-    auto title_tag = buf.find(start);
-    if (title_tag == std::string_view::npos) throw std::out_of_range("No start tag!");
-    auto title_start = title_tag + start.size();
-    auto title_close = buf.find(end, title_start);
-    if (title_close == std::string_view::npos) throw std::out_of_range("No close tag!");
-    auto title_len = title_close - title_start;
-    std::string value(buf.substr(title_start, title_len));
-    replaceAll(value, "&quot;", "\"");
-    replaceAll(value, "&amp;", "&");
-    replaceAll(value, "&apos;", "'");
-    replaceAll(value, "&lt;", "<");
-    replaceAll(value, "&gt;", ">");
-    size_t start_pos = 0;
-    while ((start_pos = value.find("&#", start_pos)) != std::string::npos) {
-        auto end = value.find(';', start_pos);
-        int character = std::stoi(value.substr(start_pos + 2, end - start_pos));
-        int utf32[] = {character, 0};
-        std::string utf8;
-        utf8::utf32to8(utf32, utf32 + 1, std::back_inserter(utf8));
-        value.replace(start_pos, end - start_pos + 1, utf8);
-    }
-    return value;
-}
-
 int editorclass::getedaltstatenum(int rxi, int ryi, int state)
 {
     for (size_t i = 0; i < altstates.size(); i++)
@@ -7689,16 +7755,5 @@ int editorclass::numcoins()
     }
     return temp;
 }
-
-#define TAG_FINDER(NAME, TAG) std::string NAME(std::string_view buf) { return find_tag(buf, "<" TAG ">", "</" TAG ">"); }
-
-TAG_FINDER(find_title, "Title");
-TAG_FINDER(find_desc1, "Desc1");
-TAG_FINDER(find_desc2, "Desc2");
-TAG_FINDER(find_desc3, "Desc3");
-TAG_FINDER(find_creator, "Creator");
-TAG_FINDER(find_website, "website");
-
-#undef TAG_FINDER
 
 #endif /* NO_CUSTOM_LEVELS */
