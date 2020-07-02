@@ -1,9 +1,10 @@
-{ cross ? false, clang ? false, debug ? false, android ? false }:
-let pkgsNative = import (builtins.fetchTarball {
+{ cross ? false, clang ? false, debug ? false, android ? false, pinned ? true }:
+let pkgsPinned = import (builtins.fetchTarball {
   name = "cross-compile-nixpkgs";
   url = https://github.com/nixos/nixpkgs/archive/2436c27541b2f52deea3a4c1691216a02152e729.tar.gz;
   sha256 = "0p98dwy3rbvdp6np596sfqnwlra11pif3rbdh02pwdyjmdvkmbvd";
 }) {};
+    pkgsNative = if pinned then pkgsPinned else import <nixpkgs> {};
     pkgs = if cross then pkgsNative.pkgsCross.mingwW64 else pkgsNative;
     stdenv = if clang then pkgs.llvmPackages_latest.stdenv else pkgs.stdenv;
 in
