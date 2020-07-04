@@ -7091,7 +7091,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
 #if !defined(NO_CUSTOM_LEVELS)
     case Menu::playerworlds:
         option("play a level");
-        option("search for levels");
+        option("download levels");
  #if !defined(NO_EDITOR)
         option("level editor");
  #endif
@@ -7108,7 +7108,9 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         option("next page");
         option("previous page");
         option("return to menu");
-        menuyoff = 20;
+        menuxoff = 36;
+        menuyoff = 70 - (menuoptions.size() * 10);
+        menuspacing = 5;
         return; // no automatic centering
         break;
     case Menu::levellist:

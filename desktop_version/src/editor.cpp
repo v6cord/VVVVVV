@@ -209,7 +209,7 @@ bool editorclass::loadOnlineLevels()
 {
     onlinelevellist.clear();
 
-    auto r = cpr::Get(cpr::Url{"http://o.lol-sa.me/EbDZSgz.txt"});
+    auto r = cpr::Get(cpr::Url{"http://o.lol-sa.me/idTjiHS.txt"});
     //cpr::Authentication{"user", "pass"},
     //cpr::Parameters{{"anon", "true"}, {"key", "value"}});
     //r.status_code;                  // 200
@@ -234,12 +234,10 @@ bool editorclass::loadOnlineLevels()
     }
     
     hRoot=tinyxml2::XMLHandle(pElem);
-
     for( pElem = hRoot.FirstChildElement( "Levels" ).FirstChild().ToElement(); pElem; pElem=pElem->NextSiblingElement())
     {
         std::string pKey(pElem->Value());
         const char* pText = pElem->GetText();
-
         if (pKey == "Level")
         {
             OnlineLevelData loaded;
