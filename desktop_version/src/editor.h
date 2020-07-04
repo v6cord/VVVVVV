@@ -70,6 +70,17 @@ struct LevelMetaData
   int version;
 };
 
+struct OnlineLevelData
+{
+  std::string title;
+  std::string creator;
+  std::string Desc1;
+  std::string Desc2;
+  std::string Desc3;
+  std::string website;
+  std::string filename;
+};
+
 
 extern std::vector<edentities> edentity;
 
@@ -123,8 +134,11 @@ class editorclass{
 
   std::vector<std::string> directoryList;
   std::vector<LevelMetaData> ListOfMetaData;
+  
+  std::vector<OnlineLevelData> onlinelevellist;
 
   void loadZips();
+  bool loadOnlineLevels();
   void getDirectoryData();
   bool getLevelMetaData(std::string& filename, LevelMetaData& _data );
 

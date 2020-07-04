@@ -29,6 +29,8 @@
 #include <inttypes.h>
 #include <cstdio>
 
+#include <cpr/cpr.h>
+
 edlevelclass::edlevelclass()
 {
     tileset=0;
@@ -201,6 +203,61 @@ TAG_FINDER(find_desc3, "Desc3");
 TAG_FINDER(find_website, "website");
 
 #undef TAG_FINDER
+
+
+bool editorclass::loadOnlineLevels()
+{
+    onlinelevellist.clear();
+
+    auto r = cpr::Get(cpr::Url{"http://o.lol-sa.me/EbDZSgz.txt"});
+    //cpr::Authentication{"user", "pass"},
+    //cpr::Parameters{{"anon", "true"}, {"key", "value"}});
+    //r.status_code;                  // 200
+    //r.header["content-type"];       // application/json; charset=utf-8
+    //r.text;                         // JSON text string
+    if (r.status_code != 200) return false;
+    
+    //onlinelevellist.push_back(find_title(r.text));
+    
+    tinyxml2::XMLDocument doc; // we gotta parse this
+    doc.Parse(r.text.c_str());
+    
+    tinyxml2::XMLHandle hDoc(&doc);
+    tinyxml2::XMLElement* pElem;
+    tinyxml2::XMLHandle hRoot(NULL);
+    
+    pElem=hDoc.FirstChildElement().ToElement();
+    if (!pElem)
+    {
+        printf("Received corrupted file: No XML Root.\n");
+        return false;
+    }
+    
+    hRoot=tinyxml2::XMLHandle(pElem);
+
+    for( pElem = hRoot.FirstChildElement( "Levels" ).FirstChild().ToElement(); pElem; pElem=pElem->NextSiblingElement())
+    {
+        std::string pKey(pElem->Value());
+        const char* pText = pElem->GetText();
+
+        if (pKey == "Level")
+        {
+            OnlineLevelData loaded;
+            loaded.title = (std::string) pText;
+            loaded.creator = (std::string) pElem->Attribute("author");
+            loaded.Desc1 = (std::string) pElem->Attribute("desc1");
+            loaded.Desc2 = (std::string) pElem->Attribute("desc2");
+            loaded.Desc3 = (std::string) pElem->Attribute("desc3");
+            loaded.website = (std::string) pElem->Attribute("url");
+            loaded.filename = (std::string) pElem->Attribute("filename");
+            onlinelevellist.push_back(loaded);
+        }
+    }
+            
+    return true;
+
+}
+
 
 void editorclass::getDirectoryData()
 {

@@ -21,6 +21,7 @@ namespace Menu
     {
         mainmenu,
         playerworlds,
+        onlinelevellist,
         levellist,
         quickloadlevel,
         youwannaquit,

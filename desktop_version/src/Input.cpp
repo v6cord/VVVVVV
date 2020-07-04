@@ -278,8 +278,15 @@ void menuactionpress()
             game.createmenu(Menu::levellist);
             map.nexttowercolour();
             break;
- #if !defined(NO_EDITOR)
         case 1:
+            music.playef(11);
+            if (ed.loadOnlineLevels()) {
+                game.createmenu(Menu::onlinelevellist);
+            }
+            map.nexttowercolour();
+            break;
+ #if !defined(NO_EDITOR)
+        case 2:
             //LEVEL EDITOR HOOK
             music.playef(11);
             game.mainmenu = 20;
@@ -287,7 +294,7 @@ void menuactionpress()
             ed.filename="";
             break;
  #endif
-        case OFFSET+2:
+        case OFFSET+3:
             //"OPENFOLDERHOOK"
             if (FILESYSTEM_openDirectoryEnabled()
             && FILESYSTEM_openDirectory(FILESYSTEM_getUserLevelDirectory()))
@@ -300,7 +307,7 @@ void menuactionpress()
                 music.playef(2);
             }
             break;
-        case OFFSET+3:
+        case OFFSET+4:
             //back
             music.playef(11);
             game.returnmenu();
