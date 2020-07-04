@@ -193,50 +193,79 @@ void menuactionpress()
         break;
 #if !defined(NO_CUSTOM_LEVELS)
     case Menu::levellist:
-        if(game.currentmenuoption==(int)game.menuoptions.size()-1){
+        if (game.currentmenuoption == (int)game.menuoptions.size() - 1) {
             //go back to menu
             music.playef(11);
             game.returnmenu();
             map.nexttowercolour();
-        }else if(game.currentmenuoption==(int)game.menuoptions.size()-2){
+        }
+        else if (game.currentmenuoption == (int)game.menuoptions.size() - 2) {
             //previous page
             music.playef(11);
-            if(game.levelpage==0){
-                game.levelpage=(ed.ListOfMetaData.size()-1)/8;
-            }else{
+            if (game.levelpage == 0) {
+                game.levelpage = (ed.ListOfMetaData.size() - 1) / 8;
+            }
+            else {
                 game.levelpage--;
             }
             game.createmenu(Menu::levellist, true);
-            game.currentmenuoption=game.menuoptions.size()-2;
+            game.currentmenuoption = game.menuoptions.size() - 2;
             map.nexttowercolour();
-        }else if(game.currentmenuoption==(int)game.menuoptions.size()-3){
+        }
+        else if (game.currentmenuoption == (int)game.menuoptions.size() - 3) {
             //next page
             music.playef(11);
-            if((size_t) ((game.levelpage*8)+8) >= ed.ListOfMetaData.size()){
-                game.levelpage=0;
-            }else{
+            if ((size_t)((game.levelpage * 8) + 8) >= ed.ListOfMetaData.size()) {
+                game.levelpage = 0;
+            }
+            else {
                 game.levelpage++;
             }
             game.createmenu(Menu::levellist, true);
-            game.currentmenuoption=game.menuoptions.size()-3;
+            game.currentmenuoption = game.menuoptions.size() - 3;
             map.nexttowercolour();
-        }else{
+        }
+        else {
             //Ok, launch the level!
             //PLAY CUSTOM LEVEL HOOK
             music.playef(11);
-            game.playcustomlevel=(game.levelpage*8)+game.currentmenuoption;
-            game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
-            game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
+            game.playcustomlevel = (game.levelpage * 8) + game.currentmenuoption;
+            game.customleveltitle = ed.ListOfMetaData[game.playcustomlevel].title;
+            game.customlevelfilename = ed.ListOfMetaData[game.playcustomlevel].filename;
 
             std::string name = "saves/" + ed.ListOfMetaData[game.playcustomlevel].filename.substr(7) + ".vvv";
             tinyxml2::XMLDocument doc;
-            if (!FILESYSTEM_loadTiXml2Document(name.c_str(), doc)){
+            if (!FILESYSTEM_loadTiXml2Document(name.c_str(), doc)) {
                 game.mainmenu = 22;
                 graphics.fademode = 2;
-            }else{
+            }
+            else {
                 game.createmenu(Menu::quickloadlevel);
                 map.nexttowercolour();
             }
+        }
+        break;
+    case Menu::onlinelevellist:
+        if (game.currentmenuoption == (int)game.menuoptions.size() - 1) {
+            //go back to menu
+            music.playef(11);
+            game.returnmenu();
+            map.nexttowercolour();
+        }
+        else if (game.currentmenuoption == (int)game.menuoptions.size() - 2) {
+            //previous page
+            music.playef(11);
+            map.nexttowercolour();
+        }
+        else if (game.currentmenuoption == (int)game.menuoptions.size() - 3) {
+            //next page
+            music.playef(11);
+            map.nexttowercolour();
+        }
+        else {
+            // dl the level
+            music.playef(11);
+            map.nexttowercolour();
         }
         break;
 #endif

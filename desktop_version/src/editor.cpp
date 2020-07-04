@@ -29,7 +29,7 @@
 #include <inttypes.h>
 #include <cstdio>
 
-#include <cpr/cpr.h>
+#include <curl/curl.h>
 
 edlevelclass::edlevelclass()
 {
@@ -204,23 +204,41 @@ TAG_FINDER(find_website, "website");
 
 #undef TAG_FINDER
 
+static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
+{
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
 
 bool editorclass::loadOnlineLevels()
 {
     onlinelevellist.clear();
 
-    auto r = cpr::Get(cpr::Url{"http://o.lol-sa.me/idTjiHS.txt"});
-    //cpr::Authentication{"user", "pass"},
-    //cpr::Parameters{{"anon", "true"}, {"key", "value"}});
-    //r.status_code;                  // 200
-    //r.header["content-type"];       // application/json; charset=utf-8
-    //r.text;                         // JSON text string
-    if (r.status_code != 200) return false;
-    
-    //onlinelevellist.push_back(find_title(r.text));
-    
-    tinyxml2::XMLDocument doc; // we gotta parse this
-    doc.Parse(r.text.c_str());
+    CURL* curl;
+    CURLcode res;
+    std::string returned_xml;
+    curl = curl_easy_init();
+    if (!curl) return false;
+
+    curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8000/");
+
+    // Make sure it works with https
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+    // Write the data to an std::string once we get it
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &returned_xml);
+
+    // Perform the request, res will get the return code
+    res = curl_easy_perform(curl);
+    // cleanup
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK) return false;
+
+    tinyxml2::XMLDocument doc;
+    doc.Parse(returned_xml.c_str());
     
     tinyxml2::XMLHandle hDoc(&doc);
     tinyxml2::XMLElement* pElem;

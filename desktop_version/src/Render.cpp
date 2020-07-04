@@ -1210,6 +1210,10 @@ void titlerender()
         {
             graphics.drawlevelmenu(tr, tg, tb);
         }
+        else if (game.currentmenuname == Menu::onlinelevellist)
+        {
+            graphics.drawlevelmenu(tr, tg, tb);
+        }
         else
         {
             graphics.drawmenu(tr, tg, tb);

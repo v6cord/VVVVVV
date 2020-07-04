@@ -185,16 +185,13 @@ ENDIF()
 SET_PROPERTY(TARGET VVVVVV PROPERTY CXX_STANDARD 98)
 SET_PROPERTY(TARGET VVVVVV PROPERTY CXX_EXTENSIONS FALSE)
 
+find_package(CURL CONFIG REQUIRED)
+target_link_libraries(VVVVVV CURL::libcurl)
+
 # Library information
 ADD_LIBRARY(tinyxml2-static STATIC ${XML2_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
-
-
-include(FetchContent)
-FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/whoshuu/cpr.git)
-FetchContent_MakeAvailable(cpr)
-target_link_libraries(VVVVVV cpr::cpr)
 
 # Static Dependencies
 TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml2-static lodepng-static)

@@ -7103,12 +7103,12 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
     case Menu::onlinelevellist:
         for(int i=0; i < (int)ed.onlinelevellist.size(); i++)
         {
-            option(ed.onlinelevellist[i].title);
+            option("    " + ed.onlinelevellist[i].title);
         }
         option("next page");
         option("previous page");
         option("return to menu");
-        menuxoff = 36;
+        menuxoff = 20;
         menuyoff = 70 - (menuoptions.size() * 10);
         menuspacing = 5;
         return; // no automatic centering
