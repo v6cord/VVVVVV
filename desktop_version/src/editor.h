@@ -298,7 +298,7 @@ class editorclass{
   std::vector<GhostInfo> ghosts;
   int currentghosts;
 
-  int selected_online_level = 0;
+  int selected_online_level;
 };
 
 void addedentity(int xp, int yp, int tp, int p1=0, int p2=0, int p3=0, int p4=0, int p5=320, int p6=240);

@@ -7118,6 +7118,10 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         option("return to menu");
         menuyoff = 40;
         break;
+    case Menu::finisheddownload:
+        menuyoff = -20;
+        option("ok");
+        break;
     case Menu::levellist:
         if(ed.ListOfMetaData.size()==0)
         {

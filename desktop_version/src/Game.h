@@ -23,6 +23,7 @@ namespace Menu
         playerworlds,
         onlinelevellist,
         downloadlevelconfirm,
+        finisheddownload,
         levellist,
         quickloadlevel,
         youwannaquit,

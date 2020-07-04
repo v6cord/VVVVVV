@@ -96,6 +96,12 @@ void menurender()
         graphics.Print(-1, 80, "by " + ed.onlinelevellist[ed.selected_online_level].creator, tr, tg, tb, true);
         break;
     }
+    case Menu::finisheddownload:
+    {
+        graphics.Print(-1, 40, "Downloaded level as", tr, tg, tb, true);
+        graphics.Print(-1, 70, ed.onlinelevellist[ed.selected_online_level].filename, tr, tg, tb, true);
+        break;
+    }
 #endif
     case Menu::errornostart:
       graphics.Print( -1, 65, "ERROR: This level has", tr, tg, tb, true);

@@ -275,6 +275,7 @@ void menuactionpress()
             // download
             std::string filename = "levels/" + ed.onlinelevellist[ed.selected_online_level].filename;
             FILESYSTEM_downloadFile(filename.c_str(), ed.onlinelevellist[ed.selected_online_level].url.c_str());
+            game.createmenu(Menu::finisheddownload);
             music.playef(11);
             map.nexttowercolour();
         }
@@ -284,6 +285,12 @@ void menuactionpress()
             game.returnmenu();
             map.nexttowercolour();
         }
+        break;
+    case Menu::finisheddownload:
+        music.playef(11);
+        game.returnmenu();
+        game.returnmenu();
+        map.nexttowercolour();
         break;
 #endif
     case Menu::quickloadlevel:
