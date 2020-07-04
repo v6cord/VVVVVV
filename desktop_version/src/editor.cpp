@@ -264,12 +264,13 @@ bool editorclass::loadOnlineLevels()
             loaded.Desc1 = (std::string) pElem->Attribute("desc1");
             loaded.Desc2 = (std::string) pElem->Attribute("desc2");
             loaded.Desc3 = (std::string) pElem->Attribute("desc3");
-            loaded.website = (std::string) pElem->Attribute("url");
+            loaded.website = (std::string) pElem->Attribute("website");
+            loaded.url = (std::string) pElem->Attribute("url");
             loaded.filename = (std::string) pElem->Attribute("filename");
             onlinelevellist.push_back(loaded);
         }
     }
-            
+
     return true;
 
 }

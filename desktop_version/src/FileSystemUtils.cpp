@@ -18,6 +18,8 @@
 
 #include "tinyxml2.h"
 
+#include <curl/curl.h>
+
 /* These are needed for PLATFORM_* crap */
 #if defined(_WIN32)
 #include <windows.h>
@@ -293,6 +295,34 @@ void FILESYSTEM_freeMemory(unsigned char **mem)
 {
 	free(*mem);
 	*mem = NULL;
+}
+
+size_t write_data(void* ptr, size_t size, size_t nmemb, PHYSFS_File* stream) {
+    //size_t written = fwrite(ptr, size, nmemb, stream);
+    size_t written = PHYSFS_writeBytes(stream, ptr, size * nmemb);
+    return written;
+}
+
+bool FILESYSTEM_downloadFile(const char* name, const char* url) {
+    CURL* curl;
+    PHYSFS_File* fp;
+    CURLcode res;
+    curl = curl_easy_init();
+    if (curl)
+    {
+        fp = PHYSFS_openWrite(name);
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+        PHYSFS_close(fp);
+    }
+    else
+    {
+        return false;
+    }
+    return true;
 }
 
 bool FILESYSTEM_saveTiXml2Document(const char *name, tinyxml2::XMLDocument& doc)

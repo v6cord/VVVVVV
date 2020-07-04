@@ -264,7 +264,24 @@ void menuactionpress()
         }
         else {
             // dl the level
+            ed.selected_online_level = game.currentmenuoption;
             music.playef(11);
+            game.createmenu(Menu::downloadlevelconfirm);
+            map.nexttowercolour();
+        }
+        break;
+    case Menu::downloadlevelconfirm:
+        if (game.currentmenuoption == 0) {
+            // download
+            std::string filename = "levels/" + ed.onlinelevellist[ed.selected_online_level].filename;
+            FILESYSTEM_downloadFile(filename.c_str(), ed.onlinelevellist[ed.selected_online_level].url.c_str());
+            music.playef(11);
+            map.nexttowercolour();
+        }
+        else {
+            // return to menu
+            music.playef(11);
+            game.returnmenu();
             map.nexttowercolour();
         }
         break;

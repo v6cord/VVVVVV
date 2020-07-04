@@ -7101,7 +7101,7 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         maxspacing = 15;
         break;
     case Menu::onlinelevellist:
-        for(int i=0; i < (int)ed.onlinelevellist.size(); i++)
+        for (int i = 0; i < (int)ed.onlinelevellist.size(); i++)
         {
             option("    " + ed.onlinelevellist[i].title);
         }
@@ -7112,6 +7112,11 @@ void Game::createmenu( enum Menu::MenuName t, bool samemenu/*= false*/ )
         menuyoff = 70 - (menuoptions.size() * 10);
         menuspacing = 5;
         return; // no automatic centering
+        break;
+    case Menu::downloadlevelconfirm:
+        option("yes, download");
+        option("return to menu");
+        menuyoff = 40;
         break;
     case Menu::levellist:
         if(ed.ListOfMetaData.size()==0)

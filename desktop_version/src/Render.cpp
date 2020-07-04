@@ -71,7 +71,7 @@ void menurender()
     }
     case Menu::onlinelevellist:
     {
-        int tmp = game.currentmenuoption + (game.levelpage * 8);
+        int tmp = game.currentmenuoption;
         if (tmp >= 0 && tmp < (int)ed.onlinelevellist.size()) { // FIXME: size_t/int! -flibit
           //Don't show next/previous page or return to menu options here!
             if (game.menuoptions.size() - game.currentmenuoption <= 3) {
@@ -86,6 +86,14 @@ void menurender()
                 graphics.Print(-1, 90, ed.onlinelevellist[tmp].Desc3, tr, tg, tb, true);
             }
         }
+        break;
+    }
+    case Menu::downloadlevelconfirm:
+    {
+        graphics.Print(-1, 40, "Are you sure you want to", tr, tg, tb, true);
+        graphics.Print(-1, 50, "download this level?", tr, tg, tb, true);
+        graphics.Print(-1, 70, ed.onlinelevellist[ed.selected_online_level].title, tr, tg, tb, true);
+        graphics.Print(-1, 80, "by " + ed.onlinelevellist[ed.selected_online_level].creator, tr, tg, tb, true);
         break;
     }
 #endif
