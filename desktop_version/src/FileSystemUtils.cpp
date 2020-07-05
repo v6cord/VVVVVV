@@ -34,7 +34,7 @@
 #include <shellapi.h>
 #include <winbase.h>
 #define getcwd(buf, size) GetCurrentDirectory((size), (buf))
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__DragonFly__) || defined(__SWITCH__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__DragonFly__) || defined(__SWITCH__) || defined(__EMSCRIPTEN__)
 #include <unistd.h>
 #include <dirent.h>
 #include <limits.h>
@@ -648,7 +648,7 @@ void PLATFORM_migrateSaveData(char* output)
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 	} while (FindNextFile(hFind, &findHandle));
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__EMSCRIPTEN__)
 	/* No Migration needed. */
 #else
 #error See PLATFORM_migrateSaveData
@@ -712,7 +712,7 @@ bool FILESYSTEM_openDirectory(const char *dname) {
     ShellExecute(NULL, "open", dname, NULL, NULL, SW_SHOWMINIMIZED);
     return true;
 }
-#elif defined(__SWITCH__) || defined(__ANDROID__)
+#elif defined(__SWITCH__) || defined(__ANDROID__) || defined(__EMSCRIPTEN__)
 bool FILESYSTEM_openDirectory(const char *dname) {
     return false;
 }

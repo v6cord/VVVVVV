@@ -1,7 +1,12 @@
 #ifndef SOUNDSYSTEM_H
 #define SOUNDSYSTEM_H
 
+#ifdef __EMSCRIPTEN__
+// SDL2 is builtin to the Emscripten compiler so we can't do this in CMake :(
+#include <SDL2/SDL_mixer.h>
+#else
 #include <SDL_mixer.h>
+#endif
 
 class MusicTrack
 {

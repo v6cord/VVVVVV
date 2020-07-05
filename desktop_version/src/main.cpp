@@ -43,6 +43,8 @@
 #include <mingw.thread.h>
 #include <mingw.condition_variable.h>
 #include <mingw.mutex.h>
+#elif defined(__EMSCRIPTEN__)
+#include <emscripten.h>
 #elif !defined(__APPLE__)
 #include <thread>
 #include <condition_variable>
@@ -249,7 +251,7 @@ int main(int argc, char *argv[])
         key.isActive = true;
         game.gametimer = 0;
         obj.init();
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__EMSCRIPTEN__)
         std::condition_variable timeout;
         std::mutex mutex;
         std::thread init([&]() {
@@ -263,7 +265,7 @@ int main(int argc, char *argv[])
             pre_fakepercent.store(80);
             graphics.reloadresources(true);
             pre_fakepercent.store(100);
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__EMSCRIPTEN__)
             auto end = std::chrono::steady_clock::now();
             if (end - start < 1s) {
                 pre_quickend.store(true);
@@ -385,14 +387,20 @@ int main(int argc, char *argv[])
         }
 #endif
 
-        volatile Uint32 time, timePrev = 0;
+        volatile Uint32 time = 0, timePrev = 0;
 
+#define VCE_DEBUG
 #ifdef VCE_DEBUG
         auto last_gamestate = game.gamestate;
 #endif
 
+#ifndef __EMSCRIPTEN__
         while(!key.quitProgram)
         {
+#else
+        auto main_loop = [=]() mutable {
+            if (key.quitProgram) exit(0);
+#endif
 #ifdef VCE_DEBUG
             if (last_gamestate != game.gamestate) {
                 printf("gamestate %i -> %i\n", last_gamestate, game.gamestate);
@@ -400,6 +408,7 @@ int main(int argc, char *argv[])
             }
 #endif
 
+#ifndef __EMSCRIPTEN__
             time = SDL_GetTicks();
 
             // Update network per frame.
@@ -427,7 +436,11 @@ int main(int argc, char *argv[])
             timePrev = time;
 
             }
-
+#else
+            time = SDL_GetTicks();
+            Uint32 timetaken = time - timePrev;
+            timePrev = time;
+#endif
 
             key.Poll();
             if(key.toggleFullscreen)
@@ -648,7 +661,17 @@ int main(int argc, char *argv[])
             gameScreen.FlipScreen();
 
 
-        }
+        };
+#ifdef __EMSCRIPTEN__
+        void* closure = malloc(sizeof(main_loop));
+        memcpy(closure, &main_loop, sizeof(main_loop));
+        emscripten_cancel_main_loop();
+        emscripten_set_main_loop_arg([](void* arg) {
+            auto func = (decltype(main_loop)*) arg;
+            (*func)();
+        }, closure, 0, false);
+        emscripten_set_main_loop_timing(EM_TIMING_RAF, 2);
+#else
 
 
         log_close();
@@ -658,6 +681,7 @@ int main(int argc, char *argv[])
         NETWORK_shutdown();
         SDL_Quit();
         FILESYSTEM_deinit();
+#endif
 
         return 0;
     } catch (const std::exception& ex) {

@@ -1,4 +1,4 @@
-#if !defined(__SWITCH__) && !defined(__ANDROID__)
+#if !defined(__SWITCH__) && !defined(__ANDROID__) && !defined(__EMSCRIPTEN__)
 
 #include "Network.h"
 

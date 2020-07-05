@@ -57,15 +57,16 @@ const char *GCChar(SDL_GameControllerButton button)
 	return NULL;
 }
 
-bool is_number(const std::string& s)
+bool is_number(const std::string& str)
 {
-    try {
-        std::size_t pos;
-        (void)std::stod(s, &pos);
-        return pos == s.size();
-    } catch (std::invalid_argument &) {
-        return false;
-    }
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (!std::isdigit(static_cast<unsigned char>(str[i])) && !(i == 0 && str[0] != '-'))
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 int ss_toi( std::string _s )

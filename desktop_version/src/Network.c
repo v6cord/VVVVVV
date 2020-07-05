@@ -1,6 +1,6 @@
 #include "Network.h"
 
-#if !defined(__SWITCH__) && !defined(__ANDROID__)
+#if !defined(__SWITCH__) && !defined(__ANDROID__) && !defined(__EMSCRIPTEN__)
 #define UNUSED(expr) (void)(expr)
 
 #ifdef STEAM_NETWORK

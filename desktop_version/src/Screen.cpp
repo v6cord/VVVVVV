@@ -43,10 +43,11 @@ void Screen::init()
 		&m_renderer
 	);
 	SDL_SetWindowTitle(m_window, "VVVVVV: Community Edition");
-
+#ifndef __EMSCRIPTEN__
 	SDL_Surface *icon = LoadImage("VVVVVV.png");
 	SDL_SetWindowIcon(m_window, icon);
 	SDL_FreeSurface(icon);
+#endif
 #endif
 
 	// FIXME: This surface should be the actual backbuffer! -flibit
@@ -78,7 +79,7 @@ void Screen::init()
 void Screen::ResizeScreen(int x, int y)
 {
 	if (headless || !initialized) return;
-#ifndef __SWITCH__
+#if !defined(__SWITCH__)
 	int resX = 320;
 	int resY = 240;
 	if (x != -1 && y != -1)
@@ -211,7 +212,9 @@ void Screen::FlipScreen()
 		NULL
 	);
 	SDL_RenderPresent(m_renderer);
+#ifndef __EMSCRIPTEN__
 	SDL_RenderClear(m_renderer);
+#endif
 	SDL_FillRect(m_screen, NULL, 0x00000000);
 }
 
