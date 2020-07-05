@@ -45,6 +45,8 @@
 #include <mingw.mutex.h>
 #elif defined(__EMSCRIPTEN__)
 #include <emscripten.h>
+#include <algorithm>
+#include <iterator>
 #elif !defined(__APPLE__)
 #include <thread>
 #include <condition_variable>
@@ -344,7 +346,7 @@ int main(int argc, char *argv[])
                     if(game.bestrank[4]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
                     if(game.bestrank[5]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
 
-#if !defined(NO_CUSTOM_LEVELS)
+#if !defined(NO_CUSTOM_LEVELS) && !defined(__EMSCRIPTEN__)
         if (startinplaytest) {
             game.levelpage = 0;
             game.playcustomlevel = 0;
@@ -384,6 +386,31 @@ int main(int argc, char *argv[])
             }
             graphics.fademode = 0;
 
+        }
+#elif defined(__EMSCRIPTEN__)
+        int autostart = EM_ASM_INT({ return window.autostartLevel; });
+        if (autostart) {
+            auto exclude = FILESYSTEM_getLevelDirFileNames();
+            ed.loadZips();
+            auto list = FILESYSTEM_getLevelDirFileNames();
+            std::sort(exclude.begin(), exclude.end());
+            std::sort(list.begin(), list.end());
+            decltype(list) zipLevels;
+            std::set_difference(list.begin(), list.end(), exclude.begin(), exclude.end(), std::back_inserter(zipLevels));
+            std::remove_if(zipLevels.begin(), zipLevels.end(), [](auto x) {
+                std::string suffix = ".vvvvvv";
+                return !std::equal(suffix.rbegin(), suffix.rend(), x.rbegin());
+            });
+            ed.directoryList = zipLevels;
+            LevelMetaData meta;
+            if (ed.getLevelMetaData(zipLevels.at(0), meta)) {
+                ed.ListOfMetaData = { meta };
+                game.loadcustomlevelstats();
+                game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
+                game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
+                script.startgamemode(22);
+                graphics.fademode = 0;
+            }
         }
 #endif
 
