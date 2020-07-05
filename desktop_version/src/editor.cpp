@@ -1,5 +1,12 @@
 #if !defined(NO_CUSTOM_LEVELS)
 
+#ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
+#endif
+#ifndef _POSIX_SOURCE
+#define _POSIX_SOURCE
+#endif
+
 #include "editor.h"
 
 #include "Game.h"
@@ -29,12 +36,6 @@
 #include <iterator>
 #include <iostream>
 
-#ifndef __STDC_FORMAT_MACROS
-#define __STDC_FORMAT_MACROS
-#endif
-#ifndef _POSIX_SOURCE
-#define _POSIX_SOURCE
-#endif
 #include <inttypes.h>
 #include <cstdio>
 
