@@ -61,7 +61,7 @@ bool is_number(const std::string& str)
 {
 	for (size_t i = 0; i < str.length(); i++)
 	{
-		if (!std::isdigit(static_cast<unsigned char>(str[i])) && !(i == 0 && str[0] != '-'))
+		if (!std::isdigit(static_cast<unsigned char>(str[i])) && !(i == 0 && str[0] == '-'))
 		{
 			return false;
 		}
