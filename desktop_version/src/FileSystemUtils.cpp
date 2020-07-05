@@ -358,6 +358,8 @@ static int download_thread(void* data) {
 }
 
 bool FILESYSTEM_downloadFile(const char* name, const char* url) {
+    SDL_AtomicSet(&progress, 0);
+
     CURL* curl;
     PHYSFS_File* fp;
     curl = curl_easy_init();

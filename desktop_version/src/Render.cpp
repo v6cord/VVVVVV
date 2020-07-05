@@ -10,6 +10,8 @@
 
 #include "MakeAndPlay.h"
 
+#include <sstream>
+
 int tr;
 int tg;
 int tb;
@@ -1170,6 +1172,18 @@ void menurender()
             graphics.Print( 320-(tempstring.length()*8), 210, tempstring, tr, tg, tb);
         }
         break;
+    }
+    case Menu::downloading:
+    {
+        int progress = FILESYSTEM_getDownloadProgress();
+        if (progress == 100) {
+            game.createmenu(Menu::finisheddownload);
+        } else {
+            std::stringstream text;
+            text << FILESYSTEM_getDownloadProgress();
+            text << "%";
+            graphics.Print((320 - (text.str().length() * 8)) / 2, 240 / 2 - 4, text.str(), tr, tg, tb);
+        }
     }
     default:
         break;
