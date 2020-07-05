@@ -22,6 +22,7 @@ void FILESYSTEM_unmountassets();
 void FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
                                  size_t *len, bool addnull = false);
 void FILESYSTEM_freeMemory(unsigned char **mem);
+int FILESYSTEM_getDownloadProgress();
 bool FILESYSTEM_downloadFile(const char* name, const char* url);
 bool FILESYSTEM_saveTiXml2Document(const char *name, tinyxml2::XMLDocument& doc);
 bool FILESYSTEM_loadTiXml2Document(const char *name, tinyxml2::XMLDocument& doc);

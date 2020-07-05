@@ -297,19 +297,32 @@ void FILESYSTEM_freeMemory(unsigned char **mem)
 	*mem = NULL;
 }
 
-size_t write_data(void* ptr, size_t size, size_t nmemb, PHYSFS_File* stream) {
+static size_t write_data(void* ptr, size_t size, size_t nmemb, PHYSFS_File* stream) {
     //size_t written = fwrite(ptr, size, nmemb, stream);
     size_t written = PHYSFS_writeBytes(stream, ptr, size * nmemb);
     return written;
 }
 
-int progress_func(void* ptr, double TotalToDownload, double NowDownloaded,
+
+SDL_atomic_t progress;
+
+int FILESYSTEM_getDownloadProgress() {
+    return SDL_AtomicGet(&progress);
+}
+
+static int progress_func(void* ptr, double TotalToDownload, double NowDownloaded,
     double TotalToUpload, double NowUploaded)
 {
     if (TotalToDownload <= 0.0) {
         return 0;
     }
     double fractiondownloaded = NowDownloaded / TotalToDownload;
+
+    int percent = fractiondownloaded * 100;
+
+    if (percent != 100) {
+	SDL_AtomicSet(&progress, fractiondownloaded * 100);
+    }
 
     int chars_to_display = round(fractiondownloaded * 40);
 
@@ -332,6 +345,18 @@ int progress_func(void* ptr, double TotalToDownload, double NowDownloaded,
     return 0;
 }
 
+static int download_thread(void* data) {
+    void** args = (void**) data;
+    CURL* curl = (CURL*) args[0];
+    PHYSFS_File* fp = (PHYSFS_File*) args[1];
+    free(data);
+    curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+    PHYSFS_close(fp);
+    SDL_AtomicSet(&progress, 100);
+    return 0;
+}
+
 bool FILESYSTEM_downloadFile(const char* name, const char* url) {
     CURL* curl;
     PHYSFS_File* fp;
@@ -344,10 +369,13 @@ bool FILESYSTEM_downloadFile(const char* name, const char* url) {
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress_func);
-        curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        PHYSFS_close(fp);
-        printf("\n");
+	void** args = (void**) malloc(sizeof(void*) * 2);
+	args[0] = curl;
+	args[1] = fp;
+	SDL_Thread* thread = SDL_CreateThread(download_thread, "download", (void*) args);
+	if (!thread) {
+	    printf("SDL_CreateThread failed: %s\n", SDL_GetError());
+	}
     }
     else
     {
