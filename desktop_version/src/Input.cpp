@@ -333,8 +333,13 @@ void menuactionpress()
             break;
         case 1:
             music.playef(11);
+            ed.current_page = 1;
             if (ed.loadOnlineLevels()) {
                 game.createmenu(Menu::onlinelevellist);
+            }
+            else
+            {
+                puts("Something went wrong getting levels. Check your internet, maybe?");
             }
             map.nexttowercolour();
             break;

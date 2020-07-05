@@ -19,6 +19,8 @@
 #include <string>
 #include <utf8/unchecked.h>
 #include <physfs.h>
+#include <sstream>
+#include <iostream>
 
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
@@ -220,7 +222,18 @@ bool editorclass::loadOnlineLevels()
     curl = curl_easy_init();
     if (!curl) return false;
 
-    curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8000/");
+    std::stringstream request_url;
+    request_url.seekp(0, std::ios_base::end);
+
+    request_url << "https://vsix.dev/levels/api/levels"
+                << "?page=" << current_page
+                << "&order=" << "newest";
+
+    std::string temp_string = request_url.str();
+
+    std::cout << "Sending request to" << request_url.str() << std::endl;
+
+    curl_easy_setopt(curl, CURLOPT_URL, temp_string.c_str());
 
     // Make sure it works with https
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
