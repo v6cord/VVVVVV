@@ -335,7 +335,6 @@ int progress_func(void* ptr, double TotalToDownload, double NowDownloaded,
 bool FILESYSTEM_downloadFile(const char* name, const char* url) {
     CURL* curl;
     PHYSFS_File* fp;
-    CURLcode res;
     curl = curl_easy_init();
     if (curl)
     {
@@ -343,9 +342,9 @@ bool FILESYSTEM_downloadFile(const char* name, const char* url) {
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, FALSE);
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress_func);
-        res = curl_easy_perform(curl);
+        curl_easy_perform(curl);
         curl_easy_cleanup(curl);
         PHYSFS_close(fp);
         printf("\n");
