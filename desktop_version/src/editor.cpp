@@ -1,5 +1,6 @@
 #if !defined(NO_CUSTOM_LEVELS)
 
+#ifdef __APPLE__
 #include "Game.h"
 
 #ifndef __STDC_FORMAT_MACROS
@@ -7,6 +8,16 @@
 #endif
 #ifndef _POSIX_SOURCE
 #define _POSIX_SOURCE
+#endif
+#else
+#include "Game.h"
+
+#ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
+#endif
+#ifndef _POSIX_SOURCE
+#define _POSIX_SOURCE
+#endif
 #endif
 
 #include "editor.h"
