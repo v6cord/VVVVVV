@@ -492,7 +492,7 @@ elseif (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
 else()
 	# Only try to autodetect if both SDL2 variables aren't explicitly set
 	find_package(SDL2 CONFIG)
-        if (FALSE AND TARGET SDL2::SDL2)
+	if (TARGET SDL2::SDL2)
 		message(STATUS "Using TARGET SDL2::SDL2")
                 if(ANDROID)
                     target_link_libraries(main SDL2::SDL2 SDL2_mixer vorbisfile vorbis ogg)
