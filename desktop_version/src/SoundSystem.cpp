@@ -64,7 +64,7 @@ SoundTrack::~SoundTrack() {
     isValid = false;
 }
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(__EMSCRIPTEN__)
 void SoundSystem::init()
 #else
 SoundSystem::SoundSystem()
@@ -82,7 +82,7 @@ SoundSystem::SoundSystem()
 	}
 }
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(__EMSCRIPTEN__)
 SoundSystem::SoundSystem()
 #else
 void SoundSystem::init()
