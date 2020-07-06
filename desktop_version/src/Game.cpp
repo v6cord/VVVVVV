@@ -4952,6 +4952,8 @@ void Game::savestats()
     dataNode->LinkEndChild( msg );
 
     FILESYSTEM_saveTiXml2Document("saves/unlock.vvv", doc);
+
+    FILESYSTEM_flushSave();
 }
 
 void Game::customstart()
