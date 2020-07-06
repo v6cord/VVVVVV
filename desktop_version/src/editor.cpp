@@ -10,14 +10,14 @@
 #define _POSIX_SOURCE
 #endif
 #else
-#include "Game.h"
-
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
 #endif
 #ifndef _POSIX_SOURCE
 #define _POSIX_SOURCE
 #endif
+
+#include "Game.h"
 #endif
 
 #include "editor.h"
