@@ -1,5 +1,7 @@
 #if !defined(NO_CUSTOM_LEVELS)
 
+#include "Game.h"
+
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
 #endif
@@ -9,7 +11,6 @@
 
 #include "editor.h"
 
-#include "Game.h"
 #include "Graphics.h"
 #include "Entity.h"
 #include "Music.h"
