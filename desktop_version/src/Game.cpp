@@ -690,6 +690,8 @@ void Game::savecustomlevelstats()
         printf("Could Not Save level stats!\n");
         printf("Failed: %s%s\n", saveFilePath.c_str(), "levelstats.vvv");
     }
+
+    FILESYSTEM_flushSave();
 }
 
 void Game::updatestate()
@@ -6881,6 +6883,8 @@ void Game::customsavequick(std::string savfile)
         printf("Could Not Save game!\n");
         printf("Failed: %s%s%s", saveFilePath.c_str(), levelfile.c_str(), ".vvv");
     }
+
+    FILESYSTEM_flushSave();
 }
 
 

@@ -35,4 +35,6 @@ bool FILESYSTEM_openDirectory(const char *dname);
 
 bool FILESYSTEM_delete(const char *name);
 
+void FILESYSTEM_flushSave();
+
 #endif /* FILESYSTEMUTILS_H */

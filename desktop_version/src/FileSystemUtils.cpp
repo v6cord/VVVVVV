@@ -46,6 +46,10 @@
 #define MAX_PATH PATH_MAX
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 char saveDir[MAX_PATH];
 char levelDir[MAX_PATH];
 
@@ -746,4 +750,12 @@ bool FILESYSTEM_openDirectory(const char *dname) {
 bool FILESYSTEM_delete(const char *name)
 {
     return PHYSFS_delete(name) != 0;
+}
+
+void FILESYSTEM_flushSave() {
+#ifdef __EMSCRIPTEN__
+    EM_ASM(
+	FS.syncfs(false, function() {});
+    );
+#endif
 }
