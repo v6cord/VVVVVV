@@ -416,7 +416,6 @@ int main(int argc, char *argv[])
 
         volatile Uint32 time = 0, timePrev = 0;
 
-#define VCE_DEBUG
 #ifdef VCE_DEBUG
         auto last_gamestate = game.gamestate;
 #endif
