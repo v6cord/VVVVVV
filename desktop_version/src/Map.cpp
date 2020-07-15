@@ -1531,6 +1531,8 @@ void mapclass::loadlevel(int rx, int ry)
 	ypos = 0;
 	oldypos = 0;
 	extrarow = 0;
+	spikeleveltop = 0;
+	spikelevelbottom = 0;
 
 	//Custom stuff for warplines
 	obj.customwarpmode=false;
