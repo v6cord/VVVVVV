@@ -1803,7 +1803,7 @@ void gameinput()
                     game.gamestate = MAPMODE;
                     game.gamesaved = false;
                     graphics.resumegamemode = false;
-                    game.menupage = 10; // The Map Page
+                    game.menupage = 30; // Pause screen
 
                     BlitSurfaceStandard(graphics.menubuffer,NULL,graphics.backBuffer, NULL);
                     graphics.menuoffset = 240; //actually this should count the roomname
@@ -1989,7 +1989,7 @@ void mapinput()
             if (key.isDown(27))
             {
                 game.mapheld = true;
-                game.menupage = 10;
+                game.menupage = 30;
             }
         }
         else
@@ -2132,6 +2132,8 @@ void mapinput()
         if (game.menupage == 19) game.menupage = 21;
         if (game.menupage == 22) game.menupage = 20;
 
+        if (game.menupage == 29) game.menupage = 33;
+        if (game.menupage == 34) game.menupage = 30;
     }
 }
 
