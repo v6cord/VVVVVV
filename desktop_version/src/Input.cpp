@@ -445,7 +445,15 @@ void menuactionpress()
             //back
             music.playef(11);
             game.returnmenu();
-            map.nexttowercolour();
+            if (game.ingame_titlemode)
+            {
+                game.ingame_titlemode = false;
+                game.gamestate = MAPMODE;
+            }
+            else
+            {
+                map.nexttowercolour();
+            }
             break;
         }
         break;
@@ -660,7 +668,15 @@ void menuactionpress()
             //back
             music.playef(11);
             game.returnmenu();
-            map.nexttowercolour();
+            if (game.ingame_titlemode)
+            {
+                game.ingame_titlemode = false;
+                game.gamestate = MAPMODE;
+            }
+            else
+            {
+                map.nexttowercolour();
+            }
         }
         break;
     }
@@ -2158,6 +2174,7 @@ void mapmenuactionpress()
         // Graphic options
         music.playef(11);
         game.gamestate = TITLEMODE;
+        game.ingame_titlemode = true;
         game.createmenu(Menu::graphicoptions);
         map.nexttowercolour();
 
@@ -2169,6 +2186,7 @@ void mapmenuactionpress()
         // Game options
         music.playef(11);
         game.gamestate = TITLEMODE;
+        game.ingame_titlemode = true;
         game.createmenu(Menu::options);
         map.nexttowercolour();
 
