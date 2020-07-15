@@ -301,6 +301,7 @@ public:
     int timetrialpar, timetrialresulttime, timetrialrank = 0;
 
     int creditposition = 0;
+    int oldcreditposition = 0;
     int creditmaxposition = 0;
     std::vector<const char*> superpatrons;
     std::vector<const char*> patrons;

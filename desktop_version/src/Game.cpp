@@ -176,6 +176,7 @@ void Game::init(void)
     activity_g = 0;
     activity_b = 0;
     creditposition = 0;
+    oldcreditposition = 0;
     bestgamedeaths = -1;
 
     fullScreenEffect_badSignal = false;
