@@ -446,10 +446,7 @@ void menuactionpress()
             music.playef(11);
             if (game.ingame_titlemode)
             {
-                game.ingame_titlemode = false;
-                game.returntomenu(game.kludge_ingametemp);
-                game.gamestate = MAPMODE;
-                map.kludge_to_bg();
+                game.returntopausemenu();
             }
             else
             {
@@ -671,10 +668,7 @@ void menuactionpress()
             music.playef(11);
             if (game.ingame_titlemode)
             {
-                game.ingame_titlemode = false;
-                game.returntomenu(game.kludge_ingametemp);
-                game.gamestate = MAPMODE;
-                map.kludge_to_bg();
+                game.returntopausemenu();
             }
             else
             {

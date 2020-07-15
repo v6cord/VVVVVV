@@ -8224,3 +8224,11 @@ void Game::returntoeditor()
     map.scrolldir = 0;
 }
 #endif
+
+void Game::returntopausemenu()
+{
+    ingame_titlemode = false;
+    returntomenu(kludge_ingametemp);
+    gamestate = MAPMODE;
+    map.kludge_to_bg();
+}
