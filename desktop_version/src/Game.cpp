@@ -164,6 +164,7 @@ void Game::init(void)
     creditposx = 0;
     creditposy = 0;
     creditposdelay = 0;
+    oldcreditposx = 0;
 
     useteleporter = false;
     teleport_to_teleporter = 0;

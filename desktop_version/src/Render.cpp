@@ -1923,6 +1923,8 @@ void gamecompleterender2()
         }
     }
 
+    FillRect(graphics.backBuffer, graphics.lerp(game.oldcreditposx * 8, game.creditposx * 8) + 8, game.creditposy * 8, 8, 8, 0, 0, 0);
+
     graphics.drawfade();
 
     graphics.render();
