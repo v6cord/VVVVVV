@@ -1659,18 +1659,6 @@ void Graphics::drawentities()
 {
     ct.nocolor = false;
 
-    //Update line colours!
-    if (linedelay <= 0)
-    {
-        linestate++;
-        if (linestate >= 10) linestate = 0;
-        linedelay = 2;
-    }
-    else
-    {
-        linedelay--;
-    }
-
     point tpoint;
 
     SDL_Rect drawRect;
