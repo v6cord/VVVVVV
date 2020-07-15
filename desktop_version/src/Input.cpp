@@ -2001,7 +2001,7 @@ void mapinput()
         }
     }
 
-    if(graphics.menuoffset==0)
+    if(graphics.menuoffset==0 && game.fadetomenudelay <= 0 && game.fadetolabdelay <= 0)
     {
         if (graphics.flipmode)
         {
