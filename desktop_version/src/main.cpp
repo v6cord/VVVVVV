@@ -70,6 +70,7 @@ int savemusic = 0;
 
 std::string playtestname;
 
+<<<<<<< HEAD
 UtilityClass help;
 Graphics graphics;
 musicclass music;
@@ -85,6 +86,16 @@ FILE* logger;
 
 extern const char* git_rev;
 bool headless = false;
+=======
+volatile Uint32 time_ = 0;
+volatile Uint32 timePrev = 0;
+volatile Uint32 accumulator = 0;
+volatile Uint32 f_time = 0;
+volatile Uint32 f_timePrev = 0;
+volatile Uint32 f_accumulator = 0;
+
+void gameloop();
+>>>>>>> a8d299422342efa1f4b6ec6fe868480610339866
 
 int main(int argc, char *argv[])
 {
@@ -387,13 +398,6 @@ int main(int argc, char *argv[])
 
     }
 
-    volatile Uint32 time_ = 0;
-    volatile Uint32 timePrev = 0;
-    volatile Uint32 accumulator = 0;
-    volatile Uint32 f_time = 0;
-    volatile Uint32 f_timePrev = 0;
-    volatile Uint32 f_accumulator = 0;
-
 #ifdef VCE_DEBUG
     auto last_gamestate = game.gamestate;
 #endif
@@ -415,6 +419,19 @@ int main(int argc, char *argv[])
             f_accumulator += f_rawdeltatime;
         }
 
+        gameloop();
+    }
+
+    game.savestats();
+    NETWORK_shutdown();
+    SDL_Quit();
+    FILESYSTEM_deinit();
+
+    return 0;
+}
+
+void gameloop()
+{
         while ((game.over30mode || f_accumulator >= 34) && !key.quitProgram)
         {
             if (game.over30mode)
@@ -710,6 +727,7 @@ int main(int argc, char *argv[])
                 gameScreen.FlipScreen();
             }
         }
+<<<<<<< HEAD
     }
 
 
@@ -724,4 +742,6 @@ int main(int argc, char *argv[])
 #endif
 
     return 0;
+=======
+>>>>>>> a8d299422342efa1f4b6ec6fe868480610339866
 }
