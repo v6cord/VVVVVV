@@ -10,6 +10,7 @@ textboxclass::textboxclass()
     h = 0;
     lw = 0;
     tl = 0;
+    prev_tl = 0;
     tm = 0;
     timer = 0;
 }
@@ -57,6 +58,7 @@ void textboxclass::setcol(int rr, int gg, int bb)
 
 void textboxclass::update()
 {
+    prev_tl = tl;
     if (tm == 0)
     {
         tl += .1f;
@@ -65,7 +67,6 @@ void textboxclass::update()
             tl = 1;
             tm = 1;
         }
-        setcol(int(tr * tl), int(tg * tl), int(tb * tl));
     }
     else if (tm == 2)
     {
@@ -75,7 +76,6 @@ void textboxclass::update()
             tl = 0.5;
             //this textbox will be removed by updatetextboxes() later
         }
-        setcol(int(tr * tl), int(tg * tl), int(tb * tl));
     }
     if (timer > 0)
     {

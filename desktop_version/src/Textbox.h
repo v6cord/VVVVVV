@@ -43,6 +43,7 @@ public:
     int timer = 0;
 
     float tl = 0.0;
+    float prev_tl = 0.0;
     int tm = 0;
 
     int max = 0;
