@@ -41,7 +41,7 @@ int pre_temprectx=0, pre_temprecty=0, pre_temprectw=320, pre_temprecth=240;
 int last_percent = 0;
 #endif
 
-void preloaderrender()
+void preloaderlogic()
 {
 #ifdef VCE_DEBUG
   if (pre_fakepercent.load() != last_percent) {
@@ -63,6 +63,12 @@ void preloaderrender()
       pre_curcol = (pre_curcol + int(fRandom() * 5.0f)) % 6;
       pre_coltimer = 8;
     }
+  }
+}
+
+void preloaderrender()
+{
+  if(pre_transition>=30){
     switch(pre_curcol) {
     case 0:
       pre_lightcol = graphics.RGBflip(0xBF,0x59,0x6F);

@@ -11,4 +11,6 @@ void preloaderloop();
 extern std::atomic_int pre_fakepercent;
 extern std::atomic_bool pre_quickend;
 
+void preloaderlogic();
+
 #endif /* PRELOADER_H */
