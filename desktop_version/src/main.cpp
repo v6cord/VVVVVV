@@ -455,11 +455,6 @@ void gameloop()
 
 void deltaloop()
 {
-    game.infocus = key.isActive;
-
-    // Update network per frame.
-    NETWORK_update();
-
     //timestep limit to 30
     const float rawdeltatime = static_cast<float>(time_ - timePrev);
     accumulator += rawdeltatime;
@@ -526,6 +521,11 @@ void deltaloop()
 
 void fixedloop()
 {
+    game.infocus = key.isActive;
+
+    // Update network per frame.
+    NETWORK_update();
+
     key.Poll();
     if(key.toggleFullscreen)
     {
