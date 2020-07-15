@@ -1503,4 +1503,20 @@ void gamelogic()
         game.returntoeditor();
     }
 #endif
+
+    if (game.activeactivity > -1)
+    {
+        if (game.act_fade < 5)
+        {
+            game.act_fade = 5;
+        }
+        if (game.act_fade < 10)
+        {
+            game.act_fade++;
+        }
+    }
+    else if (game.act_fade > 5)
+    {
+        game.act_fade--;
+    }
 }
