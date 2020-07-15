@@ -205,6 +205,7 @@ public:
 
     //Trophy Text
     int trophytext, trophytype = 0;
+    int oldtrophytext = 0;
 
     //Secret lab scripts
     int altstates = 0;
