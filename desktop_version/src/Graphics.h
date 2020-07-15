@@ -121,6 +121,7 @@ public:
 	void drawgui();
 
 	void drawsprite(int x, int y, int t, int r, int g, int b);
+	void drawsprite(int x, int y, int t, Uint32 c);
 
 	void printcrewname(int x, int y, int t);
 
@@ -331,6 +332,20 @@ public:
 		return v0 + alpha * (v1 - v0);
 	}
 	float alpha;
+
+	Uint32 col_crewred = 0;
+	Uint32 col_crewyellow = 0;
+	Uint32 col_crewgreen = 0;
+	Uint32 col_crewcyan = 0;
+	Uint32 col_crewblue = 0;
+	Uint32 col_crewpurple = 0; //actually pink
+	Uint32 col_crewinactive = 0;
+	Uint32 col_clock = 0;
+	Uint32 col_trinket = 0;
+	int col_tr = 0;
+	int col_tg = 0;
+	int col_tb = 0;
+	void updatetitlecolours();
 
 	SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
