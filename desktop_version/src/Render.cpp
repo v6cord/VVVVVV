@@ -2023,7 +2023,6 @@ void gamerender()
 
         if (map.finalmode)
         {
-            map.glitchname = map.getglitchname(game.roomx, game.roomy);
             graphics.bprint(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }else{
 
@@ -2346,7 +2345,6 @@ void maprender()
     else
     {
       if (map.finalmode){
-        map.glitchname = map.getglitchname(game.roomx, game.roomy);
         graphics.Print(5, 2, map.glitchname, 196, 196, 255 - help.glow, true);
       }else{
         std::string usethisname;

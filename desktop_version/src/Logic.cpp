@@ -117,6 +117,11 @@ void maplogic()
     }else if (map.cursorstate == 2){
         map.cursordelay++;
     }
+
+    if (map.finalmode)
+    {
+        map.glitchname = map.getglitchname(game.roomx, game.roomy);
+    }
 }
 
 
@@ -1676,5 +1681,10 @@ void gamelogic()
         }
 
         obj.entities[i].updatecolour();
+    }
+
+    if (map.finalmode)
+    {
+        map.glitchname = map.getglitchname(game.roomx, game.roomy);
     }
 }
