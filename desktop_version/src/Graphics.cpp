@@ -128,6 +128,9 @@ void Graphics::init()
     showmousecursor = true;
 
     alpha = 1.0f;
+
+    screenshake_x = 0;
+    screenshake_y = 0;
 }
 
 int Graphics::font_idx(uint32_t ch) {
@@ -3052,7 +3055,6 @@ void Graphics::flashlight()
 
 void Graphics::screenshake()
 {
-	point tpoint;
 	if(flipmode)
 	{
 		//	tpoint.x = int((Math.random() * 7) - 4); tpoint.y = int((Math.random() * 7) - 4);
@@ -3060,10 +3062,8 @@ void Graphics::screenshake()
 		//	screenbuffer.draw(backbuffer, flipmatrix);
 		//	flipmatrix.translate(-tpoint.x, -tpoint.y);
 
-		tpoint.x =  (fRandom() * 7) - 4;
-		tpoint.y =  (fRandom() * 7) - 4;
 		SDL_Rect shakeRect;
-		setRect(shakeRect,tpoint.x, tpoint.y, backBuffer->w, backBuffer->h);
+		setRect(shakeRect,screenshake_x, screenshake_y, backBuffer->w, backBuffer->h);
 		SDL_Surface* flipBackBuffer = FlipSurfaceVerticle(backBuffer);
 		screenbuffer->UpdateScreen( flipBackBuffer, &shakeRect);
 		SDL_FreeSurface(flipBackBuffer);
@@ -3074,14 +3074,18 @@ void Graphics::screenshake()
 		//SDL_Rect rect;
 		//setRect(rect, blackBars/2, 0, screenbuffer->w, screenbuffer->h);
 		//SDL_BlitSurface(backBuffer, NULL, screenbuffer, &rect);
-		tpoint.x =  static_cast<Sint32>((fRandom() * 7) - 4);
-		tpoint.y =  static_cast<Sint32>((fRandom() * 7) - 4);
 		SDL_Rect shakeRect;
-		setRect(shakeRect,tpoint.x, tpoint.y, backBuffer->w, backBuffer->h);
+		setRect(shakeRect,screenshake_x, screenshake_y, backBuffer->w, backBuffer->h);
 		screenbuffer->UpdateScreen( backBuffer, &shakeRect);
 	}
 
 	FillRect(backBuffer, 0x000000 );
+}
+
+void Graphics::updatescreenshake()
+{
+	screenshake_x =  static_cast<Sint32>((fRandom() * 7) - 4);
+	screenshake_y =  static_cast<Sint32>((fRandom() * 7) - 4);
 }
 
 void Graphics::render()

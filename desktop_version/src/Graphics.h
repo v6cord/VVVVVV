@@ -148,6 +148,10 @@ public:
 
 	void flashlight();
 	void screenshake();
+	void updatescreenshake();
+
+	int screenshake_x;
+	int screenshake_y;
 
 	void render();
 	void renderwithscreeneffects();
