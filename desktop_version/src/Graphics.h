@@ -184,6 +184,7 @@ public:
 	void setcolreal(Uint32 t);
 
 	void drawbackground(int t);
+	void updatebackground(int t);
 	void drawtile3( int x, int y, int t, int off );
 	void drawentcolours( int x, int y, int t);
 	void drawtile3( int x, int y, int t );
