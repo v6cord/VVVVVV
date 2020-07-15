@@ -2059,7 +2059,8 @@ void gamerender()
         } else {
             graphics.bprint(304 - coinstring.length() * 8, 231,coinstring, 255 - help.glow/2, 255 - help.glow/2, 196);
         }
-        graphics.drawhuetile(311, 230, 48, 1);
+        graphics.huetilesetcol(1);
+        graphics.drawhuetile(311, 230, 48);
     }
 
     // scriptrender

@@ -3906,7 +3906,8 @@ void editorrender()
                 break;
             case 8: // Coin
                 if(edentity[i].p1==0) {
-                    graphics.drawhuetile(ex, ey, 48, 8);
+                    graphics.huetilesetcol(8);
+                    graphics.drawhuetile(ex, ey, 48);
                     fillboxabs(ex, ey, 8, 8, graphics.getRGB(164,164,164));
                 }
                 if(edentity[i].p1==1) {
@@ -4617,10 +4618,11 @@ void editorrender()
                 graphics.drawsprite(tx,ty,192,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
                 //18:
                 tx+=tg;
-                graphics.drawhuetile(tx,   ty,   48, 8);
-                graphics.drawhuetile(tx+8, ty,   48, 8);
-                graphics.drawhuetile(tx,   ty+8, 48, 8);
-                graphics.drawhuetile(tx+8, ty+8, 48, 8);
+                graphics.huetilesetcol(8);
+                graphics.drawhuetile(tx,   ty,   48);
+                graphics.drawhuetile(tx+8, ty,   48);
+                graphics.drawhuetile(tx,   ty+8, 48);
+                graphics.drawhuetile(tx+8, ty+8, 48);
                 //19:
                 tx+=tg;
                 graphics.drawtelepart(tx, ty, 1, 100);
