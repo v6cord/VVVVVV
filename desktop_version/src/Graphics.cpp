@@ -42,6 +42,7 @@ void Graphics::init()
 
     showcutscenebars = false;
     cutscenebarspos = 0;
+    oldcutscenebarspos = 0;
     notextoutline = false;
 
     flipmode = false;
@@ -1047,10 +1048,11 @@ void Graphics::drawpartimage( int t, int xp, int yp, int wp, int hp)
 
 void Graphics::cutscenebars()
 {
+    int usethispos = lerp(oldcutscenebarspos, cutscenebarspos);
     if (showcutscenebars)
     {
-        FillRect(backBuffer, 0, 0, cutscenebarspos, 16, 0x000000);
-        FillRect(backBuffer, 360-cutscenebarspos, 224, cutscenebarspos, 16, 0x000000);
+        FillRect(backBuffer, 0, 0, usethispos, 16, 0x000000);
+        FillRect(backBuffer, 360-usethispos, 224, usethispos, 16, 0x000000);
     }
     else
     {
@@ -1058,14 +1060,15 @@ void Graphics::cutscenebars()
         if (cutscenebarspos > 0)
         {
             //draw
-            FillRect(backBuffer, 0, 0, cutscenebarspos, 16, 0x000000);
-            FillRect(backBuffer, 360-cutscenebarspos, 224, cutscenebarspos, 16, 0x000000);
+            FillRect(backBuffer, 0, 0, usethispos, 16, 0x000000);
+            FillRect(backBuffer, 360-usethispos, 224, usethispos, 16, 0x000000);
         }
     }
 }
 
 void Graphics::cutscenebarstimer()
 {
+    oldcutscenebarspos = cutscenebarspos;
     if (showcutscenebars)
     {
         cutscenebarspos += 25;

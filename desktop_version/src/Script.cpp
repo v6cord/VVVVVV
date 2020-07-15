@@ -1640,10 +1640,12 @@ void scriptclass::run() {
                 if (words[0] == "cutscenefast") {
                     graphics.showcutscenebars = true;
                     graphics.cutscenebarspos = 360;
+                    graphics.oldcutscenebarspos = 360;
                 }
                 if (words[0] == "endcutscenefast") {
                     graphics.showcutscenebars = false;
                     graphics.cutscenebarspos = 0;
+                    graphics.oldcutscenebarspos = 360;
                 }
                 if (words[0] == "untilbars" || words[0] == "puntilbars") {
                     if (graphics.showcutscenebars) {
@@ -3427,6 +3429,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
             graphics.showcutscenebars = true;
             graphics.cutscenebarspos = 320;
+            graphics.oldcutscenebarspos = 320;
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
@@ -3664,6 +3667,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
             graphics.showcutscenebars = true;
             graphics.cutscenebarspos = 320;
+            graphics.oldcutscenebarspos = 320;
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
@@ -3688,6 +3692,7 @@ void scriptclass::startgamemode(int t) {
             game.jumpheld = true;
             graphics.showcutscenebars = true;
             graphics.cutscenebarspos = 320;
+            graphics.oldcutscenebarspos = 320;
 
             // set flipmode
             if (graphics.setflipmode) graphics.flipmode = true;
@@ -4405,6 +4410,7 @@ void scriptclass::hardreset() {
     graphics.flipmode = false;  // This will be reset if needs be elsewhere
     graphics.showcutscenebars = false;
     graphics.cutscenebarspos = 0;
+    graphics.oldcutscenebarspos = 0;
     graphics.screenbuffer->badSignalEffect = game.fullScreenEffect_badSignal;
 
     // mapclass
