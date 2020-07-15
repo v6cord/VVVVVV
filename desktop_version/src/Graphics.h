@@ -281,6 +281,7 @@ public:
 	bool backgrounddrawn, foregrounddrawn = false;
 
 	int menuoffset = 0;
+	int oldmenuoffset = 0;
 	bool resumegamemode = false;
 
 	SDL_Rect warprect = {0};

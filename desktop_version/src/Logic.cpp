@@ -42,6 +42,7 @@ void maplogic()
     help.updateglow();
     graphics.updatetextboxes();
 
+    graphics.oldmenuoffset = graphics.menuoffset;
     if (graphics.resumegamemode)
     {
         graphics.menuoffset += 25;
