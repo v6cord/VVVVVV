@@ -1801,15 +1801,7 @@ void Graphics::drawentities()
         case 3:    // Big chunky pixels!
             prect.x = xp;
             prect.y = yp - yoff;
-            //A seperate index of colours, for simplicity
-            if(obj.entities[i].colour==1)
-            {
-                FillRect(backBuffer, prect, (fRandom() * 64), 10, 10);
-            }
-            else if (obj.entities[i].colour == 2)
-            {
-                FillRect(backBuffer,prect, int(160- help.glow/2 - (fRandom()*20)),  200- help.glow/2, 220 - help.glow);
-            }
+            FillRect(backBuffer, prect, bigchunkygetcol(obj.entities[i].colour));
             break;
         case 4:    // Small pickups
             if(obj.entities[i].behave==0) {
@@ -3048,6 +3040,19 @@ void Graphics::huetilesetcol(int t)
 		setcolreal(getRGB(250-int(fRandom()*32), 250-int(fRandom()*32),  10));
 		break;
 	}
+}
+
+Uint32 Graphics::bigchunkygetcol(int t)
+{
+	//A seperate index of colours, for simplicity
+	switch (t)
+	{
+	case 1:
+		return getRGB((fRandom() * 64), 10, 10);
+	case 2:
+		return getRGB(int(160- help.glow/2 - (fRandom()*20)),  200- help.glow/2, 220 - help.glow);
+	}
+	return 0x00000000;
 }
 
 void Graphics::setwarprect( int a, int b, int c, int d )
