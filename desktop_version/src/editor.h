@@ -107,7 +107,7 @@ public:
     int x = -1;
     int y = -1; // -1 means not set
     int state = -1;
-    growing_vector<int> tiles;
+    std::vector<int> tiles;
 
     void reset();
 };
@@ -117,7 +117,7 @@ public:
     edtower();
     int size = 40; // minimum size
     int scroll = 0; // scroll direction (0=The Tower, 1=Panic Room)
-    growing_vector<int> tiles;
+    std::vector<int> tiles;
 
     void reset(void);
 };
@@ -198,8 +198,8 @@ public:
     std::string Desc3;
     std::string website;
 
-    growing_vector<std::string> directoryList;
-    growing_vector<LevelMetaData> ListOfMetaData;
+    std::vector<std::string> directoryList;
+    std::vector<LevelMetaData> ListOfMetaData;
 
     void loadZips();
     void getDirectoryData();
@@ -300,8 +300,8 @@ public:
     int numtrinkets();
     int numcrewmates();
     int numcoins();
-    growing_vector<edlevelclass> level;
-    growing_vector<int> kludgewarpdir;
+    std::vector<edlevelclass> level;
+    std::vector<int> kludgewarpdir;
 
     int temp = 0;
     int notedelay = 0;
@@ -421,9 +421,9 @@ public:
 
     bool grayenemieskludge = false;
 
-    growing_vector<edaltstate> altstates;
-    growing_vector<edtower> towers;
-    growing_vector<customtrial> customtrials;
+    std::vector<edaltstate> altstates;
+    std::vector<edtower> towers;
+    std::vector<customtrial> customtrials;
 
     int ypos; // tower mode y position
 
@@ -436,8 +436,8 @@ public:
 
     int gettowerplattile(int col);
 
-    growing_vector<GhostInfo> ghosts;
-    std::vector<Dimension> dimensions; // no need to be a growing_vector
+    std::vector<GhostInfo> ghosts;
+    std::vector<Dimension> dimensions;
 
     int currentghosts = 0;
 

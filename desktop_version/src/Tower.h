@@ -29,10 +29,10 @@ public:
     //public var minitower:Array = new Array();
     //public var vmult:Array = new Array();
 
-    growing_vector<int> back;
-    growing_vector<int> contents;
-    growing_vector<int> minitower;
-    growing_vector<int> vmult;
+    std::vector<int> back;
+    std::vector<int> contents;
+    std::vector<int> minitower;
+    std::vector<int> vmult;
 
     bool minitowermode = false;
 };

@@ -1840,7 +1840,7 @@ void editorclass::saveconvertor()
     maxheight=20;
     int oldwidth=10, oldheight=10;
 
-    growing_vector <int> tempcontents;
+    std::vector <int> tempcontents;
     for (int j = 0; j < 30 * oldwidth; j++)
     {
         for (int i = 0; i < 40 * oldheight; i++)
@@ -2470,7 +2470,7 @@ bool editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-                growing_vector<std::string> values = split(TextString,',');
+                std::vector<std::string> values = split(TextString,',');
                 //contents.clear();
                 for(size_t i = 0; i < contents.size(); i++)
                 {
@@ -2508,7 +2508,7 @@ bool editorclass::load(std::string& _path)
                     edAltstateEl->QueryIntAttribute("y", &altstates[i].y);
                     edAltstateEl->QueryIntAttribute("state", &altstates[i].state);
 
-                    growing_vector<std::string> values = split(TextString, ',');
+                    std::vector<std::string> values = split(TextString, ',');
 
                     for (size_t t = 0; t < values.size(); t++)
                         altstates[i].tiles[t] = atoi(values[t].c_str());
@@ -2534,7 +2534,7 @@ bool editorclass::load(std::string& _path)
                     edTowerEl->QueryIntAttribute("size", &towers[i].size);
                     edTowerEl->QueryIntAttribute("scroll", &towers[i].scroll);
 
-                    growing_vector<std::string> values = split(TextString, ',');
+                    std::vector<std::string> values = split(TextString, ',');
 
                     for (size_t t = 0; t < values.size(); t++)
                         towers[i].tiles[t] = atoi(values[t].c_str());
@@ -2550,7 +2550,7 @@ bool editorclass::load(std::string& _path)
             std::string TextString = (pText);
             if(TextString.length())
             {
-              growing_vector<std::string> values = split(TextString,',');
+              std::vector<std::string> values = split(TextString,',');
               contents.clear();
               for(int i = 0; i < values.size(); i++)
               {
@@ -5741,7 +5741,7 @@ void editorinput()
             if (!ed.textcount)
                 key.disabletextentry();
 
-            growing_vector<std::string> coords;
+            std::vector<std::string> coords;
             std::string filename = ed.filename+".vvvvvv";
             switch (ed.textmod) {
             case TEXT_GOTOROOM:

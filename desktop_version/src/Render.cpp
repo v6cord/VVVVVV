@@ -644,7 +644,7 @@ void menurender()
         int temp_tg = tg;
         int temp_tb = tb;
 
-        for(growing_vector<std::string>::size_type i = 0 + game.changelogoffset; i != (14 + game.changelogoffset) && i < changelog.size(); i++) {
+        for(std::vector<std::string>::size_type i = 0 + game.changelogoffset; i != (14 + game.changelogoffset) && i < changelog.size(); i++) {
             // Huge if, I swear this made sense when I wrote it
             // If there's more lines above the top line displayed, or if
             // there's more lines below the bottom lined displayed, make

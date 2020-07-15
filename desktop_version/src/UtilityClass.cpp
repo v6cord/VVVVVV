@@ -77,7 +77,7 @@ int ss_toi( std::string _s )
 	return x;
 }
 
-growing_vector<std::string> split( const std::string &s, char delim, growing_vector<std::string> &elems )
+std::vector<std::string> split( const std::string &s, char delim, std::vector<std::string> &elems )
 {
 	std::stringstream ss(s);
 	std::string item;
@@ -88,9 +88,9 @@ growing_vector<std::string> split( const std::string &s, char delim, growing_vec
 	return elems;
 }
 
-growing_vector<std::string> split( const std::string &s, char delim )
+std::vector<std::string> split( const std::string &s, char delim )
 {
-	growing_vector<std::string> elems;
+	std::vector<std::string> elems;
 	return split(s, delim, elems);
 }
 
@@ -116,7 +116,7 @@ std::string UtilityClass::String( int _v )
 	return(os.str());
 }
 
-std::string UtilityClass::GCString(growing_vector<SDL_GameControllerButton> buttons)
+std::string UtilityClass::GCString(std::vector<SDL_GameControllerButton> buttons)
 {
 	std::string retval = "";
 	for (size_t i = 0; i < buttons.size(); i += 1)

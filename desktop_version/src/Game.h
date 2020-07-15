@@ -311,27 +311,27 @@ public:
 
     bool inintermission = false;
 
-    growing_vector<int> crewstats;
+    std::vector<int> crewstats;
 
     bool alarmon = false;
     int alarmdelay = 0;
     bool blackout = false;
 
-    growing_vector<int> tele_crewstats;
+    std::vector<int> tele_crewstats;
 
-    growing_vector<int> quick_crewstats;
+    std::vector<int> quick_crewstats;
 
-    growing_vector<int> unlock;
-    growing_vector<int> unlocknotify;
+    std::vector<int> unlock;
+    std::vector<int> unlocknotify;
     bool anything_unlocked();
     int stat_trinkets = 0;
     bool fullscreen = false;
     int bestgamedeaths = 0;
 
-    growing_vector<int>besttimes;
-    growing_vector<int>besttrinkets;
-    growing_vector<int>bestlives;
-    growing_vector<int> bestrank;
+    std::vector<int>besttimes;
+    std::vector<int>besttrinkets;
+    std::vector<int>bestlives;
+    std::vector<int> bestrank;
 
     std::string tele_gametime;
     int tele_trinkets = 0;
@@ -411,10 +411,10 @@ public:
     bool customlevelstatsloaded = false;
 
 
-    growing_vector<SDL_GameControllerButton> controllerButton_map;
-    growing_vector<SDL_GameControllerButton> controllerButton_flip;
-    growing_vector<SDL_GameControllerButton> controllerButton_esc;
-    growing_vector<scriptmarker> scriptmarkers;
+    std::vector<SDL_GameControllerButton> controllerButton_map;
+    std::vector<SDL_GameControllerButton> controllerButton_flip;
+    std::vector<SDL_GameControllerButton> controllerButton_esc;
+    std::vector<scriptmarker> scriptmarkers;
 
     bool hidemarkers = false;
     bool skipfakeload = false;
@@ -439,19 +439,19 @@ public:
     int playgc = 0;
     std::string playassets;
 
-    growing_vector<SDL_Surface*> script_images;
-    growing_vector<std::string> script_image_names;
+    std::vector<SDL_Surface*> script_images;
+    std::vector<std::string> script_image_names;
 
     bool incustomtrial = false;
     int currenttrial = 0;
 
-    growing_vector<customtrialrecord> customtrialstats;
+    std::vector<customtrialrecord> customtrialstats;
     bool nocoincounter = false;
 
 
     bool quiet = false;
 
-    growing_vector<std::string> onetimescripts;
+    std::vector<std::string> onetimescripts;
 
     bool cutemode = false;
     bool allymode = false;

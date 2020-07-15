@@ -110,7 +110,7 @@ public:
 
     //Script contents
     std::vector<std::string> commands;
-    growing_vector<std::string> words;
+    std::vector<std::string> words;
     std::vector<std::string> txt;
     std::string scriptname;
     int position = 0;
@@ -135,7 +135,7 @@ public:
     //Custom level stuff
     std::vector<Script> customscripts;
 
-    growing_vector<scriptimage> scriptrender;
+    std::vector<scriptimage> scriptrender;
 
     bool loopdelay = false;
 

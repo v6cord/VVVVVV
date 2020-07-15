@@ -467,9 +467,9 @@ bool FILESYSTEM_loadTiXml2Document(const char *name, tinyxml2::XMLDocument& doc)
 	return true;
 }
 
-growing_vector<std::string> FILESYSTEM_getLevelDirFileNames()
+std::vector<std::string> FILESYSTEM_getLevelDirFileNames()
 {
-	growing_vector<std::string> list;
+	std::vector<std::string> list;
 	char **fileList = PHYSFS_enumerateFiles("/levels");
 	char **i;
 	std::string builtLocation;

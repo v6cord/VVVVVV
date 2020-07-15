@@ -97,13 +97,13 @@ public:
     void dimensionwraparound(int* rx, int* ry);
 
 
-    growing_vector <int> roomdeaths;
-    growing_vector <int> roomdeathsfinal;
-    growing_vector <int> areamap;
-    growing_vector <int> contents;
-    growing_vector <int> explored;
-    growing_vector <int> vmult;
-    growing_vector <std::string> tmap;
+    std::vector <int> roomdeaths;
+    std::vector <int> roomdeathsfinal;
+    std::vector <int> areamap;
+    std::vector <int> contents;
+    std::vector <int> explored;
+    std::vector <int> vmult;
+    std::vector <std::string> tmap;
 
     int temp = 0;
     int temp2 = 0;
@@ -155,7 +155,7 @@ public:
     int customzoom = 0;
     bool customshowmm = false;
 
-    growing_vector<std::string> specialnames;
+    std::vector<std::string> specialnames;
     int glitchmode = 0;
     int glitchdelay = 0;
     std::string glitchname;
@@ -168,8 +168,8 @@ public:
     int final_colorframe, final_colorframedelay = 0;
 
     //Teleporters and Trinkets on the map
-    growing_vector<point> teleporters;
-    growing_vector<point> shinytrinkets;
+    std::vector<point> teleporters;
+    std::vector<point> shinytrinkets;
 
     bool showteleporters, showtargets, showtrinkets = false;
 
