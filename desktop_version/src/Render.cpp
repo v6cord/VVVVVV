@@ -2328,7 +2328,6 @@ void gamerender()
     if (obj.trophytext > 0)
     {
         graphics.drawtrophytext();
-        obj.trophytext--;
     }
 
 

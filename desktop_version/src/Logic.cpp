@@ -1519,4 +1519,9 @@ void gamelogic()
     {
         game.act_fade--;
     }
+
+    if (obj.trophytext > 0)
+    {
+        obj.trophytext--;
+    }
 }
