@@ -230,6 +230,7 @@ int main(int argc, char *argv[])
 
     if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
     {
+        puts("Unable to initialize filesystem!");
         return 1;
     }
 
