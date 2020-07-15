@@ -8232,4 +8232,5 @@ void Game::returntopausemenu()
     gamestate = MAPMODE;
     map.kludge_to_bg();
     map.tdrawback = true;
+    game.mapheld = true;
 }
