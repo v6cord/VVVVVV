@@ -390,6 +390,9 @@ int main(int argc, char *argv[])
     volatile Uint32 time = 0;
     volatile Uint32 timePrev = 0;
     volatile Uint32 accumulator = 0;
+    volatile Uint32 f_time = 0;
+    volatile Uint32 f_timePrev = 0;
+    volatile Uint32 f_accumulator = 0;
 
 #ifdef VCE_DEBUG
     auto last_gamestate = game.gamestate;
@@ -404,8 +407,27 @@ int main(int argc, char *argv[])
         }
 #endif
 
-        time = SDL_GetTicks();
+        f_timePrev = f_time;
+        f_time = SDL_GetTicks();
+        const float f_rawdeltatime = static_cast<float>(f_time - f_timePrev);
+        if (!game.over30mode)
+        {
+            f_accumulator += f_rawdeltatime;
+        }
+
+        while ((game.over30mode || f_accumulator >= 34) && !key.quitProgram)
+        {
+            if (game.over30mode)
+            {
+                f_accumulator = 0;
+            }
+            else
+            {
+                f_accumulator = fmodf(f_accumulator, 34);
+            }
+
         timePrev = time;
+        time = SDL_GetTicks();
 
         game.infocus = key.isActive;
 
@@ -686,6 +708,7 @@ int main(int argc, char *argv[])
                 break;
             }
             gameScreen.FlipScreen();
+        }
         }
     }
 
