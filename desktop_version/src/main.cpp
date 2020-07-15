@@ -108,76 +108,89 @@ int main(int argc, char *argv[])
     char* baseDir = NULL;
 
     for (int i = 1; i < argc; ++i) {
-        if (strcmp(argv[i], "--quiet") == 0) {
+#define ARG(name) (strcmp(argv[i], name) == 0)
+#define ARG_INNER(code) \
+    if (i + 1 < argc) \
+    { \
+        i++; \
+        code \
+    } \
+    else \
+    { \
+        printf("%s option requires one argument.\n", argv[i]); \
+        return 1; \
+    }
+
+        if (ARG("--quiet")) {
             game.quiet = true;
         }
-        if (strcmp(argv[i], "--version") == 0) {
+        if (ARG("--version")) {
             puts("VVVVVV-CE");
             puts("Version c1.0-pre1");
             printf("Built from commit %s\n", git_rev);
             return 0;
         }
-        if (strcmp(argv[i], "--headless") == 0) {
+        if (ARG("--headless")) {
             headless = true;
         }
-        if (strcmp(argv[i], "--syslog") == 0) {
+        if (ARG("--syslog")) {
             syslog = true;
         }
-        if (strcmp(argv[i], "--no-syslog") == 0) {
+        if (ARG("--no-syslog")) {
             syslog = false;
         }
-        if ((std::string(argv[i]) == "-playing") || (std::string(argv[i]) == "-p")) {
-            if (i + 1 < argc) {
+
+        if (ARG("-renderer"))
+        {
+            ARG_INNER({
+                SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
+            })
+        }
+        else if (ARG("-basedir"))
+        {
+            ARG_INNER({
+                baseDir = argv[i];
+            })
+        }
+        else if (ARG("-assets"))
+        {
+            ARG_INNER({
+                assetsPath = argv[i];
+            })
+        }
+        else if (ARG("-playing") || ARG("-p"))
+        {
+            ARG_INNER({
                 startinplaytest = true;
-                i++;
                 playtestname = std::string("levels/");
                 playtestname.append(argv[i]);
                 playtestname.append(std::string(".vvvvvv"));
-            } else {
-                printf("-playing option requires one argument.\n");
-                return 1;
-            }
+            })
         }
-        if (strcmp(argv[i], "-playx") == 0 ||
-                strcmp(argv[i], "-playy") == 0 ||
-                strcmp(argv[i], "-playrx") == 0 ||
-                strcmp(argv[i], "-playry") == 0 ||
-                strcmp(argv[i], "-playgc") == 0 ||
-                strcmp(argv[i], "-playmusic") == 0) {
-            if (i + 1 < argc) {
+        else if (ARG("-playx") || ARG("-playy") ||
+        ARG("-playrx") || ARG("-playry") ||
+        ARG("-playgc") || ARG("-playmusic"))
+        {
+            ARG_INNER({
                 savefileplaytest = true;
-                auto v = std::atoi(argv[i+1]);
-                if (strcmp(argv[i], "-playx") == 0) savex = v;
-                else if (strcmp(argv[i], "-playy") == 0) savey = v;
-                else if (strcmp(argv[i], "-playrx") == 0) saverx = v;
-                else if (strcmp(argv[i], "-playry") == 0) savery = v;
-                else if (strcmp(argv[i], "-playgc") == 0) savegc = v;
-                else if (strcmp(argv[i], "-playmusic") == 0) savemusic = v;
-                i++;
-            } else {
-                printf("-playing option requires one argument.\n");
-                return 1;
-            }
-        } else if (strcmp(argv[i], "-playassets") == 0) {
-            if (i + 1 < argc) {
-                i++;
-                // Even if this is a directory, FILESYSTEM_mountassets() expects '.vvvvvv' on the end
+                int v = std::atoi(argv[i]);
+                if (ARG("-playx")) savex = v;
+                else if (ARG("-playy")) savey = v;
+                else if (ARG("-playrx")) saverx = v;
+                else if (ARG("-playry")) savery = v;
+                else if (ARG("-playgc")) savegc = v;
+                else if (ARG("-playmusic")) savemusic = v;
+            })
+        }
+        else if (ARG("-playassets"))
+        {
+            // Even if this is a directory, FILESYSTEM_mountassets() expects '.vvvvvv' on the end
+            ARG_INNER({
                 playassets = "levels/" + std::string(argv[i]) + ".vvvvvv";
-            } else {
-                printf("%s option requires one argument.\n", argv[i]);
-                return 1;
-            }
+            })
         }
-        if (std::string(argv[i]) == "-renderer") {
-            i++;
-            SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
-        } else if (strcmp(argv[i], "-basedir") == 0) {
-            ++i;
-            baseDir = argv[i];
-        } else if (strcmp(argv[i], "-assets") == 0) {
-            ++i;
-            assetsPath = argv[i];
-        }
+#undef ARG_INNER
+#undef ARG_IS
     }
 
     if (syslog) {
