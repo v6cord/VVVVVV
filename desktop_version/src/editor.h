@@ -302,6 +302,7 @@ public:
 
     int temp = 0;
     int notedelay = 0;
+    int oldnotedelay = 0;
     std::string note;
     std::string keybuffer;
     std::string filename;
