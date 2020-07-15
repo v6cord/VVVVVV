@@ -675,7 +675,7 @@ void menuactionpress()
             }
             music.usingmmmmmm = !music.usingmmmmmm;
             music.playef(11);
-            music.play(6);
+            music.play(music.currentsong);
             game.savestats();
         }
         else if (game.currentmenuoption == 5+mmmmmm_offset)
