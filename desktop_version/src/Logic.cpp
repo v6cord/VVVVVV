@@ -5,6 +5,19 @@
 
 int last_gravity = -1;
 
+void titleupdatetextcol()
+{
+    graphics.col_tr = map.r - (help.glow / 4) - int(fRandom() * 4);
+    graphics.col_tg = map.g - (help.glow / 4) - int(fRandom() * 4);
+    graphics.col_tb = map.b - (help.glow / 4) - int(fRandom() * 4);
+    if (graphics.col_tr < 0) graphics.col_tr = 0;
+    if(graphics.col_tr>255) graphics.col_tr=255;
+    if (graphics.col_tg < 0) graphics.col_tg = 0;
+    if(graphics.col_tg>255) graphics.col_tg=255;
+    if (graphics.col_tb < 0) graphics.col_tb = 0;
+    if(graphics.col_tb>255) graphics.col_tb=255;
+}
+
 void titlelogic()
 {
     //Misc
@@ -27,15 +40,7 @@ void titlelogic()
     }
     else
     {
-        graphics.col_tr = map.r - (help.glow / 4) - int(fRandom() * 4);
-        graphics.col_tg = map.g - (help.glow / 4) - int(fRandom() * 4);
-        graphics.col_tb = map.b - (help.glow / 4) - int(fRandom() * 4);
-        if (graphics.col_tr < 0) graphics.col_tr = 0;
-        if(graphics.col_tr>255) graphics.col_tr=255;
-        if (graphics.col_tg < 0) graphics.col_tg = 0;
-        if(graphics.col_tg>255) graphics.col_tg=255;
-        if (graphics.col_tb < 0) graphics.col_tb = 0;
-        if(graphics.col_tb>255) graphics.col_tb=255;
+        titleupdatetextcol();
 
         graphics.updatetitlecolours();
     }

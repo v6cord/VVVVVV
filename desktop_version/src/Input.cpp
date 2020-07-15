@@ -1,5 +1,6 @@
 #include "Enums.h"
 #include "Input.h"
+#include "Logic.h"
 #include "Script.h"
 
 #include "MakeAndPlay.h"
@@ -2159,6 +2160,10 @@ void mapmenuactionpress()
         game.gamestate = TITLEMODE;
         game.createmenu(Menu::graphicoptions);
         map.nexttowercolour();
+
+        // Fix delta rendering glitch
+        graphics.updatetowerbackground();
+        titleupdatetextcol();
         break;
     case 33:
         // Game options
@@ -2166,6 +2171,10 @@ void mapmenuactionpress()
         game.gamestate = TITLEMODE;
         game.createmenu(Menu::options);
         map.nexttowercolour();
+
+        // Fix delta rendering glitch
+        graphics.updatetowerbackground();
+        titleupdatetextcol();
         break;
     }
 }
