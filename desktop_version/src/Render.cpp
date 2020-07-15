@@ -3171,33 +3171,10 @@ void maprender()
 
     if (graphics.resumegamemode)
     {
-        graphics.menuoffset += 25;
-        if (map.extrarow)
-        {
-            if (graphics.menuoffset >= 230)
-            {
-                graphics.menuoffset = 230;
-                //go back to gamemode!
-                game.mapheld = true;
-                game.gamestate = GAMEMODE;
-            }
-        }
-        else
-        {
-            if (graphics.menuoffset >= 240)
-            {
-                graphics.menuoffset = 240;
-                //go back to gamemode!
-                game.mapheld = true;
-                game.gamestate = GAMEMODE;
-            }
-        }
         graphics.menuoffrender();
     }
     else if (graphics.menuoffset > 0)
     {
-        graphics.menuoffset -= 25;
-        if (graphics.menuoffset < 0) graphics.menuoffset = 0;
         graphics.menuoffrender();
     }
     else
@@ -3430,33 +3407,10 @@ void teleporterrender()
 
     if (graphics.resumegamemode)
     {
-        graphics.menuoffset += 25;
-        if (map.extrarow)
-        {
-            if (graphics.menuoffset >= 230)
-            {
-                graphics.menuoffset = 230;
-                //go back to gamemode!
-                game.mapheld = true;
-                game.gamestate = GAMEMODE;
-            }
-        }
-        else
-        {
-            if (graphics.menuoffset >= 240)
-            {
-                graphics.menuoffset = 240;
-                //go back to gamemode!
-                game.mapheld = true;
-                game.gamestate = GAMEMODE;
-            }
-        }
         graphics.menuoffrender();
     }
     else if (graphics.menuoffset > 0)
     {
-        graphics.menuoffset -= 25;
-        if (graphics.menuoffset < 0) graphics.menuoffset = 0;
         graphics.menuoffrender();
     }
     else
