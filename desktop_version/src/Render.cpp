@@ -2936,7 +2936,7 @@ void maprender()
 
         if (graphics.flipmode)
         {
-            if (game.intimetrial || game.insecretlab || game.nodeathmode)
+            if (game.inspecial())
             {
                 graphics.Print(0, 135, "Return to main menu?", 196, 196, 255 - help.glow, true);
             }
@@ -2952,7 +2952,7 @@ void maprender()
         else
         {
 
-            if (game.intimetrial || game.insecretlab || game.nodeathmode)
+            if (game.inspecial())
             {
                 graphics.Print(0, 80, "Return to main menu?", 196, 196, 255 - help.glow, true);
             }
@@ -2972,7 +2972,7 @@ void maprender()
 
         if (graphics.flipmode)
         {
-            if (game.intimetrial || game.insecretlab || game.nodeathmode)
+            if (game.inspecial())
             {
                 graphics.Print(0, 135, "Return to main menu?", 196, 196, 255 - help.glow, true);
             }
@@ -2987,7 +2987,7 @@ void maprender()
         }
         else
         {
-            if (game.intimetrial || game.insecretlab || game.nodeathmode)
+            if (game.inspecial())
             {
                 graphics.Print(0, 80, "Return to main menu?", 196, 196, 255 - help.glow, true);
             }
