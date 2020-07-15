@@ -115,6 +115,7 @@ public:
 
 
     std::string roomname;
+    std::string hiddenname;
 
     //Special tower stuff
     bool towermode = false;
