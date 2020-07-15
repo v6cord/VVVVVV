@@ -2040,7 +2040,10 @@ void mapinput()
             game.menupage++;
         }
 
-        mapmenuactionpress();
+        if (game.press_action)
+        {
+            mapmenuactionpress();
+        }
 
         if (game.menupage < 0) game.menupage = 3;
         if (game.menupage > 3 && game.menupage < 9) game.menupage = 0;
@@ -2058,7 +2061,7 @@ void mapinput()
 
 void mapmenuactionpress()
 {
-    if (game.menupage == 1 && obj.flags[67] && game.press_action && !game.insecretlab && !map.custommode)
+    if (game.menupage == 1 && obj.flags[67] && !game.insecretlab && !map.custommode)
     {
         //Warp back to the ship
         graphics.resumegamemode = true;
@@ -2082,7 +2085,7 @@ void mapmenuactionpress()
         game.statedelay = 0;
     }
 
-    if (game.menupage == 3 && !game.gamesaved && game.press_action && !game.intimetrial
+    if (game.menupage == 3 && !game.gamesaved && !game.intimetrial
             && !game.nodeathmode && !game.insecretlab && !game.inintermission)
     {
         game.flashlight = 5;
@@ -2108,12 +2111,12 @@ void mapmenuactionpress()
         }
     }
 
-    if (game.menupage == 10 && game.press_action)
+    if (game.menupage == 10)
     {
         //return to game
         graphics.resumegamemode = true;
     }
-    if (game.menupage == 11 && game.press_action)
+    if (game.menupage == 11)
     {
         //quit to menu
 
@@ -2127,12 +2130,12 @@ void mapmenuactionpress()
         game.fadetomenudelay = 16;
     }
 
-    if (game.menupage == 20 && game.press_action)
+    if (game.menupage == 20)
     {
         //return to game
         graphics.resumegamemode = true;
     }
-    if (game.menupage == 21 && game.press_action)
+    if (game.menupage == 21)
     {
         //quit to menu
         game.swnmode = false;
