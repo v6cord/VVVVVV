@@ -217,7 +217,6 @@ public:
     int jumppressed = 0;
     int gravitycontrol = 0;
 
-    bool infocus = false;
     bool muted = false;
     int mutebutton = 0;
     bool musicmuted = false;
