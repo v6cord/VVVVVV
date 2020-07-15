@@ -437,6 +437,7 @@ public:
     int playrx = 0;
     int playry = 0;
     int playgc = 0;
+    std::string playassets;
 
     growing_vector<SDL_Surface*> script_images;
     growing_vector<std::string> script_image_names;
