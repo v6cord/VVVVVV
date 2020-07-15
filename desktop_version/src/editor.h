@@ -474,11 +474,13 @@ void fillboxabs(int x, int y, int x2, int y2, int c);
 int dmcap(void);
 int dmwidth(void);
 
+#if !defined(NO_EDITOR)
 void editorrender();
 
 void editorlogic();
 
 void editorinput();
+#endif
 
 extern editorclass ed;
 

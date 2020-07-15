@@ -3356,6 +3356,7 @@ int cycle_through_custom_resources(int current, std::map <int, std::vector<SDL_S
     return 0;
 }
 
+#if !defined(NO_EDITOR)
 void editormenurender(int tr, int tg, int tb)
 {
     switch (game.currentmenuname)
@@ -7479,6 +7480,7 @@ void editorinput()
         }
     }
 }
+#endif /* NO_EDITOR */
 
 int editorclass::getedaltstatenum(int rxi, int ryi, int state)
 {
