@@ -284,8 +284,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 
         pre_fakepercent.store(45);
 
-	strcpy_safe(output, PHYSFS_getBaseDir());
-	strcpy_safe(output, "gamecontrollerdb.txt");
+	SDL_snprintf(output, sizeof(output), "%s%s", PHYSFS_getBaseDir(), "gamecontrollerdb.txt");
 	if (SDL_GameControllerAddMappingsFromFile(output) < 0 && !game.quiet)
 	{
 		printf("gamecontrollerdb.txt not found!\n");
