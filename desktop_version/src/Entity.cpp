@@ -2467,6 +2467,7 @@ bool entityclass::updateentities( int i )
                 {
                     entities[i].statedelay = 6;
                     entities[i].xp -=  int(entities[i].para);
+                    entities[i].oldxp -=  int(entities[i].para);
                 }
                 break;
             case 18: //Special for ASCII Snake (right)
@@ -2474,6 +2475,7 @@ bool entityclass::updateentities( int i )
                 {
                     entities[i].statedelay = 6;
                     entities[i].xp += int(entities[i].para);
+                    entities[i].oldxp += int(entities[i].para);
                 }
                 break;
             }
