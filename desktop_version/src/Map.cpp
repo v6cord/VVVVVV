@@ -921,6 +921,7 @@ void mapclass::realign_tower() {
 
 	if (ypos < 0)
 		ypos = 0;
+	oldypos = ypos;
 	bypos = ypos / 2;
 }
 
@@ -1528,6 +1529,7 @@ void mapclass::loadlevel(int rx, int ry)
 
 	towermode = false;
 	ypos = 0;
+	oldypos = 0;
 	extrarow = 0;
 
 	//Custom stuff for warplines
