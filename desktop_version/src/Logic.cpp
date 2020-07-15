@@ -1540,6 +1540,7 @@ void gamelogic()
     }
 #endif
 
+    game.prev_act_fade = game.act_fade;
     if (game.activeactivity > -1)
     {
         if (game.act_fade < 5)
