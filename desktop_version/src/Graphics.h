@@ -347,6 +347,8 @@ public:
 	int col_tb = 0;
 	void updatetitlecolours();
 
+	bool kludgeswnlinewidth = false;
+
 	SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
 
