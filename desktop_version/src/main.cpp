@@ -489,10 +489,12 @@ void deltaloop()
         case PRELOADER:
             preloaderrender();
             break;
+#if !defined(NO_CUSTOM_LEVELS)
         case EDITORMODE:
             graphics.flipmode = false;
             editorrender();
             break;
+#endif
         case TITLEMODE:
             titlerender();
             break;
@@ -587,7 +589,6 @@ void fixedloop()
             break;
 #if !defined(NO_CUSTOM_LEVELS)
         case EDITORMODE:
-            graphics.flipmode = false;
             //Input
             editorinput();
             ////Logic
