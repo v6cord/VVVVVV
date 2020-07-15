@@ -4921,6 +4921,10 @@ void editorlogic()
             break;
         }
     }
+    else if (!game.colourblindmode)
+    {
+        graphics.updatetowerbackground();
+    }
 
     if (graphics.fademode == 1)
     {

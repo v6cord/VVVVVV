@@ -215,6 +215,7 @@ public:
 	void menuoffrender();
 
 	void drawtowerbackground();
+	void updatetowerbackground();
 
 	void setcol(int t);
 	void drawfinalmap();
