@@ -402,6 +402,8 @@ int main(int argc, char *argv[])
 
         time = SDL_GetTicks();
 
+        game.infocus = key.isActive;
+
         // Update network per frame.
         NETWORK_update();
 
@@ -454,7 +456,6 @@ int main(int argc, char *argv[])
                 game.press_map = false;
             }
 
-            game.infocus = key.isActive;
             if(!game.infocus)
             {
                 Mix_Pause(-1);
@@ -468,6 +469,7 @@ int main(int argc, char *argv[])
                     graphics.bprint(5, 230, "Press N to mute music only", 164 - help.glow, 196 - help.glow, 164 - help.glow, true);
                 }
                 graphics.render();
+                gameScreen.FlipScreen();
                 //We are minimised, so lets put a bit of a delay to save CPU
                 SDL_Delay(100);
             }
@@ -479,16 +481,12 @@ int main(int argc, char *argv[])
                 switch(game.gamestate)
                 {
                 case PRELOADER:
-                    //Render
-                    preloaderrender();
                     break;
 #if !defined(NO_CUSTOM_LEVELS)
                 case EDITORMODE:
                     graphics.flipmode = false;
                     //Input
                     editorinput();
-                    //Render
-                    editorrender();
                     ////Logic
                     editorlogic();
                     break;
@@ -497,8 +495,6 @@ int main(int argc, char *argv[])
                     //Input
                     changeloginput();
                     titleinput();
-                    //Render
-                    titlerender();
                     ////Logic
                     titlelogic();
                     break;
@@ -508,16 +504,13 @@ int main(int argc, char *argv[])
                     }
 
                     gameinput();
-                    gamerender();
                     gamelogic();
                     break;
                 case MAPMODE:
-                    maprender();
                     mapinput();
                     maplogic();
                     break;
                 case TELEPORTERMODE:
-                    teleporterrender();
                     if(game.useteleporter)
                     {
                         teleporterinput();
@@ -532,21 +525,18 @@ int main(int argc, char *argv[])
                     maplogic();
                     break;
                 case GAMECOMPLETE:
-                    gamecompleterender();
                     //Input
                     gamecompleteinput();
                     //Logic
                     gamecompletelogic();
                     break;
                 case GAMECOMPLETE2:
-                    gamecompleterender2();
                     //Input
                     gamecompleteinput2();
                     //Logic
                     gamecompletelogic2();
                     break;
                 case CLICKTOSTART:
-                    help.updateglow();
                     break;
                 default:
                     break;
@@ -634,10 +624,44 @@ int main(int argc, char *argv[])
             music.processmusic();
             graphics.processfade();
             game.gameclock();
+        }
+        const float alpha = static_cast<float>(accumulator) / timesteplimit;
+
+        if (game.infocus)
+        {
+            switch (game.gamestate)
+            {
+            case PRELOADER:
+                preloaderrender();
+                break;
+            case EDITORMODE:
+                graphics.flipmode = false;
+                editorrender();
+                break;
+            case TITLEMODE:
+                titlerender();
+                break;
+            case GAMEMODE:
+                gamerender();
+                break;
+            case MAPMODE:
+                maprender();
+                break;
+            case TELEPORTERMODE:
+                teleporterrender();
+                break;
+            case GAMECOMPLETE:
+                gamecompleterender();
+                break;
+            case GAMECOMPLETE2:
+                gamecompleterender2();
+                break;
+            case CLICKTOSTART:
+                help.updateglow();
+                break;
+            }
             gameScreen.FlipScreen();
         }
-        const float deltatime = rawdeltatime/1000.0f * 34.0f / timesteplimit;
-        const float alpha = static_cast<float>(accumulator) / timesteplimit;
     }
 
 
