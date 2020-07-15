@@ -444,15 +444,16 @@ void menuactionpress()
         default:
             //back
             music.playef(11);
-            game.returnmenu();
             if (game.ingame_titlemode)
             {
                 game.ingame_titlemode = false;
+                game.returntomenu(game.kludge_ingametemp);
                 game.gamestate = MAPMODE;
                 map.kludge_to_bg();
             }
             else
             {
+                game.returnmenu();
                 map.nexttowercolour();
             }
             break;
@@ -668,15 +669,16 @@ void menuactionpress()
         {
             //back
             music.playef(11);
-            game.returnmenu();
             if (game.ingame_titlemode)
             {
                 game.ingame_titlemode = false;
+                game.returntomenu(game.kludge_ingametemp);
                 game.gamestate = MAPMODE;
                 map.kludge_to_bg();
             }
             else
             {
+                game.returnmenu();
                 map.nexttowercolour();
             }
         }
@@ -2187,6 +2189,7 @@ void mapmenuactionpress()
             game.createmenu(Menu::options);
         }
         map.bg_to_kludge();
+        game.kludge_ingametemp = game.currentmenuname;
 
         map.nexttowercolour();
         map.scrolldir = 0;
