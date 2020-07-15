@@ -290,6 +290,7 @@ public:
 
 	int fademode = 0;
 	int fadeamount = 0;
+	int oldfadeamount = 0;
 	std::vector <int> fadebars;
 
 	bool trinketcolset = false;
