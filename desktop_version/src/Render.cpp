@@ -2496,19 +2496,6 @@ void maprender()
             }
           }
 
-          if (map.cursorstate == 0){
-            map.cursordelay++;
-            if (map.cursordelay > 10){
-              map.cursorstate = 1;
-              map.cursordelay = 0;
-            }
-          }else if (map.cursorstate == 1){
-            map.cursordelay++;
-            if (map.cursordelay > 30) map.cursorstate = 2;
-          }else if (map.cursorstate == 2){
-            map.cursordelay++;
-          }
-
           //normal size maps
           if(map.customzoom==4){
             if(map.cursorstate==1){
@@ -2571,18 +2558,8 @@ void maprender()
             if (game.roomx == 109)
             {
                 //tower!instead of room y, scale map.ypos
-                if (map.cursorstate == 0)
+                if (map.cursorstate == 1)
                 {
-                    map.cursordelay++;
-                    if (map.cursordelay > 10)
-                    {
-                        map.cursorstate = 1;
-                        map.cursordelay = 0;
-                    }
-                }
-                else if (map.cursorstate == 1)
-                {
-                    map.cursordelay++;
                     if (int(map.cursordelay / 4) % 2 == 0)
                     {
                         graphics.drawrect(40 + ((game.roomx - 100) * 12) , 21 , 12, 180, 255,255,255);
@@ -2592,7 +2569,6 @@ void maprender()
                 }
                 else if (map.cursorstate == 2)
                 {
-                    map.cursordelay++;
                     if (int(map.cursordelay / 15) % 2 == 0)
                     {
                         graphics.drawrect(40 + ((game.roomx - 100) * 12) + 2 , 21  + 2, 12 - 4, 180 - 4,16, 245 - (help.glow), 245 - (help.glow));
@@ -2601,28 +2577,16 @@ void maprender()
             }
             else
             {
-                if (map.cursorstate == 0)
+                if (map.cursorstate == 1)
                 {
-                    map.cursordelay++;
-                    if (map.cursordelay > 10)
-                    {
-                        map.cursorstate = 1;
-                        map.cursordelay = 0;
-                    }
-                }
-                else if (map.cursorstate == 1)
-                {
-                    map.cursordelay++;
                     if (int(map.cursordelay / 4) % 2 == 0)
                     {
                         graphics.drawrect(40 + ((game.roomx - 100) * 12) , 21 + ((game.roomy - 100) * 9) , 12 , 9 , 255,255,255);
                         graphics.drawrect(40 + ((game.roomx - 100) * 12) + 2, 21 + ((game.roomy - 100) * 9) + 2, 12 - 4, 9 - 4, 255,255,255);
                     }
-                    if (map.cursordelay > 30) map.cursorstate = 2;
                 }
                 else if (map.cursorstate == 2)
                 {
-                    map.cursordelay++;
                     if (int(map.cursordelay / 15) % 2 == 0)
                     {
                         graphics.drawrect(40 + ((game.roomx - 100) * 12) + 2, 21 + ((game.roomy - 100) * 9) + 2, 12 - 4, 9 - 4, 16, 245 - (help.glow), 245 - (help.glow));
