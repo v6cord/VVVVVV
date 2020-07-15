@@ -360,6 +360,7 @@ public:
     SDL_Rect teleblock = {0};
     bool activetele = false;
     int readytotele = 0;
+    int oldreadytotele = 0;
     int activity_r, activity_g, activity_b = 0;
     std::string activity_lastprompt;
 

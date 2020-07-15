@@ -170,6 +170,7 @@ void Game::init(void)
 
     activetele = false;
     readytotele = 0;
+    oldreadytotele = 0;
     activity_lastprompt = "";
     activity_r = 0;
     activity_g = 0;
