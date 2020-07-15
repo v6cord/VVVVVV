@@ -13,6 +13,7 @@ textboxclass::textboxclass()
     prev_tl = 0;
     tm = 0;
     timer = 0;
+    allowspecial = false;
 }
 
 void textboxclass::centerx(int centerline)

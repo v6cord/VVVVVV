@@ -48,6 +48,8 @@ public:
 
     int max = 0;
 
+    bool allowspecial;
+
 };
 
 #endif /* TEXTBOX_H */
