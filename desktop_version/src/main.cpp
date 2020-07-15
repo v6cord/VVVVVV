@@ -304,6 +304,11 @@ int main(int argc, char *argv[])
     map.bypos = map.ypos / 2;
 
     //Moved screensetting init here from main menu V2.1
+
+    // FIXME: Thanks to having to work around an SDL2 bug, this destroys the
+    // renderer created by Screen::init(), which is a bit wasteful!
+    // This is annoying to fix because we'd have to call gameScreen.init() after
+    // game.loadstats(), but game.loadstats() assumes gameScreen.init() is already called!
     graphics.processVsync();
 
     if (game.skipfakeload)
