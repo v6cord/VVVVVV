@@ -543,6 +543,17 @@ std::vector<std::string> changelog = {
 
 };
 
+// Macro-like inline function used in maprender()
+// Used to keep some text positions the same in Flip Mode
+int inline FLIP(int ypos)
+{
+    if (graphics.flipmode)
+    {
+        return 220 - ypos;
+    }
+    return ypos;
+}
+
 void menurender()
 {
     switch (game.currentmenuname) {
