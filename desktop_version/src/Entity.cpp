@@ -1220,6 +1220,10 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
     //Rule 6 is a crew member
 
     entclass entity;
+    entity.xp = xp;
+    entity.yp = yp;
+    entity.oldxp = xp;
+    entity.oldyp = yp;
     entity.type = t;
     int thetile = customplatformtile;
     int theroomnum = game.roomx-100 + ed.maxwidth*(game.roomy-100);
@@ -1236,8 +1240,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.rule = 0; //Playable character
         entity.tile = 0;
         entity.colour = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1250,8 +1252,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         break;
     case 1: //Simple enemy, bouncing off the walls
         entity.rule = 1;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.behave = vx;
         entity.para = vy;
         entity.w = 16;
@@ -1304,8 +1304,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
           if (gridmatch(p1, p2, p3, p4, -32, -40, 352, 264)) entity.tile = 27;
         }
 
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 32;
         entity.h = 8;
 
@@ -1374,8 +1372,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             if (game.roomx == 50 && game.roomy == 52) entity.tile = 22;
         }
 
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cy = -1;
         entity.w = 32;
         entity.h = 10;
@@ -1391,8 +1387,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 3;
         entity.size = 1;
         entity.tile = 10;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cy = -1;
         entity.w = 8;
         entity.h = 10;
@@ -1408,8 +1402,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 4;
         entity.size = 0;
         entity.tile = 11 + vx;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 0;
@@ -1422,8 +1414,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 5;  //Particles
         entity.colour = 1;
         entity.size = 3;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.vx = vx;
         entity.vy = vy;
 
@@ -1434,8 +1424,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 5;  //Particles
         entity.colour = 2;
         entity.size = 3;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.vx = vx;
         entity.vy = vy;
 
@@ -1447,8 +1435,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             entity.type = 6;
             entity.size = 4;
             entity.tile = 48;
-            entity.xp = xp;
-            entity.yp = yp;
             int temp_size = 8;
             if (vy == 1 || vy == 2) temp_size = 16;
             if (vy == 3 || vy == 4) temp_size = 24;
@@ -1468,8 +1454,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 7;
         entity.size = 0;
         entity.tile = 22;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 3;
@@ -1485,8 +1469,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 8;
         entity.size = 0;
         if (vx == 0 || vx == 1) entity.tile = 20 + vx; else entity.tile = 188 + vx;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 4;
@@ -1510,8 +1492,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 9;
         entity.size = 5;
         entity.life = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = vx;
         entity.h = 1;
         entity.onentity = 1;
@@ -1521,8 +1501,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 10;
         entity.size = 6;
         entity.life = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 1;
         entity.h = vx;
         //entity.colour = 0;
@@ -1533,8 +1511,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 11;
         entity.size = 0;
         entity.tile = 18;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 10;
@@ -1550,8 +1526,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 100;
         entity.size = 7;
         entity.tile = 1; //inactive
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 96;
         entity.h = 96;
         entity.colour = 100;
@@ -1564,8 +1538,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 12; //A special case!
         entity.tile = 144;
         entity.colour = 13; //144 for sad :(
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1581,8 +1553,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 12; //A special case!
         entity.tile = 144+6;
         entity.colour = 14; //144 for sad (upside down+12):(
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1598,8 +1568,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 12; //A special case!
         entity.tile = 144;
         entity.colour = 16; //144 for sad :(
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1624,8 +1592,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         {
             entity.tile = 144;
         }
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1649,8 +1615,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 12; //A special case!
         entity.tile = 0;
         entity.colour = 6; //54 for sad :(
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1666,8 +1630,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 13;
         entity.size = 0;
         entity.tile = 16 + vx;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 4;
@@ -1680,8 +1642,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 13;
         entity.size = 0;
         entity.tile = 16 + vx;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 4;
@@ -1694,8 +1654,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 7;
         entity.size = 0;
         entity.tile = 22;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 3;
@@ -1710,8 +1668,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         //Given a different behavior, these enemies are especially for SWN mode and disappear outside the screen.
         entity.rule = 1;
         entity.type = 23;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.behave = vx;
         entity.para = vy;
         entity.w = 16;
@@ -1759,8 +1715,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         {
             entity.tile = 144;
         }
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -1786,8 +1740,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.rule = 3;
         entity.type = 15;
         entity.size = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 16;
         entity.h = 16;
         entity.colour = 4;
@@ -1963,8 +1915,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 11;
         entity.size = 0;
         entity.tile = 18;
-        entity.xp =  (xp);
-        entity.yp =  (yp);
         entity.w = 16;
         entity.h = 16;
         entity.colour = 3;
@@ -1979,8 +1929,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 51;
         entity.size = 6;
         entity.life = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 1;
         entity.h = vx;
         //entity.colour = 0;
@@ -1993,8 +1941,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 52;
         entity.size = 6;
         entity.life = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = 1;
         entity.h = vx;
         //entity.colour = 0;
@@ -2007,8 +1953,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 53;
         entity.size = 5;
         entity.life = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = vx;
         entity.h = 1;
         entity.onentity = 1;
@@ -2020,8 +1964,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
         entity.type = 54;
         entity.size = 5;
         entity.life = 0;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.w = vx;
         entity.h = 1;
         entity.onentity = 1;
@@ -2039,8 +1981,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
           entity.tile = 0;
         }
         entity.colour = crewcolour(int(vy));
-        entity.xp = xp;
-        entity.yp = yp;
         entity.cx = 6;
         entity.cy = 2;
         entity.w = 12;
@@ -2060,8 +2000,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
       case 56: //Custom enemy
         entity.rule = 1;
         entity.type = 1;
-        entity.xp = xp;
-        entity.yp = yp;
         entity.behave = vx;
         entity.para = vy;
         entity.w = 16;
@@ -2470,17 +2408,20 @@ bool entityclass::updateentities( int i )
                     {
                         entities[i].tile = 120;
                         entities[i].yp = (28*8)-62;
+                        entities[i].oldyp = (28*8)-62;
                     }
                     else
                     {
                         entities[i].tile = 96;
                         entities[i].yp = 24;
+                        entities[i].oldyp = 24;
                     }
                     //now, x position
                     if (player > -1 && entities[player].xp > 20 * 8)
                     {
                         //approach from the left
                         entities[i].xp = -64;
+                        entities[i].oldxp = -64;
                         entities[i].state = 2;
                         bool entitygone = updateentities(i); //right
                         if (entitygone) return true;
@@ -2489,6 +2430,7 @@ bool entityclass::updateentities( int i )
                     {
                         //approach from the left
                         entities[i].xp = 320;
+                        entities[i].oldxp = 320;
                         entities[i].state = 3;
                         bool entitygone = updateentities(i); //left
                         if (entitygone) return true;
