@@ -383,7 +383,9 @@ int main(int argc, char *argv[])
 
     }
 
-    volatile Uint32 time = 0, timePrev = 0;
+    volatile Uint32 time = 0;
+    volatile Uint32 timePrev = 0;
+    volatile Uint32 accumulator = 0;
 
 #ifdef VCE_DEBUG
     auto last_gamestate = game.gamestate;
@@ -403,28 +405,24 @@ int main(int argc, char *argv[])
         // Update network per frame.
         NETWORK_update();
 
-        //framerate limit to 30
-        Uint32 timetaken = time - timePrev;
-        if(game.gamestate==EDITORMODE)
-                {
-        if (timetaken < 24)
+        //timestep limit to 30
+        const float rawdeltatime = static_cast<float>(time - timePrev);
+        accumulator += rawdeltatime;
+
+        Uint32 timesteplimit;
+        if (game.gamestate == EDITORMODE)
         {
-            volatile Uint32 delay = 24 - timetaken;
-            SDL_Delay( delay );
-            time = SDL_GetTicks();
+            timesteplimit = 24;
+        }
+        else
+        {
+            timesteplimit = game.gameframerate;
         }
         timePrev = time;
 
-        }else{
-        if (timetaken < game.gameframerate)
+        while (accumulator >= timesteplimit)
         {
-            volatile Uint32 delay = game.gameframerate - timetaken;
-            SDL_Delay( delay );
-            time = SDL_GetTicks();
-        }
-        timePrev = time;
-
-        }
+        accumulator = fmodf(accumulator, timesteplimit);
 
         key.Poll();
         if(key.toggleFullscreen)
@@ -637,9 +635,11 @@ int main(int argc, char *argv[])
         graphics.processfade();
         game.gameclock();
         gameScreen.FlipScreen();
+        }
+        const float deltatime = rawdeltatime/1000.0f * 34.0f / timesteplimit;
+        const float alpha = static_cast<float>(accumulator) / timesteplimit;
+    }
 
-
-    };
 
 
     log_close();
