@@ -2751,7 +2751,7 @@ bool editorclass::load(std::string& _path)
             {
                 std::vector<std::string> values = split(TextString,'|');
                 script.clearcustom();
-                Script script_;
+                Script script_ = {};
                 bool headerfound = false;
                 for (auto& line : values)
                 {

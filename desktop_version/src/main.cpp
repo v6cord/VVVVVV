@@ -546,8 +546,7 @@ int main(int argc, char *argv[])
                 titlelogic();
                 break;
             case GAMEMODE:
-                if (script.running)
-                {
+                if (script.is_running()) {
                     script.run();
                 }
 
@@ -572,8 +571,7 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    if (script.running)
-                    {
+                    if (script.is_running()) {
                         script.run();
                     }
                     gameinput();

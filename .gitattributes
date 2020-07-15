@@ -1,2 +1,3 @@
 *.as linguist-language=ActionScript
 mobile_version/* linguist-vendored
+third_party/* linguist-vendored linguist-generated

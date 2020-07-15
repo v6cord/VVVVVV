@@ -60,7 +60,8 @@ struct script_exception : public std::exception {
     const char* what() const noexcept override;
 
     script_exception(const std::exception& ex);
-    script_exception(const char* message);
+    script_exception(const char* message, bool raw = false);
+    script_exception(std::string message, bool raw = false);
 };
 
 #endif

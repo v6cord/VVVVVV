@@ -3,10 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <unordered_map>
 #include "Game.h"
 #include "ScriptX.h"
 #include "Enums.h"
+#include "LuaScript.h"
 
 #define filllines(lines) commands.insert(commands.end(), lines, lines + sizeof(lines)/sizeof(lines[0]))
 
@@ -19,6 +21,7 @@ struct stackframe {
 struct Script {
     std::string name;
     std::vector<std::string> contents;
+    bool lua;
 };
 
 #define LAYERNAMES \
@@ -158,6 +161,13 @@ public:
         LAYERNAMES
 #undef X
     };
+
+    std::list<lua_script> lua_scripts;
+
+    bool is_running();
+
+    void quit();
+    void stop();
 };
 
 // Syntax: X(<type>, <name>, <value> (has to be a valid rvalue, and can only be set if a valid lvalue), <offset/indexing>, <slow, 1/0>)

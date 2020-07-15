@@ -6,6 +6,10 @@ cd "$(dirname "$0")"
 ARGS=("$@")
 set --
 
+if [ -z "$debug" ]; then
+    debug=1
+fi
+
 source build.sh # source build.sh so we get its argument parsing for free!
 
 export DISPLAY="${DISPLAY:-:0}" # if you're developing over ssh, set $DISPLAY

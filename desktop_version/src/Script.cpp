@@ -17,6 +17,7 @@
 #include "Music.h"
 #include "Utilities.h"
 #include "Maths.h"
+#include "LuaScript.h"
 
 extern bool headless;
 
@@ -281,8 +282,9 @@ std::string stringify<bool>(bool val) {
     return val ? "true" : "false";
 }
 
-void quit() {
-    if(map.custommodeforreal) {
+void scriptclass::quit() {
+    stop();
+    if(!map.custommode || map.custommodeforreal) {
         graphics.flipmode = false;
         game.gamestate = TITLEMODE;
         FILESYSTEM_unmountassets();
@@ -298,6 +300,11 @@ void quit() {
         if(!game.muted && ed.levmusic>0) music.fadeMusicVolumeIn(3000);
         if(ed.levmusic>0) music.fadeout();
     }
+}
+
+void scriptclass::stop() {
+    lua_scripts.clear();
+    running = false;
 }
 
 void scriptclass::renderimages(enum Layer::LayerName layer) {
@@ -359,6 +366,17 @@ void scriptclass::renderimages(enum Layer::LayerName layer) {
 
 void scriptclass::run() {
     try {
+        for (auto it = lua_scripts.begin(); it != lua_scripts.end();) {
+            bool cont = it->run();
+            if (lua_scripts.empty()) {
+                return;
+            } else if (cont) {
+                ++it;
+            } else {
+                it = lua_scripts.erase(it);
+            }
+        }
+
         if (scriptdelay == 0) {
             passive = false;
         }
@@ -3383,12 +3401,8 @@ void scriptclass::run() {
         if (scriptdelay > 0) {
             scriptdelay--;
         }
-    } catch (const script_exception& ex) {
-        handle_exception(ex);
-        quit();
     } catch (const std::exception& ex) {
-        handle_exception(script_exception(ex));
-        quit();
+        handle_exception(ex);
     }
 }
 
@@ -4486,6 +4500,7 @@ void scriptclass::hardreset() {
     game.script_image_names.clear();
 
     active_scripts.clear();
+    lua_scripts.clear();
 
     keepcolor = false;
 
@@ -4538,16 +4553,26 @@ void scriptclass::loadcustom(std::string t)
   std::string tstring;
 
   // can't use `auto` here :(
-  std::vector<std::string>* contents = nullptr;
-  for (auto& script_ : customscripts)
-      if (script_.name == cscriptname) {
-          contents = &script_.contents;
+  Script* scriptptr = nullptr;
+  for (auto& scriptelem : customscripts)
+      if (scriptelem.name == cscriptname) {
+          scriptptr = &scriptelem;
           break;
       }
-  if(contents == nullptr)
+  if(scriptptr == nullptr)
     return;
 
-  auto& lines = *contents;
+  auto& script_ = *scriptptr;
+  auto& lines = script_.contents;
+
+  if (script_.lua) {
+      try {
+          lua_script::load(t, lines);
+      } catch (const std::exception& ex) {
+          handle_exception(ex);
+      }
+      return;
+  }
 
   //Ok, we've got the relavent script segment, we do a pass to assess it, then run it!
   int customcutscenemode=0;
@@ -4868,4 +4893,8 @@ void scriptclass::loadcustom(std::string t)
     else
       running = false;
   }
+}
+
+bool scriptclass::is_running() {
+    return !lua_scripts.empty() || running;
 }

@@ -191,6 +191,7 @@ SET(VVV_SRC
 	src/main.cpp
 	src/Network.c
 	src/Utilities.cpp
+    src/LuaScript.cpp
         ${GITREV_FILE}
         ${VCE_ZIP_OBJ}
 )
@@ -314,6 +315,8 @@ IF(SUPPORTS_IMPLICIT_FALLTHROUGH AND NOT ANDROID)
     #TARGET_COMPILE_OPTIONS(VVVVVV-CE PRIVATE -Werror=implicit-fallthrough)
 ENDIF()
 
+file(GLOB LUA_SRC "../third_party/lua-5.3.5/src/*.c")
+
 # Library information
 ADD_LIBRARY(tinyxml2-static STATIC ${XML2_SRC})
 target_include_directories(tinyxml2-static PUBLIC ../third_party/tinyxml2)
@@ -321,15 +324,33 @@ ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 target_include_directories(physfs-static PUBLIC ../third_party/physfs)
 ADD_LIBRARY(cparse-static STATIC ${PARSE_SRC})
 target_include_directories(cparse-static PUBLIC ../third_party/cparse)
+ADD_LIBRARY(lua-static STATIC ${LUA_SRC})
+target_include_directories(lua-static PUBLIC ../third_party/lua-5.3.5/src)
+ADD_LIBRARY(sol2-static INTERFACE)
+target_include_directories(sol2-static INTERFACE ../third_party/sol2)
+target_link_libraries(sol2-static INTERFACE lua-static)
+
+set_source_files_properties(${LUA_SRC} PROPERTIES LANGUAGE CXX)
+target_compile_definitions(sol2-static INTERFACE SOL_USING_CXX_LUA)
 
 if (SWITCH)
     target_compile_options(cparse-static PUBLIC -fexceptions)
+    target_compile_options(lua-static PUBLIC -fexceptions)
+endif()
+
+if(APPLE)
+    target_compile_definitions(lua-static PUBLIC LUA_USE_MACOSX)
+elseif(SWITCH)
+    target_compile_definitions(lua-static PUBLIC LLONG_MAX=9223372036854775807LL LLONG_MIN=0LL)
+elseif(NOT WIN32)
+    target_compile_definitions(lua-static PUBLIC LUA_USE_POSIX)
 endif()
 
 if(ANDROID)
     set_target_properties(tinyxml2-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(physfs-static PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(cparse-static PROPERTIES LINKER_LANGUAGE CXX)
+    set_target_properties(lua-static PROPERTIES LINKER_LANGUAGE CXX)
 endif()
 
 # FriBidi (Detection pulled from HHVM)
@@ -432,13 +453,13 @@ endif()
 # Static Dependencies
 if(ANDROID)
     find_package(Threads)
-    TARGET_LINK_LIBRARIES(main physfs-static tinyxml2-static cparse-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(main physfs-static tinyxml2-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
     add_dependencies(main SDL_build SDL_mixer_build)
 elseif(EMSCRIPTEN)
     TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml2-static cparse-static)
 else()
     find_package(Threads)
-    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml2-static cparse-static PNG::PNG Threads::Threads)
+    TARGET_LINK_LIBRARIES(VVVVVV-CE physfs-static tinyxml2-static cparse-static lua-static sol2-static PNG::PNG Threads::Threads)
 endif()
 
 # data.zip path
