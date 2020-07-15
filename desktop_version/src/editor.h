@@ -8,6 +8,7 @@
 #include <string>
 #include <string_view>
 #include "Script.h"
+#include "Graphics.h"
 
 #define VCEVERSION 1
 #define IS_VCE_LEVEL (map.custommode && ed.vceversion > 0)
@@ -287,6 +288,7 @@ public:
     int getlevelcol(int t);
     int getenemycol(int t);
     int entcol = 0;
+    Uint32 entcolreal = 0;
 
     //Colouring stuff
     int getwarpbackground(int rx, int ry);

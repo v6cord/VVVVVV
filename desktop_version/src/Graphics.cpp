@@ -3404,3 +3404,23 @@ bool Graphics::onscreen(int t)
 {
 	return (t >= -40 && t <= 280);
 }
+
+Uint32 Graphics::crewcolourreal(int t)
+{
+	switch (t)
+	{
+	case 0:
+		return col_crewcyan;
+	case 1:
+		return col_crewpurple;
+	case 2:
+		return col_crewyellow;
+	case 3:
+		return col_crewred;
+	case 4:
+		return col_crewgreen;
+	case 5:
+		return col_crewblue;
+	}
+	return col_crewcyan;
+}

@@ -3771,12 +3771,6 @@ void editorrender()
     int rmstrx = 318 - rmstr.length() * 8;
 
     //Draw entities
-    game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
-    ed.entcol=ed.getenemycol(game.customcol);
-    if (ed.grayenemieskludge) {
-        ed.entcol = 18;
-        ed.grayenemieskludge = false;
-    }
     obj.customplatformtile=game.customcol*12;
 
     int tx = ed.tilex;
@@ -3827,9 +3821,11 @@ void editorrender()
             (tower || (ex >= 0 && ex < 320 && ey >= 0 && ey < 240))) {
 
             int flipped = ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype == 15 && edentity[i].p1 == 2 ? 24 : 0;
+            // FIXME: UNUSED! Fix flipped enemies!
+            (void) flipped; // suppress unused warning
             switch(edentity[i].t) {
             case 1: // Enemies
-                graphics.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcol,flipped);
+                graphics.drawspritesetcol(ex, ey, ed.getenemyframe(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype, edentity[i].p1),ed.entcolreal);
                 if(edentity[i].p1==0)
                     graphics.Print(ex+4,ey+4, "V", 255, 255, 255 - help.glow, false);
                 if(edentity[i].p1==1)
@@ -3975,14 +3971,14 @@ void editorrender()
                 fillboxabs(ex, ey, 8*12, 8*12, graphics.getRGB(164,164,255));
                 break;
             case 15: // Crewmates
-                graphics.drawspritesetcol(ex - 4, ey, 144, obj.crewcolour(edentity[i].p1));
+                graphics.drawsprite(ex - 4, ey, 144, graphics.crewcolourreal(edentity[i].p1));
                 fillboxabs(ex, ey, 16, 24, graphics.getRGB(164,164,164));
                 break;
             case 16: // Start
                 if (edentity[i].p1==0) // Left
-                    graphics.drawspritesetcol(ex - 4, ey, 0, obj.crewcolour(0));
+                    graphics.drawspritesetcol(ex - 4, ey, 0, graphics.col_crewcyan);
                 else if (edentity[i].p1==1)
-                    graphics.drawspritesetcol(ex - 4, ey, 3, obj.crewcolour(0));
+                    graphics.drawspritesetcol(ex - 4, ey, 3, graphics.col_crewcyan);
                 fillboxabs(ex, ey, 16, 24, graphics.getRGB(164,164,164));
                 if(ed.entframe<2)
                     graphics.Print(ex - 12, ey - 8, "START", 255, 255, 255);
@@ -4611,13 +4607,13 @@ void editorrender()
                 FillRect(graphics.backBuffer, tx+6,ty+2,4,12,graphics.getRGB(255,255,255));
                 //15:
                 tx+=tg;
-                graphics.drawsprite(tx,ty,186,75, 75, 255- help.glow/4 - (fRandom()*20));
+                graphics.drawsprite(tx,ty,186,graphics.col_crewblue);
                 //16:
                 tx+=tg;
-                graphics.drawsprite(tx,ty,184,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
+                graphics.drawsprite(tx,ty,184,graphics.col_crewcyan);
                 //17:
                 tx+=tg;
-                graphics.drawsprite(tx,ty,192,160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
+                graphics.drawsprite(tx,ty,192,graphics.col_crewcyan);
                 //18:
                 tx+=tg;
                 graphics.huetilesetcol(8);
@@ -4894,6 +4890,17 @@ void editorlogic()
 {
     //Misc
     help.updateglow();
+    graphics.updatetitlecolours();
+
+    game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
+    ed.entcol=ed.getenemycol(game.customcol);
+    if (ed.grayenemieskludge) {
+        ed.entcol = 18;
+        ed.grayenemieskludge = false;
+    }
+
+    graphics.setcol(ed.entcol);
+    ed.entcolreal = graphics.ct.colour;
 
     map.bypos -= 2;
     map.bscroll = -2;

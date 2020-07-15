@@ -349,6 +349,8 @@ public:
 
 	bool kludgeswnlinewidth = false;
 
+	Uint32 crewcolourreal(int t);
+
 	SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
 
