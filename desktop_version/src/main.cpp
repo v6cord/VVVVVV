@@ -550,10 +550,6 @@ int main(int argc, char *argv[])
                     script.run();
                 }
 
-                for (int i = 0; i < (int)script.active_scripts.size(); i++) {
-                    script.active_scripts[i].update();
-                }
-
                 gameinput();
                 gamerender();
                 gamelogic();

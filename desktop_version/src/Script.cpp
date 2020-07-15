@@ -8,7 +8,6 @@
 #include <optional>
 #include <stdexcept>
 #include "Graphics.h"
-#include "ScriptX.h"
 
 #include "Entity.h"
 #include "FileSystemUtils.h"
@@ -4499,7 +4498,6 @@ void scriptclass::hardreset() {
     game.script_images.clear();
     game.script_image_names.clear();
 
-    active_scripts.clear();
     lua_scripts.clear();
 
     keepcolor = false;

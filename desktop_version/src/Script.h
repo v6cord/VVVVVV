@@ -6,7 +6,6 @@
 #include <list>
 #include <unordered_map>
 #include "Game.h"
-#include "ScriptX.h"
 #include "Enums.h"
 #include "LuaScript.h"
 
@@ -148,8 +147,6 @@ public:
 
     int getpixelx = -1;
     int getpixely = -1;
-
-    growing_vector<scriptx> active_scripts;
 
     bool killedviridian = false;
     int killtimer = 0;
