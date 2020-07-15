@@ -2095,6 +2095,9 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         break;
     }
+
+    entity.drawframe = entity.tile;
+
     entities.push_back(entity);
     return k;
 }
