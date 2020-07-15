@@ -2185,6 +2185,7 @@ void mapmenuactionpress()
             game.createmenu(Menu::options);
         }
         map.nexttowercolour();
+        map.scrolldir = 0;
 
         // Fix delta rendering glitch
         graphics.updatetowerbackground();
