@@ -2061,7 +2061,10 @@ void mapinput()
 
 void mapmenuactionpress()
 {
-    if (game.menupage == 1 && obj.flags[67] && !game.insecretlab && !map.custommode)
+    switch (game.menupage)
+    {
+    case 1:
+    if (obj.flags[67] && !game.insecretlab && !map.custommode)
     {
         //Warp back to the ship
         graphics.resumegamemode = true;
@@ -2084,8 +2087,9 @@ void mapmenuactionpress()
         game.state = 4000;
         game.statedelay = 0;
     }
-
-    if (game.menupage == 3 && !game.gamesaved && !game.intimetrial
+        break;
+    case 3:
+    if (!game.gamesaved && !game.intimetrial
             && !game.nodeathmode && !game.insecretlab && !game.inintermission)
     {
         game.flashlight = 5;
@@ -2110,14 +2114,13 @@ void mapmenuactionpress()
             game.savequick();
         }
     }
+        break;
 
-    if (game.menupage == 10)
-    {
+    case 10:
         //return to game
         graphics.resumegamemode = true;
-    }
-    if (game.menupage == 11)
-    {
+        break;
+    case 11:
         //quit to menu
 
         //Kill contents of offset render buffer, since we do that for some reason.
@@ -2128,21 +2131,20 @@ void mapmenuactionpress()
         map.nexttowercolour();
         game.fadetomenu = true;
         game.fadetomenudelay = 16;
-    }
+        break;
 
-    if (game.menupage == 20)
-    {
+    case 20:
         //return to game
         graphics.resumegamemode = true;
-    }
-    if (game.menupage == 21)
-    {
+        break;
+    case 21:
         //quit to menu
         game.swnmode = false;
         graphics.fademode = 2;
         music.fadeout();
         game.fadetolab = true;
         game.fadetolabdelay = 16;
+        break;
     }
 }
 
