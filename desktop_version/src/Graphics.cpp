@@ -104,7 +104,6 @@ void Graphics::init()
 
     // initialize everything else to zero
     backBuffer = NULL;
-    backboxrect = SDL_Rect();
     bcol = 0;
     bcol2 = 0;
     ct = colourTransform();
@@ -2174,7 +2173,7 @@ void Graphics::drawbackground( int t )
                 break;
             }
 
-            backboxrect = backboxes[i];
+            SDL_Rect backboxrect = backboxes[i];
             backboxrect.x = lerp(backboxes[i].x - backboxvx[i], backboxes[i].x);
             backboxrect.y = lerp(backboxes[i].y - backboxvy[i], backboxes[i].y);
 
