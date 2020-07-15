@@ -2104,7 +2104,7 @@ void mapinput()
             music.fadeout();
             map.nexttowercolour();
             game.fadetomenu = true;
-            game.fadetomenudelay = 15;
+            game.fadetomenudelay = 16;
             FILESYSTEM_unmountassets();
         }
 
@@ -2120,7 +2120,7 @@ void mapinput()
             graphics.fademode = 2;
             music.fadeout();
             game.fadetolab = true;
-            game.fadetolabdelay = 15;
+            game.fadetolabdelay = 16;
         }
 
         if (game.menupage < 0) game.menupage = 3;
