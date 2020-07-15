@@ -2098,6 +2098,10 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
     }
 
     entity.drawframe = entity.tile;
+    if (!entity.invis)
+    {
+        entity.updatecolour();
+    }
 
     entities.push_back(entity);
     return k;

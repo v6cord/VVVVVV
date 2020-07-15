@@ -1,6 +1,8 @@
 #ifndef ENT_H
 #define ENT_H
 
+#include "Graphics.h"
+
 #define		rn( rx,  ry) ((rx) + ((ry) * 100))
 
 class entclass
@@ -15,6 +17,8 @@ public:
     void setenemyroom(int rx, int ry);
 
     void settreadmillcolour(int rx, int ry);
+
+    void updatecolour();
 
 public:
     //Fundamentals
@@ -47,6 +51,8 @@ public:
     int yp, xp = 0;
     int flipped = 0;
     int flippedsize = 0;
+
+    Uint32 realcol = 0;
 };
 
 #endif /* ENT_H */
