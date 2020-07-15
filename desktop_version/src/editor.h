@@ -145,6 +145,7 @@ struct GhostInfo {
     int x; // .xp
     int y; // .yp
     int col; // .colour
+    Uint32 realcol;
     int frame; // .drawframe
 };
 
