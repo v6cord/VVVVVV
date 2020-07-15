@@ -449,6 +449,7 @@ public:
     int getcustomsprites();
 
     int returneditoralpha = 0;
+    int oldreturneditoralpha = 0;
 
     int cursor_x = 0;
     int cursor_y = 0;
