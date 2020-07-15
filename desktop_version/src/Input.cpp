@@ -1429,7 +1429,7 @@ void menuactionpress()
             music.playef(11);
             music.play(6);
             game.incustomtrial = false;
-            game.returnmenu();
+            game.returntomenu(Menu::timetrials);
             map.nexttowercolour();
             break;
         case 1:
