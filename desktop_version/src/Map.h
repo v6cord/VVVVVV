@@ -192,6 +192,22 @@ public:
     //Map cursor
     int cursorstate, cursordelay = 0;
 
+    int kludge_bypos = 0;
+    int kludge_colstate = 0;
+    int kludge_scrolldir = 0;
+    void inline bg_to_kludge()
+    {
+        kludge_bypos = bypos;
+        kludge_colstate = colstate;
+        kludge_scrolldir = scrolldir;
+    }
+    void inline kludge_to_bg()
+    {
+        bypos = kludge_bypos;
+        colstate = kludge_colstate;
+        scrolldir = kludge_scrolldir;
+    }
+
     bool nofog = false;
 
     void updatetowerentcol(int col);
