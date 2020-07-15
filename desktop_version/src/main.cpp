@@ -403,6 +403,7 @@ int main(int argc, char *argv[])
 #endif
 
         time = SDL_GetTicks();
+        timePrev = time;
 
         game.infocus = key.isActive;
 
@@ -418,11 +419,14 @@ int main(int argc, char *argv[])
         {
             timesteplimit = 24;
         }
-        else
+        else if (game.gamestate == GAMEMODE || game.gamestate == MAPMODE || game.gamestate == TELEPORTERMODE)
         {
             timesteplimit = game.gameframerate;
         }
-        timePrev = time;
+        else
+        {
+            timesteplimit = 34;
+        }
 
         while (accumulator >= timesteplimit)
         {
