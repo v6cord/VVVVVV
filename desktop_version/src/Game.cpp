@@ -389,6 +389,7 @@ void Game::init(void)
 
     ingame_titlemode = false;
     kludge_ingametemp = Menu::mainmenu;
+    shouldreturntopausemenu = false;
 
     /* Terry's Patrons... */
     const char* superpatrons_arr[] = {
@@ -8235,4 +8236,5 @@ void Game::returntopausemenu()
     graphics.backgrounddrawn = false;
     game.mapheld = true;
     graphics.flipmode = graphics.setflipmode;
+    game.shouldreturntopausemenu = true;
 }
