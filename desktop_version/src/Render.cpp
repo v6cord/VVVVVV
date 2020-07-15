@@ -2326,6 +2326,8 @@ void gamerender()
 
 void maprender()
 {
+    FillRect(graphics.backBuffer, 0x000000);
+
     //draw screen alliteration
     //Roomname:
     int temp = map.area(game.roomx, game.roomy);
@@ -3109,6 +3111,7 @@ void maprender()
 
 void teleporterrender()
 {
+    FillRect(graphics.backBuffer, 0x000000);
     int tempx;
     int tempy;
     //draw screen alliteration
