@@ -3646,6 +3646,11 @@ dimensions_break:
 
 void editorrender()
 {
+    if (game.shouldreturntoeditor)
+    {
+        graphics.backgrounddrawn = false;
+    }
+
     //Draw grid
 
     FillRect(graphics.backBuffer, 0, 0, 320,240, graphics.getRGB(0,0,0));
@@ -4901,6 +4906,11 @@ void editorlogic()
 
     graphics.setcol(ed.entcol);
     ed.entcolreal = graphics.ct.colour;
+
+    if (game.shouldreturntoeditor)
+    {
+        game.shouldreturntoeditor = false;
+    }
 
     map.bypos -= 2;
     map.bscroll = -2;
