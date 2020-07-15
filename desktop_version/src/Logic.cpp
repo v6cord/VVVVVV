@@ -276,6 +276,8 @@ void gamelogic()
     if (map.towermode)
     {
         map.oldypos = map.ypos;
+        map.oldspikeleveltop = map.spikeleveltop;
+        map.oldspikelevelbottom = map.spikelevelbottom;
         if(!game.completestop)
         {
             if (map.cameramode == 0)

@@ -135,6 +135,7 @@ public:
     int colstate, colstatedelay = 0;
     int colsuperstate = 0;
     int spikeleveltop, spikelevelbottom = 0;
+    int oldspikeleveltop, oldspikelevelbottom = 0;
     bool tdrawback = false;
     int bscroll = 0;
     //final level navigation
