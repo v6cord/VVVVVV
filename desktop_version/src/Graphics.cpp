@@ -1868,12 +1868,19 @@ void Graphics::drawentities()
             }
             break;
         case 5:    //Horizontal Line
+        {
+            int oldw = obj.entities[i].w;
+            if (game.swngame == 3 && obj.getlineat(84 - 32) == i)
+            {
+                oldw -= 24;
+            }
             line_rect.x = xp;
             line_rect.y = yp - yoff;
-            line_rect.w = obj.entities[i].w;
+            line_rect.w = lerp(oldw, obj.entities[i].w);
             line_rect.h = 1;
             drawgravityline(i);
             break;
+        }
         case 6:    //Vertical Line
             line_rect.x = xp;
             line_rect.y = yp - yoff;
