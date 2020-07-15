@@ -572,6 +572,11 @@ int main(int argc, char *argv[])
                 graphics.updatescreenshake();
             }
 
+            if (graphics.screenbuffer->badSignalEffect)
+            {
+                UpdateFilter();
+            }
+
             //We did editorinput, now it's safe to turn this off
             key.linealreadyemptykludge = false;
 

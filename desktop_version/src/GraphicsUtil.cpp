@@ -529,11 +529,9 @@ void BlitSurfaceTint(
 
 int scrollamount = 0;
 bool isscrolling = 0;
-SDL_Surface* ApplyFilter( SDL_Surface* _src )
-{
-    SDL_Surface* _ret = SDL_CreateRGBSurface(_src->flags, _src->w, _src->h, 32,
-        _src->format->Rmask, _src->format->Gmask, _src->format->Bmask, _src->format->Amask);
 
+void UpdateFilter()
+{
     if (rand() % 4000 < 8)
     {
         isscrolling = true;
@@ -548,6 +546,12 @@ SDL_Surface* ApplyFilter( SDL_Surface* _src )
             isscrolling = false;
         }
     }
+}
+
+SDL_Surface* ApplyFilter( SDL_Surface* _src )
+{
+    SDL_Surface* _ret = SDL_CreateRGBSurface(_src->flags, _src->w, _src->h, 32,
+        _src->format->Rmask, _src->format->Gmask, _src->format->Bmask, _src->format->Amask);
 
     int redOffset = rand() % 4;
 
