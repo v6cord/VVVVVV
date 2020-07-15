@@ -43,10 +43,6 @@
 #include <mingw.thread.h>
 #include <mingw.condition_variable.h>
 #include <mingw.mutex.h>
-#elif defined(__EMSCRIPTEN__)
-#include <emscripten.h>
-#include <algorithm>
-#include <iterator>
 #elif !defined(__APPLE__)
 #include <thread>
 #include <condition_variable>
@@ -252,7 +248,7 @@ int main(int argc, char *argv[])
     key.isActive = true;
     game.gametimer = 0;
     obj.init();
-#if !defined(__APPLE__) && !defined(__EMSCRIPTEN__)
+#if !defined(__APPLE__)
     std::condition_variable timeout;
     std::mutex mutex;
     std::thread init([&]() {
@@ -266,7 +262,7 @@ int main(int argc, char *argv[])
         pre_fakepercent.store(80);
         graphics.reloadresources(true);
         pre_fakepercent.store(100);
-#if !defined(__APPLE__) && !defined(__EMSCRIPTEN__)
+#if !defined(__APPLE__)
         auto end = std::chrono::steady_clock::now();
         if (end - start < 1s) {
             pre_quickend.store(true);
@@ -345,7 +341,7 @@ int main(int argc, char *argv[])
                 if(game.bestrank[4]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
                 if(game.bestrank[5]>=3) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
 
-#if !defined(NO_CUSTOM_LEVELS) && !defined(__EMSCRIPTEN__)
+#if !defined(NO_CUSTOM_LEVELS)
     if (startinplaytest) {
         game.levelpage = 0;
         game.playcustomlevel = 0;
@@ -386,32 +382,6 @@ int main(int argc, char *argv[])
         graphics.fademode = 0;
 
     }
-#elif defined(__EMSCRIPTEN__)
-    int autostart = EM_ASM_INT({ return window.autostartLevel; });
-    if (autostart) {
-        auto exclude = FILESYSTEM_getLevelDirFileNames();
-        ed.loadZips();
-        auto list = FILESYSTEM_getLevelDirFileNames();
-        std::sort(exclude.begin(), exclude.end());
-        std::sort(list.begin(), list.end());
-        decltype(list) zipLevels;
-        std::set_difference(list.begin(), list.end(), exclude.begin(), exclude.end(), std::back_inserter(zipLevels));
-        std::remove_if(zipLevels.begin(), zipLevels.end(), [](auto x) {
-            std::string suffix = ".vvvvvv";
-            return !std::equal(suffix.rbegin(), suffix.rend(), x.rbegin());
-        });
-        ed.directoryList = zipLevels;
-        LevelMetaData meta;
-        if (ed.getLevelMetaData(zipLevels.at(0), meta)) {
-            ed.ListOfMetaData = { meta };
-            game.loadcustomlevelstats();
-            game.customleveltitle=ed.ListOfMetaData[game.playcustomlevel].title;
-            game.customlevelfilename=ed.ListOfMetaData[game.playcustomlevel].filename;
-            script.startgamemode(22);
-            graphics.fademode = 0;
-        }
-    }
-#endif
 
     volatile Uint32 time = 0, timePrev = 0;
 
@@ -419,13 +389,8 @@ int main(int argc, char *argv[])
     auto last_gamestate = game.gamestate;
 #endif
 
-#ifndef __EMSCRIPTEN__
     while(!key.quitProgram)
     {
-#else
-    auto main_loop = [=]() mutable {
-        if (key.quitProgram) exit(0);
-#endif
 #ifdef VCE_DEBUG
         if (last_gamestate != game.gamestate) {
             printf("gamestate %i -> %i\n", last_gamestate, game.gamestate);
@@ -433,7 +398,6 @@ int main(int argc, char *argv[])
         }
 #endif
 
-#ifndef __EMSCRIPTEN__
         time = SDL_GetTicks();
 
         // Update network per frame.
@@ -461,11 +425,6 @@ int main(int argc, char *argv[])
         timePrev = time;
 
         }
-#else
-        time = SDL_GetTicks();
-        Uint32 timetaken = time - timePrev;
-        timePrev = time;
-#endif
 
         key.Poll();
         if(key.toggleFullscreen)
@@ -681,16 +640,6 @@ int main(int argc, char *argv[])
 
 
     };
-#ifdef __EMSCRIPTEN__
-    void* closure = malloc(sizeof(main_loop));
-    memcpy(closure, &main_loop, sizeof(main_loop));
-    emscripten_cancel_main_loop();
-    emscripten_set_main_loop_arg([](void* arg) {
-        auto func = (decltype(main_loop)*) arg;
-        (*func)();
-    }, closure, 0, false);
-    emscripten_set_main_loop_timing(EM_TIMING_RAF, 2);
-#else
 
 
     log_close();
