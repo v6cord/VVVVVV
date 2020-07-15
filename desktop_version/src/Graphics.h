@@ -105,6 +105,7 @@ public:
 	int crewcolour(const int t);
 
 	void cutscenebars();
+	void cutscenebarstimer();
 
 	void drawpartimage(int t, int xp, int yp, int wp, int hp);
 

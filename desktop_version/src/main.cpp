@@ -478,6 +478,8 @@ int main(int argc, char *argv[])
                 Mix_Resume(-1);
                 Mix_ResumeMusic();
                 game.gametimer++;
+                graphics.cutscenebarstimer();
+
                 switch(game.gamestate)
                 {
                 case PRELOADER:
