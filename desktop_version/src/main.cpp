@@ -163,8 +163,6 @@ int main(int argc, char *argv[])
         log_init();
     }
 
-    SDL_SetHintWithPriority(SDL_HINT_RENDER_VSYNC, "1", SDL_HINT_OVERRIDE);
-
     if (!game.quiet) {
         printf("\t\t\n");
         printf("\t\t\n");
@@ -295,6 +293,8 @@ int main(int argc, char *argv[])
     map.bypos = map.ypos / 2;
 
     //Moved screensetting init here from main menu V2.1
+    graphics.processVsync();
+
     if (game.skipfakeload)
         game.gamestate = TITLEMODE;
                 if(game.usingmmmmmm==0) music.usingmmmmmm=false;
