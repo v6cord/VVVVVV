@@ -315,6 +315,12 @@ public:
 
 	bool showmousecursor = false;
 
+	float inline lerp(const float v0, const float v1)
+	{
+		return v0 + alpha * (v1 - v0);
+	}
+	float alpha;
+
 	SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
 
