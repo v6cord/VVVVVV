@@ -3099,7 +3099,7 @@ void maprender()
         graphics.drawfade();
     }
 
-    if (graphics.resumegamemode || graphics.menuoffset > 0)
+    if (graphics.resumegamemode || graphics.menuoffset > 0 || graphics.oldmenuoffset > 0)
     {
         graphics.menuoffrender();
     }
@@ -3331,7 +3331,7 @@ void teleporterrender()
     }
 
 
-    if (graphics.resumegamemode || graphics.menuoffset > 0)
+    if (graphics.resumegamemode || graphics.menuoffset > 0 || graphics.oldmenuoffset > 0)
     {
         graphics.menuoffrender();
     }
