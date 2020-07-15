@@ -245,6 +245,19 @@ bool is_positive_num(const std::string& str, bool hex)
 	return true;
 }
 
+bool endsWith(const std::string& str, const std::string& suffix)
+{
+	if (str.size() < suffix.size())
+	{
+		return false;
+	}
+	return str.compare(
+		str.size() - suffix.size(),
+		suffix.size(),
+		suffix
+	) == 0;
+}
+
 std::string UtilityClass::getmusicname(int num) {
 	std::string names[16] = {
 		"Nothing",

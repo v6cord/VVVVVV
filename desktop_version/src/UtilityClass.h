@@ -48,6 +48,8 @@ bool parsebool(std::string parsethis);
 
 bool is_positive_num(const std::string& str, bool hex);
 
+bool endsWith(const std::string& str, const std::string& suffix);
+
 growing_vector<std::string> split(const std::string &s, char delim, growing_vector<std::string> &elems);
 
 growing_vector<std::string> split(const std::string &s, char delim);
