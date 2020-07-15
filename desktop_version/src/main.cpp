@@ -70,7 +70,6 @@ int savemusic = 0;
 
 std::string playtestname;
 
-<<<<<<< HEAD
 UtilityClass help;
 Graphics graphics;
 musicclass music;
@@ -86,7 +85,7 @@ FILE* logger;
 
 extern const char* git_rev;
 bool headless = false;
-=======
+
 volatile Uint32 time_ = 0;
 volatile Uint32 timePrev = 0;
 volatile Uint32 accumulator = 0;
@@ -95,7 +94,7 @@ volatile Uint32 f_timePrev = 0;
 volatile Uint32 f_accumulator = 0;
 
 void gameloop();
->>>>>>> a8d299422342efa1f4b6ec6fe868480610339866
+void deltaloop();
 
 int main(int argc, char *argv[])
 {
@@ -449,6 +448,12 @@ void gameloop()
         timePrev = time_;
         time_ = SDL_GetTicks();
 
+        deltaloop();
+    }
+}
+
+void deltaloop()
+{
         game.infocus = key.isActive;
 
         // Update network per frame.
@@ -729,5 +734,4 @@ void gameloop()
             }
             gameScreen.FlipScreen();
         }
-    }
 }
