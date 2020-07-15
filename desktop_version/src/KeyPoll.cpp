@@ -443,7 +443,7 @@ void KeyPoll::Poll()
 				{
 					if (wasFullscreen)
 					{
-						gameScreen.isWindowed = false;
+						graphics.screenbuffer->isWindowed = false;
 						SDL_SetWindowFullscreen(
 							SDL_GetWindowFromID(evt.window.windowID),
 							SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -457,8 +457,8 @@ void KeyPoll::Poll()
 				isActive = false;
 				if (!useFullscreenSpaces)
 				{
-					wasFullscreen = !gameScreen.isWindowed;
-					gameScreen.isWindowed = true;
+					wasFullscreen = !graphics.screenbuffer->isWindowed;
+					graphics.screenbuffer->isWindowed = true;
 					SDL_SetWindowFullscreen(
 						SDL_GetWindowFromID(evt.window.windowID),
 						0
