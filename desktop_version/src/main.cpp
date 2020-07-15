@@ -397,6 +397,7 @@ int main(int argc, char *argv[])
         graphics.fademode = 0;
 
     }
+#endif
 
 #ifdef VCE_DEBUG
     auto last_gamestate = game.gamestate;
