@@ -129,6 +129,8 @@ public:
 
 	void printcrewnamedark(int x, int y, int t);
 
+	void map_tab(int opt, const std::string& text, bool selected = false);
+
 	bool Print(int _x, int _y, std::string _s, int r, int g, int b, bool cen = false);
 
 	bool PrintAlpha(int _x, int _y, std::string _s, int r, int g, int b, int a, bool cen = false);
