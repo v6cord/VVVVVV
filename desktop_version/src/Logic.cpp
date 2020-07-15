@@ -275,6 +275,7 @@ void gamelogic()
 
     if (map.towermode)
     {
+        map.oldypos = map.ypos;
         if(!game.completestop)
         {
             if (map.cameramode == 0)

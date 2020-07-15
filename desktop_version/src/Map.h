@@ -119,6 +119,7 @@ public:
     //Special tower stuff
     bool towermode = false;
     float ypos = 0.0;
+    float oldypos = 0.0;
     int bypos = 0;
     int cameramode = 0;
     int cameraseek, cameraseekframe = 0;
