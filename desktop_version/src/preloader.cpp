@@ -214,8 +214,7 @@ void preloaderloop() {
             music.playef(2);
         }*/
 
-        game.infocus = key.isActive;
-        if(!game.infocus)
+        if(!key.isActive)
         {
             Mix_Pause(-1);
             Mix_PauseMusic();

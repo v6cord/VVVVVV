@@ -286,7 +286,6 @@ int main(int argc, char *argv[])
     graphics.tempBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
     SDL_SetSurfaceBlendMode(graphics.tempBuffer, SDL_BLENDMODE_NONE);
 
-    game.infocus = true;
     key.isActive = true;
     game.gametimer = 0;
     obj.init();
@@ -323,7 +322,6 @@ int main(int argc, char *argv[])
 
     if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
 
-    game.infocus = true;
     game.gamestate = TITLEMODE;
 
     game.menustart = false;
