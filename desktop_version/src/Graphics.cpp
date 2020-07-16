@@ -789,7 +789,7 @@ void Graphics::drawtile( int x, int y, int t )
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     if (INBOUNDS(t, tiles) && t >= 14 && t <= 17 && customts <= 3) {
         colourTransform thect = {ed.getonewaycol()};
-        BlitSurfaceTint(tiles[t], NULL, backBuffer, &rect, thect);
+        BlitSurfaceTinted(tiles[t], NULL, backBuffer, &rect, thect);
     } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts])) {
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
     } else if (INBOUNDS(t, tiles)) {
@@ -804,7 +804,7 @@ void Graphics::drawtile2( int x, int y, int t )
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
     if (INBOUNDS(t, tiles2) && t >= 14 && t <= 17 && customts <= 3) {
         colourTransform thect = {ed.getonewaycol()};
-        BlitSurfaceTint(tiles2[t], NULL, backBuffer, &rect, thect);
+        BlitSurfaceTinted(tiles2[t], NULL, backBuffer, &rect, thect);
     } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts])) {
         BlitSurfaceStandard(customtiles[customts][t], NULL, backBuffer, &rect);
     } else if (INBOUNDS(t, tiles2)) {
@@ -2778,7 +2778,7 @@ void Graphics::drawforetile(int x, int y, int t)
         int customts = ed.getcustomtiles();
         if (tile >= 14 && tile <= 17 && customts <= 3) {
             colourTransform thect = {ed.getonewaycol()};
-            BlitSurfaceTint(tiles[t], NULL, foregroundBuffer, &rect, thect);
+            BlitSurfaceTinted(tiles[t], NULL, foregroundBuffer, &rect, thect);
         } else if (customtiles.find(customts) != customtiles.end()) {
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
         } else {
@@ -2797,7 +2797,7 @@ void Graphics::drawforetile2(int x, int y, int t)
         int customts = ed.getcustomtiles();
         if (tile >= 14 && tile <= 17 && customts <= 3) {
             colourTransform thect = {ed.getonewaycol()};
-            BlitSurfaceTint(tiles2[t], NULL, foregroundBuffer, &rect, thect);
+            BlitSurfaceTinted(tiles2[t], NULL, foregroundBuffer, &rect, thect);
         } else if (customtiles.find(customts) != customtiles.end()) {
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
         } else {
