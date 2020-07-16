@@ -1551,8 +1551,6 @@ void mapclass::loadlevel(int rx, int ry)
 	obj.customwarpmodevon=false;
 	obj.customwarpmodehon=false;
 
-	std::vector<std::string> tmap;
-
 	int tower_entry = 0;
 	int newtower = entering_tower(rx, ry, &tower_entry);
 	if (newtower) {

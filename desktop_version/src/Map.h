@@ -103,7 +103,6 @@ public:
     std::vector <int> contents;
     std::vector <int> explored;
     std::vector <int> vmult;
-    std::vector <std::string> tmap;
 
     int temp = 0;
     int temp2 = 0;
