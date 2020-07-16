@@ -112,6 +112,12 @@ struct MenuStackFrame
     enum Menu::MenuName name;
 };
 
+struct CustomLevelStat
+{
+    std::string name;
+    int score; //0 - not played, 1 - finished, 2 - all trinkets, 3 - finished, all trinkets
+};
+
 
 class Game
 {
@@ -406,9 +412,7 @@ public:
     void savecustomlevelstats();
     void updatecustomlevelstats(std::string clevel, int cscore);
 
-    std::string customlevelstats[200]; //string array containing level filenames
-    int customlevelscore[200] = {0};//0 - not played, 1 - finished, 2 - all trinkets, 3 - finished, all trinkets
-    int numcustomlevelstats = 0;
+    std::vector<CustomLevelStat> customlevelstats;
     bool customlevelstatsloaded = false;
 
 
