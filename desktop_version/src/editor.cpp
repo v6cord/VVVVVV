@@ -3568,19 +3568,19 @@ dimensions_break:
             songname = "4: Passion for Exploring";
             break;
         case 5:
-            graphics.Print( -1, 120, "N/A: Pause", tr, tg, tb, true);
+            songname = "N/A: Pause";
             break;
         case 6:
             songname = "5: Presenting VVVVVV";
             break;
         case 7:
-            graphics.Print( -1, 120, "N/A: Plenary", tr, tg, tb, true);
+            songname = "N/A: Plenary";
             break;
         case 8:
             songname = "6: Predestined Fate";
             break;
         case 9:
-            graphics.Print( -1, 120, "N/A: Positive Force Reversed", tr, tg, tb, true);
+            songname = "N/A: ecroF evitisoP";
             break;
         case 10:
             songname = "7: Popular Potpourri";
@@ -3598,7 +3598,7 @@ dimensions_break:
             songname = "11: Piercing the Sky";
             break;
         case 15:
-            graphics.Print( -1, 120, "N/A: Predestined Fate Remix", tr, tg, tb, true);
+            songname = "N/A: Predestined Fate Remix";
             break;
         default:
             songname = "?: something else";
