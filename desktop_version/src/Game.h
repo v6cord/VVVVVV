@@ -454,8 +454,6 @@ public:
     bool nocoincounter = false;
 
 
-    bool quiet = false;
-
     std::vector<std::string> onetimescripts;
 
     bool cutemode = false;

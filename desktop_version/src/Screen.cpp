@@ -80,7 +80,7 @@ void Screen::init()
 
 void Screen::ResizeScreen(int x, int y)
 {
-	if (headless || !initialized) return;
+	if (!initialized) return;
 #if !defined(__SWITCH__)
 	int resX = 320;
 	int resY = 240;

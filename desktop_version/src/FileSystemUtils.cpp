@@ -188,7 +188,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
         PHYSFS_unmount(output);
 	PHYSFS_mount(output, NULL, 0);
 	PHYSFS_setWriteDir(output);
-	if (!game.quiet) printf("Base directory: %s\n", output);
+	printf("Base directory: %s\n", output);
 
         pre_fakepercent.store(5);
 
@@ -197,7 +197,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	strcat(saveDir, "saves");
 	strcat(saveDir, PHYSFS_getDirSeparator());
 	PHYSFS_mkdir(saveDir);
-	if (!game.quiet) printf("Save directory: %s\n", saveDir);
+	printf("Save directory: %s\n", saveDir);
 
         pre_fakepercent.store(10);
 
@@ -206,7 +206,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
 	strcat(levelDir, "levels");
 	strcat(levelDir, PHYSFS_getDirSeparator());
 	mkdirResult |= PHYSFS_mkdir(levelDir);
-	if (!game.quiet) printf("Level directory: %s\n", levelDir);
+	printf("Level directory: %s\n", levelDir);
 
 	/* We didn't exist until now, migrate files! */
 	if (mkdirResult == 0)
@@ -285,7 +285,7 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
         pre_fakepercent.store(45);
 
 	SDL_snprintf(output, sizeof(output), "%s%s", PHYSFS_getBaseDir(), "gamecontrollerdb.txt");
-	if (SDL_GameControllerAddMappingsFromFile(output) < 0 && !game.quiet)
+	if (SDL_GameControllerAddMappingsFromFile(output) < 0)
 	{
 		printf("gamecontrollerdb.txt not found!\n");
 	}
@@ -345,7 +345,7 @@ void FILESYSTEM_mountassets(const char* path)
 	}
 
 	if (cstr && FILESYSTEM_directoryExists(zippath.c_str())) {
-		if (!game.quiet) printf("Custom asset directory exists at %s\n", zippath.c_str());
+		printf("Custom asset directory exists at %s\n", zippath.c_str());
 		FILESYSTEM_mount(zippath.c_str());
 		graphics.reloadresources();
 	} else if (zip_path != "data.zip" && !endsWith(zip_path, "/data.zip") && endsWith(zip_path, ".zip")) {
@@ -361,10 +361,10 @@ void FILESYSTEM_mountassets(const char* path)
 		}
 		graphics.reloadresources();
 	} else if (FILESYSTEM_directoryExists(dirpath.c_str())) {
-		if (!game.quiet) printf("Custom asset directory exists at %s\n",dirpath.c_str());
+		printf("Custom asset directory exists at %s\n",dirpath.c_str());
 		FILESYSTEM_mount(dirpath.c_str());
 		graphics.reloadresources();
-	} else if (!game.quiet) {
+	} else {
 		printf("Custom asset directory does not exist\n");
 	}
 }
@@ -373,11 +373,11 @@ void FILESYSTEM_unmountassets()
 {
     if (graphics.assetdir != "")
     {
-        if (!game.quiet) printf("Unmounting %s\n", graphics.assetdir.c_str());
+        printf("Unmounting %s\n", graphics.assetdir.c_str());
         PHYSFS_unmount(graphics.assetdir.c_str());
         graphics.assetdir = "";
         graphics.reloadresources();
-    } else if (!game.quiet) printf("Cannot unmount when no asset directory is mounted\n");
+    } else printf("Cannot unmount when no asset directory is mounted\n");
 }
 
 bool FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,

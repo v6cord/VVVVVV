@@ -296,7 +296,7 @@ void Game::init(void)
     if (!FILESYSTEM_loadTiXml2Document("saves/qsave.vvv", doc))
     {
         quicksummary = "";
-        if (!quiet) printf("Quick Save Not Found\n");
+        printf("Quick Save Not Found\n");
     }
     else
     {
@@ -332,7 +332,7 @@ void Game::init(void)
     if (!FILESYSTEM_loadTiXml2Document("saves/tsave.vvv", docTele))
     {
         telesummary = "";
-        if (!quiet) printf("Teleporter Save Not Found\n");
+        printf("Teleporter Save Not Found\n");
     }
     else
     {

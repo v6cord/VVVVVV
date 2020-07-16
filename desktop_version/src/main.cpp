@@ -85,7 +85,6 @@ FILE* logger;
 #endif
 
 extern const char* git_rev;
-bool headless = false;
 
 volatile Uint32 time_ = 0;
 volatile Uint32 timePrev = 0;
@@ -120,17 +119,11 @@ int main(int argc, char *argv[])
         return 1; \
     }
 
-        if (ARG("--quiet")) {
-            game.quiet = true;
-        }
         if (ARG("--version")) {
             puts("VVVVVV-CE");
             puts("Version c1.0-pre2");
             printf("Built from commit %s\n", git_rev);
             return 0;
-        }
-        if (ARG("--headless")) {
-            headless = true;
         }
         if (ARG("--syslog")) {
             syslog = true;
@@ -202,36 +195,34 @@ int main(int argc, char *argv[])
         log_init();
     }
 
-    if (!game.quiet) {
-        printf("\t\t\n");
-        printf("\t\t\n");
-        printf("\t\t       VVVVVV\n");
-        printf("\t\t\n");
-        printf("\t\t\n");
-        printf("\t\t  8888888888888888  \n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t888888    8888    88\n");
-        printf("\t\t888888    8888    88\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t888888            88\n");
-        printf("\t\t88888888        8888\n");
-        printf("\t\t  8888888888888888  \n");
-        printf("\t\t      88888888      \n");
-        printf("\t\t  8888888888888888  \n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t88888888888888888888\n");
-        printf("\t\t8888  88888888  8888\n");
-        printf("\t\t8888  88888888  8888\n");
-        printf("\t\t    888888888888    \n");
-        printf("\t\t    8888    8888    \n");
-        printf("\t\t  888888    888888  \n");
-        printf("\t\t  888888    888888  \n");
-        printf("\t\t  888888    888888  \n");
-        printf("\t\t\n");
-        printf("\t\t\n");
-    }
+    printf("\t\t\n");
+    printf("\t\t\n");
+    printf("\t\t       VVVVVV\n");
+    printf("\t\t\n");
+    printf("\t\t\n");
+    printf("\t\t  8888888888888888  \n");
+    printf("\t\t88888888888888888888\n");
+    printf("\t\t888888    8888    88\n");
+    printf("\t\t888888    8888    88\n");
+    printf("\t\t88888888888888888888\n");
+    printf("\t\t88888888888888888888\n");
+    printf("\t\t888888            88\n");
+    printf("\t\t88888888        8888\n");
+    printf("\t\t  8888888888888888  \n");
+    printf("\t\t      88888888      \n");
+    printf("\t\t  8888888888888888  \n");
+    printf("\t\t88888888888888888888\n");
+    printf("\t\t88888888888888888888\n");
+    printf("\t\t88888888888888888888\n");
+    printf("\t\t8888  88888888  8888\n");
+    printf("\t\t8888  88888888  8888\n");
+    printf("\t\t    888888888888    \n");
+    printf("\t\t    8888    8888    \n");
+    printf("\t\t  888888    888888  \n");
+    printf("\t\t  888888    888888  \n");
+    printf("\t\t  888888    888888  \n");
+    printf("\t\t\n");
+    printf("\t\t\n");
 
     if(!FILESYSTEM_initCore(argv[0], baseDir, assetsPath))
     {
@@ -255,8 +246,6 @@ int main(int argc, char *argv[])
     graphics.screenbuffer = &gameScreen;
 
     game.loadstats();
-
-    gameScreen.headless = headless;
 
     const SDL_PixelFormat* fmt = gameScreen.GetFormat();
     graphics.backBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
@@ -320,7 +309,7 @@ int main(int argc, char *argv[])
     init.join();
 #endif
 
-    if (!game.quiet) NETWORK_init(); // FIXME: this is probably bad
+    NETWORK_init(); // FIXME: this is probably bad
 
     game.gamestate = TITLEMODE;
 

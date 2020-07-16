@@ -23,7 +23,6 @@ public:
 	bool isWindowed = false;
 	bool isFiltered = false;
 	bool badSignalEffect = false;
-	bool headless = false;
 	bool initialized = false;
 	int stretchMode = 0;
 
