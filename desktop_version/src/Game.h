@@ -259,6 +259,7 @@ public:
     enum Menu::MenuName kludge_ingametemp = Menu::mainmenu;
     int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
+    int menuspacing = 0;
     std::vector<MenuStackFrame> menustack;
 
     void inline option(std::string text, bool active = true)

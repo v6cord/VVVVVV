@@ -1478,7 +1478,7 @@ void Graphics::processfade()
     }
 }
 
-void Graphics::drawmenu( int cr, int cg, int cb, int division /*= 30*/ )
+void Graphics::drawmenu( int cr, int cg, int cb )
 {
     for (size_t i = 0; i < game.menuoptions.size(); i++)
     {
@@ -1490,14 +1490,14 @@ void Graphics::drawmenu( int cr, int cg, int cb, int division /*= 30*/ )
                 std::string tempstring = game.menuoptions[i].text;
                 std::transform(tempstring.begin(), tempstring.end(),tempstring.begin(), ::toupper);
                 tempstring = std::string("[ ") + tempstring + std::string(" ]");
-                Print(110 + (i * division) - 16 +game.menuxoff, 140 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
+                Print((i * game.menuspacing) - 16 +game.menuxoff, 140 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
             }
             else
             {
                 std::string tempstring = game.menuoptions[i].text;
                 tempstring = "[ " + tempstring + " ]";
                 //Draw it in gray
-                Print(110 + (i * division) - 16 +game.menuxoff, 140 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
+                Print((i * game.menuspacing) - 16 +game.menuxoff, 140 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
             }
         }
         else
@@ -1505,18 +1505,18 @@ void Graphics::drawmenu( int cr, int cg, int cb, int division /*= 30*/ )
             //Draw it normally
             if (game.menuoptions[i].active)
             {
-                Print(110 + (i * division) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i].text, cr, cg, cb);
+                Print((i * game.menuspacing) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i].text, cr, cg, cb);
             }
             else
             {
                 //Draw it in gray
-                Print(110 + (i * division) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i].text, 128, 128, 128);
+                Print((i * game.menuspacing) +game.menuxoff, 140 + (i * 12)+game.menuyoff, game.menuoptions[i].text, 128, 128, 128);
             }
         }
     }
 }
 
-void Graphics::drawlevelmenu( int cr, int cg, int cb, int division /*= 30*/ )
+void Graphics::drawlevelmenu( int cr, int cg, int cb )
 {
     for (size_t i = 0; i < game.menuoptions.size(); i++)
     {
@@ -1529,14 +1529,14 @@ void Graphics::drawlevelmenu( int cr, int cg, int cb, int division /*= 30*/ )
                 std::string tempstring = game.menuoptions[i].text;
                 std::transform(tempstring.begin(), tempstring.end(),tempstring.begin(), ::toupper);
                 tempstring = std::string("[ ") + tempstring + std::string(" ]");
-                Print(110 + (i * division) - 16 +game.menuxoff, 140+8 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
+                Print((i * game.menuspacing) - 16 +game.menuxoff, 140+8 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
             }
             else
             {
                 std::string tempstring = game.menuoptions[i].text;
                 tempstring = "[ " + tempstring + " ]";
                 //Draw it in gray
-                Print(110 + (i * division) - 16 +game.menuxoff, 140+8 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
+                Print((i * game.menuspacing) - 16 +game.menuxoff, 140+8 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
             }
           }else{
             //Draw it highlighted
@@ -1545,14 +1545,14 @@ void Graphics::drawlevelmenu( int cr, int cg, int cb, int division /*= 30*/ )
                 std::string tempstring = game.menuoptions[i].text;
                 std::transform(tempstring.begin(), tempstring.end(),tempstring.begin(), ::toupper);
                 tempstring = std::string("[ ") + tempstring + std::string(" ]");
-                Print(110 + (i * division) - 16 +game.menuxoff, 144 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
+                Print((i * game.menuspacing) - 16 +game.menuxoff, 144 + (i * 12) +game.menuyoff, tempstring, cr, cg, cb);
             }
             else
             {
                 std::string tempstring = game.menuoptions[i].text;
                 tempstring = "[ " + tempstring + " ]";
                 //Draw it in gray
-                Print(110 + (i * division) - 16 +game.menuxoff, 144 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
+                Print((i * game.menuspacing) - 16 +game.menuxoff, 144 + (i * 12)+game.menuyoff, tempstring, 128, 128, 128);
             }
           }
         }
@@ -1562,23 +1562,23 @@ void Graphics::drawlevelmenu( int cr, int cg, int cb, int division /*= 30*/ )
             //Draw it normally
             if (game.menuoptions[i].active)
             {
-                Print(110 + (i * division) +game.menuxoff, 140+8 + (i * 12)+game.menuyoff, game.menuoptions[i].text, cr, cg, cb);
+                Print((i * game.menuspacing) +game.menuxoff, 140+8 + (i * 12)+game.menuyoff, game.menuoptions[i].text, cr, cg, cb);
             }
             else
             {
                 //Draw it in gray
-                Print(110 + (i * division) +game.menuxoff, 140+8 + (i * 12)+game.menuyoff, game.menuoptions[i].text, 128, 128, 128);
+                Print((i * game.menuspacing) +game.menuxoff, 140+8 + (i * 12)+game.menuyoff, game.menuoptions[i].text, 128, 128, 128);
             }
           }else{
             //Draw it normally
             if (game.menuoptions[i].active)
             {
-                Print(110 + (i * division) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i].text, cr, cg, cb);
+                Print((i * game.menuspacing) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i].text, cr, cg, cb);
             }
             else
             {
                 //Draw it in gray
-                Print(110 + (i * division) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i].text, 128, 128, 128);
+                Print((i * game.menuspacing) +game.menuxoff, 144 + (i * 12)+game.menuyoff, game.menuoptions[i].text, 128, 128, 128);
             }
           }
         }

@@ -4456,7 +4456,52 @@ void editorrender()
         editormenurender(tr, tg, tb);
 
         graphics.drawmenu(tr, tg, tb, 15);
-    } else if (ed.textmod) {
+    }
+    else if(ed.scripttextmod)
+    {
+        FillRect(graphics.backBuffer, 0,221,320,240, graphics.getRGB(32,32,32));
+        FillRect(graphics.backBuffer, 0,222,320,240, graphics.getRGB(0,0,0));
+        graphics.Print(4, 224, "Enter script id name:", 255,255,255, false);
+        if(ed.entframe<2)
+        {
+            graphics.Print(4, 232, edentity[ed.textent].scriptname+"_", 196, 196, 255 - help.glow, true);
+        }
+        else
+        {
+            graphics.Print(4, 232, edentity[ed.textent].scriptname+" ", 196, 196, 255 - help.glow, true);
+        }
+    }
+    else if(ed.savemod)
+    {
+        FillRect(graphics.backBuffer, 0,221,320,240, graphics.getRGB(32,32,32));
+        FillRect(graphics.backBuffer, 0,222,320,240, graphics.getRGB(0,0,0));
+        graphics.Print(4, 224, "Enter filename to save map as:", 255,255,255, false);
+        if(ed.entframe<2)
+        {
+            graphics.Print(4, 232, ed.filename+"_", 196, 196, 255 - help.glow, true);
+        }
+        else
+        {
+            graphics.Print(4, 232, ed.filename+" ", 196, 196, 255 - help.glow, true);
+        }
+    }
+    else if(ed.loadmod)
+    {
+        FillRect(graphics.backBuffer, 0,221,320,240, graphics.getRGB(32,32,32));
+        FillRect(graphics.backBuffer, 0,222,320,240, graphics.getRGB(0,0,0));
+        graphics.Print(4, 224, "Enter map filename to load:", 255,255,255, false);
+        if(ed.entframe<2)
+        {
+            graphics.Print(4, 232, ed.filename+"_", 196, 196, 255 - help.glow, true);
+        }
+        else
+        {
+            graphics.Print(4, 232, ed.filename+" ", 196, 196, 255 - help.glow, true);
+        }
+    }
+    else if(ed.roomnamemod)
+    {
+>>>>>>> 0023c821db369733782b5a4e72574c066d112be7
         FillRect(graphics.backBuffer, 0,221,320,240, graphics.getRGB(32,32,32));
         FillRect(graphics.backBuffer, 0,222,320,240, graphics.getRGB(0,0,0));
         graphics.Print(4, 224, ed.textdesc, 255,255,255, false);
