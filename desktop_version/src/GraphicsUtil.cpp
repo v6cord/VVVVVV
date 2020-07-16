@@ -456,7 +456,7 @@ void EraseSurface(
     }
 }
 
-void BlitSurfaceTint(
+void BlitSurfaceTinted(
     SDL_Surface* _src,
     SDL_Rect* _srcRect,
     SDL_Surface* _dest,
