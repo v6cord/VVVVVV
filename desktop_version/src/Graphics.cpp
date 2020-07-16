@@ -426,7 +426,6 @@ void Graphics::MakeSpriteArray()
         }
     }
 }
-}
 
 #undef PROCESS_TILESHEET
 #undef PROCESS_TILESHEET_RENAME
