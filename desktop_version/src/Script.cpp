@@ -1973,11 +1973,19 @@ try {
 					obj.entities[i].h = 21;
 				}
 			} else if (words[0] == "createentity") {
-				auto k = obj.createentity(ss_toi(words[1]),
-										ss_toi(words[2]), ss_toi(words[3]),
-										ss_toi(words[4]), ss_toi(words[5]));
-				if (words[6] != "") {
-					switch (ss_toi(words[6])) {
+				if (words[6] == "") words[6] = "0";
+				if (words[7] == "") words[7] = "0";
+				if (words[8] == "") words[8] = "320";
+				if (words[9] == "") words[9] = "240";
+				auto k = obj.createentity(ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]),
+					ss_toi(words[4]), ss_toi(words[5]),
+					ss_toi(words[6]), ss_toi(words[7]), ss_toi(words[8]), ss_toi(words[9]));
+				words[6] = "";
+				words[7] = "";
+				words[8] = "";
+				words[9] = "";
+				if (words[10] != "") {
+					switch (ss_toi(words[10])) {
 						case 0: obj.entities[k].setenemyroom(4 + 100, 0 + 100); break;
 						case 1: obj.entities[k].setenemyroom(2 + 100, 0 + 100); break;
 						case 2: obj.entities[k].setenemyroom(12 + 100, 3 + 100); break;
