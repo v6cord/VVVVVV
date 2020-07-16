@@ -3419,6 +3419,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intro");
 		break;
@@ -3440,6 +3441,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 2:  // Load Quicksave
@@ -3460,9 +3462,10 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
-		// a very special case for here needs to ensure that the tower is
-		// set correctly
-		if (map.towermode) {
+		map.initmapdata();
+		//a very special case for here needs to ensure that the tower is set correctly
+		if (map.towermode)
+		{
 			map.resetplayer();
 
 			i = obj.getplayer();
@@ -3499,6 +3502,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 4:
@@ -3525,6 +3529,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 5:
@@ -3551,6 +3556,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 6:
@@ -3577,6 +3583,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 7:
@@ -3603,6 +3610,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 8:
@@ -3635,6 +3643,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		graphics.fademode = 4;
 		break;
 	case 9:
@@ -3657,6 +3666,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intro");
 		break;
@@ -3682,6 +3692,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intro");
 		break;
@@ -3711,6 +3722,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		music.play(11);
 		graphics.fademode = 4;
 		break;
@@ -3744,6 +3756,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_1");
 		break;
@@ -3777,6 +3790,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_1");
 		break;
@@ -3810,6 +3824,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_1");
 		break;
@@ -3843,6 +3858,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_1");
 		break;
@@ -3873,6 +3889,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_2");
 		break;
@@ -3903,6 +3920,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_2");
 		break;
@@ -3933,6 +3951,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_2");
 		break;
@@ -3963,6 +3982,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		call("intermission_2");
 		break;
@@ -3985,6 +4005,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		ed.generatecustomminimap();
 		graphics.fademode = 4;
 		break;
@@ -4019,13 +4040,13 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		if (map.towermode) {
 			// Undo player x/y adjustments and realign camera on checkpoint
 			map.resetplayer();
-			map.realign_tower();  // resetplayer only realigns if room
-								  // differs
+			map.realign_tower();  // resetplayer only realigns if room differs
 		}
-		if (ed.levmusic > 0) {
+		if(ed.levmusic>0){
 			music.play(ed.levmusic);
 		} else {
 			music.currentsong = -1;
@@ -4058,6 +4079,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 
 		ed.generatecustomminimap();
 		map.customshowmm = true;
@@ -4098,6 +4120,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		ed.generatecustomminimap();
 		graphics.fademode = 4;
 		break;
@@ -4156,6 +4179,7 @@ void scriptclass::startgamemode(int t) {
 			map.resetplayer();
 		}
 		map.gotoroom(game.saverx, game.savery);
+		map.initmapdata();
 		music.currentsong = -1;
 		ed.generatecustomminimap();
 		graphics.fademode = 4;
