@@ -28,7 +28,7 @@ public:
 
 	void changemusicarea(int x, int y);
 
-	int currentsong, musicfade, musicfadein = 0;
+	int currentsong = 0;
 	int resumesong = false;
 
 	void playfile(const char* t, std::string track, int loops, bool internal = false);
@@ -47,10 +47,6 @@ public:
 	bool m_doFadeInVol = false;
 	int FadeVolAmountPerFrame = 0;
 	int musicVolume = 0;
-
-	float volume = 1.0;
-
-	bool custompd = false;
 
 	int fadeoutqueuesong = -1; // -1 if no song queued
 	bool dontquickfade = false;
