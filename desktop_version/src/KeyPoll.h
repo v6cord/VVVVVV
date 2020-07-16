@@ -86,6 +86,8 @@ public:
 
 	bool linealreadyemptykludge;
 
+	Uint64 pauseStart = 0;
+
         SDL_Keycode fakekey;
         int fakekeytimer = -1;
         std::unordered_map<SDL_FingerID, SDL_Keycode> finger_buttons;

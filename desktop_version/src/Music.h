@@ -14,11 +14,14 @@ class musicclass
 public:
 	void init();
 
-	void play(int t, int fadeintime = 3000);
+	void play(int t, const double position_sec = 0.0, const int fadein_ms = 3000);
+	void play(int t, int fadeintime);
+	void resume(const int fadein_ms = 0);
 	void haltdasmusik();
 	void silencedasmusik();
 	void fadeMusicVolumeIn(int ms);
 	void fadeout();
+	void fadein();
 	void processmusicfadein();
 	void processmusic();
 	void niceplay(int t);
@@ -56,6 +59,9 @@ public:
 	bool mmmmmm = false;
 	bool usingmmmmmm = false;
         bool loaded = false;
+
+	Uint64 songStart = 0;
+	Uint64 songEnd = 0;
 
         std::unordered_map<std::string, SoundTrack> custom_files;
         std::unordered_map<std::string, int> custom_file_channels;
