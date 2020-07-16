@@ -31,6 +31,10 @@ mapclass::mapclass()
 	cursorstate = 0;
 	cursordelay = 0;
 
+	towermode = false;
+	cameraseekframe = 0;
+	resumedelay = 0;
+
 	final_colormode = false;
 	final_colorframe = 0;
 	final_colorframedelay = 0;
@@ -962,10 +966,13 @@ void mapclass::resetplayer() {
 		obj.entities[i].colour = game.playercolour;
 		game.lifeseq = 10;
 		obj.entities[i].invis = true;
-		obj.entities[i].size = 0;
-		obj.entities[i].cx = 6;
-		obj.entities[i].cy = 2;
-		obj.entities[i].h = 21;
+		if (!game.glitchrunnermode)
+		{
+			obj.entities[i].size = 0;
+			obj.entities[i].cx = 6;
+			obj.entities[i].cy = 2;
+			obj.entities[i].h = 21;
+		}
 
 		if (towermode && old_tower != new_tower)
 			realign_tower();
