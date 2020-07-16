@@ -488,6 +488,8 @@ public:
 
     bool shouldreturntopausemenu;
     void returntopausemenu();
+
+    bool disablepause;
 };
 
 extern Game game;

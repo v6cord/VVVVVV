@@ -1113,6 +1113,19 @@ void menurender()
             }
             break;
         case 5:
+            graphics.bigprint( -1, 40, "Unfocus Pause", tr, tg, tb, true);
+            graphics.Print( -1, 75, "Toggle if the game will pause", tr, tg, tb, true);
+            graphics.Print( -1, 85, "when you're unfocused.", tr, tg, tb, true);
+            if (game.disablepause)
+            {
+                graphics.Print(-1, 105, "Unfocus pause is OFF", tr/2, tg/2, tb/2, true);
+            }
+            else
+            {
+                graphics.Print(-1, 105, "Unfocus pause is ON", tr, tg, tb, true);
+            }
+            break;
+        case 6:
             graphics.bigprint( -1, 40, "Music", tr, tg, tb, true);
             graphics.Print( -1, 75, "Disables music.", tr, tg, tb, true);
             if (!game.musicmuted)
@@ -1124,7 +1137,7 @@ void menurender()
                 graphics.Print( -1, 85, "Music is OFF.", tr/2, tg/2, tb/2, true);
             }
             break;
-        case 6:
+        case 7:
             graphics.bigprint(-1, 30, "Room Name BG", tr, tg, tb, true);
             graphics.Print( -1, 75, "Lets you see through what is behind", tr, tg, tb, true);
             graphics.Print( -1, 85, "the name at the bottom of the screen.", tr, tg, tb, true);

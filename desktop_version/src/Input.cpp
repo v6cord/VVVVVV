@@ -596,16 +596,21 @@ void menuactionpress()
             }
             break;
         case 5:
+            // toggle unfocus pause
+            game.disablepause = !game.disablepause;
+            music.playef(11);
+            break;
+        case 6:
             // mute
             game.musicmuted = !game.musicmuted;
             music.playef(11);
             break;
-        case 6:
+        case 7:
             // toggle translucent roomname BG
             graphics.translucentroomname = !graphics.translucentroomname;
             music.playef(11);
             break;
-        case 7:
+        case 8:
             //back
             music.playef(11);
             game.returnmenu();
