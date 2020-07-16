@@ -830,6 +830,7 @@ void Graphics::drawtile3( int x, int y, int t, int off )
     t += off*30;
     if (!INBOUNDS(t, tiles3))
     {
+        WHINE_ONCE("drawtile3() out-of-bounds!")
         return;
     }
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
@@ -840,6 +841,7 @@ void Graphics::drawentcolours( int x, int y, int t)
 {
     if (!INBOUNDS(t, entcolours))
     {
+        WHINE_ONCE("drawentcolours() out-of-bounds!")
         return;
     }
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
