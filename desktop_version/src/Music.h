@@ -56,6 +56,9 @@ public:
 	bool usingmmmmmm = false;
         bool loaded = false;
 
+	int num_pppppp_tracks = 0;
+	int num_mmmmmm_tracks = 0;
+
 	Uint64 songStart = 0;
 	Uint64 songEnd = 0;
 
