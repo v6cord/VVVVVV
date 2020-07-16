@@ -629,6 +629,11 @@ void menuactionpress()
             map.nexttowercolour();
             break;
         case 1:
+            // Glitchrunner mode
+            music.playef(11);
+            game.glitchrunnermode = !game.glitchrunnermode;
+            break;
+        case 2:
 #if !defined(MAKEANDPLAY)
             //unlock play options
             music.playef(11);
@@ -650,13 +655,13 @@ void menuactionpress()
             game.savemystats = true;
 #endif
             break;
-        case 2:
+        case 3:
             //clear data menu
             music.playef(11);
             game.createmenu(Menu::controller);
             map.nexttowercolour();
             break;
-        case 3:
+        case 4:
             //clear data menu
             music.playef(11);
             game.createmenu(Menu::cleardatamenu);
@@ -665,7 +670,7 @@ void menuactionpress()
         }
 
         int mmmmmm_offset = music.mmmmmm ? 0 : -1;
-        if (game.currentmenuoption == 4+mmmmmm_offset)
+        if (game.currentmenuoption == 5+mmmmmm_offset)
         {
             //**** TOGGLE MMMMMM
             if(game.usingmmmmmm > 0){
@@ -678,7 +683,7 @@ void menuactionpress()
             music.play(music.currentsong);
             game.savestats();
         }
-        else if (game.currentmenuoption == 5+mmmmmm_offset)
+        else if (game.currentmenuoption == 6+mmmmmm_offset)
         {
             //back
             music.playef(11);
