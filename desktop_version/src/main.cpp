@@ -635,7 +635,15 @@ void inline fixedloop()
             titlelogic();
             break;
         case GAMEMODE:
-            if (script.is_running()) {
+            // WARNING: If updating this code, don't forget to update Map.cpp mapclass::twoframedelayfix()
+
+            // Ugh, I hate this kludge variable but it's the only way to do it
+            if (script.dontrunnextframe)
+            {
+                script.dontrunnextframe = false;
+            }
+            else if (script.is_running())
+            {
                 script.run();
             }
 

@@ -2488,15 +2488,27 @@ void mapclass::dimensionwraparound(int* rx, int* ry)
 	*ry += dim->y;
 }
 
-void twoframedelayfix()
+void mapclass::twoframedelayfix()
 {
-	// Kludge to remove 2-frame-delay when loading init scripts for a room
-	if (IS_VCE_LEVEL && game.deathseq == -1 && obj.checktrigger() > -1 && obj.activetrigger >= 300 && !script.nointerrupt) {
-		game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
-		obj.kludgeonetimescript = true;
-		obj.removetrigger(obj.activetrigger);
-		game.state = 0;
-		script.callstack.clear();
-		script.load(game.newscript);
+	// Fixes the two-frame delay in custom levels that use scripts to spawn an entity upon room load.
+	// Because when the room loads and newscript is set to run, newscript has already ran for that frame,
+	// and when the script gets loaded script.run() has already ran for that frame, too.
+	// A bit kludge-y, but it's the least we can do without changing the frame ordering.
+
+	if (!IS_VCE_LEVEL
+	|| game.deathseq != -1
+	// obj.checktrigger() sets obj.activetrigger
+	|| obj.checktrigger() <= -1
+	|| obj.activetrigger <= 300
+	|| script.nointerrupt)
+	{
+		return;
 	}
+
+	game.newscript = "custom_" + game.customscript[obj.activetrigger - 300];
+	obj.kludgeonetimescript = true;
+	obj.removetrigger(obj.activetrigger);
+	game.state = 0;
+	script.callstack.clear();
+	script.load(game.newscript);
 }

@@ -29,6 +29,7 @@ scriptclass::scriptclass() {
     scriptdelay = 0;
     running = false;
     passive = false;
+    dontrunnextframe = false;
 
     b = 0;
     g = 0;

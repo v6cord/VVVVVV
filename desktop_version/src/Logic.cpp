@@ -1058,9 +1058,6 @@ void gamelogic()
             }
         }
 
-        // If we do a gotoroom because of a screen transition, set this to true
-        bool kludgeroominitscript = false;
-
         //Using warplines?
         if (obj.customwarpmode && !map.towermode) {
             //Rewritten system for mobile update: basically, the new logic is to
@@ -1183,6 +1180,8 @@ void gamelogic()
             }
         }
 
+        bool screen_transition = false;
+
         if (!map.warpy && !map.towermode)
         {
             //Normal! Just change room
@@ -1191,13 +1190,13 @@ void gamelogic()
             {
                 obj.entities[player].yp -= 240;
                 map.gotoroom(game.roomx, game.roomy + 1);
-                kludgeroominitscript = true;
+                screen_transition = true;
             }
             if (player > -1 && game.door_up > -2 && obj.entities[player].yp < -2)
             {
                 obj.entities[player].yp += 240;
                 map.gotoroom(game.roomx, game.roomy - 1);
-                kludgeroominitscript = true;
+                screen_transition = true;
             }
         }
 
@@ -1209,13 +1208,13 @@ void gamelogic()
             {
                 obj.entities[player].xp += 320;
                 map.gotoroom(game.roomx - 1, game.roomy);
-                kludgeroominitscript = true;
+                screen_transition = true;
             }
             if (player > -1 && game.door_right > -2 && obj.entities[player].xp >= 308)
             {
                 obj.entities[player].xp -= 320;
                 map.gotoroom(game.roomx + 1, game.roomy);
-                kludgeroominitscript = true;
+                screen_transition = true;
             }
         }
 
@@ -1233,7 +1232,7 @@ void gamelogic()
                 if (map.leaving_tower(&game.roomx, &game.roomy)) {
                     map.gotodimroom(game.roomx, game.roomy);
                     map.gotoroom(game.roomx, game.roomy);
-                    twoframedelayfix();
+                    map.twoframedelayfix();
                 } else {
                     dowrap = true;
                 }
@@ -1374,8 +1373,10 @@ void gamelogic()
             }
         }
 
-        if (kludgeroominitscript)
-            twoframedelayfix();
+        if (screen_transition)
+        {
+            map.twoframedelayfix();
+        }
     }
 
     //Update colour cycling for final level

@@ -1784,6 +1784,7 @@ void Game::updatestate()
             break;
 
 
+        // WARNING: If updating this code, make sure to update Map.cpp mapclass::twoframedelayfix()
         case 300:
         case 301:
         case 302:

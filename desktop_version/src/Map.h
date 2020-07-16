@@ -14,8 +14,6 @@
 #include "Music.h"
 #include "editor.h"
 
-void twoframedelayfix();
-
 class mapclass
 {
 public:
@@ -91,6 +89,8 @@ public:
     std::string currentarea(int t);
 
     void loadlevel(int rx, int ry);
+
+    void twoframedelayfix();
 
     Dimension* getdimension(int index);
     Dimension* getdimension();

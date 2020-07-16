@@ -117,7 +117,7 @@ public:
     int looppoint, loopcount = 0;
 
     int scriptdelay = 0;
-    bool running = false;
+    bool running, dontrunnextframe = false;
     bool nointerrupt = false;
     bool passive = false;
     std::string tempword;

@@ -5055,6 +5055,7 @@ void entityclass::entitycollisioncheck()
         }
     }
 
+    // WARNING: If updating this code, don't forget to update Map.cpp mapclass::twoframedelayfix()
     activetrigger = -1;
     if (checktrigger() > -1 && !script.nointerrupt)
     {
