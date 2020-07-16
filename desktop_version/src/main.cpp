@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
         }
         if (ARG("--version")) {
             puts("VVVVVV-CE");
-            puts("Version c1.0-pre1");
+            puts("Version c1.0-pre2");
             printf("Built from commit %s\n", git_rev);
             return 0;
         }
