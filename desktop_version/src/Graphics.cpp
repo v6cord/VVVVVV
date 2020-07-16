@@ -2762,12 +2762,12 @@ void Graphics::drawforetile(int x, int y, int t)
         SDL_Rect rect;
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
-        if (tile >= 14 && tile <= 17 && customts <= 3) {
+        if (INBOUNDS(tile, tiles) && tile >= 14 && tile <= 17 && customts <= 3) {
             colourTransform thect = {ed.getonewaycol()};
             BlitSurfaceTinted(tiles[t], NULL, foregroundBuffer, &rect, thect);
-        } else if (customtiles.find(customts) != customtiles.end()) {
+        } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(tile, customtiles[customts])) {
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
-        } else {
+        } else if INBOUNDS(tile, tiles) {
             BlitSurfaceStandard(tiles[t],NULL, foregroundBuffer, &rect  );
         }
     }
@@ -2781,12 +2781,12 @@ void Graphics::drawforetile2(int x, int y, int t)
         SDL_Rect rect;
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
-        if (tile >= 14 && tile <= 17 && customts <= 3) {
+        if (INBOUNDS(tile, tiles2) && tile >= 14 && tile <= 17 && customts <= 3) {
             colourTransform thect = {ed.getonewaycol()};
             BlitSurfaceTinted(tiles2[t], NULL, foregroundBuffer, &rect, thect);
-        } else if (customtiles.find(customts) != customtiles.end()) {
+        } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(tile, customtiles[customts])) {
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
-        } else {
+        } else if INBOUNDS(tile, tiles2) {
             BlitSurfaceStandard(tiles2[t],NULL, foregroundBuffer, &rect  );
         }
     }
@@ -2799,9 +2799,9 @@ void Graphics::drawforetile3(int x, int y, int t, int off)
         SDL_Rect rect;
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
-        if (customtiles.find(customts) != customtiles.end())
+        if (customtiles.find(customts) != customtiles.end() && INBOUNDS(tile, customtiles[customts]))
             BlitSurfaceStandard(customtiles[customts][t], NULL, foregroundBuffer, &rect);
-        else
+        else if INBOUNDS(tile, tiles3)
             BlitSurfaceStandard(tiles3[t+(off*30)],NULL, foregroundBuffer, &rect  );
         //frontbuffer.copyPixels(tiles3[t+(off*30)], tiles_rect, tpoint);
     }
