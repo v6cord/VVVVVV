@@ -49,7 +49,3 @@ if cmp -s "$timestamp_ref" vce.zip.c; then
 fi
 
 ninja ${verbose:+-v}
-
-if [ ! -z "$windows" ]; then
-    cp -uv ../../.github/libs/* SDL_mixer_X_build-prefix/bin/*.dll SDL_mixer_X_build-prefix/lib/*.dll . || true
-fi
