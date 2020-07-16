@@ -5446,6 +5446,11 @@ void editormenuactionpress()
     }
 }
 
+bool up_pressed = false;
+bool down_pressed = false;
+bool left_pressed = false;
+bool right_pressed = false;
+
 void editorinput()
 {
     game.mx = (float) key.mx;
@@ -5459,6 +5464,11 @@ void editorinput()
         ed.tilex = ed.tilex * 320 / winwidth;
         ed.tiley = ed.tiley * 240 / winheight;
     }
+
+    up_pressed = key.keymap[SDLK_UP] || key.keymap[SDL_CONTROLLER_BUTTON_DPAD_UP];
+    down_pressed = key.keymap[SDLK_DOWN] || key.keymap[SDL_CONTROLLER_BUTTON_DPAD_DOWN];
+    left_pressed = key.keymap[SDLK_LEFT] || key.keymap[SDL_CONTROLLER_BUTTON_DPAD_LEFT];
+    right_pressed = key.keymap[SDLK_RIGHT] || key.keymap[SDL_CONTROLLER_BUTTON_DPAD_RIGHT];
 
     game.press_left = false;
     game.press_right = false;
@@ -5567,13 +5577,13 @@ void editorinput()
             //hook select menu
             if(ed.keydelay>0) ed.keydelay--;
 
-            if((key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8]) && ed.keydelay<=0)
+            if((up_pressed || key.keymap[SDLK_KP_8]) && ed.keydelay<=0)
             {
                 ed.keydelay=6;
                 ed.hookmenu--;
             }
 
-            if((key.keymap[SDLK_DOWN] || key.keymap[SDLK_KP_2]) && ed.keydelay<=0)
+            if((down_pressed || key.keymap[SDLK_KP_2]) && ed.keydelay<=0)
             {
                 ed.keydelay=6;
                 ed.hookmenu++;
@@ -5605,12 +5615,11 @@ void editorinput()
             }
 
             if (!game.press_action && !game.press_left && !game.press_right
-                    && !key.keymap[SDLK_UP] && !key.keymap[SDLK_DOWN]
-                    && !key.keymap[SDLK_KP_8] && !key.keymap[SDLK_KP_2] && !key.isDown(27)) game.jumpheld = false;
+                    && !up_pressed && !down_pressed && !key.isDown(27)) game.jumpheld = false;
             if (!game.jumpheld)
             {
                 if (game.press_action || game.press_left || game.press_right || game.press_map
-                        || key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN]
+                        || up_pressed || down_pressed
                         || key.keymap[SDLK_KP_8] || key.keymap[SDLK_KP_2] || key.isDown(27))
                 {
                     game.jumpheld = true;
@@ -5655,7 +5664,7 @@ void editorinput()
 
             if(ed.keydelay>0) ed.keydelay--;
 
-            if(key.keymap[SDLK_UP] && ed.keydelay<=0)
+            if(up_pressed && ed.keydelay<=0)
             {
                 ed.keydelay=6;
                 ed.sby--;
@@ -5674,7 +5683,7 @@ void editorinput()
                 key.keybuffer=ed.sb[ed.pagey+ed.sby];
             }
 
-            if(key.keymap[SDLK_DOWN] && ed.keydelay<=0)
+            if(down_pressed && ed.keydelay<=0)
             {
                 ed.keydelay=6;
                 if(ed.sby+ed.pagey<(int)ed.sb.size()-1)
@@ -5924,22 +5933,22 @@ void editorinput()
         if(ed.settingsmod)
         {
             if (!game.press_action && !game.press_left && !game.press_right
-                    && !key.keymap[SDLK_UP] && !key.keymap[SDLK_DOWN] && !key.keymap[SDLK_PAGEUP] && !key.keymap[SDLK_PAGEDOWN]) game.jumpheld = false;
+                    && !up_pressed && !down_pressed) game.jumpheld = false;
             if (!game.jumpheld)
             {
                 if (game.press_action || game.press_left || game.press_right || game.press_map
-                        || key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] || key.keymap[SDLK_PAGEUP] || key.keymap[SDLK_PAGEDOWN])
+                        || up_pressed || down_pressed)
                 {
                     game.jumpheld = true;
                 }
 
                 if(game.menustart)
                 {
-                    if (game.press_left || key.keymap[SDLK_UP])
+                    if (game.press_left || up_pressed)
                     {
                         if (!ed.trialmod) game.currentmenuoption--;
                     }
-                    else if (game.press_right || key.keymap[SDLK_DOWN])
+                    else if (game.press_right || down_pressed)
                     {
                         if (!ed.trialmod) game.currentmenuoption++;
                     }
@@ -5960,14 +5969,14 @@ void editorinput()
                         music.playef(11);
                     }
                     if (game.currentmenuoption == 3) {
-                        if (game.press_left || key.keymap[SDLK_UP]) ed.customtrials[ed.edtrial].trinkets--;
-                        if (game.press_right || key.keymap[SDLK_DOWN]) ed.customtrials[ed.edtrial].trinkets++;
+                        if (game.press_left || up_pressed) ed.customtrials[ed.edtrial].trinkets--;
+                        if (game.press_right || down_pressed) ed.customtrials[ed.edtrial].trinkets++;
                         if (ed.customtrials[ed.edtrial].trinkets > 99) ed.customtrials[ed.edtrial].trinkets = 0;
                         if (ed.customtrials[ed.edtrial].trinkets < 0) ed.customtrials[ed.edtrial].trinkets = 99;
                     }
                     if (game.currentmenuoption == 4) {
-                        if (game.press_left || key.keymap[SDLK_UP]) ed.customtrials[ed.edtrial].par--;
-                        if (game.press_right || key.keymap[SDLK_DOWN]) ed.customtrials[ed.edtrial].par++;
+                        if (game.press_left || up_pressed) ed.customtrials[ed.edtrial].par--;
+                        if (game.press_right || down_pressed) ed.customtrials[ed.edtrial].par++;
                         if (key.keymap[SDLK_PAGEDOWN]) ed.customtrials[ed.edtrial].par += 60;
                         if (key.keymap[SDLK_PAGEUP]) ed.customtrials[ed.edtrial].par -= 60;
                         if (ed.customtrials[ed.edtrial].par > 600) ed.customtrials[ed.edtrial].par = 0;
@@ -5998,22 +6007,22 @@ void editorinput()
             // Ctrl+Shift modifiers
             // TODO: Better Direct Mode interface
             ed.dmtileeditor=10;
-            if(key.keymap[SDLK_LEFT]) {
+            if(left_pressed) {
                 ed.dmtile--;
                 ed.keydelay=3;
                 if(ed.dmtile<0) ed.dmtile+=dmcap();
-            } else if(key.keymap[SDLK_RIGHT]) {
+            } else if(right_pressed) {
                 ed.dmtile++;
                 ed.keydelay=3;
 
                 if (ed.dmtile>=dmcap())
                     ed.dmtile-=dmcap();
             }
-            if(key.keymap[SDLK_UP]) {
+            if(up_pressed) {
                 ed.dmtile-=dmwidth();
                 ed.keydelay=3;
                 if(ed.dmtile<0) ed.dmtile+=dmcap();
-            } else if(key.keymap[SDLK_DOWN]) {
+            } else if(right_pressed) {
                 ed.dmtile+=dmwidth();
                 ed.keydelay=3;
 
@@ -6128,18 +6137,18 @@ void editorinput()
 
         } else if (key.keymap[SDLK_LSHIFT] || key.keymap[SDLK_RSHIFT]) {
             // Shift modifiers
-            if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-                key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+            if (up_pressed || down_pressed ||
+                left_pressed || right_pressed ||
                 key.keymap[SDLK_KP_8] || key.keymap[SDLK_KP_2] ||
                 key.keymap[SDLK_KP_4] || key.keymap[SDLK_KP_6]) {
                 ed.keydelay = 6;
-                if (key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8])
+                if (up_pressed || key.keymap[SDLK_KP_8])
                     ed.mapheight--;
-                else if (key.keymap[SDLK_DOWN] || key.keymap[SDLK_KP_2])
+                else if (down_pressed || key.keymap[SDLK_KP_2])
                     ed.mapheight++;
-                else if (key.keymap[SDLK_LEFT] || key.keymap[SDLK_KP_4])
+                else if (left_pressed || key.keymap[SDLK_KP_4])
                     ed.mapwidth--;
-                else if (key.keymap[SDLK_RIGHT] || key.keymap[SDLK_KP_6])
+                else if (right_pressed || key.keymap[SDLK_KP_6])
                     ed.mapwidth++;
 
                 if (ed.mapheight < 1)
@@ -7592,20 +7601,20 @@ int editorclass::gettowerplattile(int col)
 
 void editorclass::switchroomsinput()
 {
-    if (key.keymap[SDLK_UP] || key.keymap[SDLK_DOWN] ||
-        key.keymap[SDLK_LEFT] || key.keymap[SDLK_RIGHT] ||
+    if (up_pressed || down_pressed ||
+        left_pressed || right_pressed ||
         key.keymap[SDLK_KP_8] || key.keymap[SDLK_KP_2] ||
         key.keymap[SDLK_KP_4] || key.keymap[SDLK_KP_6] ||
         key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
         key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT) || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
         ed.keydelay = 6;
-        if (key.keymap[SDLK_UP] || key.keymap[SDLK_KP_8] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
+        if (up_pressed || key.keymap[SDLK_KP_8] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_UP))
             ed.levy--;
-        else if (key.keymap[SDLK_DOWN] || key.keymap[SDLK_KP_2] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+        else if (down_pressed || key.keymap[SDLK_KP_2] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
             ed.levy++;
-        else if (key.keymap[SDLK_LEFT] || key.keymap[SDLK_KP_4] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+        else if (left_pressed || key.keymap[SDLK_KP_4] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
             ed.levx--;
-        else if (key.keymap[SDLK_RIGHT] || key.keymap[SDLK_KP_6] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+        else if (right_pressed || key.keymap[SDLK_KP_6] || key.isDown(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
             ed.levx++;
         ed.updatetiles = true;
         ed.changeroom = true;
