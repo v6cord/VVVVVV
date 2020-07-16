@@ -3899,21 +3899,31 @@ void editorrender()
             case 11: // Gravity lines
                 fillboxabs(ex, ey, 8, 8, graphics.getRGB(164,255,164));
                 if(edentity[i].p1 == 0) { //Horizontal
-                    while (tx >= 0 && !ed.spikefree(tx, ey / 8)) tx--;
-                    while (tx2 < 40 && !ed.spikefree(tx2, ey / 8)) tx2++;
-                    tx++;
+                    if (edentity[i].p4 != 1) {
+                        // Unlocked
+                        while (tx >= 0 && !ed.spikefree(tx, ey / 8)) tx--;
+                        while (tx2 < 40 && !ed.spikefree(tx2, ey / 8)) tx2++;
+                        tx++;
+                        edentity[i].p2 = tx;
+                        edentity[i].p3 = (tx2-tx)*8;
+                    } else {
+                        // Locked (no-op)
+                    }
                     FillRect(graphics.backBuffer, (tx*8), ey+4, (tx2-tx)*8, 1,
                              graphics.getRGB(194,194,194));
-                    edentity[i].p2 = tx;
-                    edentity[i].p3 = (tx2-tx)*8;
                 } else { // Vertical
-                    while (ty >= 0 && !ed.towerspikefree(tx, ty)) ty--;
-                    while (ty2 < y_size && !ed.towerspikefree(tx, ty2)) ty2++;
-                    ty++;
+                    if (edentity[i].p4 != 1) {
+                        // Unlocked
+                        while (ty >= 0 && !ed.towerspikefree(tx, ty)) ty--;
+                        while (ty2 < y_size && !ed.towerspikefree(tx, ty2)) ty2++;
+                        ty++;
+                        edentity[i].p2 = ty;
+                        edentity[i].p3 = (ty2-ty) * 8;
+                    } else {
+                        // Locked (no-op)
+                    }
                     FillRect(graphics.backBuffer, (tx*8)+3, (ty*8) - (ed.ypos*8), 1,
                              (ty2-ty)*8, graphics.getRGB(194,194,194));
-                    edentity[i].p2 = ty;
-                    edentity[i].p3 = (ty2-ty) * 8;
                 }
                 break;
             case 13: // Warp tokens
@@ -3990,21 +4000,31 @@ void editorrender()
             case 50: // Warp lines
                 fillboxabs(ex, ey, 8, 8, graphics.getRGB(164,255,164));
                 if (edentity[i].p1>=2) { //Horizontal
-                    while (tx >= 0 && !ed.free(tx, ey / 8)) tx--;
-                    while (tx2 < 40 && !ed.free(tx2, ey / 8)) tx2++;
-                    tx++;
+                    if (edentity[i].p4 != 1) {
+                        // Unlocked
+                        while (tx >= 0 && !ed.free(tx, ey / 8)) tx--;
+                        while (tx2 < 40 && !ed.free(tx2, ey / 8)) tx2++;
+                        tx++;
+                        edentity[i].p2=tx;
+                        edentity[i].p3=(tx2-tx)*8;
+                    } else {
+                        // Locked (no-op)
+                    }
                     fillboxabs((tx*8), ey+1, (tx2-tx)*8, 6,
                                graphics.getRGB(255,255,194));
-                    edentity[i].p2=tx;
-                    edentity[i].p3=(tx2-tx)*8;
                 } else { // Vertical
-                    while (ty >= 0 && !ed.towerfree(tx, ty)) ty--;
-                    while (ty2 < y_size && !ed.towerfree(tx, ty2)) ty2++;
-                    ty++;
+                    if (edentity[i].p4 != 1) {
+                        // Unlocked
+                        while (ty >= 0 && !ed.towerfree(tx, ty)) ty--;
+                        while (ty2 < y_size && !ed.towerfree(tx, ty2)) ty2++;
+                        ty++;
+                        edentity[i].p2=ty;
+                        edentity[i].p3=(ty2-ty)*8;
+                    } else {
+                        // Locked (no-op)
+                    }
                     fillboxabs((tx*8)+1, (ty*8) - (ed.ypos*8), 6,
                                (ty2-ty)*8, graphics.getRGB(255,255,194));
-                    edentity[i].p2=ty;
-                    edentity[i].p3=(ty2-ty)*8;
                 }
                 break;
             case 999: // ?
