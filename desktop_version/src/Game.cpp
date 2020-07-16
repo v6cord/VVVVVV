@@ -215,7 +215,7 @@ void Game::init(void)
     tele_crewstats.resize(6);
     quick_crewstats.resize(6);
     besttimes.resize(6, -1);
-    ::memset(bestframes, -1, sizeof(bestframes) * sizeof(int));
+    SDL_memset(bestframes, -1, sizeof(bestframes));
     besttrinkets.resize(6, -1);
     bestlives.resize(6, -1);
     bestrank.resize(6, -1);
@@ -4600,7 +4600,7 @@ void Game::loadstats()
             if (TextString.length())
             {
                 std::vector<std::string> values = split(TextString, ',');
-                for (size_t i = 0; i < std::min(sizeof(bestframes), values.size()); i++)
+                for (size_t i = 0; i < std::min(sizeof(bestframes) / sizeof(int), values.size()); i++)
                 {
                     bestframes[i] = atoi(values[i].c_str());
                 }
@@ -4920,7 +4920,7 @@ void Game::savestats()
     dataNode->LinkEndChild( msg );
 
     std::string s_besttimes;
-    for(size_t i = 0; i < besttrinkets.size(); i++ )
+    for(size_t i = 0; i < besttimes.size(); i++ )
     {
         s_besttimes += help.String(besttimes[i]) + ",";
     }
@@ -4929,7 +4929,7 @@ void Game::savestats()
     dataNode->LinkEndChild( msg );
 
     std::string s_bestframes;
-    for (size_t i = 0; i < sizeof(bestframes); i++)
+    for (size_t i = 0; i < sizeof(bestframes) / sizeof(int); i++)
     {
         s_bestframes += help.String(bestframes[i]) + ",";
     }
