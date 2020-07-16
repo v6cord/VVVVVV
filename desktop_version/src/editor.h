@@ -419,8 +419,6 @@ public:
     int dmtile = 0;
     int dmtileeditor = 0;
 
-    bool grayenemieskludge = false;
-
     std::vector<edaltstate> altstates;
     std::vector<edtower> towers;
     std::vector<customtrial> customtrials;

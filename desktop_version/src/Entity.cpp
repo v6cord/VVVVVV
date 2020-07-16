@@ -2100,8 +2100,6 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             break;
           }
         }
-        if (ed.grayenemieskludge)
-          entity.colour = 18;
 
         if(custom_gray){
           entity.colour = 18;

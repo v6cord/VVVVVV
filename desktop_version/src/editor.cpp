@@ -456,8 +456,6 @@ void editorclass::reset()
     hookmenu=0;
     script.customscripts.clear();
 
-    grayenemieskludge = false;
-
     for (size_t i = 0; i < altstates.size(); i++)
         altstates[i].reset();
     for (size_t i = 0; i < towers.size(); i++)
@@ -610,9 +608,6 @@ int editorclass::getlevelcol(int t)
 {
     if(level[t].tileset==0)  //Station
     {
-        if (level[t].tilecol == -1)
-            // Fix gray enemies
-            grayenemieskludge = true;
         return level[t].tilecol;
     }
     else if(level[t].tileset==1)   //Outside
@@ -625,9 +620,6 @@ int editorclass::getlevelcol(int t)
     }
     else if(level[t].tileset==3)   //Warp Zone
     {
-        if (level[t].tilecol == 6)
-            // Fix gray enemies
-            grayenemieskludge = true;
         return 46+level[t].tilecol;
     }
     else if(level[t].tileset==4)   //Ship
@@ -4855,10 +4847,6 @@ void editorlogic()
 
     game.customcol=ed.getlevelcol(ed.levx+(ed.levy*ed.maxwidth))+1;
     ed.entcol=ed.getenemycol(game.customcol);
-    if (ed.grayenemieskludge) {
-        ed.entcol = 18;
-        ed.grayenemieskludge = false;
-    }
 
     graphics.setcol(ed.entcol);
     ed.entcolreal = graphics.ct.colour;
