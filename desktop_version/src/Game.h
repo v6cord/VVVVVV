@@ -337,6 +337,7 @@ public:
     int bestgamedeaths = 0;
 
     std::vector<int>besttimes;
+    int bestframes[6];
     std::vector<int>besttrinkets;
     std::vector<int>bestlives;
     std::vector<int> bestrank;

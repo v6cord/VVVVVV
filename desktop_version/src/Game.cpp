@@ -215,6 +215,7 @@ void Game::init(void)
     tele_crewstats.resize(6);
     quick_crewstats.resize(6);
     besttimes.resize(6, -1);
+    ::memset(bestframes, -1, sizeof(bestframes) * sizeof(int));
     besttrinkets.resize(6, -1);
     bestlives.resize(6, -1);
     bestrank.resize(6, -1);
@@ -1478,13 +1479,31 @@ void Game::updatestate()
                 customtrialstats[currenttrial].attempted = true;
                 customsavetrialsave(ed.ListOfMetaData[playcustomlevel].filename);
             } else {
-                if (timetrialresulttime < besttimes[timetriallevel] || besttimes[timetriallevel]==-1)
+                if (timetrialresulttime < besttimes[timetriallevel]
+                || (timetrialresulttime == besttimes[timetriallevel] && timetrialresultframes < bestframes[timetriallevel])
+                || besttimes[timetriallevel]==-1)
                 {
                     besttimes[timetriallevel] = timetrialresulttime;
+                    bestframes[timetriallevel] = timetrialresultframes;
                 }
                 if (trinkets() > besttrinkets[timetriallevel] || besttrinkets[timetriallevel]==-1)
                 {
                     besttrinkets[timetriallevel] = trinkets();
+                }
+                if (deathcounts < bestlives[timetriallevel] || bestlives[timetriallevel]==-1)
+                {
+                    bestlives[timetriallevel] = deathcounts;
+                }
+                if (timetrialrank > bestrank[timetriallevel] || bestrank[timetriallevel]==-1)
+                {
+                    bestrank[timetriallevel] = timetrialrank;
+                    if(timetrialrank>=3){
+                        if(timetriallevel==0) NETWORK_unlockAchievement("vvvvvvtimetrial_station1_fixed");
+                        if(timetriallevel==1) NETWORK_unlockAchievement("vvvvvvtimetrial_lab_fixed");
+                        if(timetriallevel==2) NETWORK_unlockAchievement("vvvvvvtimetrial_tower_fixed");
+                        if(timetriallevel==3) NETWORK_unlockAchievement("vvvvvvtimetrial_station2_fixed");
+                        if(timetriallevel==4) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
+                        if(timetriallevel==5) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
                 }
                 if (deathcounts < bestlives[timetriallevel] || bestlives[timetriallevel]==-1)
                 {
@@ -4475,6 +4494,7 @@ void Game::deletestats()
         for (int i = 0; i < 6; i++)
         {
             besttimes[i] = -1;
+            bestframes[i] = -1;
             besttrinkets[i] = -1;
             bestlives[i] = -1;
             bestrank[i] = -1;
@@ -4570,6 +4590,19 @@ void Game::loadstats()
                 for(size_t i = 0; i < values.size(); i++)
                 {
                     besttimes.push_back(atoi(values[i].c_str()));
+                }
+            }
+        }
+
+        if (pKey == "bestframes")
+        {
+            std::string TextString = pText;
+            if (TextString.length())
+            {
+                std::vector<std::string> values = split(TextString, ',');
+                for (size_t i = 0; i < std::min(sizeof(bestframes), values.size()); i++)
+                {
+                    bestframes[i] = atoi(values[i].c_str());
                 }
             }
         }
@@ -4893,6 +4926,15 @@ void Game::savestats()
     }
     msg = doc.NewElement( "besttimes" );
     msg->LinkEndChild( doc.NewText( s_besttimes.c_str() ));
+    dataNode->LinkEndChild( msg );
+
+    std::string s_bestframes;
+    for (size_t i = 0; i < sizeof(bestframes); i++)
+    {
+        s_bestframes += help.String(bestframes[i]) + ",";
+    }
+    msg = doc.NewElement( "bestframes" );
+    msg->LinkEndChild( doc.NewText( s_bestframes.c_str() ) );
     dataNode->LinkEndChild( msg );
 
     std::string s_besttrinkets;
