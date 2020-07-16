@@ -1362,6 +1362,7 @@ void Graphics::textboxtimer( int t )
 {
     if (!INBOUNDS(m, textbox))
     {
+        puts("textboxtimer() out-of-bounds!");
         return;
     }
 
@@ -1372,6 +1373,7 @@ void Graphics::addline( std::string t )
 {
     if (!INBOUNDS(m, textbox))
     {
+        puts("addline() out-of-bounds!");
         return;
     }
 
@@ -1382,6 +1384,7 @@ void Graphics::textboxadjust()
 {
     if (!INBOUNDS(m, textbox))
     {
+        puts("textboxadjust() out-of-bounds!");
         return;
     }
 
@@ -3190,6 +3193,7 @@ void Graphics::textboxcenter()
 {
 	if (!INBOUNDS(m, textbox))
 	{
+		puts("textboxcenter() out-of-bounds!");
 		return;
 	}
 
@@ -3201,6 +3205,7 @@ void Graphics::textboxcenterx(int centerline)
 {
 	if (!INBOUNDS(m, textbox))
 	{
+		puts("textboxcenterx() out-of-bounds!");
 		return;
 	}
 
@@ -3211,6 +3216,7 @@ int Graphics::textboxwidth()
 {
 	if (!INBOUNDS(m, textbox))
 	{
+		puts("textboxwidth() out-of-bounds!");
 		return 0;
 	}
 
@@ -3221,6 +3227,7 @@ void Graphics::textboxmove(int xo, int yo)
 {
 	if (!INBOUNDS(m, textbox))
 	{
+		puts("textboxmove() out-of-bounds!");
 		return;
 	}
 
@@ -3232,6 +3239,7 @@ void Graphics::textboxmoveto(int xo)
 {
 	if (!INBOUNDS(m, textbox))
 	{
+		puts("textboxmoveto() out-of-bounds!");
 		return;
 	}
 
@@ -3242,6 +3250,7 @@ void Graphics::textboxcentery(int centerline)
 {
 	if (!INBOUNDS(m, textbox))
 	{
+		puts("textboxcentery() out-of-bounds!");
 		return;
 	}
 
