@@ -441,7 +441,7 @@ public:
 
     void switchroomsinput();
 
-    Uint32 getonewaycol(int rx, int ry);
+    Uint32 getonewaycol(const int rx, const int ry);
     Uint32 getonewaycol();
 
     int getcustomtiles(int rx, int ry);

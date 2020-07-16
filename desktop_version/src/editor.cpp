@@ -7604,10 +7604,14 @@ void editorclass::switchroomsinput()
 
 // Return a graphics-ready color based off of the given tileset and tilecol
 // Much kudos to Dav999 for saving me a lot of work, because I stole these colors from const.lua in Ved! -Info Teddy
-Uint32 editorclass::getonewaycol(int rx, int ry)
+Uint32 editorclass::getonewaycol(const int rx, const int ry)
 {
-    int roomnum = rx + ry*maxwidth;
-    edlevelclass& room = level[roomnum];
+    const int roomnum = rx + ry*maxwidth;
+    if (roomnum < 0 || roomnum >= 400)
+    {
+        return graphics.getRGB(255, 255, 255);
+    }
+    const edlevelclass& room = level[roomnum];
     switch (room.tileset) {
 
     case 0: // Space Station
