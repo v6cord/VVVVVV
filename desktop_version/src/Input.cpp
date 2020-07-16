@@ -420,31 +420,19 @@ void menuactionpress()
             game.currentmenuoption = 3;
             break;
         case 4:
-            //toggle mouse cursor
-            music.playef(11);
-            if (graphics.showmousecursor == true) {
-                SDL_ShowCursor(SDL_DISABLE);
-                graphics.showmousecursor = false;
-            }
-            else {
-                SDL_ShowCursor(SDL_ENABLE);
-                graphics.showmousecursor = true;
-            }
-            break;
-        case 5:
             //toggle 30+ fps
             music.playef(11);
             game.over30mode = !game.over30mode;
             game.savestats();
             break;
-        case 6:
+        case 5:
             //toggle vsync
             music.playef(11);
             graphics.vsync = !graphics.vsync;
             graphics.processVsync();
             game.savestats();
             break;
-        case 7:
+        case 6:
             // resize to nearest multiple
             if (graphics.screenbuffer->isWindowed)
             {
@@ -547,6 +535,49 @@ void menuactionpress()
             break;
         }
         break;
+    case Menu::advancedoptions:
+        switch (game.currentmenuoption)
+        {
+        case 0:
+            //toggle mouse cursor
+            music.playef(11);
+            if (graphics.showmousecursor == true) {
+                SDL_ShowCursor(SDL_DISABLE);
+                graphics.showmousecursor = false;
+            }
+            else {
+                SDL_ShowCursor(SDL_ENABLE);
+                graphics.showmousecursor = true;
+            }
+            break;
+        case 1:
+            // toggle unfocus pause
+            game.disablepause = !game.disablepause;
+            music.playef(11);
+            break;
+        case 2:
+            // toggle fake load screen
+            game.skipfakeload = !game.skipfakeload;
+            music.playef(11);
+            break;
+        case 3:
+            // toggle translucent roomname BG
+            graphics.translucentroomname = !graphics.translucentroomname;
+            music.playef(11);
+            break;
+        case 4:
+            // Glitchrunner mode
+            music.playef(11);
+            game.glitchrunnermode = !game.glitchrunnermode;
+            break;
+        case 5:
+            //back
+            music.playef(11);
+            game.returnmenu();
+            map.nexttowercolour();
+            break;
+        }
+        break;
     case Menu::accessibility:
         switch (game.currentmenuoption)
         {
@@ -612,21 +643,11 @@ void menuactionpress()
             }
             break;
         case 5:
-            // toggle unfocus pause
-            game.disablepause = !game.disablepause;
-            music.playef(11);
-            break;
-        case 6:
             // mute
             game.musicmuted = !game.musicmuted;
             music.playef(11);
             break;
-        case 7:
-            // toggle translucent roomname BG
-            graphics.translucentroomname = !graphics.translucentroomname;
-            music.playef(11);
-            break;
-        case 8:
+        case 6:
             //back
             music.playef(11);
             game.returnmenu();
@@ -665,9 +686,10 @@ void menuactionpress()
             map.nexttowercolour();
             break;
         case 1:
-            // Glitchrunner mode
+            //advanced options
             music.playef(11);
-            game.glitchrunnermode = !game.glitchrunnermode;
+            game.createmenu(Menu::advancedoptions);
+            map.nexttowercolour();
             break;
         case 2:
 #if !defined(MAKEANDPLAY)

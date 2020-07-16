@@ -718,17 +718,10 @@ void menurender()
             graphics.Print( -1, 75, "slowdown modes or invincibility", tr, tg, tb, true);
             break;
         case 1:
-            graphics.bigprint( -1, 30, "Glitchrunner Mode", tr, tg, tb, true);
-            graphics.Print( -1, 65, "Re-enable glitches that existed", tr, tg, tb, true);
-            graphics.Print( -1, 75, "in previous versions of the game", tr, tg, tb, true);
-            if (game.glitchrunnermode)
-            {
-                graphics.Print( -1, 95, "Glitchrunner mode is ON", tr, tg, tb, true);
-            }
-            else
-            {
-                graphics.Print( -1, 95, "Glitchrunner mode is OFF", tr/2, tg/2, tb/2, true);
-            }
+            graphics.bigprint( -1, 30, "Advanced Options", tr, tg, tb, true);
+            graphics.Print( -1, 65, "Hide the mouse cursor, remove", tr, tg, tb, true);
+            graphics.Print( -1, 75, "the loading screen, turn on", tr, tg, tb, true);
+            graphics.Print( -1, 85, "glitchrunner mode and more", tr, tg, tb, true);
             break;
         case 2:
 #if !defined(MAKEANDPLAY)
@@ -831,17 +824,6 @@ void menurender()
             graphics.Print( -1, 85, "adjust the picture.", tr, tg, tb, true);
             break;
         case 4:
-            graphics.bigprint(-1, 30, "Toggle Mouse Cursor", tr, tg, tb, true);
-            graphics.Print(-1, 65, "Show/hide the system mouse cursor.", tr, tg, tb, true);
-
-            if (graphics.showmousecursor) {
-                graphics.Print(-1, 85, "Current mode: SHOW", tr, tg, tb, true);
-            }
-            else {
-                graphics.Print(-1, 85, "Current mode: HIDE", tr/2, tg/2, tb/2, true);
-            }
-            break;
-        case 5:
             graphics.bigprint(-1, 30, "Toggle 30+ FPS", tr, tg, tb, true);
             graphics.Print(-1, 65, "Change whether the game", tr, tg, tb, true);
             graphics.Print(-1, 75, "runs at 30 or over 30 FPS.", tr, tg, tb, true);
@@ -855,7 +837,7 @@ void menurender()
                 graphics.Print(-1, 95, "Current mode: Over 30 FPS", tr, tg, tb, true);
             }
             break;
-        case 6:
+        case 5:
             graphics.bigprint(-1, 30, "Toggle VSync", tr, tg, tb, true);
             graphics.Print(-1, 65, "Turn VSync on or off.", tr, tg, tb, true);
 
@@ -868,7 +850,7 @@ void menurender()
                 graphics.Print(-1, 95, "Current mode: VSYNC ON", tr, tg, tb, true);
             }
             break;
-        case 7:
+        case 6:
             graphics.bigprint(-1, 30, "Resize to Nearest", tr, tg, tb, true);
             graphics.Print(-1, 65, "Resize to the nearest window size", tr, tg, tb, true);
             graphics.Print(-1, 75, "that is of an integer multiple.", tr, tg, tb, true);
@@ -1072,6 +1054,64 @@ void menurender()
 
 
         break;
+    case Menu::advancedoptions:
+        switch (game.currentmenuoption)
+        {
+        case 0:
+            graphics.bigprint(-1, 30, "Toggle Mouse Cursor", tr, tg, tb, true);
+            graphics.Print(-1, 65, "Show/hide the system mouse cursor.", tr, tg, tb, true);
+
+            if (graphics.showmousecursor) {
+                graphics.Print(-1, 95, "Current mode: SHOW", tr, tg, tb, true);
+            }
+            else {
+                graphics.Print(-1, 95, "Current mode: HIDE", tr/2, tg/2, tb/2, true);
+            }
+            break;
+        case 1:
+            graphics.bigprint( -1, 30, "Unfocus Pause", tr, tg, tb, true);
+            graphics.Print( -1, 65, "Toggle if the game will pause", tr, tg, tb, true);
+            graphics.Print( -1, 75, "when the window is unfocused.", tr, tg, tb, true);
+            if (game.disablepause)
+            {
+                graphics.Print(-1, 95, "Unfocus pause is OFF", tr/2, tg/2, tb/2, true);
+            }
+            else
+            {
+                graphics.Print(-1, 95, "Unfocus pause is ON", tr, tg, tb, true);
+            }
+            break;
+        case 2:
+            graphics.bigprint(-1, 30, "Fake Load Screen", tr, tg, tb, true);
+            if (game.skipfakeload)
+                graphics.Print(-1, 65, "Fake loading screen is OFF", tr/2, tg/2, tb/2, true);
+            else
+                graphics.Print(-1, 65, "Fake loading screen is ON", tr, tg, tb, true);
+            break;
+        case 3:
+            graphics.bigprint(-1, 30, "Room Name BG", tr, tg, tb, true);
+            graphics.Print( -1, 65, "Lets you see through what is behind", tr, tg, tb, true);
+            graphics.Print( -1, 75, "the name at the bottom of the screen.", tr, tg, tb, true);
+            if (graphics.translucentroomname)
+                graphics.Print(-1, 95, "Room name background is TRANSLUCENT", tr/2, tg/2, tb/2, true);
+            else
+                graphics.Print(-1, 95, "Room name background is OPAQUE", tr, tg, tb, true);
+            break;
+        case 4:
+            graphics.bigprint( -1, 30, "Glitchrunner Mode", tr, tg, tb, true);
+            graphics.Print( -1, 65, "Re-enable glitches that existed", tr, tg, tb, true);
+            graphics.Print( -1, 75, "in previous versions of the game", tr, tg, tb, true);
+            if (game.glitchrunnermode)
+            {
+                graphics.Print( -1, 95, "Glitchrunner mode is ON", tr, tg, tb, true);
+            }
+            else
+            {
+                graphics.Print( -1, 95, "Glitchrunner mode is OFF", tr/2, tg/2, tb/2, true);
+            }
+            break;
+        }
+        break;
     case Menu::accessibility:
         switch (game.currentmenuoption)
         {
@@ -1146,19 +1186,6 @@ void menurender()
             }
             break;
         case 5:
-            graphics.bigprint( -1, 40, "Unfocus Pause", tr, tg, tb, true);
-            graphics.Print( -1, 75, "Toggle if the game will pause", tr, tg, tb, true);
-            graphics.Print( -1, 85, "when you're unfocused.", tr, tg, tb, true);
-            if (game.disablepause)
-            {
-                graphics.Print(-1, 105, "Unfocus pause is OFF", tr/2, tg/2, tb/2, true);
-            }
-            else
-            {
-                graphics.Print(-1, 105, "Unfocus pause is ON", tr, tg, tb, true);
-            }
-            break;
-        case 6:
             graphics.bigprint( -1, 40, "Music", tr, tg, tb, true);
             graphics.Print( -1, 75, "Disables music.", tr, tg, tb, true);
             if (!game.musicmuted)
@@ -1169,15 +1196,6 @@ void menurender()
             {
                 graphics.Print( -1, 85, "Music is OFF.", tr/2, tg/2, tb/2, true);
             }
-            break;
-        case 7:
-            graphics.bigprint(-1, 30, "Room Name BG", tr, tg, tb, true);
-            graphics.Print( -1, 75, "Lets you see through what is behind", tr, tg, tb, true);
-            graphics.Print( -1, 85, "the name at the bottom of the screen.", tr, tg, tb, true);
-            if (graphics.translucentroomname)
-                graphics.Print(-1, 105, "Room name background is TRANSLUCENT", tr/2, tg/2, tb/2, true);
-            else
-                graphics.Print(-1, 105, "Room name background is OPAQUE", tr, tg, tb, true);
             break;
         }
         break;
