@@ -443,6 +443,7 @@ public:
 
     Uint32 getonewaycol(const int rx, const int ry);
     Uint32 getonewaycol();
+    bool onewaycol_override = false;
 
     int getcustomtiles(int rx, int ry);
     int getcustomtiles();
