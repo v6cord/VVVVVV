@@ -2020,12 +2020,12 @@ void gamerender()
             if (!game.colourblindmode)
             {
                 if (!graphics.noclear) graphics.drawtowerbackground();
-                graphics.drawtowermap();
             }
             else
             {
-                graphics.drawtowermap_nobackground();
+                FillRect(graphics.backBuffer,0x00000);
             }
+            graphics.drawtowermap();
         }
         else
         {
