@@ -787,7 +787,7 @@ void Graphics::drawtile( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (INBOUNDS(t, tiles) && t >= 14 && t <= 17 && customts <= 3) {
+    if (INBOUNDS(t, tiles) && t >= 14 && t <= 17 && customts <= 3 && !FILESYSTEM_assetsmounted) {
         colourTransform thect = {ed.getonewaycol()};
         BlitSurfaceTinted(tiles[t], NULL, backBuffer, &rect, thect);
     } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts])) {
@@ -802,7 +802,7 @@ void Graphics::drawtile2( int x, int y, int t )
 {
     int customts = ed.getcustomtiles();
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    if (INBOUNDS(t, tiles2) && t >= 14 && t <= 17 && customts <= 3) {
+    if (INBOUNDS(t, tiles2) && t >= 14 && t <= 17 && customts <= 3 && !FILESYSTEM_assetsmounted) {
         colourTransform thect = {ed.getonewaycol()};
         BlitSurfaceTinted(tiles2[t], NULL, backBuffer, &rect, thect);
     } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(t, customtiles[customts])) {
@@ -2762,7 +2762,7 @@ void Graphics::drawforetile(int x, int y, int t)
         SDL_Rect rect;
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
-        if (INBOUNDS(tile, tiles) && tile >= 14 && tile <= 17 && customts <= 3) {
+        if (INBOUNDS(tile, tiles) && tile >= 14 && tile <= 17 && customts <= 3 && !FILESYSTEM_assetsmounted) {
             colourTransform thect = {ed.getonewaycol()};
             BlitSurfaceTinted(tiles[t], NULL, foregroundBuffer, &rect, thect);
         } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(tile, customtiles[customts])) {
@@ -2781,7 +2781,7 @@ void Graphics::drawforetile2(int x, int y, int t)
         SDL_Rect rect;
         setRect(rect, x,y,tiles_rect.w, tiles_rect.h);
         int customts = ed.getcustomtiles();
-        if (INBOUNDS(tile, tiles2) && tile >= 14 && tile <= 17 && customts <= 3) {
+        if (INBOUNDS(tile, tiles2) && tile >= 14 && tile <= 17 && customts <= 3 && !FILESYSTEM_assetsmounted) {
             colourTransform thect = {ed.getonewaycol()};
             BlitSurfaceTinted(tiles2[t], NULL, foregroundBuffer, &rect, thect);
         } else if (customtiles.find(customts) != customtiles.end() && INBOUNDS(tile, customtiles[customts])) {

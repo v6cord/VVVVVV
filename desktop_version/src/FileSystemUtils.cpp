@@ -331,6 +331,8 @@ void FILESYSTEM_mount(const char *fname)
         graphics.assetdir = path.c_str();
 }
 
+bool FILESYSTEM_assetsmounted = false;
+
 void FILESYSTEM_mountassets(const char* path)
 {
 	const std::string _path(path);
@@ -348,6 +350,7 @@ void FILESYSTEM_mountassets(const char* path)
 		printf("Custom asset directory exists at %s\n", zippath.c_str());
 		FILESYSTEM_mount(zippath.c_str());
 		graphics.reloadresources();
+		FILESYSTEM_assetsmounted = true;
 	} else if (zip_path != "data.zip" && !endsWith(zip_path, "/data.zip") && endsWith(zip_path, ".zip")) {
 		printf("Custom asset directory is .zip at %s\n", zip_path.c_str());
 		PHYSFS_File* zip = PHYSFS_openRead(zip_path.c_str());
@@ -359,25 +362,33 @@ void FILESYSTEM_mountassets(const char* path)
 		} else {
 			graphics.assetdir = zip_path;
 		}
+		FILESYSTEM_assetsmounted = true;
 		graphics.reloadresources();
 	} else if (FILESYSTEM_directoryExists(dirpath.c_str())) {
 		printf("Custom asset directory exists at %s\n",dirpath.c_str());
 		FILESYSTEM_mount(dirpath.c_str());
 		graphics.reloadresources();
+		FILESYSTEM_assetsmounted = true;
 	} else {
 		printf("Custom asset directory does not exist\n");
+		FILESYSTEM_assetsmounted = false;
 	}
 }
 
 void FILESYSTEM_unmountassets()
 {
-    if (graphics.assetdir != "")
-    {
-        printf("Unmounting %s\n", graphics.assetdir.c_str());
-        PHYSFS_unmount(graphics.assetdir.c_str());
-        graphics.assetdir = "";
-        graphics.reloadresources();
-    } else printf("Cannot unmount when no asset directory is mounted\n");
+	if (graphics.assetdir != "")
+	{
+		printf("Unmounting %s\n", graphics.assetdir.c_str());
+		PHYSFS_unmount(graphics.assetdir.c_str());
+		graphics.assetdir = "";
+		graphics.reloadresources();
+	}
+	else
+	{
+		printf("Cannot unmount when no asset directory is mounted\n");
+	}
+	FILESYSTEM_assetsmounted = false;
 }
 
 bool FILESYSTEM_loadFileToMemory(const char *name, unsigned char **mem,
