@@ -91,15 +91,6 @@ void Screen::ResizeScreen(int x, int y)
 		resY = y;
 	}
 
-	if (stretchMode > 2) {
-		resX *= stretchMode - 2;
-		resY *= stretchMode - 2;
-		SDL_SetWindowResizable(m_window, SDL_FALSE);
-		SDL_SetWindowSize(m_window, resX, resY);
-	} else {
-		SDL_SetWindowResizable(m_window, SDL_TRUE);
-	}
-
 	if(!isWindowed)
 	{
 		int result = SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -228,7 +219,7 @@ void Screen::toggleFullScreen()
 
 void Screen::toggleStretchMode()
 {
-	stretchMode = (stretchMode + 1) % 7;
+	stretchMode = (stretchMode + 1) % 3;
 	ResizeScreen(-1, -1);
 }
 

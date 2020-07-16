@@ -397,7 +397,7 @@ void menuactionpress()
         case 1:
             music.playef(11);
             graphics.screenbuffer->toggleStretchMode();
-            game.stretchMode = (game.stretchMode + 1) % 7;
+            game.stretchMode = (game.stretchMode + 1) % 3;
             game.savestats();
             game.currentmenuoption = 1;
             break;
