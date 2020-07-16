@@ -300,7 +300,7 @@ public:
     //Time Trials
     bool intimetrial, timetrialparlost = false;
     int timetrialcountdown, timetrialshinytarget, timetriallevel = 0;
-    int timetrialpar, timetrialresulttime, timetrialrank = 0;
+    int timetrialpar, timetrialresulttime, timetrialresultframes, timetrialrank = 0;
 
     int creditposition = 0;
     int oldcreditposition = 0;
