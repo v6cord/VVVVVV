@@ -2028,38 +2028,6 @@ try {
 					default: obj.entities[k].setenemyroom(4 + 100, 0 + 100); break;
 					}
 				}
-			}
-			else if (words[0] == "createcrewman")
-			{
-				if (words[3] == "cyan")
-				{
-					r=0;
-				}
-				else if (words[3] == "red")
-				{
-					r=15;
-				}
-				else if (words[3] == "green")
-				{
-					r=13;
-				}
-				else if (words[3] == "yellow")
-				{
-					r=14;
-				}
-				else if (words[3] == "blue")
-				{
-					r=16;
-				}
-				else if (words[3] == "purple")
-				{
-					r=20;
-				}
-				else if (words[3] == "gray")
-				{
-					r=19;
->>>>>>> ee610238b59aa57955b6923f9d31245182583ca4
-				}
 				setvar("return", std::to_string(k));
 			} else if (words[0] == "fatal_left") {
 				obj.fatal_left();
