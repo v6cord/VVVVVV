@@ -20,12 +20,14 @@ public:
 	void toggleFullScreen();
 	void toggleStretchMode();
 	void toggleLinearFilter();
+	void resetRendererWorkaround();
 
 	bool isWindowed = false;
 	bool isFiltered = false;
 	bool badSignalEffect = false;
 	bool initialized = false;
 	int stretchMode = 0;
+	bool vsync = false;
 
 	SDL_Window *m_window;
 	SDL_Renderer *m_renderer;

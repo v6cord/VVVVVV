@@ -353,9 +353,6 @@ public:
 
 	Uint32 crewcolourreal(int t);
 
-	bool vsync;
-	void processVsync();
-
 	SDL_BlendMode blendmode = SDL_BLENDMODE_BLEND;
 };
 
