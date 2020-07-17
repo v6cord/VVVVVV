@@ -1945,26 +1945,38 @@ std::string editorclass::warptokendest(int t) {
     return "("+help.String(rx)+","+help.String(ry)+")"+towerstr;
 }
 
-// Switches tileset
-void editorclass::switch_tileset(bool reversed) {
-    std::string tilesets[6] =
-        {"Space Station", "Outside", "Lab", "Warp Zone", "Ship", "Tower"};
-    int tiles = level[levx + levy*maxwidth].tileset;
-    int oldtiles = tiles;
+void editorclass::switch_tileset(const bool reversed /*= false*/)
+{
+    const char* tilesets[] = {"Space Station", "Outside", "Lab", "Warp Zone", "Ship"};
+    const size_t roomnum = levx + levy*maxwidth;
+    if (roomnum >= SDL_arraysize(level))
+    {
+        return;
+    }
+    edlevelclass& room = level[roomnum];
+
+    int tiles = room.tileset;
+
     if (reversed)
+    {
         tiles--;
+    }
     else
+    {
         tiles++;
+    }
 
-    tiles = mod(tiles, 6);
-    level[levx + levy*maxwidth].tileset = tiles;
-    int newtiles = tiles;
+    const size_t modulus = SDL_arraysize(tilesets);
+    tiles = (tiles % modulus + modulus) % modulus;
+    room.tileset = tiles;
 
-    clamp_tilecol(levx, levy, false);
+    clamp_tilecol(levx, levy);
 
-    switch_tileset_tiles(oldtiles, newtiles);
+    char buffer[64];
+    SDL_snprintf(buffer, sizeof(buffer), "Now using %s Tileset", tilesets[tiles]);
+
+    note = buffer;
     notedelay = 45;
-    ed.note = "Now using "+tilesets[tiles]+" Tileset";
     updatetiles = true;
 }
 
@@ -2001,46 +2013,29 @@ void editorclass::switch_tileset_tiles(int from, int to) {
     }
 }
 
-// Switches tileset color
-void editorclass::switch_tilecol(bool reversed) {
+void editorclass::switch_tilecol(const bool reversed /*= false*/)
+{
+    const size_t roomnum = levx + levy*maxwidth;
+    if (roomnum >= SDL_arraysize(level))
+    {
+        return;
+    }
+    edlevelclass& room = level[roomnum];
+
     if (reversed)
-        level[levx + levy*maxwidth].tilecol--;
+    {
+        room.tilecol--;
+    }
     else
-        level[levx + levy*maxwidth].tilecol++;
+    {
+        room.tilecol++;
+    }
 
     clamp_tilecol(levx, levy, true);
 
     notedelay = 45;
-    ed.note = "Tileset Colour Changed";
+    note = "Tileset Colour Changed";
     updatetiles = true;
-}
-
-void editorclass::clamp_tilecol(int levx, int levy, bool wrap) {
-    int tileset = level[levx + levy*maxwidth].tileset;
-    int tilecol = level[levx + levy*maxwidth].tilecol;
-
-    int mincol = -1;
-    int maxcol = 5;
-
-    // Only Space Station allows tileset -1
-    if (tileset != 0)
-        mincol = 0;
-
-    if (tileset == 0)
-        maxcol = 31;
-    else if (tileset == 1)
-        maxcol = 7;
-    else if (tileset == 3)
-        maxcol = 6;
-    else if (tileset == 5)
-        maxcol = 29;
-
-    // If wrap is true, wrap-around, otherwise just cap
-    if (tilecol > maxcol)
-        tilecol = (wrap ? mincol : maxcol);
-    if (tilecol < mincol)
-        tilecol = (wrap ? maxcol : mincol);
-    level[levx + levy*maxwidth].tilecol = tilecol;
 }
 
 // Performs tasks needed when enabling Tower Mode
@@ -2276,6 +2271,73 @@ int editorclass::tower_row(int rx, int ry) {
 
     int room = rx + ry * maxwidth;
     return level[room].tower_row;
+}
+
+void editorclass::clamp_tilecol(const int rx, const int ry, const bool wrap /*= false*/)
+{
+    const size_t roomnum = rx + ry*maxwidth;
+    if (roomnum >= SDL_arraysize(level))
+    {
+        return;
+    }
+    edlevelclass& room = level[rx + ry*maxwidth];
+
+    const int tileset = room.tileset;
+    int tilecol = room.tilecol;
+
+    int mincol = 0;
+    int maxcol = 5;
+
+    switch (tileset)
+    {
+    case 0:
+        maxcol = 31;
+        break;
+    case 1:
+        maxcol = 7;
+        break;
+    case 3:
+        maxcol = 6;
+        break;
+    case 5:
+        maxcol = 29;
+        break;
+    }
+
+    // If wrap is true, wrap-around, otherwise just cap
+    if (tilecol > maxcol)
+    {
+        tilecol = (wrap ? mincol : maxcol);
+    }
+    if (tilecol < mincol)
+    {
+        tilecol = (wrap ? maxcol : mincol);
+    }
+
+    room.tilecol = tilecol;
+}
+
+void editorclass::switch_enemy(const bool reversed /*= false*/)
+{
+    const size_t roomnum = levx + levy*maxwidth;
+    if (roomnum >= SDL_arraysize(level))
+    {
+        return;
+    }
+    edlevelclass& room = level[roomnum];
+
+    if (reversed)
+    {
+        room.enemytype--;
+    }
+    else
+    {
+        room.enemytype++;
+    }
+    // NOTE: VCE has 28 enemy types
+
+    note = "Enemy Type Changed";
+    notedelay = 45;
 }
 
 bool editorclass::load(std::string& _path)
@@ -6280,22 +6342,20 @@ void editorinput()
             }
             if(!tower && key.keymap[SDLK_F1])
             {
-                ed.switch_tileset(false);
+                ed.switch_tileset();
                 graphics.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
             if(!tower && key.keymap[SDLK_F2])
             {
-                ed.switch_tilecol(false);
+                ed.switch_tilecol();
                 graphics.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
             if(key.keymap[SDLK_F3])
             {
-                ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype=(ed.level[ed.levx+(ed.levy*ed.maxwidth)].enemytype+1)%28;
+                ed.switch_enemy();
                 ed.keydelay=6;
-                ed.notedelay=45;
-                ed.note="Enemy Type Changed";
             }
             if(key.keymap[SDLK_F4])
             {

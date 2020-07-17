@@ -248,10 +248,11 @@ public:
 
     int backmatch(int x, int y);
 
-    void switch_tileset(bool reversed);
+    void switch_tileset(const bool reversed = false);
     void switch_tileset_tiles(int from, int to);
-    void switch_tilecol(bool reversed);
-    void clamp_tilecol(int levx, int levy, bool wrap);
+    void switch_tilecol(const bool reversed = false);
+    void clamp_tilecol(const int rx, const int ry, const bool wrap = false);
+    void switch_enemy(const bool reversed = false);
 
     void enable_tower(void);
     void snap_tower_entry(int rx, int ry);
