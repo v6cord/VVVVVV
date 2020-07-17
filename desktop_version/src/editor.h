@@ -207,7 +207,7 @@ public:
 
     void saveconvertor();
     void reset();
-    void getlin(enum textmode mode, std::string prompt, std::string *ptr);
+    void getlin(const enum textmode mode, const std::string& prompt, std::string *ptr);
   std::vector<int> loadlevel(int rxi, int ryi, int altstate);
 
     void placetile(int x, int y, int t);

@@ -557,7 +557,7 @@ void editorclass::insertline(int t)
     sb.insert(sb.begin() + t, "");
 }
 
-void editorclass::getlin(enum textmode mode, std::string prompt, std::string *ptr) {
+void editorclass::getlin(const enum textmode mode, const std::string& prompt, std::string *ptr) {
     ed.textmod = mode;
     ed.textptr = ptr;
     ed.textdesc = prompt;
