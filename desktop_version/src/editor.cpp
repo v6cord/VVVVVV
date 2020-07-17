@@ -6249,6 +6249,10 @@ void editorinput()
                 graphics.backgrounddrawn=false;
                 ed.keydelay = 6;
             }
+            if (key.keymap[SDLK_F3]) {
+                ed.switch_enemy(true);
+                ed.keydelay = 6;
+            }
 
             if (key.keymap[SDLK_1]) ed.drawmode=17;
             if (key.keymap[SDLK_2]) ed.drawmode=18;
