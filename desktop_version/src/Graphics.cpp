@@ -1938,23 +1938,23 @@ void Graphics::drawentities()
             break;
         case 4:    // Small pickups
             if(obj.entities[i].behave==0) {
-                setcol(obj.entities[i].realcol);
+                setcolreal(obj.entities[i].realcol);
                 drawhuetile(xp, yp - yoff, obj.entities[i].tile);
             }
             if(obj.entities[i].behave==1) {
-                setcol(obj.entities[i].realcol);
+                setcolreal(obj.entities[i].realcol);
                 drawhuetile(xp, yp - yoff, 196);
             }
             if(obj.entities[i].behave==2) {
-                setcol(obj.entities[i].realcol);
+                setcolreal(obj.entities[i].realcol);
                 drawhuetile(xp, yp - yoff, 197);
             }
             if(obj.entities[i].behave==3) {
-                setcol(obj.entities[i].realcol);
+                setcolreal(obj.entities[i].realcol);
                 drawhuetile(xp, yp - yoff, 198);
             }
             if(obj.entities[i].behave==4) {
-                setcol(obj.entities[i].realcol);
+                setcolreal(obj.entities[i].realcol);
                 drawhuetile(xp, yp - yoff, 199);
             }
             break;
