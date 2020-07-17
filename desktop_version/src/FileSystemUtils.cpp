@@ -193,20 +193,18 @@ int FILESYSTEM_init(char *argvZero, char *baseDir, char *assetsPath)
         pre_fakepercent.store(5);
 
 	/* Create save directory */
-	strcpy_safe(saveDir, output);
-	strcat(saveDir, "saves");
+	strcpy(saveDir, "saves");
 	strcat(saveDir, PHYSFS_getDirSeparator());
 	PHYSFS_mkdir(saveDir);
-	printf("Save directory: %s\n", saveDir);
+	printf("Save directory: %s%s\n", output, saveDir);
 
         pre_fakepercent.store(10);
 
 	/* Create level directory */
-	strcpy_safe(levelDir, output);
-	strcat(levelDir, "levels");
+	strcpy(levelDir, "levels");
 	strcat(levelDir, PHYSFS_getDirSeparator());
 	mkdirResult |= PHYSFS_mkdir(levelDir);
-	printf("Level directory: %s\n", levelDir);
+	printf("Level directory: %s%s\n", output, levelDir);
 
 	/* We didn't exist until now, migrate files! */
 	if (mkdirResult == 0)
