@@ -1504,6 +1504,7 @@ void Game::updatestate()
                         if(timetriallevel==3) NETWORK_unlockAchievement("vvvvvvtimetrial_station2_fixed");
                         if(timetriallevel==4) NETWORK_unlockAchievement("vvvvvvtimetrial_warp_fixed");
                         if(timetriallevel==5) NETWORK_unlockAchievement("vvvvvvtimetrial_final_fixed");
+                    }
                 }
                 if (deathcounts < bestlives[timetriallevel] || bestlives[timetriallevel]==-1)
                 {
