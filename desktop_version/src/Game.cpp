@@ -3331,7 +3331,7 @@ void Game::updatestate()
             {
                 //flip mode complete
                 NETWORK_unlockAchievement("vvvvvvgamecompleteflip");
-                unlock[19] = true;
+                unlocknum(19);
             }
 
             if (bestgamedeaths == -1)
@@ -3366,7 +3366,7 @@ void Game::updatestate()
             if (nodeathmode)
             {
                 NETWORK_unlockAchievement("vvvvvvmaster"); //bloody hell
-                unlock[20] = true;
+                unlocknum(20);
                 state = 3520;
                 statedelay = 0;
             }
