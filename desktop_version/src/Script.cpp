@@ -1981,13 +1981,17 @@ try {
 				if (words[7] == "") words[7] = "0";
 				if (words[8] == "") words[8] = "320";
 				if (words[9] == "") words[9] = "240";
-				auto k = obj.createentity(ss_toi(words[1]), ss_toi(words[2]), ss_toi(words[3]),
-					ss_toi(words[4]), ss_toi(words[5]),
-					ss_toi(words[6]), ss_toi(words[7]), ss_toi(words[8]), ss_toi(words[9]));
-				words[6] = "";
-				words[7] = "";
-				words[8] = "";
-				words[9] = "";
+				int k = obj.createentity(
+					ss_toi(words[1]),
+					ss_toi(words[2]),
+					ss_toi(words[3]),
+					ss_toi(words[4]),
+					ss_toi(words[5]),
+					ss_toi(words[6]),
+					ss_toi(words[7]),
+					ss_toi(words[8]),
+					ss_toi(words[9])
+				);
 				if (words[10] != "") {
 					switch (ss_toi(words[10])) {
 						case 0: obj.entities[k].setenemyroom(4 + 100, 0 + 100); break;
@@ -2023,6 +2027,38 @@ try {
 						case 27: obj.entities[k].setenemyroom(13+100, 7+100); break;  // bus
 						default: obj.entities[k].setenemyroom(4 + 100, 0 + 100); break;
 					}
+				}
+			}
+			else if (words[0] == "createcrewman")
+			{
+				if (words[3] == "cyan")
+				{
+					r=0;
+				}
+				else if (words[3] == "red")
+				{
+					r=15;
+				}
+				else if (words[3] == "green")
+				{
+					r=13;
+				}
+				else if (words[3] == "yellow")
+				{
+					r=14;
+				}
+				else if (words[3] == "blue")
+				{
+					r=16;
+				}
+				else if (words[3] == "purple")
+				{
+					r=20;
+				}
+				else if (words[3] == "gray")
+				{
+					r=19;
+>>>>>>> ee610238b59aa57955b6923f9d31245182583ca4
 				}
 				setvar("return", std::to_string(k));
 			} else if (words[0] == "fatal_left") {
