@@ -5840,20 +5840,20 @@ void editorinput()
             if (!ed.textcount)
                 key.disabletextentry();
 
-            std::vector<std::string> coords;
             std::string filename = ed.filename+".vvvvvv";
             switch (ed.textmod) {
-            case TEXT_GOTOROOM:
-                coords = split(key.keybuffer, ',');
-                if (coords.size() == 2) {
-                    ed.levx = (atoi(coords[0].c_str()) - 1) % ed.mapwidth;
-                    if (ed.levx < 0)
-                        ed.levx = 0;
-                    ed.levy = (atoi(coords[1].c_str()) - 1) % ed.mapheight;
-                    if (ed.levy < 0)
-                        ed.levy = 0;
+            case TEXT_GOTOROOM: {
+                std::vector<std::string> coords = split(key.keybuffer, ',');
+                if (coords.size() != 2) {
+                    ed.note = "[ ERROR: Invalid format ]";
+                    ed.notedelay = 45;
+                    break;
                 }
+                ed.levx = clamp(atoi(coords[0].c_str()) - 1, 0, ed.mapwidth - 1);
+                ed.levy = clamp(atoi(coords[1].c_str()) - 1, 0, ed.mapheight - 1);
+                graphics.backgrounddrawn = false;
                 break;
+            }
             case TEXT_LOAD:
                 if (ed.load(filename))
                     // don't use filename, it has the full path
@@ -6528,8 +6528,7 @@ void editorinput()
             }
             if (key.keymap[SDLK_g]) {
                 ed.keydelay = 6;
-                ed.getlin(TEXT_GOTOROOM, "Enter room coordinates (x,y):",
-                          NULL);
+                ed.getlin(TEXT_GOTOROOM, "Enter room coordinates x,y:", NULL);
                 game.mapheld=true;
             }
             if (key.keymap[SDLK_a]) {
