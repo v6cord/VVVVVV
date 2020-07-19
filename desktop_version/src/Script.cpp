@@ -256,9 +256,16 @@ void scriptclass::tokenize(std::string t) {
 		} else {
 			tempword += currentletter;
 		}
+		if (j >= (int) SDL_arraysize(words))
+		{
+			break;
+		}
 	}
 
-	words[j] = tempword;
+	if (j < (int) SDL_arraysize(words))
+	{
+		words[j] = tempword;
+	}
 }
 
 template<class T>
