@@ -36,7 +36,8 @@ struct customtrialrecord {
 
 struct MenuOption
 {
-    std::string text;
+    char text[161]; // 40 chars (160 bytes) covers the entire screen, + 1 more for null terminator
+    // WARNING: should match Game::menutextbytes below
     bool active;
 };
 
@@ -266,12 +267,13 @@ public:
     int current_credits_list_index = 0;
     int menuxoff, menuyoff = 0;
     int menuspacing = 0;
+    static const int menutextbytes = 161; // this is just sizeof(MenuOption::text), but doing that is non-standard
     std::vector<MenuStackFrame> menustack;
 
-    void inline option(std::string text, bool active = true)
+    void inline option(const char* text, bool active = true)
     {
         MenuOption menuoption;
-        menuoption.text = text;
+        SDL_strlcpy(menuoption.text, text, sizeof(menuoption.text));
         menuoption.active = active;
         menuoptions.push_back(menuoption);
     }

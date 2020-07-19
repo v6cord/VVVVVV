@@ -314,7 +314,7 @@ void menuactionpress()
             for (int i = 0; i < (int)ed.customtrials.size(); i++) {
                 std::string sl = ed.customtrials[i].name;
                 std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);
-                game.option(sl);
+                game.option(sl.c_str());
             }
             if (ed.customtrials.size() > 0) {
                 game.option("return to menu");
