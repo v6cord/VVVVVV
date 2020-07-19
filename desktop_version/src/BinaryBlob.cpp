@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <SDL.h>
 
 #ifdef __MINGW32__
 #define PRINTF_LL "%I64d"
@@ -18,16 +18,7 @@
 binaryBlob::binaryBlob()
 {
 	numberofHeaders = 0;
-	for (int i = 0; i < 128; i += 1)
-	{
-		m_headers[i].valid = false;
-
-		for (int j = 0; j < 48; j += 1)
-		{
-			m_headers[i].name[j] = '\0';
-		}
-	}
-	::memset(m_headers, 0, 128 * sizeof(resourceheader));
+	SDL_memset(m_headers, 0, sizeof(m_headers));
 }
 
 #ifdef VVV_COMPILEMUSIC
@@ -71,7 +62,7 @@ void binaryBlob::writeBinaryBlob(const char* _name)
 	FILE *file = fopen(_name, "wb");
 	if (file != NULL)
 	{
-		fwrite((char*) &m_headers, 1, sizeof(resourceheader) * 128, file);
+		fwrite((char*) &m_headers, 1, sizeof(m_headers), file);
 
 		for (int i = 0; i < numberofHeaders; i += 1)
 		{
@@ -100,11 +91,11 @@ bool binaryBlob::unPackBinary(const char* name)
 
 	size = PHYSFS_fileLength(handle);
 
-	PHYSFS_readBytes(handle, &m_headers, sizeof(resourceheader) * 128);
+	PHYSFS_readBytes(handle, &m_headers, sizeof(m_headers));
 
-	int offset = 0 + (sizeof(resourceheader) * 128);
+	int offset = 0 + (sizeof(m_headers));
 
-	for (int i = 0; i < 128; i += 1)
+	for (size_t i = 0; i < SDL_arraysize(m_headers); i += 1)
 	{
 		/* Name can be stupid, just needs to be terminated */
 		m_headers[i].name[47] = '\0';
@@ -137,7 +128,7 @@ bool binaryBlob::unPackBinary(const char* name)
 
 	printf("The complete reloaded file size: " PRINTF_LL "\n", size);
 
-	for (int i = 0; i < 128; i += 1)
+	for (size_t i = 0; i < SDL_arraysize(m_headers); i += 1)
 	{
 		if (m_headers[i].valid == false)
 		{
@@ -150,9 +141,24 @@ bool binaryBlob::unPackBinary(const char* name)
 	return true;
 }
 
+// FIXME: Apply the commit named "Don't leak binaryBlob"!
+/*
+void binaryBlob::clear()
+{
+	for (size_t i = 0; i < SDL_arraysize(m_headers); i += 1)
+	{
+		if (m_headers[i].valid)
+		{
+			free(m_memblocks[i]);
+			m_headers[i].valid = false;
+		}
+	}
+}
+*/
+
 int binaryBlob::getIndex(const char* _name)
 {
-	for (int i = 0; i < 128; i += 1)
+	for (size_t i = 0; i < SDL_arraysize(m_headers); i += 1)
 	{
 		if (strcmp(_name, m_headers[i].name) == 0)
 		{
@@ -175,7 +181,7 @@ char* binaryBlob::getAddress(int _index)
 std::vector<int> binaryBlob::getExtra()
 {
 	std::vector<int> result;
-	for (int i = 0; i < 128; i += 1)
+	for (size_t i = 0; i < SDL_arraysize(m_headers); i += 1)
 	{
 		if (m_headers[i].valid
 #define FOREACH_TRACK(track_name) && strcmp(m_headers[i].name, track_name) != 0
