@@ -5338,7 +5338,7 @@ void Game::loadquick()
                 if (values.size() <= 20 * 20) {
                     for (int y = 0; y < ed.maxheight; y++)
                         for (int x = 0; x < ed.maxwidth; x++)
-                            if (x * y <= 20 * 20)
+                            if (x < 20 && y < 20)
                                 map.explored[x + y*ed.maxwidth] = atoi(values[x + y*20].c_str());
                             else
                                 map.explored[x + y*ed.maxwidth] = 0;
@@ -5626,7 +5626,7 @@ void Game::customloadquick(std::string savfile)
                 if (values.size() <= 20 * 20) {
                     for (int y = 0; y < ed.maxheight; y++)
                         for (int x = 0; x < ed.maxwidth; x++)
-                            if (x * y <= 20 * 20)
+                            if (x < 20 && y < 20)
                                 map.explored[x + y*ed.maxwidth] = atoi(values[x + y*20].c_str());
                             else
                                 map.explored[x + y*ed.maxwidth] = 0;
@@ -6864,7 +6864,7 @@ void Game::loadtele()
                 if (values.size() <= 20 * 20) {
                     for (int y = 0; y < ed.maxheight; y++)
                         for (int x = 0; x < ed.maxwidth; x++)
-                            if (x * y <= 20 * 20)
+                            if (x < 20 && y < 20)
                                 map.explored[x + y*ed.maxwidth] = atoi(values[x + y*20].c_str());
                             else
                                 map.explored[x + y*ed.maxwidth] = 0;
