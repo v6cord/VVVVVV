@@ -149,7 +149,7 @@ std::string scriptclass::processvars(std::string t) {
 	std::string tempvar = "";
 	bool readingvar = false;
 	for (size_t i = 0; i < t.length(); i++) {
-		currentletter = t.substr(i, 1);
+		std::string currentletter = t.substr(i, 1);
 		if (readingvar) {
 			if (currentletter == "%") {
 				readingvar = false;
@@ -199,7 +199,8 @@ void scriptclass::updatevars() {
 
 void scriptclass::tokenize(std::string t) {
 	j = 0;
-	tempword = "";
+	std::string tempword;
+	std::string currentletter;
 	words.clear();
 
 	std::string varname = "";

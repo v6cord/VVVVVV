@@ -120,8 +120,6 @@ public:
     bool running, dontrunnextframe = false;
     bool nointerrupt = false;
     bool passive = false;
-    std::string tempword;
-    std::string currentletter;
 
     //Textbox stuff
     int textx = 0;
