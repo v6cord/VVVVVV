@@ -68,9 +68,6 @@ public:
     bool freezeglow = false;
     int slowsine = 0;
     int glowdir = 0;
-    int globaltemp = 0;
-    int temp = 0;
-    int temp2 = 0;
     std::vector<int> splitseconds;
 };
 
