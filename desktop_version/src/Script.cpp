@@ -2644,10 +2644,9 @@ try {
 				for (i = 0; i < 100; i++) {
 					obj.collect[i] = false;
 					obj.customcollect[i] = false;
+					obj.coincollect[i] = false;
 				}
 
-				obj.coincollect.clear();
-				obj.coincollect.resize(100);
 				game.deathcounts = 0;
 				game.advancetext = false;
 				game.hascontrol = true;
@@ -4499,8 +4498,7 @@ void scriptclass::hardreset() {
 	SDL_memset(obj.customcollect, false, sizeof(obj.customcollect));
 	i = 100; //previously a for-loop iterating over collect/customcollect set this to 100
 
-	obj.coincollect.clear();
-	obj.coincollect.resize(100);
+	SDL_memset(obj.coincollect, false, sizeof(obj.coincollect));
 	game.nocoincounter = false;
 
 	int theplayer = obj.getplayer();

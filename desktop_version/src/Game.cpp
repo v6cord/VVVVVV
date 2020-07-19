@@ -5356,19 +5356,7 @@ void Game::loadquick()
 
         LOAD_ARRAY_RENAME(collect, obj.collect)
 
-        if (pKey == "coincollect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.coincollect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.coincollect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(coincollect, obj.coincollect)
 
         if (pKey == "finalmode")
         {
@@ -5661,19 +5649,7 @@ void Game::customloadquick(std::string savfile)
 
         LOAD_ARRAY_RENAME(collect, obj.collect)
 
-        if (pKey == "coincollect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.coincollect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.coincollect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(coincollect, obj.coincollect)
 
         LOAD_ARRAY_RENAME(customcollect, obj.customcollect)
 
@@ -6180,7 +6156,7 @@ void Game::savetele()
     msgs->LinkEndChild( msg );
 
     std::string coincollect;
-    for(size_t i = 0; i < obj.coincollect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.coincollect); i++ )
     {
         coincollect += help.String((int) obj.coincollect[i]) + ",";
     }
@@ -6389,7 +6365,7 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
     std::string coincollect;
-    for(size_t i = 0; i < obj.coincollect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.coincollect); i++ )
     {
         coincollect += help.String((int) obj.coincollect[i]) + ",";
     }
@@ -6600,7 +6576,7 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
     std::string coincollect;
-    for(size_t i = 0; i < obj.coincollect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.coincollect); i++ )
     {
         coincollect += help.String((int) obj.coincollect[i]) + ",";
     }
@@ -6928,19 +6904,7 @@ void Game::loadtele()
 
         LOAD_ARRAY_RENAME(collect, obj.collect)
 
-        if (pKey == "coincollect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.coincollect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.coincollect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(coincollect, obj.coincollect)
 
         if (pKey == "finalmode")
         {

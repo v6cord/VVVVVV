@@ -191,7 +191,7 @@ public:
     std::vector<blockclass> blocks;
     bool flags[1000];
     bool collect[100];
-    std::vector<bool> coincollect;
+    bool coincollect[100];
     bool customcollect[100];
 
     bool skipblocks, skipdirblocks = false;

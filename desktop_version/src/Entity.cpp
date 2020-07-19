@@ -71,7 +71,7 @@ void entityclass::init()
 
     resetallflags();
     SDL_memset(collect, false, sizeof(collect));
-    coincollect.resize(100);
+    SDL_memset(coincollect, false, sizeof(coincollect));
     SDL_memset(customcollect, false, sizeof(customcollect));
 }
 
@@ -2660,7 +2660,7 @@ bool entityclass::updateentities( int i )
                 if (entities[i].behave == 3) game.coins += 50;
                 if (entities[i].behave == 4) game.coins += 100;
                 music.playef(4);
-                coincollect[entities[i].para] = true;
+                coincollect[(int) entities[i].para] = true;
 
                 return removeentity(i);
             }
