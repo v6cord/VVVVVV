@@ -837,9 +837,10 @@ try {
 					position--;
 				}
 			} else if (words[0] == "customifflag") {
-				int flag = ss_toi(words[1]);
-				if (flag >= 0 && flag < (int) obj.flags.size() && obj.flags[flag]) {
-					call("custom_" + words[2]);
+				size_t flag = ss_toi(words[1]);
+				if (flag < SDL_arraysize(obj.flags) && obj.flags[flag])
+				{
+					load("custom_"+words[2]);
 					position--;
 				}
 			}
@@ -2456,14 +2457,15 @@ try {
 					position--;
 				}
 			} else if (words[0] == "ifflag") {
-				int flag = ss_toi(words[1]);
-				if (flag >= 0 && flag < (int) obj.flags.size() && obj.flags[flag]) {
-					call(words[2]);
+				size_t flag = ss_toi(words[1]);
+				if (flag < SDL_arraysize(obj.flags) && obj.flags[flag])
+				{
+					load(words[2]);
 					position--;
 				}
 			} else if (words[0] == "ifnotflag") {
-				int flag = ss_toi(words[1]);
-				if (flag >= 0 && flag < (int) obj.flags.size() && !obj.flags[flag]) {
+				size_t flag = ss_toi(words[1]);
+				if (flag < SDL_arraysize(obj.flags) && !obj.flags[flag]) {
 					call("custom_" + words[2]);
 					continue;
 				}
@@ -4487,8 +4489,7 @@ void scriptclass::hardreset() {
 	obj.trophytype = 0;
 	obj.altstates = 0;
 
-	obj.flags.clear();
-	obj.flags.resize(1000);
+	obj.resetallflags();
 
 	for (i = 0; i < (int) SDL_arraysize(obj.customcrewmoods); i++){
 		obj.customcrewmoods[i]=true;

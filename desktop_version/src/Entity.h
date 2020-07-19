@@ -189,7 +189,7 @@ public:
 
 
     std::vector<blockclass> blocks;
-    std::vector<bool> flags;
+    bool flags[1000];
     std::vector<bool> collect;
     std::vector<bool> coincollect;
     std::vector<bool> customcollect;

@@ -5350,19 +5350,7 @@ void Game::loadquick()
             }
         }
 
-        if (pKey == "flags")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.flags.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.flags.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(flags, obj.flags)
 
         LOAD_ARRAY(crewstats)
 
@@ -5677,19 +5665,7 @@ void Game::customloadquick(std::string savfile)
             }
         }
 
-        if (pKey == "flags")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.flags.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.flags.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(flags, obj.flags)
 
         LOAD_ARRAY_RENAME(moods, obj.customcrewmoods)
 
@@ -6213,7 +6189,7 @@ void Game::savetele()
     msgs->LinkEndChild( msg );
 
     std::string flags;
-    for(size_t i = 0; i < obj.flags.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.flags); i++ )
     {
         flags += help.String((int) obj.flags[i]) + ",";
     }
@@ -6422,7 +6398,7 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
     std::string flags;
-    for(size_t i = 0; i < obj.flags.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.flags); i++ )
     {
         flags += help.String((int) obj.flags[i]) + ",";
     }
@@ -6624,7 +6600,7 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
     std::string flags;
-    for(size_t i = 0; i < obj.flags.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.flags); i++ )
     {
         flags += help.String((int) obj.flags[i]) + ",";
     }
@@ -6982,19 +6958,7 @@ void Game::loadtele()
             }
         }
 
-        if (pKey == "flags")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.flags.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.flags.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(flags, obj.flags)
 
         LOAD_ARRAY(crewstats)
 

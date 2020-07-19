@@ -69,7 +69,7 @@ void entityclass::init()
 
     SDL_memset(customcrewmoods, true, sizeof(customcrewmoods));
 
-    flags.resize(1000);
+    resetallflags();
     collect.resize(100);
     coincollect.clear();
     coincollect.resize(100);
@@ -78,8 +78,7 @@ void entityclass::init()
 
 void entityclass::resetallflags()
 {
-    flags.clear();
-    flags.resize(1000);
+    SDL_memset(flags, false, sizeof(flags));
 }
 
 int entityclass::swncolour( int t )
