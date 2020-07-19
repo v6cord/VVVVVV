@@ -2644,7 +2644,6 @@ try {
 				for (i = 0; i < 100; i++) {
 					obj.collect[i] = false;
 					obj.customcollect[i] = false;
-					obj.coincollect[i] = false;
 				}
 
 				game.deathcounts = 0;

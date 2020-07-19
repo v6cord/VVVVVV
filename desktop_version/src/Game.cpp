@@ -5356,8 +5356,6 @@ void Game::loadquick()
 
         LOAD_ARRAY_RENAME(collect, obj.collect)
 
-        LOAD_ARRAY_RENAME(coincollect, obj.coincollect)
-
         if (pKey == "finalmode")
         {
             map.finalmode = atoi(pText);
@@ -6155,15 +6153,6 @@ void Game::savetele()
     msg->LinkEndChild( doc.NewText( collect.c_str() ));
     msgs->LinkEndChild( msg );
 
-    std::string coincollect;
-    for(size_t i = 0; i < SDL_arraysize(obj.coincollect); i++ )
-    {
-        coincollect += help.String((int) obj.coincollect[i]) + ",";
-    }
-    msg = doc.NewElement( "coincollect" );
-    msg->LinkEndChild( doc.NewText( coincollect.c_str() ));
-    msgs->LinkEndChild( msg );
-
     //Position
 
     msg = doc.NewElement( "finalx" );
@@ -6362,15 +6351,6 @@ void Game::savequick()
     }
     msg = doc.NewElement( "collect" );
     msg->LinkEndChild( doc.NewText( collect.c_str() ));
-    msgs->LinkEndChild( msg );
-
-    std::string coincollect;
-    for(size_t i = 0; i < SDL_arraysize(obj.coincollect); i++ )
-    {
-        coincollect += help.String((int) obj.coincollect[i]) + ",";
-    }
-    msg = doc.NewElement( "coincollect" );
-    msg->LinkEndChild( doc.NewText( coincollect.c_str() ));
     msgs->LinkEndChild( msg );
 
     //Position
@@ -6903,8 +6883,6 @@ void Game::loadtele()
         LOAD_ARRAY(crewstats)
 
         LOAD_ARRAY_RENAME(collect, obj.collect)
-
-        LOAD_ARRAY_RENAME(coincollect, obj.coincollect)
 
         if (pKey == "finalmode")
         {
