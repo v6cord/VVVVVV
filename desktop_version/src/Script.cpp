@@ -67,7 +67,7 @@ packToken cparse_rand(TokenMap scope) {
 	return result;
 }
 
-std::string scriptclass::evalvar(std::string expr) {
+std::string scriptclass::evalvar(const std::string& expr) {
 	static bool CPARSE_INITIALIZED = false;
 	if (!CPARSE_INITIALIZED) {
 		cparse_startup();
@@ -97,7 +97,7 @@ std::string scriptclass::evalvar(std::string expr) {
 	}
 }
 
-int scriptclass::getimage(std::string n) {
+int scriptclass::getimage(std::string_view n) {
 	for (std::size_t i = 0; i < game.script_images.size(); i++) {
 		if (game.script_image_names[i] == n) {
 			return i;
@@ -129,7 +129,7 @@ static std::string get_specialvar(const T&& ref, int offset) {
 	}
 }
 
-void scriptclass::setvar(std::string n, std::string c) {
+void scriptclass::setvar(const std::string& n, std::string c) {
 	if (c == "true") c = "1";
 	if (c == "false") c = "0";
 	variables[n] = c;
@@ -143,7 +143,7 @@ void scriptclass::setvar(std::string n, std::string c) {
 #undef X
 }
 
-std::string scriptclass::processvars(std::string t) {
+std::string scriptclass::processvars(std::string_view t) {
 	std::string tempstring = "";
 	std::string tempvar = "";
 	bool readingvar = false;
@@ -196,7 +196,8 @@ void scriptclass::updatevars() {
 #undef X
 }
 
-void scriptclass::tokenize(std::string t) {
+void scriptclass::tokenize(std::string t)
+{
 	j = 0;
 	std::string tempword;
 	char currentletter;

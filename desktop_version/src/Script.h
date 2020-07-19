@@ -70,27 +70,27 @@ public:
 
     scriptclass();
 
-    void load(std::string name);
+    void load(const std::string& name);
     void call(std::string t);
     void loadother(const char* t);
     void loadcustom(std::string t);
 
-    void inline add(std::string t)
+    void inline add(const std::string& t)
     {
         commands.push_back(t);
     }
 
     void clearcustom();
 
-    int getimage(std::string n);
+    int getimage(std::string_view n);
 
-    void setvar(std::string n, std::string c);
+    void setvar(const std::string& n, std::string c);
 
     void updatevars();
 
-    std::string evalvar(std::string t);
+    std::string evalvar(const std::string& t);
 
-    std::string processvars(std::string t);
+    std::string processvars(std::string_view t);
 
     void tokenize(std::string t);
 
