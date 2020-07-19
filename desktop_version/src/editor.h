@@ -205,7 +205,6 @@ public:
     void getDirectoryData();
     bool getLevelMetaData(std::string& filename, LevelMetaData& _data );
 
-    void saveconvertor();
     void reset();
     void getlin(const enum textmode mode, const std::string& prompt, std::string *ptr);
   std::vector<int> loadlevel(int rxi, int ryi, int altstate);
@@ -296,13 +295,15 @@ public:
     int getwarpbackground(int rx, int ry);
 
   std::vector<std::string> getLevelDirFileNames( );
-  std::vector <int> contents;
-  std::vector <int> vmult;
+  static const int maxwidth = 100, maxheight = 100; //Special; the physical max the engine allows
+  static const int numrooms = maxwidth * maxheight;
+  int contents[40 * 30 * numrooms];
+  int vmult[30 * maxheight];
     int numtrinkets();
     int numcrewmates();
     int numcoins();
-    edlevelclass level[100 * 100];
-    int kludgewarpdir[100 * 100];
+  edlevelclass level[numrooms]; //Maxwidth*maxheight
+  int kludgewarpdir[numrooms]; //Also maxwidth*maxheight
 
     int notedelay = 0;
     int oldnotedelay = 0;
@@ -376,10 +377,6 @@ public:
     int levmusic = 0;
     int mapwidth = 0;
     int mapheight = 0; //Actual width and height of stage
-
-    //Special; the physical max the engine allows
-    static const int maxwidth = 100;
-    static const int maxheight = 100;
 
     int version = 0;
     int vceversion = 0;
