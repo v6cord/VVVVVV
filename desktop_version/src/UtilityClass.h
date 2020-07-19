@@ -68,7 +68,7 @@ public:
     bool freezeglow = false;
     int slowsine = 0;
     int glowdir = 0;
-    std::vector<int> splitseconds;
+    int splitseconds[30];
 };
 
 extern UtilityClass help;
