@@ -329,8 +329,9 @@ public:
 
     std::vector<int> quick_crewstats;
 
-    std::vector<int> unlock;
-    std::vector<int> unlocknotify;
+    static const int numunlock = 25;
+    bool unlock[numunlock];
+    bool unlocknotify[numunlock];
     bool anything_unlocked();
     int stat_trinkets = 0;
     bool fullscreen = false;
