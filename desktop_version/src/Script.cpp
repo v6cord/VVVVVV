@@ -20,7 +20,6 @@
 
 scriptclass::scriptclass() {
 	// Init
-	words.resize(40);
 	txt.resize(40);
 
 	position = 0;
@@ -201,7 +200,8 @@ void scriptclass::tokenize(std::string t) {
 	j = 0;
 	std::string tempword;
 	char currentletter;
-	words.clear();
+	for (auto& word : words)
+		word.clear();
 
 	std::string varname = "";
 	std::string op = "";
@@ -246,9 +246,10 @@ void scriptclass::tokenize(std::string t) {
 		currentletter = t[i];
 		if (currentletter == '(' || currentletter == ')' ||
 			currentletter == ',') {
-			words.push_back(tempword);
+			words[j] = tempword;
 			std::transform(words[j].begin(), words[j].end(), words[j].begin(),
 						   ::tolower);
+			j++;
 			tempword = "";
 		} else if (currentletter == ' ') {
 			// don't do anything - i.e. strip out spaces.
@@ -257,8 +258,7 @@ void scriptclass::tokenize(std::string t) {
 		}
 	}
 
-	words.push_back(tempword);
-	words.push_back("");
+	words[j] = tempword;
 }
 
 template<class T>
@@ -1013,7 +1013,7 @@ try {
 			}
 			if (words[0] == "randchoose") {
 				std::vector<std::string> options;
-				for (size_t ti = 2; ti < words.size(); ti++) {
+				for (size_t ti = 2; ti < SDL_arraysize(words); ti++) {
 					if (words[ti].empty())
 						break;
 
