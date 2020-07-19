@@ -540,7 +540,7 @@ void mapclass::changefinalcol(int t)
 	//change the map to colour t - for the game's final stretch.
 	//First up, the tiles. This is just a setting:
 	final_mapcol = t;
-	temp = 6 - t;
+	int temp = 6 - t;
 	//Next, entities
 	for (size_t i = 0; i < obj.entities.size(); i++)
 	{
@@ -1421,7 +1421,7 @@ void mapclass::gotoroom(int rx, int ry)
 	//Leaving the Ship
 	if (game.roomx == 104 && game.roomy == 112) music.niceplay(4);
 	}
-	temp = rx + (ry * 100);
+	int temp = rx + (ry * 100);
 	loadlevel(game.roomx, game.roomy);
 
 
@@ -2249,8 +2249,8 @@ void mapclass::loadlevel(int rx, int ry)
 		{
 			int thetile = towermode && minitowermode ? 12 : 1;
 			//put a block underneath
-			temp = obj.entities[i].xp / 8.0f;
-			temp2 = obj.entities[i].yp / 8.0f;
+			int temp = obj.entities[i].xp / 8.0f;
+			int temp2 = obj.entities[i].yp / 8.0f;
 			settile(temp, temp2, thetile);
 			settile(temp+1, temp2, thetile);
 			settile(temp+2, temp2, thetile);

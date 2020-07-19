@@ -105,8 +105,6 @@ public:
     std::vector <int> explored;
     std::vector <int> vmult;
 
-    int temp = 0;
-    int temp2 = 0;
     int background = 0;
     int rcol = 0;
     int tileset = 0;
