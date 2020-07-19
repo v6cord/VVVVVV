@@ -889,7 +889,7 @@ try {
 				// replacetiles(tile 1,tile 2)
 				int tile1 = ss_toi(words[1]);
 				int tile2 = ss_toi(words[2]);
-				std::vector<int>& contents = map.contents;
+				auto& contents = map.contents;
 				for (int i = 0; i < 1200; i++) {
 					int x = i % 40;
 					int y = i / 40;

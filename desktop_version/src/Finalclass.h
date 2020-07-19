@@ -5,13 +5,11 @@
 #include "Entity.h"
 
 #include <string>
-#include <vector>
-#include "Game.h"
 
 class finalclass
 {
 public:
-    std::vector<int> loadlevel(int rx, int ry);
+    const int* loadlevel(int rx, int ry);
 
     std::string roomname;
     int coin, rcol = 0;
