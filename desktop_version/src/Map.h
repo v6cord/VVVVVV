@@ -100,7 +100,7 @@ public:
 
     int roomdeaths[ed.maxwidth * ed.maxheight];
     int roomdeathsfinal[20 * 20];
-    std::vector <int> areamap;
+    static const int areamap[20 * 20];
     std::vector <int> contents;
     bool explored[ed.maxwidth * ed.maxheight];
     std::vector <int> vmult;
