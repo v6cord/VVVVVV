@@ -118,8 +118,6 @@ editorclass::editorclass()
 
     altstates.resize(500);
     towers.resize(400);
-    level.resize(maxwidth * maxheight);
-    kludgewarpdir.resize(maxwidth * maxheight);
 
     entspeed = 0;
 

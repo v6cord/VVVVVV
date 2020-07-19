@@ -478,7 +478,7 @@ try {
 				int temprx = ss_toi(words[1]) - 1;
 				int tempry = ss_toi(words[2]) - 1;
 				int curlevel = temprx + (ed.maxwidth * (tempry));
-				bool inbounds = curlevel >= 0 && curlevel < (int) ed.level.size();
+				bool inbounds = curlevel >= 0 && curlevel < (int) SDL_arraysize(ed.level);
 				if (inbounds) {
 					ed.level[curlevel].warpdir = ss_toi(words[3]);
 				}
@@ -522,7 +522,7 @@ try {
 			}
 			if (words[0] == "ifwarp") {
 				int room = ss_toi(words[1]) - 1 + (ed.maxwidth * (ss_toi(words[2]) - 1));
-				if (room >= 0 && room < (int) ed.level.size() && ed.level[room].warpdir == ss_toi(words[3])) {
+				if (room >= 0 && room < (int) SDL_arraysize(ed.level) && ed.level[room].warpdir == ss_toi(words[3])) {
 					call("custom_" + words[4]);
 					position--;
 				}
