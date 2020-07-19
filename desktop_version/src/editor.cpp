@@ -1831,8 +1831,6 @@ void editorclass::saveconvertor()
     // Unused, no need to add altstates support to this function
 
     //In the case of resizing breaking a level, this function can fix it
-    maxwidth=20;
-    maxheight=20;
     int oldwidth=10, oldheight=10;
 
     std::vector <int> tempcontents;

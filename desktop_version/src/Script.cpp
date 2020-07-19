@@ -2441,9 +2441,10 @@ try {
 					graphics.resumegamemode = true;
 				}
 			} else if (words[0] == "ifexplored") {
-				int room = ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]));
-				if (room >= 0 && room < (int) map.explored.size() && map.explored[room] == 1) {
-					call(words[3]);
+				int room = ss_toi(words[1]) + (20 * ss_toi(words[2]));
+				if (INBOUNDS_ARR(room, map.explored) && map.explored[room] == 1)
+				{
+					load(words[3]);
 					position--;
 				}
 			} else if (words[0] == "iflast") {
@@ -2535,14 +2536,16 @@ try {
 					continue;
 				}
 			} else if (words[0] == "hidecoordinates") {
-				int room = ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]));
-				if (room >= 0 && room < (int) map.explored.size()) {
-					map.explored[room] = 0;
+				int room = ss_toi(words[1]) + (20 * ss_toi(words[2]));
+				if (INBOUNDS_ARR(room, map.explored))
+				{
+					map.explored[room] = false;
 				}
 			} else if (words[0] == "showcoordinates") {
-				int room = ss_toi(words[1]) + (ed.maxwidth * ss_toi(words[2]));
-				if (room >= 0 && room < (int) map.explored.size()) {
-					map.explored[room] = 1;
+				int room = ss_toi(words[1]) + (20 * ss_toi(words[2]));
+				if (INBOUNDS_ARR(room, map.explored))
+				{
+					map.explored[room] = true;
 				}
 			} else if (words[0] == "hideship") {
 				map.hideship();
@@ -4472,12 +4475,9 @@ void scriptclass::hardreset() {
 	map.customshowmm = true;
 	map.dimension = -1;
 
-	map.roomdeaths.clear();
-	map.roomdeaths.resize(ed.maxwidth * ed.maxheight);
-	map.roomdeathsfinal.clear();
-	map.roomdeathsfinal.resize(20 * 20);
-	map.explored.clear();
-	map.explored.resize(ed.maxwidth * ed.maxheight);
+	SDL_memset(map.roomdeaths, 0, sizeof(map.roomdeaths));
+	SDL_memset(map.roomdeathsfinal, 0, sizeof(map.roomdeathsfinal));
+	map.resetmap();
 	//entityclass
 	obj.nearelephant = false;
 	obj.upsetmode = false;

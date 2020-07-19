@@ -5334,18 +5334,17 @@ void Game::loadquick()
             if(TextString.length()>1)
             {
                 std::vector<std::string> values = split(TextString,',');
-                map.explored.clear();
                 // Backwards compatibility with 20x20 explored status arrays
                 if (values.size() <= 20 * 20) {
                     for (int y = 0; y < ed.maxheight; y++)
                         for (int x = 0; x < ed.maxwidth; x++)
                             if (x * y <= 20 * 20)
-                                map.explored.push_back(atoi(values[x + y*20].c_str()));
+                                map.explored[x + y*ed.maxwidth] = atoi(values[x + y*20].c_str());
                             else
-                                map.explored.push_back(0);
+                                map.explored[x + y*ed.maxwidth] = 0;
                 } else {
                     for (size_t i = 0; i < values.size(); i++)
-                        map.explored.push_back(atoi(values[i].c_str()));
+                        map.explored[i] = atoi(values[i].c_str());
                 }
             }
         }
@@ -5623,18 +5622,17 @@ void Game::customloadquick(std::string savfile)
             if(TextString.length()>1)
             {
                 std::vector<std::string> values = split(TextString,',');
-                map.explored.clear();
                 // Backwards compatibility with 20x20 explored status arrays
                 if (values.size() <= 20 * 20) {
                     for (int y = 0; y < ed.maxheight; y++)
                         for (int x = 0; x < ed.maxwidth; x++)
                             if (x * y <= 20 * 20)
-                                map.explored.push_back(atoi(values[x + y*20].c_str()));
+                                map.explored[x + y*ed.maxwidth] = atoi(values[x + y*20].c_str());
                             else
-                                map.explored.push_back(0);
+                                map.explored[x + y*ed.maxwidth] = 0;
                 } else {
                     for (size_t i = 0; i < values.size(); i++)
-                        map.explored.push_back(atoi(values[i].c_str()));
+                        map.explored[i] = atoi(values[i].c_str());
                 }
             }
         }
@@ -6118,7 +6116,7 @@ void Game::savetele()
     //Flags, map and stats
 
     std::string mapExplored;
-    for(size_t i = 0; i < map.explored.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(map.explored); i++ )
     {
         mapExplored += help.String(map.explored[i]) + ",";
     }
@@ -6318,7 +6316,7 @@ void Game::savequick()
     //Flags, map and stats
 
     std::string mapExplored;
-    for(size_t i = 0; i < map.explored.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(map.explored); i++ )
     {
         mapExplored += help.String(map.explored[i]) + ",";
     }
@@ -6511,7 +6509,7 @@ void Game::customsavequick(std::string savfile)
     //Flags, map and stats
 
     std::string mapExplored;
-    for(size_t i = 0; i < map.explored.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(map.explored); i++ )
     {
         mapExplored += help.String(map.explored[i]) + ",";
     }
@@ -6862,18 +6860,17 @@ void Game::loadtele()
             if(TextString.length())
             {
                 std::vector<std::string> values = split(TextString,',');
-                map.explored.clear();
                 // Backwards compatibility with 20x20 explored status arrays
                 if (values.size() <= 20 * 20) {
                     for (int y = 0; y < ed.maxheight; y++)
                         for (int x = 0; x < ed.maxwidth; x++)
                             if (x * y <= 20 * 20)
-                                map.explored.push_back(atoi(values[x + y*20].c_str()));
+                                map.explored[x + y*ed.maxwidth] = atoi(values[x + y*20].c_str());
                             else
-                                map.explored.push_back(0);
+                                map.explored[x + y*ed.maxwidth] = 0;
                 } else {
                     for (size_t i = 0; i < values.size(); i++)
-                        map.explored.push_back(atoi(values[i].c_str()));
+                        map.explored[i] = atoi(values[i].c_str());
                 }
             }
         }

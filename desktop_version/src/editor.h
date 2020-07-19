@@ -378,8 +378,8 @@ public:
     int mapheight = 0; //Actual width and height of stage
 
     //Special; the physical max the engine allows
-    int maxwidth = 100;
-    int maxheight = 100;
+    static const int maxwidth = 100;
+    static const int maxheight = 100;
 
     int version = 0;
     int vceversion = 0;

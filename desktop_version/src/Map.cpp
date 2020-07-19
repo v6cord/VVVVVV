@@ -64,10 +64,9 @@ mapclass::mapclass()
 	//We create a blank map
 	contents.resize(40 * 30);
 
-	areamap.resize(20 * 20);
-	roomdeaths.resize(ed.maxwidth * ed.maxheight);
-	roomdeathsfinal.resize(20 * 20);
-	explored.resize(ed.maxwidth * ed.maxheight);
+	SDL_memset(roomdeaths, 0, sizeof(roomdeaths));
+	SDL_memset(roomdeathsfinal, 0, sizeof(roomdeathsfinal));
+	resetmap();
 
 	tileset = 0;
 	initmapdata();
@@ -144,8 +143,7 @@ void mapclass::settrinket(int x, int y)
 void mapclass::resetmap()
 {
 	//clear the explored area of the map
-	explored.clear();
-	explored.resize(ed.maxwidth * ed.maxheight);
+	SDL_memset(explored, 0, sizeof(explored));
 }
 
 void mapclass::resetnames()
@@ -1548,7 +1546,7 @@ void mapclass::loadlevel(int rx, int ry)
 	int t;
 	if (!finalmode)
 	{
-		explored[rx - 100 + ((ry - 100) * ed.maxwidth)] = 1;
+		explored[rx - 100 + ((ry - 100) * ed.maxwidth)] = true;
 		if (rx == 109 && !custommode)
 		{
 			exploretower();

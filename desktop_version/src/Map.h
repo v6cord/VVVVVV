@@ -98,11 +98,11 @@ public:
     void dimensionwraparound(int* rx, int* ry);
 
 
-    std::vector <int> roomdeaths;
-    std::vector <int> roomdeathsfinal;
+    int roomdeaths[ed.maxwidth * ed.maxheight];
+    int roomdeathsfinal[20 * 20];
     std::vector <int> areamap;
     std::vector <int> contents;
-    std::vector <int> explored;
+    bool explored[ed.maxwidth * ed.maxheight];
     std::vector <int> vmult;
 
     int background = 0;
