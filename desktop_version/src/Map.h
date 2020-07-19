@@ -153,7 +153,7 @@ public:
     int customzoom = 0;
     bool customshowmm = false;
 
-    std::vector<std::string> specialnames;
+    std::string specialnames[8];
     int glitchmode = 0;
     int glitchdelay = 0;
     std::string glitchname;
