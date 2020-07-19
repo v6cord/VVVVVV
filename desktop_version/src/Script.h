@@ -70,11 +70,10 @@ public:
 
     scriptclass();
 
-    void load(std::string t);
+    void load(std::string name);
     void call(std::string t);
-    void loadother(std::string t);
+    void loadother(const char* t);
     void loadcustom(std::string t);
-
 
     void inline add(std::string t)
     {
