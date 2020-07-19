@@ -237,7 +237,6 @@ public:
 
 	int m = 0;
 
-	std::vector <SDL_Surface*> backgrounds;
 	std::vector <SDL_Surface*> images;
 
 	std::vector <SDL_Surface*> tele;
@@ -248,9 +247,7 @@ public:
 	std::vector <SDL_Surface*> sprites;
 	std::vector <SDL_Surface*> flipsprites;
 	std::vector <SDL_Surface*> bfont;
-	std::vector <SDL_Surface*> bfontmask;
 	std::vector <SDL_Surface*> flipbfont;
-	std::vector <SDL_Surface*> flipbfontmask;
 	std::map <int, std::vector<SDL_Surface*>> customtiles;
 	std::map <int, std::vector<SDL_Surface*>> customsprites;
 
@@ -270,7 +267,6 @@ public:
 	SDL_Rect bfont_rect = {0};
 	SDL_Rect tiles_rect = {0};
 	SDL_Rect sprites_rect = {0};
-	SDL_Rect bfontmask_rect = {0};
 	SDL_Rect images_rect = {0};
 	SDL_Rect bg_rect = {0};
 	SDL_Rect line_rect = {0};

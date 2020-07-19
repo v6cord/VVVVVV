@@ -97,7 +97,6 @@ void GraphicsResources::init(void)
 	im_bfont =		LoadImage("graphics/font.png");
 	im_unifont =		LoadImage("graphics/unifont.png", true, false, true);
 	im_wideunifont =	LoadImage("graphics/wideunifont.png", true, false, true);
-	im_bfontmask =		LoadImage("graphics/fontmask.png");
 	im_teleporter =		LoadImage("graphics/teleporter.png");
 
 	im_image0 =		LoadImage("graphics/levelcomplete.png", false);
@@ -156,7 +155,6 @@ GraphicsResources::~GraphicsResources(void)
 	SDL_FreeSurface(im_bfont);
 	SDL_FreeSurface(im_unifont);
 	SDL_FreeSurface(im_wideunifont);
-	SDL_FreeSurface(im_bfontmask);
 	SDL_FreeSurface(im_teleporter);
 
 	SDL_FreeSurface(im_image0);

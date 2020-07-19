@@ -22,7 +22,6 @@ public:
     SDL_Surface* im_bfont;
     SDL_Surface* im_unifont;
     SDL_Surface* im_wideunifont;
-    SDL_Surface* im_bfontmask;
     SDL_Surface* im_teleporter;
     SDL_Surface* im_image0;
     SDL_Surface* im_image1;
