@@ -311,9 +311,6 @@ public:
     int creditposition = 0;
     int oldcreditposition = 0;
     int creditmaxposition = 0;
-    std::vector<const char*> superpatrons;
-    std::vector<const char*> patrons;
-    std::vector<const char*> githubfriends;
     bool insecretlab = false;
 
     bool inintermission = false;
