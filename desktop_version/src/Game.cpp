@@ -211,9 +211,9 @@ void Game::init(void)
     }
     customcol=0;
 
-    crewstats.resize(6);
-    tele_crewstats.resize(6);
-    quick_crewstats.resize(6);
+    SDL_memset(crewstats, false, sizeof(crewstats));
+    SDL_memset(tele_crewstats, false, sizeof(tele_crewstats));
+    SDL_memset(quick_crewstats, false, sizeof(quick_crewstats));
     SDL_memset(besttimes, -1, sizeof(besttimes));
     SDL_memset(bestframes, -1, sizeof(bestframes));
     SDL_memset(besttrinkets, -1, sizeof(besttrinkets));
@@ -4531,19 +4531,21 @@ void Game::unlocknum( int t )
     savestats();
 }
 
-#define LOAD_ARRAY(ARRAY_NAME) \
+#define LOAD_ARRAY_RENAME(ARRAY_NAME, DEST) \
     if (pKey == #ARRAY_NAME) \
     { \
         std::string TextString = pText; \
         if (TextString.length()) \
         { \
             std::vector<std::string> values = split(TextString, ','); \
-            for (size_t i = 0; i < SDL_min(SDL_arraysize(ARRAY_NAME), values.size()); i++) \
+            for (size_t i = 0; i < SDL_min(SDL_arraysize(DEST), values.size()); i++) \
             { \
-                ARRAY_NAME[i] = atoi(values[i].c_str()); \
+                DEST[i] = atoi(values[i].c_str()); \
             } \
         } \
     }
+
+#define LOAD_ARRAY(ARRAY_NAME) LOAD_ARRAY_RENAME(ARRAY_NAME, ARRAY_NAME)
 
 void Game::loadstats()
 {
@@ -5362,19 +5364,7 @@ void Game::loadquick()
             }
         }
 
-        if (pKey == "crewstats")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                crewstats.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    crewstats.push_back(atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY(crewstats)
 
         if (pKey == "collect")
         {
@@ -5701,32 +5691,9 @@ void Game::customloadquick(std::string savfile)
             }
         }
 
-        if (pKey == "moods")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                for(size_t i = 0; i < 6; i++)
-                {
-                    obj.customcrewmoods[i]=atoi(values[i].c_str());
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(moods, obj.customcrewmoods)
 
-        if (pKey == "crewstats")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                crewstats.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    crewstats.push_back(atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY(crewstats)
 
         if (pKey == "collect")
         {
@@ -6106,19 +6073,7 @@ void Game::loadsummary()
                 map.finalstretch = atoi(pText);
             }
 
-            if (pKey == "crewstats")
-            {
-                std::string TextString = (pText);
-                if(TextString.length())
-                {
-                    std::vector<std::string> values = split(TextString,',');
-                    tele_crewstats.clear();
-                    for(size_t i = 0; i < values.size(); i++)
-                    {
-                        tele_crewstats.push_back(atoi(values[i].c_str()));
-                    }
-                }
-            }
+            LOAD_ARRAY_RENAME(crewstats, tele_crewstats)
 
         }
         tele_gametime = giventimestring(l_hours,l_minute, l_second);
@@ -6195,19 +6150,7 @@ void Game::loadsummary()
                 map.finalstretch = atoi(pText);
             }
 
-            if (pKey == "crewstats")
-            {
-                std::string TextString = (pText);
-                if(TextString.length())
-                {
-                    std::vector<std::string> values = split(TextString,',');
-                    quick_crewstats.clear();
-                    for(size_t i = 0; i < values.size(); i++)
-                    {
-                        quick_crewstats.push_back(atoi(values[i].c_str()));
-                    }
-                }
-            }
+            LOAD_ARRAY_RENAME(crewstats, quick_crewstats)
 
         }
 
@@ -6279,7 +6222,7 @@ void Game::savetele()
     msgs->LinkEndChild( msg );
 
     std::string crewstatsString;
-    for(size_t i = 0; i < crewstats.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(crewstats); i++ )
     {
         crewstatsString += help.String(crewstats[i]) + ",";
     }
@@ -6488,7 +6431,7 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
     std::string crewstatsString;
-    for(size_t i = 0; i < crewstats.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(crewstats); i++ )
     {
         crewstatsString += help.String(crewstats[i]) + ",";
     }
@@ -6690,7 +6633,7 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
     std::string moods;
-    for(int i = 0; i < 6; i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.customcrewmoods); i++ )
     {
         moods += help.String(obj.customcrewmoods[i]) + ",";
     }
@@ -6699,7 +6642,7 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
     std::string crewstatsString;
-    for(size_t i = 0; i < crewstats.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(crewstats); i++ )
     {
         crewstatsString += help.String(crewstats[i]) + ",";
     }
@@ -7053,19 +6996,7 @@ void Game::loadtele()
             }
         }
 
-        if (pKey == "crewstats")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                crewstats.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    crewstats.push_back(atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY(crewstats)
 
         if (pKey == "collect")
         {
@@ -8148,7 +8079,7 @@ void Game::swnpenalty()
 int Game::crewrescued()
 {
     int temp = 0;
-    for (size_t i = 0; i < crewstats.size(); i++)
+    for (size_t i = 0; i < SDL_arraysize(crewstats); i++)
     {
         if (crewstats[i])
         {

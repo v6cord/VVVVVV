@@ -220,7 +220,7 @@ public:
     int customr = 0;
     int customg = 0;
     int customb = 0;
-    int customcrewmoods[6] = {0};
+    int customcrewmoods[Game::numcrew] = {0};
 
     std::unordered_map<std::string, int> named_crewmen;
 

@@ -2468,9 +2468,10 @@ try {
 					continue;
 				}
 			} else if (words[0] == "ifcrewlost") {
-				int crewmate = ss_toi(words[1]);
-				if (crewmate >= 0 && crewmate < (int) game.crewstats.size() && game.crewstats[crewmate] == false) {
-					call(words[2]);
+				size_t crewmate = ss_toi(words[1]);
+				if (crewmate < SDL_arraysize(game.crewstats) && game.crewstats[crewmate]==false)
+				{
+					load(words[2]);
 					position--;
 				}
 			} else if (words[0] == "iftrinkets") {
@@ -4351,7 +4352,8 @@ void scriptclass::hardreset() {
 	game.nodeathmode = false;
 	game.nocutscenes = false;
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < (int) SDL_arraysize(game.crewstats); i++)
+	{
 		game.crewstats[i] = false;
 	}
 	game.crewstats[0] = true;
@@ -4488,8 +4490,8 @@ void scriptclass::hardreset() {
 	obj.flags.clear();
 	obj.flags.resize(1000);
 
-	for (i = 0; i < 6; i++) {
-		obj.customcrewmoods[i] = 1;
+	for (i = 0; i < (int) SDL_arraysize(obj.customcrewmoods); i++){
+		obj.customcrewmoods[i]=true;
 	}
 
 	obj.collect.clear();
