@@ -149,9 +149,9 @@ std::string scriptclass::processvars(std::string t) {
 	std::string tempvar = "";
 	bool readingvar = false;
 	for (size_t i = 0; i < t.length(); i++) {
-		std::string currentletter = t.substr(i, 1);
+		char currentletter = t[i];
 		if (readingvar) {
-			if (currentletter == "%") {
+			if (currentletter == '%') {
 				readingvar = false;
 				std::string temp = "%" + tempvar + "%";
 				if (variables.find(tempvar) != variables.end()) {
@@ -178,7 +178,7 @@ std::string scriptclass::processvars(std::string t) {
 			} else {
 				tempvar += currentletter;
 			}
-		} else if (currentletter == "%") {
+		} else if (currentletter == '%') {
 			readingvar = true;
 		} else {
 			tempstring += currentletter;
@@ -200,7 +200,7 @@ void scriptclass::updatevars() {
 void scriptclass::tokenize(std::string t) {
 	j = 0;
 	std::string tempword;
-	std::string currentletter;
+	char currentletter;
 	words.clear();
 
 	std::string varname = "";
@@ -211,17 +211,17 @@ void scriptclass::tokenize(std::string t) {
 	bool parseops = true;
 
 	for (size_t i = 0; i < t.length(); i++) {
-		currentletter = t.substr(i, 1);
-		if ((currentletter == "(") || (currentletter == ",") ||
-			(currentletter == ")")) {
+		currentletter = t[i];
+		if ((currentletter == '(') || (currentletter == ',') ||
+			(currentletter == ')')) {
 			parseops = false;
 			break;
-		} else if (((currentletter == "=") || (currentletter == "+") ||
-					(currentletter == "-")) &&
+		} else if (((currentletter == '=') || (currentletter == '+') ||
+					(currentletter == '-')) &&
 				   !readop) {
 			op += currentletter;
 			readingrest = true;
-		} else if (currentletter != " ") {
+		} else if (currentletter != ' ') {
 			if (readingrest) {
 				rest += currentletter;
 				readop = true;
@@ -243,14 +243,14 @@ void scriptclass::tokenize(std::string t) {
 	t = processvars(t);
 
 	for (size_t i = 0; i < t.length(); i++) {
-		currentletter = t.substr(i, 1);
-		if (currentletter == "(" || currentletter == ")" ||
-			currentletter == ",") {
+		currentletter = t[i];
+		if (currentletter == '(' || currentletter == ')' ||
+			currentletter == ',') {
 			words.push_back(tempword);
 			std::transform(words[j].begin(), words[j].end(), words[j].begin(),
 						   ::tolower);
 			tempword = "";
-		} else if (currentletter == " ") {
+		} else if (currentletter == ' ') {
 			// don't do anything - i.e. strip out spaces.
 		} else {
 			tempword += currentletter;
