@@ -304,7 +304,6 @@ public:
     std::vector<edlevelclass> level;
     std::vector<int> kludgewarpdir;
 
-    int temp = 0;
     int notedelay = 0;
     int oldnotedelay = 0;
     std::string note;

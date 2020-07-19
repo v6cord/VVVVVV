@@ -963,8 +963,8 @@ int editorclass::getwarpbackground(int rx, int ry)
             break;
         }
         break;
-    case 5: //Tower
-        temp = (level[tmp].tilecol) / 5;
+    case 5: { //Tower
+        int temp = (level[tmp].tilecol) / 5;
         switch(temp)
         {
         case 0:
@@ -990,6 +990,7 @@ int editorclass::getwarpbackground(int rx, int ry)
             break;
         }
         break;
+    }
     default:
         return 6;
         break;
@@ -1346,7 +1347,7 @@ editorclass::absat(int *x, int *y)
 }
 int editorclass::freewrap( int x, int y )
 {
-    temp = getabstiletyp(x, y);
+    int temp = getabstiletyp(x, y);
     if (temp != TILE_FOREGROUND) return 0;
     return 1;
 }
@@ -1354,7 +1355,7 @@ int editorclass::freewrap( int x, int y )
 int editorclass::backonlyfree( int x, int y )
 {
     //Returns 1 if tile is a background tile, 0 otherwise
-    temp = gettiletyplocal(x, y);
+    int temp = gettiletyplocal(x, y);
     if (temp == TILE_BACKGROUND)
         return 1;
     return 0;
@@ -1381,7 +1382,7 @@ int editorclass::towerspikefree(int x, int y) {
     if (y >= size) y = size - 1;
 
     int tile = towers[tower-1].tiles[x + y*40];
-    temp = gettiletyp(level[levx + levy * maxwidth].tileset, tile);
+    int temp = gettiletyp(level[levx + levy * maxwidth].tileset, tile);
     if (temp == TILE_FOREGROUND || temp == TILE_BACKGROUND || temp == TILE_SPIKE)
         return 1;
     return 0;
@@ -1394,7 +1395,7 @@ int editorclass::spikefree(int x, int y) {
     if (y == -1) y = 0;
     if (y == 30) y = 29;
 
-    temp = gettiletyplocal(x, y);
+    int temp = gettiletyplocal(x, y);
     if (temp == TILE_FOREGROUND || temp == TILE_BACKGROUND || temp == TILE_SPIKE)
         return 1;
     return 0;
@@ -1626,7 +1627,7 @@ int editorclass::edgetile( int x, int y )
 
 int editorclass::spikebase(int x, int y)
 {
-    temp=x+(y*maxwidth);
+    int temp=x+(y*maxwidth);
     if (level[temp].tileset==5) {
         return level[temp].tilecol * 30;
     }
@@ -3826,7 +3827,7 @@ void editorrender()
     } else
         ty += ed.ypos;
 
-    ed.temp=edentat(tx, ty, ed.levaltstate, tower);
+    int temp2=edentat(tx, ty, ed.levaltstate, tower);
 
     // Iterate backwards to make the editor draw in the same order as ingame
     for(int i=edentity.size() - 1; i >= 0; i--) {
@@ -4015,7 +4016,7 @@ void editorrender()
             case 13: // Warp tokens
                 graphics.drawsprite(ex, ey, 18+(ed.entframe%2),196,196,196);
                 fillboxabs(ex, ey, 16, 16, graphics.getRGB(164,164,255));
-                if(ed.temp==i)
+                if(temp2==i)
                     graphics.Print(ex, ey - 8, ed.warptokendest(i),210,210,255);
                 else
                     graphics.Print(ex, ey - 8,
@@ -4065,7 +4066,7 @@ void editorrender()
 
                 graphics.drawsprite(ex, ty+8, 16 + usethistile, 96, 96, 96);
                 fillboxabs(ex, ey, 16, 24, graphics.getRGB(164,164,164));
-                if(ed.temp==i)
+                if(temp2==i)
                     graphics.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
                 break;
             }
@@ -4073,14 +4074,14 @@ void editorrender()
                 fillboxabs(ex, ey, edentity[i].p1*8 + edentity[i].p3, edentity[i].p2*8 + edentity[i].p4,
                            edentity[i].onetime ? graphics.getRGB(255,255,164) : graphics.getRGB(255,164,255));
                 fillboxabs(ex, ey, 8, 8, graphics.getRGB(255,255,255));
-                if(ed.temp==i)
+                if(temp2==i)
                     graphics.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
                 break;
             case 20: // Activity Zones
                 fillboxabs(ex, ey, edentity[i].p1*8 + edentity[i].p3, edentity[i].p2*8 + edentity[i].p4,
                            graphics.getRGB(164,255,164));
                 fillboxabs(ex, ey, 8, 8, graphics.getRGB(255,255,255));
-                if(ed.temp==i)
+                if(temp2==i)
                     graphics.Print(ex, ey - 8, edentity[i].scriptname,210,210,255);
                 break;
             case 50: // Warp lines
