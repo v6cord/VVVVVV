@@ -306,14 +306,16 @@ public:
 	int cutscenebarspos = 0;
 	int oldcutscenebarspos = 0;
 
-	std::vector<SDL_Rect> stars;
-	std::vector<int> starsspeed;
+	static const int numstars = 50;
+	SDL_Rect stars[numstars];
+	int starsspeed[numstars];
 
 	int spcol, spcoldel = 0;
-	std::vector<SDL_Rect> backboxes;
-	std::vector<int> backboxvx;
-	std::vector<int> backboxvy;
-	std::vector<float> backboxint;
+	static const int numbackboxes = 18;
+	SDL_Rect backboxes[numbackboxes];
+	int backboxvx[numbackboxes];
+	int backboxvy[numbackboxes];
+	float backboxint[numbackboxes];
 
 	int warpskip, warpfcol, warpbcol = 0;
 
