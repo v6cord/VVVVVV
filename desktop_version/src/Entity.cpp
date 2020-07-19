@@ -70,10 +70,9 @@ void entityclass::init()
     SDL_memset(customcrewmoods, true, sizeof(customcrewmoods));
 
     resetallflags();
-    collect.resize(100);
-    coincollect.clear();
+    SDL_memset(collect, false, sizeof(collect));
     coincollect.resize(100);
-    customcollect.resize(100);
+    SDL_memset(customcollect, false, sizeof(customcollect));
 }
 
 void entityclass::resetallflags()
@@ -1452,7 +1451,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
             //Check if it's already been collected
             entity.para = vx;
             entity.behave = vy;
-            if (!INBOUNDS(vx, coincollect) || coincollect[vx]) return -1;
+            if (!INBOUNDS_ARR(vx, coincollect) || coincollect[(int) vx]) return -1;
         }
         break;
     case 9: //Something Shiny
@@ -1468,7 +1467,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (collect[vx]) return -1;
+        if (collect[(int) vx]) return -1;
         break;
     case 10: //Savepoint
         entity.rule = 3;
@@ -1668,7 +1667,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (INBOUNDS(vx, collect) && !collect[ (vx)]) return -1;
+        if (INBOUNDS_ARR(vx, collect) && !collect[(int) vx]) return -1;
         break;
     case 23: //SWN Enemies
         //Given a different behavior, these enemies are especially for SWN mode and disappear outside the screen.
@@ -2001,7 +2000,7 @@ int entityclass::createentity( float xp, float yp, int t, float vx /*= 0*/, floa
 
         //Check if it's already been collected
         entity.para = vx;
-        if (!INBOUNDS(vx, customcollect) || customcollect[vx]) return -1;
+        if (!INBOUNDS_ARR(vx, customcollect) || customcollect[(int) vx]) return -1;
         break;
       case 56: //Custom enemy
         entity.rule = 1;
@@ -2670,9 +2669,9 @@ bool entityclass::updateentities( int i )
             //wait for collision
             if (entities[i].state == 1)
             {
-                if (INBOUNDS(entities[i].para, collect))
+                if (INBOUNDS_ARR(entities[i].para, collect))
                 {
-                    collect[entities[i].para] = true;
+                    collect[(int) entities[i].para] = true;
                 }
 
                 if (game.intimetrial)
@@ -3313,9 +3312,9 @@ bool entityclass::updateentities( int i )
             }
             else if (entities[i].state == 1)
             {
-                if (INBOUNDS(entities[i].para, customcollect))
+                if (INBOUNDS_ARR(entities[i].para, customcollect))
                 {
-                    customcollect[entities[i].para] = true;
+                    customcollect[(int) entities[i].para] = true;
                 }
 
                 if (game.intimetrial)

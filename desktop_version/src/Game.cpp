@@ -5354,19 +5354,7 @@ void Game::loadquick()
 
         LOAD_ARRAY(crewstats)
 
-        if (pKey == "collect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.collect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.collect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(collect, obj.collect)
 
         if (pKey == "coincollect")
         {
@@ -5671,19 +5659,7 @@ void Game::customloadquick(std::string savfile)
 
         LOAD_ARRAY(crewstats)
 
-        if (pKey == "collect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.collect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.collect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(collect, obj.collect)
 
         if (pKey == "coincollect")
         {
@@ -5699,19 +5675,7 @@ void Game::customloadquick(std::string savfile)
             }
         }
 
-        if (pKey == "customcollect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.customcollect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.customcollect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(customcollect, obj.customcollect)
 
         if (pKey == "finalmode")
         {
@@ -6207,7 +6171,7 @@ void Game::savetele()
     msgs->LinkEndChild( msg );
 
     std::string collect;
-    for(size_t i = 0; i < obj.collect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.collect); i++ )
     {
         collect += help.String((int) obj.collect[i]) + ",";
     }
@@ -6416,7 +6380,7 @@ void Game::savequick()
     msgs->LinkEndChild( msg );
 
     std::string collect;
-    for(size_t i = 0; i < obj.collect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.collect); i++ )
     {
         collect += help.String((int) obj.collect[i]) + ",";
     }
@@ -6627,7 +6591,7 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
     std::string collect;
-    for(size_t i = 0; i < obj.collect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.collect); i++ )
     {
         collect += help.String((int) obj.collect[i]) + ",";
     }
@@ -6645,7 +6609,7 @@ void Game::customsavequick(std::string savfile)
     msgs->LinkEndChild( msg );
 
     std::string customcollect;
-    for(size_t i = 0; i < obj.customcollect.size(); i++ )
+    for(size_t i = 0; i < SDL_arraysize(obj.customcollect); i++ )
     {
         customcollect += help.String((int) obj.customcollect[i]) + ",";
     }
@@ -6962,19 +6926,7 @@ void Game::loadtele()
 
         LOAD_ARRAY(crewstats)
 
-        if (pKey == "collect")
-        {
-            std::string TextString = (pText);
-            if(TextString.length())
-            {
-                std::vector<std::string> values = split(TextString,',');
-                obj.collect.clear();
-                for(size_t i = 0; i < values.size(); i++)
-                {
-                    obj.collect.push_back((bool) atoi(values[i].c_str()));
-                }
-            }
-        }
+        LOAD_ARRAY_RENAME(collect, obj.collect)
 
         if (pKey == "coincollect")
         {
@@ -8063,12 +8015,28 @@ void Game::resetgameclock()
 
 int Game::trinkets()
 {
-    return std::count(obj.collect.begin(), obj.collect.end(), true);
+    int temp = 0;
+    for (size_t i = 0; i < SDL_arraysize(obj.collect); i++)
+    {
+        if (obj.collect[i])
+        {
+            temp++;
+        }
+    }
+    return temp;
 }
 
 int Game::crewmates()
 {
-    return std::count(obj.customcollect.begin(), obj.customcollect.end(), true);
+    int temp = 0;
+    for (size_t i = 0; i < SDL_arraysize(obj.customcollect); i++)
+    {
+        if (obj.customcollect[i])
+        {
+            temp++;
+        }
+    }
+    return temp;
 }
 
 bool Game::anything_unlocked()

@@ -190,9 +190,9 @@ public:
 
     std::vector<blockclass> blocks;
     bool flags[1000];
-    std::vector<bool> collect;
+    bool collect[100];
     std::vector<bool> coincollect;
-    std::vector<bool> customcollect;
+    bool customcollect[100];
 
     bool skipblocks, skipdirblocks = false;
 

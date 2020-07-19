@@ -2914,11 +2914,11 @@ try {
 				music.haltdasmusik();
 				music.playef(3);
 
-			int trinket = ss_toi(words[1]);
-			if (trinket >= 0 && trinket < (int) obj.collect.size())
-			{
-				obj.collect[trinket] = true;
-			}
+				size_t trinket = ss_toi(words[1]);
+				if (trinket < SDL_arraysize(obj.collect))
+				{
+					obj.collect[trinket] = true;
+				}
 
 				graphics.textboxremovefast();
 
@@ -4495,10 +4495,8 @@ void scriptclass::hardreset() {
 		obj.customcrewmoods[i]=true;
 	}
 
-	obj.collect.clear();
-	obj.collect.resize(100);
-	obj.customcollect.clear();
-	obj.customcollect.resize(100);
+	SDL_memset(obj.collect, false, sizeof(obj.collect));
+	SDL_memset(obj.customcollect, false, sizeof(obj.customcollect));
 	i = 100; //previously a for-loop iterating over collect/customcollect set this to 100
 
 	obj.coincollect.clear();

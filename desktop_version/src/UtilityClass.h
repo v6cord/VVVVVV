@@ -30,6 +30,7 @@ std::vector<std::string> split(const std::string &s, char delim, std::vector<std
 std::vector<std::string> split(const std::string &s, char delim);
 
 #define INBOUNDS(index, vector) ((int) index >= 0 && (int) index < (int) vector.size())
+#define INBOUNDS_ARR(index, array) ((int) index >= 0 && (int) index < (int) SDL_arraysize(array))
 
 #define WHINE_ONCE(message) \
     static bool whine = true; \
