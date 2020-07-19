@@ -2324,11 +2324,6 @@ try {
 				} else if (obj.entities[i].state == 17) {
 					obj.entities[i].dir = ss_toi(words[3]);
 				}
-			} else if (words[0] == "alarmon") {
-				game.alarmon = true;
-				game.alarmdelay = 0;
-			} else if (words[0] == "alarmoff") {
-				game.alarmon = false;
 			} else if (words[0] == "activateteleporter") {
 				i = obj.getteleporter();
 				if (i > -1) {
