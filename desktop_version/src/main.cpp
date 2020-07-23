@@ -278,36 +278,11 @@ int main(int argc, char *argv[])
     key.isActive = true;
     game.gametimer = 0;
     obj.init();
-#if !defined(__APPLE__)
-    std::condition_variable timeout;
-    std::mutex mutex;
-    std::thread init([&]() {
-        auto start = std::chrono::steady_clock::now();
-#endif
-        if(!FILESYSTEM_init(argv[0], baseDir, assetsPath)) {
-            exit(1);
-        }
-        pre_fakepercent.store(50);
-        music.init();
-        pre_fakepercent.store(80);
-        graphics.reloadresources(true);
-        pre_fakepercent.store(100);
-#if !defined(__APPLE__)
-        auto end = std::chrono::steady_clock::now();
-        if (end - start < 1s) {
-            pre_quickend.store(true);
-        }
-        std::unique_lock<std::mutex> lock(mutex);
-        lock.unlock();
-        timeout.notify_all();
-    });
-
-    std::unique_lock<std::mutex> uniq(mutex);
-    timeout.wait_for(uniq, 1s);
-    uniq.unlock();
-    preloaderloop();
-    init.join();
-#endif
+    if(!FILESYSTEM_init(argv[0], baseDir, assetsPath)) {
+        exit(1);
+    }
+    music.init();
+    graphics.reloadresources(true);
 
     NETWORK_init(); // FIXME: this is probably bad
 
