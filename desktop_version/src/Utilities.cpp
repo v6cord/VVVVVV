@@ -18,6 +18,10 @@ extern scriptclass script;
 
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
 #include <unistd.h>
+#ifndef __SWITCH__
+#include <sys/types.h>
+#include <signal.h>
+#endif
 #endif
 
 uint64_t splitmix64(uint64_t& x) {
@@ -145,7 +149,11 @@ std::string dtos(double val) {
 }
 
 #if !defined(__ANDROID__) && !defined(_WIN32)
+#ifdef __SWITCH__
 static FILE* logger = nullptr;
+#else
+static pid_t logger = 0;
+#endif
 #endif
 
 #ifdef __ANDROID__
@@ -176,6 +184,41 @@ bool log_default() {
 #endif
 }
 
+pid_t popen2(const char *command, int *infp, int *outfp) {
+    int p_stdin[2], p_stdout[2];
+    pid_t pid;
+
+    if (pipe(p_stdin) != 0 || pipe(p_stdout) != 0)
+        return -1;
+
+    pid = fork();
+
+    if (pid < 0)
+        return pid;
+    else if (pid == 0) {
+        close(p_stdin[1]);
+        dup2(p_stdin[0], 0);
+        close(p_stdout[0]);
+        dup2(p_stdout[1], 1);
+
+        execl("/bin/sh", "sh", "-c", command, NULL);
+        perror("execl");
+        exit(1);
+    }
+
+    if (infp == NULL)
+        close(p_stdin[1]);
+    else
+        *infp = p_stdin[1];
+
+    if (outfp == NULL)
+        close(p_stdout[0]);
+    else
+        *outfp = p_stdout[0];
+
+    return pid;
+}
+
 void log_init() {
 #if defined(__ANDROID__)
     setvbuf(stdout, 0, _IOLBF, 0);
@@ -190,11 +233,12 @@ void log_init() {
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
 #ifdef __SWITCH__
     logger = fopen("sdmc:/switch/VVVVVV/vvvvvv-ce.log", "a");
+    int logger_fd = fileno(logger);
 #else
-    logger = popen("logger", "w");
+    int logger_fd;
+    logger = popen2("logger", &logger_fd, NULL);
 #endif
     if (logger) {
-        auto logger_fd = fileno(logger);
         auto stdout_fd = fileno(stdout);
         auto stderr_fd = fileno(stderr);
         dup2(logger_fd, stdout_fd);
@@ -212,7 +256,7 @@ void log_close() {
 #elif defined(__ANDROID__)
     // doesn't need closing
 #elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
-    if (logger) pclose(logger);
+    if (logger) kill(logger, SIGTERM);
 #endif
 }
 
