@@ -151,7 +151,7 @@ std::string dtos(double val) {
 #if !defined(__ANDROID__) && !defined(_WIN32)
 #ifdef __SWITCH__
 static FILE* logger = nullptr;
-#else
+#elif !defined(_WIN32)
 static pid_t logger = 0;
 #endif
 #endif
@@ -184,6 +184,7 @@ bool log_default() {
 #endif
 }
 
+#if !defined(__SWITCH__) && !defined(_WIN32)
 pid_t popen2(const char *command, int *infp, int *outfp) {
     int p_stdin[2], p_stdout[2];
     pid_t pid;
@@ -218,6 +219,7 @@ pid_t popen2(const char *command, int *infp, int *outfp) {
 
     return pid;
 }
+#endif
 
 void log_init() {
 #if defined(__ANDROID__)
