@@ -315,6 +315,7 @@ IF(SUPPORTS_IMPLICIT_FALLTHROUGH AND NOT ANDROID)
 ENDIF()
 
 file(GLOB LUA_SRC "../third_party/lua-5.3.5/src/*.c")
+list(FILTER LUA_SRC EXCLUDE REGEX ".*luac?\\.c")
 
 # Library information
 ADD_LIBRARY(tinyxml2-static STATIC ${XML2_SRC})
