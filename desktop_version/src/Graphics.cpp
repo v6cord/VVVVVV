@@ -2854,6 +2854,7 @@ void Graphics::setcol( int t )
 		//No color
 	case -1:
 		ct.nocolor = true;
+        ct.colour = -1;
 		break;
 		//Player Normal
 	case 0:
@@ -3447,9 +3448,13 @@ Uint32 Graphics::RGBf(int r, int g, int b)
 	return SDL_MapRGBA(backBuffer->format, r, g, b, 255);
 }
 
-void Graphics::setcolreal(Uint32 t)
+void Graphics::setcolreal(long long t)
 {
-	ct.colour = t;
+    if (t == -1) {
+        ct.nocolor = true;
+    } else {
+        ct.colour = t;
+    }
 }
 
 void Graphics::drawrect(int x, int y, int w, int h, int r, int g, int b)

@@ -187,7 +187,7 @@ public:
 
 	Uint32 RGBf(int r, int g, int b);
 
-	void setcolreal(Uint32 t);
+	void setcolreal(long long t);
 
 	void drawbackground(int t);
 	void updatebackground(int t);

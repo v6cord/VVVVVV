@@ -52,7 +52,7 @@ public:
     int flipped = 0;
     int flippedsize = 0;
 
-    Uint32 realcol = 0;
+    long long realcol = 0;
 };
 
 #endif /* ENT_H */
