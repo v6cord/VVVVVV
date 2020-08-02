@@ -373,7 +373,7 @@ void musicclass::playfile(const char* t, std::string track, int loops, bool inte
 		if (PHYSFS_getRealDir(t) != PHYSFS_getRealDir("VVVVVV.png")) return;
 	}
 
-	int channel = 0;
+	int channel = -1;
 
 	auto[pair, inserted] = custom_files.insert(std::make_pair(t, SoundTrack()));
 	if (inserted) {
@@ -396,9 +396,9 @@ void musicclass::playfile(const char* t, std::string track, int loops, bool inte
 			stopfile(track);
 			custom_file_paths[track] = t;
 		}
-	} else {
-		channel = Mix_PlayChannel(-1, pair->second.sound, loops);
 	}
+
+	channel = Mix_PlayChannel(-1, pair->second.sound, loops);
 
 	if (channel == -1) {
 		fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
